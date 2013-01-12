@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.sishuok</groupId>
+    <artifactId>es</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>es</name>
+    <url>https://github.com/zhangkaitao/es</url>
+    <organization>
+        <name>es</name>
+        <url>https://github.com/zhangkaitao</url>
+    </organization>
+
+    <modules>
+        <module>parent</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <locales>zh_CN</locales>
+                    <outputEncoding>UTF-8</outputEncoding>
+                    <inputEncoding>UTF-8</inputEncoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>apache-repo</id>
+            <name>apache Repository</name>
+            <url>https://repository.apache.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>travis-ci-repo</id>
+            <name>travis-ci Repository</name>
+            <url>http://maven.mirrors.travis-ci.org/nexus/content/repositories/central</url>
+        </repository>
+        <repository>
+            <id>java-repo</id>
+            <name>java Repository</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>springsource-repo</id>
+            <name>SpringSource Repository</name>
+            <url>http://repo.springsource.org/release/</url>
+        </repository>
+        <repository>
+            <id>jboss-repo-releases</id>
+            <name>Jboss Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>maven-repo1</id>
+            <name>maven-repo1</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven2-repo</id>
+            <name>maven2 Repository</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>Codehaus repository</id>
+            <url>http://repository.codehaus.org/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- 开发人员信息 -->
+    <developers>
+        <developer>
+            <name>zhankaitao</name>
+            <email>zhangkaitao0503@gmail.com</email>
+            <url>https://github.com/zhangkaitao</url>
+            <roles>
+                <role>software engineer</role>
+            </roles>
+            <timezone>8</timezone>
+        </developer>
+    </developers>
+
+    <!--许可证 -->
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <!-- 持续集成信息 -->
+    <ciManagement>
+        <system>continuum</system>
+        <url>https://travis-ci.org/zhangkaitao/ssh-scaffold</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnError>true</sendOnError>
+                <sendOnFailure>true</sendOnFailure>
+                <sendOnSuccess>true</sendOnSuccess>
+                <sendOnWarning>false</sendOnWarning>
+                <configuration>
+                    <address>zhangkaitao0503@gmail.com</address>
+                </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+
+    <!-- 问题反馈信息 -->
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/zhangkaitao/ssh-scaffold/issues</url>
+    </issueManagement>
+
+    <!-- 分发管理 -->
+    <distributionManagement>
+        <!-- mvn site:deploy 部署的位置-->
+        <site>
+            <id>local</id>
+            <name>filesystem</name>
+            <!-- 修改到磁盘的相应位置 -->
+            <url>file:D:\target\site</url>
+        </site>
+    </distributionManagement>
+
+    <!-- 版本控制信息 -->
+    <scm>
+        <url>https://github.com/zhangkaitao/ssh-scaffold/</url>
+        <connection>scm:git:git://github.com/zhangkaitao/ssh-scaffold.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:zhangkaitao/ssh-scaffold.git</developerConnection>
+    </scm>
+
+
+</project>

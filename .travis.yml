@@ -1,0 +1,6 @@
+language: java
+jdk:
+  - openjdk7
+notifications:
+  email:
+    - zhangkaitao0503@gmail.com

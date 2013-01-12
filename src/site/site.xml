@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SSH脚手架">
+    <publishDate position="left" format="yyyy-MM-dd HH:mm" />
+    <version position="left"/>    
+    <bannerLeft>
+        <name>ssh-scaffold</name>
+        <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
+        <href>index.html</href>
+    </bannerLeft>
+    <bannerRight>
+        <name>SSH脚手架</name>
+        <href>index.html</href>
+    </bannerRight>
+    <body>
+        <menu name="使用指南"  inherit="top">
+            <item name="总体概览" href="/index.html"/>
+            <item name="生成项目" href="/index.html"/>
+            <item name="基础设施" href="/index.html"/>
+            <item name="代码生成" href="/index.html"/>
+        </menu>
+        <menu name="项目"  inherit="top">
+            <item name="ssh-scaffold" href="/index.html"/>
+            <item name="parent" href="/parent/index.html"/>
+            <item name="common" href="/common/index.html"/>
+            <item name="web" href="/web/index.html"/>
+        </menu>
+        <links>
+            <item name="GitHub" href="http://github.com/"/>
+            <item name="作者博客" href="http://jinnianshilongnian.iteye.com/"/>
+        </links>
+        <menu ref="reports" inherit="top"/>
+    </body>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.2.1</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <sideBarEnabled>true</sideBarEnabled>
+        </fluidoSkin>
+    </custom>
+</project>

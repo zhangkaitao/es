@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <suppress checks="FileLength"
+              files="TokenTypes.java"
+              lines="1"/>
+    <suppress checks="MagicNumber"
+              files="UnusedPrivateMethodCheck.java"
+              lines="176"/>
+    <suppress checks="ImportControl"
+              files="NewlineAtEndOfFileCheck.java"
+              lines="27"/>
+    <suppress checks="ImportControl"
+              files="TranslationCheck.java"
+              lines="24"/>
+    <suppress checks="ImportControl"
+              files="SuppressionCommentFilter.java"
+              lines="28"/>
+    <suppress checks="ImportControl"
+              files="SuppressWithNearbyCommentFilter.java"
+              lines="28"/>
+    <suppress id="paramNum"
+              files="LocalizedMessage.java"
+              lines="141,148,181,213"/>
+
+    <!-- Tone down the checking for test code -->
+    <suppress checks="EmptyBlock" files=".*[\\/]src[\\/]tests[\\/]"/>
+    <suppress checks="ImportControl" files=".*[\\/]src[\\/]tests[\\/]"/>
+    <suppress checks="Javadoc" files=".*[\\/]src[\\/]tests[\\/]"/>
+    <suppress checks="MagicNumber" files=".*[\\/]src[\\/]tests[\\/]"/>
+    <suppress checks="MethodCount" files="[\\/]IndentationCheckTest.java$"/>
+    <suppress checks="EqualsAvoidNull" files="[\\/]Int.*FilterTest.java$"/>
+
+    <!-- suppressions to remove over time -->
+    <suppress checks="FinalLocalVariable" files=".*[\\/]src[\\/]tests[\\/]"/>
+    <suppress checks="LineLength" files=".*[\\/]src[\\/]tests[\\/]"/>
+    <suppress checks="Name" files=".*[\\/]src[\\/]tests[\\/]"/>    
+
+    <!--
+      Turn off all checks for Generated and Test code. Fixes issues with using
+      Eclipse plug-in.
+      -->
+    <suppress checks="." files=".*[\\/]grammars[\\/]Generated[a-zA-Z]*\.java"/>
+    <suppress checks="." files=".*[\\/]grammars[\\/]Generated[a-zA-Z]*\.java"/>
+    <suppress checks="." files=".*[\\/]checkstyle[\\/]gui[\\/]"/>
+</suppressions>
