@@ -112,7 +112,7 @@
     <!-- 持续集成信息 -->
     <ciManagement>
         <system>continuum</system>
-        <url>https://travis-ci.org/zhangkaitao/ssh-scaffold</url>
+        <url>https://travis-ci.org/zhangkaitao/es</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -130,7 +130,7 @@
     <!-- 问题反馈信息 -->
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/zhangkaitao/ssh-scaffold/issues</url>
+        <url>https://github.com/zhangkaitao/es/issues</url>
     </issueManagement>
 
     <!-- 分发管理 -->
@@ -146,9 +146,9 @@
 
     <!-- 版本控制信息 -->
     <scm>
-        <url>https://github.com/zhangkaitao/ssh-scaffold/</url>
-        <connection>scm:git:git://github.com/zhangkaitao/ssh-scaffold.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:zhangkaitao/ssh-scaffold.git</developerConnection>
+        <url>https://github.com/zhangkaitao/es/</url>
+        <connection>scm:git:git://github.com/zhangkaitao/es.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:zhangkaitao/es.git</developerConnection>
     </scm>
 
 
