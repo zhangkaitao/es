@@ -325,6 +325,11 @@
         </dependency>
 
         <!-- data source 相关jar包-->
+        <dependency>
+            <groupId>proxool</groupId>
+            <artifactId>proxool</artifactId>
+            <version>0.8.3</version>
+        </dependency>
      <!--   <dependency>
             <groupId>org.logicalcobwebs</groupId>
             <artifactId>com.springsource.org.logicalcobwebs.proxool</artifactId>
