@@ -325,7 +325,7 @@
         </dependency>
 
         <!-- data source 相关jar包-->
-        <dependency>
+     <!--   <dependency>
             <groupId>org.logicalcobwebs</groupId>
             <artifactId>com.springsource.org.logicalcobwebs.proxool</artifactId>
             <version>${proxool.version}</version>
@@ -334,7 +334,7 @@
             <groupId>org.logicalcobwebs</groupId>
             <artifactId>com.springsource.org.logicalcobwebs.cglib.core</artifactId>
             <version>${proxool.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- 日志相关jar包 -->
         <dependency>
             <groupId>org.slf4j</groupId>
