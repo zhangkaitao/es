@@ -32,11 +32,11 @@
 
 <module name="Checker">
     <!--
-        If you set the basedir property below, then all reported file
+        If you set the basedir searchProperty below, then all reported file
         names will be relative to the specified directory. See
         http://checkstyle.sourceforge.net/5.x/config.html#Checker
 
-        <property name="basedir" value="${basedir}"/>
+        <searchProperty name="basedir" value="${basedir}"/>
     -->
 
     <!-- Checks that a package-info.java file exists for each package.     -->
@@ -47,14 +47,14 @@
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
     <module name="NewlineAtEndOfFile"/>
 
-    <!-- Checks that property files contain the same keys.         -->
+    <!-- Checks that searchProperty files contain the same keys.         -->
     <!-- See http://checkstyle.sf.net/config_misc.html#Translation -->
     <module name="Translation"/>
-    
+
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
     <module name="FileLength"/>
-    
+
     <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
     <module name="FileTabCharacter"/>
@@ -62,17 +62,17 @@
     <!-- Miscellaneous other checks.                   -->
     <!-- See http://checkstyle.sf.net/config_misc.html -->
     <module name="RegexpSingleline">
-       <property name="format" value="\s+$"/>
-       <property name="minimum" value="0"/>
-       <property name="maximum" value="0"/>
-       <property name="message" value="Line has trailing spaces."/>
+       <searchProperty name="format" value="\s+$"/>
+       <searchProperty name="minimum" value="0"/>
+       <searchProperty name="maximum" value="0"/>
+       <searchProperty name="message" value="Line has trailing spaces."/>
     </module>
 
     <!-- Checks for Headers                                -->
     <!-- See http://checkstyle.sf.net/config_header.html   -->
     <!-- <module name="Header"> -->
-    <!--   <property name="headerFile" value="${checkstyle.header.file}"/> -->
-    <!--   <property name="fileExtensions" value="java"/> -->
+    <!--   <searchProperty name="headerFile" value="${checkstyle.header.file}"/> -->
+    <!--   <searchProperty name="fileExtensions" value="java"/> -->
     <!-- </module> -->
 
     <module name="TreeWalker">
@@ -87,7 +87,7 @@
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
-        <module name="ConstantName"/>
+       <!-- <module name="ConstantName"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
         <module name="MemberName"/>
@@ -96,11 +96,11 @@
         <module name="ParameterName"/>
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
-
+-->
 
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
-        <module name="AvoidStarImport"/>
+        <!--<module name="AvoidStarImport"/>-->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
@@ -108,14 +108,18 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength"/>
-        <module name="MethodLength"/>
-        <module name="ParameterNumber"/>
+        <module name="LineLength">
+            <searchProperty name="max" value="160"/>
+        </module>
+        <module name="MethodLength">
+            <searchProperty name="max" value="150"/>
+        </module>
+        <!--<module name="ParameterNumber"/>-->
 
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
-        <module name="EmptyForIteratorPad"/>
+        <!--<module name="EmptyForIteratorPad"/>
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
         <module name="NoWhitespaceAfter"/>
@@ -125,27 +129,27 @@
         <module name="TypecastParenPad"/>
         <module name="WhitespaceAfter"/>
         <module name="WhitespaceAround"/>
-
+-->
 
         <!-- Modifier Checks                                    -->
         <!-- See http://checkstyle.sf.net/config_modifiers.html -->
-        <module name="ModifierOrder"/>
+      <!--  <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
-
+-->
 
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See http://checkstyle.sf.net/config_blocks.html -->
-        <module name="AvoidNestedBlocks"/>
+ <!--       <module name="AvoidNestedBlocks"/>
         <module name="EmptyBlock"/>
         <module name="LeftCurly"/>
         <module name="NeedBraces"/>
-        <module name="RightCurly"/>
+        <module name="RightCurly"/>-->
 
 
         <!-- Checks for common coding problems               -->
         <!-- See http://checkstyle.sf.net/config_coding.html -->
-        <module name="AvoidInlineConditionals"/>
-        <module name="DoubleCheckedLocking"/>    <!-- MY FAVOURITE -->
+   <!--     <module name="AvoidInlineConditionals"/>
+        <module name="DoubleCheckedLocking"/>    &lt;!&ndash; MY FAVOURITE &ndash;&gt;
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField"/>
@@ -155,23 +159,23 @@
         <module name="MissingSwitchDefault"/>
         <module name="RedundantThrows"/>
         <module name="SimplifyBooleanExpression"/>
-        <module name="SimplifyBooleanReturn"/>
+        <module name="SimplifyBooleanReturn"/>-->
 
         <!-- Checks for class design                         -->
         <!-- See http://checkstyle.sf.net/config_design.html -->
-        <module name="DesignForExtension"/>
-        <!--<module name="FinalClass"/>-->
+ <!--       <module name="DesignForExtension"/>
+        &lt;!&ndash;<module name="FinalClass"/>&ndash;&gt;
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
-        <module name="VisibilityModifier"/>
+        <module name="VisibilityModifier"/>-->
 
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->
-        <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
-        <module name="TodoComment"/>
-        <module name="UpperEll"/>
+        <!--<module name="ArrayTypeStyle"/>-->
+        <!--<module name="FinalParameters"/>-->
+        <!--<module name="TodoComment"/>-->
+        <!--<module name="UpperEll"/>-->
 
     </module>
 

@@ -3,7 +3,7 @@
     <publishDate position="left" format="yyyy-MM-dd HH:mm" />
     <version position="left"/>    
     <bannerLeft>
-        <name>ssh-scaffold</name>
+        <name>es</name>
         <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
         <href>index.html</href>
     </bannerLeft>
@@ -19,10 +19,10 @@
             <item name="代码生成" href="/index.html"/>
         </menu>
         <menu name="项目"  inherit="top">
-            <item name="ssh-scaffold" href="/index.html"/>
-            <item name="parent" href="/parent/index.html"/>
-            <item name="common" href="/common/index.html"/>
-            <item name="web" href="/web/index.html"/>
+            <item name="es" href="/index.html"/>
+            <item name="parent" href="/es-parent/index.html"/>
+            <item name="common" href="/es-common/index.html"/>
+            <item name="web" href="/es-web/index.html"/>
         </menu>
         <links>
             <item name="GitHub" href="http://github.com/"/>
