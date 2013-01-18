@@ -15,14 +15,14 @@ import javax.persistence.Query;
  * <p>Date: 13-1-16 下午8:10
  * <p>Version: 1.0
  */
-public class NoneSearchCallback implements SearchCallback {
+public final class NoneSearchCallback implements SearchCallback {
 
     @Override
-    public void prepareQL(StringBuilder hql, Searchable search) {
+    public void prepareQL(StringBuilder ql, Searchable search) {
     }
 
     @Override
-    public void prepareOrder(StringBuilder hql, Searchable search) {
+    public void prepareOrder(StringBuilder ql, Searchable search) {
     }
 
     @Override

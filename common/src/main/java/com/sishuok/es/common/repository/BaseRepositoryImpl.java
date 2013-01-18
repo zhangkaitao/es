@@ -6,12 +6,11 @@
 package com.sishuok.es.common.repository;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.entity.search.SearchPropertyMappingDefinition;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.repository.callback.SearchCallback;
-import com.sishuok.es.common.utils.SearchConvertUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import com.sishuok.es.common.utils.SearchableConvertUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
@@ -20,6 +19,7 @@ import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,8 +60,6 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
                 break;
             }
         }
-
-
         QL_LIST_ALL = "from " + this.entityClass.getSimpleName() + " o where 1=1 ";
         QL_COUNT_ALL = " select count(o) from " + this.entityClass.getSimpleName() + " o where 1=1 ";
 
@@ -69,14 +67,20 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
 
 
     /**
-     * @param hql
-     * @param search
+     * <p>ql条件查询<br/>
+     * searchCallback默认实现请参考 {@see com.sishuok.es.common.repository.callback.DefaultSearchCallback}<br/>
+     *
+     * 测试用例请参考：{@see com.sishuok.es.common.repository.UserRepositoryImplForCustomSearchIT}
+     * 和{@see com.sishuok.es.common.repository.UserRepositoryImplForDefaultSearchIT}
+     * @param ql
+     * @param search 查询条件、分页 排序
+     * @param searchCallback 查询回调  自定义设置查询条件和赋值
      * @return
      */
-    protected List<M> find(final String hql, final Searchable search, SearchCallback searchCallback) {
+    protected List<M> find(final String ql, final Searchable search, SearchCallback searchCallback) {
         convertSearchable(search);
 
-        StringBuilder s = new StringBuilder(hql);
+        StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
         searchCallback.prepareOrder(s, search);
         Query query = entityManager.createQuery(s.toString());
@@ -85,19 +89,34 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
         return query.getResultList();
     }
 
-    protected Long count(final String hql, final Searchable search, SearchCallback searchCallback) {
+    /**
+     * <p>按条件统计<br/>
+     * 测试用例请参考：{@see com.sishuok.es.common.repository.UserRepositoryImplForCustomSearchIT}
+     * 和{@see com.sishuok.es.common.repository.UserRepositoryImplForDefaultSearchIT}
+     * @param ql
+     * @param search
+     * @param searchCallback
+     * @return
+     */
+    protected Long count(final String ql, final Searchable search, SearchCallback searchCallback) {
         convertSearchable(search);
-        StringBuilder s = new StringBuilder(hql);
+        StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
         Query query = entityManager.createQuery(s.toString());
         searchCallback.setValues(query, search);
         return (Long) query.getSingleResult();
     }
 
-    protected M findOne(String hql, final Searchable search, SearchCallback searchCallback) {
+    /**
+     * 按条件查询一个实体
+     * @param ql
+     * @param search
+     * @param searchCallback
+     * @return
+     */
+    protected M findOne(String ql, final Searchable search, SearchCallback searchCallback) {
         convertSearchable(search);
-
-        StringBuilder s = new StringBuilder(hql);
+        StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
         searchCallback.prepareOrder(s, search);
         Query query = entityManager.createQuery(s.toString());
@@ -112,8 +131,87 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
         return null;
     }
 
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql，pageable存储分页信息 null表示不分页<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
+     * @param ql
+     * @param pageable null表示不分页
+     * @param params
+     * @param <T>
+     * @return
+     */
+    protected <T> List<T> findAll(final String ql, final Pageable pageable, final Object... params) {
+        Query query = entityManager.createQuery(ql);
+        setParameters(query, params);
+        if (pageable != null && pageable.getPageSize() > 0) {
+            query.setFirstResult(pageable.getOffset());
+            query.setMaxResults(pageable.getPageSize());
+        }
+        return query.getResultList();
+    }
+
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql统计<br/>
+     * 具体使用请参考测试用例：com.sishuok.es.common.repository.UserRepositoryImplIT#testCountAll()
+     * @param ql
+     * @param params
+     * @return
+     */
+    protected Long countAll(final String ql, final Object... params) {
+           Query query = entityManager.createQuery(ql);
+           setParameters(query, params);
+          return (Long)query.getSingleResult();
+       }
+
+    /**
+     * <p>根据ql和按照索引顺序的params查询一个实体<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindOne()}
+     * @param ql
+     * @param params
+     * @param <T>
+     * @return
+     */
+    protected <T> T findOne(final String ql, final Object... params) {
+        List<T> list = findAll(ql, new PageRequest(0, 1), params);
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+
+        return null;
+    }
+
+    /**
+     * <p>执行批处理语句.如 之间insert, update, delete 等.<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testBatchUpdate()}
+     * @param ql
+     * @param params
+     * @return
+     */
+    protected int batchUpdate(final String ql, final Object... params) {
+        Query query = entityManager.createQuery(ql);
+        setParameters(query, params);
+        return query.executeUpdate();
+    }
+
+    /**
+     * 按顺序设置Query参数
+     * @param query
+     * @param params
+     */
+    protected void setParameters(Query query, Object[] params) {
+        if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+                query.setParameter(i + 1, params[i]);
+            }
+        }
+    }
+
+    /**
+     * 将Searchable中的字符串数据转换为Entity的实际值
+     * @param search
+     */
     protected void convertSearchable(Searchable search) {
-        SearchConvertUtils.convertSearchValueToDomainValue(search, entityClass);
+        SearchableConvertUtils.convertSearchValueToEntityValue(search, entityClass);
     }
 
 }

@@ -23,12 +23,12 @@ public interface SearchCallback {
 
     /**
      * 动态拼HQL where、group by having
-     * @param hql
+     * @param ql
      * @param search
      */
-    public void prepareQL(StringBuilder hql, Searchable search);
+    public void prepareQL(StringBuilder ql, Searchable search);
 
-    public void prepareOrder(StringBuilder hql, Searchable search);
+    public void prepareOrder(StringBuilder ql, Searchable search);
 
     /**
      * 根据search给query赋值及设置分页信息

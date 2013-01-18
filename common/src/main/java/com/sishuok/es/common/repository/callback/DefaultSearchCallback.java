@@ -23,37 +23,37 @@ public class DefaultSearchCallback implements SearchCallback {
     private static final String paramPrefix = "param_";
 
     @Override
-    public void prepareQL(StringBuilder hql, Searchable search) {
+    public void prepareQL(StringBuilder ql, Searchable search) {
         if(!search.hasSearchFilter()) {
             return;
         }
 
         int paramIndex = 1;
         for(SearchFilter searchFilter : search.getSearchFilters()) {
-            hql.append(" and ");
+            ql.append(" and ");
             //自定义条件
             String entityProperty = searchFilter.getEntityProperty();
             String operatorStr = searchFilter.getOperatorStr();
             //实体名称
-            hql.append(entityProperty);
+            ql.append(entityProperty);
             //操作符
             //1、如果是自定义查询符号，则使用SearchPropertyMappings中定义的默认的操作符
-            hql.append(" ");
-            hql.append(operatorStr);
+            ql.append(" ");
+            ql.append(operatorStr);
 
             if (!searchFilter.isUnaryFilter()) {
-                hql.append(" :");
-                hql.append(paramPrefix);
-                hql.append(paramIndex++);
+                ql.append(" :");
+                ql.append(paramPrefix);
+                ql.append(paramIndex++);
             }
         }
 
     }
 
-    public void prepareOrder(StringBuilder hql, Searchable search) {
+    public void prepareOrder(StringBuilder ql, Searchable search) {
         if(search.hashSort()) {
-            hql.append(" order by ");
-            hql.append(search.getSort().toString().replace(":", " "));
+            ql.append(" order by ");
+            ql.append(search.getSort().toString().replace(":", " "));
         }
     }
 
