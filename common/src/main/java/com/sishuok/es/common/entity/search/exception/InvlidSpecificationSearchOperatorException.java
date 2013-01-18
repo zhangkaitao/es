@@ -12,7 +12,7 @@ import com.sishuok.es.common.entity.search.SearchOperator;
  * <p>Date: 13-1-17 上午11:59
  * <p>Version: 1.0
  */
-public class InvlidSpecificationSearchOperatorException extends SearchException {
+public final class InvlidSpecificationSearchOperatorException extends SearchException {
 
     public InvlidSpecificationSearchOperatorException(String searchProperty, String operatorStr) {
         this(searchProperty, operatorStr, null);

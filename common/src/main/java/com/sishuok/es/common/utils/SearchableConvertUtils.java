@@ -12,7 +12,6 @@ import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyExcept
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
-import org.springframework.beans.NotWritablePropertyException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 
@@ -25,13 +24,13 @@ import java.util.List;
  * <p>Date: 13-1-15 上午11:46
  * <p>Version: 1.0
  */
-public class SearchConvertUtils {
+public final class SearchableConvertUtils {
     private static volatile ConversionService conversionService;
 
-    public static <T> void convertSearchValueToDomainValue(final Searchable search, final Class<T> entityClass) {
+    public static <T> void convertSearchValueToEntityValue(final Searchable search, final Class<T> entityClass) {
         SearchPropertyMappingDefinition searchPropertyMappingDefinition = SearchPropertyMappingDefinition.newInstance(entityClass);
 
-        convertSearchValueToDomainValue(search, entityClass, searchPropertyMappingDefinition);
+        convertSearchValueToEntityValue(search, entityClass, searchPropertyMappingDefinition);
     }
 
     /**
@@ -41,7 +40,7 @@ public class SearchConvertUtils {
      * @param mappingDefinition 自定义查询条件映射定义
      * @param <T>
      */
-    public static <T> void convertSearchValueToDomainValue(
+    public static <T> void convertSearchValueToEntityValue(
             final Searchable search, final Class<T> entityClass, final SearchPropertyMappingDefinition mappingDefinition) {
 
         if(search.isConverted()) {
@@ -104,7 +103,7 @@ public class SearchConvertUtils {
         return newValue;
     }
 
-/*    public static <T> void convertSearchValueToDomainValue(SearchRequest search, Class<T> domainClass) {
+/*    public static <T> void convertSearchValueToEntityValue(SearchRequest search, Class<T> domainClass) {
         List<SearchFilter> searchFilters = search.getSearchFilters();
         for (SearchFilter searchFilter : searchFilters) {
             String property = searchFilter.getSearchProperty();
@@ -145,7 +144,7 @@ public class SearchConvertUtils {
 
     public static ConversionService getConversionService() {
         if (conversionService == null) {
-            synchronized (SearchConvertUtils.class) {
+            synchronized (SearchableConvertUtils.class) {
                 if (conversionService == null) {
                     try {
                         conversionService = SpringUtils.getBean(ConversionService.class);

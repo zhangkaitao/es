@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  * <p>Date: 13-1-15 上午7:12
  * <p>Version: 1.0
  */
-public class SearchFilter {
+public final class SearchFilter {
 
     private String searchProperty;
     private SearchOperator operator;

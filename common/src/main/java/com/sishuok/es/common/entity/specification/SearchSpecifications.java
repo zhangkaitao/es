@@ -10,7 +10,7 @@ import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
-import com.sishuok.es.common.utils.SearchConvertUtils;
+import com.sishuok.es.common.utils.SearchableConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
@@ -21,11 +21,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 动态查询Specification
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-15 上午10:51
  * <p>Version: 1.0
  */
-public class SearchSpecifications {
+public final class SearchSpecifications {
 
     /**
      * 根据sql拼
@@ -36,7 +37,7 @@ public class SearchSpecifications {
     public static <T> Specification<T> bySearch(final Searchable search, Class<T> domainClass) throws SearchException {
 
         //将查询的数据转换为domain对应属性的类型
-        SearchConvertUtils.convertSearchValueToDomainValue(search, domainClass);
+        SearchableConvertUtils.convertSearchValueToEntityValue(search, domainClass);
 
         return new Specification<T>() {
             @Override

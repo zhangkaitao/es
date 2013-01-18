@@ -16,12 +16,12 @@ import org.springframework.data.domain.Sort;
 import java.util.Map;
 
 /**
- * <p>构建Search</p>
+ * <p>构建Searchable  </p>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-16 上午8:47
  * <p>Version: 1.0
  */
-public class SearchableBuilder {
+public final class SearchableBuilder {
 
     private Map<String, Object> searchParams;
     private Map<String, SearchFilter> searchFilterMap = Maps.newHashMap();

@@ -10,7 +10,7 @@ package com.sishuok.es.common.entity.search.exception;
  * <p>Date: 13-1-17 上午11:44
  * <p>Version: 1.0
  */
-public class InvalidSearchValueException extends SearchException {
+public final class InvalidSearchValueException extends SearchException {
 
     public InvalidSearchValueException(String searchProperty, String entityProperty, Object value) {
         this(searchProperty, entityProperty, value, null);

@@ -28,7 +28,7 @@ import java.util.Map;
  * <p>Date: 13-1-16 下午6:15
  * <p>Version: 1.0
  */
-public class SearchPropertyMappingDefinition {
+public final class SearchPropertyMappingDefinition {
 
     public static final SearchPropertyMappingDefinition EMPTY = newInstance(null);
 

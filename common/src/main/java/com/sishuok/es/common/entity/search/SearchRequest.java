@@ -25,7 +25,7 @@ import java.util.*;
  * <p>Version: 1.0
  */
 
-public class SearchRequest implements Searchable {
+public final class SearchRequest implements Searchable {
 
     private final Map<String, SearchFilter> searchFilterMap = Maps.newHashMap();
 
