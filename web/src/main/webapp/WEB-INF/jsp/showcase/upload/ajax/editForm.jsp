@@ -1,0 +1,104 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
+<es:contentHeader/>
+<%@include file="/WEB-INF/jsp/common/import-upload-css.jspf"%>
+<div>
+    <form:form id="editForm" method="post" commandName="upload" cssClass="form-horizontal" enctype="multipart/form-data">
+        <fieldset>
+            <legend>文件管理[${op}] <a href="${ctx}/showcase/upload" class="btn btn-link">返回</a></legend>
+
+            <es:showGlobalError commandName="upload"/>
+
+            <form:hidden path="id"/>
+
+            <div class="control-group">
+                <form:label path="name" cssClass="control-label">名称</form:label>
+                <div class="controls">
+                    <form:input path="name" cssClass="validate[required,maxSize[10]]" placeholder="最多10个字符"/>
+                </div>
+            </div>
+
+            <div class="control-group" style="margin-bottom: 0px;<c:if test="${empty upload.src}">display: none</c:if>">
+                <form:label path="name" cssClass="control-label"></form:label>
+                <div class="controls">
+                    <div class="ajax-upload-view"></div>
+                    <form:hidden path="src"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <form:label path="name" cssClass="control-label">文件</form:label>
+                <div class="controls">
+                    <span class="btn btn-success fileinput-button">
+                        <i class="icon-plus icon-white"></i>
+                        <span>添加文件...</span>
+                        <input type="file" name="files[]" class="ajax-file-upload" data-url="${ctx}/ajaxUpload" multiple>
+                        </span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" class="btn btn-primary" value="${op}">
+                    <a href="${ctx}/showcase/upload" class="btn">返回</a>
+                </div>
+            </div>
+        </fieldset>
+    </form:form>
+</div>
+<es:contentFooter/>
+<%@include file="/WEB-INF/jsp/common/import-upload-simple-js.jspf"%>
+
+<script type="text/javascript">
+    $(function () {
+        $('.ajax-file-upload').fileupload();
+        $('.ajax-file-upload').fileupload("option", {
+            progressall: function (e, data) {
+                var view = $(".ajax-upload-view");
+                view.parent().parent().show();
+                var progressBar = view.find(".progress");
+                if(progressBar.size() == 0) {
+                    var progressBarTemplate =
+                            '<div class="progress progress-striped">' +
+                                '<div class="bar"></div>' +
+                            '</div>';
+                    progressBar = view.append(progressBarTemplate);
+                }
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                progressBar.find(".bar").css("width", progress + "%");
+            },
+            start : function(e) {
+                $(".ajax-upload-view").html("");
+                var submitBtn = $(this).closest("form").find(":submit");
+                submitBtn.data("value", submitBtn.val()).val("上传文件中...").prop("disabled", true);
+            },
+            //上传完成
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    if (file.error) {
+                        $(".ajax-upload-view").html("<div class='alert alert-error'>" + file.error + "</div>");
+                    } else {
+                        $("[name=src]").val(file.url);
+                        var msg = "<div class='alert alert-success'><strong>上传成功！</strong><br/>{preview}</div>";
+                        var preview = "";
+                        var url = ctx + "/" + file.url;
+                        var thumbnail_url = ctx + "/" + file.thumbnail_url;
+                        if($.app.isImage(file.name)) {
+                            preview = "<a href='{url}' target='_blank'><img src='{thumbnail_url}' title='{name}' height='120px'/></a>"
+                        } else {
+                            preview = "<a href='{url}' target='_blank'>{name}</a>"
+                        }
+                        preview = preview.replace("{url}", url).replace("{thumbnail_url}", thumbnail_url).replace("{name}", file.name);
+                        msg = msg.replace("{preview}", preview);
+                        $(".ajax-upload-view").html(msg);
+
+                    }
+                });
+                var submitBtn = $(this).closest("form").find(":submit");
+                submitBtn.val(submitBtn.data("value")).prop("disabled", false);
+            }
+        });
+        var validationEngine = $("#editForm").validationEngine();
+        <es:showFieldError commandName="upload"/>
+    });
+</script>

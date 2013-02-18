@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+    <!-- 静态资源不过滤 -->
+    <http pattern="/static/**" security="none" create-session="stateless"/>
+    <http pattern="*.js" security="none" create-session="stateless"/>
+    <http pattern="*.css" security="none" create-session="stateless"/>
+    <http pattern="*.png" security="none" create-session="stateless"/>
+    <http pattern="*.jpg" security="none" create-session="stateless"/>
+    <http pattern="*.gif" security="none" create-session="stateless"/>
+
+    <http pattern="/admin/login" security="none"/>
+    <http pattern="/admin/logout" security="none"/>
+
+    <http auto-config='true'>
+        <!-- 登录地址允许游客访问，且必须走https登录 -->
+        <intercept-url pattern="/admin/login" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https"/>
+        <intercept-url pattern="/admin/logout" access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https"/>
+
+        <intercept-url pattern="/**" access="ROLE_USER"/>
+        <!-- 表单登录配置；login-page:指定登录页；default-target-url：默认返回页；always-use-default-target是否总用默认返回页 -->
+
+        <form-login
+                login-page='/admin/login'
+                default-target-url="/" always-use-default-target="false"/>
+        <!-- 退出配置：logout-url退出时URL；logout-success-url：退出成功页 -->
+        <!-- invalidate-session：失效session；delete-cookies：删除的cookie名字列表（逗号分隔） -->
+        <logout
+                logout-url="/admin/logout" logout-success-url="/admin/login"
+                invalidate-session="true" delete-cookies="JSESSIONID"/>
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin" password="123" authorities="ROLE_USER, ROLE_ADMIN"/>
+                <user name="user" password="123" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

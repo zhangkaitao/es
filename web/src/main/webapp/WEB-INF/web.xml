@@ -1,7 +1,116 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+    <display-name>es-web</display-name>
+
+    <!-- Spring配置文件开始  -->
+     <context-param>
+         <param-name>contextConfigLocation</param-name>
+         <param-value>
+             classpath:spring-common.xml,
+             classpath:spring-config.xml
+         </param-value>
+     </context-param>
+     <listener>
+         <listener-class>
+             org.springframework.web.context.ContextLoaderListener
+         </listener-class>
+     </listener>
+     <!-- Spring配置文件结束 -->
+
+    <!-- 设置servlet编码开始 -->
+    <filter>
+        <filter-name>Set Character Encoding</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>Set Character Encoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- 设置servlet编码结束 -->
+
+    <!-- 设置上下文路径到ctx 方便获取 -->
+        <filter>
+            <filter-name>SetContextPathFiler</filter-name>
+            <filter-class>com.sishuok.es.common.web.filter.SetCommonDataFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>SetContextPathFiler</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+    <!-- 调试时web请求/响应时使用的Filter，请配置debugRequest logger -->
+    <filter>
+        <filter-name>DebugRequestAndResponseFilter</filter-name>
+        <filter-class>com.sishuok.es.common.web.filter.DebugRequestAndResponseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DebugRequestAndResponseFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http delete方法 -->
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <servlet-name>spring</servlet-name>
+    </filter-mapping>
+    <filter>
+        <filter-name>httpPutFormFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>httpPutFormFilter</filter-name>
+        <servlet-name>spring</servlet-name>
+    </filter-mapping>
+    <filter>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+   		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+   	</filter>
+   	<filter-mapping>
+   		<filter-name>openEntityManagerInViewFilter</filter-name>
+   		<url-pattern>/*</url-pattern>
+   	</filter-mapping>
+
+    <servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+    <!--如果 发现报 该错误 No mapping found for HTTP request with URI  加入下mapping
+    <servlet-mapping>
+        <servlet-name>jsp</servlet-name>
+        <url-pattern>*.jsp</url-pattern>
+    </servlet-mapping-->
+
+    <welcome-file-list>
+        <welcome-file>/</welcome-file>
+    </welcome-file-list>
+
 </web-app>

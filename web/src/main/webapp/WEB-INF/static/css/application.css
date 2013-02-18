@@ -1,0 +1,208 @@
+body{
+    font-size: 14px ;
+}
+.center-panel {
+    padding-right: 10px!important;
+}
+.sys-menu{
+    background: #0069D6;
+    padding: 8px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+    margin: -10px;
+    margin-bottom: 5px;
+}
+
+#menu > div{
+    line-height: 23px;
+    font-size: 14px;
+    list-style: none;
+    margin: 0px;
+}
+#menu .ui-icon {
+    float: left;
+}
+#menu .ui-icon-menu{
+    right: 1em;left: auto;
+}
+#menu .select{
+    color: #0069D6!important;
+}
+
+#menu li ul {
+    list-style: none;
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 15px;
+}
+
+.ui-progressbar .ui-progressbar-value{background: #ddd;}
+.progress-label {
+    float: left;
+    margin-left: 50%;
+    margin-top: 5px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.ui-tabs .ui-tabs-nav{
+    background: #0069D6;
+    border-bottom: 0px!important;
+}
+.ui-tabs .ui-tabs-nav li{
+    margin-right: 8px;
+    background: #e6e6e6;
+}
+
+@-moz-document url-prefix(){
+    .ui-tabs .ui-tabs-nav li .ui-icon-close{
+        float: left;/**firefox*/
+    }
+}
+.tabs-fix-top {
+    position: fixed;
+    top: 11.6%;
+    left: 20.4%;
+    right: 0%;
+    z-index: 999999;
+}
+#tabs > div{
+    margin-top: 50px!important;
+    padding: 0px 6px 0px 6px!important;
+}
+
+.page-input{
+    width: 50px;
+    margin-left: 30px;
+}
+.page-btn{
+    margin-bottom: 10px;
+}
+.page-info{
+    float: none!important;
+    border: 0px!important;
+}
+
+.table .check{
+    text-align: center;
+}
+
+.sort-table .sort-title {
+    float: left;
+}
+.sort-table .sort {
+    float: right;
+}
+
+.sort-table .sort .dropdown-menu{
+    min-width: 80px!important;
+}
+.sort-table .sort .dropdown-menu > li > a{
+    padding: 4px 55px 4px 10px;
+    cursor: pointer;
+}
+.sort-table .sort .sort-hover {
+    color: #f89406!important;
+}
+
+.control-group .input-append{
+    display:block;
+}
+.control-group .customfile {
+    float: left;
+    display:inline;
+}
+.control-group .customfile input {
+    float: left;
+    padding-left: 25px;
+}
+
+iframe[tabs=true] {
+    border: 0px!important;
+    margin:0px!important;
+}
+
+.inline-radio label{
+    display: inline-block;
+    padding-top: 5px;
+    margin-bottom: 0;
+    vertical-align: middle;
+    margin-right: 5px!important;
+}
+
+.ui-layout-toggler .content {
+    font: 14px bold Verdana, Verdana, Arial, Helvetica, sans-serif;
+}
+.ui-layout-toggler:hover .content {
+    /* mouse-over */
+    color: #0069D6;
+}
+
+.table .edit-btn {
+    padding: 0px!important;
+}
+
+.confirm .title {
+    color: #bd362f;
+}
+
+.moveable{
+    float: right;
+
+}
+.moveable .ui-icon {
+    float: left;
+}
+.moveable .none{
+    width: 16px;
+    height: 16px;
+    float: left;
+}
+.moveable .btn-link {
+    font-size: 14px!important;
+}
+.sortable-placeholder {
+    height: 3em;
+    line-height: 3em;
+}
+
+.ajax-upload-view .progress {
+    width: 300px;
+    height: 30px;
+    float: left;
+}
+.ajax-upload-view .alert {
+    width: 300px;
+}
+
+.treeContent ul.ztree {
+    margin-top: 2px;
+    border: 1px solid #617775;
+    background: #f0f6e4;
+    width: 210px;
+    height: 250px;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+
+.ztree li span.button.add {
+    margin-left: 2px;
+    margin-right: -1px;
+    background-position: -144px 0;
+    vertical-align: top;
+    *vertical-align: middle;
+}
+.ztree li a input.rename{
+    height:16px!important;
+}
+.ztree li a.curSelectedNode_Edit {
+    height: 19px!important;
+}
+.modal,.modal-backdrop {
+    z-index:9999999999!important;
+}
+.modal.fade.in {
+    top:20%!important;
+}
