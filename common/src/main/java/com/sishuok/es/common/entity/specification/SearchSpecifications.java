@@ -5,12 +5,13 @@
  */
 package com.sishuok.es.common.entity.specification;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
-import com.sishuok.es.common.utils.SearchableConvertUtils;
+import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
@@ -47,8 +48,9 @@ public final class SearchSpecifications {
                     return cb.conjunction();
                 }
 
-                List<Predicate> predicateList = new ArrayList<Predicate>();
+                List<Predicate> predicateList = Lists.newArrayList();
                 for(SearchFilter searchFilter : searchFilters) {
+
                     String entityProperty = searchFilter.getEntityProperty();
 
                     String[] names = StringUtils.split(entityProperty, ".");
@@ -60,7 +62,15 @@ public final class SearchSpecifications {
                             expression = expression.get(name);
                         }
                     }
-                    predicateList.add(transformOperatorToPredicate(searchFilter, cb, expression));
+
+                    try {
+                        predicateList.add(transformOperatorToPredicate(searchFilter, cb, expression));
+                    } catch (ClassCastException e) {
+                        throw new SearchException(
+                                "search class cast error. search property:" + searchFilter.getSearchProperty() +
+                                ",operator:" + searchFilter.getOperatorStr() + ",value:" + searchFilter.getValue()
+                                , e);
+                    }
                 }
 
                 return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));

@@ -45,7 +45,7 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
             userRepository.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("realname", "zhang");
+        searchParams.put("realname_like", "zhang");
         Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
         assertEquals(count, userRepositoryImpl.findAllByCustom(search).getNumberOfElements());
     }
@@ -60,7 +60,7 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
             userRepository.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("realname", "zhang");
+        searchParams.put("realname_like", "zhang");
         Searchable search =
                 SearchableBuilder
                         .newInstance(searchParams)

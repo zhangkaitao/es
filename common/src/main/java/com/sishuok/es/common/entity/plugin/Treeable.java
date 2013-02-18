@@ -24,9 +24,35 @@ public interface Treeable {
 
     public String getTitle();
 
-    public int getPath();
+    /**
+     * 显示的图标 大小为16×16
+     * @return
+     */
+    public String getIcon();
 
-    public void setPath(int path);
+    public void setIcon(String icon);
+
+    public String getPath();
+
+    public void setPath(String path);
+
+    /**
+     * 父路径
+     * @return
+     */
+    public String getParentPath();
+
+    /**
+     * 是否是根节点
+     * @return
+     */
+    public boolean isRoot();
+
+    /**
+     * 是否是叶子节点
+     * @return
+     */
+    public boolean isLeaf();
 
     /**
      * 每级路径的长度
@@ -34,4 +60,19 @@ public interface Treeable {
      * @return
      */
     public int getPathLength();
+
+    /**
+     * 根节点默认图标 如果没有默认 空即可  大小为16×16
+     */
+    public String getRootDefaultIcon();
+
+    /**
+     * 树枝节点默认图标 如果没有默认 空即可  大小为16×16
+     */
+    public String getBranchDefaultIcon();
+
+    /**
+     * 树叶节点默认图标 如果没有默认 空即可  大小为16×16
+     */
+    public String getLeafDefaultIcon();
 }

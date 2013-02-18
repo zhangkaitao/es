@@ -9,12 +9,15 @@ import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.BaseRepositoryImpl;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -26,15 +29,28 @@ import java.util.List;
  * <p>Date: 13-1-12 下午4:43
  * <p>Version: 1.0
  */
-public abstract class BaseService<M extends BaseEntity, ID extends Serializable> {
+public abstract class BaseService<M extends BaseEntity, ID extends Serializable> implements InitializingBean {
 
 
     protected final Class<M> entityClass;
     private BaseRepository<M, ID> baseRepository;
 
-    protected BaseService(BaseRepository<M, ID> baseRepository) {
-        this.entityClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    public void setBaseRepository(BaseRepository<M, ID> baseRepository) {
         this.baseRepository = baseRepository;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(baseRepository);
+    }
+
+    public BaseService() {
+        Type parameterizedType = this.getClass().getGenericSuperclass();
+        //CGLUB subclass target object(泛型在父类上)
+        if(!(parameterizedType instanceof ParameterizedType)) {
+            parameterizedType = this.getClass().getSuperclass().getGenericSuperclass();
+        }
+        this.entityClass = (Class<M>) ((ParameterizedType) parameterizedType).getActualTypeArguments()[0];
     }
 
     /**
@@ -167,5 +183,7 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
     public Page<M> findAll(Searchable searchable) {
         return baseRepository.findAll(searchable.getSpecifications(entityClass), searchable.getPage());
     }
+
+
 
 }

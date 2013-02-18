@@ -8,6 +8,7 @@ package com.sishuok.es.common.repository;
 import com.sishuok.es.common.entity.BaseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
 
@@ -20,6 +21,7 @@ import java.io.Serializable;
  * <p>Date: 13-1-12 下午4:46
  * <p>Version: 1.0
  */
+@NoRepositoryBean
 public interface BaseRepository<M extends BaseEntity, ID extends Serializable>
         extends JpaRepository<M, ID>, JpaSpecificationExecutor<M> {
 

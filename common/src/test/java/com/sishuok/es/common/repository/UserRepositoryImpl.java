@@ -79,13 +79,13 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
     private SearchCallback customSearchCallback = new DefaultSearchCallback() {
         @Override
         public void prepareQL(StringBuilder hql, Searchable search) {
-            if(search.containsSearchProperty("realname")) {
+            if(search.containsSearchProperty("realname_like")) {
                 hql.append(" and exists(select 1 from BaseInfo bi where o = bi.user and bi.realname like :realname )");
             }
         }
         @Override
         public void setValues(Query query, Searchable search) {
-            if(search.containsSearchProperty("realname")) {
+            if(search.containsSearchProperty("realname_like")) {
                 query.setParameter("realname", "%" + search.getValue("realname") + "%");
             }
         }

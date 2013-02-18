@@ -13,10 +13,10 @@ package com.sishuok.es.common.entity.plugin;
  * <p>Date: 13-1-12 下午4:09
  * <p>Version: 1.0
  */
-public interface Moveable {
+public interface Movable {
 
-    public int getPriority();
+    public Integer getWeight();
 
-    public void setPriority(int priority);
+    public void setWeight(Integer weight);
 
 }

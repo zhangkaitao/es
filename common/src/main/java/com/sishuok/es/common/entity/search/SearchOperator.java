@@ -48,7 +48,7 @@ public enum SearchOperator {
             }
         }
 
-        throw new SearchException("SearchOperator not support search operator symbol : " + symbol);
+        throw new SearchException("SearchOperator not method search operator symbol : " + symbol);
     }
 
     private static String formatSymbol(String symbol) {

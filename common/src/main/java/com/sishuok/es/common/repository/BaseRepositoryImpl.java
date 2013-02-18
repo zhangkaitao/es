@@ -8,7 +8,7 @@ package com.sishuok.es.common.repository;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.repository.callback.SearchCallback;
-import com.sishuok.es.common.utils.SearchableConvertUtils;
+import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +19,6 @@ import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
 
 
     public BaseRepositoryImpl() {
-        this.entityClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.entityClass = (Class<M>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         Field[] fields = this.entityClass.getDeclaredFields();
         for (Field f : fields) {
             if (f.isAnnotationPresent(Id.class)) {

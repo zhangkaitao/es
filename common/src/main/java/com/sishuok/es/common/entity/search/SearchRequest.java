@@ -118,12 +118,14 @@ public final class SearchRequest implements Searchable {
             }
 
             boolean allowBlankValue = isAllowBlankValue(operator);
-            boolean isValueBlank = value == null || (value instanceof String && StringUtils.isBlank((String) value));
+            boolean isValueBlank = value == null;
+            isValueBlank = isValueBlank || (value instanceof String && StringUtils.isBlank((String) value));
+            isValueBlank = isValueBlank || (value instanceof List && ((List)value).size() == 0);
             //过滤掉空值，即不参与查询
             if (!allowBlankValue && isValueBlank) {
                 continue;
             }
-            addSearchFilter(searchProperty, operator, value);
+            addSearchFilter(key, searchProperty, operator, value);
         }
     }
 
@@ -137,9 +139,6 @@ public final class SearchRequest implements Searchable {
         return operator == SearchOperator.isNotNull || operator == SearchOperator.isNull;
     }
 
-    public void addSearchFilter(final SearchFilter searchFilter) {
-        getSearchFilters().add(searchFilter);
-    }
 
     /**
      * @param searchProperty
@@ -147,8 +146,8 @@ public final class SearchRequest implements Searchable {
      * @param value
      * @see SearchFilter#SearchFilter(java.lang.String, SearchOperator, java.lang.Object)
      */
-    public void addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
-        searchFilterMap.put(searchProperty, new SearchFilter(searchProperty, operator, value));
+    public void addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value) {
+        searchFilterMap.put(key, new SearchFilter(searchProperty, operator, value));
     }
 
     public Collection<SearchFilter> getSearchFilters() {

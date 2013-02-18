@@ -21,8 +21,8 @@ public class UserService extends BaseService<User, Long> {
     private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        super(userRepository);
+    public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+        setBaseRepository(userRepository);
     }
 }

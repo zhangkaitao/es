@@ -3,13 +3,14 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.common.utils;
+package com.sishuok.es.common.entity.search.utils;
 
 import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchPropertyMappingDefinition;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
+import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.core.convert.ConversionService;
@@ -70,7 +71,7 @@ public final class SearchableConvertUtils {
                 if(isCollection) {
                     list.addAll((Collection)value);
                 } else {
-                    list = CollectionUtils.arrayToList(value);
+                    list = new ArrayList<Object>(CollectionUtils.arrayToList(value));
                 }
                 int length = list.size();
                 for (int i = 0; i < length; i++) {
@@ -92,6 +93,7 @@ public final class SearchableConvertUtils {
 
         Object newValue;
         try {
+
             beanWrapper.setPropertyValue(entityProperty, value);
             newValue = beanWrapper.getPropertyValue(entityProperty);
         } catch (InvalidPropertyException e) {

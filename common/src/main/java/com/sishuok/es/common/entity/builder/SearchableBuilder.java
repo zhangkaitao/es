@@ -13,6 +13,7 @@ import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,7 +34,7 @@ public final class SearchableBuilder {
     }
 
     public static SearchableBuilder newInstance() {
-        return newInstance(null);
+        return newInstance(new HashMap<String, Object>());
     }
 
     public static SearchableBuilder newInstance(Map<String, Object> searchParams) {
@@ -42,6 +43,11 @@ public final class SearchableBuilder {
         searchBuilder.searchParams = searchParams;
 
         return searchBuilder;
+    }
+
+    public SearchableBuilder addSearchParam(String key, String[] value) {
+        searchParams.put(key, value);
+        return this;
     }
 
     public SearchableBuilder addSearchParam(String key, String value) {

@@ -53,4 +53,7 @@
     </jpa:repositories>
 
     <context:component-scan base-package="com.sishuok.es.common.service"></context:component-scan>
+
+    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
+
 </beans>

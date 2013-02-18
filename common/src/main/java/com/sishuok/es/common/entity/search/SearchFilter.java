@@ -133,6 +133,13 @@ public final class SearchFilter {
         return operatorStr.startsWith("is");
     }
 
+    @Override
+    public int hashCode() {
+        int result = searchProperty != null ? searchProperty.hashCode() : 0;
+        result = 31 * result + (operator != null ? operator.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
+    }
 
     @Override
     public String toString() {
