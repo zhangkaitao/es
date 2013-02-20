@@ -24,7 +24,7 @@
 
   Most Checks are configurable, be sure to consult the documentation.
 
-  To completely disable a check, just comment it out or delete it from the file.
+  To completely disable a check, just comment it out or delete it from the upload.
 
   Finally, it is worth reading the documentation.
 
@@ -32,14 +32,14 @@
 
 <module name="Checker">
     <!--
-        If you set the basedir searchProperty below, then all reported file
+        If you set the basedir searchProperty below, then all reported upload
         names will be relative to the specified directory. See
         http://checkstyle.sourceforge.net/5.x/config.html#Checker
 
         <searchProperty name="basedir" value="${basedir}"/>
     -->
 
-    <!-- Checks that a package-info.java file exists for each package.     -->
+    <!-- Checks that a package-info.java upload exists for each package.     -->
     <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocPackage -->
     <!--<module name="JavadocPackage"/>-->
 
@@ -71,7 +71,7 @@
     <!-- Checks for Headers                                -->
     <!-- See http://checkstyle.sf.net/config_header.html   -->
     <!-- <module name="Header"> -->
-    <!--   <searchProperty name="headerFile" value="${checkstyle.header.file}"/> -->
+    <!--   <searchProperty name="headerFile" value="${checkstyle.header.upload}"/> -->
     <!--   <searchProperty name="fileExtensions" value="java"/> -->
     <!-- </module> -->
 

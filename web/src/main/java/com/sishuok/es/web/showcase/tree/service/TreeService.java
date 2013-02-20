@@ -83,7 +83,7 @@ public class TreeService extends BaseService<Tree, Long> {
 
             if(siblings.size() == 0) { //如果没有兄弟了 则直接把源的设置为目标即可
                 String nextTargetChildPath = nextChildPath(target.getParentPath(), target.getChildPathSuffix());
-                source.setPath(nextTargetChildPath);
+                treeRepository.updateSelftAndChild(source.getPath(), nextTargetChildPath);
                 return;
             } else {
                 moveType = "prev";

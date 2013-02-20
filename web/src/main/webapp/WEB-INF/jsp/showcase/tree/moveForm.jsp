@@ -13,7 +13,7 @@
             <div class="controls">
                 <span class="help-inline" style="padding: 4px;">
                     <es:showAttachment filename="${source.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
-                    ${source.title}
+                    ${source.name}
                 </span>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <label class="control-label">目标节点</label>
             <div class="controls">
                 <input type="hidden" id="targetPath" name="targetPath" value="${target.path}">
-                <input type="text" id="targetTitle" name="targetTitle" value="${target.title}" class="validate[required]" readonly="readonly">
+                <input type="text" id="targetname" name="targetname" value="${target.name}" class="validate[required]" readonly="readonly">
                 <a id="selectTree"  href="javascript:;">选择</a>
             </div>
         </div>
@@ -46,7 +46,7 @@
 <script type="text/javascript">
 $(function () {
 
-    function initSelectTree($btn, id, title) {
+    function initSelectTree($btn, id, name) {
 
         var treeContentStr =
                 '<div id="treeContent{id}" class="treeContent" style="display:none; position: absolute;">' +
@@ -55,7 +55,7 @@ $(function () {
         $("body").append(treeContentStr.replace(/\{id\}/g, id));
 
         var $id = $("#" + id);
-        var $title = $("#" + title);
+        var $name = $("#" + name);
         var treeContent = "treeContent" + id;
         var $treeContent = $("#" + treeContent);
         var treeSelect = "treeSelect" + id;
@@ -76,7 +76,7 @@ $(function () {
 
         var zNodes =[
             <c:forEach items="${trees.content}" var="t">
-                { id:'${t.path}', pId:'${t.parentPath}', name:"${t.title}", icon:"${ctx}/${t.icon}", open: true},
+                { id:'${t.path}', pId:'${t.parentPath}', name:"${t.name}", icon:"${ctx}/${t.icon}", open: true},
             </c:forEach>
         ];
 
@@ -84,13 +84,13 @@ $(function () {
             var zTree = $.fn.zTree.getZTreeObj(treeSelect);
             var nodes = zTree.getSelectedNodes();
             var lastNode = nodes[nodes.length - 1];
-            $title.prop("value", lastNode.name);
+            $name.prop("value", lastNode.name);
             $id.prop("value", lastNode.id);
         }
 
         function showMenu() {
-            var titleOffset = $title.offset();
-            $treeContent.css({left: titleOffset.left + "px", top: titleOffset.top + $title.outerHeight() + "px"}).slideDown("fast");
+            var nameOffset = $name.offset();
+            $treeContent.css({left: nameOffset.left + "px", top: nameOffset.top + $name.outerHeight() + "px"}).slideDown("fast");
             $("body").bind("mousedown", onBodyDown);
         }
 
@@ -118,7 +118,7 @@ $(function () {
         });
     }
 
-    initSelectTree($("#selectTree,#targetTitle"), "targetPath", "targetTitle");
+    initSelectTree($("#selectTree,#targetname"), "targetPath", "targetname");
 
     var validationEngine = $("#moveForm").validationEngine({
         validationEventTrigger : "submit"

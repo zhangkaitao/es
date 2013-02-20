@@ -10,6 +10,7 @@
             <li><a href="${ctx}/showcase/move">可移动列表</a></li>
             <li><a href="${ctx}/showcase/upload">文件上传</a></li>
             <li><a href="${ctx}/showcase/tree/main">树</a></li>
+            <li><a href="${ctx}/showcase/parentchild/parent">父子表</a></li>
             <li>
                 <a href="#">系统管理</a>
                 <ul>

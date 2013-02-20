@@ -137,7 +137,7 @@ public class SampleController {
 
         //全局错误 前台使用<es:showGlobalError commandName="showcase/sample"/> 显示
         if(sample.getName().contains("admin")) {
-            result.reject("sample.name.must.not.admin");
+            result.reject("name.must.not.admin");
         }
 
         return result.hasErrors();

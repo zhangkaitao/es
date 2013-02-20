@@ -20,9 +20,9 @@ package com.sishuok.es.common.entity.plugin;
  */
 public interface Treeable {
 
-    public void setTitle(String title);
+    public void setName(String name);
 
-    public String getTitle();
+    public String getName();
 
     /**
      * 显示的图标 大小为16×16

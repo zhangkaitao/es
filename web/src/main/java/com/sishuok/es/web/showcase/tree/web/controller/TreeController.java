@@ -156,7 +156,7 @@ public class TreeController {
 
         Tree child = new Tree();
         child.setShow(Boolean.FALSE);
-        child.setTitle("新节点");
+        child.setName("新节点");
 
         treeService.appendChild(parent, child);
 
@@ -173,9 +173,9 @@ public class TreeController {
 
     @RequestMapping(value = "ajax/rename/{path}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxRename(@PathVariable("path") String path, @RequestParam("newTitle") String newTitle) {
+    public Object ajaxRename(@PathVariable("path") String path, @RequestParam("newName") String newName) {
         Tree tree = treeService.findByPath(path);
-        tree.setTitle(newTitle);
+        tree.setName(newName);
         treeService.update(tree);
         return tree;
     }

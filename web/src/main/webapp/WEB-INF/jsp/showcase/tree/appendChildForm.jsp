@@ -13,15 +13,15 @@
             <div class="controls">
                 <span class="help-inline" style="padding: 4px;">
                     <es:showAttachment filename="${parent.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
-                    ${parent.title}
+                    ${parent.name}
                 </span>
             </div>
         </div>
 
         <div class="control-group">
-            <form:label path="title" cssClass="control-label">子节点名称</form:label>
+            <form:label path="name" cssClass="control-label">子节点名称</form:label>
             <div class="controls">
-                <form:input path="title" cssClass="validate[required,custom[title]]" placeholder="小于50个字符"/>
+                <form:input path="name" cssClass="validate[required,custom[name]]" placeholder="小于50个字符"/>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
 <es:contentFooter/>
 <script type="text/javascript">
 $(function () {
-    $.validationEngineLanguage.allRules.title = {
+    $.validationEngineLanguage.allRules.name = {
         "regex": /^.{1,50}$/,
         "alertText": "* 小于50个字符"
     };

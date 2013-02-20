@@ -23,7 +23,7 @@ import java.util.Date;
 @Table(name = "tbl_sample")
 public class Sample extends BaseEntity<Long> {
 
-    @NotNull(message = "{sample.name.not.null}")
+    @NotNull(message = "{name.not.null}")
     @Column(name = "name")
     private String name;
 

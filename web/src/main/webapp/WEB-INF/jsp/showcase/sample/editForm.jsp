@@ -27,10 +27,8 @@
             <div class="control-group">
                 <form:label path="birthday" cssClass="control-label">出生日期</form:label>
                 <div class="controls input-append date">
-                    <form:input path="birthday" data-format="yyyy-MM-dd hh:mm:ss" placeholder="例如2013-02-07-11:58"/>
-                    <span class="add-on">
-                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                    </span>
+                    <form:input path="birthday" data-format="yyyy-MM-dd hh:mm:ss" placeholder="例如2013-02-07 11:58:11" readonly="true"/>
+                    <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                 </div>
             </div>
 

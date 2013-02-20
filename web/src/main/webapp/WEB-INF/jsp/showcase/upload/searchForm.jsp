@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<form id="searchForm" class="form-inline accordion" action="${ctx}/showcase/upload" async="true">
+<form id="searchForm" class="form-inline accordion" action="${ctx}/showcase/upload">
 
     <label for="search.id_in">编号</label>
     <input type="text" id="search.id_in" name="search.id_in" value="${param['search.id_in']}"  class="input-medium" placeholder="多个使用空格分隔">

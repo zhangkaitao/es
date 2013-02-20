@@ -92,7 +92,7 @@
         * @param treeNode
          */
         function onRename(e, treeId, treeNode) {
-            var url = "${ctx}/showcase/tree/ajax/rename/" + treeNode.id + "?newTitle=" + treeNode.name;
+            var url = "${ctx}/showcase/tree/ajax/rename/" + treeNode.id + "?newName=" + treeNode.name;
             $.getJSON(url, function (data) {
                 location.reload();
             });
@@ -133,6 +133,9 @@
         * @param isCopy
         */
         function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+            if(!targetNode || treeNodes.length == 0) {
+                return;
+            }
             var sourcePath = treeNodes[0].id;
             var targetPath = targetNode.id;
             var moveType = moveType;
@@ -144,7 +147,7 @@
 
         var zNodes =[
             <c:forEach items="${trees.content}" var="t">
-                { id:'${t.path}', pId:'${t.parentPath}', name:"${t.title}", icon:"${ctx}/${t.icon}", open: true,
+                { id:'${t.path}', pId:'${t.parentPath}', name:"${t.name}", icon:"${ctx}/${t.icon}", open: true,
                   click : "parent.frames['maintainFrame'].location.href='${ctx}/showcase/tree/maintain/${t.id}'",
                   root : ${t.root}},
             </c:forEach>

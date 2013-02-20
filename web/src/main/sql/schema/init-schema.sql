@@ -29,7 +29,7 @@ create table `tbl_upload`(
 
 create table `tbl_tree`(
     `id`         bigint unsigned not null auto_increment,
-    `title`      varchar(100),
+    `name`      varchar(100),
     `path`       varchar(200),
     `icon`       varchar(200),
     `show`       bool,
@@ -37,6 +37,23 @@ create table `tbl_tree`(
     index idx_path (`path`)
 ) charset=utf8 ENGINE=InnoDB;
 
+create table `tbl_parent`(
+  `id`          bigint unsigned not null auto_increment,
+  `name`        varchar(100),
+  `type`        varchar(50),
+  `beginDate`  timestamp,
+  `endDate`    timestamp,
+  `show`        bool,
+  constraint `pk_parent` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;
 
-
-
+create table `tbl_child`(
+  `id`          bigint unsigned not null auto_increment,
+  `parent_id`  bigint unsigned,
+  `name`        varchar(100),
+  `type`        varchar(50),
+  `beginTime`  time,
+  `endTime`    time,
+  `show`        bool,
+  constraint `pk_child` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;

@@ -50,6 +50,7 @@ body{
 .ui-tabs .ui-tabs-nav{
     background: #0069D6;
     border-bottom: 0px!important;
+    z-index: 1000;
 }
 .ui-tabs .ui-tabs-nav li{
     margin-right: 8px;
@@ -205,4 +206,13 @@ iframe[tabs=true] {
 }
 .modal.fade.in {
     top:20%!important;
+}
+.prettyprint {
+    padding: 8px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+}
+legend.no-margin{
+    margin-bottom: 0px;
+    border: 0px;
 }

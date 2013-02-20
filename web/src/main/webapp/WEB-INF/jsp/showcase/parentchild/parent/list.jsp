@@ -16,7 +16,7 @@
           <span class="icon-search"></span>
           查询
       </a>
-      <a id="create" class="btn" href="${ctx}/showcase/sample/create">
+      <a id="create" class="btn" href="${ctx}/showcase/parentchild/parent/create">
           <span class="icon-edit"></span>
           新增
       </a>
@@ -39,29 +39,29 @@
                 <a class="reverse-all" href="javascript:;">反选</a>
             </th>
             <th sort="id">编号</th>
-            <th sort="name">姓名</th>
-            <th>年龄</th>
-            <th>出生日期</th>
-            <th>性别</th>
+            <th sort="name">名称</th>
+            <th>类型</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
             <th>是否显示</th>
             <th style="width: 6%">操作</th>
         </tr>
       </thead>
       <tbody>
-      <c:forEach items="${samples.content}" var="sample">
+      <c:forEach items="${parents.content}" var="parent">
         <tr>
-            <td class="check"><input type="checkbox" name="ids" value="${sample.id}"></td>
-            <td>${sample.id}</td>
-            <td>${sample.name}</td>
-            <td>${sample.age}</td>
-            <td><spring:eval expression="sample.birthday"/></td>
-            <td>${sample.sex.info}</td>
-            <td>${sample.show}</td>
+            <td class="check"><input type="checkbox" name="ids" value="${parent.id}"></td>
+            <td>${parent.id}</td>
+            <td>${parent.name}</td>
+            <td>${parent.type.info}</td>
+            <td><spring:eval expression="parent.beginDate"/></td>
+            <td><spring:eval expression="parent.endDate"/></td>
+            <td>${parent.show}</td>
             <td>
-                <a class="btn btn-link edit-btn" title="修改" href="${ctx}/showcase/sample/update/${sample.id}">
+                <a class="btn btn-link edit-btn" title="修改" href="${ctx}/showcase/parentchild/parent/update/${parent.id}">
                     <span class=" icon-edit"></span>
                 </a>
-                <a class="btn btn-link edit-btn" title="删除" href="${ctx}/showcase/sample/delete/${sample.id}">
+                <a class="btn btn-link edit-btn" title="删除" href="${ctx}/showcase/parentchild/parent/delete/${parent.id}">
                     <span class=" icon-remove"></span>
                 </a>
             </td>
@@ -69,7 +69,7 @@
       </c:forEach>
       </tbody>
   </table>
-  <es:page page="${samples}" />
+  <es:page page="${parents}" />
 </div>
 <es:contentFooter/>
 <script type="text/javascript">
@@ -78,21 +78,7 @@
             $.app.confirm({
                 message: "确定删除选中的数据吗？",
                 ok : function() {
-                    window.location.href = "${ctx}/showcase/sample/batch/delete?" + $(".check :checkbox").serialize();
-                    //ajax删除
-                    <%--$.ajax({--%>
-                        <%--type : "post",--%>
-                        <%--dataType: "json",--%>
-                        <%--url : "${ctx}/showcase/sample/batch/delete",--%>
-                        <%--data : $(".check :checkbox").serialize(),--%>
-                        <%--success : function (data) {--%>
-                            <%--if (!data.success) {--%>
-                                <%--$.app.alert("删除时遇到问题，请重试或联系管理员");--%>
-                            <%--} else {--%>
-                                <%--location.reload();--%>
-                            <%--}--%>
-                        <%--}--%>
-                    <%--});--%>
+                    window.location.href = "${ctx}/showcase/parentchild/parent/batch/delete?" + $(".check :checkbox").serialize();
                 }
             });
         });
@@ -103,7 +89,7 @@
                 $.app.alert({message : "请先选中要修改的数据"});
                 return;
             }
-            window.location.href = '${ctx}/showcase/sample/update/' + id;
+            window.location.href = '${ctx}/showcase/parentchild/parent/update/' + id;
         });
 
     });

@@ -29,7 +29,7 @@ public class Tree extends BaseEntity<Long> implements Treeable {
     /**
      * 标题
      */
-    private String title;
+    private String name;
     /**
      * 路径
      * 比如中国01 山东0101 河北0102
@@ -52,12 +52,12 @@ public class Tree extends BaseEntity<Long> implements Treeable {
     @Column(name = "`show`")
     private Boolean show;
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPath() {

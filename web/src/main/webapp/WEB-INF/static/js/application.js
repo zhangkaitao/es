@@ -271,24 +271,8 @@ $.app = {
      */
     loadingToCenterIframe: function (panel, url, loadingMessage) {
         panel.data("url", url);
-        if (!loadingMessage) {
-            loadingMessage = '装载中...';
-        }
-        $.blockUI({
-            fadeIn: 700,
-            fadeOut: 700,
-            showOverlay: false,
-            css: {
-                border: 'none',
-                padding: '15px',
-                backgroundColor: '#ddd',
-                '-webkit-border-radius': '10px',
-                '-moz-border-radius': '10px',
-                opacity: .6,
-                color: '#000'
-            },
-            message: '<h4><img src="' + ctx + '/static/images/loading.gif" /> ' + loadingMessage + ' </h4>'
-        });
+
+        $.app.waiting(loadingMessage);
 
         var panelId = panel.prop("id");
         var iframeId = "iframe-" + panelId;
@@ -316,10 +300,13 @@ $.app = {
     },
 
     waiting : function(message) {
-        $.blockUI({
+        if(!message) {
+            message = "装载中...";
+        }
+        top.window.$.blockUI({
             fadeIn: 700,
             fadeOut: 700,
-            showOverlay: true,
+            showOverlay: false,
             css: {
                 border: 'none',
                 padding: '15px',
@@ -334,8 +321,58 @@ $.app = {
     }
     ,
     waitingOver: function () {
-        $.unblockUI();
-    },
+        top.window.$.unblockUI();
+    }
+    ,
+    /**
+     * 模态编辑
+     * @param url
+     * @param css
+     */
+    modalEdit : function(url, css) {
+        var defaultCss = {
+            cursor:"default",
+            "text-align": "",
+            padding : "10px",
+            width: "800px",
+            top: "20%",
+            left: "30%"
+        };
+
+        if(!css) {
+            css = defaultCss;
+        } else {
+            if(!css.top) {
+                css.top = defaultCss.top;
+            }
+            if(!css.left) {
+                css.left = defaultCss.left;
+            }
+            if(!css.width) {
+                css.width = defaultCss.width;
+            }
+        }
+
+        $.app.waiting();
+        $.get(url, function(data) {
+            $.app.waitingOver();
+            //因为是在top中弹出窗口编辑，因此需要把document保存下来，方便接下来的操作
+            top.window.currentDocument = document;
+            top.window.$.blockUI({
+                message : data,
+                css : css
+            });
+        });
+    }
+    ,
+    /**
+     * 取消编辑
+     */
+    cancelEdit : function() {
+        this.waitingOver();
+        top.window.currentDocument = null;
+    }
+    ,
     /**
      * 分页
      * @param url
@@ -592,9 +629,32 @@ $.app = {
 
              });
          }
-    },
+    }
+    ,
     isImage : function(filename) {
         return /gif|jpe?g|png|bmp$/i.test(filename);
+    }
+    ,
+    initDatetimePicker : function() {
+        //初始化 datetime picker
+        $('.date').each(function() {
+            var pickDate = $(this).find("[data-format]").attr("data-format").toLowerCase().indexOf("yyyy-mm-dd") != -1;
+            var pickTime = $(this).find("[data-format]").attr("data-format").toLowerCase().indexOf("hh:mm:ss") != -1;
+            $(this).datetimepicker({
+                pickDate : pickDate,
+                pickTime : pickTime
+            });
+        });
+    }
+    ,
+    initFileInput : function() {
+        //初始化 文件上传框
+        $('input[type="file"].custom-file-input').customFileInput({
+            button_position 	: 'right',
+            feedback_text		: '还没有选择文件...',
+            button_text			: '浏  览',
+            button_change_text	: '更  改'
+        });
     }
 };
 
@@ -602,15 +662,8 @@ $.app = {
 $(function () {
     $.app.initTable($(".table"));
     $.app.initTableMoveable($(".move-table"));
-    //初始化 datetime picker
-    $('.date').datetimepicker();
-    //初始化 文件上传框
-    $('input[type="file"].custom-file-input').customFileInput({
-            button_position 	: 'right',
-            feedback_text		: '还没有选择文件...',
-            button_text			: '浏  览',
-            button_change_text	: '更  改'
-    });
+    $.app.initDatetimePicker();
+    $.app.initFileInput();
 
     $(document).ajaxError(function(event,request, settings){
         $.app.alert({
