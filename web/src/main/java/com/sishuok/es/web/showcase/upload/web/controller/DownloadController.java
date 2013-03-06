@@ -5,25 +5,13 @@
  */
 package com.sishuok.es.web.showcase.upload.web.controller;
 
-import com.sishuok.es.Constants;
-import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.utils.FileUploadUtils;
-import com.sishuok.es.web.showcase.upload.entity.Upload;
-import com.sishuok.es.web.showcase.upload.service.UploadService;
-import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.*;
 import java.lang.String;
 import java.net.URLDecoder;

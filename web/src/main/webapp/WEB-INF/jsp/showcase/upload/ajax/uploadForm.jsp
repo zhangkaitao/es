@@ -11,11 +11,12 @@
             <div class="row fileupload-buttonbar">
                 <div class="span7">
                     <!-- The fileinput-button span is used to style the file input field as button -->
-                    <span class="btn btn-success fileinput-button">
+                    <label for="files" class="btn btn-success fileinput-button">
                         <i class="icon-plus icon-white"></i>
                         <span>添加文件...</span>
-                        <input type="file" name="files[]" multiple>
-                    </span>
+                        <input type="file" id="files" name="files[]" multiple>
+                    </label>
+
                     <button type="submit" class="btn btn-primary start">
                         <i class="icon-upload icon-white"></i>
                         <span>开始上传</span>
@@ -89,7 +90,7 @@
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td class="preview"><span class="fade"></span></td>
+        <td class="preview" style="width:120px"><span class="fade"></span></td>
         <td class="name" width="35%"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% if (file.error) { %}
@@ -127,7 +128,7 @@
             <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else { %}
             <td class="preview">{% if (file.thumbnail_url) { %}
-                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}" width="120px"></a>
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}" style="width:120px"></a>
             {% } %}</td>
             <td class="name">
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
@@ -135,7 +136,7 @@
             <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
             <td colspan="2"></td>
         {% } %}
-        <td class="delete">
+        <td class="delete" width="10%">
             <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                 <i class="icon-trash icon-white"></i>
                 <span>删除</span>
@@ -170,7 +171,7 @@
         $('#fileupload').fileupload('option', {
             url: '${ctx}/ajaxUpload',
             maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar)$/i,
+            acceptFileTypes: /(\.|\/)(bmp|gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar)$/i,
             process: [
                 {
                     action: 'load',

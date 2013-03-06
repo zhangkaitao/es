@@ -200,8 +200,9 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
             WebDataBinder binder, 
             NativeWebRequest request, 
             MethodParameter parameter) throws Exception {
-        
-        
+
+        Map<String, Boolean> hasProcessedPrefixMap = new HashMap<String, Boolean>();
+
         Class<?> targetType = binder.getTarget().getClass();
         ServletRequest servletRequest = prepareServletRequest(binder.getTarget(), request, parameter);
         WebDataBinder simpleBinder = binderFactory.createBinder(request, null, null);
@@ -221,16 +222,23 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
                 componentType = parameter.getParameterType().getComponentType();
             }
             
-            
+
             for(Object key : servletRequest.getParameterMap().keySet()) {
                 String prefixName = getPrefixName((String) key);
+
+                //每个prefix 只处理一次
+                if(hasProcessedPrefixMap.containsKey(prefixName)) {
+                    continue;
+                } else {
+                    hasProcessedPrefixMap.put(prefixName, Boolean.TRUE);
+                }
+
                 if(isSimpleComponent(prefixName)) { //bind simple type 
                     Map<String, Object> paramValues = WebUtils.getParametersStartingWith(servletRequest, prefixName);
                     for(Object value : paramValues.values()) {
                         target.add(simpleBinder.convertIfNecessary(value, componentType));
                     }
                 } else {
-                    
                     Object component = BeanUtils.instantiate(componentType);
                     WebDataBinder componentBinder = binderFactory.createBinder(request, component, null);
                     component = componentBinder.getTarget();
@@ -244,12 +252,11 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
                                 throw new BindException(componentBinder.getBindingResult());
                             }
                         }
-                        
                         target.add(component);
                     }
                 }
             }
-        } else if(MapWapper.class.isAssignableFrom(targetType)) { 
+        } else if(MapWapper.class.isAssignableFrom(targetType)) {
             
             
             Type type = parameter.getGenericParameterType();
@@ -267,6 +274,13 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
             
             for(Object key : servletRequest.getParameterMap().keySet()) {
                 String prefixName = getPrefixName((String) key);
+
+                //每个prefix 只处理一次
+                if(hasProcessedPrefixMap.containsKey(prefixName)) {
+                    continue;
+                } else {
+                    hasProcessedPrefixMap.put(prefixName, Boolean.TRUE);
+                }
                 
                 Object keyValue = simpleBinder.convertIfNecessary(getMapKey(prefixName), keyType);
                 
@@ -374,7 +388,7 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
         if(parameterName.charAt(modelPrefixNameLength) == '[') {
             return parameterName.substring(modelPrefixNameLength);
         }
-        throw new IllegalArgumentException("illegal request parameter, can not binding to @FormBean("+modelPrefixName+")");
+        throw new IllegalArgumentException("illegal request parameter, can not binding to @FormBean(" + modelPrefixName + ")");
     }
 
     private boolean isFormModelAttribute(String parameterName, String modelPrefixName) {

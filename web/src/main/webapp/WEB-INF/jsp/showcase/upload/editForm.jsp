@@ -2,11 +2,13 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div>
-    <form:form id="editForm" method="post" commandName="upload" cssClass="form-horizontal" enctype="multipart/form-data">
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
+        <!--上一个地址-->
+        <es:BackURL hiddenInput="true"/>
         <fieldset>
-            <legend>文件管理[${op}] <a href="${ctx}/showcase/upload" class="btn btn-link">返回</a></legend>
+            <legend>文件管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
-            <es:showGlobalError commandName="upload"/>
+            <es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
 
@@ -17,27 +19,27 @@
                 </div>
             </div>
 
-            <c:if test="${not empty upload.src}">
+            <c:if test="${not empty m.src}">
             <div class="control-group">
                 <form:label path="name" cssClass="control-label"></form:label>
                 <div class="controls">
-                    <es:showAttachment filename="${upload.src}" showImage="true" width="auto" height="160"/>
+                    <es:showAttachment filename="${m.src}" showImage="true" width="auto" height="160"/>
                     <form:hidden path="src"/>
                 </div>
             </div>
             </c:if>
 
             <div class="control-group">
-                <form:label path="name" cssClass="control-label">文件</form:label>
+                <label for="file" class="control-label">文件</label>
                 <div class="controls">
-                    <input type="file" name="file" class="custom-file-input"/>
+                    <input id="file" type="file" name="file" class="custom-file-input"/>
                 </div>
-            </div>
+        </div>
 
             <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="${ctx}/showcase/upload" class="btn">返回</a>
+                    <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
         </fieldset>
@@ -53,9 +55,10 @@
             </c:when>
             <c:otherwise>
                 var validationEngine = $("#editForm").validationEngine();
-                <es:showFieldError commandName="upload"/>
+                <es:showFieldError commandName="m"/>
             </c:otherwise>
         </c:choose>
+
 
     });
 </script>

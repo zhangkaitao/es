@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>抽象DAO层基类 提供一些简便方法<br/>
@@ -24,5 +25,6 @@ import java.io.Serializable;
 @NoRepositoryBean
 public interface BaseRepository<M extends BaseEntity, ID extends Serializable>
         extends JpaRepository<M, ID>, JpaSpecificationExecutor<M> {
+
 
 }

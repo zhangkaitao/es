@@ -20,10 +20,12 @@
 
         <div class="control-group">
             <label class="control-label">目标节点</label>
-            <div class="controls">
+            <div class="controls input-append" title="选择目标节点">
                 <input type="hidden" id="targetPath" name="targetPath" value="${target.path}">
                 <input type="text" id="targetname" name="targetname" value="${target.name}" class="validate[required]" readonly="readonly">
-                <a id="selectTree"  href="javascript:;">选择</a>
+                <a id="selectTree"  href="javascript:;">
+                    <span class="add-on"><i class="icon-chevron-down"></i></span>
+                </a>
             </div>
         </div>
 
@@ -75,8 +77,8 @@ $(function () {
         };
 
         var zNodes =[
-            <c:forEach items="${trees.content}" var="t">
-                { id:'${t.path}', pId:'${t.parentPath}', name:"${t.name}", icon:"${ctx}/${t.icon}", open: true},
+            <c:forEach items="${page.content}" var="m">
+                { id:'${m.path}', pId:'${m.parentPath}', name:"${m.name}", icon:"${ctx}/${m.icon}", open: true},
             </c:forEach>
         ];
 

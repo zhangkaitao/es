@@ -11,10 +11,8 @@
         <div class="control-group">
             <label class="control-label">父节点名称</label>
             <div class="controls">
-                <span class="help-inline" style="padding: 4px;">
-                    <es:showAttachment filename="${parent.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
-                    ${parent.name}
-                </span>
+                 <es:showAttachment filename="${parent.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
+                 ${parent.name}
             </div>
         </div>
 

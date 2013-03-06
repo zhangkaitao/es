@@ -6,7 +6,7 @@
 package com.sishuok.es.common.service;
 
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.builder.SearchableBuilder;
+import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
@@ -103,7 +103,7 @@ public class UserServiceTest extends BaseUserIT {
     }
 
     @Test
-    public void tesCount() {
+    public void testCount() {
         int count = 15;
         for (int i = 0; i < count; i++) {
             userService.save(createUser());
@@ -112,7 +112,7 @@ public class UserServiceTest extends BaseUserIT {
     }
 
     @Test
-    public void tesFindAll() {
+    public void testFindAll() {
         int count = 15;
         User user = null;
         for (int i = 0; i < count; i++) {
@@ -125,7 +125,7 @@ public class UserServiceTest extends BaseUserIT {
 
 
     @Test
-    public void tesFindAllBySort() {
+    public void testFindAllBySort() {
         int count = 15;
         User user = null;
         for (int i = 0; i < count; i++) {
@@ -148,7 +148,7 @@ public class UserServiceTest extends BaseUserIT {
 
 
     @Test
-    public void tesFindAllByPageableAndSortDesc() {
+    public void testFindAllByPageableAndSortDesc() {
         int count = 15;
         User lastUser = null;
         for (int i = 0; i < count; i++) {
@@ -165,7 +165,7 @@ public class UserServiceTest extends BaseUserIT {
     }
 
     @Test
-    public void tesFindAllByPageableAndSortAsc() {
+    public void testFindAllByPageableAndSortAsc() {
         int count = 15;
         User lastUser = null;
         for (int i = 0; i < count; i++) {
@@ -183,7 +183,7 @@ public class UserServiceTest extends BaseUserIT {
 
 
     @Test
-    public void tesFindAllBySearchAndNoPage() {
+    public void testFindAllBySearchAndNoPage() {
         int count = 15;
         User lastUser = null;
         for (int i = 0; i < count; i++) {
@@ -204,7 +204,7 @@ public class UserServiceTest extends BaseUserIT {
 
 
     @Test
-    public void tesFindAllBySearchAndSort() {
+    public void testFindAllBySearchAndSort() {
         int count = 15;
         User lastUser = null;
         for (int i = 0; i < count; i++) {
@@ -226,7 +226,7 @@ public class UserServiceTest extends BaseUserIT {
     }
 
     @Test
-    public void tesFindAllBySearchAndPageableAndSortAsc() {
+    public void testFindAllBySearchAndPageableAndSortAsc() {
         int count = 15;
         User lastUser = null;
         for (int i = 0; i < count; i++) {

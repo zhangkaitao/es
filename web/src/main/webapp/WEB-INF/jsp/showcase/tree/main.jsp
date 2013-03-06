@@ -2,8 +2,8 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center"
-         frameborder="0" scrolling="auto" style="top: 0px!important;"></iframe>
+<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center no-top"
+         frameborder="0" scrolling="auto"></iframe>
 
 <iframe id="treeFrame" name="treeFrame" class="ui-layout-west" frameborder="0" scrolling="auto"
          src="${ctx}/showcase/tree/tree"></iframe>

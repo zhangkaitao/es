@@ -2,10 +2,12 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div>
-    <form:form id="editForm" method="post" commandName="parent" cssClass="form-horizontal">
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
+        <!--上一个地址-->
+        <es:BackURL hiddenInput="true"/>
         <fieldset>
-            <legend class="no-margin">父管理[${op}] <a href="${ctx}/showcase/parentchild/parent" class="btn btn-link">返回</a></legend>
-            <es:showGlobalError commandName="parent"/>
+            <legend class="no-margin">父管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
+            <es:showGlobalError commandName="m"/>
             <form:hidden path="id"/>
 
             <div class="prettyprint">
@@ -49,12 +51,30 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
+            <br/>
             <fieldset>
-                <legend class="no-margin">子列表<a id="createChild" class="btn btn-link">新增子</a></legend>
+                <legend class="no-margin">
+                    子列表
+                    <div class="btn-group">
+                        <a id="createChild" class="btn">
+                            <span class="icon-edit"></span>
+                            新增
+                        </a>
+                        <a id="removeSelectChild" class="btn">
+                            <span class="icon-remove"></span>
+                            批量删除
+                        </a>
+                    </div>
+                </legend>
                 <div>
                     <table id="childTable" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
+                                <th style="width: 10%">
+                                    <a class="check-all" href="javascript:;">全选</a>
+                                    |
+                                    <a class="reverse-all" href="javascript:;">反选</a>
+                                </th>
                                 <th>编号</th>
                                 <th>名称</th>
                                 <th>类型</th>
@@ -65,15 +85,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                           <tr>
-                               <td>1</td>
-                               <td>1</td>
-                               <td>1</td>
-                               <td>1</td>
-                               <td>1</td>
-                               <td>1</td>
-                               <td>1</td>
-                           </tr>
+                           <c:forEach items="${childList}" var="c">
+                               <tr id="old_${c.id}">
+                                   <td class="check"><input type="checkbox" name="ids" value="${c.id}"></td>
+                                   <td>${c.id}</td>
+                                   <td>${c.name}</td>
+                                   <td>${c.type.info}</td>
+                                   <td><spring:eval expression="c.beginTime"/></td>
+                                   <td><spring:eval expression="c.endTime"/></td>
+                                   <td>${c.show ? '是' : '否'}</td>
+                                   <td>
+                                       <c:choose>
+                                           <c:when test="${op eq '删除'}">
+                                               &nbsp;
+                                           </c:when>
+                                           <c:otherwise>
+                                               <a class='icon-edit' href='javascript:void(0);' title='修改'></a>
+                                               <a class='icon-trash' href='javascript:void(0);' title='删除'></a>
+                                               <a class='icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>
+                                           </c:otherwise>
+                                       </c:choose>
+                                   </td>
+                               </tr>
+                           </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -83,7 +117,7 @@
             <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="${ctx}/showcase/parentchild/parent" class="btn">返回</a>
+                    <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
         </fieldset>
@@ -95,19 +129,26 @@
         <c:choose>
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
-                $("#editForm :input").prop("readonly", true);
+                $("#editForm :input").not(":submit,:button").prop("readonly", true);
             </c:when>
             <c:otherwise>
                 var validationEngine = $("#editForm").validationEngine();
-                <es:showFieldError commandName="parent"/>
+                <es:showFieldError commandName="m"/>
             </c:otherwise>
         </c:choose>
 
+        $.parentchild.initParentForm({
+            form : $("#editForm"),
+            tableId : "childTable",
+            prefixParamName : "childList",
+            createUrl : "${ctx}/showcase/parentchild/parent/child/create",
+            updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",
+            deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}",
+            batchDeleteUrl : "${ctx}/showcase/parentchild/parent/child/batch/delete"
 
-        $("#createChild").click(function() {
-            $.app.modalEdit("${ctx}/showcase/parentchild/parent/child/create")
         });
-
-
     });
+
+
+
 </script>

@@ -41,7 +41,7 @@ public class FileUploadUtils {
     };
     public static final String[] DEFAULT_ALLOWED_CONTENT_TYPE = {
                 //图片
-                "image/bmp", "image/gif", "image/jpeg", "image/png", "image/tiff",
+                "image/bmp", "image/gif", "image/jpg", "image/pjpeg", "image/jpeg", "image/png", "image/tiff",
                 //word excel powerpoint
                 "application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint",
                 //压缩文件
@@ -192,6 +192,7 @@ public class FileUploadUtils {
             throws InvalidContentTypeException, FileSizeLimitExceededException {
 
         String contentType = file.getContentType();
+
         long size = file.getSize();
 
         if (allowedContentType != null && !isAllowedContentType(contentType, allowedContentType)) {

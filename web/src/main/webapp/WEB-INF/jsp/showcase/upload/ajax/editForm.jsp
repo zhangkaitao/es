@@ -3,6 +3,7 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-upload-css.jspf"%>
 <div>
+
     <form:form id="editForm" method="post" commandName="upload" cssClass="form-horizontal" enctype="multipart/form-data">
         <fieldset>
             <legend>文件管理[${op}] <a href="${ctx}/showcase/upload" class="btn btn-link">返回</a></legend>
@@ -19,7 +20,7 @@
             </div>
 
             <div class="control-group" style="margin-bottom: 0px;<c:if test="${empty upload.src}">display: none</c:if>">
-                <form:label path="name" cssClass="control-label"></form:label>
+                <label for="files" class="control-label"></label>
                 <div class="controls">
                     <div class="ajax-upload-view"></div>
                     <form:hidden path="src"/>
@@ -27,13 +28,14 @@
             </div>
 
             <div class="control-group">
-                <form:label path="name" cssClass="control-label">文件</form:label>
+                <label for="files" class="control-label">文件</label>
                 <div class="controls">
-                    <span class="btn btn-success fileinput-button">
+                   <label for="files" class="btn btn-success fileinput-button">
                         <i class="icon-plus icon-white"></i>
                         <span>添加文件...</span>
-                        <input type="file" name="files[]" class="ajax-file-upload" data-url="${ctx}/ajaxUpload" multiple>
-                        </span>
+                       <input type="file" id="files" name="files[]" data-url="${ctx}/ajaxUpload" multiple>
+                   </label>
+
                 </div>
             </div>
 
@@ -51,8 +53,10 @@
 
 <script type="text/javascript">
     $(function () {
-        $('.ajax-file-upload').fileupload();
-        $('.ajax-file-upload').fileupload("option", {
+        $('.fileinput-button input[type="file"]').fileupload({
+            dataType : "json"
+        });
+        $('.fileinput-button input[type="file"]').fileupload("option", {
             progressall: function (e, data) {
                 var view = $(".ajax-upload-view");
                 view.parent().parent().show();
@@ -60,8 +64,8 @@
                 if(progressBar.size() == 0) {
                     var progressBarTemplate =
                             '<div class="progress progress-striped">' +
-                                '<div class="bar"></div>' +
-                            '</div>';
+                                    '<div class="bar"></div>' +
+                                    '</div>';
                     progressBar = view.append(progressBarTemplate);
                 }
                 var progress = parseInt(data.loaded / data.total * 100, 10);

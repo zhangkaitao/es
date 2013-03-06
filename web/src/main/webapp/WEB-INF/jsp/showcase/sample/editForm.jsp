@@ -2,13 +2,16 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div>
-    <form:form id="editForm" method="post" commandName="sample" cssClass="form-horizontal">
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
+        <!--上一个地址-->
+        <es:BackURL hiddenInput="true"/>
         <fieldset>
-            <legend>示例管理[${op}] <a href="${ctx}/showcase/sample" class="btn btn-link">返回</a></legend>
+            <legend>示例管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
-            <es:showGlobalError commandName="sample"/>
+            <es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
+
 
             <div class="control-group">
                 <form:label path="name" cssClass="control-label">名称</form:label>
@@ -51,7 +54,7 @@
             <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="${ctx}/showcase/sample" class="btn">返回</a>
+                    <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
         </fieldset>
@@ -63,7 +66,10 @@
         <c:choose>
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
-                $("#editForm :input").prop("readonly", true);
+                $("#editForm :input").not(":submit,:button").prop("readonly", true);
+            </c:when>
+            <c:when test="${op eq '查看'}">
+                $("#editForm :input").prop("readonly", true).remove(":button,:submit");
             </c:when>
             <c:otherwise>
                 //自定义ajax验证  ajax[ajaxNameCall] 放到验证规则的最后（放到中间只有当submit时才验证）
@@ -82,7 +88,7 @@
                     "alertText": "* 5到10个字母、数字、下划线"
                 };
                 var validationEngine = $("#editForm").validationEngine();
-                <es:showFieldError commandName="sample"/>
+                <es:showFieldError commandName="m"/>
             </c:otherwise>
         </c:choose>
     });

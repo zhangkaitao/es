@@ -26,18 +26,12 @@ public class SampleService extends BaseService<Sample, Long> {
 
     @Autowired
     public void setSampleRepository(SampleRepository sampleRepository) {
-        this.sampleRepository = sampleRepository;
         setBaseRepository(sampleRepository);
+        this.sampleRepository = sampleRepository;
     }
 
     public Sample findByName(String name) {
         return sampleRepository.findByName(name);
     }
 
-    public void delete(Long[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
-            return;
-        }
-        sampleRepository.deleteByIds(Arrays.asList(ids));
-    }
 }

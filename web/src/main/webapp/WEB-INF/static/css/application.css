@@ -2,7 +2,7 @@ body{
     font-size: 14px ;
 }
 .center-panel {
-    padding-right: 10px!important;
+    padding-right: 20px!important;
 }
 .sys-menu{
     background: #0069D6;
@@ -13,6 +13,10 @@ body{
     font-size: 18px;
     margin: -10px;
     margin-bottom: 5px;
+}
+
+.ui-layout-west {
+    z-index: 2!important;
 }
 
 #menu > div{
@@ -27,8 +31,18 @@ body{
 #menu .ui-icon-menu{
     right: 1em;left: auto;
 }
+#menu ul{
+    padding: 0 0 0 10px;
+}
+#menu li {
+    margin: 5px 0 5px 0;
+}
 #menu .select{
-    color: #0069D6!important;
+    background: #0069D6!important;
+    color: white!important;
+}
+#menu .select a{
+    color: white!important;
 }
 
 #menu li ul {
@@ -47,29 +61,64 @@ body{
     text-shadow: 1px 1px 0 #fff;
 }
 
-.ui-tabs .ui-tabs-nav{
-    background: #0069D6;
-    border-bottom: 0px!important;
-    z-index: 1000;
-}
-.ui-tabs .ui-tabs-nav li{
-    margin-right: 8px;
-    background: #e6e6e6;
+#tabs.tabs-fix-top {
+    position: fixed;
+    top: 73px;
+    left: 238px;
+    right: 0px;
+    height: 34px;
+    z-index: 1;
 }
 
-@-moz-document url-prefix(){
-    .ui-tabs .ui-tabs-nav li .ui-icon-close{
-        float: left;/**firefox*/
-    }
+#tabs ul {
+    width: 500000px;
 }
-.tabs-fix-top {
-    position: fixed;
-    top: 11.6%;
-    left: 20.4%;
-    right: 0%;
-    z-index: 999999;
+#tabs .ul-wrapper {
+    width: 1190px;
+    overflow: hidden;
+    float: left;
 }
-#tabs > div{
+
+#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+    border: none;
+}
+#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    border: 1px solid #ddd;
+    border-bottom: 1px solid #fff;
+}
+
+#tabs.ui-tabs .ui-tabs-nav li,#tabs.ui-tabs .ui-tabs-nav li a {
+    cursor: pointer;
+}
+
+#tabs.ui-tabs .ui-tabs-nav li .ui-icon {
+    height: 15px;
+    float: left;
+}
+
+
+
+#tabs .icon-chevron-left, #tabs .icon-chevron-right {
+    position: absolute;
+    top: 0px;
+    z-index: 1;
+    height: 32px;
+    border: 1px solid #ddd;
+    float: left;
+    line-height: 32px;
+    color: #0069D6;
+    background: #eee;
+    padding: 0px 2px;
+    cursor: pointer;
+}
+#tabs .icon-chevron-left {
+    left: 0px;
+}
+#tabs .icon-chevron-right {
+    right: 0px;
+}
+
+#tabs > .ui-tabs-panel{
     margin-top: 50px!important;
     padding: 0px 6px 0px 6px!important;
 }
@@ -111,16 +160,10 @@ body{
 .control-group .input-append{
     display:block;
 }
-.control-group .customfile {
-    float: left;
-    display:inline;
-}
-.control-group .customfile input {
-    float: left;
-    padding-left: 25px;
-}
 
-iframe[tabs=true] {
+
+
+iframe[tabs="true"] {
     border: 0px!important;
     margin:0px!important;
 }
@@ -202,11 +245,16 @@ iframe[tabs=true] {
     height: 19px!important;
 }
 .modal,.modal-backdrop {
-    z-index:9999999999!important;
+    z-index:999999998!important;
 }
-.modal.fade.in {
-    top:20%!important;
+.modal-gallery {
+    z-index:999999999!important;
 }
+.blockUI .blockUI-close{
+    float: right;
+}
+
+
 .prettyprint {
     padding: 8px;
     background-color: #f7f7f9;
@@ -215,4 +263,74 @@ iframe[tabs=true] {
 legend.no-margin{
     margin-bottom: 0px;
     border: 0px;
+}
+
+.child-data > td,.child-data > td:hover {
+    background: #E9F3FF!important;
+}
+/*默认会偏移*/
+.ui-spinner-input{
+    margin: 0px;
+}
+/*默认会隐藏掉error提示*/
+.ui-spinner{
+    overflow: visible;
+}
+
+.search{
+    float: left;
+    width: 100%;;
+}
+
+.search .accordion-inner{
+    *padding: 5px;
+}
+.search form {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 5px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+#maintainFrame {
+    top: 0px;
+    top: 0px!important;
+}
+
+/*去除IE 虚线框*/
+a,input,textarea{blr:expression(this.onFocus=this.close());} /* 只支持IE，过多使用效率低 */
+a,input,textarea{blr:expression(this.onFocus=this.blur());} /* 只支持IE，过多使用效率低 */
+a:focus { -moz-outline-style: none; } /* IE不支持 */
+
+
+
+.file-input label {
+    padding: 4px 12px;
+    margin-bottom: 0px;
+}
+.file-input a {
+    padding: 0px;
+}
+/*file upload*/
+.file-input input[type="file"] {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 1;
+    width: 0px;
+    margin: 0px;
+    height: 0px;
+    line-height: 0px;
+}
+.file-input .name {
+    margin-left: 8px;
 }

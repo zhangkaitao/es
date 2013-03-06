@@ -1,20 +1,33 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="sys-menu">
-    系统菜单
-</div>
+<%--<div class="sys-menu">--%>
+    <%--系统菜单--%>
+<%--</div>--%>
 <div id="menu">
     <div>
         <h3><a href="#">示例管理</a></h3>
         <ul>
             <li><a href="${ctx}/showcase/sample">示例列表</a></li>
+            <li><a href="${ctx}/showcase/deleted">逻辑删除列表</a></li>
             <li><a href="${ctx}/showcase/move">可移动列表</a></li>
             <li><a href="${ctx}/showcase/upload">文件上传</a></li>
             <li><a href="${ctx}/showcase/tree/main">树</a></li>
-            <li><a href="${ctx}/showcase/parentchild/parent">父子表</a></li>
+            <li><a href="${ctx}/showcase/parentchild/parent">父子表(小数据量)</a></li>
+            <li>
+                <a href="#">父子表(大数据量)</a>
+                <ul>
+                    <li><a href="${ctx}/showcase/product/category">类别管理</a></li>
+                    <li><a href="${ctx}/showcase/product/product">产品管理</a></li>
+                </ul>
+            </li>
             <li>
                 <a href="#">系统管理</a>
                 <ul>
-                    <li><a href="${ctx}/showcase/sample/list">用户管理</a></li>
+                    <li>
+                        <a href="#">系统管理2</a>
+                        <ul>
+                            <li><a href="${ctx}/showcase/sample/list">用户管理</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
         </ul>

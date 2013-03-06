@@ -21,29 +21,7 @@ import java.util.List;
  */
 public interface MoveRepository extends BaseRepository<Move, Long> {
 
-    Move findByName(String name);
 
-    @Modifying
-    @Query(value = "delete from Move where id in (?1)")
-    void deleteByIds(List<Long> ids);
-
-    @Query(value = "select (case when (max(weight) is null) then 0 else max(weight) end) + ?1 from Move")
-    Integer findNextWeight(Integer stepLength);
-
-    @Query(value = "from Move m where m.weight < ?1 order by m.weight desc")
-    Page<Move> findPreByWeight(Integer weight, Pageable pageable);
-
-    @Query(value = "from Move m where m.weight > ?1 order by m.weight asc")
-    Page<Move> findNextByWeight(Integer weight, Pageable pageable);
-
-    @Query(value = "select count(m) from Move m where m.weight>=?1 and m.weight <= ?2")
-    Long countByBetween(Integer minWeight, Integer maxWeight);
-
-    @Query(value = "from Move m where m.weight>=?1 and m.weight <= ?2 order by m.weight asc")
-    List<Move> findByBetweenAndAsc(Integer minWeight, Integer maxWeight);
-
-    @Query(value = "from Move m where m.weight>=?1 and m.weight <= ?2 order by m.weight desc")
-    List<Move> findByBetweenAndDesc(Integer minWeight, Integer maxWeight);
 }
 
 

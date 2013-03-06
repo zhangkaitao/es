@@ -260,24 +260,29 @@
 				lyr1 = $('<div class="blockUI" style="display:none"></div>');
 
 			if (opts.theme)
-				lyr2 = $('<div class="blockUI blockOverlay ui-widget-overlay" style="z-index:'+ (z++) +';display:none"></div>');
+				//lyr2 = $('<div class="blockUI blockOverlay ui-widget-overlay" style="z-index:'+ (z++) +';display:none"></div>');
+                lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
 			else
 				lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
 
 			if (opts.theme && full) {
 				s = '<div class="blockUI ' + opts.blockMsgClass + ' blockPage ui-dialog ui-widget ui-corner-all" style="z-index:'+(z+10)+';display:none;position:fixed">';
 				if ( opts.title ) {
-					s += '<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>';
+					//s += '<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>';
+					s += '<div class=" ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>';
 				}
-				s += '<div class="ui-widget-content ui-dialog-content"></div>';
+				//s += '<div class="ui-widget-content ui-dialog-content"></div>';
+                s += '<div class="blockUI-content ui-dialog-content"></div>';
 				s += '</div>';
 			}
 			else if (opts.theme) {
 				s = '<div class="blockUI ' + opts.blockMsgClass + ' blockElement ui-dialog ui-widget ui-corner-all" style="z-index:'+(z+10)+';display:none;position:absolute">';
 				if ( opts.title ) {
-					s += '<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>';
-				}  
-				s += '<div class="ui-widget-content ui-dialog-content"></div>';
+					//s += '<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>';
+					s += '<div class="ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>';
+				}
+				//s += '<div class="ui-widget-content ui-dialog-content"></div>';
+				s += '<div class="blockUI-content ui-dialog-content"></div>';
 				s += '</div>';
 			}
 			else if (full) {
@@ -292,14 +297,15 @@
 			if (msg) {
 				if (opts.theme) {
 					lyr3.css(themedCSS);
-					lyr3.addClass('ui-widget-content');
+					//lyr3.addClass('ui-widget-content');
 				}
 				else
 					lyr3.css(css);
 			}
 
 			// style the overlay
-			if (!opts.theme /*&& (!opts.applyPlatformOpacityRules)*/)
+			//if (!opts.theme /*&& (!opts.applyPlatformOpacityRules)*/)
+			if (true /*&& (!opts.applyPlatformOpacityRules)*/)
 				lyr2.css(opts.overlayCSS);
 			lyr2.css('position', full ? 'fixed' : 'absolute');
 
@@ -365,7 +371,7 @@
 			// show the message
 			if (msg) {
 				if (opts.theme)
-					lyr3.find('.ui-widget-content').append(msg);
+					lyr3.find('.blockUI-content').append(msg);
 				else
 					lyr3.append(msg);
 				if (msg.jquery || msg.nodeType)

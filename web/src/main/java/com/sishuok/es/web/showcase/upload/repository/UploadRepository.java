@@ -21,7 +21,4 @@ public interface UploadRepository extends BaseRepository<Upload, Long> {
 
     Upload findByName(String name);
 
-    @Modifying
-    @Query(value = "delete from Upload where id in (?1)")
-    void deleteByIds(List<Long> ids);
 }

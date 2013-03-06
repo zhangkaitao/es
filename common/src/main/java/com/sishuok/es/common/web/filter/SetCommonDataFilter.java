@@ -7,6 +7,8 @@ package com.sishuok.es.common.web.filter;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,12 +35,14 @@ public class SetCommonDataFilter extends BaseFilter {
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         request.setAttribute("ctx", request.getContextPath());
-        request.setAttribute("currentURL", extractCurrentURL(request));
+        request.setAttribute("currentURL", extractCurrentURL(request, true));
+        request.setAttribute("noQueryStringCurrentURL", extractCurrentURL(request, false));
+        request.setAttribute("BackURL", extractBackURL(request));
 
         chain.doFilter(request, response);
     }
 
-    private String extractCurrentURL(HttpServletRequest request) {
+    private String extractCurrentURL(HttpServletRequest request, boolean needQueryString) {
         String url = request.getRequestURI();
         String queryString = request.getQueryString();
         if (StringUtils.hasLength(queryString)) {
@@ -50,10 +54,46 @@ public class SetCommonDataFilter extends BaseFilter {
                 queryString = "?" + queryString.substring(1);
             }
         }
-        if(StringUtils.hasLength(queryString)) {
+        if(StringUtils.hasLength(queryString) && needQueryString) {
             url = url + queryString;
         }
+        return getBasePath(request) + url;
+    }
+
+    /**
+     * 上一次请求的地址
+     * 1、先从request.parameter中查找BackURL
+     * 2、获取header中的 referer
+     * @param request
+     * @return
+     */
+    private String extractBackURL(HttpServletRequest request) {
+        String url = request.getParameter("BackURL");
+        if(url == null) {
+            url = request.getHeader("Referer");
+        }
+        if(url != null && url.startsWith(request.getContextPath())) {
+            url = getBasePath(request) + url;
+        }
         return url;
+    }
+
+    private String getBasePath(HttpServletRequest req) {
+        StringBuffer baseUrl = new StringBuffer();
+        String scheme = req.getScheme();
+        int port = req.getServerPort();
+
+        //String		servletPath = req.getServletPath ();
+        //String		pathInfo = req.getPathInfo ();
+
+        baseUrl.append(scheme);        // http, https
+        baseUrl.append("://");
+        baseUrl.append(req.getServerName());
+        if ((scheme.equals("http") && port != 80) || (scheme.equals("https") && port != 443)) {
+            baseUrl.append(':');
+            baseUrl.append(req.getServerPort());
+        }
+        return baseUrl.toString();
     }
 
 }

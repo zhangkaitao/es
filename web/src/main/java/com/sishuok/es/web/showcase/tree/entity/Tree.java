@@ -6,16 +6,11 @@
 package com.sishuok.es.web.showcase.tree.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.entity.plugin.Treeable;
+import com.sishuok.es.common.plugin.entity.Treeable;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Formula;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * <p>User: Zhang Kaitao
@@ -140,7 +135,7 @@ public class Tree extends BaseEntity<Long> implements Treeable {
     }
 
     /**
-     * @see com.sishuok.es.common.entity.plugin.Treeable#getPathLength()
+     * @see com.sishuok.es.common.plugin.entity.Treeable#getPathLength()
      * @return
      */
     @Override

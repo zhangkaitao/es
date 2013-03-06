@@ -13,44 +13,49 @@ $.app = {
         function resizePanel(panelName, panelElement, panelState, panelOptions, layoutName) {
             var tabul = $(".tabs-fix-top");
             if (panelName == 'west') {
-                var left = panelElement.width() + 28;
+                var left = panelElement.width() + 30;
                 if (panelState.isClosed) {
-                    left = 19;
+                    left = 21;
                 }
                 tabul.css("left", left);
             }
             if (panelName == 'north') {
-                var top = panelElement.height() + 28;
+                var top = panelElement.height() + 30;
                 if (panelState.isClosed) {
-                    top = 7;
+                    top = 9;
                 }
                 tabul.css("top", top);
             }
         }
 
         this.layout = $('body').layout({
-            applyDefaultStyles: true,
-            west__size: "20%",
-            north__size: "11%",
-            south__size: "8%",
-            togglerTip_open: "关闭",
-            togglerTip_closed: "打开",
-            west__spacing_closed: 20,
-            west__togglerContent_closed: "菜<BR>单",
-            resizerTip: "调整大小",
-            sliderTip: "滑动打开",
-            onhide: resizePanel,
-            onshow: resizePanel,
-            onopen: resizePanel,
-            onclose: resizePanel,
-            onresize: resizePanel
+                west__size:  230
+            ,   north__size: 65
+            ,   south__size: 30
+            ,	west__spacing_closed:		20
+            ,	west__togglerLength_closed:	100
+            ,	west__togglerContent_closed:"菜<BR>单"
+            ,	togglerTip_closed:	"打开"
+            ,	togglerTip_open:	"关闭"
+            ,	sliderTip:			"滑动打开"
+            ,   resizerTip:         "调整大小"
+            ,   onhide: resizePanel
+            ,   onshow: resizePanel
+            ,   onopen: resizePanel
+            ,   onclose: resizePanel
+            ,   onresize: resizePanel
+            ,	center__maskContents:		true // IMPORTANT - enable iframe masking
         });
     },
     /**初始化tab */
     initTab: function () {
         var tabs = $("#tabs").tabs({
             beforeActivate: function (event, ui) {
-                $.app.activeIframe(ui.newPanel.prop("id"));
+                $("#tabs").find(".ui-icon").hide();
+                var newPanelId = ui.newPanel.prop("id");
+                $("#tabs").find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".ui-icon").show();
+                $.app.activeIframe(newPanelId);
+                activeMenu(newPanelId);
             }
         });
         this.tabs = tabs;
@@ -74,14 +79,75 @@ $.app = {
                 tabs.tabs("refresh");
             }
         });
+
+        function activeMenu(tabPanelId) {
+            var currentMenu = $("#menu-" + tabPanelId.replace("tabs-", ""));
+            $("#menu .select").removeClass("select");
+            if(currentMenu.size() > 0) {
+                //把父菜单展示出来
+                currentMenu.parents("ul").each(function(){
+                    //不能使用“ul:hidden” 因为它是把只有隐藏的都查出来
+                    // 比如<ul style="display:none"><li><ul><li><a class='a'></a></li></ul></li></ul>
+                    //$(".a").parents("ul:hidden") 会查出两个 即hidden的元素对其子也是有效的
+                    if($(this).css("display") == 'none') {
+                        $(this).prev("a").click();
+                    }
+                });
+                currentMenu.closest("li").addClass("select");
+            }
+        }
+        this.initTabScroll();
     },
+        initTabScroll: function () {
+            var scrollInterval;
+            var speed = 20;
+
+            var move = function(step) {
+                return function() {
+                    var $ulWrapper = $("#tabs .ul-wrapper");
+                    var $lastLI = $ulWrapper.find("ul li:last");
+
+                    var ulWrapperLeftPos = $ulWrapper.offset().left + $ulWrapper.width();
+                    var lastLILeftPos = $lastLI.offset().left + $lastLI.width();
+                    var leftPos = $ulWrapper.scrollLeft() + step;
+                    var maxLeftPos = lastLILeftPos - ulWrapperLeftPos;
+                    //right move
+                    if(step > 0) {
+                        if(lastLILeftPos < ulWrapperLeftPos + 200) {
+                        }
+                        if(step > 0  && maxLeftPos <= 0) {
+                            return;
+                        }
+                    }
+
+                    if(leftPos < 0) {
+                        leftPos = 0;
+                    }
+
+
+
+                    $ulWrapper.animate({scrollLeft : leftPos}, 900);
+                };
+            };
+
+            $("#tabs .icon-chevron-left").click(function () {
+                move(-200)();
+            });
+            $("#tabs .icon-chevron-right").click(function () {
+                move(200)();
+            });
+
+        },
     /**初始化菜单*/
     initMenu: function () {
         var menus = $("#menu");
+
+        var rootCloseIconClass = "ui-icon-circle-plus";
+        var rootOpenIconClass = "ui-icon-circle-minus";
         menus.addClass("ui-accordion ui-widget ui-helper-reset");
         menus.find("h3")
             .addClass("ui-accordion-header ui-helper-reset ui-state-default  ui-accordion-icons ui-widget-menu")
-            .append('<span class="ui-icon ui-icon-menu ui-icon-circle-plus"></span>')
+            .append('<span class="ui-icon ui-icon-menu '+ rootCloseIconClass + '"></span>')
             .next("ul").hide()
             .end()
             .click(function () {
@@ -89,54 +155,57 @@ $.app = {
                     $(this)
                         .removeClass("ui-state-active")
                         .find("span")
-                        .removeClass("ui-icon-circle-minus")
-                        .addClass("ui-icon-circle-plus")
+                        .removeClass(rootOpenIconClass)
+                        .addClass(rootCloseIconClass)
                         .end()
-                        .next("ul").hide();
+                        .next("ul").hide("blind");
                 } else {
                     $(this)
                         .addClass("ui-state-active")
                         .find("span")
-                        .removeClass("ui-icon-circle-plus")
-                        .addClass("ui-icon-circle-minus")
+                        .removeClass(rootCloseIconClass)
+                        .addClass(rootOpenIconClass)
                         .end()
-                        .next("ul").show();
+                        .next("ul").show("blind");
                 }
             }).eq(0).click();
 
+        var leafIconClass = "icon-angle-right";
+        var branchOpenIconClass = "icon-double-angle-right";
+        var branchCloseIconClass = "icon-double-angle-down";
         menus.find("div > ul")
             .addClass(" ui-accordion-content ui-helper-reset ui-widget-content ui-widget-menu ui-corner-bottom ui-accordion-content-active")
             .children("li").each(function () {
                 var submenu = $(this);
-                if (submenu.children("ul").size() > 0) {
+                if (submenu.find("ul").size() > 0) {
                     submenu.find("ul").hide();
-                    submenu.find("ul > li").prepend('<span class="ui-icon ui-icon-document"></span>');
-                    submenu
-                        .prepend('<span class="ui-icon ui-icon-triangle-1-e"></span>')
+                    submenu.find("li:not(:has(ul))").prepend('<span class="' + leafIconClass + '"></span>');
+                    submenu.find("ul").closest("li")
+                        .prepend('<span class="' + branchOpenIconClass + '"></span>')
                         .find("a,span")
                         .click(function () {
-                            if ($(this).parent().find("span").hasClass("ui-icon-triangle-1-s")) {
-                                $(this).parent().find("span")
-                                    .removeClass("ui-icon-triangle-1-s")
-                                    .addClass("ui-icon-triangle-1-e")
+                            if ($(this).parent().children("span").hasClass(branchCloseIconClass)) {
+                                $(this).parent().children("span")
+                                    .removeClass(branchCloseIconClass)
+                                    .addClass(branchOpenIconClass)
                                     .end()
-                                    .find("ul").hide();
+                                    .children("ul").hide("blind");
                             } else {
-                                $(this).parent().find("span")
-                                    .removeClass("ui-icon-triangle-1-e")
-                                    .addClass("ui-icon-triangle-1-s")
+                                $(this).parent().children("span")
+                                    .removeClass(branchOpenIconClass)
+                                    .addClass(branchCloseIconClass)
                                     .end()
-                                    .find("ul").show();
+                                    .children("ul").show("blind");
                             }
                         });
                 } else {
-                    submenu.prepend('<span class="ui-icon ui-icon-document"></span>');
+                    submenu.prepend('<span class="' + leafIconClass + '"></span>');
                 }
             });
 
 
         var index = 2;
-        var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='ui-icon ui-icon-close' role='presentation'title='关闭'>关闭</span><span class='ui-icon ui-icon-refresh' role='presentation' title='刷新'>刷新</span></li>";
+        var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='ui-icon ui-icon-close' role='presentation'title='关闭'>关闭</span><br/><span class='ui-icon ui-icon-refresh' role='presentation' title='刷新'>刷新</span></li>";
         $("#menu a").each(function () {
             var a = $(this);
             var href = a.attr("href");
@@ -147,12 +216,13 @@ $.app = {
             a.data("index", index++)
                 .data("url", a.attr("href"))
                 .attr("href", "#")
+                .attr("id", "menu-" + a.data("index"))
                 .click(function () {
                     var a = $(this);
                     $("#menu a").each(function () {
-                        $(this).removeClass("select");
+                        $(this).closest("li").removeClass("select");
                     });
-                    a.addClass("select");
+                    a.closest("li").addClass("select");
                     var panelIndex = a.data("index");
                     var panelId = "tabs-" + panelIndex;
                     currentTabPanel = $("#" + panelId);
@@ -166,7 +236,6 @@ $.app = {
                         tabs.tabs("refresh");
                         currentTabPanel = $("#" + panelId);
                         currentTabPanel.data("index", tabs.find("ul li").index(li));
-
                     }
                     $.app.loadingToCenterIframe(currentTabPanel, a.data("url"));
                     tabs.tabs("option", "active", currentTabPanel.data("index"));
@@ -182,7 +251,7 @@ $.app = {
     initTable: function (table) {
         //初始化表格中checkbox 点击单元格选中
         table.find("td.check").each(function () {
-            var checkbox = $(this).find(":checkbox");
+            var checkbox = $(this).find(":checkbox,:radio");
             checkbox.click(function (event) {
                 event.stopPropagation();
             });
@@ -192,7 +261,14 @@ $.app = {
         });
         //初始化全选反选
         table.find(".check-all").click(function () {
-            table.find("td.check :checkbox").prop("checked", true);
+            var checkAll = $(this);
+            if(checkAll.text() == '全选') {
+                checkAll.text("取消");
+                table.find("td.check :checkbox").prop("checked", true);
+            } else {
+                checkAll.text("全选");
+                table.find("td.check :checkbox").prop("checked", false);
+            }
         });
         table.find(".reverse-all").click(function () {
             table.find("td.check :checkbox").each(function () {
@@ -204,6 +280,8 @@ $.app = {
     /**
      * 初始化sort
      * @param table
+     * @param async 异步加载吗》
+     * @param containerId 异步加载到的容器ID 请参考tags/page.tag
      */
     initSort: function (table) {
         //初始化排序
@@ -217,6 +295,14 @@ $.app = {
         if (!sortURL) {
             sortURL = window.location.href;
         }
+
+        var async = table.attr("sort-async");
+        var containerId = table.attr("sort-container-id");
+        if(async == 'true' && !containerId) {
+            $.app.alert({message: "异步加载时，容器id(sort-container-id)不能为空"});
+            return;
+        }
+
         var sortBtnTemplate =
             '<div class="dropdown sort">' +
                 '  <a class="dropdown-toggle {sort-icon}" data-toggle="dropdown" href="#" title="排序"></a>' +
@@ -249,14 +335,16 @@ $.app = {
             var sortBtn = $(sortBtnStr);
             sortComp.wrapInner("<div class='sort-title'></div>").append(sortBtn);
 
+
+
             sortBtn.find(".up").click(function () {
-                $.app.turnSort(sortURL, sortPropertyName, "asc");
+                $.app.turnSort(sortURL, sortPropertyName, "asc", async, containerId);
             });
             sortBtn.find(".down").click(function () {
-                $.app.turnSort(sortURL, sortPropertyName, "desc");
+                $.app.turnSort(sortURL, sortPropertyName, "desc", async, containerId);
             });
             sortBtn.find(".cancel").click(function () {
-                $.app.turnSort(sortURL);
+                $.app.turnSort(sortURL, null, null, async, containerId);
             });
         });
     },
@@ -297,6 +385,8 @@ $.app = {
         this.layout.panes.center.hide();
         this.layout.panes.center = iframe;
         this.layout.panes.center.show();
+        this.layout.resizeAll();
+
     },
 
     waiting : function(message) {
@@ -310,10 +400,10 @@ $.app = {
             css: {
                 border: 'none',
                 padding: '15px',
-                backgroundColor: '#ddd',
+                backgroundColor: '#ccc',
                 '-webkit-border-radius': '10px',
                 '-moz-border-radius': '10px',
-                opacity: .6,
+                opacity:.6,
                 color: '#000'
             },
             message: '<h4><img src="' + ctx + '/static/images/loading.gif" /> ' + message + ' </h4>'
@@ -325,11 +415,12 @@ $.app = {
     }
     ,
     /**
-     * 模态编辑
+     * 模态窗口
+     * @title 标题
      * @param url
      * @param css
      */
-    modalEdit : function(url, css) {
+    modalDialog : function(title, url, css, currentDocument) {
         var defaultCss = {
             cursor:"default",
             "text-align": "",
@@ -338,29 +429,26 @@ $.app = {
             top: "20%",
             left: "30%"
         };
-
         if(!css) {
-            css = defaultCss;
-        } else {
-            if(!css.top) {
-                css.top = defaultCss.top;
-            }
-            if(!css.left) {
-                css.left = defaultCss.left;
-            }
-            if(!css.width) {
-                css.width = defaultCss.width;
-            }
+            css = {};
         }
+        css = $.extend({}, defaultCss, css);
 
         $.app.waiting();
         $.get(url, function(data) {
             $.app.waitingOver();
             //因为是在top中弹出窗口编辑，因此需要把document保存下来，方便接下来的操作
-            top.window.currentDocument = document;
+            if(!currentDocument) {
+                currentDocument = document;
+            }
+            top.window.currentDocument = currentDocument;
             top.window.$.blockUI({
+                theme:true,
+                showOverlay : true,
+                title : title + "<a class='btn btn-link icon-remove blockUI-close' href='javascript:$.app.waitingOver();' title='关闭'></a>",
                 message : data,
-                css : css
+                css : css,
+                themedCSS: css
             });
         });
     }
@@ -368,7 +456,7 @@ $.app = {
     /**
      * 取消编辑
      */
-    cancelEdit : function() {
+    cancelModelDialog : function() {
         this.waitingOver();
         top.window.currentDocument = null;
     }
@@ -379,8 +467,10 @@ $.app = {
      * @param pagePrefix
      * @param pageSize
      * @param pn
+     * @param async 异步模式
+     * @param containerId异步加载到的容器ID
      */
-    turnPage: function (url, pagePrefix, pageSize, pn) {
+    turnPage: function (url, pagePrefix, pageSize, pn, async, containerId) {
         var pageURL = url;
         if (pagePrefix != '') {
             pagePrefix = pagePrefix + "_";
@@ -396,15 +486,31 @@ $.app = {
         if (pageSize != '') {
             pageURL = pageURL + "&" + pagePrefix + "page.size=" + pageSize;
         }
-        window.location.href = pageURL;
+
+        if(async && !containerId) {
+            $.app.alert({
+                message : "异步模式下，容器id不能空"
+            });
+            return;
+        }
+
+        if(async) {
+            $.get(pageURL, function(data) {
+                $("#" + containerId).replaceWith(data);
+            });
+        } else {
+            window.location.href = pageURL;
+        }
     },
     /**
      * 执行排序
      * @param sortURL
      * @param sortPropertyName
      * @param order
+     * @param async
+     * @param containerId
      */
-    turnSort: function (sortURL, sortPropertyName, order) {
+    turnSort: function (sortURL, sortPropertyName, order, async, containerId) {
         //如果URL中包含锚点（#） 删除
         if(sortURL.indexOf("#") > 0) {
             sortURL = sortURL.substring(0, sortURL.indexOf("#"));
@@ -413,8 +519,14 @@ $.app = {
         sortURL = sortURL.replace(/\&.*sort.*=((asc)|(desc))/gi, '');
         sortURL = sortURL.replace(/\?.*sort.*=((asc)|(desc))\&/gi, '?');
         sortURL = sortURL.replace(/\?.*sort.*=((asc)|(desc))/gi, '');
-        if (arguments.length == 1) {
-            window.location.href = sortURL;
+        if (!sortPropertyName) {
+            if(async) {
+                $.get(sortURL, function(data){
+                    $("#" + containerId).replaceWith(data);
+                });
+            } else {
+                window.location.href = sortURL;
+            }
             return;
         }
         if (sortURL.indexOf("?") == -1) {
@@ -423,26 +535,29 @@ $.app = {
             sortURL = sortURL + "&";
         }
         sortURL = sortURL + sortPropertyName + "=" + order;
-        window.location.href = sortURL;
+
+        if(async) {
+            $.get(sortURL, function(data){
+                $("#" + containerId).replaceWith(data);
+            });
+        } else {
+            window.location.href = sortURL;
+        }
     }
     ,
 
     alert : function(options) {
+        if(!options) {
+            options = {};
+        }
         var defaults = {
             title : "警告",
             message   : "非法的操作",
             okTitle : "关闭",
             ok : $.noop
         };
-        if(options) {
-            if(!options.title) options.title = defaults.title;
-            if (!options.message)  options.message = defaults.message;
-            if (!options.okTitle) options.okTitle = defaults.okTitle;
-            if (!options.ok) options.ok = defaults.ok;
-        } else {
-            options = defaults;
-        }
         options.alert = true;
+        options = $.extend({}, defaults, options);
         this.confirm(options);
     }
     ,
@@ -464,31 +579,26 @@ $.app = {
             ok : $.noop,
             alert : false
         };
+
+        if(!options) {
+            options = {};
+        }
+        options = $.extend({}, defaults, options);
+
         var template =
             '<div class="modal hide fade confirm">' +
-              '<div class="modal-header">' +
+                '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
                 '<h3 class="title">{title}</h3>' +
-              '</div>' +
-              '<div class="modal-body">' +
-                 '<p>{message}</p>' +
-              '</div>' +
-              '<div class="modal-footer">' +
+                '</div>' +
+                '<div class="modal-body">' +
+                '<p>{message}</p>' +
+                '</div>' +
+                '<div class="modal-footer">' +
                 '<a href="#" class="btn btn-ok btn-danger" data-dismiss="modal">{okTitle}</a>' +
                 '<a href="#" class="btn btn-cancel" data-dismiss="modal">{cancelTitle}</a>'+
-              '</div>' +
-            '</div>';
-        if(options) {
-            if(!options.title) options.title = defaults.title;
-            if(!options.message)  options.message = defaults.message;
-            if(!options.cancelTitle) options.cancelTitle = defaults.cancelTitle;
-            if(!options.okTitle) options.okTitle = defaults.okTitle;
-            if(!options.cancel) options.cancel = defaults.cancel;
-            if(!options.ok) options.ok = defaults.ok;
-            if(!options.alert) options.okCallback = defaults.alert;
-        } else {
-            options = defaults;
-        }
+                '</div>' +
+                '</div>';
 
         var modalDom =
             $(template
@@ -508,129 +618,6 @@ $.app = {
         modalDom.modal();
     }
     ,
-    /**
-     * urlPrefix：指定移动URL的前缀，
-      * 如/sample，生成的URL格式为/sample/move/{direction:方向(up|down)}/{fromId}/{toId}
-     * @param table
-     * @param urlPrefix
-      */
-    initTableMoveable : function(table) {
-        if(table.size() == 0) {
-            return;
-        }
-        var urlPrefix = table.attr("move-url-prefix");
-        if(!urlPrefix) {
-            $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/move'&gt;<br/>自动生成：/move/{direction:方向(up|down)}/{fromId}/{toId}"});
-        }
-         var fixHelper = function (e, tr) {
-             var $originals = tr.children();
-             var $helper = tr.clone();
-             $helper.children().each(function (index) {
-                 // Set helper cell sizes to match the original sizes
-                 $(this).width($originals.eq(index).width())
-             });
-             return $helper;
-         };
-
-         //事表格可拖拽排序
-         table.find("tbody")
-                 .sortable({
-                     helper: fixHelper,
-                     opacity: 0.5,
-                     cursor: "move",
-                     placeholder: "sortable-placeholder",
-                     update: function (even, ui) {
-                         even.stopPropagation();
-                         prepareMove(ui.item.find(".moveable").closest("td"));
-                     }
-                 });
-
-         //弹出移动框
-         table.find("a.pop-movable[rel=popover]")
-                 .mouseenter(function (e) {
-                     var a = $(this);
-                     a.popover("show");
-                     var idInput = a.closest("tr").find(".id");
-                     idInput.focus();
-                     a.next(".popover").find(".popover-up-btn,.popover-down-btn").click(function() {
-                         var fromId = $(this).closest("tr").prop("id");
-                         var toId = idInput.val();
-
-                         if(!/\d+/.test(toId)) {
-                             $.app.alert({message : "请输入数字!"});
-                             return;
-                         }
-
-                         var fromTD = $(this).closest("td");
-
-                         if($(this).hasClass("popover-up-btn")) {
-                             move(fromTD, fromId, toId, "up");
-                         } else {
-                             move(fromTD, fromId, toId, "down");
-                         }
-                     });
-                     a.parent().mouseleave(function() {
-                         a.popover("hide");
-                     });
-                 });
-
-         table.find(".up-btn,.down-btn").click(function() {
-             var fromTR = $(this).closest("tr");
-             if($(this).hasClass("up-btn")) {
-                 fromTR.prev("tr").before(fromTR);
-             } else {
-                 fromTR.next("tr").after(fromTR);
-             }
-             prepareMove($(this).closest("td"));
-         });
-
-         /**
-          *
-          * @param fromTD
-          */
-         function prepareMove(fromTD) {
-             var fromTR = fromTD.closest("tr");
-             var fromId = fromTR.prop("id");
-             var nextTR = fromTR.next("tr");
-             if(nextTR.size() > 0) {
-                 move(fromTD, fromId, nextTR.prop("id"), "down");
-             } else {
-                 var preTR = fromTR.prev("tr");
-                 move(fromTD, fromId, preTR.prop("id"), "up");
-             }
-
-         }
-         function move(fromTD, fromId, toId, direction) {
-             if(!(fromId && toId)) {
-                 return;
-             }
-             var order = $.app.tdOrder(fromTD);
-             if (!order) {
-                 $.app.alert({message: "请首先排序要移动的字段！"});
-                 return;
-             }
-             //如果升序排列 需要反转direction
-             if(order == "desc") {
-                 if(direction == "up") {
-                     direction = "down";
-                 } else {
-                     direction = "up";
-                 }
-             }
-             $.app.waiting("正在移动");
-             var url = urlPrefix + "/" + direction + "/" + fromId + "/" + toId;
-             $.getJSON(url, function(data) {
-                 $.app.waitingOver();
-                 if(data.success) {
-                     location.reload();
-                 } else {
-                     $.app.alert({message : data.message});
-                 }
-
-             });
-         }
-    }
-    ,
     isImage : function(filename) {
         return /gif|jpe?g|png|bmp$/i.test(filename);
     }
@@ -647,29 +634,702 @@ $.app = {
         });
     }
     ,
-    initFileInput : function() {
-        //初始化 文件上传框
-        $('input[type="file"].custom-file-input').customFileInput({
-            button_position 	: 'right',
-            feedback_text		: '还没有选择文件...',
-            button_text			: '浏  览',
-            button_change_text	: '更  改'
+    removeContextPath : function(url) {
+        if(url.indexOf(ctx) == 0) {
+            return url.substr(ctx.length);
+        }
+        return url;
+    }
+    ,
+    /**
+     * 异步化form表单或a标签
+     * @param $form
+     * @param containerId
+     */
+    asyncLoad : function($tag, containerId) {
+        if($tag.is("form")) {
+            $tag.submit(function() {
+                if($tag.prop("method").toLowerCase() == 'post') {
+                    $.post($tag.prop("action"), $tag.serialize(), function(data) {
+                        $("#" + containerId).replaceWith(data);
+                    });
+                } else {
+                    $.get($tag.prop("action"), $tag.serialize(), function(data) {
+                        $("#" + containerId).replaceWith(data);
+                    });
+                }
+                return false;
+            });
+        } else if($tag.is("a")) {
+            $tag.click(function() {
+                $.get($tag.prop("href"), function(data) {
+                    $("#" + containerId).replaceWith(data);
+                });
+                return false;
+            });
+        } else {
+            $.app.alert({message : "该标签不支持异步加载，支持的标签有form、a"});
+        }
+
+    }
+};
+
+$.parentchild = {
+    /**
+     * 初始化父子操作中的子表单
+     * options
+     *     {
+                form : 表单【默认$("childForm")】,
+                tableId : "表格Id"【默认"childTable"】,
+                excludeInputSelector : "[name='_show']"【排除的selector 默认无】,
+                trId : "修改的哪行数据的tr id， 如果没有表示是新增的",
+                validationEngine : null 验证引擎,
+                updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}" 修改时url模板 {id} 表示修改时的id,
+                deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}  删除时url模板 {id} 表示删除时的id,
+            }
+     * @param options
+     * @return {boolean}
+     */
+    initChildForm : function(options) {
+        var defaults = {
+            form : $("#childForm"),
+            tableId : "childTable",
+            excludeInputSelector : "",
+            trId : "",
+            validationEngine : null
+        };
+
+        if(!options) {
+            options = {};
+        }
+        options = $.extend({}, defaults, options);
+
+        //如果有trId则用trId中的数据更新当前表单
+        if(options.trId) {
+            //currentDocument 是执行$.app.modalEdit时保存的当前document 请参考application.modalDialog
+            var $tr = $("#" + options.trId, currentDocument);
+            if($tr.size() > 0 && $tr.find(":input").size() > 0) {
+                //因为是按顺序保存的 所以按照顺序获取  第一个是checkbox 跳过
+                var index = 1;
+                options.form.find(":input").not(options.excludeInputSelector).each(function() {
+                    var $input = $(this);
+                    var $trInput = $tr.find(":input").eq(index++);
+                    if($trInput.size() == 0) {
+                        return;
+                    }
+                    var $trInputClone = $trInput.clone(true).show();
+                    //saveModalFormToTable 为了防止重名问题，添加了tr id前缀，修改时去掉
+                    $trInputClone.prop("name", $trInputClone.prop("name").replace(options.trId, ""));
+                    $trInputClone.prop("id", $trInputClone.prop("id").replace(options.trId, ""));
+
+                    //克隆后 select的选择丢失了 TODO 提交给jquery bug
+                    if($trInput.is("select")) {
+                        $trInput.find("option").each(function(i) {
+                            $trInputClone.find("option").eq(i).prop("selected", $(this).prop("selected"));
+                        });
+                    }
+                    if($trInput.is(":radio,:checkbox")) {
+                        $trInputClone.prop("checked", $trInput.prop("checked"));
+                    }
+
+                    $trInputClone.replaceAll($input);
+                });
+            }
+        }
+
+        options.form.submit(function() {
+            if(options.validationEngine && !options.validationEngine.validationEngine("validate")) {
+                return false;
+            }
+            return $.parentchild.saveModalFormToTable(options);
+        });
+    }
+    ,
+    //保存打开的模态窗口到打开者的表格中
+    /**
+     * options
+     *     {
+                form : 表单【默认$("childForm")】,
+                tableId : "表格Id"【默认"childTable"】,
+                excludeInputSelector : "[name='_show']"【排除的selector 默认无】,
+                updateCallback : 【修改时的回调  默认 updateChild】,
+                deleteCallback : 【删除时的回调默认 deleteChild】,
+                trId : "修改的哪行数据的tr id， 如果没有表示是新增的"
+            }
+     * @param options
+     * @return {boolean}
+     */
+    saveModalFormToTable :function(options) {
+        //currentDocument 是执行$.app.modalEdit时保存的当前document 请参考application.modalDialog
+        var currentDocument = top.window.currentDocument;
+        var $childTbody = $("#" + options.tableId + " tbody", currentDocument);
+
+        if(!options.trId || options.alwaysNew) {
+            var counter = $childTbody.data("counter");
+            if(!counter) {
+                counter = 0;
+            }
+            options.trId = "new_" + counter++;
+            $childTbody.data("counter", counter);
+        }
+        var $lastTr = $("#" + options.trId, $childTbody);
+
+        var $tr = $("<tr></tr>");
+        $tr.prop("id", options.trId);
+        if($lastTr.size() == 0 || options.alwaysNew) {
+            $childTbody.append($tr);
+        } else {
+            $lastTr.replaceWith($tr);
+        }
+
+        var $td = $("<td></td>");
+
+        //checkbox
+        $tr.append($td.clone(true).addClass("check").append("<input type='checkbox'>"));
+
+        var $inputs = options.form.find(":input").not(":button,:submit,:reset");
+        if(options.excludeInputSelector) {
+            $inputs = $inputs.not(options.excludeInputSelector);
+        }
+        $inputs = $inputs.filter(function() {
+            return $inputs.filter("[name='" + $(this).prop("name") + "']").index($(this)) == 0;
+        });
+        $inputs.each(function() {
+            var $input = $("[name='" + $(this).prop("name") + "']", options.form);
+
+            var val = $input.val();
+            //使用文本在父页显示，而不是值
+            //如果是单选按钮/复选框 （在写的过程中，必须在输入框后跟着一个label）
+            if($input.is(":radio,:checkbox")) {
+                val = "";
+                $input.filter(":checked").each(function() {
+                    if(val != "") {
+                        val = val + "，";
+                    }
+                    val = val + $("label[for='" + $(this).prop("id") + "']").text();
+                });
+            }
+            //下拉列表
+            if($input.is("select")) {
+                val = "";
+                $input.find("option:selected").each(function() {
+                    if(val != "") {
+                        val = val + "，";
+                    }
+                    val = val + $(this).text();
+                });
+            }
+
+            //因为有多个孩子 防止重名造成数据丢失
+            $input.each(function() {
+                if($(this).is("[id]")) {
+                    $(this).prop("id", options.trId + $(this).prop("id"));
+                }
+                $(this).prop("name", options.trId + $(this).prop("name"));
+            });
+            $tr.append($td.clone(true).append(val).append($input.hide()));
+
+        });
+
+
+        var $updateBtn = $("<a class='icon-edit' href='javascript:void(0);' title='修改'></a>");
+        $updateBtn.click(function() {
+            $.parentchild.updateChild($(this), options.updateUrl, currentDocument);
+        });
+
+        var $deleteBtn = $("<a class='icon-trash' href='javascript:void(0);' title='删除'></a>");
+        $deleteBtn.click(function() {
+            $.parentchild.deleteChild($(this), options.deleteUrl, currentDocument);
+        })
+        var $copyBtn = $("<a class='icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>");
+        $copyBtn.click(function() {
+            $.parentchild.copyChild($(this), options.updateUrl, currentDocument);
+        });
+
+        $tr.append($td.clone(true).append($updateBtn).append(" ").append($deleteBtn).append(" ").append($copyBtn));
+
+        $.app.cancelModelDialog();
+        return false;
+    }
+    ,
+    /**
+     * 更新子
+     * @param $a 当前按钮
+     * @param updateUrl  更新地址
+     * @param currentDocument 当前文档
+     */
+    updateChild : function($a, updateUrl, currentDocument) {
+        var $tr = $a.closest("tr");
+        if(updateUrl.indexOf("?") > 0) {
+            updateUrl = updateUrl + "&";
+        } else {
+            updateUrl = updateUrl + "?";
+        }
+        updateUrl = updateUrl + "trId={trId}";
+
+        //表示已经在数据库中了
+        if($tr.is("[id^='old']")) {
+            updateUrl = updateUrl.replace("{id}", $tr.prop("id").replace("old_", ""));
+        } else {
+            //表示刚刚新增的还没有保存到数据库
+            updateUrl = updateUrl.replace("{id}", 0);
+        }
+        updateUrl = updateUrl.replace("{trId}", $tr.prop("id"));
+        $.app.modalDialog("修改", updateUrl, null, currentDocument);
+    }
+    ,
+    /**
+     * 以当前行复制一份
+     * @param $a 当前按钮
+     * @param updateUrl  更新地址
+     * @param currentDocument 当前文档
+     */
+    copyChild : function($a, updateUrl, currentDocument) {
+        var $tr = $a.closest("tr");
+        if(updateUrl.indexOf("?") > 0) {
+            updateUrl = updateUrl + "&";
+        } else {
+            updateUrl = updateUrl + "?";
+        }
+        updateUrl = updateUrl + "trId={trId}";
+        updateUrl = updateUrl + "&copy=true";
+
+        //表示已经在数据库中了
+        if($tr.is("[id^='old']")) {
+            updateUrl = updateUrl.replace("{id}", $tr.prop("id").replace("old_", ""));
+        } else {
+            //表示刚刚新增的还没有保存到数据库
+            updateUrl = updateUrl.replace("{id}", 0);
+        }
+        updateUrl = updateUrl.replace("{trId}", $tr.prop("id"));
+        $.app.modalDialog("复制", updateUrl, null, currentDocument);
+    }
+    ,
+    /**
+     * 删除子
+     * @param $a 当前按钮
+     * @param deleteUrl 删除地址
+     * @param currentDocument 当前文档
+     */
+    deleteChild : function($a, deleteUrl, currentDocument) {
+        $.app.confirm({
+            message : "确认删除吗？",
+            ok : function() {
+                var $tr = $a.closest("tr");
+                //如果数据库中存在
+                if($tr.prop("id").indexOf("old_") == 0) {
+                    deleteUrl = deleteUrl.replace("{id}", $tr.prop("id").replace("old_", ""));
+                    $.post(deleteUrl, function() {
+                        $tr.remove();
+                    });
+                } else {
+                    $tr.remove();
+                }
+
+            }
+        });
+    }
+    ,
+    /**
+     * 初始化父子表单中的父表单
+     * {
+     *     form: $form 父表单,
+     *     tableId : tableId 子表格id,
+     *     prefixParamName : "" 子表单 参数前缀,
+     *     createUrl : "${ctx}/showcase/parentchild/parent/child/create",
+     *     updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}" 修改时url模板 {id} 表示修改时的id,
+     *     deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}  删除时url模板 {id} 表示删除时的id,
+     * }
+     */
+    initParentForm : function(options) {
+        var $childTable = $("#" + options.tableId);
+
+        //绑定在切换页面时的事件 防止误前进/后退 造成数据丢失
+        $(window).on('beforeunload',function(){
+            if($childTable.find(":input").size() > 0) {
+                return "确定离开当前编辑页面吗？";
+            }
+        });
+        $("#createChild").click(function() {
+            $.app.modalDialog("新增", options.createUrl);
+        });
+        $("#removeSelectChild").click(function() {
+            $.app.confirm({
+                message: "确定删除选中的数据吗？",
+                ok : function() {
+                    var ids = new Array();
+                    var $trs = $childTable.find("tbody tr").has(":checked");
+                    $trs.each(function() {
+                        var id = $(this).prop("id");
+                        if(id.indexOf("old_") == 0) {
+                            id = id.replace("old_", "");
+                            ids.push({name : "ids", value : id});
+                        }
+                    });
+
+                    $.post(options.batchDeleteUrl, ids, function() {
+                        $trs.remove();
+                    });
+
+                }
+            });
+        });
+        $childTable.find("tbody tr").each(function() {
+            var $tr = $(this);
+            if($tr.prop("id").indexOf("old_") == 0) {
+                $tr.find(".icon-edit").click(function() {
+                    $.parentchild.updateChild($(this), options.updateUrl, document);
+                });
+                $tr.find(".icon-remove").click(function() {
+                    $.parentchild.deleteChild($(this), options.deleteUrl, document);
+                });
+                $tr.find(".icon-copy").click(function() {
+                    $.parentchild.copyChild($(this), options.updateUrl, document);
+                });
+            }
+        });
+        options.form.submit(function() {
+            //如果是提交 不需要执行beforeunload
+            $(window).unbind("beforeunload");
+            $childTable.find("tbody tr").each(function(index) {
+                var tr = $(this);
+                tr.find(":input").each(function() {
+                    if($(this).prop("name").indexOf(options.prefixParamName) != 0) {
+                        $(this).prop("name", options.prefixParamName + "[" + index + "]." + $(this).prop("name").replace(tr.prop("id"), ""));
+                    }
+                });
+            });
+        });
+    }
+    ,
+    /**
+     * 初始化父子列表中子列表
+     * @param $table 父表格
+     * @param loadUrl 装载子表格的地址
+     */
+    initChildList : function($table, loadUrl) {
+        var openIcon = "icon-plus-sign";
+        var closeIcon = "icon-minus-sign";
+        $table.find("tr ." + openIcon).click(function() {
+            var $a = $(this);
+            //只显示当前的 其余的都隐藏
+            $a.closest("table")
+                .find("." + closeIcon).not($a).removeClass(closeIcon).addClass(openIcon)
+                .end().end()
+                .find(".child-data").not($a.closest("tr").next("tr")).hide();
+
+            //如果是ie7
+            if($(this).closest("html").hasClass("ie7")) {
+                var $aClone = $(this).clone(true);
+                if($aClone.hasClass(closeIcon)) {
+                    $aClone.addClass(openIcon).removeClass(closeIcon);
+                } else {
+                    $aClone.addClass(closeIcon).removeClass(openIcon);
+                }
+                $(this).after($aClone);
+                $(this).remove();
+                $a = $aClone;
+            } else {
+                $a.toggleClass(openIcon);
+                $a.toggleClass(closeIcon);
+            }
+
+            var $currentTr = $a.closest("tr");
+            var $dataTr = $currentTr.next("tr");
+            if(!$dataTr.hasClass("child-data")) {
+                $.app.waiting();
+                $dataTr = $("<tr class='child-data' style='display: none;'></tr>");
+                var $dataTd = $("<td colspan='" + $currentTr.find("td").size() + "'></td>");
+                $dataTr.append($dataTd);
+                $currentTr.after($dataTr);
+                $dataTd.load(loadUrl.replace("{parentId}", $a.attr("data-id")),function() {
+                    $.app.waitingOver();
+                });
+            }
+            $dataTr.toggle();
+
+            return false;
+        });
+
+    }
+}
+
+$.edit = {
+    //格式化url前缀，默认清除url ? 后边的
+    formatUrlPrefix : function(urlPrefix) {
+        if(!urlPrefix) {
+            urlPrefix = currentURL;
+        }
+        if(urlPrefix.indexOf("?") >= 0) {
+            return urlPrefix.substr(0, urlPrefix.indexOf("?"));
+        }
+        return urlPrefix;
+    }
+    ,
+    initRemoveSelected : function($btn, $table, urlPrefix) {
+        if(!$btn || !$table) {
+            return;
+        }
+        urlPrefix = this.formatUrlPrefix(urlPrefix);
+        $btn.click(function() {
+            $.app.confirm({
+                message: "确定删除选中的数据吗？",
+                ok : function() {
+                    window.location.href =
+                        urlPrefix + "/batch/delete?" +
+                            $table.find(".check :checkbox").serialize() +
+                            "&BackURL=" + $.app.removeContextPath(currentURL);
+                    //ajax删除
+//                    $.ajax({
+//                        type : "post",
+//                        dataType: "json",
+//                        url : "${ctx}/showcase/upload/batch/delete",
+//                        data : $(".check :checkbox").serialize(),
+//                        success : function (data) {
+//                            if (!data.success) {
+//                                $.app.alert("删除时遇到问题，请重试或联系管理员");
+//                            } else {
+//                                location.reload();
+//                            }
+//                        }
+//                    });
+                }
+            });
+        });
+    }
+    ,
+    initUpdateSelected : function($btn, $table, urlPrefix) {
+
+        if(!$btn || !$table) {
+            return;
+        }
+
+        urlPrefix = this.formatUrlPrefix(urlPrefix);
+        $btn.click(function() {
+            var id = $table.find(".check :checkbox:checked").val();
+            if(!id) {
+                $.app.alert({message : "请先选中要修改的数据"});
+                return;
+            }
+            window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.app.removeContextPath(currentURL);;
         });
     }
 };
 
+$.movable = {
+    /**
+     * urlPrefix：指定移动URL的前缀，
+     * 如/sample，生成的URL格式为/sample/move/{direction:方向(up|down)}/{fromId}/{toId}
+     * @param table
+     * @param urlPrefix
+     */
+    initMoveableTable : function(table) {
+        if(table.size() == 0) {
+            return;
+        }
+        var urlPrefix = table.attr("move-url-prefix");
+        if(!urlPrefix) {
+            $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/move'&gt;<br/>自动生成：/move/{direction:方向(up|down)}/{fromId}/{toId}"});
+        }
+        var fixHelper = function (e, tr) {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+            $helper.children().each(function (index) {
+                // Set helper cell sizes to match the original sizes
+                $(this).width($originals.eq(index).width())
+            });
+            return $helper;
+        };
+
+        //事表格可拖拽排序
+        table.find("tbody")
+            .sortable({
+                helper: fixHelper,
+                opacity: 0.5,
+                cursor: "move",
+                placeholder: "sortable-placeholder",
+                update: function (even, ui) {
+                    even.stopPropagation();
+                    prepareMove(ui.item.find(".moveable").closest("td"));
+                }
+            });
+
+        //弹出移动框
+        table.find("a.pop-movable[rel=popover]")
+            .mouseenter(function (e) {
+                var a = $(this);
+                a.popover("show");
+                var idInput = a.closest("tr").find(".id");
+                idInput.focus();
+                a.next(".popover").find(".popover-up-btn,.popover-down-btn").click(function() {
+                    var fromId = $(this).closest("tr").prop("id");
+                    var toId = idInput.val();
+
+                    if(!/\d+/.test(toId)) {
+                        $.app.alert({message : "请输入数字!"});
+                        return;
+                    }
+
+                    var fromTD = $(this).closest("td");
+
+                    if($(this).hasClass("popover-up-btn")) {
+                        move(fromTD, fromId, toId, "up");
+                    } else {
+                        move(fromTD, fromId, toId, "down");
+                    }
+                });
+                a.parent().mouseleave(function() {
+                    a.popover("hide");
+                });
+            });
+
+        table.find(".up-btn,.down-btn").click(function() {
+            var fromTR = $(this).closest("tr");
+            if($(this).hasClass("up-btn")) {
+                fromTR.prev("tr").before(fromTR);
+            } else {
+                fromTR.next("tr").after(fromTR);
+            }
+            prepareMove($(this).closest("td"));
+        });
+
+        /**
+         *
+         * @param fromTD
+         */
+        function prepareMove(fromTD) {
+            var fromTR = fromTD.closest("tr");
+            var fromId = fromTR.prop("id");
+            var nextTR = fromTR.next("tr");
+            if(nextTR.size() > 0) {
+                move(fromTD, fromId, nextTR.prop("id"), "down");
+            } else {
+                var preTR = fromTR.prev("tr");
+                move(fromTD, fromId, preTR.prop("id"), "up");
+            }
+
+        }
+        function move(fromTD, fromId, toId, direction) {
+            if(!(fromId && toId)) {
+                return;
+            }
+            var order = $.app.tdOrder(fromTD);
+            if (!order) {
+                $.app.alert({message: "请首先排序要移动的字段！"});
+                return;
+            }
+            //如果升序排列 需要反转direction
+            if(order == "desc") {
+                if(direction == "up") {
+                    direction = "down";
+                } else {
+                    direction = "up";
+                }
+            }
+            $.app.waiting("正在移动");
+            var url = urlPrefix + "/" + direction + "/" + fromId + "/" + toId;
+            $.getJSON(url, function(data) {
+                $.app.waitingOver();
+                if(data.success) {
+                    location.reload();
+                } else {
+                    $.app.alert({message : data.message});
+                }
+
+            });
+        }
+    }
+    ,
+    initMovableReweight : function($btn, url) {
+        $btn.click(function () {
+            $.app.confirm({
+                message: "确定优化权重吗？<br/><strong>注意：</strong>优化权重执行效率比较低，请在本系统使用人员较少时执行（如下班时间）",
+                ok: function () {
+                    $.app.waiting("优化权重执行中。。");
+                    $.getJSON(url, function(data) {
+                        $.app.waitingOver();
+                        if(!data.success) {
+                            $.app.alert({message : data.message});
+                        } else {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        });
+    }
+};
+
+$.array = {
+    remove : function(array, data) {
+        if(array.length == 0) {
+            return;
+        }
+        for(var i = array.length - 1; i >= 0; i--) {
+            if(array[i] == data) {
+                array.splice(i, 1);
+            }
+        }
+    },
+    contains : function(array, data) {
+        if(array.length == 0) {
+            return false;
+        }
+        for(var i = array.length - 1; i >= 0; i--) {
+            if(array[i] == data) {
+                return true;
+            }
+        }
+        return false;
+    },
+    indexOf : function(array, data) {
+        if(array.length == 0) {
+            return -1;
+        }
+        for(var i = array.length - 1; i >= 0; i--) {
+            if(array[i] == data) {
+                return i;
+            }
+        }
+        return -1;
+    },
+    clear : function(array) {
+        if(array.length == 0) {
+            return;
+        }
+        array.splice(0, array.length);
+    },
+    trim : function(array) {
+        for(var i = array.length - 1; i >= 0; i--) {
+            if(array[i] == "" || array[i] == null) {
+                array.splice(i, 1);
+            }
+        }
+        return array;
+    }
+
+};
+
 
 $(function () {
+    //global disable ajax cache
+    $.ajaxSetup({ cache: false });
+
     $.app.initTable($(".table"));
-    $.app.initTableMoveable($(".move-table"));
+    $.movable.initMoveableTable($(".move-table"));
     $.app.initDatetimePicker();
-    $.app.initFileInput();
+
+    //初始化批量删除和修改按钮
+    $.edit.initRemoveSelected($("#removeSelect"), $(".table"));
+    $.edit.initUpdateSelected($("#update"), $(".table"));
+
 
     $(document).ajaxError(function(event,request, settings){
         $.app.alert({
             title : "网络故障/系统故障(请截屏反馈给管理员)",
             message : "出错状态码:" + request.status + "[" + request.statusText + "]" + "<br/>出错页面:" + settings.url
         });
+        $.app.waitingOver();
     });
 });
 

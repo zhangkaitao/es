@@ -6,7 +6,7 @@
 package com.sishuok.es.web.showcase.move.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.entity.plugin.Movable;
+import com.sishuok.es.common.plugin.entity.Movable;
 import com.sishuok.es.common.entity.validate.group.Create;
 
 import javax.persistence.*;
@@ -25,7 +25,6 @@ public class Move extends BaseEntity<Long> implements Movable {
     @Column(name = "name")
     private String name;
 
-    @NotNull()
     @Column(name = "weight")
     private Integer weight;
 

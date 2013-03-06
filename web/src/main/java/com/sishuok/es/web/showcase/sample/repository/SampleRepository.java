@@ -21,7 +21,4 @@ public interface SampleRepository extends BaseRepository<Sample, Long> {
 
     Sample findByName(String name);
 
-    @Modifying
-    @Query(value = "delete from Sample where id in (?1)")
-    void deleteByIds(List<Long> ids);
 }

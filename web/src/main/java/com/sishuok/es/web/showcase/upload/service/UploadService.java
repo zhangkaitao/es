@@ -22,22 +22,9 @@ import java.util.Arrays;
 @Service
 public class UploadService extends BaseService<Upload, Long> {
 
-    private UploadRepository uploadRepository;
-
     @Autowired
     public void setUploadRepository(UploadRepository uploadRepository) {
-        this.uploadRepository = uploadRepository;
         setBaseRepository(uploadRepository);
     }
 
-    public Upload findByName(String name) {
-        return uploadRepository.findByName(name);
-    }
-
-    public void delete(Long[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
-            return;
-        }
-        uploadRepository.deleteByIds(Arrays.asList(ids));
-    }
 }

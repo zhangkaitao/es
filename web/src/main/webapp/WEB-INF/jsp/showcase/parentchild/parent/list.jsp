@@ -2,11 +2,9 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <es:showMessage/>
-<div>
-    <div id="search" class="accordion-body collapse">
-        <div class="accordion-inner">
-            <%@include file="searchForm.jsp"%>
-        </div>
+<div id="search" class="accordion-body collapse search">
+    <div class="accordion-inner">
+        <%@include file="searchForm.jsp"%>
     </div>
 </div>
 
@@ -17,7 +15,7 @@
           查询
       </a>
       <a id="create" class="btn" href="${ctx}/showcase/parentchild/parent/create">
-          <span class="icon-edit"></span>
+          <span class="icon-file"></span>
           新增
       </a>
       <a id="update" class="btn">
@@ -25,7 +23,7 @@
           修改
       </a>
       <a id="removeSelect" class="btn">
-          <span class="icon-remove"></span>
+          <span class="icon-trash"></span>
           批量删除
       </a>
   </div>
@@ -33,7 +31,8 @@
   <table class="sort-table table table-bordered table-hover table-striped" sort-prefix="" sort-url="">
       <thead>
         <tr>
-            <th style="width: 10%">
+            <th style="width: 20px">&nbsp;</th>
+            <th style="width: 80px">
                 <a class="check-all" href="javascript:;">全选</a>
                 |
                 <a class="reverse-all" href="javascript:;">反选</a>
@@ -44,25 +43,30 @@
             <th>开始时间</th>
             <th>结束时间</th>
             <th>是否显示</th>
-            <th style="width: 6%">操作</th>
+            <th style="width: 50px">操作</th>
         </tr>
       </thead>
       <tbody>
-      <c:forEach items="${parents.content}" var="parent">
+      <c:forEach items="${page.content}" var="m">
         <tr>
-            <td class="check"><input type="checkbox" name="ids" value="${parent.id}"></td>
-            <td>${parent.id}</td>
-            <td>${parent.name}</td>
-            <td>${parent.type.info}</td>
-            <td><spring:eval expression="parent.beginDate"/></td>
-            <td><spring:eval expression="parent.endDate"/></td>
-            <td>${parent.show}</td>
             <td>
-                <a class="btn btn-link edit-btn" title="修改" href="${ctx}/showcase/parentchild/parent/update/${parent.id}">
-                    <span class=" icon-edit"></span>
+                <a data-id="${m.id}" class="btn-link icon-plus-sign"></a>
+            </td>
+            <td class="check">
+                <input type="checkbox" name="ids" value="${m.id}">
+            </td>
+            <td>${m.id}</td>
+            <td>${m.name}</td>
+            <td>${m.type.info}</td>
+            <td><spring:eval expression="m.beginDate"/></td>
+            <td><spring:eval expression="m.endDate"/></td>
+            <td>${m.show ? '是' : '否'}</td>
+            <td>
+                <a class="btn btn-link edit-btn" title="修改" href="${ctx}/showcase/parentchild/parent/update/${m.id}">
+                    <span class="icon-edit"></span>
                 </a>
-                <a class="btn btn-link edit-btn" title="删除" href="${ctx}/showcase/parentchild/parent/delete/${parent.id}">
-                    <span class=" icon-remove"></span>
+                <a class="btn btn-link edit-btn" title="删除" href="${ctx}/showcase/parentchild/parent/delete/${m.id}">
+                    <span class="icon-trash"></span>
                 </a>
             </td>
         </tr>
@@ -74,23 +78,7 @@
 <es:contentFooter/>
 <script type="text/javascript">
     $(function() {
-        $("#removeSelect").click(function() {
-            $.app.confirm({
-                message: "确定删除选中的数据吗？",
-                ok : function() {
-                    window.location.href = "${ctx}/showcase/parentchild/parent/batch/delete?" + $(".check :checkbox").serialize();
-                }
-            });
-        });
-
-        $("#update").click(function() {
-            var id = $(".check :checkbox:checked").val();
-            if(!id) {
-                $.app.alert({message : "请先选中要修改的数据"});
-                return;
-            }
-            window.location.href = '${ctx}/showcase/parentchild/parent/update/' + id;
-        });
+        $.parentchild.initChildList($(".table"), "${ctx}/showcase/parentchild/parent/child/{parentId}");
 
     });
 </script>

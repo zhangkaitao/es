@@ -43,7 +43,7 @@
                 },
                 "min": {
                     "regex": "none",
-                    "alertText": "* 最小值為 "
+                    "alertText": "* 最小值为 "
                 },
                 "max": {
                     "regex": "none",

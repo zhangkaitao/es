@@ -6,7 +6,7 @@
 package com.sishuok.es.common.repository;
 
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.builder.SearchableBuilder;
+import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;

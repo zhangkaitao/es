@@ -17,16 +17,16 @@
   margin-right: 4px;
 }
 .fileinput-button input {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  transform: translate(-300px, 0) scale(4);
-  font-size: 23px;
-  direction: ltr;
-  cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 1;
+    width: 0px;
+    margin: 0px;
+    height: 0px;
+    line-height: 0px;
 }
 .fileupload-buttonbar .btn,
 .fileupload-buttonbar .toggle {
@@ -51,17 +51,6 @@
   display: block;
 }
 
-/* Fix for IE 6: */
-* html .fileinput-button {
-  line-height: 24px;
-  margin: 1px -3px 0 0;
-}
-
-/* Fix for IE 7: */
-* + html .fileinput-button {
-  padding: 2px 15px;
-  margin: 1px 0 0 0;
-}
 
 @media (max-width: 767px) {
   .files .btn span {

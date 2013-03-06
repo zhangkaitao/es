@@ -2,11 +2,11 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<form:form id="maintainForm" method="post" commandName="tree" cssClass="form-horizontal" enctype="multipart/form-data">
+<form:form id="maintainForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
     <fieldset>
         <legend>维护树</legend>
 
-        <es:showGlobalError commandName="tree"/>
+        <es:showGlobalError commandName="m"/>
 
         <form:hidden path="id"/>
         <form:hidden path="path"/>
@@ -18,11 +18,11 @@
             </div>
         </div>
 
-        <c:if test="${not empty tree.icon}">
+        <c:if test="${not empty m.icon}">
             <div class="control-group">
                 <form:label path="icon" cssClass="control-label">当前显示的图标</form:label>
                 <div class="controls">
-                    <es:showAttachment filename="${tree.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
+                    <es:showAttachment filename="${m.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
                     <form:hidden path="icon"/>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <input id="updateTree" type="submit" class="btn btn-primary" value="修改">
                 <input id="deleteTree" type="submit" class="btn btn-primary" value="删除">
                 <input id="appendChild" type="submit" class="btn btn-primary" value="添加子节点">
-                <c:if test="${tree.root == false}"><%-- 根节点不能移动 --%>
+                <c:if test="${m.root == false}"><%-- 根节点不能移动 --%>
                 <input id="moveTree" type="submit" class="btn btn-primary" value="移动节点">
                 </c:if>
             </div>
@@ -63,28 +63,28 @@ $(function () {
         "alertText": "* 小于50个字符"
     };
     var validationEngine = $("#maintainForm").validationEngine();
-    <es:showFieldError commandName="tree"/>
+    <es:showFieldError commandName="m"/>
 
     $("#updateTree").click(function() {
-        this.form.action = "${ctx}/showcase/tree/update/${tree.id}";
+        this.form.action = "${ctx}/showcase/tree/update/${m.id}";
     });
     $("#deleteTree").click(function () {
         var btn = this;
         $.app.confirm({
             message : "确认删除吗？",
             ok : function() {
-                btn.form.action = "${ctx}/showcase/tree/delete/${tree.id}";
+                btn.form.action = "${ctx}/showcase/tree/delete/${m.id}";
                 btn.form.submit();
           }
       });
       return false;
   });
   $("#appendChild").click(function () {
-      window.location.href = "${ctx}/showcase/tree/appendChild/${tree.id}";
+      window.location.href = "${ctx}/showcase/tree/appendChild/${m.id}";
       return false;
   });
   $("#moveTree").click(function () {
-      window.location.href = "${ctx}/showcase/tree/move/${tree.id}";
+      window.location.href = "${ctx}/showcase/tree/move/${m.id}";
       return false;
   });
 

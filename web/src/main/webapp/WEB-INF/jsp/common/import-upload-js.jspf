@@ -18,4 +18,3 @@
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
 <!--[if gte IE 8]><script src="${ctx}/static/comp/jQuery-File-Upload/js/cors/jquery.xdr-transport.js"></script><![endif]-->
 
-

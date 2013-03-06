@@ -19,7 +19,4 @@ import java.util.List;
  */
 public interface ParentRepository extends BaseRepository<Parent, Long> {
 
-    @Modifying
-    @Query(value = "delete from Parent where id in (?1)")
-    void deleteByIds(List<Long> ids);
 }

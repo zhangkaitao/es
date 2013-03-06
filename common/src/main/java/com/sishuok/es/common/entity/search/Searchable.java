@@ -39,6 +39,21 @@ public interface Searchable {
     public void addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value);
 
     /**
+     * 添加过滤条件 如key="parent.id_eq" value = 1
+     * @param key
+     */
+    public void addSearchFilter(final String key, Object value);
+
+    /**
+     * 添加过滤条件
+     * @param searchProperty 查询的属性名
+     * @param operator 操作运算符
+     * @param value 值
+     */
+    public void addSearchFilter(final String searchProperty, SearchOperator operator, Object value);
+
+
+    /**
      * 获取分页和排序信息
      * @return
      */

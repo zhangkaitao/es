@@ -3,21 +3,45 @@
 <es:contentHeader title="Easy-Scaffold脚手架" centerPanel="false"/>
 
     <div id="content" style="padding: 0px!important;">
-        <div id="tabs">
-            <ul class="tabs-fix-top">
-                <li><a href="#tabs-1">欢迎使用</a></li>
-            </ul>
+        <div id="tabs" class="tabs-fix-top">
+            <span class="icon-chevron-left"></span>
+            <div class="ul-wrapper">
+                <ul>
+                    <li><a href="#tabs-1">欢迎使用1</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用</a></li>
+                    <li><a href="#tabs-1">欢迎使用10</a></li>
+                    <li><a href="#tabs-1">欢迎使用10</a></li>
+                    <li><a href="#tabs-1">欢迎使用10</a></li>
+                    <li><a href="#tabs-1">欢迎使用10</a></li>
+                    <li><a href="#tabs-1">欢迎使用12</a></li>
+                    <li><a href="#tabs-1">欢迎使用12</a></li>
+                    <li><a href="#tabs-1">欢迎使用12</a></li>
+                    <li><a href="#tabs-1">欢迎使用14</a></li>
+                </ul>
+            </div>
+            <span class="icon-chevron-right"></span>
+
             <div id="tabs-1">
             </div>
         </div>
     </div>
-   <iframe id="iframe-tabs-1" tabs="true" class="ui-layout-center" frameborder="0" scrolling="auto"
-            src="${ctx}/welcome"></iframe>
+   <iframe id="iframe-tabs-1" name="content" tabs="true" class="ui-layout-center"
+           frameborder="0" scrolling="auto" src="${ctx}/welcome"></iframe>
 
 
     <div class="ui-layout-north">
         <%@include file="header.jsp"%>
     </div>
+
 
     <div class="ui-layout-south">
         <%@include file="footer.jsp"%>
@@ -26,8 +50,8 @@
         <%@include file="menu.jsp"%>
     </div>
 <es:contentFooter/>
-<script>
-    $(document).ready(function () {
+<script type="text/javascript">
+    $(function() {
         $.app.initIndex();
     });
 </script>

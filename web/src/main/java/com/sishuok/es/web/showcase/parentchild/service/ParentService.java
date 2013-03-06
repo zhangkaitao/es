@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -28,16 +29,35 @@ public class ParentService extends BaseService<Parent, Long> {
     private ParentRepository parentRepository;
 
     @Autowired
+    private ChildService childService;
+
+    @Autowired
     public void setParentRepository(ParentRepository parentRepository) {
-        this.parentRepository = parentRepository;
         setBaseRepository(parentRepository);
+        this.parentRepository = parentRepository;
     }
 
 
-    public void delete(Long[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
-            return;
+    public void save(Parent parent, List<Child> childList) {
+        save(parent);
+        saveOrUpdateChild(parent, childList);
+    }
+
+    public void update(Parent parent, List<Child> childList) {
+        update(parent);
+        saveOrUpdateChild(parent, childList);
+    }
+    private void saveOrUpdateChild(Parent parent, List<Child> childList) {
+        for(Child child : childList) {
+            if(child == null) {//防止中间有跳过的
+                continue;
+            }
+            child.setParent(parent);
+            if(child.getId() == null) {//新的
+                childService.save(child);
+            } else {
+                childService.update(child);
+            }
         }
-        parentRepository.deleteByIds(Arrays.asList(ids));
     }
 }

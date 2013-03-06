@@ -2,11 +2,13 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div>
-    <form:form id="editForm" method="post" commandName="move" cssClass="form-horizontal">
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
+        <!--上一个地址-->
+        <es:BackURL hiddenInput="true"/>
         <fieldset>
-            <legend>可移动管理[${op}] <a href="${ctx}/showcase/move" class="btn btn-link">返回</a></legend>
+            <legend>可移动管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
-            <es:showGlobalError commandName="move"/>
+            <es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
 
@@ -37,7 +39,7 @@
             <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="${ctx}/showcase/move" class="btn">返回</a>
+                    <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
         </fieldset>
@@ -53,7 +55,7 @@
             </c:when>
             <c:otherwise>
                 var validationEngine = $("#editForm").validationEngine();
-                <es:showFieldError commandName="move"/>
+                <es:showFieldError commandName="m"/>
             </c:otherwise>
         </c:choose>
     });

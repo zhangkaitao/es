@@ -116,7 +116,7 @@
         </tx:attributes>
     </tx:advice>
 
-    <aop:config expose-proxy="true">
+    <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
         <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
@@ -125,31 +125,31 @@
 
 
     <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
-     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-         <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
-         <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
-         <property name="validationMessageSource" ref="messageSource"/>
-     </bean>
-     <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-     </bean>
-    <bean class="org.springframework.data.repository.support.DomainClassConverter">
-        <constructor-arg ref="conversion-service"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
     </bean>
 
-     <!-- 国际化的消息资源文件 -->
-     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-         <property name="basenames">
-             <list>
-                 <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
-                 <value>classpath:messages</value>
-                 <value>classpath:ValidationMessages</value>
-                 <value>classpath:org/springframework/security/messages</value>
-             </list>
-         </property>
-         <property name="defaultEncoding" value="UTF-8"/>
-         <property name="cacheSeconds" value="60"/>
-     </bean>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    </bean>
 
+    <bean class="org.springframework.data.repository.support.DomainClassConverter">
+        <constructor-arg ref="conversionService"/>
+    </bean>
 
+    <!-- 国际化的消息资源文件 -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
+                <value>classpath:messages</value>
+                <value>classpath:ValidationMessages</value>
+                <value>classpath:org/springframework/security/messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
 
 </beans>

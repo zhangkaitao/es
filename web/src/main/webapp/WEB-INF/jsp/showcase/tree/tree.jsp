@@ -146,10 +146,10 @@
         }
 
         var zNodes =[
-            <c:forEach items="${trees.content}" var="t">
-                { id:'${t.path}', pId:'${t.parentPath}', name:"${t.name}", icon:"${ctx}/${t.icon}", open: true,
-                  click : "parent.frames['maintainFrame'].location.href='${ctx}/showcase/tree/maintain/${t.id}'",
-                  root : ${t.root}},
+            <c:forEach items="${page.content}" var="m">
+                { id:'${m.path}', pId:'${m.parentPath}', name:"${m.name}", icon:"${ctx}/${m.icon}", open: true,
+                  click : "parent.frames['maintainFrame'].location.href='${ctx}/showcase/tree/maintain/${m.id}'",
+                  root : ${m.root}},
             </c:forEach>
         ];
  

@@ -150,6 +150,18 @@ public final class SearchRequest implements Searchable {
         searchFilterMap.put(key, new SearchFilter(searchProperty, operator, value));
     }
 
+    @Override
+    public void addSearchFilter(String key, Object value) {
+        Map<String, Object> map = Maps.newHashMap();
+        map.put(key, value);
+        toSearchFilters(map);
+    }
+
+    @Override
+    public void addSearchFilter(String searchProperty, SearchOperator operator, Object value) {
+        addSearchFilter(searchProperty + separator + operator.toString(), value);
+    }
+
     public Collection<SearchFilter> getSearchFilters() {
         return Collections.unmodifiableCollection(searchFilterMap.values());
     }

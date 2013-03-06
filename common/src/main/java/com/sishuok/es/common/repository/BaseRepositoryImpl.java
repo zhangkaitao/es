@@ -9,13 +9,15 @@ import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.repository.callback.SearchCallback;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
+import com.sishuok.es.common.utils.ReflectUtils;
+import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.SharedEntityManagerCreator;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Id;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -50,8 +52,18 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
     protected final String QL_COUNT_ALL;
 
 
-    public BaseRepositoryImpl() {
-        this.entityClass = (Class<M>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    protected BaseRepositoryImpl() {
+        this(null);
+
+    }
+
+
+    protected BaseRepositoryImpl(Class<M> entityClass) {
+        if(entityClass == null) {
+            entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
+        }
+        this.entityClass = entityClass;
+
         Field[] fields = this.entityClass.getDeclaredFields();
         for (Field f : fields) {
             if (f.isAnnotationPresent(Id.class)) {
@@ -59,10 +71,13 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
                 break;
             }
         }
-        QL_LIST_ALL = "from " + this.entityClass.getSimpleName() + " o where 1=1 ";
-        QL_COUNT_ALL = " select count(o) from " + this.entityClass.getSimpleName() + " o where 1=1 ";
+        QL_LIST_ALL = String.format("select o from %s o where 1=1 ", this.entityClass.getSimpleName());
+        QL_COUNT_ALL = String.format("select count(o) from %s o where 1=1 ", this.entityClass.getSimpleName());
 
     }
+
+
+
 
 
     /**
@@ -76,7 +91,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
      * @param searchCallback 查询回调  自定义设置查询条件和赋值
      * @return
      */
-    protected List<M> find(final String ql, final Searchable search, SearchCallback searchCallback) {
+    public List<M> find(final String ql, final Searchable search, SearchCallback searchCallback) {
         convertSearchable(search);
 
         StringBuilder s = new StringBuilder(ql);
@@ -113,7 +128,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
      * @param searchCallback
      * @return
      */
-    protected M findOne(String ql, final Searchable search, SearchCallback searchCallback) {
+    public M findOne(String ql, final Searchable search, SearchCallback searchCallback) {
         convertSearchable(search);
         StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
@@ -131,6 +146,17 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
     }
 
     /**
+     * @see BaseRepositoryImpl#findAll(String, org.springframework.data.domain.Pageable, Object...) ;
+     * @param ql
+     * @param params
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> findAll(final String ql, final Object... params) {
+        return findAll(ql, null, params);
+    }
+
+    /**
      * <p>根据ql和按照索引顺序的params执行ql，pageable存储分页信息 null表示不分页<br/>
      * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
      * @param ql
@@ -139,7 +165,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
      * @param <T>
      * @return
      */
-    protected <T> List<T> findAll(final String ql, final Pageable pageable, final Object... params) {
+    public <T> List<T> findAll(final String ql, final Pageable pageable, final Object... params) {
         Query query = entityManager.createQuery(ql);
         setParameters(query, params);
         if (pageable != null && pageable.getPageSize() > 0) {
@@ -170,7 +196,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
      * @param <T>
      * @return
      */
-    protected <T> T findOne(final String ql, final Object... params) {
+    public <T> T findOne(final String ql, final Object... params) {
         List<T> list = findAll(ql, new PageRequest(0, 1), params);
         if (list.size() > 0) {
             return list.get(0);
@@ -186,7 +212,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
      * @param params
      * @return
      */
-    protected int batchUpdate(final String ql, final Object... params) {
+    public int batchUpdate(final String ql, final Object... params) {
         Query query = entityManager.createQuery(ql);
         setParameters(query, params);
         return query.executeUpdate();
@@ -211,6 +237,25 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
      */
     protected void convertSearchable(Searchable search) {
         SearchableConvertUtils.convertSearchValueToEntityValue(search, entityClass);
+    }
+
+
+    public static <M extends BaseEntity, ID extends Serializable> BaseRepositoryImpl<M, ID> defaultBaseRepositoryImpl(Class<M> entityClass) {
+        DefaultRepositoryImpl<M, ID> defaultRepository = new DefaultRepositoryImpl<M, ID>(entityClass);
+        EntityManagerFactory emf = SpringUtils.getBean(EntityManagerFactory.class);
+        EntityManager entityManager = EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
+        if(entityManager == null) {
+            entityManager = SharedEntityManagerCreator.createSharedEntityManager(emf);
+        }
+        defaultRepository.entityManager = entityManager;
+
+        return defaultRepository;
+    }
+
+    private static class DefaultRepositoryImpl<M extends BaseEntity, ID extends Serializable> extends BaseRepositoryImpl<M, ID> {
+        public DefaultRepositoryImpl(Class<M> entityClass) {
+            super(entityClass);
+        }
     }
 
 }

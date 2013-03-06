@@ -2,13 +2,13 @@
 <form id="searchForm" class="form-inline accordion" action="${ctx}/showcase/sample">
 
     <label for="search.id_in">编号</label>
-    <input type="text" id="search.id_in" name="search.id_in" value="${param['search.id_in']}"  class="input-medium" placeholder="多个使用空格分隔">
+    <input type="text" id="search.id_in" name="search.id_in" value="${param['search.id_in']}"  class="input-medium" placeholder="多个使用空格分隔"/>
     &nbsp;&nbsp;
     <label for="search.age_gt">年龄从</label>
-    <input type="text" id="search.age_gt" name="search.age_gt" value="${param['search.age_gt']}" class="input-small" placeholder="大于">
+    <input type="text" id="search.age_gt" name="search.age_gt" value="${param['search.age_gt']}" class="input-small" placeholder="大于"/>
 
     <label for="search.age_lt">到</label>
-    <input type="text" id="search.age_lt" name="search.age_lt" value="${param['search.age_lt']}" class="input-small" placeholder="小于">
+    <input type="text" id="search.age_lt" name="search.age_lt" value="${param['search.age_lt']}" class="input-small" placeholder="小于"/>
 
     <br/><br/>
 
@@ -37,7 +37,7 @@
         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
     </div>
     &nbsp;&nbsp;
-    <button type="submit" class="btn">查询</button>
+    <input type="submit" class="btn" value="查询"/>
     <a href="javascript:location.href=$('#searchForm').prop('action')" class="btn btn-link">查询所有</a>
 
 </form>

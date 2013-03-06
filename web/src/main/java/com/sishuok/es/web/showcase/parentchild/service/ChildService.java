@@ -3,10 +3,12 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.web.showcase.childchild.service;
+package com.sishuok.es.web.showcase.parentchild.service;
 
 import com.sishuok.es.common.service.BaseService;
+import com.sishuok.es.web.showcase.move.repository.MoveRepository;
 import com.sishuok.es.web.showcase.parentchild.entity.Child;
+import com.sishuok.es.web.showcase.parentchild.entity.Parent;
 import com.sishuok.es.web.showcase.parentchild.repository.ChildRepository;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -27,19 +30,24 @@ public class ChildService extends BaseService<Child, Long> {
     private ChildRepository childRepository;
 
     @Autowired
-    public void setChildRepository(ChildRepository childRepository) {
-        this.childRepository = childRepository;
+    private void setChildRepository(ChildRepository childRepository) {
         setBaseRepository(childRepository);
+        this.childRepository = childRepository;
     }
 
-    Page<Child> findByParent(Long parentId, Pageable pageable) {
-        return childRepository.findByParent(parentId, pageable);
+    public ChildService() {
     }
 
-    public void delete(Long[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
-            return;
-        }
-        childRepository.deleteByIds(Arrays.asList(ids));
+    public Page<Child> findByParent(Parent parent, Pageable pageable) {
+        return childRepository.findByParent(parent, pageable);
+    }
+
+    Page<Child> findByParents(List<Parent> parents, Pageable pageable) {
+        return childRepository.findByParents(parents, pageable);
+    }
+
+
+    public void deleteByParent(Parent parent) {
+        childRepository.deleteByParent(parent);
     }
 }

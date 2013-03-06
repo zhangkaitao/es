@@ -5,6 +5,7 @@ create table `tbl_sample`(
     `birthday`   timestamp,
     `sex`        varchar(50),
     `show`       bool default false,
+     `deleted`  bool default false,
 
     constraint `pk_sample` primary key(`id`),
     constraint `unique_sample_name` unique(`name`),
@@ -56,4 +57,24 @@ create table `tbl_child`(
   `endTime`    time,
   `show`        bool,
   constraint `pk_child` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `tbl_category`(
+  `id`          bigint unsigned not null auto_increment,
+  `name`        varchar(100),
+  `weight`      int unsigned default 0,
+  `show`        bool,
+  constraint `pk_category` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `tbl_product`(
+  `id`             bigint unsigned not null auto_increment,
+  `category_id`  bigint unsigned,
+  `name`          varchar(100),
+  `price`         bigint unsigned default 0,
+  `number`        bigint unsigned default 0,
+  `beginDate`    timestamp ,
+  `endDate`      timestamp ,
+  `show`        bool,
+  constraint `pk_product` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;

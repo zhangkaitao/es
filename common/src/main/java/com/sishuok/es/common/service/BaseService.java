@@ -7,17 +7,25 @@ package com.sishuok.es.common.service;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.BaseRepositoryImpl;
+import com.sishuok.es.common.utils.ReflectUtils;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +41,14 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
 
 
     protected final Class<M> entityClass;
-    private BaseRepository<M, ID> baseRepository;
+    protected BaseRepository<M, ID> baseRepository;
+
+    protected BaseRepositoryImpl baseDefaultRepositoryImpl;
+
+    public BaseService() {
+        this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
+        this.baseDefaultRepositoryImpl = BaseRepositoryImpl.defaultBaseRepositoryImpl(entityClass);
+    }
 
     public void setBaseRepository(BaseRepository<M, ID> baseRepository) {
         this.baseRepository = baseRepository;
@@ -41,17 +56,9 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(baseRepository);
+        Assert.notNull(baseRepository, "BaseRepository required, Class is:" + getClass());
     }
 
-    public BaseService() {
-        Type parameterizedType = this.getClass().getGenericSuperclass();
-        //CGLUB subclass target object(泛型在父类上)
-        if(!(parameterizedType instanceof ParameterizedType)) {
-            parameterizedType = this.getClass().getSuperclass().getGenericSuperclass();
-        }
-        this.entityClass = (Class<M>) ((ParameterizedType) parameterizedType).getActualTypeArguments()[0];
-    }
 
     /**
      * 保存单个实体
@@ -81,8 +88,46 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
      *
      * @param id 主键
      */
+    @Transactional
     public void delete(ID id) {
-        baseRepository.delete(id);
+        M m = findOne(id);
+        delete(m);
+    }
+
+    /**
+     * 根据主键删除相应实体
+     *
+     * @param ids 实体
+     */
+    @Transactional
+    public void delete(ID[] ids) {
+        if(ArrayUtils.isEmpty(ids)) {
+            return;
+        }
+        List<M> models = new ArrayList<M>();
+        for(ID id : ids) {
+            M model = null;
+            try {
+                model = (M)entityClass.newInstance();
+            }catch (Exception e) {
+                throw new RuntimeException("batch delete " + entityClass.getName() + " error", e);
+            }
+            try {
+                BeanUtils.setProperty(model, "id", id);
+            } catch (Exception e) {
+                throw new RuntimeException("batch delete " + entityClass.getName() + " error, can not set id", e);
+            }
+
+            models.add(model);
+        }
+
+        if(models.get(0) instanceof LogicDeleteable) {
+            String hql = String.format("update %s o set o.deleted=true where o in (?1)", this.entityClass.getSimpleName());
+            baseDefaultRepositoryImpl.batchUpdate(hql, models);
+        } else {
+            baseRepository.deleteInBatch(models);
+        }
+
     }
 
     /**
@@ -90,8 +135,17 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
      *
      * @param m 实体
      */
+    @Transactional
     public void delete(M m) {
-        baseRepository.delete(m);
+        if(m == null) {
+            return;
+        }
+        if(m != null && m instanceof LogicDeleteable) {
+            ((LogicDeleteable) m).markDeleted();
+            baseRepository.save(m);
+        } else {
+            baseRepository.delete(m);
+        }
     }
 
 
@@ -184,6 +238,14 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
         return baseRepository.findAll(searchable.getSpecifications(entityClass), searchable.getPage());
     }
 
-
+    /**
+     * 按条件分页并排序统计实体数量
+     *
+     * @param searchable 条件
+     * @return
+     */
+    public Long count(Searchable searchable) {
+        return baseRepository.count(searchable.getSpecifications(entityClass));
+    }
 
 }
