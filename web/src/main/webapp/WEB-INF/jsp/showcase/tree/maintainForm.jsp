@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<es:contentHeader/>
 
+<es:contentHeader/>
 <form:form id="maintainForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
     <fieldset>
         <legend>维护树</legend>
@@ -9,7 +9,9 @@
         <es:showGlobalError commandName="m"/>
 
         <form:hidden path="id"/>
-        <form:hidden path="path"/>
+        <form:hidden path="parentId"/>
+        <form:hidden path="parentIds"/>
+        <form:hidden path="weight"/>
 
         <div class="control-group">
             <form:label path="name" cssClass="control-label">名称</form:label>
@@ -38,14 +40,17 @@
         <div class="control-group">
             <form:label path="show" cssClass="control-label">是否显示</form:label>
             <div class="controls inline-radio">
-                <form:radiobuttons path="show" items="${booleanList}" itemLabel="info" itemValue="value" cssClass="validate[required]"/>
+                <form:radiobuttons
+                        path="show" items="${booleanList}" itemLabel="info" itemValue="value" cssClass="validate[required]"/>
             </div>
         </div>
 
         <div class="control-group">
             <div class="controls">
                 <input id="updateTree" type="submit" class="btn btn-primary" value="修改">
+                <c:if test="${m.root == false}">
                 <input id="deleteTree" type="submit" class="btn btn-primary" value="删除">
+                </c:if>
                 <input id="appendChild" type="submit" class="btn btn-primary" value="添加子节点">
                 <c:if test="${m.root == false}"><%-- 根节点不能移动 --%>
                 <input id="moveTree" type="submit" class="btn btn-primary" value="移动节点">

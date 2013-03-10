@@ -6,7 +6,6 @@
 package com.sishuok.es.web.showcase.upload.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.web.utils.FileUploadUtils;
 import com.sishuok.es.web.showcase.upload.entity.Upload;
 import com.sishuok.es.web.showcase.upload.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;

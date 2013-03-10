@@ -2,6 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <es:showMessage/>
+
 <div id="search" class="accordion-body collapse search">
     <div class="accordion-inner">
         <%@include file="searchForm.jsp"%>

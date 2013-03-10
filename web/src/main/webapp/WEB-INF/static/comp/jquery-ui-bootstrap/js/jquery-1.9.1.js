@@ -1125,7 +1125,7 @@ jQuery.Callbacks = function( options ) {
 			disabled: function() {
 				return !list;
 			},
-			// Lock the list in its current state
+			// Lock the list in its current status
 			lock: function() {
 				stack = undefined;
 				if ( !memory ) {
@@ -1167,7 +1167,7 @@ jQuery.extend({
 
 	Deferred: function( func ) {
 		var tuples = [
-				// action, add listener, listener list, final state
+				// action, add listener, listener list, final status
 				[ "resolve", "done", jQuery.Callbacks("once memory"), "resolved" ],
 				[ "reject", "fail", jQuery.Callbacks("once memory"), "rejected" ],
 				[ "notify", "progress", jQuery.Callbacks("memory") ]
@@ -1222,10 +1222,10 @@ jQuery.extend({
 			// promise[ done | fail | progress ] = list.add
 			promise[ tuple[1] ] = list.add;
 
-			// Handle state
+			// Handle status
 			if ( stateString ) {
 				list.add(function() {
-					// state = [ resolved | rejected ]
+					// status = [ resolved | rejected ]
 					state = stateString;
 
 				// [ reject_list | resolve_list ].disable; progress_list.lock
@@ -1424,7 +1424,7 @@ jQuery.support = (function() {
 	// value of true after appended to the DOM (IE6/7)
 	support.appendChecked = input.checked;
 
-	// WebKit doesn't clone checked state correctly in fragments
+	// WebKit doesn't clone checked status correctly in fragments
 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
 	// Support: IE<9
@@ -3240,7 +3240,7 @@ jQuery.event = {
 			noBubble: true
 		},
 		click: {
-			// For checkbox, fire native event so checked state will be right
+			// For checkbox, fire native event so checked status will be right
 			trigger: function() {
 				if ( jQuery.nodeName( this, "input" ) && this.type === "checkbox" && this.click ) {
 					this.click();
@@ -6299,7 +6299,7 @@ function fixCloneNodeIssues( src, dest ) {
 		}
 
 	} else if ( nodeName === "input" && manipulation_rcheckableType.test( src.type ) ) {
-		// IE6-8 fails to persist the checked state of a cloned checkbox
+		// IE6-8 fails to persist the checked status of a cloned checkbox
 		// or radio button. Worse, IE6-7 fail to give the cloned element
 		// a checked appearance if the defaultChecked value isn't also set
 
@@ -6312,7 +6312,7 @@ function fixCloneNodeIssues( src, dest ) {
 		}
 
 	// IE6-8 fails to return the selected option to the default selected
-	// state when cloning options
+	// status when cloning options
 	} else if ( nodeName === "option" ) {
 		dest.defaultSelected = dest.selected = src.defaultSelected;
 
@@ -7757,7 +7757,7 @@ jQuery.extend({
 			// Headers (they are sent all at once)
 			requestHeaders = {},
 			requestHeadersNames = {},
-			// The jqXHR state
+			// The jqXHR status
 			state = 0,
 			// Default abort message
 			strAbort = "canceled",
@@ -8967,7 +8967,7 @@ function defaultPrefilter( elem, props, opts ) {
 			hidden = dataShow.hidden;
 		}
 
-		// store state if its toggle - enables .stop().toggle() to "reverse"
+		// store status if its toggle - enables .stop().toggle() to "reverse"
 		if ( toggle ) {
 			dataShow.hidden = !hidden;
 		}

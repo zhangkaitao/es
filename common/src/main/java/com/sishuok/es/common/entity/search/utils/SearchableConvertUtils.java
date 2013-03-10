@@ -59,6 +59,11 @@ public final class SearchableConvertUtils {
                 searchFilter.setSearchPropertyMappingInfo(mappingDefinition.getSearchPropertyMapping(searchProperty));
             }
 
+            //一元运算符不需要计算
+            if(searchFilter.isUnaryFilter()) {
+                continue;
+            }
+
             String entityProperty = searchFilter.getEntityProperty();
 
             Object value = searchFilter.getValue();

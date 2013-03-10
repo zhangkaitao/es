@@ -3,14 +3,14 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.common.web.utils;
+package com.sishuok.es.common.web.upload;
 
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.security.Coder;
+import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
+import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.validation.BindingResult;
@@ -34,23 +34,40 @@ import static org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeExc
  */
 public class FileUploadUtils {
 
-    public static final long DEFAULT_MAX_SIZE = 10485760;
+    //默认大小 50M
+    public static final long DEFAULT_MAX_SIZE = 52428800;
 
-    public static final String[] IMAGE_CONTENT_TYPE = {
-            "image/bmp", "image/gif", "image/jpeg", "image/png", "image/tiff"
-    };
-    public static final String[] DEFAULT_ALLOWED_CONTENT_TYPE = {
-                //图片
-                "image/bmp", "image/gif", "image/jpg", "image/pjpeg", "image/jpeg", "image/png", "image/tiff",
-                //word excel powerpoint
-                "application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint",
-                //压缩文件
-                "application/x-gzip", "application/zip", "application/rar",
-                //pdf
-                "application/pdf",
-                "application/octet-stream"
-        };
+    //默认上传的地址
     public static final String DEFAULT_BASE_DIR = "upload";
+
+    //默认的文件名最大长度
+    public static final int DEFAULT_FILE_NAME_LENGTH = 200;
+
+    public static final String[] IMAGE_EXTENSION = {
+            "bmp", "gif", "jpg", "jpeg", "png"
+    };
+
+    public static final String[] FLASH_EXTENSION = {
+            "swf", "flv"
+    };
+
+    public static final String[] MEDIA_EXTENSION = {
+            "swf", "flv", "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg", "asf", "rm", "rmvb"
+    };
+
+    public static final String[] DEFAULT_ALLOWED_EXTENSION = {
+            //图片
+            "bmp", "gif", "jpg", "jpeg", "png",
+            //word excel powerpoint
+            "doc", "docx", "xls", "xlsx", "ppt", "pptx",
+            "html", "htm", "txt",
+             //压缩文件
+            "rar", "zip", "gz", "bz2",
+            //pdf
+            "pdf"
+    };
+
+
 
     private static int counter = 0;
 
@@ -63,7 +80,7 @@ public class FileUploadUtils {
      * @return
      */
     public static final String upload(HttpServletRequest request, MultipartFile file, BindingResult result) {
-        return upload(request, file, result, DEFAULT_ALLOWED_CONTENT_TYPE);
+        return upload(request, file, result, DEFAULT_ALLOWED_EXTENSION);
     }
 
 
@@ -72,26 +89,27 @@ public class FileUploadUtils {
      * @param request 当前请求
      * @param file 上传的文件
      * @param result 添加出错信息
-     * @param allowedContentTypes 允许上传的文件类型
+     * @param allowedExtension 允许上传的文件类型
      * @return
      */
-    public static final String upload(HttpServletRequest request, MultipartFile file, BindingResult result, String[] allowedContentTypes) {
-        if(file.getOriginalFilename().length() > 100) {
-            result.reject("upload.filename.exceed.length");
-        }
+    public static final String upload(HttpServletRequest request, MultipartFile file, BindingResult result, String[] allowedExtension) {
         try {
-            return upload(request, DEFAULT_BASE_DIR, file, allowedContentTypes, DEFAULT_MAX_SIZE);
+            return upload(request, DEFAULT_BASE_DIR, file, allowedExtension, DEFAULT_MAX_SIZE);
         } catch (IOException e) {
             LogUtils.error("file upload error", e);
             result.reject("upload.server.error");
-        } catch (FileUploadBase.InvalidContentTypeException e) {
-            if(allowedContentTypes == IMAGE_CONTENT_TYPE) {
-                result.reject("upload.not.allow.image.contentType");
-            } else {
-                result.reject("upload.not.allow.contentType");
-            }
+        } catch (InvalidExtensionException.InvalidImageExtensionException e) {
+            result.reject("upload.not.allow.image.extension");
+        } catch (InvalidExtensionException.InvalidFlashExtensionException e) {
+            result.reject("upload.not.allow.flash.extension");
+        } catch (InvalidExtensionException.InvalidMediaExtensionException e) {
+            result.reject("upload.not.allow.media.extension");
+        } catch (InvalidExtensionException e) {
+            result.reject("upload.not.allow.extension");
         } catch (FileUploadBase.FileSizeLimitExceededException e) {
             result.reject("upload.exceed.maxSize");
+        } catch (FileNameLengthLimitExceededException e) {
+            result.reject("upload.filename.exceed.length");
         }
         return null;
     }
@@ -102,18 +120,24 @@ public class FileUploadUtils {
      * @param request 当前请求 从请求中提取 应用上下文根
      * @param baseDir 相对应用的基目录
      * @param file  上传的文件
-     * @param allowedContentType 允许的文件类型 null 表示允许所有
+     * @param allowedExtension 允许的文件类型 null 表示允许所有
      * @param maxSize  最大上传的大小 -1 表示不限制
      * @return  返回上传成功的文件名
-     * @throws InvalidContentTypeException 如果MIME类型不允许
+     * @throws InvalidExtensionException 如果MIME类型不允许
      * @throws FileSizeLimitExceededException  如果超出最大大小
+     * @throws FileNameLengthLimitExceededException 文件名太长
      * @throws IOException 比如读写文件出错时
      */
     public static final String upload(
-            HttpServletRequest request, String baseDir, MultipartFile file, String[] allowedContentType, long maxSize)
-            throws InvalidContentTypeException, FileSizeLimitExceededException, IOException {
+            HttpServletRequest request, String baseDir, MultipartFile file, String[] allowedExtension, long maxSize)
+            throws InvalidExtensionException, FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
 
-        assertAllowed(file, allowedContentType, maxSize);
+        int fileNamelength = file.getOriginalFilename().length();
+        if(fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
+            throw new FileNameLengthLimitExceededException(file.getOriginalFilename(), fileNamelength, FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
+        }
+
+        assertAllowed(file, allowedExtension, maxSize);
         String filename = extractFilename(file, baseDir);
 
         File desc = getAbsoluteFile(extractUploadDir(request), filename);
@@ -182,24 +206,31 @@ public class FileUploadUtils {
      * 是否允许文件上传
      *
      * @param file               上传的文件
-     * @param allowedContentType 文件类型  null 表示允许所有
+     * @param allowedExtension 文件类型  null 表示允许所有
      * @param maxSize            最大大小 字节为单位 -1表示不限制
      * @return
-     * @throws InvalidContentTypeException 如果MIME类型不允许
+     * @throws InvalidExtensionException 如果MIME类型不允许
      * @throws FileSizeLimitExceededException  如果超出最大大小
      */
-    public static final void assertAllowed(MultipartFile file, String[] allowedContentType, long maxSize)
-            throws InvalidContentTypeException, FileSizeLimitExceededException {
+    public static final void assertAllowed(MultipartFile file, String[] allowedExtension, long maxSize)
+            throws InvalidExtensionException, FileSizeLimitExceededException {
 
-        String contentType = file.getContentType();
+        String filename = file.getOriginalFilename();
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+        if (allowedExtension != null && !isAllowedExtension(extension, allowedExtension)) {
+            if(allowedExtension == IMAGE_EXTENSION) {
+                throw new InvalidExtensionException.InvalidImageExtensionException(allowedExtension, extension, filename);
+            } else if(allowedExtension == FLASH_EXTENSION) {
+                throw new InvalidExtensionException.InvalidFlashExtensionException(allowedExtension, extension, filename);
+            } else if(allowedExtension == MEDIA_EXTENSION) {
+                throw new InvalidExtensionException.InvalidMediaExtensionException(allowedExtension, extension, filename);
+            } else {
+                throw new InvalidExtensionException(allowedExtension, extension, filename);
+            }
+        }
 
         long size = file.getSize();
-
-        if (allowedContentType != null && !isAllowedContentType(contentType, allowedContentType)) {
-            throw new InvalidContentTypeException(
-                    "not allowed upload upload, contentType:" + contentType +
-                    ", allowed contentType:" + Arrays.toString(allowedContentType));
-        }
         if (maxSize != -1 && size > maxSize) {
             throw new FileSizeLimitExceededException("not allowed upload upload", size, maxSize);
         }
@@ -207,13 +238,13 @@ public class FileUploadUtils {
 
     /**
      * 判断MIME类型是否是允许的MIME类型
-     * @param contentType
-     * @param allowedContentType
+     * @param extension
+     * @param allowedExtension
      * @return
      */
-    public static final boolean isAllowedContentType(String contentType, String[] allowedContentType) {
-        for (String str : allowedContentType) {
-            if (str.equalsIgnoreCase(contentType)) {
+    public static final boolean isAllowedExtension(String extension, String[] allowedExtension) {
+        for (String str : allowedExtension) {
+            if (str.equalsIgnoreCase(extension)) {
                 return true;
             }
         }

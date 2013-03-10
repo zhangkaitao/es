@@ -288,12 +288,12 @@ $.Widget.prototype = {
 			.removeAttr( "aria-disabled" )
 			.removeClass(
 				this.widgetFullName + "-disabled " +
-				"ui-state-disabled" );
+				"ui-status-disabled" );
 
 		// clean up events and states
 		this.bindings.unbind( this.eventNamespace );
-		this.hoverable.removeClass( "ui-state-hover" );
-		this.focusable.removeClass( "ui-state-focus" );
+		this.hoverable.removeClass( "ui-status-hover" );
+		this.focusable.removeClass( "ui-status-focus" );
 	},
 	_destroy: $.noop,
 
@@ -354,10 +354,10 @@ $.Widget.prototype = {
 
 		if ( key === "disabled" ) {
 			this.widget()
-				.toggleClass( this.widgetFullName + "-disabled ui-state-disabled", !!value )
+				.toggleClass( this.widgetFullName + "-disabled ui-status-disabled", !!value )
 				.attr( "aria-disabled", value );
-			this.hoverable.removeClass( "ui-state-hover" );
-			this.focusable.removeClass( "ui-state-focus" );
+			this.hoverable.removeClass( "ui-status-hover" );
+			this.focusable.removeClass( "ui-status-focus" );
 		}
 
 		return this;

@@ -6,3 +6,9 @@
         <span class="icon-ok"></span>${message}
     </div>
 </c:if>
+<c:if test="${not empty error}">
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <span class="icon-ok"></span>${error}
+    </div>
+</c:if>

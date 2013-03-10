@@ -43,6 +43,7 @@
       <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
           <constructor-arg ref="conversionService"/>
       </bean>
+      <bean class="com.sishuok.es.common.web.filter.SetCommonDataInterceptor"/>
       <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/**"/>-->
             <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->

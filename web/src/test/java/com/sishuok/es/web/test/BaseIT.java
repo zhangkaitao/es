@@ -30,5 +30,9 @@ public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
     protected void flush() {
         entityManager.flush();
     }
+    protected void clear() {
+        entityManager.flush();
+        entityManager.clear();
+    }
 }
 

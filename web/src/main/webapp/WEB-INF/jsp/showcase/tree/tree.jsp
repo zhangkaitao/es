@@ -7,7 +7,7 @@
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
-        <!--
+    $(function() {
         var setting = {
             view: {
                 addHoverDom: addHoverDom,
@@ -61,10 +61,11 @@
                     + "' title='添加子节点' onfocus='this.blur();'></span>";
             sObj.after(addStr);
             var btn = $("#addBtn_" + treeNode.id);
-            if (btn) btn.bind("click", function (e) {
-                onAdd(e, treeId, treeNode);
-                return false;
-            });
+            if (btn)
+                btn.bind("click", function (e) {
+                    onAdd(e, treeId, treeNode);
+                    return false;
+                });
         }
         function removeHoverDom(treeId, treeNode) {
             $("#addBtn_" + treeNode.id).unbind().remove();
@@ -105,9 +106,9 @@
          */
         function onRemove(e, treeId, treeNode) {
             var url = "${ctx}/showcase/tree/ajax/delete/" + treeNode.id;
-                        $.getJSON(url, function (data) {
-                            location.reload();
-                        });
+            $.getJSON(url, function (data) {
+                location.reload();
+            });
         }
 
         /**
@@ -136,25 +137,23 @@
             if(!targetNode || treeNodes.length == 0) {
                 return;
             }
-            var sourcePath = treeNodes[0].id;
-            var targetPath = targetNode.id;
+            var sourceId = treeNodes[0].id;
+            var targetId = targetNode.id;
             var moveType = moveType;
-            var url = "${ctx}/showcase/tree/ajax/move/" + sourcePath + "/" + targetPath + "/" + moveType;
+            var url = "${ctx}/showcase/tree/ajax/move/" + sourceId + "/" + targetId + "/" + moveType;
             $.getJSON(url, function (newNode) {
                 location.reload();
             });
         }
 
         var zNodes =[
-            <c:forEach items="${page.content}" var="m">
-                { id:'${m.path}', pId:'${m.parentPath}', name:"${m.name}", icon:"${ctx}/${m.icon}", open: true,
+            <c:forEach items="${trees}" var="m">
+                { id:${m.id}, pId:${m.parentId}, name:"${m.name}", icon:"${ctx}/${m.icon}", open: true,
                   click : "parent.frames['maintainFrame'].location.href='${ctx}/showcase/tree/maintain/${m.id}'",
                   root : ${m.root}},
             </c:forEach>
         ];
  
-        $(document).ready(function(){
-            $.fn.zTree.init($("#tree"), setting, zNodes);
-        });
-        //-->
+        $.fn.zTree.init($("#tree"), setting, zNodes);
+    });
 </script>

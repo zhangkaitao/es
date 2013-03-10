@@ -370,9 +370,13 @@
 
 			// show the message
 			if (msg) {
-				if (opts.theme)
-					lyr3.find('.blockUI-content').append(msg);
-				else
+				if (opts.theme) {
+                    if(lyr3.height() > 200) {
+                        lyr3.find('.blockUI-content').height(lyr3.height() - 40).append(msg);
+                    } else {
+                        lyr3.find('.blockUI-content').css("height", "100%").append(msg);
+                    }
+                } else
 					lyr3.append(msg);
 				if (msg.jquery || msg.nodeType)
 					$(msg).show();

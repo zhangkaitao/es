@@ -6,7 +6,7 @@
 package com.sishuok.es.web.showcase.upload.web.controller;
 
 import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.common.web.utils.FileUploadUtils;
+import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.web.showcase.upload.entity.Upload;
 import com.sishuok.es.web.showcase.upload.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,6 @@ import javax.validation.Valid;
 @RequestMapping(value = "showcase/upload")
 public class UploadController extends BaseCRUDController<Upload, Long> {
 
-    @Autowired
     private UploadService uploadService;
 
     @Autowired
@@ -50,7 +49,7 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
     public String create(
             Model model,
             HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file,
-            @Valid Upload upload, BindingResult result,
+            @Valid @ModelAttribute("m") Upload upload, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
         if(!file.isEmpty()) {
@@ -70,10 +69,9 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
     public String update(
             Model model,
             HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file,
-            @Valid @ModelAttribute("upload") Upload upload, BindingResult result,
+            @Valid @ModelAttribute("m") Upload upload, BindingResult result,
             @RequestParam(value = "BackURL") String backURL,
             RedirectAttributes redirectAttributes) {
-
 
         if(!file.isEmpty()) {
             upload.setSrc(FileUploadUtils.upload(request, file, result));

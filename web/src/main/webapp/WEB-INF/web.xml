@@ -41,16 +41,6 @@
     </filter-mapping>
     <!-- 设置servlet编码结束 -->
 
-    <!-- 设置上下文路径到ctx 方便获取 -->
-        <filter>
-            <filter-name>SetContextPathFiler</filter-name>
-            <filter-class>com.sishuok.es.common.web.filter.SetCommonDataFilter</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>SetContextPathFiler</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
     <!-- 调试时web请求/响应时使用的Filter，请配置debugRequest logger -->
     <filter>
         <filter-name>DebugRequestAndResponseFilter</filter-name>

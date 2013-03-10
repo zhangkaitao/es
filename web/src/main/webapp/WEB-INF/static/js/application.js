@@ -1,4 +1,5 @@
 //自己扩展的jquery函数
+//压缩时请把编码改成ANSI
 $.app = {
     tabs: null,
     layout: null,
@@ -7,29 +8,32 @@ $.app = {
         this.initLayout();
         this.initMenu();
         this.initTab();
+        this.initTabScroll();
     },
     /**初始化布局*/
     initLayout: function () {
         function resizePanel(panelName, panelElement, panelState, panelOptions, layoutName) {
             var tabul = $(".tabs-fix-top");
             if (panelName == 'west') {
-                var left = panelElement.width() + 30;
+                var left = panelElement.width() + 13;
                 if (panelState.isClosed) {
-                    left = 21;
+                        left = 23;
                 }
                 tabul.css("left", left);
             }
             if (panelName == 'north') {
-                var top = panelElement.height() + 30;
+                var top = panelElement.height() + 13;
                 if (panelState.isClosed) {
                     top = 9;
                 }
                 tabul.css("top", top);
             }
+            tabul.find(".ul-wrapper").width(tabul.width());
+            $.app.initTabScrollHideOrShowMoveBtn();
         }
 
         this.layout = $('body').layout({
-                west__size:  230
+                west__size:  250
             ,   north__size: 65
             ,   south__size: 30
             ,	west__spacing_closed:		20
@@ -49,40 +53,9 @@ $.app = {
     },
     /**初始化tab */
     initTab: function () {
-        var tabs = $("#tabs").tabs({
-            beforeActivate: function (event, ui) {
-                $("#tabs").find(".ui-icon").hide();
-                var newPanelId = ui.newPanel.prop("id");
-                $("#tabs").find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".ui-icon").show();
-                $.app.activeIframe(newPanelId);
-                activeMenu(newPanelId);
-            }
-        });
-        this.tabs = tabs;
-        tabs.delegate("span.ui-icon-close", "click", function () {
-            var panelId = $(this).closest("li").remove().attr("aria-controls");
-            $("#" + panelId).remove();
-            tabs.tabs("refresh");
-        });
-        tabs.delegate("span.ui-icon-refresh", "click", function () {
-            var panelId = $(this).closest("li").attr("aria-controls");
-            var panel = $("#" + panelId);
-            $.app.loadingToCenterIframe(panel, panel.data("url"));
-            tabs.tabs("option", "active", panel.data("index"));
-            tabs.tabs("refresh");
-        });
-
-        tabs.bind("keyup", function (event) {
-            if (event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE) {
-                var panelId = tabs.find(".ui-tabs-active").remove().attr("aria-controls");
-                $("#" + panelId).remove();
-                tabs.tabs("refresh");
-            }
-        });
-
         function activeMenu(tabPanelId) {
             var currentMenu = $("#menu-" + tabPanelId.replace("tabs-", ""));
-            $("#menu .select").removeClass("select");
+            $(".menu .select").removeClass("select");
             if(currentMenu.size() > 0) {
                 //把父菜单展示出来
                 currentMenu.parents("ul").each(function(){
@@ -96,48 +69,142 @@ $.app = {
                 currentMenu.closest("li").addClass("select");
             }
         }
-        this.initTabScroll();
+        var tabs = $("#tabs").tabs({
+            beforeActivate: function (event, ui) {
+                var tabs = $("#tabs");
+                tabs.find(".ui-icon").hide();
+                var newPanelId = ui.newPanel.prop("id");
+                tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".ui-icon").show();
+                activeMenu(newPanelId);
+                $.app.activeIframe(newPanelId);
+            }
+        });
+        this.tabs = tabs;
+        tabs.delegate("span.ui-icon-close", "click", function () {
+            var panelId = $(this).closest("li").remove().attr("aria-controls");
+            $("#" + panelId).remove();
+            $("#iframe-" + panelId).remove();
+            tabs.tabs("refresh");
+        });
+        tabs.delegate("span.ui-icon-refresh", "click", function () {
+            var panelId = $(this).closest("li").attr("aria-controls");
+            var panel = $("#" + panelId);
+            $.app.loadingToCenterIframe(panel, panel.data("url"), null, true);
+            tabs.tabs("option", "active", panel.data("index"));
+            tabs.tabs("refresh");
+        });
+
+        tabs.bind("keyup", function (event) {
+            if (event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE) {
+                var panelId = tabs.find(".ui-tabs-active").remove().attr("aria-controls");
+                $("#" + panelId).remove();
+                tabs.tabs("refresh");
+            }
+        });
     },
-        initTabScroll: function () {
-            var scrollInterval;
-            var speed = 20;
+    initTabScrollHideOrShowMoveBtn : function(panelId) {
+        var $ulWrapper = $("#tabs .ul-wrapper");
+        var $lastLI = $ulWrapper.find("ul li:last");
+        var $firstLI = $ulWrapper.find("ul li:first");
 
-            var move = function(step) {
-                return function() {
-                    var $ulWrapper = $("#tabs .ul-wrapper");
-                    var $lastLI = $ulWrapper.find("ul li:last");
+        var ulWapperOffsetLeft = $ulWrapper.offset().left;
+        var ulWrapperLeftPos = ulWapperOffsetLeft + $ulWrapper.width();
 
-                    var ulWrapperLeftPos = $ulWrapper.offset().left + $ulWrapper.width();
-                    var lastLILeftPos = $lastLI.offset().left + $lastLI.width();
-                    var leftPos = $ulWrapper.scrollLeft() + step;
-                    var maxLeftPos = lastLILeftPos - ulWrapperLeftPos;
-                    //right move
-                    if(step > 0) {
-                        if(lastLILeftPos < ulWrapperLeftPos + 200) {
-                        }
-                        if(step > 0  && maxLeftPos <= 0) {
-                            return;
-                        }
+        var hideOrShowBtn = function() {
+            var lastLIOffsetLeft = $lastLI.offset().left;
+            var lastLILeftPos = lastLIOffsetLeft + $lastLI.width();
+            var firstLIOffsetLeft = $firstLI.offset().left;
+
+            var $leftBtn = $("#tabs .icon-chevron-left");
+            var $rightBtn = $("#tabs .icon-chevron-right");
+
+            if (ulWapperOffsetLeft == firstLIOffsetLeft) {
+                $leftBtn.hide();
+            } else {
+                $leftBtn.show();
+            }
+            if (ulWrapperLeftPos >= lastLILeftPos) {
+                $rightBtn.hide();
+            } else {
+                $rightBtn.show();
+            }
+        };
+
+        if(panelId) {
+            var $li = $("#tabs").find("li[aria-labelledby='" + $("#" + panelId).attr("aria-labelledby") + "']");
+            var liOffsetLeft = $li.offset().left;
+            var liLeftPos = liOffsetLeft + $li.width();
+
+            //如果当前tab没有隐藏 则不scroll
+            if((ulWapperOffsetLeft <= liOffsetLeft) && (liLeftPos <= ulWrapperLeftPos)) {
+                return;
+            }
+
+            var leftPos = 0;
+            //right
+            if(ulWrapperLeftPos < liLeftPos) {
+                var isLast = $li.attr("aria-labelledby") == $lastLI.attr("aria-labelledby");
+                leftPos = $ulWrapper.scrollLeft() + (liLeftPos - ulWrapperLeftPos) + (isLast ? 10 : 50);
+            } else {
+                //left
+                leftPos = "-=" + (ulWapperOffsetLeft - liOffsetLeft + 50);
+            }
+
+            $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
+                hideOrShowBtn();
+            });
+        } else {
+            hideOrShowBtn();
+        }
+
+
+    },
+    initTabScroll: function () {
+        var move = function (step) {
+            return function () {
+                var $ulWrapper = $("#tabs .ul-wrapper");
+                var $lastLI = $ulWrapper.find("ul li:last");
+
+                var leftPos = $ulWrapper.scrollLeft() + step;
+
+                var ulWrapperLeftPos = $ulWrapper.offset().left + $ulWrapper.width();
+                var lastLILeftPos = $lastLI.offset().left + $lastLI.width();
+                var maxLeftPos = lastLILeftPos - ulWrapperLeftPos;
+
+                //right move
+                if (step > 0) {
+                    if (maxLeftPos <= step + step / 2) {
+                        leftPos = $ulWrapper.scrollLeft() + maxLeftPos;
                     }
+                    if (maxLeftPos <= 0) {
+                        return;
+                    }
+                }
 
-                    if(leftPos < 0) {
+                //left move
+                if (step < 0) {
+                    if (leftPos < -step) {
                         leftPos = 0;
                     }
+                }
 
-
-
-                    $ulWrapper.animate({scrollLeft : leftPos}, 900);
-                };
+                if (leftPos < 0) {
+                    leftPos = 0;
+                }
+                $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
+                    $.app.initTabScrollHideOrShowMoveBtn();
+                });
             };
+        };
 
-            $("#tabs .icon-chevron-left").click(function () {
-                move(-200)();
-            });
-            $("#tabs .icon-chevron-right").click(function () {
-                move(200)();
-            });
+        $("#tabs .icon-chevron-left").click(function () {
+            move(-200)();
+        });
+        $("#tabs .icon-chevron-right").click(function () {
+            move(200)();
+        });
 
-        },
+    },
     /**初始化菜单*/
     initMenu: function () {
         var menus = $("#menu");
@@ -146,27 +213,24 @@ $.app = {
         var rootOpenIconClass = "ui-icon-circle-minus";
         menus.addClass("ui-accordion ui-widget ui-helper-reset");
         menus.find("h3")
-            .addClass("ui-accordion-header ui-helper-reset ui-state-default  ui-accordion-icons ui-widget-menu")
-            .append('<span class="ui-icon ui-icon-menu '+ rootCloseIconClass + '"></span>')
-            .next("ul").hide()
-            .end()
+            .addClass("ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all")
+            .append('<span class="ui-accordion-header-icon ui-icon ui-icon-menu '+ rootCloseIconClass + '"></span>')
+            .next(".submenu").hide().end()
             .click(function () {
-                if ($(this).hasClass("ui-state-active")) {
-                    $(this)
-                        .removeClass("ui-state-active")
-                        .find("span")
-                        .removeClass(rootOpenIconClass)
-                        .addClass(rootCloseIconClass)
-                        .end()
-                        .next("ul").hide("blind");
+                var $menu = $(this);
+                if ($menu.hasClass("ui-state-active")) {
+                    $menu
+                        .find("span").removeClass(rootOpenIconClass).addClass(rootCloseIconClass).end()
+                        .next(".submenu").hide("blind", function() {
+                            $menu.removeClass("ui-state-active").removeClass("ui-accordion-header-active")
+                                 .removeClass("ui-corner-top").addClass("ui-corner-all");
+                        });
                 } else {
-                    $(this)
-                        .addClass("ui-state-active")
-                        .find("span")
-                        .removeClass(rootCloseIconClass)
-                        .addClass(rootOpenIconClass)
-                        .end()
-                        .next("ul").show("blind");
+                    $menu
+                        .addClass("ui-accordion-header-active").addClass("ui-state-active")
+                        .addClass("ui-corner-top").removeClass("ui-corner-all")
+                        .find("span").removeClass(rootCloseIconClass).addClass(rootOpenIconClass).end()
+                        .next(".submenu").show("blind");
                 }
             }).eq(0).click();
 
@@ -174,13 +238,14 @@ $.app = {
         var branchOpenIconClass = "icon-double-angle-right";
         var branchCloseIconClass = "icon-double-angle-down";
         menus.find("div > ul")
-            .addClass(" ui-accordion-content ui-helper-reset ui-widget-content ui-widget-menu ui-corner-bottom ui-accordion-content-active")
+            .addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-widget-menu ui-corner-bottom ui-accordion-content-active")
             .children("li").each(function () {
                 var submenu = $(this);
-                if (submenu.find("ul").size() > 0) {
-                    submenu.find("ul").hide();
+                var submenuUL = submenu.find("ul");
+                if (submenuUL.size() > 0) {
+                    submenuUL.hide();
                     submenu.find("li:not(:has(ul))").prepend('<span class="' + leafIconClass + '"></span>');
-                    submenu.find("ul").closest("li")
+                    submenuUL.closest("li")
                         .prepend('<span class="' + branchOpenIconClass + '"></span>')
                         .find("a,span")
                         .click(function () {
@@ -212,35 +277,40 @@ $.app = {
             if (href == "#" || href == '') {
                 return;
             }
-            var currentTabPanel = null;
+
+            var active = function(a, forceRefresh) {
+                $("#menu a").each(function () {
+                    $(this).closest("li").removeClass("select");
+                });
+                a.closest("li").addClass("select");
+                var panelIndex = a.data("index");
+                var panelId = "tabs-" + panelIndex;
+                var currentTabPanel = $("#" + panelId);
+                var tabs = $.app.tabs;
+                if (currentTabPanel.size() == 0) {
+                    var title = a.text();
+                    var li = $(tabTemplate.replace(/\{href\}/g, panelId).replace(/\{label\}/g, title));
+
+                    tabs.find("ul.ui-tabs-nav").append(li);
+                    tabs.append('<div id="' + panelId + '"></div>');
+                    tabs.tabs("refresh");
+                    currentTabPanel = $("#" + panelId);
+                    currentTabPanel.data("index", tabs.find("ul li").index(li));
+                }
+                $.app.loadingToCenterIframe(currentTabPanel, a.data("url"), null, forceRefresh);
+                tabs.tabs("option", "active", currentTabPanel.data("index"));
+
+                return false;
+            }
+
             a.data("index", index++)
                 .data("url", a.attr("href"))
                 .attr("href", "#")
                 .attr("id", "menu-" + a.data("index"))
                 .click(function () {
-                    var a = $(this);
-                    $("#menu a").each(function () {
-                        $(this).closest("li").removeClass("select");
-                    });
-                    a.closest("li").addClass("select");
-                    var panelIndex = a.data("index");
-                    var panelId = "tabs-" + panelIndex;
-                    currentTabPanel = $("#" + panelId);
-                    var tabs = $.app.tabs;
-                    if (currentTabPanel.size() == 0) {
-                        var title = a.text();
-                        var li = $(tabTemplate.replace(/\{href\}/g, panelId).replace(/\{label\}/g, title));
-
-                        tabs.find("ul.ui-tabs-nav").append(li);
-                        tabs.append('<div id="' + panelId + '"></div>');
-                        tabs.tabs("refresh");
-                        currentTabPanel = $("#" + panelId);
-                        currentTabPanel.data("index", tabs.find("ul li").index(li));
-                    }
-                    $.app.loadingToCenterIframe(currentTabPanel, a.data("url"));
-                    tabs.tabs("option", "active", currentTabPanel.data("index"));
-
-                    return false;
+                    active($(this), false);
+                }).dblclick(function() {
+                    active($(this), true);//双击强制刷新
                 });
         });
     },
@@ -249,6 +319,9 @@ $.app = {
      * @param table
      */
     initTable: function (table) {
+        if(!table || table.size() == null) {
+            return;
+        }
         //初始化表格中checkbox 点击单元格选中
         table.find("td.check").each(function () {
             var checkbox = $(this).find(":checkbox,:radio");
@@ -357,23 +430,30 @@ $.app = {
     /**
      * 异步加载url内容到tab
      */
-    loadingToCenterIframe: function (panel, url, loadingMessage) {
+    loadingToCenterIframe: function (panel, url, loadingMessage, forceRefresh) {
         panel.data("url", url);
-
-        $.app.waiting(loadingMessage);
 
         var panelId = panel.prop("id");
         var iframeId = "iframe-" + panelId;
         var iframe = $("#" + iframeId);
-        if (iframe.size() == 0) {
-            var iframe = $("iframe[tabs=true]:last").clone(true);
-            iframe.prop("id", iframeId);
-            $("iframe[tabs=true]:last").after(iframe);
-        }
-        iframe.prop("src", url).one("load", function () {
+        if (iframe.size() == 0 || forceRefresh) {
+
+            if(iframe.size() == 0) {
+                iframe = $("iframe[tabs=true]:last").clone(true);
+                iframe.prop("id", iframeId);
+                $("iframe[tabs=true]:last").after(iframe);
+            }
+
+            $.app.waiting(loadingMessage);
+            iframe.prop("src", url).one("load", function () {
+                $.app.activeIframe(panelId, iframe);
+                $.app.waitingOver();
+            });
+
+        } else {
             $.app.activeIframe(panelId, iframe);
-            $.app.waitingOver();
-        });
+        }
+
     },
     activeIframe: function (panelId, iframe) {
         if (!iframe) {
@@ -386,7 +466,7 @@ $.app = {
         this.layout.panes.center = iframe;
         this.layout.panes.center.show();
         this.layout.resizeAll();
-
+        $.app.initTabScrollHideOrShowMoveBtn(panelId);
     },
 
     waiting : function(message) {
@@ -400,10 +480,10 @@ $.app = {
             css: {
                 border: 'none',
                 padding: '15px',
-                backgroundColor: '#ccc',
+                backgroundColor: '#eee',
                 '-webkit-border-radius': '10px',
                 '-moz-border-radius': '10px',
-                opacity:.6,
+                opacity:1,
                 color: '#000'
             },
             message: '<h4><img src="' + ctx + '/static/images/loading.gif" /> ' + message + ' </h4>'
@@ -489,7 +569,7 @@ $.app = {
 
         if(async && !containerId) {
             $.app.alert({
-                message : "异步模式下，容器id不能空"
+                message:"异步模式下，容器id不能空"
             });
             return;
         }
@@ -592,7 +672,7 @@ $.app = {
                 '<h3 class="title">{title}</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
-                '<p>{message}</p>' +
+                '<div>{message}</div>' +
                 '</div>' +
                 '<div class="modal-footer">' +
                 '<a href="#" class="btn btn-ok btn-danger" data-dismiss="modal">{okTitle}</a>' +
@@ -804,7 +884,7 @@ $.parentchild = {
                 val = "";
                 $input.filter(":checked").each(function() {
                     if(val != "") {
-                        val = val + "，";
+                        val = val + ",";
                     }
                     val = val + $("label[for='" + $(this).prop("id") + "']").text();
                 });
@@ -814,7 +894,7 @@ $.parentchild = {
                 val = "";
                 $input.find("option:selected").each(function() {
                     if(val != "") {
-                        val = val + "，";
+                        val = val + ",";
                     }
                     val = val + $(this).text();
                 });
@@ -1111,7 +1191,7 @@ $.edit = {
                 $.app.alert({message : "请先选中要修改的数据"});
                 return;
             }
-            window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.app.removeContextPath(currentURL);;
+            window.location.href = urlPrefix + "/update/" + id;
         });
     }
 };
@@ -1327,7 +1407,7 @@ $(function () {
     $(document).ajaxError(function(event,request, settings){
         $.app.alert({
             title : "网络故障/系统故障(请截屏反馈给管理员)",
-            message : "出错状态码:" + request.status + "[" + request.statusText + "]" + "<br/>出错页面:" + settings.url
+            message : "出错状态码:" + request.status + "[" + request.statusText + "]" + "<br/>出错页面????:" + settings.url
         });
         $.app.waitingOver();
     });

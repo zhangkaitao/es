@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.web.showcase.upload.web.controller;
 
-import com.sishuok.es.common.web.utils.FileUploadUtils;
+import com.sishuok.es.common.web.upload.FileUploadUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

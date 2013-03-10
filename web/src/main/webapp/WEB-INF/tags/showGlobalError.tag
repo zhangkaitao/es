@@ -2,9 +2,7 @@
 <%@ attribute name="commandName" type="java.lang.String" required="true" description="命令对象名称" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<c:if test="${empty errorPosition}">
-    <c:set var="errorPosition" value="topRight"/>
-</c:if>
+
 <spring:hasBindErrors name="${commandName}">
   <c:if test="${errors.globalErrorCount > 0}">
   <div class="alert alert-error">

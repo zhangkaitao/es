@@ -19,17 +19,23 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "tbl_tree")
-public class Tree extends BaseEntity<Long> implements Treeable {
+public class Tree extends BaseEntity<Long> implements Treeable<Long> {
 
     /**
      * 标题
      */
     private String name;
     /**
-     * 路径
-     * 比如中国01 山东0101 河北0102
+     * 父路径
      */
-    private String path;
+    @Column(name = "parent_id")
+    private Long parentId;
+
+    @Column(name = "parent_ids")
+    private String parentIds;
+
+    private Integer weight;
+
     /**
      * 图标
      */
@@ -38,7 +44,7 @@ public class Tree extends BaseEntity<Long> implements Treeable {
     /**
      * 是否有叶子节点
      */
-    @Formula(value = "(select count(*) from tbl_tree f_t where f_t.path like concat(path , '___'))")
+    @Formula(value = "(select count(*) from tbl_tree f_t where f_t.parent_id = id)")
     private boolean hasChildren;
 
     /**
@@ -46,6 +52,7 @@ public class Tree extends BaseEntity<Long> implements Treeable {
      */
     @Column(name = "`show`")
     private Boolean show;
+
 
     public String getName() {
         return name;
@@ -55,12 +62,38 @@ public class Tree extends BaseEntity<Long> implements Treeable {
         this.name = name;
     }
 
-    public String getPath() {
-        return path;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentIds() {
+        return parentIds;
+    }
+
+    public void setParentIds(String parentIds) {
+        this.parentIds = parentIds;
+    }
+
+    @Override
+    public String makeSelfAsNewParentIds() {
+        return getParentIds() + getId() + getSeparator();
+    }
+
+    @Override
+    public String getSeparator() {
+        return "/";
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public String getIcon() {
@@ -80,26 +113,10 @@ public class Tree extends BaseEntity<Long> implements Treeable {
         this.icon = icon;
     }
 
-    @Override
-    public String getParentPath() {
-        if(StringUtils.isEmpty(getPath())) {
-            return "0";
-        }
-        int pathLength = getPath().length();
-        //根
-        if(pathLength == getPathLength()) {
-            return "0";
-        }
-
-        return getPath().substring(0, pathLength - getPathLength());
-    }
 
     @Override
     public boolean isRoot() {
-        if(StringUtils.isEmpty(getPath())) {
-            return false;
-        }
-        if (getPath().length() == getPathLength()) {
+        if(getParentId() != null && getParentId() == 0) {
             return true;
         }
         return false;
@@ -134,22 +151,6 @@ public class Tree extends BaseEntity<Long> implements Treeable {
         this.show = show;
     }
 
-    /**
-     * @see com.sishuok.es.common.plugin.entity.Treeable#getPathLength()
-     * @return
-     */
-    @Override
-    public int getPathLength() {
-        return 3;
-    }
-
-    /**
-     * 匹配儿子节点的后缀
-     * @return
-     */
-    public String getChildPathSuffix() {
-        return StringUtils.repeat("_", getPathLength());
-    }
 
     /**
      * 根节点默认图标 如果没有默认 空即可

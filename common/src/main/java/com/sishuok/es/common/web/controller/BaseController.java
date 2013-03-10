@@ -37,7 +37,7 @@ public class BaseController<M extends BaseEntity, ID extends Serializable> {
      * 1、获取当前类头上的@RequestMapping中的value作为前缀
      * 2、如果没有就使用当前模型小写的简单类名
      */
-    protected String viewPrefix;
+    private String viewPrefix;
 
     protected  <S extends BaseService<M, ID>> BaseController(S baseService) {
         this.baseService = baseService;
@@ -52,6 +52,9 @@ public class BaseController<M extends BaseEntity, ID extends Serializable> {
         this.viewPrefix = viewPrefix;
     }
 
+    public String getViewPrefix() {
+        return viewPrefix;
+    }
 
     protected M newModel() {
         try {
@@ -83,7 +86,7 @@ public class BaseController<M extends BaseEntity, ID extends Serializable> {
         if(StringUtils.hasLength(backURL)) {
             return backURL;
         }
-        return "/" + viewPrefix;
+        return "/" + getViewPrefix();
     }
 
     protected String defaultViewPrefix() {

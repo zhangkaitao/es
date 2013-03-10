@@ -143,7 +143,7 @@
 			return valid;
 		},
 		/**
-		*  Redraw prompts position, useful when you change the DOM state when validating
+		*  Redraw prompts position, useful when you change the DOM status when validating
 		*/
 		updatePromptsPosition: function(event) {
 

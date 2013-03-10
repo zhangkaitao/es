@@ -2,17 +2,14 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center no-top"
-         frameborder="0" scrolling="auto"></iframe>
-
-<iframe id="treeFrame" name="treeFrame" class="ui-layout-west" frameborder="0" scrolling="auto"
-         src="${ctx}/showcase/tree/tree"></iframe>
+<iframe id="treeFrame" name="treeFrame" class="ui-layout-west" frameborder="0" scrolling="auto" src="${ctx}/showcase/tree/tree"></iframe>
+<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center" frameborder="0" scrolling="auto" src="/es-web/showcase/tree/maintain/4"></iframe>
 
 <es:contentFooter/>
+
 <script type="text/javascript">
-    var layout; // a var is required because this page utilizes: myLayout.allowOverflow() method
     $(document).ready(function () {
-        layout = $('body').layout({
+        $('body').layout({
                 west__size:                    250
            ,    west__spacing_closed:        20
            ,    west__togglerLength_closed:    100

@@ -1,11 +1,5 @@
 <%@tag pageEncoding="UTF-8"%>
 <%@attribute name="title" type="java.lang.String" required="false" %>
-<%@attribute name="centerPanel" type="java.lang.Boolean" required="false" description="是否是center面板" %>
-<%
-    if(centerPanel == null) {
-        centerPanel = true;
-    }
-%>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
@@ -30,4 +24,3 @@
         var currentURL = "${requestScope.currentURL}";
     </script>
 </head>
-<body <%= centerPanel ? "class='center-panel'" : ""%>>

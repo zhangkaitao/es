@@ -5,26 +5,44 @@
  */
 package com.sishuok.es.common.web.filter;
 
+import com.sishuok.es.common.Constants;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.multipart.support.RequestPartServletServerHttpRequest;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
- * 设置通用数据的filter
+ * 设置通用数据的Interceptor
+ *
+ * 使用Filter时 文件上传时 getParameter时为null 所以改成Interceptor
+ *
  * 1、ctx---->request.contextPath
  * 2、currentURL---->当前地址
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-22 下午4:35
  * <p>Version: 1.0
  */
-public class SetCommonDataFilter extends BaseFilter {
+public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
 
     private String[] excludeParameterPattern = new String[] {
             "\\&\\w*page.pn=\\d+",
@@ -33,14 +51,17 @@ public class SetCommonDataFilter extends BaseFilter {
     };
 
     @Override
-    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        request.setAttribute("ctx", request.getContextPath());
-        request.setAttribute("currentURL", extractCurrentURL(request, true));
-        request.setAttribute("noQueryStringCurrentURL", extractCurrentURL(request, false));
-        request.setAttribute("BackURL", extractBackURL(request));
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        chain.doFilter(request, response);
+        request.setAttribute(Constants.CONTEXT_PATH, request.getContextPath());
+        request.setAttribute(Constants.CURRENT_URL, extractCurrentURL(request, true));
+        request.setAttribute(Constants.NO_QUERYSTRING_CURRENT_URL, extractCurrentURL(request, false));
+        request.setAttribute(Constants.BACK_URL, extractBackURL(request));
+
+
+        return super.preHandle(request, response, handler);
     }
+
 
     private String extractCurrentURL(HttpServletRequest request, boolean needQueryString) {
         String url = request.getRequestURI();
@@ -68,11 +89,14 @@ public class SetCommonDataFilter extends BaseFilter {
      * @return
      */
     private String extractBackURL(HttpServletRequest request) {
-        String url = request.getParameter("BackURL");
-        if(url == null) {
+        String url = request.getParameter(Constants.BACK_URL);
+
+        //使用Filter时 文件上传时 getParameter时为null 所以改成Interceptor
+
+        if(StringUtils.isEmpty(url)) {
             url = request.getHeader("Referer");
         }
-        if(url != null && url.startsWith(request.getContextPath())) {
+        if(StringUtils.hasLength(url) && url.startsWith(request.getContextPath())) {
             url = getBasePath(request) + url;
         }
         return url;
@@ -95,5 +119,6 @@ public class SetCommonDataFilter extends BaseFilter {
         }
         return baseUrl.toString();
     }
+
 
 }

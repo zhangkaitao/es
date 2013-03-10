@@ -31,12 +31,16 @@ create table `tbl_upload`(
 create table `tbl_tree`(
     `id`         bigint unsigned not null auto_increment,
     `name`      varchar(100),
-    `path`       varchar(200),
+    `parent_id` bigint,
+    `parent_ids`  varchar(200) default '',
     `icon`       varchar(200),
+    `weight`    int,
     `show`       bool,
     constraint `pk_tree` primary key(`id`),
-    index idx_path (`path`)
+    index idx_tree_parentId (`parent_id`),
+    index idx_tree_parentIds_weight (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
+alter table `tbl_tree` auto_increment=1000;
 
 create table `tbl_parent`(
   `id`          bigint unsigned not null auto_increment,
@@ -77,4 +81,26 @@ create table `tbl_product`(
   `endDate`      timestamp ,
   `show`        bool,
   constraint `pk_product` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `tbl_status_audit`(
+  `id`         bigint unsigned not null auto_increment,
+  `name`       varchar(100),
+  `status`     varchar(100),
+  `comment`    varchar(500),
+  constraint `pk_status_audit` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `tbl_status_show`(
+  `id`         bigint unsigned not null auto_increment,
+  `name`       varchar(100),
+  `status`     varchar(100),
+  constraint `pk_status_show` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `tbl_editor`(
+  `id`         bigint unsigned not null auto_increment,
+  `title`       varchar(500),
+  `content`     longtext,
+  constraint `pk_editor` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;

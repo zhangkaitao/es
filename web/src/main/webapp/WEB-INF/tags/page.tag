@@ -91,10 +91,11 @@
             </c:otherwise>
         </c:choose>
 
-        <li>
-            <input id="pn" type="text" value="${current}" class="page-input"/>
-            <input type="button" value="跳转" class="btn page-btn" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', $('#pn').val());"/>
-            <span class="page-info">[共${page.totalPages}页/${page.totalElements}条记录]</span >
-        </li>
+
     </ul>
+    <div>
+        <input id="pn" type="text" value="${current}" class="page-input"/>
+        <input type="button" value="跳转" class="btn page-btn" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', $('#pn').val());"/>
+        <span class="page-info">[共${page.totalPages}页/${page.totalElements}条记录]</span >
+    </div>
 </div>

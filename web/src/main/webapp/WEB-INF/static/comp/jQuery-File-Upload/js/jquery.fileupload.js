@@ -728,7 +728,7 @@
                             var nextSlot = that._slots.shift(),
                                 isPending;
                             while (nextSlot) {
-                                // jQuery 1.6 doesn't provide .state(),
+                                // jQuery 1.6 doesn't provide .status(),
                                 // while jQuery 1.8+ removed .isRejected():
                                 isPending = nextSlot.state ?
                                         nextSlot.state() === 'pending' :

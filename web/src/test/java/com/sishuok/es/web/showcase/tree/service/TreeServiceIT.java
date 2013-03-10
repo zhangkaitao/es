@@ -33,118 +33,182 @@ public class TreeServiceIT extends BaseIT {
     @Autowired
     private TreeRepository treeRepository;
 
+    private Tree root = null;
     @Before
     public void setUp() {
         treeRepository.deleteAll();
+        root = createTree(0, "0/");
     }
 
     @Test
     public void testMoveAsChildWithNoChild() {
-        Tree t1 = createTree("998001");
-        Tree t2 = createTree("999001");
+        Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree target = createTree(root.getId(), root.makeSelfAsNewParentIds());
         treeRepository.flush();
-        treeService.move(t1, t2.getPath(), "inner");
-        assertNotNull(treeService.findByPath("999001001"));
+        treeService.move(source, target, "inner");
+        clear();
+        assertEquals(target.getId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.makeSelfAsNewParentIds(), treeService.findOne(source.getId()).getParentIds());
+        assertEquals(Integer.valueOf(1), treeService.findOne(source.getId()).getWeight());
     }
     @Test
     public void testMoveAsChildWithChild() {
-        Tree t1 = createTree("998001");
-        Tree t2 = createTree("999001");
-        Tree t21 = createTree("999001001");
-        treeService.move(t1, t2.getPath(), "inner");
-        treeRepository.flush();
-        assertNotNull(treeService.findByPath("999001002"));
+        Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree target = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree t = createTree(target.getId(), target.getParentIds());
+        treeService.move(source, target, "inner");
+        clear();
+        assertEquals(target.getId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.makeSelfAsNewParentIds(), treeService.findOne(source.getId()).getParentIds());
+
+        assertEquals(Integer.valueOf(2), treeService.findOne(source.getId()).getWeight());
     }
 
     @Test
     public void testMoveAsBeforeWithNoPrevSiblings() {
-        Tree t11 = createTree("998001");
-        Tree t12 = createTree("998002");
-        Tree t21 = createTree("999001");
-        treeService.move(t21, t11.getPath(), "prev");
-        treeRepository.flush();
-        assertNotNull(treeService.findByPath("998001"));
-        assertNotNull(treeService.findByPath("998002"));
-        assertNotNull(treeService.findByPath("998003"));
+        Tree target = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldTargetWeight = target.getWeight();
+        Tree t = createTree(target.getId(), target.makeSelfAsNewParentIds());
+        Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldSourceWeight = source.getWeight();
+        treeService.move(source, target, "prev");
+        clear();
 
-        assertEquals(t21, treeService.findByPath("998001"));
-        assertEquals(t11, treeService.findByPath("998002"));
-        assertEquals(t12, treeService.findByPath("998003"));
+        assertEquals(target.getParentId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.getParentIds(), treeService.findOne(source.getId()).getParentIds());
+
+        assertEquals(Integer.valueOf(oldTargetWeight), treeService.findOne(source.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldSourceWeight), treeService.findOne(target.getId()).getWeight());
+
+
     }
 
     @Test
     public void testMoveAsBeforeWithPrevSiblings() {
-        Tree t11 = createTree("998001");
-        Tree t12 = createTree("998002");
-        Tree t21 = createTree("999001");
-        treeService.move(t21, t12.getPath(), "prev");
-        treeRepository.flush();
-        assertNotNull(treeService.findByPath("998001"));
-        assertNotNull(treeService.findByPath("998002"));
-        assertNotNull(treeService.findByPath("998003"));
+        Tree t = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree target = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldTargetWeight = target.getWeight();
+        Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldSourceWeight = source.getWeight();
+        treeService.move(source, target, "prev");
 
-        assertEquals(t11, treeService.findByPath("998001"));
-        assertEquals(t21, treeService.findByPath("998002"));
-        assertEquals(t12, treeService.findByPath("998003"));
+        clear();
+
+        assertEquals(target.getParentId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.getParentIds(), treeService.findOne(source.getId()).getParentIds());
+
+        assertEquals(Integer.valueOf(oldTargetWeight), treeService.findOne(source.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldSourceWeight), treeService.findOne(target.getId()).getWeight());
+
+    }
+
+    @Test
+    public void testMoveAsBeforeWithPrevSiblings2() {
+        Tree t11 = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree target = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldTargetWeight = target.getWeight();
+
+        Tree t12 = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldT12Weight = t12.getWeight();
+
+        Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        int oldSourceWeight = source.getWeight();
+
+        Tree t13 = createTree(root.getId(), root.makeSelfAsNewParentIds());
+
+        treeService.move(source, target, "prev");
+
+        clear();
+
+        assertEquals(target.getParentId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.getParentId(), treeService.findOne(t12.getId()).getParentId());
+        assertEquals(target.getParentIds(), treeService.findOne(source.getId()).getParentIds());
+
+        assertEquals(Integer.valueOf(oldTargetWeight), treeService.findOne(source.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldSourceWeight), treeService.findOne(t12.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldT12Weight), treeService.findOne(target.getId()).getWeight());
+
+
     }
 
     @Test
     public void testMoveAsBeforeWithPrevSiblingsAndContains() {
-        Tree t11 = createTree("998001");
-        Tree t12 = createTree("998002");
-        Tree t13 = createTree("998003");
-        Tree t14 = createTree("998004");
-        treeService.move(t13, t12.getPath(), "prev");
-        treeRepository.flush();
-        assertNotNull(treeService.findByPath("998001"));
-        assertNotNull(treeService.findByPath("998002"));
-        assertNotNull(treeService.findByPath("998003"));
-        assertNull(treeService.findByPath("998005"));
+        Tree newRoot = createTree(root.getId(), root.makeSelfAsNewParentIds());
 
-        assertEquals(t11, treeService.findByPath("998001"));
-        assertEquals(t13, treeService.findByPath("998002"));
-        assertEquals(t12, treeService.findByPath("998003"));
-        assertEquals(t14, treeService.findByPath("998004"));
+        Tree t11 = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        Tree target = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        int oldTargetWeight = target.getWeight();
+        Tree t12 = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        int oldT12Weight = t12.getWeight();
+
+        Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree sourceChild = createTree(source.getId(), source.makeSelfAsNewParentIds());
+
+        treeService.move(source, target, "prev");
+
+        clear();
+
+        assertEquals(target.getParentId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.getParentIds(), treeService.findOne(source.getId()).getParentIds());
+
+        assertEquals(treeService.findOne(source.getId()).getId(), treeService.findOne(sourceChild.getId()).getParentId());
+        assertEquals(treeService.findOne(source.getId()).makeSelfAsNewParentIds(), treeService.findOne(sourceChild.getId()).getParentIds());
+
+
+        assertEquals(Integer.valueOf(oldTargetWeight), treeService.findOne(source.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldT12Weight), treeService.findOne(target.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldT12Weight + 1), treeService.findOne(t12.getId()).getWeight());
+
 
     }
 
 
     @Test
     public void testMoveAsAfterWithNoAfterSiblings() {
-        Tree t11 = createTree("998001");
-        Tree t12 = createTree("998002");
-        Tree t21 = createTree("999001");
-        treeService.move(t21, t12.getPath(), "next");
-        treeRepository.flush();
-        assertNotNull(treeService.findByPath("998001"));
-        assertNotNull(treeService.findByPath("998002"));
-        assertNotNull(treeService.findByPath("998003"));
+        Tree newRoot = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree t = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        Tree target = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
 
-        assertEquals(t11, treeService.findByPath("998001"));
-        assertEquals(t12, treeService.findByPath("998002"));
-        assertEquals(t21, treeService.findByPath("998003"));
+        int oldTargetWeight = target.getWeight();
+        Tree source = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        treeService.move(source, target, "next");
+
+        clear();
+
+        assertEquals(Integer.valueOf(oldTargetWeight + 1), treeService.findOne(source.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldTargetWeight), treeService.findOne(target.getId()).getWeight());
+
     }
 
     @Test
     public void testMoveAsAfterWithAfterSiblings() {
-        Tree t11 = createTree("998001");
-        Tree t12 = createTree("998002");
-        Tree t21 = createTree("999001");
-        treeService.move(t21, t11.getPath(), "next");
-        treeRepository.flush();
-        assertNotNull(treeService.findByPath("998001"));
-        assertNotNull(treeService.findByPath("998002"));
-        assertNotNull(treeService.findByPath("998003"));
+        Tree newRoot = createTree(root.getId(), root.makeSelfAsNewParentIds());
+        Tree target = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        Tree t12 = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        int oldT12Weight = t12.getWeight();
 
-        assertEquals(t11, treeService.findByPath("998001"));
-        assertEquals(t21, treeService.findByPath("998002"));
-        assertEquals(t12, treeService.findByPath("998003"));
+        Tree source = createTree(newRoot.getId(), newRoot.makeSelfAsNewParentIds());
+        treeService.move(source, target, "next");
+
+        clear();
+
+        assertEquals(target.getParentId(), treeService.findOne(source.getId()).getParentId());
+        assertEquals(target.getParentIds(), treeService.findOne(source.getId()).getParentIds());
+
+
+        assertEquals(Integer.valueOf(oldT12Weight), treeService.findOne(source.getId()).getWeight());
+        assertEquals(Integer.valueOf(oldT12Weight + 1), treeService.findOne(t12.getId()).getWeight());
+
+
     }
 
 
-    private Tree createTree(String path) {
+
+
+    private Tree createTree(long parentId, String parentIds) {
         Tree tree = new Tree();
-        tree.setPath(path);
+        tree.setParentId(parentId);
+        tree.setParentIds(parentIds);
         treeService.save(tree);
         return tree;
     }

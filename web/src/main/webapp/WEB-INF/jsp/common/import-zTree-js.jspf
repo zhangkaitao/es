@@ -1,3 +1,3 @@
-<script src="${ctx}/static/comp/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+<script src="${ctx}/static/comp/zTree/js/jquery.ztree.all-3.5.js"></script>
 
 

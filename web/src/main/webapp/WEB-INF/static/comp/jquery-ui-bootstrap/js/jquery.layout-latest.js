@@ -640,7 +640,7 @@
          *	LAYOUT & LAYOUT-CONTAINER OPTIONS
          *	- none of these options are applicable to individual panes
          */
-        name:						""			// Not required, but useful for buttons and used for the state-cookie
+        name:						""			// Not required, but useful for buttons and used for the status-cookie
         ,	containerClass:				"ui-layout-container" // layout-container element
         ,	inset:						null		// custom container-inset values (override padding)
         ,	scrollToBookmarkOnLoad:		true		// after creating a layout, scroll to bookmark in URL (.../page.htm#myBookmark)
@@ -1019,7 +1019,7 @@
             ,	effects	= options.effects = $.extend(true, {}, $.layout.effects)
 
         /**
-         * layout-state object
+         * layout-status object
          */
             ,	state = {
                 // generate unique ID to use for event.namespace so can unbind only events added by 'this layout'
@@ -1127,7 +1127,7 @@
                             if (args.length)
                                 retVal = g(fn)(args[1]); // pass the argument parsed from 'list'
                             else if ( hasPane )
-                            // pass data: pane-name, pane-element, pane-state, pane-options, and layout-name
+                            // pass data: pane-name, pane-element, pane-status, pane-options, and layout-name
                                 retVal = g(fn)( pane, $Ps[pane], s, o, lName );
                             else // must be a layout/container callback - pass suitable info
                                 retVal = g(fn)( Instance, s, o, lName );
@@ -1404,7 +1404,7 @@
                     ,	height:	0
                 };
 
-                // NOTE: sC = state.container
+                // NOTE: sC = status.container
                 // calc center-pane outer dimensions
                 d.width		= sC.innerWidth - d.left - d.right;  // outerWidth
                 d.height	= sC.innerHeight - d.bottom - d.top; // outerHeight
@@ -1439,7 +1439,7 @@
                     ,	_alt	= _state === _closed ? _open : _closed
                     ,	classes = (root+_hover) + (root+_pane+_hover) + (root+_state+_hover) + (root+_pane+_state+_hover)
                     ;
-                if (allStates) // when 'removing' classes, also remove alternate-state classes
+                if (allStates) // when 'removing' classes, also remove alternate-status classes
                     classes += (root+_alt+_hover) + (root+_pane+_alt+_hover);
 
                 if (type=="resizer" && $El.hasClass(root+_slide))
@@ -1448,14 +1448,12 @@
                 return $.trim(classes);
             }
             ,	addHover	= function (evt, el) {
-//zhangkaitao
                 var $E = $(el || this);
                 if (evt && $E.data("layoutRole") === "toggler")
                     evt.stopPropagation(); // prevent triggering 'slide' on Resizer-bar
                 $E.addClass( getHoverClasses($E) );
             }
             ,	removeHover	= function (evt, el) {
-//zhangkaitao 禁用
                 var $E = $(el || this);
                 $E.removeClass( getHoverClasses($E, true) );
             }
@@ -1512,13 +1510,13 @@
                 var o = options
                     ,	s = state;
 
-                // TEMP state so isInitialized returns true during init process
+                // TEMP status so isInitialized returns true during init process
                 s.creatingLayout = true;
 
                 // init plugins for this layout, if there are any (eg: stateManagement)
                 runPluginCallbacks( Instance, $.layout.onCreate );
 
-                // options & state have been initialized, so now run beforeLoad callback
+                // options & status have been initialized, so now run beforeLoad callback
                 // onload will CANCEL layout creation if it returns false
                 if (false === _runCallbacks("onload_start"))
                     return 'cancel';
@@ -1580,7 +1578,7 @@
                     return _log( o.errors.centerPaneMissing );
                 }
 
-                // TEMP state so isInitialized returns true during init process
+                // TEMP status so isInitialized returns true during init process
                 state.creatingLayout = true;
 
                 // update Container dims
@@ -1653,10 +1651,10 @@
                             // set a unique child-instance key for this layout, if not already set
                             setInstanceKey({ container: $cont, options: co }, s );
                             // If THIS layout has a hash in stateManagement.autoLoad,
-                            // then see if it also contains state-data for this child-layout
+                            // then see if it also contains status-data for this child-layout
                             // If so, copy the stateData to child.options.stateManagement.autoLoad
                             if ( sm.includeChildren && state.stateData[pane] ) {
-                                //	THIS layout's state was cached when its state was loaded
+                                //	THIS layout's status was cached when its status was loaded
                                 var	paneChildren = state.stateData[pane].children || {}
                                     ,	childState	= paneChildren[ co.instanceKey ]
                                     ,	co_sm		= co.stateManagement || (co.stateManagement = { autoLoad: true })
@@ -1665,7 +1663,7 @@
                                 if ( co_sm.autoLoad === true && childState ) {
                                     co_sm.autoSave			= false; // disable autoSave because saving handled by parent-layout
                                     co_sm.includeChildren	= true;  // cascade option - FOR NOW
-                                    co_sm.autoLoad = $.extend(true, {}, childState); // COPY the state-hash
+                                    co_sm.autoLoad = $.extend(true, {}, childState); // COPY the status-hash
                                 }
                             }
 
@@ -1684,7 +1682,7 @@
             }
 
             ,	setInstanceKey = function (child, parentPaneState) {
-                // create a named key for use in state and instance branches
+                // create a named key for use in status and instance branches
                 var	$c	= child.container
                     ,	o	= child.options
                     ,	sm	= o.stateManagement
@@ -1726,9 +1724,9 @@
 
                 // if a newChild instance was passed, add it to children[pane]
                 if (newChild) {
-                    // update child.state
+                    // update child.status
                     newChild.hasParentLayout = true; // set parent-flag in child
-                    // instanceKey is a key-name used in both state and children
+                    // instanceKey is a key-name used in both status and children
                     o = newChild.options;
                     // set a unique child-instance key for this layout, if not already set
                     setInstanceKey( newChild, s );
@@ -1806,7 +1804,7 @@
                     ,	num		= $.layout.cssNum
                     ,	$parent, n
                     ;
-                // sC = state.container
+                // sC = status.container
                 sC.selector = $N.selector.split(".slice")[0];
                 sC.ref		= (o.name ? o.name +' layout / ' : '') + tag + (id ? "#"+id : cls ? '.['+cls+']' : ''); // used in messages
                 sC.isBody	= (tag === "BODY");
@@ -2294,7 +2292,7 @@
                     if (size > 0) size = max(min(size, maxSize), minSize);
                     s.autoResize = o.autoResize; // used with percentage sizes
 
-                    // state for border-panes
+                    // status for border-panes
                     s.isClosed  = false; // true = pane is closed
                     s.isSliding = false; // true = pane is currently open by 'sliding' over adjacent panes
                     s.isResizing= false; // true = pane is in process of being resized
@@ -2576,7 +2574,7 @@
                     if ($P.css("overflowX").match(/(scroll|auto)/)) {
                         $P.css("overflow", "hidden");
                     }
-                    state[pane].content = {}; // init content state
+                    state[pane].content = {}; // init content status
                     if (resize !== false) sizeContent(pane);
                     // sizeContent() is called AFTER init of all elements
                 }
@@ -2638,12 +2636,12 @@
                         //	basic format for helper - style it using class: .ui-draggable-dragging
                         ,	helper:			"clone"
                         ,	opacity:		o.resizerDragOpacity
-                        ,	addClasses:		false // avoid ui-state-disabled class when disabled
+                        ,	addClasses:		false // avoid ui-status-disabled class when disabled
                         ,	iframeFix:		o.draggableIframeFix // TODO: consider using when bug is fixed
                         ,	zIndex:			z.resizer_drag
 
                         ,	start: function (e, ui) {
-                            // REFRESH options & state pointers in case we used swapPanes
+                            // REFRESH options & status pointers in case we used swapPanes
                             o = options[pane];
                             s = state[pane];
                             // re-read options
@@ -2658,7 +2656,7 @@
                             timer.clear(pane+"_closeSlider"); // just in case already triggered
 
                             // SET RESIZER LIMITS - used in drag()
-                            setSizeLimits(pane); // update pane/resizer state
+                            setSizeLimits(pane); // update pane/resizer status
                             r = s.resizerPosition;
                             lastPos = ui.position[ side ]
 
@@ -2986,7 +2984,7 @@
                 // trigger plugins for this layout, if there are any
                 runPluginCallbacks( Instance, $.layout.onDestroy );
 
-                // trigger state-management and onunload callback
+                // trigger status-management and onunload callback
                 unload();
 
                 // clear the Instance of everything except for container & options (so could recreate)
@@ -3104,7 +3102,7 @@
                 if ($T) $T.remove();
                 if ($R) $R.remove();
 
-                // CLEAR all pointers and state data
+                // CLEAR all pointers and status data
                 Instance[pane] = $Ps[pane] = $Cs[pane] = $Rs[pane] = $Ts[pane] = false;
                 s = { removed: true };
 
@@ -3404,7 +3402,7 @@
                 if (o.resizable && $.layout.plugins.draggable)
                     $R
                         .draggable("disable")
-                        .removeClass("ui-state-disabled") // do NOT apply disabled styling - not suitable here
+                        .removeClass("ui-status-disabled") // do NOT apply disabled styling - not suitable here
                         .css("cursor", "default")
                         .attr("title","")
                     ;
@@ -3476,7 +3474,7 @@
                     if (cbReturn === "abort")
                         return queueNext();
 
-                    // update pane-state again in case options were changed in onopen_start
+                    // update pane-status again in case options were changed in onopen_start
                     if (cbReturn !== "NC") // NC = "No Callback"
                         setSizeLimits(pane, slide);
 
@@ -3594,7 +3592,7 @@
                 // sync any 'pin buttons'
                 syncPinBtns(pane, !s.isSliding);
 
-                // update pane-state dimensions - BEFORE resizing content
+                // update pane-status dimensions - BEFORE resizing content
                 $.extend(s, elDims($P));
 
                 if (state.initialized) {
@@ -3891,11 +3889,11 @@
 
                     // if was previously hidden due to noRoom, then RESET because NOW there is room
                     if (s.noRoom) {
-                        // s.noRoom state will be set by open or show
+                        // s.noRoom status will be set by open or show
                         if (s.wasOpen && o.closable) {
                             if (o.autoReopen)
                                 open(pane, false, true, true); // true = noAnimation, true = noAlert
-                            else // leave the pane closed, so just update state
+                            else // leave the pane closed, so just update status
                                 s.noRoom = false;
                         }
                         else
@@ -3904,7 +3902,7 @@
                 }
                 else { // !hasRoom - pane CANNOT fit
                     if (!s.noRoom) { // pane not set as noRoom yet, so hide or close it now...
-                        s.noRoom = true; // update state
+                        s.noRoom = true; // update status
                         s.wasOpen = !s.isClosed && !s.isSliding;
                         if (s.isClosed){} // SKIP
                         else if (o.closable) // 'close' if possible
@@ -3964,7 +3962,7 @@
                 // QUEUE in case another action/animation is in progress
                 $N.queue(function( queueNext ){
                     // calculate 'current' min/max sizes
-                    setSizeLimits(pane); // update pane-state
+                    setSizeLimits(pane); // update pane-status
                     oldSize = s.size;
                     size = _parseSize(pane, size); // handle percentages & auto
                     size = max(size, _parseSize(pane, o.minSize));
@@ -4013,10 +4011,10 @@
                         if ($P.is(":visible"))
                             sizePane_2(); // continue
                         else {
-                            // pane is NOT VISIBLE, so just update state data...
+                            // pane is NOT VISIBLE, so just update status data...
                             // when pane is *next opened*, it will have the new size
-                            s.size = size;				// update state.size
-                            $.extend(s, elDims($P));	// update state dimensions
+                            s.size = size;				// update status.size
+                            $.extend(s, elDims($P));	// update status dimensions
                         }
                         queueNext();
                     };
@@ -4070,7 +4068,7 @@
                     }
                     // END TESTING CODE
 
-                    // update pane-state dimensions
+                    // update pane-status dimensions
                     s.size	= size;
                     $.extend(s, elDims($P));
 
@@ -4130,7 +4128,7 @@
                         ,	newCenter	= calcNewCenterPaneDims()
                         ;
 
-                    // update pane-state dimensions
+                    // update pane-status dimensions
                     $.extend(s, elDims($P));
 
                     if (pane === "center") {
@@ -4138,16 +4136,19 @@
                             $P.css(visCSS);
                             return true; // SKIP - pane already the correct size
                         }
-                        // set state for makePaneFit() logic
+                        // set status for makePaneFit() logic
                         $.extend(s, cssMinDims(pane), {
                             maxWidth:	newCenter.width
                             ,	maxHeight:	newCenter.height
                         });
                         CSS = newCenter;
                         //zhangkaitao 使center的iframe撑满整屏
-                        CSS.top = CSS.top + 35;
-                        CSS.height = CSS.height - 25;
-                        CSS.width = CSS.width + 10;
+//                        CSS.top = CSS.top + 35;
+                        if($P.is("iframe[tabs=true]")){
+                            CSS.height = CSS.height - 45;
+                        }
+//                        CSS.width = CSS.width + 5;
+
                         s.newWidth	= CSS.width;
                         s.newHeight	= CSS.height;
                         // convert OUTER width/height to CSS width/height 
@@ -4189,7 +4190,7 @@
                         }
                     }
                     else { // for east and west, set only the height, which is same as center height
-                        // set state.min/maxWidth/Height for makePaneFit() logic
+                        // set status.min/maxWidth/Height for makePaneFit() logic
                         if (s.isVisible && !s.noVerticalRoom)
                             $.extend(s, elDims($P), cssMinDims(pane))
                         if (!force && !s.noVerticalRoom && newCenter.height === s.outerHeight) {
@@ -4290,7 +4291,7 @@
                 }
 
                 // onresizeall_start will CANCEL resizing if returns false
-                // state.container has already been set, so user can access this info for calcuations
+                // status.container has already been set, so user can access this info for calcuations
                 if (false === _runCallbacks("onresizeall_start")) return false;
 
                 var	// see if container is now 'smaller' than before
@@ -4419,7 +4420,7 @@
                             ,	hiddenFooters:	$Fs.length - $Fs_vis.length
                             ,	spaceBelow:		0 // correct if no content footer ($E)
                         }
-                        m.spaceAbove	= m.top; // just for state - not used in calc
+                        m.spaceAbove	= m.top; // just for status - not used in calc
                         m.bottom		= m.top + m.height;
                         if ($F.length)
                         //spaceBelow = (LastFooter.top + LastFooter.height) [footerBottom] - Content.bottom + max(LastFooter.marginBottom, pane.paddingBotom)
@@ -4686,10 +4687,10 @@
             ,	swapPanes = function (evt_or_pane1, pane2) {
                 if (!isInitialized()) return;
                 var pane1 = evtPane.call(this, evt_or_pane1);
-                // change state.edge NOW so callbacks can know where pane is headed...
+                // change status.edge NOW so callbacks can know where pane is headed...
                 state[pane1].edge = pane2;
                 state[pane2].edge = pane1;
-                // run these even if NOT state.initialized
+                // run these even if NOT status.initialized
                 if (false === _runCallbacks("onswap_start", pane1)
                     ||	false === _runCallbacks("onswap_start", pane2)
                     ) {
@@ -4706,7 +4707,7 @@
                 sizes[pane1] = oPane1 ? oPane1.state.size : 0;
                 sizes[pane2] = oPane2 ? oPane2.state.size : 0;
 
-                // clear pointers & state
+                // clear pointers & status
                 $Ps[pane1] = false;
                 $Ps[pane2] = false;
                 state[pane1] = {};
@@ -4733,7 +4734,7 @@
                 // fix any size discrepancies caused by swap
                 resizeAll();
 
-                // run these even if NOT state.initialized
+                // run these even if NOT status.initialized
                 _runCallbacks("onswap_end", pane1);
                 _runCallbacks("onswap_end", pane2);
 
@@ -4784,7 +4785,7 @@
                     ;
                     $Cs[pane] = C ? $(C) : false;
 
-                    // set options and state
+                    // set options and status
                     options[pane]	= $.extend(true, {}, oPane.options, fx);
                     state[pane]		= $.extend(true, {}, oPane.state);
 
@@ -4798,7 +4799,7 @@
                     // if moving to different orientation, then keep 'target' pane size
                     if (c.dir != _c[oldPane].dir) {
                         size = sizes[pane] || 0;
-                        setSizeLimits(pane); // update pane-state
+                        setSizeLimits(pane); // update pane-status
                         size = max(size, state[pane].minSize);
                         // use manualSizePane to disable autoResize - not useful after panes are swapped
                         manualSizePane(pane, size, true, true); // true/true = skipCallback/noAnimation
@@ -5053,7 +5054,7 @@
             ,	slideClose:			slideClose		// method - ditto
             ,	slideToggle:		slideToggle		// method - ditto
             //	pane actions
-            ,	setSizeLimits:		setSizeLimits	// method - pass a 'pane' - update state min/max data
+            ,	setSizeLimits:		setSizeLimits	// method - pass a 'pane' - update status min/max data
             ,	_sizePane:			sizePane		// method -intended for user by plugins only!
             ,	sizePane:			manualSizePane	// method - pass a 'pane' AND an 'outer-size' in pixels or percent, or 'auto'
             ,	sizeContent:		sizeContent		// method - pass a 'pane'
@@ -5082,10 +5083,10 @@
             ,	resizeAll:			resizeAll		// method - no parameters
             //	callback triggering
             ,	runCallbacks:		_runCallbacks	// method - pass evtName & pane (if a pane-event), eg: trigger("onopen", "west")
-            //	alias collections of options, state and children - created in addPane and extended elsewhere
+            //	alias collections of options, status and children - created in addPane and extended elsewhere
             ,	hasParentLayout:	false			// set by initContainer()
             ,	children:			children		// pointers to child-layouts, eg: Instance.children.west.layoutName
-            ,	north:				false			// alias group: { name: pane, pane: $Ps[pane], options: options[pane], state: state[pane], children: children[pane] }
+            ,	north:				false			// alias group: { name: pane, pane: $Ps[pane], options: options[pane], status: status[pane], children: children[pane] }
             ,	south:				false			// ditto
             ,	west:				false			// ditto
             ,	east:				false			// ditto
@@ -5111,7 +5112,7 @@
 
 
     /**
-     * jquery.layout.state 1.0
+     * jquery.layout.status 1.0
      * $Date: 2011-07-16 08:00:00 (Sat, 16 July 2011) $
      *
      * Copyright (c) 2012
@@ -5137,7 +5138,7 @@
      ,	cookie:		{ name: "appLayout", path: "/" }
      }
      })
-     *	@example $(el).layout({ stateManagement__enabled: true }) // enable auto-state-management using cookies
+     *	@example $(el).layout({ stateManagement__enabled: true }) // enable auto-status-management using cookies
      *	@example $(el).layout({ stateManagement__cookie: { name: "appLayout", path: "/" } })
      *	@example $(el).layout({ stateManagement__cookie__name: "appLayout", stateManagement__cookie__path: "/" })
      *
@@ -5147,7 +5148,7 @@
      *	@example myLayout.deleteCookie();
      *	@example var JSON = myLayout.readState();	// CURRENT Layout State
      *	@example var JSON = myLayout.readCookie();	// SAVED Layout State (from cookie)
-     *	@example var JSON = myLayout.state.stateData;	// LAST LOADED Layout State (cookie saved in layout.state hash)
+     *	@example var JSON = myLayout.status.stateData;	// LAST LOADED Layout State (cookie saved in layout.status hash)
      *
      *	CUSTOM STATE-MANAGEMENT (eg, saved in a database)
      *	@example var JSON = myLayout.readState( "west.isClosed,north.size,south.isHidden" );
@@ -5159,7 +5160,7 @@
      *
      *	A $.cookie OR $.ui.cookie namespace *should be standard*, but until then...
      *	This creates $.ui.cookie so Layout does not need the cookie.jquery.js plugin
-     *	NOTE: This utility is REQUIRED by the layout.state plugin
+     *	NOTE: This utility is REQUIRED by the layout.status plugin
      *
      *	Cookie methods in Layout are created as part of State Management
      */
@@ -5230,18 +5231,18 @@
     };
 
 
-// tell Layout that the state plugin is available
+// tell Layout that the status plugin is available
     $.layout.plugins.stateManagement = true;
 
 //	Add State-Management options to layout.defaults
     $.layout.config.optionRootKeys.push("stateManagement");
     $.layout.defaults.stateManagement = {
-        enabled:		false	// true = enable state-management, even if not using cookies
-        ,	autoSave:		true	// Save a state-cookie when page exits?
-        ,	autoLoad:		true	// Load the state-cookie when Layout inits?
-        ,	animateLoad:	true	// animate panes when loading state into an active layout
-        ,	includeChildren: true	// recurse into child layouts to include their state as well
-        // List state-data to save - must be pane-specific
+        enabled:		false	// true = enable status-management, even if not using cookies
+        ,	autoSave:		true	// Save a status-cookie when page exits?
+        ,	autoLoad:		true	// Load the status-cookie when Layout inits?
+        ,	animateLoad:	true	// animate panes when loading status into an active layout
+        ,	includeChildren: true	// recurse into child layouts to include their status as well
+        // List status-data to save - must be pane-specific
         ,	stateKeys:	"north.size,south.size,east.size,west.size,"+
             "north.isClosed,south.isClosed,east.isClosed,west.isClosed,"+
             "north.isHidden,south.isHidden,east.isHidden,west.isHidden"
@@ -5262,7 +5263,7 @@
     $.layout.state = {
 
         /**
-         * Get the current layout state and save it to a cookie
+         * Get the current layout status and save it to a cookie
          *
          * myLayout.saveCookie( keys, cookieOpts )
          *
@@ -5274,14 +5275,14 @@
             var o	= inst.options
                 ,	sm	= o.stateManagement
                 ,	oC	= $.extend(true, {}, sm.cookie, cookieOpts || null)
-                ,	data = inst.state.stateData = inst.readState( keys || sm.stateKeys ) // read current panes-state
+                ,	data = inst.state.stateData = inst.readState( keys || sm.stateKeys ) // read current panes-status
                 ;
             $.ui.cookie.write( oC.name || o.name || "Layout", $.layout.state.encodeJSON(data), oC );
-            return $.extend(true, {}, data); // return COPY of state.stateData data
+            return $.extend(true, {}, data); // return COPY of status.stateData data
         }
 
         /**
-         * Remove the state cookie
+         * Remove the status cookie
          *
          * @param {Object}	inst
          */
@@ -5310,8 +5311,8 @@
         ,	loadCookie: function (inst) {
             var c = $.layout.state.readCookie(inst); // READ the cookie
             if (c) {
-                inst.state.stateData = $.extend(true, {}, c); // SET state.stateData
-                inst.loadState(c); // LOAD the retrieved state
+                inst.state.stateData = $.extend(true, {}, c); // SET status.stateData
+                inst.loadState(c); // LOAD the retrieved status
             }
             return c;
         }
@@ -5326,10 +5327,10 @@
         ,	loadState: function (inst, data, opts) {
             if (!$.isPlainObject( data ) || $.isEmptyObject( data )) return;
 
-            // normalize data & cache in the state object
+            // normalize data & cache in the status object
             data = inst.state.stateData = $.layout.transformData( data ); // panes = default subkey
 
-            // add missing/default state-restore options
+            // add missing/default status-restore options
             var smo = inst.options.stateManagement;
             opts = $.extend({
                 animateLoad:		false //smo.animateLoad
@@ -5343,11 +5344,11 @@
                 // MUST remove pane.children keys before applying to options
                 // use a copy so we don't remove keys from original data
                 var o = $.extend(true, {}, data);
-                //delete o.center; // center has no state-data - only children
+                //delete o.center; // center has no status-data - only children
                 $.each($.layout.config.allPanes, function (idx, pane) {
                     if (o[pane]) delete o[pane].children;
                 });
-                // update CURRENT layout-options with saved state data
+                // update CURRENT layout-options with saved status data
                 $.extend(true, inst.options, o);
             }
             else {
@@ -5404,9 +5405,9 @@
         }
 
         /**
-         * Get the *current layout state* and return it as a hash
+         * Get the *current layout status* and return it as a hash
          *
-         * @param {Object=}		inst	// Layout instance to get state for
+         * @param {Object=}		inst	// Layout instance to get status for
          * @param {object=}		[opts]	// State-Managements override options
          */
         ,	readState: function (inst, opts) {
@@ -5450,10 +5451,10 @@
                         branch = data[pane] || (data[pane] = {});
                         if (!branch.children) branch.children = {};
                         $.each( pC, function (key, child) {
-                            // ONLY read state from an initialize layout
+                            // ONLY read status from an initialize layout
                             if ( child.state.initialized )
                                 branch.children[ key ] = $.layout.state.readState( child );
-                            // if we have PREVIOUS (onLoad) state for this child-layout, KEEP IT!
+                            // if we have PREVIOUS (onLoad) status for this child-layout, KEEP IT!
                             else if ( ps && ps.children && ps.children[ key ] ) {
                                 branch.children[ key ] = $.extend(true, {}, ps.children[ key ] );
                             }
@@ -5512,22 +5513,22 @@
                 ,	saveCookie:		function (keys, cookieOpts) { return _.saveCookie(inst, keys, cookieOpts); }
                 //	loadCookie - readCookie and use to loadState() - returns hash of cookie data
                 ,	loadCookie:		function () { return _.loadCookie(inst); }
-                //	loadState - pass a hash of state to use to update options
+                //	loadState - pass a hash of status to use to update options
                 ,	loadState:		function (stateData, opts) { _.loadState(inst, stateData, opts); }
-                //	readState - returns hash of current layout-state
+                //	readState - returns hash of current layout-status
                 ,	readState:		function (keys) { return _.readState(inst, keys); }
                 //	add JSON utility methods too...
                 ,	encodeJSON:		_.encodeJSON
                 ,	decodeJSON:		_.decodeJSON
             });
 
-            // init state.stateData key, even if plugin is initially disabled
+            // init status.stateData key, even if plugin is initially disabled
             inst.state.stateData = {};
 
             // autoLoad MUST BE one of: data-array, data-hash, callback-function, or TRUE
             if ( !sm.autoLoad ) return;
 
-            //	When state-data exists in the autoLoad key USE IT,
+            //	When status-data exists in the autoLoad key USE IT,
             //	even if stateManagement.enabled == false
             if ($.isPlainObject( sm.autoLoad )) {
                 if (!$.isEmptyObject( sm.autoLoad )) {
@@ -5566,7 +5567,7 @@
 
     };
 
-// add state initialization method to Layout's onCreate array of functions
+// add status initialization method to Layout's onCreate array of functions
     $.layout.onCreate.push( $.layout.state._create );
     $.layout.onUnload.push( $.layout.state._unload );
 
@@ -5591,7 +5592,7 @@
      * Tips: [ to come ]
      */
 
-// tell Layout that the state plugin is available
+// tell Layout that the status plugin is available
     $.layout.plugins.buttons = true;
 
 //	Add buttons options to layout.defaults
@@ -5784,7 +5785,7 @@
          */
         ,	setPinState: function (inst, $Pin, pane, doPin) {
             var updown = $Pin.attr("pin");
-            if (updown && doPin === (updown=="down")) return; // already in correct state
+            if (updown && doPin === (updown=="down")) return; // already in correct status
             var
                 o		= inst.options[pane]
                 ,	pin		= o.buttonClass +"-pin"
@@ -5831,7 +5832,7 @@
                 ,	addPinBtn:		function (sel, pane) { return _.addPin(inst, sel, pane); }
             });
 
-            // init state array to hold pin-buttons
+            // init status array to hold pin-buttons
             for (var i=0; i<4; i++) {
                 var pane = $.layout.config.borderPanes[i];
                 inst.state[pane].pins = [];

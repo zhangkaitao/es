@@ -9,7 +9,9 @@ import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.utils.ImagesUtils;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.MessageUtils;
-import com.sishuok.es.common.web.utils.FileUploadUtils;
+import com.sishuok.es.common.web.upload.FileUploadUtils;
+import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
+import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
 import com.sishuok.es.web.showcase.upload.entity.AjaxUploadResponse;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,10 +38,10 @@ import java.net.URLEncoder;
 public class BatchAjaxUploadController {
 
 
-    //最大上传大小 字节为单位 默认10M
+    //最大上传大小 字节为单位
     private long maxSize = FileUploadUtils.DEFAULT_MAX_SIZE;
     //允许的文件内容类型
-    private String[] allowedContentType = FileUploadUtils.DEFAULT_ALLOWED_CONTENT_TYPE;
+    private String[] allowedExtension = FileUploadUtils.DEFAULT_ALLOWED_EXTENSION;
     //文件上传下载的父目录
     private String baseDir = FileUploadUtils.DEFAULT_BASE_DIR;
 
@@ -74,12 +76,8 @@ public class BatchAjaxUploadController {
             String filename = file.getOriginalFilename();
             long size = file.getSize();
 
-            if(file.getOriginalFilename().length() > 100) {
-                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.filename.exceed.length"));
-                continue;
-            }
             try {
-                String url = FileUploadUtils.upload(request, baseDir, file, allowedContentType, maxSize);
+                String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize);
                 String deleteURL = request.getContextPath() + "/ajaxUpload/delete?filename=" + URLEncoder.encode(url, "UTF-8");
                 if(ImagesUtils.isImage(filename)) {
                     ajaxUploadResponse.add(filename, size, url, url, deleteURL);
@@ -88,15 +86,17 @@ public class BatchAjaxUploadController {
                 }
                 continue;
             } catch (IOException e) {
-                e.printStackTrace();
                 LogUtils.error("file upload error", e);
                 ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.server.error"));
                 continue;
-            } catch (FileUploadBase.InvalidContentTypeException e) {
-                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.not.allow.contentType"));
+            } catch (InvalidExtensionException e) {
+                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.not.allow.extension"));
                 continue;
             } catch (FileUploadBase.FileSizeLimitExceededException e) {
                 ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.exceed.maxSize"));
+                continue;
+            } catch (FileNameLengthLimitExceededException e) {
+                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.filename.exceed.length"));
                 continue;
             }
         }

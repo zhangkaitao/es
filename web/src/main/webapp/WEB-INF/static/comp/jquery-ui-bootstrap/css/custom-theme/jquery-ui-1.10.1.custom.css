@@ -1258,7 +1258,7 @@ li.ui-menu-item {
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
-/* Fix problem with border in ui-state-active */
+/* Fix problem with border in ui-status-active */
 .ui-menu .ui-menu-item a.ui-state-active {
 	padding: 1px .4em;
 }

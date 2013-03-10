@@ -14,13 +14,14 @@ import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
-import com.sishuok.es.common.web.utils.FileUploadUtils;
+import com.sishuok.es.common.web.upload.FileUploadUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.reflect.generics.tree.Tree;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -30,7 +31,7 @@ import java.io.Serializable;
  * <p>Date: 13-2-22 下午4:15
  * <p>Version: 1.0
  */
-public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID extends Serializable>
+public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable<ID>, ID extends Serializable>
     extends BaseController<M, ID> {
 
     private BaseTreeableService<M, ID> treeableService;
@@ -46,21 +47,21 @@ public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID
 
     @RequestMapping(value = "main", method = RequestMethod.GET)
     public String main() {
-        return viewPrefix + "/main";
+        return getViewPrefix() + "/main";
     }
 
     @RequestMapping(value = "tree", method = RequestMethod.GET)
-    @PageableDefaults(sort = "path=asc")
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String tree(Searchable searchable, Model model) {
-        model.addAttribute("page", treeableService.findAll(searchable));
-        return viewPrefix + "/tree";
+        model.addAttribute("trees", treeableService.findAllBySort(searchable));
+        return getViewPrefix() + "/tree";
     }
 
     @RequestMapping(value = "maintain/{id}", method = RequestMethod.GET)
     public String maintain(@PathVariable("id") M m, Model model) {
         setCommonData(model);
         model.addAttribute("m", m);
-        return viewPrefix + "/maintainForm";
+        return getViewPrefix() + "/maintainForm";
     }
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public String update(
@@ -69,7 +70,7 @@ public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID
             BindingResult result, RedirectAttributes redirectAttributes) {
 
         if(!file.isEmpty()) {
-            m.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_CONTENT_TYPE));
+            m.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
         }
         if(result.hasErrors()) {
             return maintain(m, model);
@@ -94,7 +95,7 @@ public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID
         if(!model.containsAttribute("child")) {
             model.addAttribute("child", newModel());
         }
-        return viewPrefix + "/appendChildForm";
+        return getViewPrefix() + "/appendChildForm";
     }
 
     @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.POST)
@@ -106,7 +107,7 @@ public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID
         setCommonData(model);
 
         if(!file.isEmpty()) {
-            child.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_CONTENT_TYPE));
+            child.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
         }
         if (result.hasErrors()) {
             return showAppendChildForm(parent, model);
@@ -120,75 +121,73 @@ public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID
 
 
     @RequestMapping(value = "move/{sourceId}", method = RequestMethod.GET)
-    @PageableDefaults(sort = "path=asc")
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String showMoveForm(@PathVariable("sourceId") M source, Searchable searchable, Model model) {
         model.addAttribute("source", source);
         //排除自己及子子孙孙
-        searchable.addSearchFilter("search.path.notLike", "path", SearchOperator.notLike, source.getPath() + "%");
-        model.addAttribute("page", treeableService.findAll(searchable));
-        return viewPrefix + "/moveForm";
+        searchable.addSearchFilter("search.id.notEq", "id", SearchOperator.notEq, source.getId());
+        searchable.addSearchFilter(
+                "search.parentIds.notLike", "parentIds",
+                SearchOperator.notLike,
+                source.getParentIds() + source.getId() + source.getSeparator()  + "%");
+
+        model.addAttribute("trees", treeableService.findAllBySort(searchable));
+        return getViewPrefix() + "/moveForm";
     }
 
     @RequestMapping(value = "move/{sourceId}", method = RequestMethod.POST)
     public String move(
-            @PathVariable("sourceId") M source, @RequestParam("targetPath") String targetPath,
+            @PathVariable("sourceId") M source, @RequestParam("targetId") M target,
             @RequestParam("moveType") String moveType, RedirectAttributes redirectAttributes) {
 
-        treeableService.move(source, targetPath, moveType);
+        treeableService.move(source, target, moveType);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动节点成功");
         return "redirect:" + redirectUrl(null);
     }
 
     /////////////////////////////////////ajax///////////////////////////////////////////////
-    @RequestMapping(value = "ajax/appendChild/{parentPath}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/appendChild/{parentId}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxAppendChild(@PathVariable("parentPath") String parentPath) {
-
-        M parent = treeableService.findByPath(parentPath);
+    public Object ajaxAppendChild(@PathVariable("parentId") M parent) {
 
         M child = newModel();
-
         child.setName("新节点");
-
         treeableService.appendChild(parent, child);
-
         return child;
     }
 
-    @RequestMapping(value = "ajax/delete/{path}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/delete/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxDeleteSelfAndChildren(@PathVariable("path") String path) {
-        M tree = treeableService.findByPath(path);
+    public Object ajaxDeleteSelfAndChildren(@PathVariable("id") ID id) {
+        M tree = treeableService.findOne(id);
         treeableService.deleteSelfAndChild(tree);
         return tree;
     }
 
-    @RequestMapping(value = "ajax/rename/{path}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/rename/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxRename(@PathVariable("path") String path, @RequestParam("newName") String newName) {
-        M tree = treeableService.findByPath(path);
+    public Object ajaxRename(@PathVariable("id") M tree, @RequestParam("newName") String newName) {
         tree.setName(newName);
         treeableService.update(tree);
         return tree;
     }
 
 
-    @RequestMapping(value = "ajax/move/{sourcePath}/{targetPath}/{moveType}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/move/{sourceId}/{targetId}/{moveType}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxMove(
-            @PathVariable("sourcePath") String sourcePath, @PathVariable("targetPath") String targetPath,
+            @PathVariable("sourceId") M source, @PathVariable("targetId") M target,
             @PathVariable("moveType") String moveType) {
 
-        M source = treeableService.findByPath(sourcePath);
-        treeableService.move(source, targetPath, moveType);
+        treeableService.move(source, target, moveType);
 
         return source;
     }
 
     @RequestMapping(value = "success")
     public String success() {
-        return viewPrefix + "/success";
+        return getViewPrefix() + "/success";
     }
 
     @Override
@@ -196,6 +195,6 @@ public abstract class BaseTreeableController<M extends BaseEntity & Treeable, ID
         if(StringUtils.hasLength(backURL)) {
             return backURL;
         }
-        return redirectUrl("/" + viewPrefix + "/success");
+        return redirectUrl("/" + getViewPrefix() + "/success");
     }
 }

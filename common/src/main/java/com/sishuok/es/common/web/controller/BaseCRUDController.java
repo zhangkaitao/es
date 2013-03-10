@@ -48,7 +48,7 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
     @PageableDefaults(value = 10, sort = "id=desc")
     public String list(Searchable searchable, Model model) {
         model.addAttribute("page", baseService.findAll(searchable));
-        return viewPrefix + "/list";
+        return getViewPrefix() + "/list";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -56,7 +56,7 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "查看");
-        return viewPrefix + "/editForm";
+        return getViewPrefix() + "/editForm";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
@@ -66,7 +66,7 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
         if(!model.containsAttribute("m")) {
             model.addAttribute("m", newModel());
         }
-        return viewPrefix + "/editForm";
+        return getViewPrefix() + "/editForm";
     }
 
 
@@ -89,13 +89,13 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "修改");
         model.addAttribute("m", m);
-        return viewPrefix + "/editForm";
+        return getViewPrefix() + "/editForm";
     }
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public String update(
             Model model, @Valid @ModelAttribute("m") M m, BindingResult result,
-            @RequestParam(value = "BackURL", required =false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
             RedirectAttributes redirectAttributes) {
 
         if (hasError(m, result)) {
@@ -111,13 +111,13 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "删除");
         model.addAttribute("m", m);
-        return viewPrefix + "/editForm";
+        return getViewPrefix() + "/editForm";
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
     public String delete(
             @ModelAttribute("m") M m,
-            @RequestParam(value = "BackURL", required = false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
         baseService.delete(m);
@@ -128,7 +128,7 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
     @RequestMapping(value = "batch/delete")
     public String deleteInBatch(
             @RequestParam(value = "ids", required = false) ID[] ids,
-            @RequestParam(value = "BackURL", required = false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
         baseService.delete(ids);
