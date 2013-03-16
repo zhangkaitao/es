@@ -1,18 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<div id="container">
-    <fieldset>
-        <legend>
-            类别参照列表 <a class="btn btn-primary" href="javascript:$.app.waitingOver();">关闭</a>
-        </legend>
-    </fieldset>
-    <div>
+<div id="container" data-table="childTable">
+    <div class="search ui-toolbar">
        <%@include file="searchForm.jsp"%>
     </div>
-
     <div>
-      <table class="sort-table table table-bordered table-hover table-striped" style="width: 93%"
-              sort-url="${currentURL}" sort-async="true" sort-container-id="container">
+      <table id="childTable" class="sort-table table table-bordered table-hover table-striped"
+              data-async="true"
+              data-async-container="container">
           <thead>
             <tr>
                 <th style="width: 8%">
@@ -41,32 +36,33 @@
             </tr>
           </c:forEach>
           </tbody>
+          <tfoot>
+            <tr>
+                <td colspan="1000">
+                    <es:page page="${page}"/>
+                </td>
+            </tr>
+          </tfoot>
       </table>
-      <es:page page="${page}" async="true" containerId="container"/>
+
     </div>
 </div>
 <script type="text/javascript">
     $(function() {
-        $.app.initTable($(".table"));
-        $.app.asyncLoad(
-                $("#searchForm").prop("action", "${noQueryStringCurrentURL}"),
-                "container");
-
-        $.app.asyncLoad(
-                $("#searchForm .search-all").prop("href", $("#searchForm").prop("action")),
-                "container");
+        var table = $("#childTable");
+        $.table.initTable(table);
 
         var multiple = ${selectType eq 'multiple'};
         var hasDomName = ${not empty domName};
         //参照窗口的dom
-        var $openerId = $("#${domId}", top.currentDocument);
+        var $openerId = $("#${domId}");
         var ids = $.array.trim($openerId.val().split(","));
         if(hasDomName) {
-            var $openerName = $("#${domName}", top.currentDocument);
+            var $openerName = $("#${domName}");
             var names = $.array.trim($openerName.val().split(","));
         }
         //当前窗口的checkbox / radion
-        var $checkboxOrRadio = $(".table").find("td.check").find(":checkbox,:radio");
+        var $checkboxOrRadio = table.find("td.check").find(":checkbox,:radio");
         //根据参照窗口的值 选中当前窗口的数据
         $checkboxOrRadio.each(function() {
             var $current = $(this);

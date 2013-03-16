@@ -8,11 +8,8 @@ package com.sishuok.es.web.showcase.upload.service;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.web.showcase.upload.entity.Upload;
 import com.sishuok.es.web.showcase.upload.repository.UploadRepository;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 
 /**
  * <p>User: Zhang Kaitao

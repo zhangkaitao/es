@@ -59,14 +59,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         return super.save(m);
     }
 
-    @Override
-    public M saveAndFlush(M m) {
-        if (m.getWeight() == null) {
-            m.setWeight(findNextWeight());
-        }
-        return super.save(m);
-    }
-
     /**
      * 按照降序进行移动
      * 把{fromId}移动到{}toId}之后

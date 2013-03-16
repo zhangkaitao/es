@@ -3,8 +3,6 @@
 <es:contentHeader/>
 <div>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <!--上一个地址-->
-        <es:BackURL hiddenInput="true"/>
         <fieldset>
             <legend>可移动管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 

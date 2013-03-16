@@ -1,5 +1,6 @@
 <%@tag pageEncoding="UTF-8"%>
 <%@attribute name="title" type="java.lang.String" required="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
@@ -10,8 +11,6 @@
 <head>
 
     <meta charset="utf-8">
-    <!-- Always force latest IE render
-    ing engine (even in intranet) & Chrome Frame -->
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 
     <meta http-equiv="Cache-Control" content="no-store" />

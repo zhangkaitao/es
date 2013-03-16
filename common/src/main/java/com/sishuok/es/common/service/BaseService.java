@@ -71,7 +71,9 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
     }
 
     public M saveAndFlush(M m) {
-        return baseRepository.saveAndFlush(m);
+        m = save(m);
+        baseRepository.flush();
+        return m;
     }
 
     /**
@@ -247,5 +249,6 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
     public Long count(Searchable searchable) {
         return baseRepository.count(searchable.getSpecifications(entityClass));
     }
+
 
 }

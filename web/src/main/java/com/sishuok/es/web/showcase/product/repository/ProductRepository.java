@@ -6,7 +6,6 @@
 package com.sishuok.es.web.showcase.product.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.web.showcase.product.entity.Category;
 import com.sishuok.es.web.showcase.product.entity.Product;
 
 /**

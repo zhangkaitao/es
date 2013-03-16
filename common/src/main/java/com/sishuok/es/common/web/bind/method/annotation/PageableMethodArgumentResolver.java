@@ -141,7 +141,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
         Map<String, String[]> pageableMap = getPrefixParameterMap(pageableNamePrefix, webRequest, true);
         Map<String, String[]> sortMap = getPrefixParameterMap(sortNamePrefix, webRequest, false);
 
-        Sort sort = getSort(sortNamePrefix, sortMap, defaultPageRequest);
+        Sort sort = getSort(sortNamePrefix, sortMap, defaultPageRequest, webRequest);
         if (pageableMap.size() == 0) {
             return new PageRequest(defaultPageRequest.getPageNumber(), defaultPageRequest.getPageSize(), sort == null ? defaultPageRequest.getSort() : sort);
         }
@@ -153,7 +153,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
 
     }
 
-    private Sort getSort(String sortNamePrefix, Map<String, String[]> sortMap, Pageable defaultPageRequest) {
+    private Sort getSort(String sortNamePrefix, Map<String, String[]> sortMap, Pageable defaultPageRequest, NativeWebRequest webRequest) {
         Sort sort = null;
         List<OrderedSort> orderedSortList = Lists.newArrayList();
         for (String name : sortMap.keySet()) {
@@ -175,6 +175,13 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
             Sort.Direction direction = Sort.Direction.fromString(sortMap.get(name)[0]);
 
             orderedSortList.add(new OrderedSort(property, direction, order));
+        }
+
+        //jq grid sort
+        String sortProperty = webRequest.getParameter("sidx");
+        String direction = webRequest.getParameter("sord");
+        if(StringUtils.hasLength(sortProperty)) {
+            orderedSortList.add(new OrderedSort(sortProperty, Sort.Direction.fromString(direction), 0));
         }
 
         Collections.sort(orderedSortList);

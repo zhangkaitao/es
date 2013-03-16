@@ -3,8 +3,6 @@
 <es:contentHeader/>
 <div>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <!--上一个地址-->
-        <es:BackURL hiddenInput="true"/>
         <fieldset>
             <legend class="no-margin">父管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
             <es:showGlobalError commandName="m"/>
@@ -56,11 +54,11 @@
                 <legend class="no-margin">
                     子列表
                     <div class="btn-group">
-                        <a id="createChild" class="btn">
+                        <a class="btn btn-create-child">
                             <span class="icon-edit"></span>
                             新增
                         </a>
-                        <a id="removeSelectChild" class="btn">
+                        <a class="btn btn-batch-delete-child">
                             <span class="icon-remove"></span>
                             批量删除
                         </a>
@@ -141,6 +139,11 @@
             form : $("#editForm"),
             tableId : "childTable",
             prefixParamName : "childList",
+            modalSettings:{
+                width:800,
+                height:500,
+                buttons:{}
+            },
             createUrl : "${ctx}/showcase/parentchild/parent/child/create",
             updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",
             deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}",

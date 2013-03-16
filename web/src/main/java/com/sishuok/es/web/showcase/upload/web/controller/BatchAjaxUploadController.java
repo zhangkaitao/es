@@ -6,27 +6,10 @@
 package com.sishuok.es.web.showcase.upload.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.utils.ImagesUtils;
-import com.sishuok.es.common.utils.LogUtils;
-import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
-import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
-import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
-import com.sishuok.es.web.showcase.upload.entity.AjaxUploadResponse;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * ajax批量文件上传/下载
@@ -52,72 +35,4 @@ public class BatchAjaxUploadController {
         return "showcase/upload/ajax/uploadForm";
     }
 
-    /**
-     * @param request
-     * @param files
-     * @return
-     */
-    @RequestMapping(value = "ajaxUpload", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxUploadResponse ajaxUpload(
-            HttpServletRequest request, HttpServletResponse response,
-            @RequestParam(value = "files[]", required = false) MultipartFile[] files) {
-
-        //The file upload plugin makes use of an Iframe Transport module for browsers like Microsoft Internet Explorer and Opera, which do not yet support XMLHTTPRequest file uploads.
-        response.setContentType("text/plain");
-
-        AjaxUploadResponse ajaxUploadResponse = new AjaxUploadResponse();
-
-        if(ArrayUtils.isEmpty(files)) {
-            return ajaxUploadResponse;
-        }
-
-        for(MultipartFile file : files) {
-            String filename = file.getOriginalFilename();
-            long size = file.getSize();
-
-            try {
-                String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize);
-                String deleteURL = request.getContextPath() + "/ajaxUpload/delete?filename=" + URLEncoder.encode(url, "UTF-8");
-                if(ImagesUtils.isImage(filename)) {
-                    ajaxUploadResponse.add(filename, size, url, url, deleteURL);
-                } else {
-                    ajaxUploadResponse.add(filename, size, url, deleteURL);
-                }
-                continue;
-            } catch (IOException e) {
-                LogUtils.error("file upload error", e);
-                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.server.error"));
-                continue;
-            } catch (InvalidExtensionException e) {
-                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.not.allow.extension"));
-                continue;
-            } catch (FileUploadBase.FileSizeLimitExceededException e) {
-                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.exceed.maxSize"));
-                continue;
-            } catch (FileNameLengthLimitExceededException e) {
-                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.filename.exceed.length"));
-                continue;
-            }
-        }
-        return ajaxUploadResponse;
-    }
-
-
-    @RequestMapping(value = "ajaxUpload/delete", method = RequestMethod.POST)
-    public void ajaxUploadDelete(
-            HttpServletRequest request,
-            @RequestParam(value = "filename") String filename) throws Exception {
-
-        if (StringUtils.isEmpty(filename) || filename.contains("\\.\\.")) {
-            return;
-        }
-        filename = URLDecoder.decode(filename, "UTF-8");
-
-        String filePath = FileUploadUtils.extractUploadDir(request) + "/" + filename;
-
-        File file = new File(filePath);
-        file.deleteOnExit();
-
-    }
 }

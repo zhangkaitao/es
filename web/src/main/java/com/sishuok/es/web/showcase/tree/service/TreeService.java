@@ -6,16 +6,10 @@
 package com.sishuok.es.web.showcase.tree.service;
 
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
-import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.web.showcase.tree.entity.Tree;
 import com.sishuok.es.web.showcase.tree.repository.TreeRepository;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao

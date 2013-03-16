@@ -3,8 +3,6 @@
 <es:contentHeader/>
 <div>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <!--上一个地址-->
-        <es:BackURL hiddenInput="true"/>
         <fieldset>
             <legend>产品管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
@@ -96,16 +94,14 @@
             numberFormat: "n"
         });
 
-        $("[name='category.name']").parent().click(function() {
+        $("[name='category.name']").siblings(".add-on").andSelf().click(function() {
             $.app.modalDialog(
                     "参照",
                     "${ctx}/showcase/product/category/select/single;domId=categoryId;domName=categoryName",
                     {
-                        width:"800px",
-                        height:"450px",
-                        overflowY : "scroll"
-                    },
-                    document
+                        width:800,
+                        height:450
+                    }
              );
         });
     });

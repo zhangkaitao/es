@@ -59,14 +59,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         return super.save(m);
     }
 
-    @Override
-    public M saveAndFlush(M m) {
-        if(m.getWeight() == null) {
-            m.setWeight(nextWeight(m.getParentId()));
-        }
-        return super.saveAndFlush(m);
-    }
-
     @Transactional
     public void deleteSelfAndChild(M m) {
         baseRepositoryImpl.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
@@ -81,7 +73,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
    public int nextWeight(ID id) {
-        return baseRepositoryImpl.findOne(FIND_NEXT_WEIGHT_QL, id);
+        return baseRepositoryImpl.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
    }
     
 

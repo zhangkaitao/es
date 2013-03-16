@@ -9,9 +9,7 @@ import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
-import com.sishuok.es.common.utils.ReflectUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -45,11 +43,26 @@ public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> e
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    @PageableDefaults(value = 10, sort = "id=desc")
+    @PageableDefaults(sort = "id=desc")
     public String list(Searchable searchable, Model model) {
         model.addAttribute("page", baseService.findAll(searchable));
         return getViewPrefix() + "/list";
     }
+
+    /**
+     * 仅返回表格数据
+     * @param searchable
+     * @param model
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, headers = "table=true")
+    @PageableDefaults(sort = "id=desc")
+    public String listTable(Searchable searchable, Model model) {
+        list(searchable, model);
+        return getViewPrefix() + "/listTable";
+    }
+
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String view(Model model, @PathVariable("id") M m) {

@@ -6,7 +6,6 @@
 package com.sishuok.es.web.showcase.product.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.web.showcase.parentchild.entity.ParentChildType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +21,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_product")
+@Table(name = "tbl_showcase_product")
 public class Product extends BaseEntity<Long> {
 
     @OneToOne(optional = true)

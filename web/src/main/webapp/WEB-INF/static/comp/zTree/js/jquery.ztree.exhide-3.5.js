@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exHideNodes 3.5.02
+ * JQuery zTree exHideNodes 3.5.12
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	//default init node of exLib
@@ -54,8 +54,10 @@
 	_data = {
 		initHideForExCheck: function(setting, n) {
 			if (n.isHidden && setting.check && setting.check.enable) {
-				n._nocheck = !!n.nocheck
-				n.nocheck = true;
+				if(typeof n._nocheck == "undefined") {
+					n._nocheck = !!n.nocheck
+					n.nocheck = true;
+				}
 				n.check_Child_State = -1;
 				if (view.repairParentChkClassWithSelf) {
 					view.repairParentChkClassWithSelf(setting, n);
@@ -64,8 +66,10 @@
 		},
 		initShowForExCheck: function(setting, n) {
 			if (!n.isHidden && setting.check && setting.check.enable) {
-				n.nocheck = n._nocheck;
-				delete n._nocheck;
+				if(typeof n._nocheck != "undefined") {
+					n.nocheck = n._nocheck;
+					delete n._nocheck;
+				}
 				if (view.setChkClass) {
 					var checkObj = $("#" + n.tId + consts.id.CHECK);
 					view.setChkClass(setting, checkObj, n);
@@ -107,7 +111,7 @@
 			}
 		},
 		makeDOMNodeMainBefore: function(html, setting, node) {
-			html.push("<li ", (node.isHidden ? "style='display:none;' " : ""), "id='", node.tId, "' class='level", node.level,"' tabindex='0' hidefocus='true' treenode>");
+			html.push("<li ", (node.isHidden ? "style='display:none;' " : ""), "id='", node.tId, "' class='", consts.className.LEVEL, node.level,"' tabindex='0' hidefocus='true' treenode>");
 		},
 		showNode: function(setting, node, options) {
 			node.isHidden = false;

@@ -3,15 +3,14 @@
 <es:contentHeader/>
 <div>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <!--上一个地址-->
-        <es:BackURL hiddenInput="true"/>
+        <!--上一个地址 如果提交方式是get 需要加上-->
+        <%--<es:BackURL hiddenInput="true"/>--%>
         <fieldset>
             <legend>示例管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
             <es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
-
 
             <div class="control-group">
                 <form:label path="name" cssClass="control-label">名称</form:label>

@@ -4,19 +4,12 @@ package com.sishuok.es.web.showcase.tree.service; /**
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 
-import com.sishuok.es.web.showcase.move.entity.Move;
-import com.sishuok.es.web.showcase.move.repository.MoveRepository;
-import com.sishuok.es.web.showcase.move.service.MoveService;
 import com.sishuok.es.web.showcase.tree.entity.Tree;
 import com.sishuok.es.web.showcase.tree.repository.TreeRepository;
 import com.sishuok.es.web.test.BaseIT;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

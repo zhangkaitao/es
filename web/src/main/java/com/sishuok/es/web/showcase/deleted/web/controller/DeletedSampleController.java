@@ -49,7 +49,7 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
         model.addAttribute("booleanList", BooleanEnum.values());
     }
 
-    @PageableDefaults(value = 10, sort = "id=desc")
+    @PageableDefaults(sort = "id=desc")
     @SearchableDefaults(value = "deleted_eq=false")
     @Override
     public String list(Searchable searchable, Model model) {

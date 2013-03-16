@@ -16,7 +16,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_status_audit")
+@Table(name = "tbl_showcase_status_audit")
 public class Audit extends BaseEntity<Long> implements Stateable<Stateable.AuditStatus> {
 
     /**
@@ -25,7 +25,7 @@ public class Audit extends BaseEntity<Long> implements Stateable<Stateable.Audit
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private AuditStatus status;
+    private AuditStatus status = AuditStatus.waiting;
 
     private String comment;
 

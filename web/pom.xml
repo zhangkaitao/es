@@ -94,9 +94,9 @@
                         <param>src/main/sql/update</param>
                     </dbUpdateScriptsDirectory>
                     <dbCreateStatements>
-                        create database ${db.name} CHARACTER SET 'utf8'; #--;
+                        create database ${db.name} CHARACTER SET 'utf8';
                     </dbCreateStatements>
-                    <dbDropStatements>drop database ${db.name}; #--;</dbDropStatements>
+                    <dbDropStatements>drop database ${db.name}; </dbDropStatements>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -111,8 +111,8 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>*.properties</include>
-                    <include>*.xml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -140,7 +140,6 @@
         <site.basedir>${project.parent.parent.basedir}</site.basedir>
         <mysql.version>5.1.9</mysql.version>
     </properties>
-
 
     <profiles>
         <profile>

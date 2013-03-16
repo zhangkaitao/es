@@ -3,8 +3,7 @@
 <es:contentHeader/>
 <div>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <!--上一个地址-->
-        <es:BackURL hiddenInput="true"/>
+
         <fieldset>
             <legend>编辑器管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
@@ -20,11 +19,20 @@
                 </div>
             </div>
 
+
             <div class="control-group">
                 <form:label path="content" cssClass="control-label">内容</form:label>
                 <div class="controls">
-                    <form:textarea path="content" cssClass="validate[required]" cssStyle="width: 800px;height: 300px;"/>
-                </div>
+                    <c:choose>
+                    <c:when test="${op ne '查看'}">
+                        <form:textarea path="content" cssClass="validate[required]" cssStyle="width: 800px;height: 300px;"/>
+                    </c:when>
+                    <c:otherwise>
+                        ${m.content}
+                    </c:otherwise>
+                    </c:choose>
+
+               </div>
             </div>
 
             <div class="control-group">

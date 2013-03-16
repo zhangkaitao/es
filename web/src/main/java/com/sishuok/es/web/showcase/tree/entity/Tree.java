@@ -18,7 +18,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_tree")
+@Table(name = "tbl_showcase_tree")
 public class Tree extends BaseEntity<Long> implements Treeable<Long> {
 
     /**
@@ -44,7 +44,7 @@ public class Tree extends BaseEntity<Long> implements Treeable<Long> {
     /**
      * 是否有叶子节点
      */
-    @Formula(value = "(select count(*) from tbl_tree f_t where f_t.parent_id = id)")
+    @Formula(value = "(select count(*) from tbl_showcase_tree f_t where f_t.parent_id = id)")
     private boolean hasChildren;
 
     /**

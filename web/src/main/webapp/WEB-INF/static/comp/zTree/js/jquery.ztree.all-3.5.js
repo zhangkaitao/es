@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core 3.5.02
+ * JQuery zTree core 3.5.12
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,12 +9,18 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
 	//default consts of core
 	_consts = {
+		className: {
+			BUTTON: "button",
+			LEVEL: "level",
+			ICO_LOADING: "ico_loading",
+			SWITCH: "switch"
+		},
 		event: {
 			NODECREATED: "ztree_nodeCreated",
 			CLICK: "ztree_click",
@@ -450,8 +456,9 @@
 			if (!nodes || !key) return [];
 			var childKey = setting.data.key.children,
 			result = [];
+			value = value.toLowerCase();
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (typeof nodes[i][key] == "string" && nodes[i][key].indexOf(value)>-1) {
+				if (typeof nodes[i][key] == "string" && nodes[i][key].toLowerCase().indexOf(value)>-1) {
 					result.push(nodes[i]);
 				}
 				result = result.concat(data.getNodesByParamFuzzy(setting, nodes[i][childKey], key, value));
@@ -612,11 +619,9 @@
 			o = setting.treeObj;
 			// for can't select text
 			o.bind('selectstart', function(e){
-                    //bug  chrome not e.srcElement is e.delegateTarget
-					var n = (e.srcElement?e.srcElement : e.delegateTarget).nodeName.toLowerCase();
+					var n = e.originalEvent.srcElement.nodeName.toLowerCase();
 					return (n === "input" || n === "textarea" );
-				}
-			).css({
+			}).css({
 				"-moz-user-select":"-moz-none"
 			});
 			o.bind('click', eventParam, event.proxy);
@@ -871,7 +876,7 @@
 			if (node) {
 				node.isAjaxing = true;
 				var icoObj = $("#" + node.tId + consts.id.ICON);
-				icoObj.attr({"style":"", "class":"button ico_loading"});
+				icoObj.attr({"style":"", "class":consts.className.BUTTON + " " + consts.className.ICO_LOADING});
 			}
 
 			var tmpParam = {};
@@ -1099,7 +1104,7 @@
 			html.push("</li>");
 		},
 		makeDOMNodeMainBefore: function(html, setting, node) {
-			html.push("<li id='", node.tId, "' class='level", node.level,"' tabindex='0' hidefocus='true' treenode>");
+			html.push("<li id='", node.tId, "' class='", consts.className.LEVEL, node.level,"' tabindex='0' hidefocus='true' treenode>");
 		},
 		makeDOMNodeNameAfter: function(html, setting, node) {
 			html.push("</a>");
@@ -1112,7 +1117,7 @@
 			for (var f in fontcss) {
 				fontStyle.push(f, ":", fontcss[f], ";");
 			}
-			html.push("<a id='", node.tId, consts.id.A, "' class='level", node.level,"' treeNode", consts.id.A," onclick=\"", (node.click || ''),
+			html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level,"' treeNode", consts.id.A," onclick=\"", (node.click || ''),
 				"\" ", ((url != null && url.length > 0) ? "href='" + url + "'" : ""), " target='",view.makeNodeTarget(node),"' style='", fontStyle.join(''),
 				"'");
 			if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle) && title) {html.push("title='", title.replace(/'/g,"&#39;").replace(/</g,'&lt;').replace(/>/g,'&gt;'),"'");}
@@ -1132,7 +1137,7 @@
 					icoCss.push(consts.folder.DOCU);
 				}
 			}
-			return "button " + icoCss.join('_');
+			return consts.className.BUTTON + " " + icoCss.join('_');
 		},
 		makeNodeIcoStyle: function(setting, node) {
 			var icoStyle = [];
@@ -1168,7 +1173,7 @@
 			return view.makeNodeLineClassEx(node) + lineClass.join('_');
 		},
 		makeNodeLineClassEx: function(node) {
-			return "button level" + node.level + " switch ";
+			return consts.className.BUTTON + " " + consts.className.LEVEL + node.level + " " + consts.className.SWITCH + " ";
 		},
 		makeNodeTarget: function(node) {
 			return (node.target || "_blank");
@@ -1178,7 +1183,7 @@
 			return node[urlKey] ? node[urlKey] : null;
 		},
 		makeUlHtml: function(setting, node, html, content) {
-			html.push("<ul id='", node.tId, consts.id.UL, "' class='level", node.level, " ", view.makeUlLineClass(setting, node), "' style='display:", (node.open ? "block": "none"),"'>");
+			html.push("<ul id='", node.tId, consts.id.UL, "' class='", consts.className.LEVEL, node.level, " ", view.makeUlLineClass(setting, node), "' style='display:", (node.open ? "block": "none"),"'>");
 			html.push(content);
 			html.push("</ul>");
 		},
@@ -1645,7 +1650,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck 3.5.02
+ * JQuery zTree excheck 3.5.12
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1654,7 +1659,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	//default consts of excheck
@@ -2079,7 +2084,7 @@
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
-			return "button " + c.DEFAULT + " " + chkName;
+			return consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {
@@ -2269,7 +2274,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit 3.5.02
+ * JQuery zTree exedit 3.5.12
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2278,7 +2283,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	//default consts of exedit
@@ -2493,7 +2498,7 @@
 			function moveCallback() {
 				view.moveNode(setting, targetNode, node, moveType, false, isSilent);
 			}
-			if (tools.canAsync(setting, targetNode)) {
+			if (tools.canAsync(setting, targetNode) && moveType === consts.move.TYPE_INNER) {
 				view.asyncNode(setting, targetNode, isSilent, moveCallback);
 			} else {
 				moveCallback();
@@ -3047,7 +3052,7 @@
 				return;
 			}
 			var aObj = $("#" + node.tId + consts.id.A),
-			editStr = "<span class='button edit' id='" + node.tId + consts.id.EDIT + "' title='"+tools.apply(setting.edit.renameTitle, [setting.treeId, node], setting.edit.renameTitle)+"' treeNode"+consts.id.EDIT+" style='display:none;'></span>";
+			editStr = "<span class='" + consts.className.BUTTON + " edit' id='" + node.tId + consts.id.EDIT + "' title='"+tools.apply(setting.edit.renameTitle, [setting.treeId, node], setting.edit.renameTitle)+"' treeNode"+consts.id.EDIT+" style='display:none;'></span>";
 			aObj.append(editStr);
 
 			$("#" + node.tId + consts.id.EDIT).bind('click',
@@ -3066,7 +3071,7 @@
 				return;
 			}
 			var aObj = $("#" + node.tId + consts.id.A),
-			removeStr = "<span class='button remove' id='" + node.tId + consts.id.REMOVE + "' title='"+tools.apply(setting.edit.removeTitle, [setting.treeId, node], setting.edit.removeTitle)+"' treeNode"+consts.id.REMOVE+" style='display:none;'></span>";
+			removeStr = "<span class='" + consts.className.BUTTON + " remove' id='" + node.tId + consts.id.REMOVE + "' title='"+tools.apply(setting.edit.removeTitle, [setting.treeId, node], setting.edit.removeTitle)+"' treeNode"+consts.id.REMOVE+" style='display:none;'></span>";
 			aObj.append(removeStr);
 
 			$("#" + node.tId + consts.id.REMOVE).bind('click',
@@ -3353,8 +3358,8 @@
 			var liObj = $("#" + node.tId),
 			aObj = $("#" + node.tId + consts.id.A),
 			ulObj = $("#" + node.tId + consts.id.UL),
-			oldClass = "level" + oldLevel,
-			newClass = "level" + node.level;
+			oldClass = consts.className.LEVEL + oldLevel,
+			newClass = consts.className.LEVEL + node.level;
 			liObj.removeClass(oldClass);
 			liObj.addClass(newClass);
 			aObj.removeClass(oldClass);

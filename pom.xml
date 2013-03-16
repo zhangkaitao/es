@@ -59,6 +59,11 @@
             <url>http://repo.springsource.org/release/</url>
         </repository>
         <repository>
+            <id>cloudhopper</id>
+            <name>Repository for Cloudhopper</name>
+            <url>http://maven.cloudhopper.com/repos/third-party/</url>
+        </repository>
+        <repository>
             <id>jboss-repo-releases</id>
             <name>Jboss Repository</name>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>

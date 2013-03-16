@@ -10,19 +10,12 @@
 --%>
 <%@tag pageEncoding="UTF-8" description="分页" %>
 <%@ attribute name="page" type="org.springframework.data.domain.Page" required="true" description="分页" %>
-<%@ attribute name="url" type="java.lang.String" required="false" description="分页地址" %>
-<%@ attribute name="pagePrefix" type="java.lang.String" required="false" description="分页参数的前缀" %>
 <%@ attribute name="pageSize" type="java.lang.Integer" required="false" description="每页大小" %>
-<%@ attribute name="async" type="java.lang.Boolean" required="false" description="异步加载，默认false" %>
-<%@ attribute name="containerId" type="java.lang.String" required="false" description="异步加载到的容器的ID，内容会替换而不是追加" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="es" tagdir="/WEB-INF/tags" %>
-<c:if test="${empty async}">
-    <c:set var="async" value="false"/>
-</c:if>
 
-<c:if test="${empty url}">
-    <c:set var="url" value="${requestScope.currentURL}"/>
+<c:if test="${empty pageSize}">
+    <c:set var="pageSize" value="${page.size}"/>
 </c:if>
 
 <c:set var="displaySize" value="2"/>
@@ -48,14 +41,14 @@
                 <li class="disabled"><a title="上一页">&lt;&lt;</a></li>
             </c:when>
             <c:otherwise>
-                <li><a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', 1);" title="首页" async="true">首页</a></li>
-                <li><a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', ${current - 1});" title="上一页" async="true">&lt;&lt;</a></li>
+                <li><a href="#" onclick="$.table.turnPage('${pageSize}', 1, this);" title="首页">首页</a></li>
+                <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${current - 1}, this);" title="上一页">&lt;&lt;</a></li>
             </c:otherwise>
         </c:choose>
 
         <c:forEach begin="1" end="${begin == 1 ? 0 : 2}" var="i">
             <li <c:if test="${current == i}"> class="active"</c:if>>
-                <a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', ${i});" title="第${i}页" async="true">${i}</a>
+                <a href="#" onclick="$.table.turnPage('${pageSize}', ${i}, this);" title="第${i}页">${i}</a>
             </li>
         </c:forEach>
 
@@ -65,7 +58,7 @@
 
         <c:forEach begin="${begin}" end="${end}" var="i">
             <li <c:if test="${current == i}"> class="active"</c:if>>
-                <a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', ${i});" title="第${i}页" async="true">${i}</a>
+                <a href="#" onclick="$.table.turnPage('${pageSize}', ${i}, this);" title="第${i}页">${i}</a>
             </li>
         </c:forEach>
 
@@ -76,7 +69,7 @@
 
         <c:forEach begin="${end < page.totalPages ? page.totalPages - 1 : page.totalPages + 1}" end="${page.totalPages}" var="i">
             <li <c:if test="${current == i}"> class="active"</c:if>>
-                <a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', ${i});" title="第${i}页" async="true">${i}</a>
+                <a href="#" onclick="$.table.turnPage('${pageSize}', ${i}, this);" title="第${i}页">${i}</a>
             </li>
         </c:forEach>
 
@@ -86,16 +79,24 @@
                 <li class="disabled"><a title="尾页">尾页</a></li>
             </c:when>
             <c:otherwise>
-                <li><a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', ${current + 1}, ${async});" title="下一页" async="true">&gt;&gt;</a></li>
-                <li><a href="#" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', ${page.totalPages}, ${async});" title="尾页" async="true">尾页</a></li>
+                <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${current + 1}, this);" title="下一页">&gt;&gt;</a></li>
+                <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${page.totalPages}, this);" title="尾页">尾页</a></li>
             </c:otherwise>
         </c:choose>
 
 
     </ul>
     <div>
-        <input id="pn" type="text" value="${current}" class="page-input"/>
-        <input type="button" value="跳转" class="btn page-btn" onclick="$.app.turnPage('${url}', '${pagePrefix}', '${pageSize}', $('#pn').val());"/>
+        <span class="page-input">
+            第<input type="text" value="${current}" onblur="$.table.turnPage('${pageSize}', $(this).val(), this);"/>页
+        </span>
+        &nbsp;
+        <select class="input-small" onchange="$.table.turnPage($(this).val(), $(this).val(), this);">
+            <option value="10" <c:if test="${pageSize eq 10}">selected="selected" </c:if>>10</option>
+            <option value="20" <c:if test="${pageSize eq 20}">selected="selected" </c:if>>20</option>
+            <option value="30" <c:if test="${pageSize eq 30}">selected="selected" </c:if>>30</option>
+            <option value="50" <c:if test="${pageSize eq 50}">selected="selected" </c:if>>50</option>
+        </select>
         <span class="page-info">[共${page.totalPages}页/${page.totalElements}条记录]</span >
     </div>
 </div>

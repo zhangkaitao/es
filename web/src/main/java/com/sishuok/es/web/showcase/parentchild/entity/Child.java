@@ -12,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -22,7 +21,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_child")
+@Table(name = "tbl_showcase_child")
 public class Child extends BaseEntity<Long> {
 
     @OneToOne(optional = true)

@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.web.showcase.sample.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sishuok.es.common.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,7 +21,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_sample")
+@Table(name = "tbl_showcase_sample")
 public class Sample extends BaseEntity<Long> {
 
     @NotNull(message = "{name.not.null}")

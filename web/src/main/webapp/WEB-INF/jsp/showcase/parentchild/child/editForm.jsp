@@ -66,13 +66,15 @@
             excludeInputSelector : "[name='_show'],[name='_type']",
             trId : "${param.trId}",
             validationEngine : validationEngine,
+            modalSettings:{
+                width:800,
+                height:500,
+                buttons:{}
+            },
             updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",
             deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}",
             alwaysNew : "${param.copy}"
         });
-
-
-
     });
 
 </script>

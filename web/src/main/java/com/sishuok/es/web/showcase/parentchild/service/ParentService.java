@@ -9,13 +9,9 @@ import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.web.showcase.parentchild.entity.Child;
 import com.sishuok.es.web.showcase.parentchild.entity.Parent;
 import com.sishuok.es.web.showcase.parentchild.repository.ParentRepository;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

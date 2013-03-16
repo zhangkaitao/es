@@ -11,6 +11,9 @@
 	  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
+    <context:component-scan base-package="com.sishuok.es.common.service"></context:component-scan>
+
+    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
 
     <jdbc:embedded-database id="dataSource" type="H2"/>
 
@@ -43,7 +46,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
     <jpa:repositories
             base-package="com.sishuok.es.common.repository"
@@ -52,8 +55,5 @@
             transaction-manager-ref="transactionManager">
     </jpa:repositories>
 
-    <context:component-scan base-package="com.sishuok.es.common.service"></context:component-scan>
-
-    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
 
 </beans>

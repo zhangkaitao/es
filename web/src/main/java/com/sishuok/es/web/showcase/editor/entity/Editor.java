@@ -6,13 +6,8 @@
 package com.sishuok.es.web.showcase.editor.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * <p>User: Zhang Kaitao
@@ -20,7 +15,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_editor")
+@Table(name = "tbl_showcase_editor")
 public class Editor extends BaseEntity<Long> {
 
     @Column(name = "title")

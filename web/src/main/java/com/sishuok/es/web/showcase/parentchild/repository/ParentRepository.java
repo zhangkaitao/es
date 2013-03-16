@@ -7,10 +7,6 @@ package com.sishuok.es.web.showcase.parentchild.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.web.showcase.parentchild.entity.Parent;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao

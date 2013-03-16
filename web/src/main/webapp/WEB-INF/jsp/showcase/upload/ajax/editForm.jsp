@@ -3,10 +3,9 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-upload-css.jspf"%>
 <div>
-
     <form:form id="editForm" method="post" commandName="upload" cssClass="form-horizontal" enctype="multipart/form-data">
         <fieldset>
-            <legend>文件管理[${op}] <a href="${ctx}/showcase/upload" class="btn btn-link">返回</a></legend>
+            <legend>文件管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
             <es:showGlobalError commandName="upload"/>
 
@@ -42,7 +41,7 @@
             <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="${ctx}/showcase/upload" class="btn">返回</a>
+                    <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
         </fieldset>

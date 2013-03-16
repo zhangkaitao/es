@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_status_show")
+@Table(name = "tbl_showcase_status_show")
 public class Show extends BaseEntity<Long> implements Stateable<Stateable.ShowStatus> {
 
     /**

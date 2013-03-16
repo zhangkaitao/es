@@ -6,14 +6,8 @@
 package com.sishuok.es.web.showcase.upload.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.web.showcase.sample.entity.Sex;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * <p>User: Zhang Kaitao
@@ -21,7 +15,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_upload")
+@Table(name = "tbl_showcase_upload")
 public class Upload extends BaseEntity<Long> {
 
     @Column(name = "name")

@@ -8,7 +8,6 @@ package com.sishuok.es.web.showcase.product.web.controller;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.plugin.web.controller.BaseMovableController;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.web.showcase.product.entity.Category;
@@ -47,7 +46,7 @@ public class ProductController extends BaseCRUDController<Product, Long> {
     }
 
     @RequestMapping(value = "/category-{categoryId}", method = RequestMethod.GET)
-    @PageableDefaults(value = 10, sort = "id=desc")
+    @PageableDefaults(sort = "id=desc")
     public String listByCategory(Searchable searchable, @PathVariable("categoryId") Category category, Model model) {
         if(category != null) {
             model.addAttribute("category", category);

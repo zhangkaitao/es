@@ -19,6 +19,9 @@ body {
     margin: 10px;
 }
 
+.ui-dialog {
+    font-size: 14px;
+}
 
 .ui-layout-pane {
     padding: 1px 1px 1px 1px;
@@ -46,6 +49,7 @@ body {
 }
 #menu li {
     margin: 5px 0 5px 0;
+    line-height: 22px;
 }
 #menu .select{
     background: #0069D6!important;
@@ -62,6 +66,9 @@ body {
     margin-left: 15px;
 }
 
+.pagination {
+    margin: 10px 0;
+}
 .pagination ul, .pagination div {
     float: left;
 }
@@ -152,8 +159,10 @@ body {
 }
 
 .page-input{
-    width: 50px;
     margin-left: 30px;
+}
+.page-input input {
+    width: 50px;
 }
 .page-btn{
     margin-bottom: 10px;
@@ -167,6 +176,10 @@ body {
     text-align: center;
 }
 
+.sort-table .sort-th {
+    cursor: pointer;
+}
+
 .sort-table .sort-title {
     float: left;
 }
@@ -174,13 +187,6 @@ body {
     float: right;
 }
 
-.sort-table .sort .dropdown-menu{
-    min-width: 80px!important;
-}
-.sort-table .sort .dropdown-menu > li > a{
-    padding: 4px 55px 4px 10px;
-    cursor: pointer;
-}
 .sort-table .sort .sort-hover {
     color: #f89406!important;
 }
@@ -208,7 +214,7 @@ body {
     color: #0069D6;
 }
 
-.table .edit-btn {
+.table .btn-edit {
     padding: 0px!important;
 }
 
@@ -279,19 +285,6 @@ body {
 .modal-gallery {
     z-index:999999999!important;
 }
-.blockUI .blockUI-close{
-    margin-top: -5px;
-    margin-right: -10px;
-    float: right;
-}
-.blockUI.ui-dialog {
-    overflow:hidden;
-    overflow-y: hidden!important;
-}
-.blockUI.ui-dialog .blockUI-content.ui-dialog-content {
-    overflow: auto;
-}
-
 
 .prettyprint {
     padding: 8px;
@@ -327,27 +320,19 @@ body {
     overflow: visible;
 }
 
-.search{
-    float: left;
-    width: 100%;;
+.tool.ui-toolbar {
+    width: auto;
+    margin: 0 auto 1px 0;
+    padding: 7px;
+}
+.search-form {
+    margin-bottom: 0px;
+}
+.search-form .accordion-inner {
+    padding: 9px 0;
+    border-top: 0px;
 }
 
-.search .accordion-inner{
-    *padding: 5px;
-}
-.search form {
-    min-height: 20px;
-    padding: 19px;
-    margin-bottom: 5px;
-    background-color: #f5f5f5;
-    border: 1px solid #e3e3e3;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-}
 
 /*去除IE 虚线框*/
 a,input,textarea{blr:expression(this.onFocus=this.close());} /* 只支持IE，过多使用效率低 */
@@ -378,4 +363,9 @@ a:focus { -moz-outline-style: none; } /* IE不支持 */
 }
 .file-input .name {
     margin-left: 8px;
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+    background-color: #eee;
 }

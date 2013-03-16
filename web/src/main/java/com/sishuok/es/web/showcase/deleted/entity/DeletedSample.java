@@ -21,7 +21,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_sample")
+@Table(name = "tbl_showcase_sample")
 public class DeletedSample extends BaseEntity<Long> implements LogicDeleteable {
 
     @NotNull(message = "{name.not.null}")

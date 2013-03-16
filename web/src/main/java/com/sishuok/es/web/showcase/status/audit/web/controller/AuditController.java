@@ -8,9 +8,7 @@ package com.sishuok.es.web.showcase.status.audit.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Stateable;
-import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.common.web.validate.AjaxResponse;
 import com.sishuok.es.web.showcase.status.audit.entity.Audit;
 import com.sishuok.es.web.showcase.status.audit.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +59,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
             RedirectAttributes redirectAttributes
         ) {
 
-        if(audit.getStatus() != null) {
+        if(audit.getStatus() != Stateable.AuditStatus.waiting) {
             redirectAttributes.addFlashAttribute(Constants.ERROR, "数据已审核过，不能重复审核！");
             return "redirect:" + request.getAttribute(Constants.BACK_URL);
         }

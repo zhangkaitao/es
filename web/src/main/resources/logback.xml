@@ -35,6 +35,19 @@
         </encoder>
     </appender>
 
+    <!-- 访问日志 appender  -->
+    <appender name="SYS-USER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log.dir}/es-sys-user-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="debug">
         <appender-ref ref="STDOUT"/>
     </root>
@@ -43,6 +56,9 @@
     </logger>
     <logger name="es-access" level="info">
         <appender-ref ref="ACCESS"/>
+    </logger>
+    <logger name="es-sys-user" level="info">
+        <appender-ref ref="SYS-USER"/>
     </logger>
 
 </configuration>

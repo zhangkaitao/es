@@ -43,14 +43,15 @@
       <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
           <constructor-arg ref="conversionService"/>
       </bean>
-      <bean class="com.sishuok.es.common.web.filter.SetCommonDataInterceptor"/>
+      <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor"/>
       <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/**"/>-->
             <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
         <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
-    <mvc:view-controller path="/" view-name="index/index"/>
+    <mvc:view-controller path="/" view-name="redirect:/admin/index"/>
+
     <!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
     <mvc:default-servlet-handler/>
     <!-- 静态资源映射 -->
