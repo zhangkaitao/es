@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="sysUserRealm" class="com.sishuok.es.web.shiro.realm.SysUserRealm"/>
+    <!--depends-on="userRepository, userLastOnlineInfoRepository, userStatusHistoryRepository, springUtils" -->
+    <bean id="userRealm" class="com.sishuok.es.shiro.realm.UserRealm"/>
 
     <bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
         <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
-        <property name="realm" ref="sysUserRealm"/>
+        <property name="realm" ref="userRealm"/>
     </bean>
-
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
     <!-- For simplest integration, so that all SecurityUtils.* methods work in all cases, -->
     <!-- make the securityManager bean a static singleton.  DO NOT do this in web         -->
@@ -25,10 +20,12 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
 
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
     <!-- Enable Shiro Annotations for Spring-configured beans.  Only run after -->
     <!-- the lifecycleBeanProcessor has run: -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-           depends-on="lifecycleBeanPostProcessor">
+    <bean id="proxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
         <property name="proxyTargetClass" value="true"/>
     </bean>
 

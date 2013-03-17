@@ -7,32 +7,19 @@ package com.sishuok.es.common.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-@Component
-public final class SpringUtils implements ApplicationContextAware {
+public final class SpringUtils implements BeanFactoryPostProcessor {
 
-    private static ApplicationContext applicationContext; // Spring应用上下文环境
+    private static ConfigurableListableBeanFactory beanFactory; // Spring应用上下文环境
 
-    /**
-     * 实现ApplicationContextAware接口的回调方法，设置上下文环境
-     *
-     * @param applicationContext
-     * @throws org.springframework.beans.BeansException
-     *
-     */
     @Override
-    public final void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringUtils.applicationContext = applicationContext;
-    }
-
-    /**
-     * @return ApplicationContext
-     */
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        SpringUtils.beanFactory = beanFactory;
     }
 
     /**
@@ -45,7 +32,7 @@ public final class SpringUtils implements ApplicationContextAware {
      */
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) throws BeansException {
-        return (T) applicationContext.getBean(name);
+        return (T) beanFactory.getBean(name);
     }
 
     /**
@@ -58,7 +45,7 @@ public final class SpringUtils implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> clz) throws BeansException {
         @SuppressWarnings("unchecked")
-        T result = (T) applicationContext.getBean(clz);
+        T result = (T) beanFactory.getBean(clz);
         return result;
     }
 
@@ -69,7 +56,7 @@ public final class SpringUtils implements ApplicationContextAware {
      * @return boolean
      */
     public static boolean containsBean(String name) {
-        return applicationContext.containsBean(name);
+        return beanFactory.containsBean(name);
     }
 
     /**
@@ -81,7 +68,7 @@ public final class SpringUtils implements ApplicationContextAware {
      *
      */
     public static boolean isSingleton(String name) throws NoSuchBeanDefinitionException {
-        return applicationContext.isSingleton(name);
+        return beanFactory.isSingleton(name);
     }
 
     /**
@@ -91,7 +78,7 @@ public final class SpringUtils implements ApplicationContextAware {
      *
      */
     public static Class<?> getType(String name) throws NoSuchBeanDefinitionException {
-        return applicationContext.getType(name);
+        return beanFactory.getType(name);
     }
 
     /**
@@ -103,7 +90,7 @@ public final class SpringUtils implements ApplicationContextAware {
      *
      */
     public static String[] getAliases(String name) throws NoSuchBeanDefinitionException {
-        return applicationContext.getAliases(name);
+        return beanFactory.getAliases(name);
     }
 
 }

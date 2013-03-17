@@ -14,7 +14,7 @@
 
     <!-- 开启controller注解支持 -->
     <!-- 注意事项请参考：http://jinnianshilongnian.iteye.com/blog/1762632 -->
-    <context:component-scan base-package="com.sishuok.es.web" use-default-filters="false">
+    <context:component-scan base-package="com.sishuok.es" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -39,23 +39,25 @@
 
     </mvc:annotation-driven>
 
-  <mvc:interceptors>
-      <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
-          <constructor-arg ref="conversionService"/>
-      </bean>
-      <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor"/>
-      <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
-        <!--</mvc:interceptor>-->
-    </mvc:interceptors>
-
     <mvc:view-controller path="/" view-name="redirect:/admin/index"/>
-
     <!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
     <mvc:default-servlet-handler/>
     <!-- 静态资源映射 -->
-    <mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
+    <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
+
+
+    <!-- 拦截器设置 -->
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
+            <constructor-arg ref="conversionService"/>
+        </bean>
+        <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor"/>
+        <!--<mvc:interceptor>-->
+              <!--<mvc:mapping path="/**"/>-->
+              <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
+          <!--</mvc:interceptor>-->
+    </mvc:interceptors>
+
 
 
     <!-- 内容协商管理器  -->

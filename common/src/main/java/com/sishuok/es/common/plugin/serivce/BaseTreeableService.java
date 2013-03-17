@@ -26,9 +26,8 @@ import java.util.List;
  * <p>Date: 13-2-22 下午5:26
  * <p>Version: 1.0
  */
-public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID>, ID extends Serializable> extends BaseService<M, ID> {
-
-    private BaseRepositoryImpl<M, ID> baseRepositoryImpl;
+public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID>, ID extends Serializable> 
+        extends BaseService<M, ID> {
 
     private final String DELETE_CHILDREN_QL;
     private final String UPDATE_CHILDREN_PARENT_IDS_QL;
@@ -36,7 +35,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     private final String FIND_NEXT_WEIGHT_QL;
 
     protected <R extends BaseRepository<M, ID>> BaseTreeableService() {
-        baseRepositoryImpl = BaseRepositoryImpl.<M, ID>defaultBaseRepositoryImpl(entityClass);
         String entityName = this.entityClass.getSimpleName();
 
         DELETE_CHILDREN_QL = String.format("delete from %s where id=?1 or parentIds like concat(?2, %s)", entityName, "'%'");
@@ -61,7 +59,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     @Transactional
     public void deleteSelfAndChild(M m) {
-        baseRepositoryImpl.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
+        baseDefaultRepositoryImpl.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
     }
 
     @Transactional
@@ -73,7 +71,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
    public int nextWeight(ID id) {
-        return baseRepositoryImpl.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
+        return baseDefaultRepositoryImpl.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
    }
     
 
@@ -171,7 +169,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         source.setWeight(newWeight);
         update(source);
         String newSourceChildrenParentIds = source.makeSelfAsNewParentIds();
-        baseRepositoryImpl.batchUpdate(UPDATE_CHILDREN_PARENT_IDS_QL, newSourceChildrenParentIds, oldSourceChildrenParentIds);
+        baseDefaultRepositoryImpl.batchUpdate(UPDATE_CHILDREN_PARENT_IDS_QL, newSourceChildrenParentIds, oldSourceChildrenParentIds);
     }
 
     /**
@@ -181,7 +179,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @return
      */
     protected List<M> findSelfAndNextSiblings(String parentIds, int currentWeight) {
-        return baseRepositoryImpl.findAll(FIND_SELF_AND_NEXT_SIBLINGS_QL, parentIds, currentWeight);
+        return baseDefaultRepositoryImpl.findAll(FIND_SELF_AND_NEXT_SIBLINGS_QL, parentIds, currentWeight);
     }
 
 

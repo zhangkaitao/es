@@ -15,9 +15,9 @@
             <td>
                     ${m.id}
             </td>
-            <td><a href="${ctx}/admin/sys/user/sysUser/${m.user.id}">${m.user.username}</a></td>
+            <td><a href="${ctx}/admin/sys/user/${m.user.id}">${m.user.username}</a></td>
             <td>${m.status.info}</td>
-            <td><a href="${ctx}/admin/sys/user/sysUser/${m.opUser.id}">${m.opUser.username}</a></td>
+            <td><a href="${ctx}/admin/sys/user/${m.opUser.id}">${m.opUser.username}</a></td>
             <td><spring:eval expression="m.opDate"/></td>
         </tr>
     </c:forEach>

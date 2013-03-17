@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-	  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-	  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-     ">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <context:component-scan base-package="com.sishuok.es.common.utils"></context:component-scan>
+    <!-- spring工具类 方便在非spring管理环境中获取bean -->
+    <bean id="springUtils" class="com.sishuok.es.common.utils.SpringUtils"/>
 
+    <!-- 设置默认的文件上传路径 -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="com.sishuok.es.common.web.upload.FileUploadUtils.setDefaultBaseDir"/>
+        <property name="arguments" value="${file.upload.dir}"/>
+    </bean>
 
 </beans>

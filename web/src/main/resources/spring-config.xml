@@ -15,15 +15,18 @@
 
     <context:property-placeholder location="classpath:resources.properties"/>
 
+
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.sishuok.es.web">
+    <context:component-scan base-package="com.sishuok.es">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!-- 开启AOP监听 只对当前配置文件有效 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
+
+
     <!--spring data jpa repository-->
     <jpa:repositories
-            base-package="com.sishuok.es.web"
+            base-package="com.sishuok.es"
             repository-impl-postfix="Impl"
             entity-manager-factory-ref="entityManagerFactory"
             transaction-manager-ref="transactionManager">
@@ -48,7 +51,7 @@
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.sishuok.es.web"/>
+        <property name="packagesToScan" value="com.sishuok.es"/>
 
         <property name="persistenceUnitName" value="${jpa.persistenceUnitName}"/>
         <property name="persistenceProvider">
@@ -125,24 +128,6 @@
 
 
 
-
-
-    <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
-    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
-        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
-        <property name="validationMessageSource" ref="messageSource"/>
-    </bean>
-
-    <!-- 类型转换 -->
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-    </bean>
-
-    <!-- 直接把id转换为entity -->
-    <bean class="org.springframework.data.repository.support.DomainClassConverter">
-        <constructor-arg ref="conversionService"/>
-    </bean>
-
     <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
@@ -154,6 +139,21 @@
         </property>
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="cacheSeconds" value="60"/>
+    </bean>
+
+    <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!-- 类型转换及数据格式化 -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
+
+    <!-- 直接把id转换为entity -->
+    <bean class="org.springframework.data.repository.support.DomainClassConverter">
+        <constructor-arg ref="conversionService"/>
     </bean>
 
     <!--cache-->

@@ -18,6 +18,8 @@
     <meta http-equiv="Expires" content="0" />
 
     <title>${title}</title>
+    <link rel="icon" href="${ctx}/static/images/favicon.ico">
+    <link rel="shortcut icon" href="${ctx}/static/images/favicon.ico">
     <%@include file="/WEB-INF/jsp/common/import-css.jspf"%>
     <script type="text/javascript">
         var currentURL = "${requestScope.currentURL}";

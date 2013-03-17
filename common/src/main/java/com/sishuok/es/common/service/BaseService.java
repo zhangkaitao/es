@@ -43,7 +43,7 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
     protected final Class<M> entityClass;
     protected BaseRepository<M, ID> baseRepository;
 
-    protected BaseRepositoryImpl baseDefaultRepositoryImpl;
+    protected BaseRepositoryImpl<M, ID> baseDefaultRepositoryImpl;
 
     public BaseService() {
         this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
@@ -249,6 +249,7 @@ public abstract class BaseService<M extends BaseEntity, ID extends Serializable>
     public Long count(Searchable searchable) {
         return baseRepository.count(searchable.getSpecifications(entityClass));
     }
+
 
 
 }

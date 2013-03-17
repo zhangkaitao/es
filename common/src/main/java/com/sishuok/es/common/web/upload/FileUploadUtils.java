@@ -38,7 +38,7 @@ public class FileUploadUtils {
     public static final long DEFAULT_MAX_SIZE = 52428800;
 
     //默认上传的地址
-    public static final String DEFAULT_BASE_DIR = "upload";
+    private static String defaultBaseDir = "upload";
 
     //默认的文件名最大长度
     public static final int DEFAULT_FILE_NAME_LENGTH = 200;
@@ -72,6 +72,14 @@ public class FileUploadUtils {
     private static int counter = 0;
 
 
+    public static void setDefaultBaseDir(String defaultBaseDir) {
+        FileUploadUtils.defaultBaseDir = defaultBaseDir;
+    }
+
+    public static String getDefaultBaseDir() {
+        return defaultBaseDir;
+    }
+
     /**
      * 以默认配置进行文件上传
      * @param request 当前请求
@@ -94,7 +102,7 @@ public class FileUploadUtils {
      */
     public static final String upload(HttpServletRequest request, MultipartFile file, BindingResult result, String[] allowedExtension) {
         try {
-            return upload(request, DEFAULT_BASE_DIR, file, allowedExtension, DEFAULT_MAX_SIZE);
+            return upload(request, getDefaultBaseDir(), file, allowedExtension, DEFAULT_MAX_SIZE);
         } catch (IOException e) {
             LogUtils.error("file upload error", e);
             result.reject("upload.server.error");

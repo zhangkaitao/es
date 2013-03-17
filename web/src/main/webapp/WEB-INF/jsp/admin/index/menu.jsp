@@ -38,8 +38,9 @@
             <li>
                 <a href="#">用户管理</a>
                 <ul>
-                    <li><a href="${ctx}/admin/sys/user/sysUser">用户列表</a></li>
-                    <li><a href="${ctx}/admin/sys/user/statusHistory">状态历史列表</a></li>
+                    <li><a href="${ctx}/admin/sys/user">用户列表</a></li>
+                    <li><a href="${ctx}/admin/sys/user/statusHistory">状态变更历史</a></li>
+                    <li><a href="${ctx}/admin/sys/user/lastOnlineInfo">用户最后在线历史</a></li>
                 </ul>
             </li>
             <li><a href="#">权限管理</a></li>

@@ -369,3 +369,59 @@ a:focus { -moz-outline-style: none; } /* IE不支持 */
 .table-hover tbody tr:hover > th {
     background-color: #eee;
 }
+
+.login {
+    width: 400px;
+    margin: 100px auto;
+
+    background-clip: padding-box;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px 6px 6px 6px;
+    -webkit-box-shadow: 0 3px 7px #ddd;
+    -moz-box-shadow: 0 3px 7px #ddd;
+    box-shadow: 0 3px 7px #ddd;
+    outline: medium none;
+}
+.login .title {
+    color: #fff;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 8px;
+    background-clip: padding-box;
+    background-color: #0088cc;
+    border-radius: 6px 6px 0 0;
+    line-height: 30px;
+}
+.login .form {
+    padding: 30px;
+    color: #777;
+}
+.login .remember {
+    width: 230px;
+    float: left;
+}
+
+/* Footer
+-------------------------------------------------- */
+.footer {
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 70px;
+    border-top: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
+}
+.footer p {
+    margin-bottom: 0;
+    color: #777;
+}
+.footer-links {
+    margin: 10px 0;
+}
+.footer-links li {
+    display: inline;
+    padding: 0 2px;
+}
+.footer-links li:first-child {
+    padding-left: 0;
+}
