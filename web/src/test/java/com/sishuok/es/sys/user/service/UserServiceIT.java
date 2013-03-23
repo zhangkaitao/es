@@ -110,7 +110,7 @@ public class UserServiceIT extends BaseIT {
     @Test(expected = UserBlockedException.class)
     public void testLoginFailWithStatusBlocked() {
         User user = createUser(username, email, mobilePhoneNumber, password);
-        userService.changeStatus(user, UserStatus.blocked, "test");
+        userService.changeStatus(user, user, UserStatus.blocked, "test");
         userService.login(username, password);
     }
 

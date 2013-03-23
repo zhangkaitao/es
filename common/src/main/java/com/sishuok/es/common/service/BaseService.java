@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.common.service;
 
-import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
@@ -21,11 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +33,7 @@ import java.util.List;
  * <p>Date: 13-1-12 下午4:43
  * <p>Version: 1.0
  */
-public abstract class BaseService<M extends BaseEntity, ID extends Serializable> implements InitializingBean {
+public abstract class BaseService<M extends AbstractEntity, ID extends Serializable> implements InitializingBean {
 
 
     protected final Class<M> entityClass;

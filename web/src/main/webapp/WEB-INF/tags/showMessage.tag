@@ -1,14 +1,14 @@
-<%@ tag pageEncoding="UTF-8" description="显示操作成功的消息，内容为:message" %>
+<%@ tag pageEncoding="UTF-8" description="显示操作成功/失败的消息，内容为:message" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:if test="${not empty message}">
     <div class="alert alert-success">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <span class="icon-ok"></span>${message}
+        <span class="icon-ok"></span>&nbsp;${message}
     </div>
 </c:if>
 <c:if test="${not empty error}">
     <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <span class="icon-ok"></span>${error}
+        <span class="icon-remove"></span>&nbsp;${error}
     </div>
 </c:if>

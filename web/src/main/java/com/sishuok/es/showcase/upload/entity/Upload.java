@@ -15,7 +15,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_upload")
+@Table(name = "showcase_upload")
 public class Upload extends BaseEntity<Long> {
 
     @Column(name = "name")

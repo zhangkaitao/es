@@ -241,31 +241,6 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>javassist</artifactId>
-                    <groupId>org.javassist</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.mockito</groupId>
-                    <artifactId>mockito-all</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -296,6 +271,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${common-collections.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -446,6 +426,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.core.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>${javassist.version}</version>
@@ -530,6 +515,13 @@
             <version>${shiro.version}</version>
         </dependency>
 
+        <!-- quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
+
         <!-- encache 相关jar包 -->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
@@ -567,37 +559,6 @@
             </exclusions>
         </dependency>
 
-        <!-- joda time 相关jar包 -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time-jsptags</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <!-- joda hibernate user type -->
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>${jadira.usertype}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    <groupId>org.hibernate.javax.persistence</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- joda jackson datatype -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-
         <!-- 安全相关jar包 -->
 
         <!-- httpclient相关jar包 -->
@@ -625,6 +586,32 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- 时间相关 -->
+        <!--日期美化-->
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>${prettytime.version}</version>
+        </dependency>
+        <!-- joda time 相关jar包 -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
+        </dependency>
+
+        <!-- jcaptcha 验证码 -->
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha</artifactId>
+            <version>${jcaptcha.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha-integration-simple-servlet</artifactId>
+            <version>${jcaptcha.version}</version>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -637,6 +624,7 @@
         <cglib.version>2.2</cglib.version>
 
         <commons-lang3.version>3.1</commons-lang3.version>
+        <common-collections.version>3.2.1</common-collections.version>
         <commons-io.version>2.4</commons-io.version>
         <guava.version>13.0.1</guava.version>
         <common.fileupload.version>1.2.2</common.fileupload.version>
@@ -656,28 +644,30 @@
         <spring.version>3.2.2.RELEASE</spring.version>
         <spring.data.jpa.version>1.2.0.RELEASE</spring.data.jpa.version>
 
-        <hibernate.core.version>4.1.9.Final</hibernate.core.version>
+        <hibernate.core.version>4.2.0.Final</hibernate.core.version>
+        <hibernate.ehcache.version>4.2.0.Final</hibernate.ehcache.version>
         <hibernate.commons.annotaions.version>4.0.1.Final</hibernate.commons.annotaions.version>
         <hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
-        <hibernate.ehcache.version>4.1.9.Final</hibernate.ehcache.version>
 
         <javassist.version>3.12.1.GA</javassist.version>
 
-        <ehcache.core.version>2.5.0</ehcache.core.version>
+        <ehcache.core.version>2.6.5</ehcache.core.version>
 
         <shiro.version>1.2.0</shiro.version>
+        <quartz.version>2.1.7</quartz.version>
 
         <slf4j.version>1.7.3</slf4j.version>
         <logback.version>1.0.10</logback.version>
 
         <proxool.version>0.9.1</proxool.version>
         <jackson.version>2.1.2</jackson.version>
-        <joda-time.version>2.1</joda-time.version>
-        <jadira.usertype>3.0.0.GA</jadira.usertype>
+
         <httpclient.version>4.2.2</httpclient.version>
 
         <dom4j.version>1.6.1</dom4j.version>
-
+        <joda-time.version>2.1</joda-time.version>
+        <prettytime.version>2.1.2.Final</prettytime.version>
+        <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
     </properties>
 
 </project>

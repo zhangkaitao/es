@@ -51,6 +51,7 @@
                 <th sort="mobilePhoneNumber">手机号</th>
                 <th>创建时间</th>
                 <th>帐户状态</th>
+                <th>是否是管理员</th>
                 <th style="width: 190px">操作</th>
             </tr>
           <tbody>
@@ -65,6 +66,7 @@
                 <td>${m.mobilePhoneNumber}</td>
                 <td><spring:eval expression="m.createDate"/></td>
                 <td>${m.status.info}</td>
+                <td>${m.admin?'是' : '否'}</td>
                 <td>
                     <a class="btn btn-link no-padding" href="${ctx}/admin/sys/user/update/${m.id}">修改</a>
                     |
@@ -90,7 +92,7 @@
                     <br/>
                     <a class="btn btn-link no-padding status-history" data-url="${ctx}/admin/sys/user/statusHistory?search.user.username_eq=${m.username}">状态变更历史</a>
                     |
-                    <a class="btn btn-link no-padding last-online-info" data-url="${ctx}/admin/sys/user/lastOnlineInfo?search.user.username_eq=${m.username}">最后在线历史</a>
+                    <a class="btn btn-link no-padding last-online-info" data-url="${ctx}/admin/sys/user/lastOnline?search.username_eq=${m.username}">最后在线历史</a>
                 </td>
             </tr>
           </c:forEach>

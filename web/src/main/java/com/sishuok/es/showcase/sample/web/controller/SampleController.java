@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.sample.web.controller;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
@@ -12,12 +13,15 @@ import com.sishuok.es.showcase.sample.entity.Sample;
 import com.sishuok.es.showcase.sample.entity.Sex;
 import com.sishuok.es.showcase.sample.service.SampleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>User: Zhang Kaitao
@@ -92,6 +96,14 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
             }
         }
         return response.result();
+    }
+
+    //@JsonDeserialize(contentAs = Sample.class)
+    @RequestMapping(value = "test", method = RequestMethod.POST)
+    @ResponseBody
+    public Object test(@RequestBody Map<String, Sample> sampleList) {
+        System.out.println("--------------"+sampleList);
+        return sampleList;
     }
 
 

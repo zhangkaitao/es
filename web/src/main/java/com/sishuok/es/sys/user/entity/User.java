@@ -8,7 +8,6 @@ package com.sishuok.es.sys.user.entity;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,18 +22,25 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "user")
 public class User extends BaseEntity<Long> implements LogicDeleteable {
+    public static final String USERNAME_PATTERN = "^[\\u4E00-\\u9FA5\\uf900-\\ufa2d_a-zA-Z][\\u4E00-\\u9FA5\\uf900-\\ufa2d\\w]{4,19}$";
+    public static final String EMAIL_PATTERN = "^((([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+(\\.([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+)*)|((\\x22)((((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(([\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]|\\x21|[\\x23-\\x5b]|[\\x5d-\\x7e]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(\\\\([\\x01-\\x09\\x0b\\x0c\\x0d-\\x7f]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]))))*(((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(\\x22)))@((([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.)+(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.?";
+    public static final String MOBILE_PHONE_NUMBER_PATTERN = "^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$";
+    public static final int USERNAME_MIN_LENGTH = 5;
+    public static final int USERNAME_MAX_LENGTH = 20;
+    public static final int PASSWORD_MIN_LENGTH = 5;
+    public static final int PASSWORD_MAX_LENGTH = 50;
 
     @NotNull(message = "{user.username.not.null}")
-    @Pattern(regexp = "[\\u4E00-\\u9FA5\\uf900-\\ufa2d_a-zA-Z][\\u4E00-\\u9FA5\\uf900-\\ufa2d\\w]{4,19}", message = "{user.username.not.valid}")
+    @Pattern(regexp = USERNAME_PATTERN, message = "{user.username.not.valid}")
     private String username;
 
     @NotNull(message = "{user.email.not.null}")
-    @Email(message = "{user.email.not.valid}")
+    @Pattern(regexp = EMAIL_PATTERN, message = "{user.email.not.valid}")
     private String email;
 
-    @Pattern(regexp = "^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$", message = "{user.mobile.phone.number.not.valid")
+    @Pattern(regexp = MOBILE_PHONE_NUMBER_PATTERN, message = "{user.mobile.phone.number.not.valid")
     @Column(name = "mobile_phone_number")
     private String mobilePhoneNumber;
 
@@ -42,7 +48,7 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     /**
      * 使用md5(username + original password + salt)加密存储
      */
-    @Length(min = 5, max = 50, message = "{user.password.not.valid}")
+    @Length(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH, message = "{user.password.not.valid}")
     private String password;
 
     /**
@@ -62,6 +68,11 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
      */
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.normal;
+
+    /**
+     * 是否是管理员
+     */
+    private Boolean admin =false;
 
     /**
      * 逻辑删除flag
@@ -97,7 +108,7 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
      * 生成新的种子
      */
     public void randomSalt() {
-        setSalt(RandomStringUtils.randomAlphanumeric(6));
+        setSalt(RandomStringUtils.randomAlphanumeric(10));
     }
 
     public Date getCreateDate() {
@@ -145,5 +156,13 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
 
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }

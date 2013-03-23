@@ -250,7 +250,7 @@
 		*            form
 		* @return false if form submission needs to be cancelled
 		*/
-		_onSubmitEvent: function() {
+		_onSubmitEvent: function(event) {
 			var form = $(this);
 			var options = form.data('jqv');
 			
@@ -270,7 +270,9 @@
 			// validate each field 
 			// (- skip field ajax validation, not necessary IF we will perform an ajax form validation)
 			var r=methods._validateFields(form);
-
+            if (r == false) {
+                return false;
+            }
 			if (r && options.ajaxFormValidation) {
 				methods._validateFormWithAjax(form, options);
 				// cancel form auto-submission - process with async call onAjaxFormComplete
@@ -281,6 +283,7 @@
 				// !! ensures that an undefined return is interpreted as return false but allows a onValidationComplete() to possibly return true and have form continue processing
 				return !!options.onValidationComplete(form, r);
 			}
+
 			return r;
 		},
 		/**
@@ -1446,10 +1449,11 @@
 									 else
 										methods._closePrompt(errorField);
 								}
-								
-								 // If a submit form triggered this, we want to re-submit the form
-								 if (options.eventTrigger == "submit")
-									field.closest("form").submit();
+
+                                 // If a submit form triggered this, we want to re-submit the form
+                                 if (options.eventTrigger == "submit") {
+                                     field.closest("form").submit();
+                                 }
 							 }
 						 }
 						 errorField.trigger("jqv.field.result", [errorField, options.isError, msg]);
@@ -1516,6 +1520,7 @@
 				 else
 					methods._buildPrompt(field, promptText, type, ajaxed, options);
 			}
+
 		 },
 		/**
 		* Builds and shades a prompt for the given field.

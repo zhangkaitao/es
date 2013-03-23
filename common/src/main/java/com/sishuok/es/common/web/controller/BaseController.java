@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.common.web.controller;
 
-import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -22,7 +22,7 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午3:56
  * <p>Version: 1.0
  */
-public class BaseController<M extends BaseEntity, ID extends Serializable> {
+public class BaseController<M extends AbstractEntity, ID extends Serializable> {
 
     protected BaseService<M, ID> baseService;
 
@@ -87,6 +87,14 @@ public class BaseController<M extends BaseEntity, ID extends Serializable> {
             return backURL;
         }
         return "/" + getViewPrefix();
+    }
+
+    /**
+     * @param backURL null 将重定向到默认getViewPrefix()
+     * @return
+     */
+    protected String redirectToUrl(String backURL) {
+        return "redirect:" + redirectUrl(backURL);
     }
 
     protected String defaultViewPrefix() {

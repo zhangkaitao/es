@@ -20,7 +20,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_sample")
+@Table(name = "showcase_sample")
 public class Sample extends BaseEntity<Long> {
 
     @NotNull(message = "{name.not.null}")

@@ -16,7 +16,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_status_audit")
+@Table(name = "showcase_status_audit")
 public class Audit extends BaseEntity<Long> implements Stateable<Stateable.AuditStatus> {
 
     /**

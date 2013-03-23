@@ -208,37 +208,20 @@ $.app = {
     /**初始化菜单*/
     initMenu: function () {
         var menus = $("#menu");
+        menus.accordion({
+            header:"h3",
+            heightStyle:"content",
+            icons : {
+                header: "ui-icon-circle-plus",
+                activeHeader: "ui-icon-circle-minus"
+            }
+        });
 
-        var rootCloseIconClass = "ui-icon-circle-plus";
-        var rootOpenIconClass = "ui-icon-circle-minus";
-        menus.addClass("ui-accordion ui-widget ui-helper-reset");
-        menus.find("h3")
-            .addClass("ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all")
-            .append('<span class="ui-accordion-header-icon ui-icon ui-icon-menu '+ rootCloseIconClass + '"></span>')
-            .next(".submenu").hide().end()
-            .click(function () {
-                var $menu = $(this);
-                if ($menu.hasClass("ui-state-active")) {
-                    $menu
-                        .find("span").removeClass(rootOpenIconClass).addClass(rootCloseIconClass).end()
-                        .next(".submenu").hide("blind", function() {
-                            $menu.removeClass("ui-state-active").removeClass("ui-accordion-header-active")
-                                 .removeClass("ui-corner-top").addClass("ui-corner-all");
-                        });
-                } else {
-                    $menu
-                        .addClass("ui-accordion-header-active").addClass("ui-state-active")
-                        .addClass("ui-corner-top").removeClass("ui-corner-all")
-                        .find("span").removeClass(rootCloseIconClass).addClass(rootOpenIconClass).end()
-                        .next(".submenu").show("blind");
-                }
-            }).eq(0).click();
 
         var leafIconClass = "icon-angle-right";
         var branchOpenIconClass = "icon-double-angle-right";
         var branchCloseIconClass = "icon-double-angle-down";
         menus.find("div > ul")
-            .addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-widget-menu ui-corner-bottom ui-accordion-content-active")
             .children("li").each(function () {
                 var submenu = $(this);
                 var submenuUL = submenu.find("ul");
@@ -397,7 +380,7 @@ $.app = {
             title : title,
             closeText : "关闭",
             closeOnEscape:false,
-            height:500,
+            height:300,
             width:800,
             modal:true,
             close: function() {
@@ -584,6 +567,18 @@ $.app = {
         } else {
             $.app.alert({message : "该标签不支持异步加载，支持的标签有form、a"});
         }
+
+    }
+    ,
+    /**
+     * 心跳检测 防止用户打开了浏览器 但没有操作造成 会话过期
+     * 默认5分钟检测一次
+     */
+    heartbeat : function(period) {
+        if(!period) {
+            period = 5 * 60 * 1000;
+        }
+        setTimeout(function() {$.get(ctx + "/session/heartbeat");}, period);
 
     }
 };

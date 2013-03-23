@@ -67,4 +67,12 @@ public class UserStatusHistoryService extends BaseService<UserStatusHistory, Lon
         }
         return null;
     }
+
+    public String getLastReason(User user) {
+        UserStatusHistory history = findLastHistory(user);
+        if(history == null) {
+            return "";
+        }
+        return history.getReason();
+    }
 }

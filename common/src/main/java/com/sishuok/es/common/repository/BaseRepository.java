@@ -5,13 +5,12 @@
  */
 package com.sishuok.es.common.repository;
 
-import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.AbstractEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>抽象DAO层基类 提供一些简便方法<br/>
@@ -23,7 +22,7 @@ import java.util.List;
  * <p>Version: 1.0
  */
 @NoRepositoryBean
-public interface BaseRepository<M extends BaseEntity, ID extends Serializable>
+public interface BaseRepository<M extends AbstractEntity, ID extends Serializable>
         extends JpaRepository<M, ID>, JpaSpecificationExecutor<M> {
 
 

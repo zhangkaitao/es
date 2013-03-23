@@ -19,7 +19,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_parent")
+@Table(name = "showcase_parent")
 public class Parent extends BaseEntity<Long> {
 
     @NotNull(message = "name.not.null")

@@ -164,6 +164,10 @@
                 <jpa.database>MYSQL</jpa.database>
                 <jpa.databasePlatform>org.hibernate.dialect.MySQL5InnoDBDialect</jpa.databasePlatform>
                 <log.dir>D:/Backup/es</log.dir>
+
+                <shiro.uid.cookie.domain></shiro.uid.cookie.domain>
+                <shiro.uid.cookie.path>/</shiro.uid.cookie.path>
+
             </properties>
         </profile>
         <profile>
@@ -178,8 +182,40 @@
                 <jpa.generateDdl>true</jpa.generateDdl>
                 <jpa.database>H2</jpa.database>
                 <jpa.databasePlatform>org.hibernate.dialect.H2Dialect</jpa.databasePlatform>
+
+                <shiro.uid.cookie.domain>192.168.1.100</shiro.uid.cookie.domain>
+                <shiro.uid.cookie.path>/</shiro.uid.cookie.path>
+
             </properties>
         </profile>
+
+        <profile>
+            <!--正式环境-->
+            <id>production</id>
+            <properties>
+                <proxool.trace>true</proxool.trace>
+                <db.name>es</db.name>
+                <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
+                <connection.admin.url>
+                    <![CDATA[ jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                </connection.admin.url>
+                <connection.url>
+                    <![CDATA[ jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                </connection.url>
+                <connection.username>root</connection.username>
+                <connection.password/>
+                <jpa.showSql>true</jpa.showSql>
+                <jpa.generateDdl>false</jpa.generateDdl>
+                <jpa.database>MYSQL</jpa.database>
+                <jpa.databasePlatform>org.hibernate.dialect.MySQL5InnoDBDialect</jpa.databasePlatform>
+                <log.dir>/data/backup/es</log.dir>
+
+                <shiro.uid.cookie.domain>sishuok.com</shiro.uid.cookie.domain>
+                <shiro.uid.cookie.path>/</shiro.uid.cookie.path>
+
+            </properties>
+        </profile>
+
     </profiles>
 
 </project>

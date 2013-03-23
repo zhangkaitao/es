@@ -43,4 +43,10 @@ public interface Constants {
     String NO_QUERYSTRING_CURRENT_URL = "noQueryStringCurrentURL";
 
     String CONTEXT_PATH = "ctx";
+
+    /**
+     * 当前登录的用户
+     */
+    String CURRENT_USER = "user";
+
 }

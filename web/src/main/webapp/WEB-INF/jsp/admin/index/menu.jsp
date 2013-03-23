@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+
+
 <div id="menu">
     <div>
         <h3><a href="#">示例管理</a></h3>
@@ -39,8 +41,9 @@
                 <a href="#">用户管理</a>
                 <ul>
                     <li><a href="${ctx}/admin/sys/user">用户列表</a></li>
+                    <li><a href="${ctx}/admin/sys/user/online">在线用户</a></li>
                     <li><a href="${ctx}/admin/sys/user/statusHistory">状态变更历史</a></li>
-                    <li><a href="${ctx}/admin/sys/user/lastOnlineInfo">用户最后在线历史</a></li>
+                    <li><a href="${ctx}/admin/sys/user/lastOnline">用户最后在线历史</a></li>
                 </ul>
             </li>
             <li><a href="#">权限管理</a></li>

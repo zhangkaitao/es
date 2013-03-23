@@ -36,5 +36,6 @@
 <script type="text/javascript">
     $(function() {
         $.app.initIndex();
+        $.app.heartbeat();
     });
 </script>

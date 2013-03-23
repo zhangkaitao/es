@@ -24,7 +24,7 @@
             <td class="check"><input type="checkbox" name="ids" value="${m.id}"></td>
             <td>${m.id}</td>
             <td>
-                <a href="${ctx}/showcase/product/product/category-${m.category.id}">${m.category.name}</a>
+                <a class="btn btn-link btn-edit" href="${ctx}/showcase/product/product/category-${m.category.id}">${m.category.name}</a>
             </td>
             <td>${m.name}</td>
             <td>${m.price}</td>

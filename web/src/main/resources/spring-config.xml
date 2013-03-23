@@ -6,11 +6,12 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
+      default-lazy-init="true">
 
 
     <context:property-placeholder location="classpath:resources.properties"/>
@@ -151,14 +152,9 @@
     <!-- 类型转换及数据格式化 -->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
 
-    <!-- 直接把id转换为entity -->
-    <bean class="org.springframework.data.repository.support.DomainClassConverter">
+    <!-- 直接把id转换为entity 必须非lazy否则无法注册-->
+    <bean class="org.springframework.data.repository.support.DomainClassConverter" lazy-init="false">
         <constructor-arg ref="conversionService"/>
-    </bean>
-
-    <!--cache-->
-    <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:ehcache/ehcache_es.xml"/>
     </bean>
 
 </beans>

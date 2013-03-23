@@ -1,16 +1,16 @@
-drop table if exists `tbl_showcase_sample`;
-drop table if exists `tbl_showcase_moveable`;
-drop table if exists `tbl_showcase_upload`;
-drop table if exists `tbl_showcase_tree`;
-drop table if exists `tbl_showcase_parent`;
-drop table if exists `tbl_showcase_child`;
-drop table if exists `tbl_showcase_category`;
-drop table if exists `tbl_showcase_product`;
-drop table if exists `tbl_showcase_status_audit`;
-drop table if exists `tbl_showcase_status_show`;
-drop table if exists `tbl_showcase_editor`;
+drop table if exists `showcase_sample`;
+drop table if exists `showcase_moveable`;
+drop table if exists `showcase_upload`;
+drop table if exists `showcase_tree`;
+drop table if exists `showcase_parent`;
+drop table if exists `showcase_child`;
+drop table if exists `showcase_category`;
+drop table if exists `showcase_product`;
+drop table if exists `showcase_status_audit`;
+drop table if exists `showcase_status_show`;
+drop table if exists `showcase_editor`;
 ##showcase
-create table `tbl_showcase_sample`(
+create table `showcase_sample`(
     `id`         bigint not null auto_increment,
     `name`      varchar(100),
     `age`        smallint,
@@ -24,7 +24,7 @@ create table `tbl_showcase_sample`(
     index `idx_showcase_sample_birthday` (`birthday`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_moveable`(
+create table `showcase_moveable`(
     `id`         bigint not null auto_increment,
     `name`       varchar(100),
     `weight`    int default 0,
@@ -33,14 +33,14 @@ create table `tbl_showcase_moveable`(
     index `idx_showcase_moveable_weight` (`weight`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_upload`(
+create table `showcase_upload`(
     `id`         bigint not null auto_increment,
     `name`      varchar(100),
     `src`       varchar(500),
     constraint `pk_showcase_upload` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_tree`(
+create table `showcase_tree`(
     `id`         bigint not null auto_increment,
     `name`      varchar(100),
     `parent_id` bigint,
@@ -52,9 +52,9 @@ create table `tbl_showcase_tree`(
     index idx_showcase_tree_parentId (`parent_id`),
     index idx_showcase_tree_parentIds_weight (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
-alter table `tbl_showcase_tree` auto_increment=1000;
+alter table `showcase_tree` auto_increment=1000;
 
-create table `tbl_showcase_parent`(
+create table `showcase_parent`(
   `id`          bigint not null auto_increment,
   `name`        varchar(100),
   `type`        varchar(50),
@@ -64,7 +64,7 @@ create table `tbl_showcase_parent`(
   constraint `pk_showcase_parent` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_child`(
+create table `showcase_child`(
   `id`          bigint not null auto_increment,
   `parent_id`  bigint unsigned,
   `name`        varchar(100),
@@ -75,7 +75,7 @@ create table `tbl_showcase_child`(
   constraint `pk_showcase_child` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_category`(
+create table `showcase_category`(
   `id`          bigint not null auto_increment,
   `name`        varchar(100),
   `weight`      int default 0,
@@ -83,7 +83,7 @@ create table `tbl_showcase_category`(
   constraint `pk_showcase_category` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_product`(
+create table `showcase_product`(
   `id`             bigint not null auto_increment,
   `category_id`  bigint unsigned,
   `name`          varchar(100),
@@ -95,7 +95,7 @@ create table `tbl_showcase_product`(
   constraint `pk_showcase_product` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_status_audit`(
+create table `showcase_status_audit`(
   `id`         bigint not null auto_increment,
   `name`       varchar(100),
   `status`     varchar(100),
@@ -103,14 +103,14 @@ create table `tbl_showcase_status_audit`(
   constraint `pk_showcase_status_audit` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_status_show`(
+create table `showcase_status_show`(
   `id`         bigint not null auto_increment,
   `name`       varchar(100),
   `status`     varchar(100),
   constraint `pk_showcase_status_show` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `tbl_showcase_editor`(
+create table `showcase_editor`(
   `id`         bigint not null auto_increment,
   `title`       varchar(500),
   `content`     longtext,

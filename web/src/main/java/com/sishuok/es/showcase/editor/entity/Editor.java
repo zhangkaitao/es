@@ -15,7 +15,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_editor")
+@Table(name = "showcase_editor")
 public class Editor extends BaseEntity<Long> {
 
     @Column(name = "title")

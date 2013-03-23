@@ -80,6 +80,11 @@
             <layout>default</layout>
             <url>http://repo1.maven.org/maven2/</url>
         </repository>
+        <repository>
+            <id>sourceforge-releases</id>
+            <name>Sourceforge Releases</name>
+            <url>https://oss.sonatype.org/content/repositories/sourceforge-releases/</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>

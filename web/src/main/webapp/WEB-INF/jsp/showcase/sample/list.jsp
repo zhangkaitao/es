@@ -2,7 +2,6 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <es:showMessage/>
-
 <div data-table="table">
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
@@ -28,4 +27,5 @@
     <%@include file="listTable.jsp"%>
 
 </div>
+
 <es:contentFooter/>

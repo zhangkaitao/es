@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.common.repository;
 
-import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.repository.callback.SearchCallback;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
@@ -13,14 +13,12 @@ import com.sishuok.es.common.utils.ReflectUtils;
 import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -29,7 +27,7 @@ import java.util.List;
  * <p>Date: 13-1-15 下午7:33
  * <p>Version: 1.0
  */
-public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serializable> {
+public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Serializable> {
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -240,7 +238,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
     }
 
 
-    public static <M extends BaseEntity, ID extends Serializable> BaseRepositoryImpl<M, ID> defaultBaseRepositoryImpl(Class<M> entityClass) {
+    public static <M extends AbstractEntity, ID extends Serializable> BaseRepositoryImpl<M, ID> defaultBaseRepositoryImpl(Class<M> entityClass) {
         DefaultRepositoryImpl<M, ID> defaultRepository = new DefaultRepositoryImpl<M, ID>(entityClass);
         EntityManagerFactory emf = SpringUtils.getBean(EntityManagerFactory.class);
         EntityManager entityManager = EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
@@ -252,7 +250,7 @@ public abstract class BaseRepositoryImpl<M extends BaseEntity, ID extends Serial
         return defaultRepository;
     }
 
-    private static class DefaultRepositoryImpl<M extends BaseEntity, ID extends Serializable> extends BaseRepositoryImpl<M, ID> {
+    private static class DefaultRepositoryImpl<M extends AbstractEntity, ID extends Serializable> extends BaseRepositoryImpl<M, ID> {
         public DefaultRepositoryImpl(Class<M> entityClass) {
             super(entityClass);
         }

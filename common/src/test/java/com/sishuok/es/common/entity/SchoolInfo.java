@@ -5,6 +5,8 @@
  */
 package com.sishuok.es.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -17,6 +19,7 @@ import javax.persistence.*;
 @Table(name = "tbl_user_schoolinfo")
 public class SchoolInfo extends BaseEntity<Long> {
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

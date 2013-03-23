@@ -12,7 +12,9 @@
          <param-name>contextConfigLocation</param-name>
          <param-value>
              classpath:spring-common.xml,
-             classpath:spring-config.xml
+             classpath:spring-cache.xml,
+             classpath:spring-config.xml,
+             classpath:spring-shiro.xml
          </param-value>
      </context-param>
      <listener>
@@ -21,6 +23,16 @@
          </listener-class>
      </listener>
      <!-- Spring配置文件结束 -->
+
+    <!-- 设置通用的数据 -->
+    <filter>
+        <filter-name>SetCommonDataFilter</filter-name>
+        <filter-class>com.sishuok.es.common.web.interceptor.SetCommonDataFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SetCommonDataFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <!-- 设置servlet编码开始 -->
     <filter>
@@ -52,6 +64,61 @@
     </filter-mapping>
 
 
+    <!-- 同步会话数据到DB 一次请求最多同步一次 防止过多处理  需要放到Shiro过滤器之前-->
+    <filter>
+        <filter-name>syncOnlineSessionFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>syncOnlineSessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+
+    <!-- shiro 安全过滤器 -->
+    <!-- The filter-name matches name of a 'shiroFilter' bean inside applicationContext.xml -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <!-- Make sure any request you want accessible to Shiro is filtered. /* catches all -->
+    <!-- requests.  Usually this filter mapping is defined first (before all others) to -->
+    <!-- ensure that Shiro works in subsequent filters in the filter chain:             -->
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+
+    <!-- 验证码过滤器需要放到Shiro之后 因为Shiro将包装HttpSession 如果不 可能造成两次的sesison id 不一样 -->
+    <filter>
+        <filter-name>JCaptchaFilter</filter-name>
+        <filter-class>com.sishuok.es.common.web.jcaptcha.JCaptchaFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>JCaptchaFilter</filter-name>
+        <url-pattern>/jcaptcha.jpg</url-pattern>
+    </filter-mapping>
+
+
+
     <!-- 浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http delete方法 -->
     <filter>
         <filter-name>HiddenHttpMethodFilter</filter-name>
@@ -69,6 +136,7 @@
         <filter-name>httpPutFormFilter</filter-name>
         <servlet-name>spring</servlet-name>
     </filter-mapping>
+
     <filter>
         <filter-name>openEntityManagerInViewFilter</filter-name>
    		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>

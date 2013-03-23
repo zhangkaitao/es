@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.common.web.filter;
 
-import com.sishuok.es.common.utils.IpUtil;
+import com.sishuok.es.common.utils.IpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public final class DebugRequestAndResponseFilter extends BaseFilter {
             uri = uri + "?" + queryString;
         }
         log.debug("{}:{}", request.getMethod(), uri);
-        log.debug("remote ip:{}  sessionId:{}  ", IpUtil.getIpAddr(request), request.getRequestedSessionId());
+        log.debug("remote ip:{}  sessionId:{}  ", IpUtils.getIpAddr(request), request.getRequestedSessionId());
         log.debug("===header begin============================================");
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {

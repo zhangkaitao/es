@@ -18,7 +18,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_user_status_history")
+@Table(name = "user_status_history")
 public class UserStatusHistory extends BaseEntity<Long> {
 
     /**

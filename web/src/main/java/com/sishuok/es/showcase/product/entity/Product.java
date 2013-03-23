@@ -21,7 +21,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_product")
+@Table(name = "showcase_product")
 public class Product extends BaseEntity<Long> {
 
     @OneToOne(optional = true)

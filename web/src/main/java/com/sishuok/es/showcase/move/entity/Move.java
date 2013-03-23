@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_moveable")
+@Table(name = "showcase_moveable")
 public class Move extends BaseEntity<Long> implements Movable {
 
     @NotNull(groups = Create.class)

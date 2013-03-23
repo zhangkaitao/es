@@ -15,20 +15,20 @@
             <div class="control-group">
                 <form:label path="username" cssClass="control-label">用户名</form:label>
                 <div class="controls">
-                    <form:input path="username" cssClass="validate[required,custom[username],ajax[ajaxCall]]" placeholder="5到20个汉字、字母、数字或下划线"/>
+                    <form:input path="username" cssClass="validate[required,custom[username],ajax[ajaxUsernameCall]]" placeholder="5到20个汉字、字母、数字或下划线"/>
                 </div>
             </div>
 
             <div class="control-group">
-                <form:label path="username" cssClass="control-label">邮箱</form:label>
+                <form:label path="email" cssClass="control-label">邮箱</form:label>
                 <div class="controls">
-                    <form:input path="email" cssClass="validate[required,custom[email],ajax[ajaxCall]]" placeholder="如zhang@163.com"/>
+                    <form:input path="email" cssClass="validate[required,custom[email],ajax[ajaxEmailCall]]" placeholder="如zhang@163.com"/>
                 </div>
             </div>
             <div class="control-group">
-                <form:label path="username" cssClass="control-label">手机号</form:label>
+                <form:label path="mobilePhoneNumber" cssClass="control-label">手机号</form:label>
                 <div class="controls">
-                    <form:input path="mobilePhoneNumber" cssClass="validate[required,custom[mobilePhoneNumber],ajax[ajaxCall]]" placeholder="如13512345678"/>
+                    <form:input path="mobilePhoneNumber" cssClass="validate[required,custom[mobilePhoneNumber],ajax[ajaxMobilePhoneNumberCall]]" placeholder="如13512345678"/>
                 </div>
             </div>
 
@@ -63,6 +63,13 @@
             </div>
 
             <div class="control-group">
+                <form:label path="admin" cssClass="control-label">是否管理员</form:label>
+                <div class="controls inline-radio">
+                    <form:radiobuttons path="admin" items="${booleanList}" itemLabel="info" itemValue="value" cssClass="validate[required]"/>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
                     <a href="<es:BackURL/>" class="btn">返回</a>
@@ -83,8 +90,7 @@
                 $("#editForm :input").prop("readonly", true).remove(":button,:submit");
             </c:when>
             <c:otherwise>
-                //自定义ajax验证  ajax[ajaxNameCall] 放到验证规则的最后（放到中间只有当submit时才验证）
-                $.validationEngineLanguage.allRules.ajaxCall= {
+                var ajaxCall = {
                     "url": "${ctx}/admin/sys/user/validate",
                     //动态提取的数据。验证时一起发送
                     extraDataDynamic : ['#id'],
@@ -94,6 +100,11 @@
                     //"alertTextOk": "该名称可以使用",
                     "alertTextLoad": "* 正在验证，请稍等。。。"
                 };
+                //自定义ajax验证  ajax[ajaxNameCall] 放到验证规则的最后（放到中间只有当submit时才验证）
+                //不能合并到一个 否则提交表单时有个黑屏阶段
+                $.validationEngineLanguage.allRules.ajaxUsernameCall=ajaxCall;
+                $.validationEngineLanguage.allRules.ajaxEmailCall=ajaxCall;
+                $.validationEngineLanguage.allRules.ajaxMobilePhoneNumberCall=ajaxCall;
                 $.validationEngineLanguage.allRules.username={
                     "regex": /^[\u4E00-\u9FA5\uf900-\ufa2d_a-zA-Z][\u4E00-\u9FA5\uf900-\ufa2d\w]{4,19}$/,
                     "alertText": "* 5到20个汉字、字母、数字或下划线组成，且必须以非数字开头"

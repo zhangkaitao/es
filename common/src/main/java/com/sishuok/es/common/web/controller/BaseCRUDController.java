@@ -6,18 +6,15 @@
 package com.sishuok.es.common.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import org.springframework.ui.Model;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.Serializable;
 
@@ -27,7 +24,7 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午1:20
  * <p>Version: 1.0
  */
-public class BaseCRUDController<M extends BaseEntity, ID extends Serializable> extends BaseController<M, ID> {
+public class BaseCRUDController<M extends AbstractEntity, ID extends Serializable> extends BaseController<M, ID> {
 
 
     protected  <S extends BaseService<M, ID>> BaseCRUDController(S baseService) {

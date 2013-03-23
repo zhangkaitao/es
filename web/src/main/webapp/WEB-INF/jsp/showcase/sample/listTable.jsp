@@ -24,13 +24,13 @@
 <table id="table" class="sort-table table table-bordered table-hover table-striped" data-async="true">
     <thead>
     <tr>
-        <th style="width: 80px;">
+        <th style="width: 80px">
             <a class="check-all" href="javascript:;">全选</a>
             |
             <a class="reverse-all" href="javascript:;">反选</a>
         </th>
-        <th style="width: 100px;" sort="id">编号</th>
-        <th style="width: 150px;" sort="name">姓名</th>
+        <th style="width: 100px" sort="id">编号</th>
+        <th style="width: 150px" sort="name">姓名</th>
         <th>年龄</th>
         <th>出生日期</th>
         <th>性别</th>
@@ -42,7 +42,7 @@
         <tr>
             <td class="check"><input type="checkbox" name="ids" value="${m.id}"></td>
             <td>
-                <a class="btn btn-link" href="${ctx}/showcase/sample/${m.id}">${m.id}</a>
+                <a class="btn btn-link btn-edit" href="${ctx}/showcase/sample/${m.id}">${m.id}</a>
             </td>
             <td>${m.name}</td>
             <td>${m.age}</td>

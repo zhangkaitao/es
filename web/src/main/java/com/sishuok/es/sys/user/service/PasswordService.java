@@ -47,20 +47,20 @@ public class PasswordService {
         loginRecordCache = ehcacheManager.getCache("loginRecordCache");
     }
 
-    public void validate(User sysUser, String password) {
-        String username = sysUser.getUsername();
+    public void validate(User user, String password) {
+        String username = user.getUsername();
 
         int retryCount = 0;
 
         Element cacheElement = loginRecordCache.get(username);
         if(cacheElement != null) {
-            retryCount = (Integer) cacheElement.getValue();
+            retryCount = (Integer) cacheElement.getObjectValue();
             if(retryCount >= maxRetryCount) {
                 throw new UserPasswordRetryLimitExceedException(maxRetryCount);
             }
         }
 
-        if(!sysUser.getPassword().equals(encryptPassword(sysUser.getUsername(), password, sysUser.getSalt()))) {
+        if(!user.getPassword().equals(encryptPassword(user.getUsername(), password, user.getSalt()))) {
             loginRecordCache.put(new Element(username, ++retryCount));
             throw new UserPasswordNotMatchException();
         } else {

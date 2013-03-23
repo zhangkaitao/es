@@ -18,7 +18,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_showcase_category")
+@Table(name = "showcase_category")
 public class Category extends BaseEntity<Long> implements Movable {
 
     @Column(name = "name")

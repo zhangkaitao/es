@@ -6,18 +6,11 @@
 package com.sishuok.es.common.plugin.serivce;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.plugin.entity.Movable;
-import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.common.repository.BaseRepositoryImpl;
 import com.sishuok.es.common.service.BaseService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,7 +19,7 @@ import java.util.List;
  * <p>Date: 13-2-22 下午5:26
  * <p>Version: 1.0
  */
-public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID>, ID extends Serializable> 
+public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID>, ID extends Serializable>
         extends BaseService<M, ID> {
 
     private final String DELETE_CHILDREN_QL;

@@ -22,7 +22,7 @@
         <tr>
             <td class="check"><input type="checkbox" name="ids" value="${m.id}"></td>
             <td>
-                <a href="${ctx}/showcase/deleted/${m.id}">${m.id}</a>
+                <a class="btn btn-link btn-edit" href="${ctx}/showcase/deleted/${m.id}">${m.id}</a>
             </td>
             <td>${m.name}</td>
             <td>${m.age}</td>
@@ -31,10 +31,10 @@
             <td>${m.show}</td>
             <td>
                 <a class="btn btn-link btn-edit" title="修改" href="${ctx}/showcase/deleted/update/${m.id}">
-                    <span class=" icon-edit"></span>
+                    <span class="icon-edit"></span>
                 </a>
                 <a class="btn btn-link btn-edit" title="删除" href="${ctx}/showcase/deleted/delete/${m.id}">
-                    <span class=" icon-trash"></span>
+                    <span class="icon-trash"></span>
                 </a>
             </td>
         </tr>
