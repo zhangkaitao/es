@@ -20,7 +20,7 @@
             'jquery',
             'tmpl',
             'load-image',
-            './jquery.fileupload-fp'
+            './jquery.fileupload-fp.js'
         ], factory);
     } else {
         // Browser globals:
