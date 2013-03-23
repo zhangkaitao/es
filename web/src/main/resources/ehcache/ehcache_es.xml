@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="es">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache
+            maxElementsInMemory="1000"
+            eternal="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="3600"
+            overflowToDisk="false">
+    </defaultCache>
+
+    <!-- 登录记录缓存 锁定10分钟 -->
+    <cache name="loginRecordCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false">
+    </cache>
+
+    <!-- 系统用户缓存  没必要过期 -->
+    <cache name="sys-userCache"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           diskPersistent="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           memoryStoreEvictionPolicy="LRU"/>
+
+
+    <!-- shiro 会话缓存 不需要序列化到磁盘 此处我们放到db中了 此处cache没必要过期 因为我们存放到db了 -->
+    <cache name="shiro-activeSessionCache"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           diskPersistent="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           memoryStoreEvictionPolicy="LRU"/>
+
+</ehcache>
