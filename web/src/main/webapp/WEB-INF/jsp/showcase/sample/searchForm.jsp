@@ -3,7 +3,7 @@
 <form id="searchForm" class="form-inline search-form" data-change-search="true">
 
     <esform:label path="search.id_in">编号</esform:label>
-    <esform:input path="search.id_in" cssClass="input-medium" placeholder="多个使用空格分隔"/>
+    <esform:input path="search.id_in" cssClass="input-small" placeholder="多个使用空格分隔"/>
     <%--<input type="text" id="search.id_in" name="search.id_in" value="${param['search.id_in']}"  />--%>
     &nbsp;
     <esform:label path="search.age_gt">年龄</esform:label>
@@ -24,6 +24,7 @@
             <div class="input-append date">
                 <esform:input path="search.birthday_gte" cssClass="input-medium"
                                 data-format="yyyy-MM-dd hh:mm:ss"
+                                data-position="bottom-left"
                                 placeholder="大于等于"/>
                 <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
             </div>

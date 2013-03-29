@@ -672,8 +672,11 @@ a:focus { -moz-outline-style: none; } /* IE不支持 */
     color: #777;
 }
 .login .remember {
-    width: 230px;
+    width: 180px;
     float: left;
+}
+.login .btn-login {
+    padding: 5px 20px;
 }
 
 /* Footer

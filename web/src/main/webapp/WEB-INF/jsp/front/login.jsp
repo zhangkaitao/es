@@ -48,7 +48,7 @@
                     <div class="input-prepend">
                         <span class="add-on icon-circle-blank"></span>
                         <input type="text" id="jcaptchaCode" name="jcaptchaCode"
-                                class="input-large validate[required,ajax[ajaxJcaptchaCall]]" placeholder="请输入验证码">
+                                class="input-medium validate[required,ajax[ajaxJcaptchaCall]]" placeholder="请输入验证码">
                     </div>
                      <img class="jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
                 </div>
@@ -56,7 +56,7 @@
 
             <div class="control-group">
                 <label class="checkbox remember"><input type="checkbox" name="rememberMe" value="true">下次自动登录</label>
-                <input id="submitForm" type="submit" class="btn pull-left" value="登录">
+                <input id="submitForm" type="submit" class="btn btn-login pull-left" value="登录">
             </div>
 
         </form>

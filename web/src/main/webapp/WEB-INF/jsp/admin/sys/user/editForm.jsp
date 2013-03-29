@@ -4,11 +4,22 @@
 <div class="panel">
 
     <ul class="nav nav-tabs">
-        <li class="active">
-            <a>系统用户管理[${op}]</a>
+        <li <c:if test="${op eq '新增'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/create?BackURL=<es:BackURL/>">新增</a>
         </li>
+        <c:if test="${not empty m.id}">
+        <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/${m.id}?BackURL=<es:BackURL/>">查看</a>
+        </li>
+        <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/update/${m.id}?BackURL=<es:BackURL/>">修改</a>
+        </li>
+        <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/delete/${m.id}?BackURL=<es:BackURL/>">删除</a>
+        </li>
+        </c:if>
         <li>
-            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+            <a href="<es:BackURL/>">返回列表</a>
         </li>
     </ul>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
