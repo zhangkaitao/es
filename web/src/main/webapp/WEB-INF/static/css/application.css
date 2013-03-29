@@ -1,4 +1,6 @@
 
+
+
 /*bootstrap*/
 
 label,
@@ -145,12 +147,12 @@ html, body {
 }
 
 .header {
-    color: #1999d7;
+    color: #cd0c0c;
     font-weight: bold;
 }
 
 .header a {
-    color: #1999d7;
+    color: #cd0c0c;
 }
 .header .pull-left {
     margin: 10px 0 0 20px;
@@ -224,8 +226,8 @@ iframe[tabs="true"] {
     background: #ddd;
 }
 #menu .li-wrapper.active, #menu .li-wrapper.active:hover{
-    background: #0088cc!important;
-    color: white!important;
+    background: #0088cc;
+    color: white;
 }
 
 #menu li {
@@ -483,10 +485,11 @@ iframe[tabs="true"] {
 .ui-layout-toggler .content {
     font: 12px bold Verdana, Verdana, Arial, Helvetica, sans-serif;
 }
-.ui-layout-toggler:hover .content {
+
+/*.ui-layout-toggler:hover .content {*/
     /* mouse-over */
-    color: #0069D6;
-}
+    /*color: #0069D6;*/
+/*}*/
 
 .table .btn-edit {
     padding: 0px!important;
@@ -551,6 +554,7 @@ iframe[tabs="true"] {
 
 .modal{
     width: 400px;
+    font-size: 14px;
 }
 
 .modal.fade.in {
@@ -710,3 +714,4 @@ a:focus { -moz-outline-style: none; } /* IE不支持 */
 .table {
     margin-bottom: 0;
 }
+

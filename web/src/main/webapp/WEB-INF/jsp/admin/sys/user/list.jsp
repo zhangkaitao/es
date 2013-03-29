@@ -92,7 +92,7 @@
           <c:forEach items="${page.content}" var="m">
             <tr>
                 <td class="check">
-                    <input type="checkbox" name="ids" value="${m.id}" data-status="${m.status}" data-deleted="${m.deleted}">
+                    <input type="checkbox" name="ids" value="${m.id}" data-status="${m.status}" data-deleted="${m.deleted}"/>
                 </td>
                 <td>
                     <a href="${ctx}/admin/sys/user/${m.id}">${m.id}</a>

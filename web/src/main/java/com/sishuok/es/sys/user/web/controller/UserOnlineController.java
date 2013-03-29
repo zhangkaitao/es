@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <p>User: Zhang Kaitao
@@ -36,19 +37,22 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
     }
 
 
-    @RequestMapping("/{id}/forceLogout")
-    public String forceLogout(@PathVariable(value = "id") UserOnline online) {
-        if(online == null) {
-            return redirectToUrl(null);
-        }
+    @RequestMapping("/forceLogout")
+    public String forceLogout(@RequestParam(value = "ids") String[] ids) {
 
-        OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getId());
-        if(onlineSession != null) {
+        for(String id : ids) {
+            UserOnline online = userOnlineService.findOne(id);
+            if(online == null) {
+                continue;
+            }
+            OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getId());
+            if(onlineSession == null) {
+                continue;
+            }
             onlineSession.setStatus(OnlineSession.OnlineStatus.force_logout);
+            online.setStatus(OnlineSession.OnlineStatus.force_logout);
+            userOnlineService.update(online);
         }
-        online.setStatus(OnlineSession.OnlineStatus.force_logout);
-        userOnlineService.update(online);
-
         return redirectToUrl(null);
     }
 

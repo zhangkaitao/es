@@ -229,6 +229,9 @@ $.app = {
             icons : {
                 header: "icon-caret-right",
                 activeHeader: "icon-caret-down"
+            },
+            animate : {
+                easing : "easeOutQuart"
             }
         });
 
@@ -253,13 +256,13 @@ $.app = {
                                 .removeClass(branchCloseIconClass)
                                 .addClass(branchOpenIconClass)
                                 .end()
-                                .closest("li").children("ul").hide("blind");
+                                .closest("li").children("ul").hide("easeOutQuart");
                         } else {
                             liWrapper.children("span")
                                 .removeClass(branchOpenIconClass)
                                 .addClass(branchCloseIconClass)
                                 .end()
-                                .closest("li").children("ul").show("blind");
+                                .closest("li").children("ul").show("easeOutQuart");
                         }
                     });
             } else {
@@ -427,7 +430,7 @@ $.app = {
                 $.app.waitingOver();
                 var div = $("<div></div>").append(data);
                 var dialog = div.dialog(settings)
-                    .closest(".ui-dialog").attr("data-url", url).removeClass("ui-widget-content")
+                    .closest(".ui-dialog").data("durl", url).removeClass("ui-widget-content")
                     .find(".ui-dialog-content ").removeClass("ui-widget-content");
                 if(!$.app._modalDialogQueue) {
                     $.app._modalDialogQueue = new Array();
@@ -539,8 +542,8 @@ $.app = {
                 return;
             }
 
-            var pickDate = $(this).find("[data-format]").attr("data-format").toLowerCase().indexOf("yyyy-mm-dd") != -1;
-            var pickTime = $(this).find("[data-format]").attr("data-format").toLowerCase().indexOf("hh:mm:ss") != -1;
+            var pickDate = $(this).find("[data-format]").data("format").toLowerCase().indexOf("yyyy-mm-dd") != -1;
+            var pickTime = $(this).find("[data-format]").data("format").toLowerCase().indexOf("hh:mm:ss") != -1;
             $date.datetimepicker({
                 pickDate : pickDate,
                 pickTime : pickTime,
@@ -1014,7 +1017,7 @@ $.parentchild = {
                 var $dataTd = $("<td colspan='" + $currentTr.find("td").size() + "'></td>");
                 $dataTr.append($dataTd);
                 $currentTr.after($dataTr);
-                $dataTd.load(loadUrl.replace("{parentId}", $a.attr("data-id")),function() {
+                $dataTd.load(loadUrl.replace("{parentId}", $a.data("id")),function() {
                     $.app.waitingOver();
                 });
             }
@@ -1248,13 +1251,13 @@ $.table = {
             backURL = url;
         }
         //modalDialog时 把当前url保存下来方便翻页和排序
-        table.closest(".ui-dialog").attr("data-url", backURL);
+        table.closest(".ui-dialog").data("url", backURL);
 
-        if (table.attr("data-async") == "true") {
+        if (table.data("async") == "true") {
             $.app.waiting();
 
             var tableId = table.attr("id");
-            var containerId = table.attr("data-async-container");
+            var containerId = table.data("async-container");
             var headers = {};
 
             if(!containerId) {//只有只替换表格时使用
@@ -1277,7 +1280,7 @@ $.table = {
                     }
 
                     table = $("#" + tableId);
-                    table.attr("data-url", backURL);
+                    table.data("url", backURL);
                     $.table.initTable(table);
 
 
@@ -1295,10 +1298,10 @@ $.table = {
     tableURL : function(table) {
         var $dialog = table.closest(".ui-dialog");
 
-        var url = table.attr("data-url");
+        var url = table.data("url");
         if(!url && $dialog.size() > 0) {
             //modalDialog
-            url = $dialog.attr("data-url");
+            url = $dialog.data("url");
         }
         if (!url) {
             url = window.location.href;
@@ -1323,7 +1326,7 @@ $.table = {
      * @param table
      */
     getPrefix : function(table) {
-        var prefix = table.attr("data-prefix");
+        var prefix = table.data("prefix");
         if (!prefix) {
             prefix = "";
         } else {
@@ -1474,7 +1477,7 @@ $.movable = {
         if(table.size() == 0) {
             return;
         }
-        var urlPrefix = table.attr("data-move-url-prefix");
+        var urlPrefix = table.data("move-url-prefix");
         if(!urlPrefix) {
             $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/move'&gt;<br/>自动生成：/move/{direction:方向(up|down)}/{fromId}/{toId}"});
         }
