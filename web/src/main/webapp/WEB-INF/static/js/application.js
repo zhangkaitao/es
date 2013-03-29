@@ -1,12 +1,13 @@
 //自己扩展的jquery函数
 //压缩时请把编码改成ANSI
+
 $.app = {
     tabs: null,
     layout: null,
     /**初始化主页 layout，菜单，tab*/
     initIndex: function () {
-        this.initLayout();
         this.initMenu();
+        this.initLayout();
         this.initTab();
         this.initTabScroll();
     },
@@ -15,26 +16,30 @@ $.app = {
         function resizePanel(panelName, panelElement, panelState, panelOptions, layoutName) {
             var tabul = $(".tabs-fix-top");
             if (panelName == 'west') {
-                var left = panelElement.width() + 13;
-                if (panelState.isClosed) {
-                        left = 23;
-                }
-                tabul.css("left", left);
+//                var left = panelElement.width() + 11;
+//                if (panelState.isClosed) {
+//                    left = 23;
+//                }
+//                tabul.css("left", left);
             }
             if (panelName == 'north') {
-                var top = panelElement.height() + 13;
+                var top = panelElement.height() - 30;
                 if (panelState.isClosed) {
-                    top = 9;
+                    top = -58;
                 }
                 tabul.css("top", top);
             }
-            tabul.find(".ul-wrapper").width(tabul.width());
-            $.app.initTabScrollHideOrShowMoveBtn();
+
+            if(panelName == "center") {
+                tabul.find(".ul-wrapper").andSelf().width(panelState.layoutWidth);
+                $.app.initTabScrollHideOrShowMoveBtn();
+            }
+
+
         }
 
-        this.layout = $('body').layout({
-                west__size:  250
-            ,   north__size: 65
+        this.layout = $('.index-panel').layout({
+                west__size:  210
             ,   south__size: 30
             ,	west__spacing_closed:		20
             ,	west__togglerLength_closed:	100
@@ -48,14 +53,19 @@ $.app = {
             ,   onopen: resizePanel
             ,   onclose: resizePanel
             ,   onresize: resizePanel
-            ,	center__maskContents:		true // IMPORTANT - enable iframe masking
+            ,	center__maskContents:true // IMPORTANT - enable iframe masking
+            ,   north : {
+                   togglerLength_open : 0
+                ,  resizable : false
+                ,  size: 95
+            }
         });
     },
     /**初始化tab */
     initTab: function () {
         function activeMenu(tabPanelId) {
             var currentMenu = $("#menu-" + tabPanelId.replace("tabs-", ""));
-            $(".menu .select").removeClass("select");
+            $("#menu .li-wrapper.active").removeClass("active");
             if(currentMenu.size() > 0) {
                 //把父菜单展示出来
                 currentMenu.parents("ul").each(function(){
@@ -66,27 +76,29 @@ $.app = {
                         $(this).prev("a").click();
                     }
                 });
-                currentMenu.closest("li").addClass("select");
+                var li = currentMenu.closest(".li-wrapper");
+                li.addClass("active");
             }
         }
         var tabs = $("#tabs").tabs({
             beforeActivate: function (event, ui) {
                 var tabs = $("#tabs");
-                tabs.find(".ui-icon").hide();
+                tabs.find(".menu").hide();
                 var newPanelId = ui.newPanel.prop("id");
-                tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".ui-icon").show();
+                tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".menu").show();
                 activeMenu(newPanelId);
                 $.app.activeIframe(newPanelId);
             }
         });
         this.tabs = tabs;
-        tabs.delegate("span.ui-icon-close", "click", function () {
+        tabs.delegate("span.icon-remove", "click", function () {
             var panelId = $(this).closest("li").remove().attr("aria-controls");
             $("#" + panelId).remove();
             $("#iframe-" + panelId).remove();
+            tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").size());
             tabs.tabs("refresh");
         });
-        tabs.delegate("span.ui-icon-refresh", "click", function () {
+        tabs.delegate("span.icon-refresh", "click", function () {
             var panelId = $(this).closest("li").attr("aria-controls");
             var panel = $("#" + panelId);
             $.app.loadingToCenterIframe(panel, panel.data("url"), null, true);
@@ -131,23 +143,26 @@ $.app = {
         };
 
         if(panelId) {
+
             var $li = $("#tabs").find("li[aria-labelledby='" + $("#" + panelId).attr("aria-labelledby") + "']");
+
             var liOffsetLeft = $li.offset().left;
             var liLeftPos = liOffsetLeft + $li.width();
 
+            var isLast = $li.attr("aria-controls") == $lastLI.attr("aria-controls");
+
             //如果当前tab没有隐藏 则不scroll
-            if((ulWapperOffsetLeft <= liOffsetLeft) && (liLeftPos <= ulWrapperLeftPos)) {
+            if((ulWapperOffsetLeft <= liOffsetLeft) && (liLeftPos <= ulWrapperLeftPos) && !isLast) {
                 return;
             }
 
             var leftPos = 0;
             //right
-            if(ulWrapperLeftPos < liLeftPos) {
-                var isLast = $li.attr("aria-labelledby") == $lastLI.attr("aria-labelledby");
-                leftPos = $ulWrapper.scrollLeft() + (liLeftPos - ulWrapperLeftPos) + (isLast ? 10 : 50);
+            if(ulWrapperLeftPos < liLeftPos || isLast) {
+                leftPos = $ulWrapper.scrollLeft() + (liLeftPos - ulWrapperLeftPos) + (isLast ? 10 :55);
             } else {
                 //left
-                leftPos = "-=" + (ulWapperOffsetLeft - liOffsetLeft + 50);
+                leftPos = "-=" + (ulWapperOffsetLeft - liOffsetLeft + 55);
             }
 
             $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
@@ -212,49 +227,50 @@ $.app = {
             header:"h3",
             heightStyle:"content",
             icons : {
-                header: "ui-icon-circle-plus",
-                activeHeader: "ui-icon-circle-minus"
+                header: "icon-caret-right",
+                activeHeader: "icon-caret-down"
             }
         });
 
+        menus.find(".ui-accordion-header-icon").removeClass("ui-icon").addClass("menu-header-icon");
 
-        var leafIconClass = "icon-angle-right";
-        var branchOpenIconClass = "icon-double-angle-right";
-        var branchCloseIconClass = "icon-double-angle-down";
-        menus.find("div > ul")
-            .children("li").each(function () {
-                var submenu = $(this);
-                var submenuUL = submenu.find("ul");
-                if (submenuUL.size() > 0) {
-                    submenuUL.hide();
-                    submenu.find("li:not(:has(ul))").prepend('<span class="' + leafIconClass + '"></span>');
-                    submenuUL.closest("li")
-                        .prepend('<span class="' + branchOpenIconClass + '"></span>')
-                        .find("a,span")
-                        .click(function () {
-                            if ($(this).parent().children("span").hasClass(branchCloseIconClass)) {
-                                $(this).parent().children("span")
-                                    .removeClass(branchCloseIconClass)
-                                    .addClass(branchOpenIconClass)
-                                    .end()
-                                    .children("ul").hide("blind");
-                            } else {
-                                $(this).parent().children("span")
-                                    .removeClass(branchOpenIconClass)
-                                    .addClass(branchCloseIconClass)
-                                    .end()
-                                    .children("ul").show("blind");
-                            }
-                        });
-                } else {
-                    submenu.prepend('<span class="' + leafIconClass + '"></span>');
-                }
-            });
+        var leafIconClass = "menu-icon icon-angle-right";
+        var branchOpenIconClass = "menu-icon icon-double-angle-right";
+        var branchCloseIconClass = "menu-icon icon-double-angle-down";
+        menus.find("li").each(function () {
+            var li = $(this);
+
+            li.children("a").wrap("<div class='li-wrapper'></div>");
+            var liWrapper = li.children(".li-wrapper");
+            var liUL = li.find("ul");
+            var hasChild = liUL.size() > 0;
+            if (hasChild) {
+                liUL.hide();
+                liWrapper.prepend('<span class="' + branchOpenIconClass + '"></span>')
+                    .click(function () {
+                        if (liWrapper.children("span").hasClass(branchCloseIconClass)) {
+                            liWrapper.children("span")
+                                .removeClass(branchCloseIconClass)
+                                .addClass(branchOpenIconClass)
+                                .end()
+                                .closest("li").children("ul").hide("blind");
+                        } else {
+                            liWrapper.children("span")
+                                .removeClass(branchOpenIconClass)
+                                .addClass(branchCloseIconClass)
+                                .end()
+                                .closest("li").children("ul").show("blind");
+                        }
+                    });
+            } else {
+                liWrapper.prepend('<span class="' + leafIconClass + '"></span>');
+            }
+        })
 
 
         var index = 2;
-        var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='ui-icon ui-icon-close' role='presentation'title='关闭'>关闭</span><br/><span class='ui-icon ui-icon-refresh' role='presentation' title='刷新'>刷新</span></li>";
-        $("#menu a").each(function () {
+        var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='menu icon-remove' role='presentation'title='关闭'></span><br/><span class='menu icon-refresh' role='presentation' title='刷新'></span></li>";
+        menus.find("a").each(function () {
             var a = $(this);
             var href = a.attr("href");
             if (href == "#" || href == '') {
@@ -262,10 +278,11 @@ $.app = {
             }
 
             var active = function(a, forceRefresh) {
-                $("#menu a").each(function () {
-                    $(this).closest("li").removeClass("select");
+                menus.find("a").each(function () {
+                    $(this).closest("li > .li-wrapper").removeClass("active");
                 });
-                a.closest("li").addClass("select");
+                a.closest("li > .li-wrapper").addClass("active");
+
                 var panelIndex = a.data("index");
                 var panelId = "tabs-" + panelIndex;
                 var currentTabPanel = $("#" + panelId);
@@ -278,10 +295,9 @@ $.app = {
                     tabs.append('<div id="' + panelId + '"></div>');
                     tabs.tabs("refresh");
                     currentTabPanel = $("#" + panelId);
-                    currentTabPanel.data("index", tabs.find("ul li").index(li));
                 }
                 $.app.loadingToCenterIframe(currentTabPanel, a.data("url"), null, forceRefresh);
-                tabs.tabs("option", "active", currentTabPanel.data("index"));
+                tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").index(currentTabPanel));
 
                 return false;
             }
@@ -290,10 +306,13 @@ $.app = {
                 .data("url", a.attr("href"))
                 .attr("href", "#")
                 .attr("id", "menu-" + a.data("index"))
+                .closest("li")
                 .click(function () {
-                    active($(this), false);
+                    active(a, false);
+                    return false;
                 }).dblclick(function() {
-                    active($(this), true);//双击强制刷新
+                    active(a, true);//双击强制刷新
+                    return false;
                 });
         });
     },
@@ -381,7 +400,7 @@ $.app = {
             closeText : "关闭",
             closeOnEscape:false,
             height:300,
-            width:800,
+            width:600,
             modal:true,
             close: function() {
                 $(this).closest(".ui-dialog").remove();
@@ -524,7 +543,9 @@ $.app = {
             var pickTime = $(this).find("[data-format]").attr("data-format").toLowerCase().indexOf("hh:mm:ss") != -1;
             $date.datetimepicker({
                 pickDate : pickDate,
-                pickTime : pickTime
+                pickTime : pickTime,
+                maskInput: true,
+                language:"zh-CN"
             });
             $date.find(":input").click(function() {$date.find(".icon-calendar,.icon-time,.icon-date").click();});
             $date.attr("initialized", true);
@@ -578,9 +599,26 @@ $.app = {
         if(!period) {
             period = 5 * 60 * 1000;
         }
-        setTimeout(function() {$.get(ctx + "/session/heartbeat");}, period);
+        setInterval(function() {$.get(ctx + "/session/heartbeat");}, period);
 
     }
+    ,
+
+    /**
+     * 将$("N").val() ----> [1,2,3]
+     */
+    joinVar : function(elem, separator) {
+        if(!separator) {
+            separator = ",";
+        }
+        var array = new Array();
+        $(elem).each(function() {
+            array.push($(this).val());
+        });
+
+        return array.join(separator);
+    }
+
 };
 
 $.parentchild = {
@@ -760,16 +798,16 @@ $.parentchild = {
         });
 
 
-        var $updateBtn = $("<a class='icon-edit' href='javascript:void(0);' title='修改'></a>");
+        var $updateBtn = $("<a class='btn btn-link icon-edit' href='javascript:void(0);' title='修改'></a>");
         $updateBtn.click(function() {
             $.parentchild.updateChild($(this), options.updateUrl, options.modalSettings);
         });
 
-        var $deleteBtn = $("<a class='icon-trash' href='javascript:void(0);' title='删除'></a>");
+        var $deleteBtn = $("<a class='btn btn-link icon-trash' href='javascript:void(0);' title='删除'></a>");
         $deleteBtn.click(function() {
             $.parentchild.deleteChild($(this), options.deleteUrl, options.modalSettings);
         })
-        var $copyBtn = $("<a class='icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>");
+        var $copyBtn = $("<a class='btn btn-link icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>");
         $copyBtn.click(function() {
             $.parentchild.copyChild($(this), options.updateUrl, options.modalSettings);
         });
@@ -990,7 +1028,7 @@ $.parentchild = {
 
 
 $.table = {
-    
+
     /**
      * 初始化表格：全选/反选 排序
      * @param table
@@ -1016,9 +1054,9 @@ $.table = {
         $.table.initUpdateSelected(table);
         $.table.initCreate(table);
 
-
     },
     initCheckbox: function(table) {
+        var activeClass = "active";
         //初始化表格中checkbox 点击单元格选中
         table.find("td.check").each(function () {
             var checkbox = $(this).find(":checkbox,:radio");
@@ -1026,7 +1064,14 @@ $.table = {
                 event.stopPropagation();
             });
             $(this).off("click").on("click", function (event) {
-                checkbox.prop("checked", !checkbox.prop("checked"));
+                var checked = checkbox.is(":checked");
+                if(checked) {
+                    checkbox.closest("tr").removeClass("active");
+                } else {
+                    checkbox.closest("tr").addClass("active");
+                }
+                checkbox.prop("checked", !checked);
+
             });
         });
         //初始化全选反选
@@ -1034,15 +1079,23 @@ $.table = {
             var checkAll = $(this);
             if(checkAll.text() == '全选') {
                 checkAll.text("取消");
-                table.find("td.check :checkbox").prop("checked", true);
+                table.find("td.check :checkbox").prop("checked", true).closest("tr").addClass("active");
+
             } else {
                 checkAll.text("全选");
-                table.find("td.check :checkbox").prop("checked", false);
+                table.find("td.check :checkbox").prop("checked", false).closest("tr").removeClass("active");
             }
         });
         table.find(".reverse-all").off("click").on("click", function () {
             table.find("td.check :checkbox").each(function () {
-                $(this).prop("checked", !$(this).prop("checked"));
+                var checkbox = $(this);
+                var checked = checkbox.is(":checked");
+                if(checked) {
+                    checkbox.closest("tr").removeClass("active");
+                } else {
+                    checkbox.closest("tr").addClass("active");
+                }
+                checkbox.prop("checked", !checked);
             });
         });
     },
@@ -1060,6 +1113,7 @@ $.table = {
         var turnSearch = function(table, searchForm, isSearchAll) {
             var url = $.table.tableURL(table);
             url = $.table.removeSearchParam(url, searchForm);
+            url = $.table.removePageParam(url, searchForm);
             if(!isSearchAll) {
                 if(url.indexOf("?") == -1) {
                     url = url + "?";
@@ -1156,7 +1210,10 @@ $.table = {
      * @param child table的子
      */
     turnPage: function (pageSize, pn, child) {
-        var table = $(child).closest("table");
+        var table = $(child).closest(".table-pagination").prev("table");
+        if(table.size () == 0) {
+            table = $(child).closest("table");
+        }
 
         var pageURL = $.table.tableURL(table);
 
@@ -1212,6 +1269,10 @@ $.table = {
                     if (containerId) {//装载到容器
                         $("#" + containerId).replaceWith(data);
                     } else {
+                        var pagination = table.next(".table-pagination");
+                        if(pagination.size() > 0) {
+                            pagination.remove();
+                        }
                         table.replaceWith(data);
                     }
 
@@ -1321,17 +1382,14 @@ $.table = {
         var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-batch-delete");
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
-            var $selectedIds = $table.find(".check :checkbox:checked");
-            if($selectedIds.size() == 0) {
-                $.app.alert({message : "请先选择要删除的数据！"});
-                return;
-            }
+            var checkbox = $.table.getAllSelectedCheckbox($table);
+            if(checkbox.size() == 0)  return;
 
             $.app.confirm({
                 message: "确定删除选择的数据吗？",
                 ok : function() {
                     window.location.href =
-                        urlPrefix + "/batch/delete?" + $selectedIds.serialize() + "&BackURL=" + $.table.encodeTableURL($table);
+                        urlPrefix + "/batch/delete?" + checkbox.serialize() + "&BackURL=" + $.table.encodeTableURL($table);
                 }
             });
         });
@@ -1345,12 +1403,9 @@ $.table = {
 
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
-            var id = $table.find(".check :checkbox:checked").val();
-            if(!id) {
-                $.app.alert({message : "请先选择要修改的数据"});
-                return;
-            }
-
+            var checkbox = $.table.getFirstSelectedCheckbox($table);
+            if(checkbox.size() == 0)  return;
+            var id = checkbox.val();
             window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.table.encodeTableURL($table);
         });
     },
@@ -1359,13 +1414,14 @@ $.table = {
             return;
         }
         var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-create");
-        var url =  $.table.formatUrlPrefix(urlPrefix, $table) + "/create";
-        if($btn.attr("href")) {
-            url = $btn.attr("href");
-        }
-        $btn.attr("href", "javascript:;");
+
         $btn.off("click").on("click", function() {
+            var url =  $.table.formatUrlPrefix(urlPrefix, $table) + "/create";
+            if($btn.attr("href")) {
+                url = $btn.attr("href");
+            }
             window.location.href = url + (url.indexOf("?") == -1 ? "?" : "&") + "BackURL=" + $.table.encodeTableURL($table);
+            return false;
         });
     },
     initTableBtn : function($table) {
@@ -1374,16 +1430,36 @@ $.table = {
         }
         $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-batch-delete").each(function() {
             var $btn = $(this);
-            var url = $btn.attr("href");
-            if(!url || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0) {//没有url就不处理了
-                return;
-            }
+
             $btn.off("click").on("click", function() {
+                var url = $btn.attr("href");
+                if(!url || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0) {//没有url就不处理了
+                    return;
+                }
                 window.location.href = url + (url.indexOf("?") == -1 ? "?" : "&") + "BackURL=" + $.table.encodeTableURL($table);
-            }).attr("href", "javascript:;");
+                return false;
+            });
 
         });
 
+    },
+    getFirstSelectedCheckbox :function($table) {
+        var checkbox = $("#table :checkbox:checked:first");
+        if(checkbox.size() == 0) {
+            $.app.alert({
+                message : "请先选择要操作的数据！"
+            });
+        }
+        return checkbox;
+    },
+    getAllSelectedCheckbox :function($table) {
+        var checkbox = $("#table :checkbox:checked");
+        if(checkbox.size() == 0) {
+            $.app.alert({
+                message : "请先选择要操作的数据！"
+            });
+        }
+        return checkbox;
     }
 }
 
@@ -1585,7 +1661,6 @@ $.array = {
     }
 
 };
-
 
 $(function () {
     //global disable ajax cache

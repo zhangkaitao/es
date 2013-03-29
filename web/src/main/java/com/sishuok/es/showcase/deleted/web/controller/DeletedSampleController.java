@@ -53,6 +53,7 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
     @SearchableDefaults(value = "deleted_eq=false")
     @Override
     public String list(Searchable searchable, Model model) {
+        setCommonData(model);
         return super.list(searchable, model);    //To change body of overridden methods use File | Settings | File Templates.
     }
 

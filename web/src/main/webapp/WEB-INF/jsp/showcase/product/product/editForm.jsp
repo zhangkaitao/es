@@ -1,12 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<div>
+<div class="panel">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a>产品管理[${op}]</a>
+        </li>
+        <li>
+            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+        </li>
+    </ul>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <fieldset>
-            <legend>产品管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
-
-            <es:showGlobalError commandName="m"/>
+          <es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
 
@@ -71,7 +76,7 @@
                     <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
-        </fieldset>
+
     </form:form>
 </div>
 <es:contentFooter/>
@@ -99,7 +104,7 @@
                     "参照",
                     "${ctx}/showcase/product/category/select/single;domId=categoryId;domName=categoryName",
                     {
-                        width:800,
+                        width:600,
                         height:450
                     }
              );

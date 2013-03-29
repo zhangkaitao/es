@@ -3,9 +3,16 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-upload-css.jspf"%>
 <div>
+
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a>文件管理[${op}]</a>
+        </li>
+        <li>
+            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+        </li>
+    </ul>
     <form:form id="fileupload" method="post" cssClass="form-horizontal" enctype="multipart/form-data">
-        <fieldset>
-            <legend>ajax文件上传管理[${op}]</legend>
 
             <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
             <div class="row fileupload-buttonbar">
@@ -46,7 +53,7 @@
             <div class="fileupload-loading"></div>
             <br>
             <!-- The table listing the files available for upload/download -->
-            <table role="presentation" class="table table-striped">
+            <table role="presentation" class="table">
                 <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
             </table>
 
@@ -55,7 +62,7 @@
                     <input type="button" class="btn show-upload" value="显示上传的文件名">
                 </div>
             </div>
-        </fieldset>
+
     </form:form>
 </div>
 <!-- modal-gallery is the modal dialog used for the image gallery -->

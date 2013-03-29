@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table id="table" class="sort-table table table-bordered table-hover table-striped" data-async="true">
+<table id="table" class="sort-table table table-bordered table-hover" data-async="true">
     <thead>
     <tr>
-        <th style="width: 80px">
+        <th style="width: 70px;">
             <a class="check-all" href="javascript:;">全选</a>
             |
             <a class="reverse-all" href="javascript:;">反选</a>
@@ -40,12 +40,6 @@
         </tr>
     </c:forEach>
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="1000">
-                <es:page page="${page}" />
-            </td>
-        </tr>
-    </tfoot>
 </table>
+<es:page page="${page}"/>
 

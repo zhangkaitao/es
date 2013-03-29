@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table id="table" class="sort-table table table-bordered table-hover table-striped" data-async="true">
+<table id="table" class="sort-table table table-bordered table-hover" data-async="true">
     <thead>
     <tr>
         <th sort="username" style="width: 60px;">用户</th>
@@ -35,12 +35,6 @@
         </tr>
     </c:forEach>
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="1000">
-                <es:page page="${page}" />
-            </td>
-        </tr>
-    </tfoot>
 </table>
+<es:page page="${page}"/>
 

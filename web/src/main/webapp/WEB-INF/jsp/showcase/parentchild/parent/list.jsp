@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <es:showMessage/>
-<div data-table="table">
+<div data-table="table" class="panel">
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">

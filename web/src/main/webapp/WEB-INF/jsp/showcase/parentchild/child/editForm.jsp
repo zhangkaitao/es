@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<div>
+<div class="panel">
+    <br/><br/>
     <form:form id="childEditForm" method="post" commandName="child" cssClass="form-horizontal">
-        <fieldset>
-            <legend>子管理[${op}]</legend>
             <es:showGlobalError commandName="child"/>
             <form:hidden path="id"/>
 
@@ -21,7 +20,7 @@
                 </div>
             </div>
 
-            <div class="control-group ">
+            <div class="control-group">
                 <form:label path="beginTime" cssClass="control-label">开始时间</form:label>
                 <div class="controls input-append date">
                     <form:input path="beginTime" data-format="hh:mm:ss" placeholder="例如11:11:11" readonly="true"/>
@@ -44,14 +43,12 @@
                 </div>
             </div>
 
-            <br/><br/>
             <div class="control-group">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
                     <a href="javascript:$.app.cancelModelDialog();" class="btn">取消</a>
                 </div>
             </div>
-        </fieldset>
     </form:form>
 </div>
 <script type="text/javascript">
@@ -67,8 +64,8 @@
             trId : "${param.trId}",
             validationEngine : validationEngine,
             modalSettings:{
-                width:800,
-                height:500,
+                width:600,
+                height:400,
                 buttons:{}
             },
             updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",

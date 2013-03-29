@@ -1,0 +1,2 @@
+<link rel="stylesheet" href="${ctx}/static/comp/treetable/css/jquery.treetable.css">
+<link rel="stylesheet" href="${ctx}/static/comp/treetable/css/jquery.treetable.theme.default.css">

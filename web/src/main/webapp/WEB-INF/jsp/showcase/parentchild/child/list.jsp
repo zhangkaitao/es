@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table class="sort-table table table-bordered table-hover table-striped">
+<table class="sort-table table table-bordered table-hover">
       <thead>
         <tr>
             <th sort="id">编号</th>

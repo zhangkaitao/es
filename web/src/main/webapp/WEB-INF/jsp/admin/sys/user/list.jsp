@@ -1,21 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<ul class="nav nav-pills">
-    <li <c:if test="${param['search.deleted_eq'] ne 'true' and param['search.status_eq'] ne 'blocked'}">class="active"</c:if>>
-        <a href="${ctx}/admin/sys/user">用户列表</a>
-    </li>
-    <li <c:if test="${param['search.deleted_eq'] eq 'true'}">class="active"</c:if>>
-        <a href="${ctx}/admin/sys/user?search.deleted_eq=true">已删除用户列表</a>
-    </li>
-    <li <c:if test="${param['search.status_eq'] eq 'blocked'}">class="active"</c:if>>
-        <a href="${ctx}/admin/sys/user?search.status_eq=blocked">已封禁用户列表</a>
-    </li>
-</ul>
 
-<es:showMessage/>
+<div data-table="table" class="panel">
 
-<div data-table="table">
+    <es:showMessage/>
+
+
+    <ul class="nav nav-pills tool ui-toolbar">
+        <li <c:if test="${param['search.deleted_eq'] ne 'true' and param['search.status_eq'] ne 'blocked'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user">用户列表</a>
+        </li>
+        <li <c:if test="${param['search.deleted_eq'] eq 'true'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user?search.deleted_eq=true">已删除用户列表</a>
+        </li>
+        <li <c:if test="${param['search.status_eq'] eq 'blocked'}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user?search.status_eq=blocked">已封禁用户列表</a>
+        </li>
+    </ul>
+
+
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
@@ -29,15 +33,46 @@
                 </a>
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
-                    批量删除
+                    删除
                 </a>
+                <div class="btn-group">
+                    <!-- 第一个忽略掉 否则有圆角 -->
+                    <a></a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        更多操作
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="btn btn-link change-password">改密</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-link block-user">封禁用户</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-link unblocked-user">解封用户</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-link recycle">还原删除的用户</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="btn btn-link status-history">状态变更历史</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-link last-online-info">最后在线历史</a>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="span8">
             <%@include file="searchForm.jsp" %>
         </div>
     </div>
-    <table id="table" class="sort-table table table-bordered table-hover table-striped">
+
+    <table id="table" class="sort-table table table-bordered table-hover">
           <thead>
             <tr>
                 <th style="width: 80px;">
@@ -51,13 +86,14 @@
                 <th sort="mobilePhoneNumber">手机号</th>
                 <th>创建时间</th>
                 <th>帐户状态</th>
-                <th>是否是管理员</th>
-                <th style="width: 190px">操作</th>
+                <th>管理员</th>
             </tr>
           <tbody>
           <c:forEach items="${page.content}" var="m">
             <tr>
-                <td class="check"><input type="checkbox" name="ids" value="${m.id}"></td>
+                <td class="check">
+                    <input type="checkbox" name="ids" value="${m.id}" data-status="${m.status}" data-deleted="${m.deleted}">
+                </td>
                 <td>
                     <a href="${ctx}/admin/sys/user/${m.id}">${m.id}</a>
                 </td>
@@ -67,71 +103,82 @@
                 <td><spring:eval expression="m.createDate"/></td>
                 <td>${m.status.info}</td>
                 <td>${m.admin?'是' : '否'}</td>
-                <td>
-                    <a class="btn btn-link no-padding" href="${ctx}/admin/sys/user/update/${m.id}">修改</a>
-                    |
-                    <c:choose>
-                        <c:when test="${m.deleted == false}">
-                            <a class="btn btn-link no-padding" title="删除" href="${ctx}/admin/sys/user/delete/${m.id}">删除</a>
-                        </c:when>
-                        <c:otherwise>
-                            <a class="btn btn-link no-padding recycle" data-url="${ctx}/admin/sys/user/recycle/${m.id}">还原</a>
-                        </c:otherwise>
-                    </c:choose>
-                    |
-                    <a class="btn btn-link no-padding change-password" data-url="${ctx}/admin/sys/user/changePassword/${m.id}">改密</a>
-                    |
-                    <c:choose>
-                        <c:when test="${m.status eq 'normal'}">
-                            <a class="btn btn-link no-padding block-user" data-url="${ctx}/admin/sys/user/changeStatus/${m.id}/blocked">封禁</a>
-                        </c:when>
-                        <c:otherwise>
-                            <a class="btn btn-link no-padding unblock-user" data-url="${ctx}/admin/sys/user/changeStatus/${m.id}/normal">解封</a>
-                        </c:otherwise>
-                    </c:choose>
-                    <br/>
-                    <a class="btn btn-link no-padding status-history" data-url="${ctx}/admin/sys/user/statusHistory?search.user.username_eq=${m.username}">状态变更历史</a>
-                    |
-                    <a class="btn btn-link no-padding last-online-info" data-url="${ctx}/admin/sys/user/lastOnline?search.username_eq=${m.username}">最后在线历史</a>
-                </td>
             </tr>
           </c:forEach>
           </tbody>
     </table>
-    <es:page page="${page}" />
+    <es:page page="${page}"/>
 </div>
 <es:contentFooter/>
 <script type="text/javascript">
     $(function() {
         $(".change-password").click(function() {
-            var url = $(this).attr("data-url");
+            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
+            if(checkbox.size() == 0) return;
+            var id = checkbox.val();
+            var url = "${ctx}/admin/sys/user/changePassword?" + checkbox.serialize();
+
             $.app.confirm({
+                title: "修改密码",
                 message : "请输入新密码：<br/><input type='password' id='password' class='input-medium'/>",
                 ok : function() {
                     var password = $("#password").val();
                     if(password) {
-                        window.location.href = url + "?newPassword=" + password;
+                        window.location.href = url + "&newPassword=" + password;
                     }
                 }
             });
         });
 
-        $(".block-user,.unblock-user").click(function() {
-            var url = $(this).attr("data-url");
-            var tip = $(this).is(".block-user") ? "请输入封禁原因:" : "请输入解封原因：";
+        $(".block-user,.unblocked-user").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
+            if(checkbox.size() == 0) return;
+            var id = checkbox.val();
+            var status = $(this).is(".unblocked-user") ? "normal" : "blocked";
+            var url = "${ctx}/admin/sys/user/changeStatus/" + status + "?" + checkbox.serialize();
+
+            var title = status == 'blocked' ? "封禁用户" : "解封用户";
+            var tip = status == 'blocked' ? "请输入封禁原因:" : "请输入解封原因：";
+
             $.app.confirm({
+                title: title,
                 message : tip + "<br/><textarea id='reason' style='width: 300px;height: 50px;'></textarea>",
                 ok : function() {
                     var reason = $("#reason").val();
                     if(reason) {
-                        window.location.href = url + "?reason=" + reason;
+                        window.location.href = url + "&reason=" + reason;
                     }
                 }
             });
         });
+        $(".status-history").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
+            if(checkbox.size() == 0) return;
+            var ids = $.app.joinVar(checkbox.val());
+            var url = "${ctx}/admin/sys/user/statusHistory?search.user.id_eq=" + ids;
+
+            $.app.modalDialog("状态改变历史", url, {width : 800});
+        });
+        $(".last-online-info").click(function() {
+
+            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
+            if(checkbox.size() == 0) return;
+            var ids = $.app.joinVar(checkbox.val());
+            var url = "${ctx}/admin/sys/user/lastOnline?search.userId_eq=" + ids;
+
+            $.app.modalDialog("最后在线历史", url, {width : 800});
+        });
+
+
         $(".recycle").click(function() {
-            var url = $(this).attr("data-url");
+
+            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
+            if(checkbox.size() == 0) return;
+
+
+            var url = "${ctx}/admin/sys/user/recycle?" + checkbox.serialize();
             $.app.confirm({
+                title : "欢迎删除的用户",
                 message : "确认还原吗？",
                 ok : function() {
                     window.location.href = url;
@@ -139,11 +186,5 @@
             });
         });
 
-        $(".status-history").click(function() {
-            $.app.modalDialog("状态改变历史", $(this).attr("data-url"));
-        });
-        $(".last-online-info").click(function() {
-            $.app.modalDialog("最后在线历史", $(this).attr("data-url"), {width:1000});
-        });
     });
 </script>

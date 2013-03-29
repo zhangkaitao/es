@@ -14,6 +14,7 @@ import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.ExtendedEntityManagerCreator;
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
 
 import javax.persistence.*;
@@ -241,12 +242,9 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
     public static <M extends AbstractEntity, ID extends Serializable> BaseRepositoryImpl<M, ID> defaultBaseRepositoryImpl(Class<M> entityClass) {
         DefaultRepositoryImpl<M, ID> defaultRepository = new DefaultRepositoryImpl<M, ID>(entityClass);
         EntityManagerFactory emf = SpringUtils.getBean(EntityManagerFactory.class);
-        EntityManager entityManager = EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
-        if(entityManager == null) {
-            entityManager = SharedEntityManagerCreator.createSharedEntityManager(emf);
-        }
-        defaultRepository.entityManager = entityManager;
+        EntityManager entityManager = ExtendedEntityManagerCreator.createContainerManagedEntityManager(emf);
 
+        defaultRepository.entityManager = entityManager;
         return defaultRepository;
     }
 

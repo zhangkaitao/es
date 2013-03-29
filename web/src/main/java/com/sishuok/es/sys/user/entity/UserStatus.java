@@ -7,7 +7,7 @@ package com.sishuok.es.sys.user.entity;
  */
 public enum UserStatus {
 
-    normal("正常状态"), blocked("锁定状态");
+    normal("正常状态"), blocked("封禁状态");
 
     private final String info;
 

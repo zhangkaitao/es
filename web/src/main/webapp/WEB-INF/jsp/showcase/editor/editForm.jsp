@@ -1,11 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<div>
+<div class="panel">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a>编辑器管理[${op}]</a>
+        </li>
+        <li>
+            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+        </li>
+    </ul>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-
-        <fieldset>
-            <legend>编辑器管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
 
             <es:showGlobalError commandName="m"/>
 
@@ -25,7 +30,7 @@
                 <div class="controls">
                     <c:choose>
                     <c:when test="${op ne '查看'}">
-                        <form:textarea path="content" cssClass="validate[required]" cssStyle="width: 800px;height: 300px;"/>
+                        <form:textarea path="content" cssClass="validate[required]" cssStyle="width: 600px;height: 300px;"/>
                     </c:when>
                     <c:otherwise>
                         ${m.content}
@@ -41,7 +46,7 @@
                     <a href="<es:BackURL/>" class="btn">返回</a> (提交快捷键: Ctrl + Enter)
                 </div>
             </div>
-        </fieldset>
+
     </form:form>
 </div>
 <es:contentFooter/>

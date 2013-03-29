@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf" %>
-<es:contentHeader title="管理员登录 Easy-Scaffold脚手架"/>
+<es:contentHeader title="管理员登录 Easy-Scaffold脚手架" index="true"/>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <a class="brand" href="#">&nbsp;&nbsp;es脚手架</a>

@@ -55,43 +55,46 @@ public class UserController extends BaseCRUDController<User, Long> {
         return super.list(searchable, model);
     }
 
-    @RequestMapping(value = "changePassword/{id}")
+    @RequestMapping(value = "changePassword")
     public String changePassword(
             HttpServletRequest request,
-            @PathVariable("id") User user, @RequestParam("newPassword") String newPassword,
+            @RequestParam("ids") Long[] ids, @RequestParam("newPassword") String newPassword,
             RedirectAttributes redirectAttributes) {
 
-        userService.changePassword(user, newPassword);
+        userService.changePassword(ids, newPassword);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "改密成功！");
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
 
-    @RequestMapping(value = "changeStatus/{id}/{newStatus}")
+    @RequestMapping(value = "changeStatus/{newStatus}")
     public String changeStatus(
             HttpServletRequest request,
-            @PathVariable("id") User user,
+            @RequestParam("ids") Long[] ids,
             @PathVariable("newStatus") UserStatus newStatus,
             @RequestParam("reason") String reason,
             @CurrentUser User opUser,
             RedirectAttributes redirectAttributes) {
 
-        userService.changeStatus(opUser, user, newStatus, reason);
+        userService.changeStatus(opUser, ids, newStatus, reason);
 
         if(newStatus == UserStatus.normal) {
-            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "解锁成功！");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "解封成功！");
         } else if(newStatus == UserStatus.blocked) {
-            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "锁定成功！");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "封禁成功！");
         }
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
 
-    @RequestMapping(value = "recycle/{id}")
-    public String recycle(HttpServletRequest request, @PathVariable("id") User user, RedirectAttributes redirectAttributes) {
-        user.setDeleted(Boolean.FALSE);
-        userService.update(user);
+    @RequestMapping(value = "recycle")
+    public String recycle(HttpServletRequest request, @RequestParam("ids") Long[] ids, RedirectAttributes redirectAttributes) {
+        for (Long id : ids) {
+            User user = userService.findOne(id);
+            user.setDeleted(Boolean.FALSE);
+            userService.update(user);
+        }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "还原成功！");
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }

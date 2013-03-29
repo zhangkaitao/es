@@ -1,22 +1,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<div>
-    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <fieldset>
-            <legend class="no-margin">父管理[${op}] <a href="<es:BackURL/>" class="btn btn-link">返回</a></legend>
+<div class="panel">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a>父管理[${op}]</a>
+        </li>
+        <li>
+            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+        </li>
+    </ul>
+    <form:form id="editForm" method="post" commandName="m" >
+
             <es:showGlobalError commandName="m"/>
             <form:hidden path="id"/>
 
             <div class="prettyprint">
-                <div class="control-group span6">
+                <div class="control-group span4">
                     <form:label path="name" cssClass="control-label">名称</form:label>
                     <div class="controls">
                         <form:input path="name" cssClass="validate[required]" placeholder="请输入名称"/>
                     </div>
                 </div>
 
-                <div class="control-group span6">
+                <div class="control-group span4">
                     <form:label path="type" cssClass="control-label">类型</form:label>
                     <div class="controls">
                         <form:select path="type" items="${typeList}" itemLabel="info"/>
@@ -24,24 +31,31 @@
                 </div>
                 <div class="clearfix"></div>
 
-                <div class="control-group span6">
+                <div class="control-group span4">
                     <form:label path="beginDate" cssClass="control-label">开始时间</form:label>
                     <div class="controls input-append date">
-                        <form:input path="beginDate" data-format="yyyy-MM-dd" placeholder="例如2013-02-07" readonly="true"/>
+                        <form:input path="beginDate"
+                                      data-format="yyyy-MM-dd"
+                                      placeholder="例如2013-02-07"
+                                      readonly="true"/>
                         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                     </div>
                 </div>
 
-                <div class="control-group span6">
+                <div class="control-group span4">
                     <form:label path="endDate" cssClass="control-label">结束时间</form:label>
                     <div class="controls input-append date">
-                        <form:input path="endDate" data-format="yyyy-MM-dd" placeholder="例如2013-02-07" readonly="true"/>
+                        <form:input path="endDate"
+                                      data-format="yyyy-MM-dd"
+                                      placeholder="例如2013-02-07"
+                                      data-position="bottom-left"
+                                      readonly="true"/>
                         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                     </div>
                 </div>
                 <div class="clearfix"></div>
 
-                <div class="control-group span6">
+                <div class="control-group span4">
                     <form:label path="show" cssClass="control-label">是否显示</form:label>
                     <div class="controls inline-radio">
                         <form:radiobuttons path="show" items="${booleanList}" itemLabel="info" itemValue="value" cssClass="validate[required]"/>
@@ -65,10 +79,10 @@
                     </div>
                 </legend>
                 <div>
-                    <table id="childTable" class="table table-bordered table-hover table-striped">
+                    <table id="childTable" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="width: 10%">
+                                <th style="width: 80px">
                                     <a class="check-all" href="javascript:;">全选</a>
                                     |
                                     <a class="reverse-all" href="javascript:;">反选</a>
@@ -98,9 +112,9 @@
                                                &nbsp;
                                            </c:when>
                                            <c:otherwise>
-                                               <a class='icon-edit' href='javascript:void(0);' title='修改'></a>
-                                               <a class='icon-trash' href='javascript:void(0);' title='删除'></a>
-                                               <a class='icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>
+                                               <a class='btn btn-link icon-edit' href='javascript:void(0);' title='修改'></a>
+                                               <a class='btn btn-link icon-trash' href='javascript:void(0);' title='删除'></a>
+                                               <a class='btn btn-link icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>
                                            </c:otherwise>
                                        </c:choose>
                                    </td>
@@ -112,13 +126,13 @@
             </fieldset>
 
             <br/><br/>
-            <div class="control-group">
+            <div class="control-group ui-toolbar">
                 <div class="controls">
                     <input type="submit" class="btn btn-primary" value="${op}">
                     <a href="<es:BackURL/>" class="btn">返回</a>
                 </div>
             </div>
-        </fieldset>
+
     </form:form>
 </div>
 <es:contentFooter/>
@@ -140,8 +154,8 @@
             tableId : "childTable",
             prefixParamName : "childList",
             modalSettings:{
-                width:800,
-                height:500,
+                width:600,
+                height:400,
                 buttons:{}
             },
             createUrl : "${ctx}/showcase/parentchild/parent/child/create",

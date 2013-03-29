@@ -163,4 +163,17 @@ public class UserService extends BaseService<User, Long> {
         return true;
     }
 
+    public void changePassword(Long[] ids, String newPassword) {
+        UserService proxyUserService = (UserService) AopContext.currentProxy();
+        for(Long id : ids) {
+            proxyUserService.changePassword(findOne(id), newPassword);
+        }
+    }
+
+    public void changeStatus(User opUser, Long[] ids, UserStatus newStatus, String reason) {
+        UserService proxyUserService = (UserService) AopContext.currentProxy();
+        for(Long id : ids) {
+            proxyUserService.changeStatus(opUser, findOne(id), newStatus, reason);
+        }
+    }
 }

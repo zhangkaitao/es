@@ -1,12 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <form id="searchForm" class="form-inline search-form">
-    <label for="search.id_in">编号</label>
-    <input type="text" id="search.id_in" name="search.id_in" value="${param['search.id_in']}"  class="input-medium" placeholder="多个使用空格分隔"/>
+
+    <esform:label path="search.id_in">编号</esform:label>
+    <esform:input path="search.id_in" cssClass="input-medium" placeholder="多个使用空格分隔"/>
+
     &nbsp;&nbsp;
-    <label for="search.title_like">标题</label>
-    <input type="text" id="search.title_like" name="search.title_like" value="${param['search.title_like']}"  class="input-medium" placeholder="多个使用空格分隔"/>
+    <esform:label path="search.title_like">标题</esform:label>
+    <esform:input path="search.title_like" cssClass="input-medium" placeholder="模糊匹配"/>
+
     &nbsp;&nbsp;    
     <input type="submit" class="btn " value="查询"/>
-    <a class="btn btn-link btn-search-all">查询所有</a>
 
 </form>

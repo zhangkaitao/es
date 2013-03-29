@@ -2,22 +2,23 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<ul class="nav nav-pills">
-    <li <c:if test="${empty param['search.status_eq']}">class="active"</c:if>>
-        <a href="${ctx}/showcase/status/show">所有数据列表</a>
-    </li>
-    <li <c:if test="${param['search.status_eq'] eq 'show'}">class="active"</c:if>>
-        <a href="${ctx}/showcase/status/show?search.status_eq=show">显示的数据列表</a>
-    </li>
-    <li <c:if test="${param['search.status_eq'] eq 'hide'}">class="active"</c:if>>
-        <a href="${ctx}/showcase/status/show?search.status_eq=hide">隐藏的数据列表</a>
-    </li>
-</ul>
+<div data-table="table" class="panel">
+
+    <es:showMessage/>
+
+    <ul class="nav nav-pills tool ui-toolbar">
+        <li <c:if test="${empty param['search.status_eq']}">class="active"</c:if>>
+            <a href="${ctx}/showcase/status/show">所有数据列表</a>
+        </li>
+        <li <c:if test="${param['search.status_eq'] eq 'show'}">class="active"</c:if>>
+            <a href="${ctx}/showcase/status/show?search.status_eq=show">显示的数据列表</a>
+        </li>
+        <li <c:if test="${param['search.status_eq'] eq 'hide'}">class="active"</c:if>>
+            <a href="${ctx}/showcase/status/show?search.status_eq=hide">隐藏的数据列表</a>
+        </li>
+    </ul>
 
 
-<es:showMessage/>
-
-<div data-table="table">
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">

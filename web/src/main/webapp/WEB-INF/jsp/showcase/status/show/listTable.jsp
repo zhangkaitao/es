@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<table id="table" class="sort-table table table-bordered table-hover table-striped">
+<table id="table" class="sort-table table table-bordered table-hover">
     <thead>
     <tr>
         <th style="width: 80px;">
@@ -39,11 +39,5 @@
         </tr>
     </c:forEach>
     </tbody>
-    <tfoot>
-    <tr>
-        <td colspan="1000">
-            <es:page page="${page}" />
-        </td>
-    </tr>
-    </tfoot>
 </table>
+<es:page page="${page}"/>

@@ -3,5 +3,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="es" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="esform" uri="http://www.sishuok.com/tags/es-form" %>
 <%@taglib prefix="time" tagdir="/WEB-INF/tags/time" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table id="table" class="sort-table move-table table table-bordered table-hover table-striped"
+<table id="table" class="sort-table move-table table table-bordered table-hover"
        data-move-url-prefix="${ctx}/showcase/product/category" data-async="true">
     <thead>
     <tr>
@@ -13,7 +13,7 @@
         <th sort="name">名称</th>
         <th sort="weight">权重</th>
         <th>是否显示</th>
-        <th style="width: 50px">操作</th>
+        <th style="width: 68px">操作</th>
     </tr>
     </thead>
     <tbody>
@@ -46,11 +46,5 @@
         </tr>
     </c:forEach>
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="1000">
-                <es:page page="${page}" />
-            </td>
-        </tr>
-    </tfoot>
 </table>
+<es:page page="${page}"/>

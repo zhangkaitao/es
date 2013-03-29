@@ -23,9 +23,9 @@
     <c:if test="${page.totalElements > 1}">
         <a href="#" class="ui-icon ui-icon-extlink pop-movable"
            rel="popover"
-           data-placement="right"
+           data-placement="left"
            data-html="true"
            data-original-title="请输入移动到的数据编号"
-           data-content="<input type='text' class='input-small id'/>&nbsp;&nbsp;<a href='#' class='btn btn-link btn-custom popover-up-btn'>之后</a> | <a href='#' class='btn-link popover-down-btn'>之前</a>"></a>
+           data-content="<input type='text' class='input-small id'/>&nbsp;&nbsp;<a href='#' class='btn-link btn-custom popover-up-btn'>之后</a>|<a href='#' class='btn-link popover-down-btn'>之前</a>"></a>
     </c:if>
 </div>

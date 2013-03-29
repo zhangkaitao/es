@@ -2,21 +2,22 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
+<div data-table="table" class="panel">
 
-<ul class="nav nav-pills">
-    <li <c:if test="${empty param['search.userId_eq'] and empty param['search.userId_gt']}">class="active"</c:if>>
-        <a href="${ctx}/admin/sys/user/online">所有</a>
-    </li>
 
-    <li <c:if test="${not empty param['search.userId_gt']}">class="active"</c:if>>
-        <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">在线用户</a>
-    </li>
-    <li <c:if test="${not empty param['search.userId_eq']}">class="active"</c:if>>
-        <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">游客</a>
-    </li>
-</ul>
+    <ul class="nav nav-pills tool ui-toolbar ">
+        <li <c:if test="${empty param['search.userId_eq'] and empty param['search.userId_gt']}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/online">所有</a>
+        </li>
 
-<div data-table="table">
+        <li <c:if test="${not empty param['search.userId_gt']}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">在线用户</a>
+        </li>
+        <li <c:if test="${not empty param['search.userId_eq']}">class="active"</c:if>>
+            <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">游客</a>
+        </li>
+    </ul>
+
     <div class="row-fluid tool ui-toolbar">
         <%@include file="searchForm.jsp" %>
     </div>

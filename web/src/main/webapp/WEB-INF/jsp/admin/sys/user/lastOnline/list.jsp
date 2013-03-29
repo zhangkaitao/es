@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<div data-table="historyTable">
+<div data-table="historyTable" class="panel">
     <div class="row-fluid tool ui-toolbar">
         <%@include file="searchForm.jsp" %>
     </div>

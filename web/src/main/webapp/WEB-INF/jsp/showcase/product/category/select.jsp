@@ -1,25 +1,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <div id="container" data-table="childTable">
-    <div class="search ui-toolbar">
-       <%@include file="searchForm.jsp"%>
+    <div class="row-fluid tool ui-toolbar">
+        <%@include file="searchForm.jsp"%>
     </div>
     <div>
-      <table id="childTable" class="sort-table table table-bordered table-hover table-striped"
+      <table id="childTable" class="sort-table table table-bordered table-hover"
               data-async="true"
               data-async-container="container">
           <thead>
             <tr>
-                <th style="width: 8%">
-                    选择
-                </th>
+
                 <th sort="id">编号</th>
                 <th sort="name">名称</th>
+                <th style="width: 80px">
+                    选择
+                </th>
             </tr>
           </thead>
           <tbody>
           <c:forEach items="${page.content}" var="m" varStatus="status">
             <tr id="${m.id}">
+
+                <td>${m.id}</td>
+                <td class="name">${m.name}</td>
                 <td class="check">
                     <c:choose>
                         <c:when test="${selectType eq 'multiple'}">
@@ -31,20 +35,11 @@
                     </c:choose>
 
                 </td>
-                <td>${m.id}</td>
-                <td class="name">${m.name}</td>
             </tr>
           </c:forEach>
           </tbody>
-          <tfoot>
-            <tr>
-                <td colspan="1000">
-                    <es:page page="${page}"/>
-                </td>
-            </tr>
-          </tfoot>
       </table>
-
+      <es:page page="${page}"/>
     </div>
 </div>
 <script type="text/javascript">

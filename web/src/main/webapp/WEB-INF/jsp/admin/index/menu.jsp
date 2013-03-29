@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
-
 <div id="menu">
     <div>
         <h3><a href="#">示例管理</a></h3>
@@ -49,6 +47,7 @@
             <li><a href="#">权限管理</a></li>
             <li><a href="#">角色管理</a></li>
             <li><a href="#">资源管理</a></li>
+            <li><a href="${ctx}/admin/sys/resources/menu">菜单管理</a></li>
         </ul>
         </div>
     </div>

@@ -298,7 +298,6 @@
         // LAYOUT-PLUGIN REGISTRATION
         // more plugins can added beyond this default list
         ,	plugins: {
-//zhangkaitao 禁用 不让拖拽
             draggable:		!!$.fn.draggable, // resizing
             effects: {
                 core:		!!$.effects		// animimations (specific effects tested by initOptions)
@@ -685,7 +684,7 @@
         ,	panes: { // default options for 'all panes' - will be overridden by 'per-pane settings'
             applyDemoStyles: 		false		// NOTE: renamed from applyDefaultStyles for clarity
             ,	closable:				true		// pane can open & close
-            ,	resizable:				true		// when open, pane can be resized 
+            ,	resizable:				true		// when open, pane can be resized
             ,	slidable:				true		// when closed, pane can 'slide open' over other panes - closes on mouse-out
             ,	initClosed:				false		// true = init pane as 'closed'
             ,	initHidden: 			false 		// true = init pane as 'hidden' - no resizer-bar/spacing
@@ -712,7 +711,7 @@
             ,	togglerContent_open:	""			// text or HTML to put INSIDE the toggler
             ,	togglerContent_closed:	""			// ditto
             //	RESIZING OPTIONS
-            ,	resizerDblClickToggle:	true		// 
+            ,	resizerDblClickToggle:	true		//
             ,	autoResize:				true		// IF size is 'auto' or a percentage, then recalc 'pixel size' whenever the layout resizes
             ,	autoReopen:				true		// IF a pane was auto-closed due to noRoom, reopen it when there is room? False = leave it closed
             ,	resizerDragOpacity:		1			// option for ui.draggable
@@ -1114,7 +1113,7 @@
                         // convert function name (string) to function object
                         if (isStr( fn )) {
                             if (fn.match(/,/)) {
-                                // function name cannot contain a comma, 
+                                // function name cannot contain a comma,
                                 // so must be a function name AND a parameter to pass
                                 args = fn.split(",")
                                     ,	fn = eval(args[0]);
@@ -2151,7 +2150,7 @@
          * @param {Object=}		evt
          */
             ,	initPanes = function (evt) {
-                // stopPropagation if called by trigger("layoutinitpanes") - use evtPane utility 
+                // stopPropagation if called by trigger("layoutinitpanes") - use evtPane utility
                 evtPane(evt);
 
                 // NOTE: do north & south FIRST so we can measure their height - do center LAST
@@ -2174,7 +2173,7 @@
                 sizeMidPanes("center");
 
                 //	Chrome/Webkit sometimes fires callbacks BEFORE it completes resizing!
-                //	Before RC30.3, there was a 10ms delay here, but that caused layout 
+                //	Before RC30.3, there was a 10ms delay here, but that caused layout
                 //	to load asynchrously, which is BAD, so try skipping delay for now
 
                 // process pane contents and callbacks, and init/resize child-layout if exists
@@ -2310,7 +2309,7 @@
                 // init pane positioning
                 setPanePosition( pane );
 
-                // if pane is not visible, 
+                // if pane is not visible,
                 if (dir === "horz") // north or south pane
                     CSS.height = cssH($P, size);
                 else if (dir === "vert") // east or west pane
@@ -2780,9 +2779,11 @@
                     ;
                 // only masks over an IFRAME-pane need manual resizing
                 if (s.tagName == "IFRAME" && s.isVisible) // no need to mask closed/hidden panes
+
+                //zhangkaitao top s.css.top
                     $M.css({
-                        top:	s.offsetTop
-                        ,	left:	s.offsetLeft
+                        top:	s.css.top
+                        ,	left:	s.css.left
                         ,	width:	s.outerWidth
                         ,	height:	s.outerHeight
                     });
@@ -2948,7 +2949,7 @@
                 $(document).unbind("."+ sID);	// keyDown (hotkeys)
 
                 if (typeof evt_or_destroyChildren === "object")
-                // stopPropagation if called by trigger("layoutdestroy") - use evtPane utility 
+                // stopPropagation if called by trigger("layoutdestroy") - use evtPane utility
                     evtPane(evt_or_destroyChildren);
                 else // no event, so transfer 1st param to destroyChildren param
                     destroyChildren = evt_or_destroyChildren;
@@ -3816,7 +3817,7 @@
                 if (!enable)
                     timer.clear(pane+"_closeSlider");
                 else if (evtName === "click" && !o.resizable) {
-                    // IF pane is not resizable (which already has a cursor and tip) 
+                    // IF pane is not resizable (which already has a cursor and tip)
                     // then set the a cursor & title/tip on resizer when sliding
                     $R.css("cursor", enable ? o.sliderCursor : "default");
                     $R.attr("title", enable ? o.tips.Close : ""); // use Toggler-tip, eg: "Close Pane"
@@ -4007,7 +4008,7 @@
                     else { // no animation
                         $P.css( dimName, newSize );	// resize pane
                         delete s.newSize;
-                        // if pane is visible, then 
+                        // if pane is visible, then
                         if ($P.is(":visible"))
                             sizePane_2(); // continue
                         else {
@@ -4144,9 +4145,9 @@
                         CSS = newCenter;
                         //zhangkaitao 使center的iframe撑满整屏
 //                        CSS.top = CSS.top + 35;
-                        if($P.is("iframe[tabs=true]")){
-                            CSS.height = CSS.height - 45;
-                        }
+//                        if($P.is("iframe[tabs=true]")){
+//                            CSS.height = CSS.height - 45;
+//                        }
 //                        CSS.width = CSS.width + 5;
 
                         s.newWidth	= CSS.width;

@@ -3,6 +3,7 @@ drop table if exists `user_status_history`;
 drop trigger if exists `trigger_user_off_online`;
 drop table if exists `user_online`;
 drop table if exists `user_last_online`;
+drop table if exists `menu`;
 ##user
 create table `user`(
   `id`         bigint not null auto_increment,
@@ -103,3 +104,18 @@ begin
       end if ;
    end if;
 end;
+
+
+create table `menu`(
+  `id`         bigint not null auto_increment,
+  `name`      varchar(100),
+  `parent_id` bigint,
+  `parent_ids`  varchar(200) default '',
+  `icon`       varchar(200),
+  `weight`    int,
+  `show`       bool,
+  constraint `pk_menu` primary key(`id`),
+  index idx_menu_parentId (`parent_id`),
+  index idx_menu_parentIds_weight (`parent_ids`, `weight`)
+) charset=utf8 ENGINE=InnoDB;
+alter table `menu` auto_increment=1000;

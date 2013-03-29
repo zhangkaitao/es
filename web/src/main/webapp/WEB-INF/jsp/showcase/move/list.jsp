@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<es:showMessage/>
 
-<div data-table="table">
+<div data-table="table" class="panel">
+    <es:showMessage/>
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
