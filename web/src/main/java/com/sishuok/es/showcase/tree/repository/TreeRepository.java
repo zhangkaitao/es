@@ -7,6 +7,10 @@ package com.sishuok.es.showcase.tree.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.showcase.tree.entity.Tree;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao

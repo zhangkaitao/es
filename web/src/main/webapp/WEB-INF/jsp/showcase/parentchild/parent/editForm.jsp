@@ -2,14 +2,47 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div class="panel">
+
+
     <ul class="nav nav-tabs">
-        <li class="active">
-            <a>父管理[${op}]</a>
-        </li>
+        <c:if test="${op eq '新增'}">
+            <li <c:if test="${op eq '新增'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/parentchild/parent/create?BackURL=<es:BackURL/>">
+                    <i class="icon-file"></i>
+                    新增
+                </a>
+            </li>
+        </c:if>
+
+        <c:if test="${not empty m.id}">
+            <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/parentchild/parent/${m.id}?BackURL=<es:BackURL/>">
+                    <i class="icon-eye-open"></i>
+                    查看
+                </a>
+            </li>
+            <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/parentchild/parent/update/${m.id}?BackURL=<es:BackURL/>">
+                    <i class="icon-edit"></i>
+                    修改
+                </a>
+            </li>
+            <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/parentchild/parent/delete/${m.id}?BackURL=<es:BackURL/>">
+                    <i class="icon-trash"></i>
+                    删除
+                </a>
+            </li>
+        </c:if>
         <li>
-            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+            <a href="<es:BackURL/>" class="btn btn-link">
+                <i class="icon-reply"></i>
+                返回
+            </a>
         </li>
     </ul>
+
+
     <form:form id="editForm" method="post" commandName="m" >
 
             <es:showGlobalError commandName="m"/>
@@ -36,8 +69,7 @@
                     <div class="controls input-append date">
                         <form:input path="beginDate"
                                       data-format="yyyy-MM-dd"
-                                      placeholder="例如2013-02-07"
-                                      readonly="true"/>
+                                      placeholder="例如2013-02-07"/>
                         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                     </div>
                 </div>
@@ -48,8 +80,7 @@
                         <form:input path="endDate"
                                       data-format="yyyy-MM-dd"
                                       placeholder="例如2013-02-07"
-                                      data-position="bottom-left"
-                                      readonly="true"/>
+                                      data-position="bottom-left"/>
                         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                     </div>
                 </div>
@@ -69,12 +100,20 @@
                     子列表
                     <div class="btn-group">
                         <a class="btn btn-create-child">
-                            <span class="icon-edit"></span>
+                            <i class="icon-edit"></i>
                             新增
                         </a>
+                        <a class='btn btn-update-child' href='javascript:void(0);'>
+                            <i class="icon-edit"></i>
+                            修改
+                        </a>
                         <a class="btn btn-batch-delete-child">
-                            <span class="icon-remove"></span>
+                            <i class="icon-trash"></i>
                             批量删除
+                        </a>
+                        <a class='btn btn-copy-child'>
+                            <i class="icon-copy"></i>
+                            以此为模板复制一份
                         </a>
                     </div>
                 </legend>
@@ -93,7 +132,6 @@
                                 <th>开始时间</th>
                                 <th>结束时间</th>
                                 <th>是否显示</th>
-                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,18 +144,6 @@
                                    <td><spring:eval expression="c.beginTime"/></td>
                                    <td><spring:eval expression="c.endTime"/></td>
                                    <td>${c.show ? '是' : '否'}</td>
-                                   <td>
-                                       <c:choose>
-                                           <c:when test="${op eq '删除'}">
-                                               &nbsp;
-                                           </c:when>
-                                           <c:otherwise>
-                                               <a class='btn btn-link icon-edit' href='javascript:void(0);' title='修改'></a>
-                                               <a class='btn btn-link icon-trash' href='javascript:void(0);' title='删除'></a>
-                                               <a class='btn btn-link icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>
-                                           </c:otherwise>
-                                       </c:choose>
-                                   </td>
                                </tr>
                            </c:forEach>
                         </tbody>
@@ -126,12 +152,30 @@
             </fieldset>
 
             <br/><br/>
-            <div class="control-group ui-toolbar">
+
+            <c:if test="${op eq '新增'}">
+                <c:set var="icon" value="icon-file"/>
+            </c:if>
+            <c:if test="${op eq '修改'}">
+                <c:set var="icon" value="icon-edit"/>
+            </c:if>
+            <c:if test="${op eq '删除'}">
+                <c:set var="icon" value="icon-trash"/>
+            </c:if>
+
+            <div class="control-group">
                 <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="<es:BackURL/>" class="btn">返回</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="${icon}"></i>
+                            ${op}
+                    </button>
+                    <a href="<es:BackURL/>" class="btn">
+                        <i class="icon-reply"></i>
+                        返回
+                    </a>
                 </div>
             </div>
+
 
     </form:form>
 </div>
@@ -141,7 +185,10 @@
         <c:choose>
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
-                $("#editForm :input").not(":submit,:button").prop("readonly", true);
+                $.app.readonlyForm($("#editForm"), false);
+            </c:when>
+            <c:when test="${op eq '查看'}">
+                $.app.readonlyForm($("#editForm"), true);
             </c:when>
             <c:otherwise>
                 var validationEngine = $("#editForm").validationEngine();
@@ -155,9 +202,11 @@
             prefixParamName : "childList",
             modalSettings:{
                 width:600,
-                height:400,
+                height:420,
+                noTitle : true,
                 buttons:{}
             },
+
             createUrl : "${ctx}/showcase/parentchild/parent/child/create",
             updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",
             deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}",

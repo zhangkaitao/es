@@ -7,29 +7,30 @@
 
         <div class="ul-wrapper">
             <ul>
-                <li><a href="#tabs-1">欢迎使用</a></li>
+                <li><a href="#tabs-0">欢迎使用</a></li>
             </ul>
         </div>
         <span class="icon-chevron-right" style="display: none;"></span>
 
-        <div id="tabs-1">
+        <div id="tabs-0">
         </div>
 
     </div>
-   <iframe id="iframe-tabs-1" tabs="true" class="ui-layout-center"
+   <iframe id="iframe-tabs-0" tabs="true" class="ui-layout-center"
             frameborder="0" scrolling="auto" src="${ctx}/admin/welcome"></iframe>
 
+    <%@include file="userinfo.jsp"%>
 
     <div class="ui-layout-north index-header">
-        <%@include file="index/header.jsp"%>
+        <%@include file="header.jsp"%>
     </div>
 
 
     <div class="ui-layout-south">
-        <%@include file="index/footer.jsp"%>
+        <%@include file="footer.jsp"%>
     </div>
     <div class="ui-layout-west menu">
-        <%@include file="index/menu.jsp"%>
+        <%@include file="menu.jsp"%>
     </div>
 </div>
 <es:contentFooter/>

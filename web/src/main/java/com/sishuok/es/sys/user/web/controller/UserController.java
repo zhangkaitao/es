@@ -99,7 +99,6 @@ public class UserController extends BaseCRUDController<User, Long> {
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
 
-
     /**
      * 验证返回格式
      * 单个：[fieldId, 1|0, msg]

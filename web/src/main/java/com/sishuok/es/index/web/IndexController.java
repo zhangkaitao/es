@@ -19,12 +19,12 @@ public class IndexController {
 
     @RequestMapping(value = {"/{index:index;?.*}"})
     public String index() {
-        return "admin/index";
+        return "admin/index/index";
     }
 
     @RequestMapping(value = "/welcome")
     public String welcome() {
-        return "admin/welcome";
+        return "admin/index/welcome";
     }
 
 

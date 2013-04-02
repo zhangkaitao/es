@@ -4,14 +4,22 @@
 <%@include file="/WEB-INF/jsp/common/import-upload-css.jspf"%>
 <div>
 
+
     <ul class="nav nav-tabs">
         <li class="active">
-            <a>文件管理[${op}]</a>
+            <a>
+                <i class="icon-file"></i>
+                ${op}
+            </a>
         </li>
         <li>
-            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+            <a href="<es:BackURL/>" class="btn btn-link">
+                <i class="icon-reply"></i>
+                返回
+            </a>
         </li>
     </ul>
+
     <form:form id="fileupload" method="post" cssClass="form-horizontal" enctype="multipart/form-data">
 
             <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -59,7 +67,10 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <input type="button" class="btn show-upload" value="显示上传的文件名">
+                    <button type="button" class="btn show-upload">
+                        <i class="icon-eye-open"></i>
+                        显示上传的文件名
+                    </button>
                 </div>
             </div>
 

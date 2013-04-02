@@ -28,8 +28,12 @@ public class UserLastOnlineService extends BaseService<UserLastOnline, Long> {
         this.userLastOnlineRepository = userLastOnlineRepository;
     }
 
+    public UserLastOnline findByUserId(Long userId) {
+        return userLastOnlineRepository.findByUserId(userId);
+    }
+
     public void lastOnline(UserLastOnline lastOnline) {
-        UserLastOnline dbLastOnline = userLastOnlineRepository.findByUserId(lastOnline.getUserId());
+        UserLastOnline dbLastOnline = findByUserId(lastOnline.getUserId());
 
         if(dbLastOnline == null) {
             dbLastOnline = lastOnline;

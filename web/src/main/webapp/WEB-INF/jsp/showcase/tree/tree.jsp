@@ -2,158 +2,59 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
-<ul id="tree" class="ztree"></ul>
+
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a>
+            <i class="icon-sitemap"></i>
+            树列表
+        </a>
+    </li>
+</ul>
+
+<div class="control-group tree-search">
+    <esform:label path="searchName">名称</esform:label>
+    <div class="controls">
+        <esform:input path="searchName" cssClass="input-medium" placeholder="模糊匹配 回车键查询"/>
+    </div>
+</div>
 
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
+    var async = ${not empty param.async and param.async eq true};
+    function treeNodeClick(node, id, pId) {
+        parent.frames['maintainFrame'].location.href='${ctx}/showcase/tree/maintain/' + id + "?async=" + async;
+    }
     $(function() {
-        var setting = {
-            view: {
-                addHoverDom: addHoverDom,
-                removeHoverDom: removeHoverDom,
-                selectedMulti: false
-            },
-            edit: {
-                enable: true,
-                editNameSelectAll: true,
-                showRemoveBtn : function(treeId, treeNode) {return !treeNode.root;},
-                showRenameBtn: true,
-                removeTitle: "移除",
-                renameTitle: "重命名",
-                drag : {
-                    prev: drop,
-                    inner: drop,
-                    next: drop
-                }
-            },
-            data: {
-                simpleData: {
-                    enable: true
-                }
-            },
-            callback:{
-                beforeRemove: function(treeId, treeNode) { return confirm("确认删除吗？")},
-                beforeRename : beforeRename,
-                onRemove: onRemove,
-                onRename: onRename,
-                onDrop : onDrop
-            }
-        };
-
-        function drop(treeId, nodes, targetNode) {
-            if(!targetNode || !targetNode.getParentNode()) {
-                return false;
-            }
-            for (var i = 0, l = nodes.length; i < l; i++) {
-                if (nodes[i].root === true) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        var newCount = 1;
-        function addHoverDom(treeId, treeNode) {
-            var sObj = $("#" + treeNode.tId + "_span");
-            if (treeNode.editNameFlag || $("#addBtn_" + treeNode.id).length > 0) return;
-            var addStr = "<span class='button add' id='addBtn_" + treeNode.id
-                    + "' title='添加子节点' onfocus='this.blur();'></span>";
-            sObj.after(addStr);
-            var btn = $("#addBtn_" + treeNode.id);
-            if (btn)
-                btn.bind("click", function (e) {
-                    onAdd(e, treeId, treeNode);
-                    return false;
-                });
-        }
-        function removeHoverDom(treeId, treeNode) {
-            $("#addBtn_" + treeNode.id).unbind().remove();
-        }
-
-        function beforeRename(treeId, treeNode, newName) {
-            var oldName = treeNode.name;
-            if (newName.length == 0) {
-                $.app.alert({
-                    message : "节点名称不能为空。"
-                });
-                return false;
-            }
-            if(!confirm("确认重命名吗？")) {
-                var zTree = $.fn.zTree.getZTreeObj(treeId);
-                zTree.cancelEditName(treeNode.name);
-                return false;
-            }
-            return true;
-        }
-        /**
-        * 重命名结束
-        * @param e
-        * @param treeId
-        * @param treeNode
-         */
-        function onRename(e, treeId, treeNode) {
-            var url = "${ctx}/showcase/tree/ajax/rename/" + treeNode.id + "?newName=" + treeNode.name;
-            $.getJSON(url, function (data) {
-                location.reload();
-            });
-        }
-        /**
-        * 重命名结束
-        * @param e
-        * @param treeId
-        * @param treeNode
-         */
-        function onRemove(e, treeId, treeNode) {
-            var url = "${ctx}/showcase/tree/ajax/delete/" + treeNode.id;
-            $.getJSON(url, function (data) {
-                location.reload();
-            });
-        }
-
-        /**
-        * 添加新节点
-        * @param e
-        * @param treeId
-        * @param treeNode
-         */
-        function onAdd(e, treeId, treeNode) {
-            var url = "${ctx}/showcase/tree/ajax/appendChild/" + treeNode.id;
-            $.getJSON(url, function(newNode) {
-                location.reload();
-            });
-        }
-
-        /**
-        * 移动结束
-        * @param event
-        * @param treeId
-        * @param treeNodes
-        * @param targetNode
-        * @param moveType
-        * @param isCopy
-        */
-        function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
-            if(!targetNode || treeNodes.length == 0) {
-                return;
-            }
-            var sourceId = treeNodes[0].id;
-            var targetId = targetNode.id;
-            var moveType = moveType;
-            var url = "${ctx}/showcase/tree/ajax/move/" + sourceId + "/" + targetId + "/" + moveType;
-            $.getJSON(url, function (newNode) {
-                location.reload();
-            });
-        }
-
         var zNodes =[
             <c:forEach items="${trees}" var="m">
-                { id:${m.id}, pId:${m.parentId}, name:"${m.name}", icon:"${ctx}/${m.icon}", open: true,
-                  click : "parent.frames['maintainFrame'].location.href='${ctx}/showcase/tree/maintain/${m.id}'",
-                  root : ${m.root}},
+            { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true,
+                click : "${m.click}", root : ${m.root},isParent:${m.isParent}},
             </c:forEach>
         ];
- 
-        $.fn.zTree.init($("#tree"), setting, zNodes);
+
+        $.zTree.initMovableTree(
+                zNodes,
+                //重命名url模式
+                "${ctx}/showcase/tree/ajax/rename/{id}?newName={newName}",
+                //删除url模式
+                "${ctx}/showcase/tree/ajax/delete/{id}",
+                //新增url模式
+                "${ctx}/showcase/tree/ajax/appendChild/{id}",
+                //移动url模式
+                "${ctx}/showcase/tree/ajax/move/{sourceId}/{targetId}/{moveType}",
+                //异步模式
+                async,
+                //异步加载url
+                "${ctx}/showcase/tree/ajax/asyncLoad"
+        );
+
+        $.zTree.initAutocomplete(
+                $("[name='searchName']"),
+                async,
+                "${ctx}/showcase/tree/ajax/autocomplete",
+                "${ctx}/showcase/tree/tree");
+
     });
 </script>

@@ -4,20 +4,28 @@
 
 <div data-table="table" class="panel">
 
-    <es:showMessage/>
-
-
-    <ul class="nav nav-pills tool ui-toolbar">
+    <ul class="nav nav-tabs">
         <li <c:if test="${param['search.deleted_eq'] ne 'true' and param['search.status_eq'] ne 'blocked'}">class="active"</c:if>>
-            <a href="${ctx}/admin/sys/user">用户列表</a>
+            <a href="${ctx}/admin/sys/user">
+                <i class="icon-table"></i>
+                所有用户列表
+            </a>
         </li>
         <li <c:if test="${param['search.deleted_eq'] eq 'true'}">class="active"</c:if>>
-            <a href="${ctx}/admin/sys/user?search.deleted_eq=true">已删除用户列表</a>
+            <a href="${ctx}/admin/sys/user?search.deleted_eq=true">
+                <i class="icon-table"></i>
+                已删除用户列表
+            </a>
         </li>
         <li <c:if test="${param['search.status_eq'] eq 'blocked'}">class="active"</c:if>>
-            <a href="${ctx}/admin/sys/user?search.status_eq=blocked">已封禁用户列表</a>
+            <a href="${ctx}/admin/sys/user?search.status_eq=blocked">
+                <i class="icon-table"></i>
+                已封禁用户列表
+            </a>
         </li>
     </ul>
+
+    <es:showMessage/>
 
 
     <div class="row-fluid tool ui-toolbar">
@@ -36,31 +44,48 @@
                     删除
                 </a>
                 <div class="btn-group">
-                    <!-- 第一个忽略掉 否则有圆角 -->
-                    <a></a>
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-wrench"></i>
                         更多操作
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="btn btn-link change-password">改密</a>
+                            <a class="btn btn-link change-password">
+                                <i class="icon-key"></i>
+                                改密
+                            </a>
                         </li>
                         <li>
-                            <a class="btn btn-link block-user">封禁用户</a>
+                            <a class="btn btn-link block-user">
+                                <i class="icon-lock"></i>
+                                封禁用户
+                            </a>
                         </li>
                         <li>
-                            <a class="btn btn-link unblocked-user">解封用户</a>
+                            <a class="btn btn-link unblocked-user">
+                                <i class="icon-unlock"></i>
+                                解封用户
+                            </a>
                         </li>
                         <li>
-                            <a class="btn btn-link recycle">还原删除的用户</a>
+                            <a class="btn btn-link recycle">
+                                <i class="icon-ok"></i>
+                                还原删除的用户
+                            </a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a class="btn btn-link status-history">状态变更历史</a>
+                            <a class="btn btn-link status-history">
+                                <i class="icon-table"></i>
+                                状态变更历史
+                            </a>
                         </li>
                         <li>
-                            <a class="btn btn-link last-online-info">最后在线历史</a>
+                            <a class="btn btn-link last-online-info">
+                                <i class="icon-table"></i>
+                                最后在线历史
+                            </a>
                         </li>
 
                     </ul>
@@ -110,81 +135,9 @@
     <es:page page="${page}"/>
 </div>
 <es:contentFooter/>
+<%@include file="include/import-js.jspf"%>
 <script type="text/javascript">
     $(function() {
-        $(".change-password").click(function() {
-            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-            if(checkbox.size() == 0) return;
-            var id = checkbox.val();
-            var url = "${ctx}/admin/sys/user/changePassword?" + checkbox.serialize();
-
-            $.app.confirm({
-                title: "修改密码",
-                message : "请输入新密码：<br/><input type='password' id='password' class='input-medium'/>",
-                ok : function() {
-                    var password = $("#password").val();
-                    if(password) {
-                        window.location.href = url + "&newPassword=" + password;
-                    }
-                }
-            });
-        });
-
-        $(".block-user,.unblocked-user").click(function() {
-            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-            if(checkbox.size() == 0) return;
-            var id = checkbox.val();
-            var status = $(this).is(".unblocked-user") ? "normal" : "blocked";
-            var url = "${ctx}/admin/sys/user/changeStatus/" + status + "?" + checkbox.serialize();
-
-            var title = status == 'blocked' ? "封禁用户" : "解封用户";
-            var tip = status == 'blocked' ? "请输入封禁原因:" : "请输入解封原因：";
-
-            $.app.confirm({
-                title: title,
-                message : tip + "<br/><textarea id='reason' style='width: 300px;height: 50px;'></textarea>",
-                ok : function() {
-                    var reason = $("#reason").val();
-                    if(reason) {
-                        window.location.href = url + "&reason=" + reason;
-                    }
-                }
-            });
-        });
-        $(".status-history").click(function() {
-            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-            if(checkbox.size() == 0) return;
-            var ids = $.app.joinVar(checkbox.val());
-            var url = "${ctx}/admin/sys/user/statusHistory?search.user.id_eq=" + ids;
-
-            $.app.modalDialog("状态改变历史", url, {width : 800});
-        });
-        $(".last-online-info").click(function() {
-
-            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-            if(checkbox.size() == 0) return;
-            var ids = $.app.joinVar(checkbox.val());
-            var url = "${ctx}/admin/sys/user/lastOnline?search.userId_eq=" + ids;
-
-            $.app.modalDialog("最后在线历史", url, {width : 800});
-        });
-
-
-        $(".recycle").click(function() {
-
-            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-            if(checkbox.size() == 0) return;
-
-
-            var url = "${ctx}/admin/sys/user/recycle?" + checkbox.serialize();
-            $.app.confirm({
-                title : "欢迎删除的用户",
-                message : "确认还原吗？",
-                ok : function() {
-                    window.location.href = url;
-                }
-            });
-        });
-
+        initUserListButton();
     });
 </script>

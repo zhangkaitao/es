@@ -4,6 +4,17 @@
 
 <div data-table="table" class="panel">
 
+
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="${ctx}/showcase/editor">
+                <i class="icon-table"></i>
+                所有内容列表
+            </a>
+        </li>
+    </ul>
+
+
     <es:showMessage/>
 
     <div class="row-fluid tool ui-toolbar">

@@ -1,20 +1,17 @@
 
 /*淡蓝色*/
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default
-,
+
 #tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active,
 .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover
 {
-    background-color: #0099cc;
+    background-color: #0099ff;
     background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(#0099ff, #0099ff 25%, #0099cc);
-    background-image: -moz-linear-gradient(top, #0099ff, #0099ff 25%, #0099cc);
-    background-image: -o-linear-gradient(#0099ff, #0099ff 25%, #0099cc);
-    background-image: linear-gradient(#0099ff, #0099ff 25%, #0099cc);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0099ff', endColorstr='#0099cc', GradientType=0);
-    text-shadow: 0 1px 1px #0099ff;
+    background-image: -webkit-linear-gradient(#0099cc, #0099cc 25%, #0099ff);
+    background-image: -moz-linear-gradient(top, #0099cc, #0099cc 25%, #0099ff);
+    background-image: -o-linear-gradient(#0099cc, #0099cc 25%, #0099ff);
+    background-image: linear-gradient(#0099cc, #0099cc 25%, #0099ff);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0099cc', endColorstr='#0099ff', GradientType=0);
+    text-shadow: 0 1px 1px #0099cc;
     color: #fff;
     border: 1px solid #ccc;
     border-bottom-color: #bbb;
@@ -26,14 +23,13 @@
     transition: 0.1s linear background-image;
 }
 
-
 #menu .li-wrapper.active,
 #menu .li-wrapper.active:hover {
     background: #0099ff;
 }
 
 #menu .ui-accordion-header a {
-    color: #fff;
+    color: #0099cc;
 }
 #menu li a,
 #tabs.ui-tabs .ui-tabs-nav li a{
@@ -41,7 +37,7 @@
 }
 
 .ui-layout-resizer-north {
-    background-color: #0099cc;
+    background-color: #0099ff;
 }
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, #menu .li-wrapper.active, #menu .li-wrapper.active:hover, #tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active, .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
@@ -58,10 +54,10 @@ a
     background: #0099ff;
 }
 
+
 #tabs.ui-tabs .ui-tabs-nav li a {
     color: #0099ff;
 }
-
 
 
 #tabs.ui-tabs .ui-tabs-nav li a {

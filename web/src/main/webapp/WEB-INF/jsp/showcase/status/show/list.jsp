@@ -4,20 +4,29 @@
 
 <div data-table="table" class="panel">
 
-    <es:showMessage/>
-
-    <ul class="nav nav-pills tool ui-toolbar">
+    <ul class="nav nav-tabs">
         <li <c:if test="${empty param['search.status_eq']}">class="active"</c:if>>
-            <a href="${ctx}/showcase/status/show">所有数据列表</a>
+            <a href="${ctx}/showcase/status/show">
+                <i class="icon-table"></i>
+                所有数据列表
+            </a>
         </li>
         <li <c:if test="${param['search.status_eq'] eq 'show'}">class="active"</c:if>>
-            <a href="${ctx}/showcase/status/show?search.status_eq=show">显示的数据列表</a>
+            <a href="${ctx}/showcase/status/show?search.status_eq=show">
+                <i class="icon-table"></i>
+                显示的数据列表
+            </a>
         </li>
         <li <c:if test="${param['search.status_eq'] eq 'hide'}">class="active"</c:if>>
-            <a href="${ctx}/showcase/status/show?search.status_eq=hide">隐藏的数据列表</a>
+            <a href="${ctx}/showcase/status/show?search.status_eq=hide">
+                <i class="icon-table"></i>
+                隐藏的数据列表
+            </a>
         </li>
     </ul>
 
+
+    <es:showMessage/>
 
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
@@ -34,6 +43,28 @@
                     <span class="icon-trash"></span>
                     批量删除
                 </a>
+
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-pencil"></i>
+                        审核
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="btn btn-link status-show">
+                                <i class="icon-pencil"></i>
+                                显示
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-link status-hide">
+                                <i class="icon-pencil"></i>
+                                隐藏
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="span8">
@@ -45,3 +76,30 @@
 
 </div>
 <es:contentFooter/>
+
+<script type="text/javascript">
+    $(function() {
+        $(".status-show,.status-hide").click(function() {
+
+            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
+            if(checkbox.size() == 0) {
+                return;
+            }
+            var isShow = $(this).is(".status-show");
+            var title = isShow ? "显示数据" : "隐藏数据";
+            var message = isShow ? "确认显示数据吗？" : "确认隐藏数据吗？";
+            var url = isShow ?
+                    "${ctx}/showcase/status/show/status/show?" + checkbox.serialize()
+                    :
+                    "${ctx}/showcase/status/show/status/hide?" + checkbox.serialize();
+            $.app.confirm({
+                title : title,
+                message : message,
+                ok : function() {
+                    var table = $("#table");
+                    $.table.reloadTable(table, url, $.table.tableURL(table));
+                }
+            });
+        });
+    });
+</script>

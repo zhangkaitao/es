@@ -9,6 +9,7 @@ import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,15 @@ public class BaseController<M extends AbstractEntity, ID extends Serializable> {
         this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
         setViewPrefix(defaultViewPrefix());
     }
+
+
+    /**
+     * 设置通用数据
+     * @param model
+     */
+    protected void setCommonData(Model model) {
+    }
+
 
     public void setViewPrefix(String viewPrefix) {
         if(viewPrefix.startsWith("/")) {
@@ -83,10 +93,13 @@ public class BaseController<M extends AbstractEntity, ID extends Serializable> {
      * @return
      */
     protected String redirectUrl(String backURL) {
-        if(StringUtils.hasLength(backURL)) {
-            return backURL;
+        if(!StringUtils.hasLength(backURL)) {
+            backURL = getViewPrefix();
         }
-        return "/" + getViewPrefix();
+        if(!backURL.startsWith("/") && !backURL.startsWith("http")) {
+            backURL =  "/" + backURL;
+        }
+        return backURL;
     }
 
     /**

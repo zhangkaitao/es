@@ -96,7 +96,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
 
         System.out.println(birthdayList);
         String ql = "from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, userRepositoryImpl.findAll(ql, null, ids, realnamePrefix + "%", birthdayList).size());
+        assertEquals(count, userRepositoryImpl.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
     }
 
     @Test

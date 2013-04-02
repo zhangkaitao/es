@@ -11,7 +11,6 @@
         <th sort="id">编号</th>
         <th sort="title">标题</th>
         <th>内容</th>
-        <th style="width: 50px">操作</th>
     </tr>
     <tbody>
     <c:forEach items="${page.content}" var="m">
@@ -22,14 +21,6 @@
             </td>
             <td>${m.title}</td>
             <td><a href="${ctx}/showcase/editor/${m.id}">查看</a></td>
-            <td>
-                <a class="btn btn-link btn-edit" title="修改" href="${ctx}/showcase/editor/update/${m.id}">
-                    <span class=" icon-edit"></span>
-                </a>
-                <a class="btn btn-link btn-edit" title="删除" href="${ctx}/showcase/editor/delete/${m.id}">
-                    <span class=" icon-trash"></span>
-                </a>
-            </td>
         </tr>
     </c:forEach>
     </tbody>

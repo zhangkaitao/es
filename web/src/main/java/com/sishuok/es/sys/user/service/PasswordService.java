@@ -60,12 +60,16 @@ public class PasswordService {
             }
         }
 
-        if(!user.getPassword().equals(encryptPassword(user.getUsername(), password, user.getSalt()))) {
+        if(!matches(user, password)) {
             loginRecordCache.put(new Element(username, ++retryCount));
             throw new UserPasswordNotMatchException();
         } else {
             clearLoginRecordCache(username);
         }
+    }
+
+    public boolean matches(User user, String newPassword) {
+        return user.getPassword().equals(encryptPassword(user.getUsername(), newPassword, user.getSalt()));
     }
 
     public void clearLoginRecordCache(String username) {

@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +33,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/showcase/status/show")
 public class ShowController extends BaseCRUDController<Show, Long> {
 
-    private ShowService auditService;
+    private ShowService showService;
 
     @Autowired
-    public ShowController(ShowService auditService) {
-        super(auditService);
-        this.auditService = auditService;
+    public ShowController(ShowService showService) {
+        super(showService);
+        this.showService = showService;
     }
 
     @Override
@@ -52,17 +53,20 @@ public class ShowController extends BaseCRUDController<Show, Long> {
     }
 
 
-    @RequestMapping(value = "{id}/{status}", method = RequestMethod.GET)
+    @RequestMapping(value = "status/{status}", method = RequestMethod.GET)
     public String audit(
             HttpServletRequest request,
-            @PathVariable("id") Show audit,
+            @RequestParam("ids") Long[] ids,
             @PathVariable("status") Stateable.ShowStatus status,
             RedirectAttributes redirectAttributes
         ) {
 
 
-        audit.setStatus(status);
-        auditService.update(audit);
+        for(Long id : ids) {
+            Show show = showService.findOne(id);
+            show.setStatus(status);
+            showService.update(show);
+        }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 

@@ -35,7 +35,6 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
         request.setAttribute(getFailureKeyAttribute(), ae);
     }
 
-
     /**
      * 默认的成功地址
      */

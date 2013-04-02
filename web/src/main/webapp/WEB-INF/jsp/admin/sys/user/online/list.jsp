@@ -5,16 +5,25 @@
 <div data-table="table" class="panel">
 
 
-    <ul class="nav nav-pills tool ui-toolbar ">
+    <ul class="nav nav-tabs">
         <li <c:if test="${empty param['search.userId_eq'] and empty param['search.userId_gt']}">class="active"</c:if>>
-            <a href="${ctx}/admin/sys/user/online">所有</a>
+            <a href="${ctx}/admin/sys/user/online">
+                <i class="icon-table"></i>
+                所有用户列表
+            </a>
         </li>
 
         <li <c:if test="${not empty param['search.userId_gt']}">class="active"</c:if>>
-            <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">在线用户</a>
+            <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">
+                <i class="icon-table"></i>
+                登录用户列表
+            </a>
         </li>
         <li <c:if test="${not empty param['search.userId_eq']}">class="active"</c:if>>
-            <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">游客</a>
+            <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">
+                <i class="icon-table"></i>
+                匿名游客列表
+            </a>
         </li>
     </ul>
 
@@ -23,7 +32,7 @@
         <div class="span4">
             <div class="btn-group">
                 <a class="btn btn-force-logout">
-                    <span class="icon-file"></span>
+                    <span class="icon-lightbulb"></span>
                     强制退出
                 </a>
             </div>
@@ -36,23 +45,10 @@
     <%@include file="listTable.jsp"%>
 </div>
 <es:contentFooter/>
+<%@include file="../include/import-js.jspf"%>
 <script type="text/javascript">
     $(function() {
-        $(".btn-force-logout").click(function() {
-            var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-            if(checkbox.size() == 0) {
-                return;
-            }
-            $.app.confirm({
-                message : "确认强制退出吗？",
-                ok : function() {
-                    var url = "${ctx}/admin/sys/user/online/forceLogout?" + checkbox.serialize();
-                    window.location.href = url;
-                }
-            });
-        });
-
-
+        initOnlineListButton();
     });
 
 </script>

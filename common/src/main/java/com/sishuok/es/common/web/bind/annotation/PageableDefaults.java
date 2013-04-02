@@ -34,7 +34,6 @@ public @interface PageableDefaults {
     /**
    	 * The default-size the injected {@link org.springframework.data.domain.Pageable} should get if no corresponding
    	 * parameter defined in request (default is 10).
-     * 0 表示全部
    	 */
    	int value() default 10;
 

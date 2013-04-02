@@ -8,6 +8,7 @@ package com.sishuok.es.common.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.plugin.exception.SystemableException;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import org.springframework.ui.Model;
@@ -32,12 +33,6 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
     }
 
 
-    /**
-     * 设置通用数据
-     * @param model
-     */
-    protected void setCommonData(Model model) {
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
@@ -90,7 +85,7 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
         }
         baseService.save(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "新增成功");
-        return "redirect:" + redirectUrl(null);
+        return redirectToUrl(null);
     }
 
 
@@ -113,7 +108,7 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
         }
         baseService.update(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
-        return "redirect:" + redirectUrl(backURL);
+        return redirectToUrl(backURL);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
@@ -130,9 +125,13 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
-        baseService.delete(m);
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
-        return "redirect:" + redirectUrl(backURL);
+        try {
+            baseService.delete(m);
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
+        } catch (SystemableException e) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
+        }
+        return redirectToUrl(backURL);
     }
 
     @RequestMapping(value = "batch/delete")
@@ -141,9 +140,13 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
-        baseService.delete(ids);
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
-        return "redirect:" + redirectUrl(backURL);
+        try {
+            baseService.delete(ids);
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
+        } catch (SystemableException e) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
+        }
+        return redirectToUrl(backURL);
     }
 
 //ajax 删除方式

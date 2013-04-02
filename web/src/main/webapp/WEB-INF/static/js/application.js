@@ -1,323 +1,24 @@
 //自己扩展的jquery函数
 //压缩时请把编码改成ANSI
-
 $.app = {
-    tabs: null,
-    layout: null,
+
     /**初始化主页 layout，菜单，tab*/
     initIndex: function () {
-        this.initMenu();
-        this.initLayout();
-        this.initTab();
-        this.initTabScroll();
-    },
-    /**初始化布局*/
-    initLayout: function () {
-        function resizePanel(panelName, panelElement, panelState, panelOptions, layoutName) {
-            var tabul = $(".tabs-fix-top");
-            if (panelName == 'west') {
-//                var left = panelElement.width() + 11;
-//                if (panelState.isClosed) {
-//                    left = 23;
-//                }
-//                tabul.css("left", left);
-            }
-            if (panelName == 'north') {
-                var top = panelElement.height() - 30;
-                if (panelState.isClosed) {
-                    top = -58;
-                }
-                tabul.css("top", top);
-            }
+        $.menus.initMenu();
+        $.layouts.initLayout();
+        $.tabs.initTab();
 
-            if(panelName == "center") {
-                tabul.find(".ul-wrapper").andSelf().width(panelState.layoutWidth);
-                $.app.initTabScrollHideOrShowMoveBtn();
-            }
-
-
-        }
-
-        this.layout = $('.index-panel').layout({
-                west__size:  210
-            ,   south__size: 30
-            ,	west__spacing_closed:		20
-            ,	west__togglerLength_closed:	100
-            ,	west__togglerContent_closed:"菜<BR>单"
-            ,	togglerTip_closed:	"打开"
-            ,	togglerTip_open:	"关闭"
-            ,	sliderTip:			"滑动打开"
-            ,   resizerTip:         "调整大小"
-            ,   onhide: resizePanel
-            ,   onshow: resizePanel
-            ,   onopen: resizePanel
-            ,   onclose: resizePanel
-            ,   onresize: resizePanel
-            ,	center__maskContents:true // IMPORTANT - enable iframe masking
-            ,   north : {
-                   togglerLength_open : 0
-                ,  resizable : false
-                ,  size: 95
-            }
-        });
-    },
-    /**初始化tab */
-    initTab: function () {
-        function activeMenu(tabPanelId) {
-            var currentMenu = $("#menu-" + tabPanelId.replace("tabs-", ""));
-            $("#menu .li-wrapper.active").removeClass("active");
-            if(currentMenu.size() > 0) {
-                //把父菜单展示出来
-                currentMenu.parents("ul").each(function(){
-                    //不能使用“ul:hidden” 因为它是把只有隐藏的都查出来
-                    // 比如<ul style="display:none"><li><ul><li><a class='a'></a></li></ul></li></ul>
-                    //$(".a").parents("ul:hidden") 会查出两个 即hidden的元素对其子也是有效的
-                    if($(this).css("display") == 'none') {
-                        $(this).prev("a").click();
-                    }
-                });
-                var li = currentMenu.closest(".li-wrapper");
-                li.addClass("active");
-            }
-        }
-        var tabs = $("#tabs").tabs({
-            beforeActivate: function (event, ui) {
-                var tabs = $("#tabs");
-                tabs.find(".menu").hide();
-                var newPanelId = ui.newPanel.prop("id");
-                tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".menu").show();
-                activeMenu(newPanelId);
-                $.app.activeIframe(newPanelId);
-            }
-        });
-        this.tabs = tabs;
-        tabs.delegate("span.icon-remove", "click", function () {
-            var panelId = $(this).closest("li").remove().attr("aria-controls");
-            $("#" + panelId).remove();
-            $("#iframe-" + panelId).remove();
-            tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").size());
-            tabs.tabs("refresh");
-        });
-        tabs.delegate("span.icon-refresh", "click", function () {
-            var panelId = $(this).closest("li").attr("aria-controls");
-            var panel = $("#" + panelId);
-            $.app.loadingToCenterIframe(panel, panel.data("url"), null, true);
-            tabs.tabs("option", "active", panel.data("index"));
-            tabs.tabs("refresh");
-        });
-
-        tabs.bind("keyup", function (event) {
-            if (event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE) {
-                var panelId = tabs.find(".ui-tabs-active").remove().attr("aria-controls");
-                $("#" + panelId).remove();
-                tabs.tabs("refresh");
-            }
-        });
-    },
-    initTabScrollHideOrShowMoveBtn : function(panelId) {
-        var $ulWrapper = $("#tabs .ul-wrapper");
-        var $lastLI = $ulWrapper.find("ul li:last");
-        var $firstLI = $ulWrapper.find("ul li:first");
-
-        var ulWapperOffsetLeft = $ulWrapper.offset().left;
-        var ulWrapperLeftPos = ulWapperOffsetLeft + $ulWrapper.width();
-
-        var hideOrShowBtn = function() {
-            var lastLIOffsetLeft = $lastLI.offset().left;
-            var lastLILeftPos = lastLIOffsetLeft + $lastLI.width();
-            var firstLIOffsetLeft = $firstLI.offset().left;
-
-            var $leftBtn = $("#tabs .icon-chevron-left");
-            var $rightBtn = $("#tabs .icon-chevron-right");
-
-            if (ulWapperOffsetLeft == firstLIOffsetLeft) {
-                $leftBtn.hide();
-            } else {
-                $leftBtn.show();
-            }
-            if (ulWrapperLeftPos >= lastLILeftPos) {
-                $rightBtn.hide();
-            } else {
-                $rightBtn.show();
-            }
-        };
-
-        if(panelId) {
-
-            var $li = $("#tabs").find("li[aria-labelledby='" + $("#" + panelId).attr("aria-labelledby") + "']");
-
-            var liOffsetLeft = $li.offset().left;
-            var liLeftPos = liOffsetLeft + $li.width();
-
-            var isLast = $li.attr("aria-controls") == $lastLI.attr("aria-controls");
-
-            //如果当前tab没有隐藏 则不scroll
-            if((ulWapperOffsetLeft <= liOffsetLeft) && (liLeftPos <= ulWrapperLeftPos) && !isLast) {
-                return;
-            }
-
-            var leftPos = 0;
-            //right
-            if(ulWrapperLeftPos < liLeftPos || isLast) {
-                leftPos = $ulWrapper.scrollLeft() + (liLeftPos - ulWrapperLeftPos) + (isLast ? 10 :55);
-            } else {
-                //left
-                leftPos = "-=" + (ulWapperOffsetLeft - liOffsetLeft + 55);
-            }
-
-            $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
-                hideOrShowBtn();
-            });
-        } else {
-            hideOrShowBtn();
-        }
-
-
-    },
-    initTabScroll: function () {
-        var move = function (step) {
-            return function () {
-                var $ulWrapper = $("#tabs .ul-wrapper");
-                var $lastLI = $ulWrapper.find("ul li:last");
-
-                var leftPos = $ulWrapper.scrollLeft() + step;
-
-                var ulWrapperLeftPos = $ulWrapper.offset().left + $ulWrapper.width();
-                var lastLILeftPos = $lastLI.offset().left + $lastLI.width();
-                var maxLeftPos = lastLILeftPos - ulWrapperLeftPos;
-
-                //right move
-                if (step > 0) {
-                    if (maxLeftPos <= step + step / 2) {
-                        leftPos = $ulWrapper.scrollLeft() + maxLeftPos;
-                    }
-                    if (maxLeftPos <= 0) {
-                        return;
-                    }
-                }
-
-                //left move
-                if (step < 0) {
-                    if (leftPos < -step) {
-                        leftPos = 0;
-                    }
-                }
-
-                if (leftPos < 0) {
-                    leftPos = 0;
-                }
-                $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
-                    $.app.initTabScrollHideOrShowMoveBtn();
-                });
-            };
-        };
-
-        $("#tabs .icon-chevron-left").click(function () {
-            move(-200)();
-        });
-        $("#tabs .icon-chevron-right").click(function () {
-            move(200)();
-        });
-
-    },
-    /**初始化菜单*/
-    initMenu: function () {
-        var menus = $("#menu");
-        menus.accordion({
-            header:"h3",
-            heightStyle:"content",
-            icons : {
-                header: "icon-caret-right",
-                activeHeader: "icon-caret-down"
-            },
-            animate : {
-                easing : "easeOutQuart"
-            }
-        });
-
-        menus.find(".ui-accordion-header-icon").removeClass("ui-icon").addClass("menu-header-icon");
-
-        var leafIconClass = "menu-icon icon-angle-right";
-        var branchOpenIconClass = "menu-icon icon-double-angle-right";
-        var branchCloseIconClass = "menu-icon icon-double-angle-down";
-        menus.find("li").each(function () {
-            var li = $(this);
-
-            li.children("a").wrap("<div class='li-wrapper'></div>");
-            var liWrapper = li.children(".li-wrapper");
-            var liUL = li.find("ul");
-            var hasChild = liUL.size() > 0;
-            if (hasChild) {
-                liUL.hide();
-                liWrapper.prepend('<span class="' + branchOpenIconClass + '"></span>')
-                    .click(function () {
-                        if (liWrapper.children("span").hasClass(branchCloseIconClass)) {
-                            liWrapper.children("span")
-                                .removeClass(branchCloseIconClass)
-                                .addClass(branchOpenIconClass)
-                                .end()
-                                .closest("li").children("ul").hide("easeOutQuart");
-                        } else {
-                            liWrapper.children("span")
-                                .removeClass(branchOpenIconClass)
-                                .addClass(branchCloseIconClass)
-                                .end()
-                                .closest("li").children("ul").show("easeOutQuart");
-                        }
-                    });
-            } else {
-                liWrapper.prepend('<span class="' + leafIconClass + '"></span>');
-            }
-        })
-
-
-        var index = 2;
-        var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='menu icon-remove' role='presentation'title='关闭'></span><br/><span class='menu icon-refresh' role='presentation' title='刷新'></span></li>";
-        menus.find("a").each(function () {
+        $(".btn-view-info,.btn-change-password").click(function() {
             var a = $(this);
-            var href = a.attr("href");
-            if (href == "#" || href == '') {
-                return;
+            var url = "";
+            if(a.is(".btn-view-info")) {
+                url = ctx +"/admin/sys/user/loginUser/viewInfo";
+            } else if(a.is(".btn-change-password")) {
+                url = ctx + "/admin/sys/user/loginUser/changePassword";
             }
-
-            var active = function(a, forceRefresh) {
-                menus.find("a").each(function () {
-                    $(this).closest("li > .li-wrapper").removeClass("active");
-                });
-                a.closest("li > .li-wrapper").addClass("active");
-
-                var panelIndex = a.data("index");
-                var panelId = "tabs-" + panelIndex;
-                var currentTabPanel = $("#" + panelId);
-                var tabs = $.app.tabs;
-                if (currentTabPanel.size() == 0) {
-                    var title = a.text();
-                    var li = $(tabTemplate.replace(/\{href\}/g, panelId).replace(/\{label\}/g, title));
-
-                    tabs.find("ul.ui-tabs-nav").append(li);
-                    tabs.append('<div id="' + panelId + '"></div>');
-                    tabs.tabs("refresh");
-                    currentTabPanel = $("#" + panelId);
-                }
-                $.app.loadingToCenterIframe(currentTabPanel, a.data("url"), null, forceRefresh);
-                tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").index(currentTabPanel));
-
-                return false;
-            }
-
-            a.data("index", index++)
-                .data("url", a.attr("href"))
-                .attr("href", "#")
-                .attr("id", "menu-" + a.data("index"))
-                .closest("li")
-                .click(function () {
-                    active(a, false);
-                    return false;
-                }).dblclick(function() {
-                    active(a, true);//双击强制刷新
-                    return false;
-                });
+            $.tabs.activeTab(99999999, a.text(), url, true)
         });
+
     },
     /**
      * 异步加载url内容到tab
@@ -328,8 +29,8 @@ $.app = {
         var panelId = panel.prop("id");
         var iframeId = "iframe-" + panelId;
         var iframe = $("#" + iframeId);
-        if (iframe.size() == 0 || forceRefresh) {
 
+        if (iframe.size() == 0 || forceRefresh) {
             if(iframe.size() == 0) {
                 iframe = $("iframe[tabs=true]:last").clone(true);
                 iframe.prop("id", iframeId);
@@ -351,14 +52,15 @@ $.app = {
         if (!iframe) {
             iframe = $("#iframe-" + panelId);
         }
-        if (this.layout.panes.center.prop("id") == iframe.prop("id")) {
+        var layout = $.layouts.layout;
+        if (layout.panes.center.prop("id") == iframe.prop("id")) {
             return;
         }
-        this.layout.panes.center.hide();
-        this.layout.panes.center = iframe;
-        this.layout.panes.center.show();
-        this.layout.resizeAll();
-        $.app.initTabScrollHideOrShowMoveBtn(panelId);
+        layout.panes.center.hide();
+        layout.panes.center = iframe;
+        layout.panes.center.show();
+        layout.resizeAll();
+        $.tabs.initTabScrollHideOrShowMoveBtn(panelId);
     },
 
     waiting : function(message) {
@@ -405,6 +107,7 @@ $.app = {
             height:300,
             width:600,
             modal:true,
+            noTitle : false,
             close: function() {
                 $(this).closest(".ui-dialog").remove();
             },
@@ -421,7 +124,6 @@ $.app = {
             settings = {};
         }
         settings = $.extend({}, defaultSettings, settings);
-
         $.app.waiting();
         $.ajax({
             url: url,
@@ -430,8 +132,13 @@ $.app = {
                 $.app.waitingOver();
                 var div = $("<div></div>").append(data);
                 var dialog = div.dialog(settings)
-                    .closest(".ui-dialog").data("durl", url).removeClass("ui-widget-content")
-                    .find(".ui-dialog-content ").removeClass("ui-widget-content");
+                    .closest(".ui-dialog").data("url", url).removeClass("ui-widget-content")
+                    .find(".ui-dialog-content ").removeClass("ui-widget-content").focus();
+
+                if(settings.noTitle) {
+                    dialog.closest(".ui-dialog").find(".ui-dialog-titlebar").addClass("no-title");
+                }
+                dialog.closest(".ui-dialog").focus();
                 if(!$.app._modalDialogQueue) {
                     $.app._modalDialogQueue = new Array();
                 }
@@ -592,6 +299,17 @@ $.app = {
             $.app.alert({message : "该标签不支持异步加载，支持的标签有form、a"});
         }
 
+    },
+    /**
+     * 只读化表单
+     * @param form
+     */
+    readonlyForm : function(form, removeButton) {
+        var inputs = $(form).find(":input");
+        inputs.not(":submit,:button").prop("readonly", true);
+        if(removeButton) {
+            inputs.remove(":button,:submit");
+        }
     }
     ,
     /**
@@ -623,6 +341,375 @@ $.app = {
     }
 
 };
+
+$.layouts = {
+    layout: null,
+    /**初始化布局*/
+    initLayout: function () {
+        function resizePanel(panelName, panelElement, panelState, panelOptions, layoutName) {
+            var tabul = $(".tabs-fix-top");
+            if (panelName == 'north') {
+                var top = panelElement.height() - 30;
+                if (panelState.isClosed) {
+                    top = -58;
+                }
+                tabul.css("top", top);
+            }
+
+            if(panelName == "center") {
+                tabul.find(".ul-wrapper").andSelf().width(panelState.layoutWidth);
+                $.tabs.initTabScrollHideOrShowMoveBtn();
+            }
+
+
+        }
+
+        this.layout = $('.index-panel').layout({
+            west__size:  210
+            ,   south__size: 30
+            ,	west__spacing_closed:		20
+            ,	west__togglerLength_closed:	100
+            ,	west__togglerContent_closed:"菜<BR>单"
+            ,	togglerTip_closed:	"打开"
+            ,	togglerTip_open:	"关闭"
+            ,	sliderTip:			"滑动打开"
+            ,   resizerTip:         "调整大小"
+            ,   onhide: resizePanel
+            ,   onshow: resizePanel
+            ,   onopen: resizePanel
+            ,   onclose: resizePanel
+            ,   onresize: resizePanel
+            ,	center__maskContents:true // IMPORTANT - enable iframe masking
+            ,   north : {
+                togglerLength_open : 0
+                ,  resizable : false
+                ,  size: 95
+            }
+        });
+    }
+}
+
+$.menus = {
+    /**初始化菜单*/
+    initMenu: function () {
+        var menus = $("#menu");
+        menus.accordion({
+            header:"h3",
+            heightStyle:"content",
+            icons : {
+                header: "icon-caret-right",
+                activeHeader: "icon-caret-down"
+            },
+            animate : {
+                easing : "easeOutQuart"
+            }
+        });
+
+        menus.find(".ui-accordion-header-icon").removeClass("ui-icon").addClass("menu-header-icon");
+
+        var leafIconClass = "menu-icon icon-angle-right";
+        var branchOpenIconClass = "menu-icon icon-double-angle-right";
+        var branchCloseIconClass = "menu-icon icon-double-angle-down";
+        menus.find("li").each(function () {
+            var li = $(this);
+
+            li.children("a").wrap("<div class='li-wrapper'></div>");
+            var liWrapper = li.children(".li-wrapper");
+            var liUL = li.find("ul");
+            var hasChild = liUL.size() > 0;
+            if (hasChild) {
+                liUL.hide();
+                liWrapper.prepend('<span class="' + branchOpenIconClass + '"></span>')
+                    .click(function () {
+                        if (liWrapper.children("span").hasClass(branchCloseIconClass)) {
+                            liWrapper.children("span")
+                                .removeClass(branchCloseIconClass)
+                                .addClass(branchOpenIconClass)
+                                .end()
+                                .closest("li").children("ul").hide("blind");
+                        } else {
+                            liWrapper.children("span")
+                                .removeClass(branchOpenIconClass)
+                                .addClass(branchCloseIconClass)
+                                .end()
+                                .closest("li").children("ul").show("blind");
+                        }
+                    });
+            } else {
+                liWrapper.prepend('<span class="' + leafIconClass + '"></span>');
+            }
+        });
+
+        menus.find("a").each(function () {
+            var a = $(this);
+            var title = a.text();
+            var href = a.attr("href");
+            a.attr("href", "#");
+            if (href == "#" || href == '') {
+                return;
+            }
+
+            var active = function(a, forceRefresh) {
+                menus.find("a").closest("li > .li-wrapper").removeClass("active");
+                a.closest("li > .li-wrapper").addClass("active");
+                var oldPanelIndex = a.data("panelIndex");
+                var activeMenuCallback = function(panelIndex) {
+                    if(!a.data("panelIndex")) {
+                        a.data("panelIndex", panelIndex);
+                        a.attr("id", "menu-" + panelIndex);
+                    }
+                }
+                $.tabs.activeTab(oldPanelIndex, title, href, forceRefresh, activeMenuCallback);
+
+                return false;
+            }
+
+            a.closest("li")
+                .click(function () {
+                    active(a, false);
+                    return false;
+                }).dblclick(function() {
+                    active(a, true);//双击强制刷新
+                    return false;
+                });
+        });
+    }
+}
+
+$.tabs = {
+    tabs: null,
+    /**初始化tab */
+    initTab: function () {
+        function activeMenu(tabPanelId) {
+            var currentMenu = $("#menu-" + tabPanelId.replace("tabs-", ""));
+            $("#menu .li-wrapper.active").removeClass("active");
+
+            if(currentMenu.size() > 0) {
+                //把父菜单展示出来
+                currentMenu.parents("ul").each(function(){
+                    //不能使用“ul:hidden” 因为它是把只有隐藏的都查出来
+                    // 比如<ul style="display:none"><li><ul><li><a class='a'></a></li></ul></li></ul>
+                    //$(".a").parents("ul:hidden") 会查出两个 即hidden的元素对其子也是有效的
+                    if($(this).css("display") == 'none') {
+                        $(this).prev("a").click();
+                    }
+                });
+                currentMenu.closest(".li-wrapper").addClass("active");
+            }
+        }
+
+        var tabs = $("#tabs").tabs({
+            beforeActivate : function(event, ui) {
+                var tabs = $.tabs.tabs;
+                tabs.find(".menu").hide();
+                tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".menu").show();
+            },
+            activate: function (event, ui) {
+                var tabs = $.tabs.tabs;
+                var newPanelId = ui.newPanel.prop("id");
+
+                activeMenu(newPanelId);
+                $.app.activeIframe(newPanelId);
+
+            }
+        });
+        $.tabs.tabs = tabs;
+        tabs.delegate("span.icon-remove", "click", function () {
+            var panelId = $(this).closest("li").remove().attr("aria-controls");
+            $.tabs.removeTab(panelId);
+        });
+        tabs.delegate("span.icon-refresh", "click", function () {
+            var panelId = $(this).closest("li").attr("aria-controls");
+            $.tabs.activeTab(panelId, null, null, true);
+        });
+
+        tabs.bind("keyup", function (event) {
+            if (event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE) {
+                var panelId = tabs.find(".ui-tabs-active").remove().attr("aria-controls");
+                $.tabs.removeTab(panelId);
+            }
+        });
+        $.tabs.initTabScroll();
+    },
+    removeTab : function(panelId) {
+        var tabs = $.tabs.tabs;
+        $("#" + panelId).remove();
+        $("#iframe-" + panelId).remove();
+
+        var currentMenu = $("#menu-" + panelId.replace("tabs-", ""));
+        if(currentMenu.size() > 0) {
+            currentMenu.attr("id", "");
+            currentMenu.attr("panelIndex", "");
+            $("#menu .li-wrapper.active").removeClass("active");
+        }
+
+        tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").size());
+        tabs.tabs("refresh");
+    },
+    /**
+     * 创建新的tab
+     * @param title
+     * @param panelIndex
+     */
+    createTab : function(title, panelIndex) {
+        var tabs = $.tabs.tabs;
+        var lastPanel = tabs.find(".ui-tabs-panel:last");
+        var newPanelIndex = panelIndex || parseInt(lastPanel.data("index")) + 1 || 1;
+        var newPanelId = "tabs-" + newPanelIndex;
+        var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='menu icon-remove' role='presentation'title='关闭'></span><br/><span class='menu icon-refresh' role='presentation' title='刷新'></span></li>";
+        var li = $(tabTemplate.replace(/\{href\}/g, newPanelId).replace(/\{label\}/g, title));
+
+        tabs.find("ul.ui-tabs-nav").append(li);
+        tabs.append('<div id="' + newPanelId + '"></div>');
+
+        tabs.tabs("refresh");
+
+        var newPanel = $("#" + newPanelId);
+        newPanel.data("index", newPanelIndex);
+
+        return newPanel;
+    },
+    /**
+     * 激活指定索引处的tab 如果没有就创建一个
+     * @param panelIdOrIndex
+     * @param title
+     * @param url
+     * @param forceRefresh
+     * @return {*}
+     */
+    activeTab: function (panelIdOrIndex, title, url, forceRefresh, callback) {
+        var tabs = $.tabs.tabs;
+
+        if(panelIdOrIndex && ("" + panelIdOrIndex).indexOf("tabs-") == 0) {
+            currentTabPanel = $("#" + panelIdOrIndex);
+        } else {
+            var currentTabPanel = $("#tabs-" + panelIdOrIndex);
+        }
+
+        if (currentTabPanel.size() == 0) {
+            currentTabPanel = $.tabs.createTab(title, panelIdOrIndex);
+        }
+
+        if(callback) {
+            callback(currentTabPanel.data("index"));
+        }
+
+        if(!url) {
+            url = currentTabPanel.data("url");
+        }
+
+        $.app.loadingToCenterIframe(currentTabPanel, url, null, forceRefresh);
+        tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").index(currentTabPanel));
+        return currentTabPanel.data("index");
+    },
+
+    initTabScrollHideOrShowMoveBtn : function(panelId) {
+        var $ulWrapper = $("#tabs .ul-wrapper");
+        var $lastLI = $ulWrapper.find("ul li:last");
+        var $firstLI = $ulWrapper.find("ul li:first");
+
+        var ulWapperOffsetLeft = $ulWrapper.offset().left;
+        var ulWrapperLeftPos = ulWapperOffsetLeft + $ulWrapper.width();
+
+        var hideOrShowBtn = function() {
+            var lastLIOffsetLeft = $lastLI.offset().left;
+            var lastLILeftPos = lastLIOffsetLeft + $lastLI.width();
+            var firstLIOffsetLeft = $firstLI.offset().left;
+
+            var $leftBtn = $("#tabs .icon-chevron-left");
+            var $rightBtn = $("#tabs .icon-chevron-right");
+
+            if (ulWapperOffsetLeft == firstLIOffsetLeft) {
+                $leftBtn.hide();
+            } else {
+                $leftBtn.show();
+            }
+            if (ulWrapperLeftPos >= lastLILeftPos) {
+                $rightBtn.hide();
+            } else {
+                $rightBtn.show();
+            }
+        };
+
+        if(panelId) {
+
+            var $li = $("#tabs").find("li[aria-labelledby='" + $("#" + panelId).attr("aria-labelledby") + "']");
+
+            var liOffsetLeft = $li.offset().left;
+            var liLeftPos = liOffsetLeft + $li.width();
+
+            var isLast = $li.attr("aria-controls") == $lastLI.attr("aria-controls");
+
+            //如果当前tab没有隐藏 则不scroll
+            if((ulWapperOffsetLeft <= liOffsetLeft) && (liLeftPos <= ulWrapperLeftPos) && !isLast) {
+                return;
+            }
+
+            var leftPos = 0;
+            //right
+            if(ulWrapperLeftPos < liLeftPos || isLast) {
+                leftPos = $ulWrapper.scrollLeft() + (liLeftPos - ulWrapperLeftPos) + (isLast ? 10 :55);
+            } else {
+                //left
+                leftPos = "-=" + (ulWapperOffsetLeft - liOffsetLeft + 55);
+            }
+
+            $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
+                hideOrShowBtn();
+            });
+        } else {
+            hideOrShowBtn();
+        }
+
+
+    },
+    initTabScroll: function () {
+        var move = function (step) {
+            return function () {
+                var $ulWrapper = $("#tabs .ul-wrapper");
+                var $lastLI = $ulWrapper.find("ul li:last");
+
+                var leftPos = $ulWrapper.scrollLeft() + step;
+
+                var ulWrapperLeftPos = $ulWrapper.offset().left + $ulWrapper.width();
+                var lastLILeftPos = $lastLI.offset().left + $lastLI.width();
+                var maxLeftPos = lastLILeftPos - ulWrapperLeftPos;
+
+                //right move
+                if (step > 0) {
+                    if (maxLeftPos <= step + step / 2) {
+                        leftPos = $ulWrapper.scrollLeft() + maxLeftPos;
+                    }
+                    if (maxLeftPos <= 0) {
+                        return;
+                    }
+                }
+
+                //left move
+                if (step < 0) {
+                    if (leftPos < -step) {
+                        leftPos = 0;
+                    }
+                }
+
+                if (leftPos < 0) {
+                    leftPos = 0;
+                }
+                $ulWrapper.animate({scrollLeft: leftPos}, 600, function () {
+                    $.tabs.initTabScrollHideOrShowMoveBtn();
+                });
+            };
+        };
+
+        $("#tabs .icon-chevron-left").click(function () {
+            move(-200)();
+        });
+        $("#tabs .icon-chevron-right").click(function () {
+            move(200)();
+        });
+
+    }
+}
 
 $.parentchild = {
     /**
@@ -800,23 +887,6 @@ $.parentchild = {
 
         });
 
-
-        var $updateBtn = $("<a class='btn btn-link icon-edit' href='javascript:void(0);' title='修改'></a>");
-        $updateBtn.click(function() {
-            $.parentchild.updateChild($(this), options.updateUrl, options.modalSettings);
-        });
-
-        var $deleteBtn = $("<a class='btn btn-link icon-trash' href='javascript:void(0);' title='删除'></a>");
-        $deleteBtn.click(function() {
-            $.parentchild.deleteChild($(this), options.deleteUrl, options.modalSettings);
-        })
-        var $copyBtn = $("<a class='btn btn-link icon-copy' href='javascript:void(0);' title='以此为模板复制一份'></a>");
-        $copyBtn.click(function() {
-            $.parentchild.copyChild($(this), options.updateUrl, options.modalSettings);
-        });
-
-        $tr.append($td.clone(true).append($updateBtn).append(" ").append($deleteBtn).append(" ").append($copyBtn));
-
         $.table.initCheckbox($childTable);
 
         $.app.cancelModelDialog();
@@ -828,8 +898,7 @@ $.parentchild = {
      * @param $a 当前按钮
      * @param updateUrl  更新地址
      */
-    updateChild : function($a, updateUrl, modalSettings) {
-        var $tr = $a.closest("tr");
+    updateChild : function($tr, updateUrl, modalSettings) {
         if(updateUrl.indexOf("?") > 0) {
             updateUrl = updateUrl + "&";
         } else {
@@ -853,8 +922,7 @@ $.parentchild = {
      * @param $a 当前按钮
      * @param updateUrl  更新地址
      */
-    copyChild : function($a, updateUrl, modalSettings) {
-        var $tr = $a.closest("tr");
+    copyChild : function($tr, updateUrl, modalSettings) {
         if(updateUrl.indexOf("?") > 0) {
             updateUrl = updateUrl + "&";
         } else {
@@ -924,6 +992,25 @@ $.parentchild = {
         $(".btn-create-child").click(function() {
             $.app.modalDialog("新增", options.createUrl, options.modalSettings);
         });
+        $(".btn-update-child").click(function() {
+            var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked:first");
+            if($trs.size() == 0) {
+                $.app.alert({message : "请先选择要修改的数据！"});
+                return;
+            }
+            $.parentchild.updateChild($trs, options.updateUrl, options.modalSettings);
+        });
+
+        $(".btn-copy-child").click(function() {
+            var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked:first");
+            if($trs.size() == 0) {
+                $.app.alert({message : "请先选择要复制的数据！"});
+                return;
+            }
+            $.parentchild.copyChild($trs, options.updateUrl, options.modalSettings);
+        });
+
+
         $(".btn-batch-delete-child").click(function() {
             var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked");
             if($trs.size() == 0) {
@@ -949,25 +1036,13 @@ $.parentchild = {
                 }
             });
         });
-        $childTable.find("tbody tr").each(function() {
-            var $tr = $(this);
-            if($tr.prop("id").indexOf("old_") == 0) {
-                $tr.find(".icon-edit").click(function() {
-                    $.parentchild.updateChild($(this), options.updateUrl, options.modalSettings);
-                });
-                $tr.find(".icon-remove").click(function() {
-                    $.parentchild.deleteChild($(this), options.deleteUrl, options.modalSettings);
-                });
-                $tr.find(".icon-copy").click(function() {
-                    $.parentchild.copyChild($(this), options.updateUrl, options.modalSettings);
-                });
-            }
-        });
+
         options.form.submit(function() {
             //如果是提交 不需要执行beforeunload
             $(window).unbind("beforeunload");
             $childTable.find("tbody tr").each(function(index) {
                 var tr = $(this);
+                tr.find(".check > :checkbox").attr("checked", false);
                 tr.find(":input").each(function() {
                     if($(this).prop("name").indexOf(options.prefixParamName) != 0) {
                         $(this).prop("name", options.prefixParamName + "[" + index + "]." + $(this).prop("name").replace(tr.prop("id"), ""));
@@ -1030,6 +1105,8 @@ $.parentchild = {
 }
 
 
+
+
 $.table = {
 
     /**
@@ -1064,6 +1141,12 @@ $.table = {
         table.find("td.check").each(function () {
             var checkbox = $(this).find(":checkbox,:radio");
             checkbox.off("click").on("click", function (event) {
+                var checked = !checkbox.is(":checked");
+                if(checked) {
+                    checkbox.closest("tr").removeClass("active");
+                } else {
+                    checkbox.closest("tr").addClass("active");
+                }
                 event.stopPropagation();
             });
             $(this).off("click").on("click", function (event) {
@@ -1665,6 +1748,66 @@ $.array = {
 
 };
 
+/*
+ * Project: Twitter Bootstrap Hover Dropdown
+ * Author: Cameron Spear
+ * Contributors: Mattia Larentis
+ *
+ * Dependencies?: Twitter Bootstrap's Dropdown plugin
+ *
+ * A simple plugin to enable twitter bootstrap dropdowns to active on hover and provide a nice user experience.
+ *
+ * No license, do what you want. I'd love credit or a shoutout, though.
+ *
+ * http://cameronspear.com/blog/twitter-bootstrap-dropdown-on-hover-plugin/
+ */
+;(function($, window, undefined) {
+    // outside the scope of the jQuery plugin to
+    // keep track of all dropdowns
+    var $allDropdowns = $();
+
+    // if instantlyCloseOthers is true, then it will instantly
+    // shut other nav items when a new one is hovered over
+    $.fn.dropdownHover = function(options) {
+
+        // the element we really care about
+        // is the dropdown-toggle's parent
+        $allDropdowns = $allDropdowns.add(this.parent());
+
+        return this.each(function() {
+            var $this = $(this).parent(),
+                defaults = {
+                    delay: 100,
+                    instantlyCloseOthers: true
+                },
+                data = {
+                    delay: $(this).data('delay'),
+                    instantlyCloseOthers: $(this).data('close-others')
+                },
+                settings = $.extend(true, {}, defaults, options, data),
+                timeout;
+
+            $this.hover(function() {
+                if(settings.instantlyCloseOthers === true)
+                    $allDropdowns.removeClass('open');
+
+                window.clearTimeout(timeout);
+                $(this).addClass('open');
+            }, function() {
+                timeout = window.setTimeout(function() {
+                    $this.removeClass('open');
+                }, settings.delay);
+            });
+        });
+    };
+
+    // apply dropdownHover to all elements with the data-hover="dropdown" attribute
+    $(document).ready(function() {
+        $('[data-hover="dropdown"]').dropdownHover();
+    });
+})(jQuery, this);
+
+
 $(function () {
     //global disable ajax cache
     $.ajaxSetup({ cache: false });
@@ -1674,6 +1817,39 @@ $(function () {
     });
     $.app.initDatetimePicker();
 
+//    $("[data-toggle='tooltip']").each(function() {
+//        var placement = $(this).data("placement") || "bottom";
+//        var my = "center top+15";
+//        var at = "center bottom";
+//        var arraw = "top";
+//        if(placement == "top") {
+//            my = "center bottom-15";
+//            at = "center top";
+//            arraw = "bottom";
+//        } else if(placement == "right") {
+//            my = "left+15 left";
+//            at = "right center";
+//            arraw = "left";
+//        } else if(placement == "left") {
+//            my = "right-15 center";
+//            at = "left center";
+//            arraw = "right";
+//        }
+//        $(this).tooltip({
+//            position: {
+//                my: my,
+//                at: at,
+//                using: function( position, feedback ) {
+//                    $( this ).css( position );
+//                    $( "<div>" )
+//                        .addClass( "arrow " + arraw )
+//                        .addClass( feedback.vertical )
+//                        .addClass( feedback.horizontal )
+//                        .appendTo( this );
+//                }
+//            }
+//        });
+//    })
 
     $(document).ajaxError(function(event,request, settings){
         $.app.alert({
@@ -1683,4 +1859,7 @@ $(function () {
         $.app.waitingOver();
     });
 });
+
+
+
 

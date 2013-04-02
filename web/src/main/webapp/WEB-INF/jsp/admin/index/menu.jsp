@@ -9,7 +9,7 @@
             <li><a href="${ctx}/showcase/deleted">逻辑删除列表</a></li>
             <li><a href="${ctx}/showcase/move">可移动列表</a></li>
             <li><a href="${ctx}/showcase/upload">文件上传</a></li>
-            <li><a href="${ctx}/showcase/tree/main">树</a></li>
+            <li><a href="${ctx}/showcase/tree">树</a></li>
             <li><a href="${ctx}/showcase/editor">编辑器</a></li>
             <li><a href="${ctx}/showcase/parentchild/parent">父子表(小数据量)</a></li>
             <li>
@@ -44,7 +44,13 @@
                     <li><a href="${ctx}/admin/sys/user/lastOnline">用户最后在线历史</a></li>
                 </ul>
             </li>
-            <li><a href="#">权限管理</a></li>
+            <li>
+                <a href="#">组织机构</a>
+                <ul>
+                    <li><a href="${ctx}/admin/sys/organization/organization">组织机构</a></li>
+                    <li><a href="${ctx}/admin/sys/organization/job">工作职务</a></li>
+                </ul>
+            </li>
             <li><a href="#">角色管理</a></li>
             <li><a href="#">资源管理</a></li>
             <li><a href="${ctx}/admin/sys/resources/menu">菜单管理</a></li>

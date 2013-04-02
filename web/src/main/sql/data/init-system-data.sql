@@ -9,3 +9,7 @@ insert into `menu`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) valu
 insert into `menu`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (9, 7, '0/1/7/', 1, '叶子32', true);
 insert into `menu`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (10, 7, '0/1/7/', 3, '节点31', true);
 insert into `menu`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (11, 10, '0/1/7/10/', 1, '叶子311', true);
+
+
+insert into `organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '组织机构', true);
+insert into `job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '职务', true);

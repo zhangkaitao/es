@@ -2,12 +2,42 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div class="panel">
+
     <ul class="nav nav-tabs">
-        <li class="active">
-            <a>显示状态管理[${op}]</a>
-        </li>
+        <c:if test="${op eq '新增'}">
+            <li <c:if test="${op eq '新增'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/status/audit/create?BackURL=<es:BackURL/>">
+                    <i class="icon-file"></i>
+                    新增
+                </a>
+            </li>
+        </c:if>
+
+        <c:if test="${not empty m.id}">
+            <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/status/show/${m.id}?BackURL=<es:BackURL/>">
+                    <i class="icon-eye-open"></i>
+                    查看
+                </a>
+            </li>
+            <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/status/show/update/${m.id}?BackURL=<es:BackURL/>">
+                    <i class="icon-edit"></i>
+                    修改
+                </a>
+            </li>
+            <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+                <a href="${ctx}/showcase/status/show/delete/${m.id}?BackURL=<es:BackURL/>">
+                    <i class="icon-trash"></i>
+                    删除
+                </a>
+            </li>
+        </c:if>
         <li>
-            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+            <a href="<es:BackURL/>" class="btn btn-link">
+                <i class="icon-reply"></i>
+                返回
+            </a>
         </li>
     </ul>
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
@@ -31,10 +61,26 @@
                 </div>
             </div>
 
+            <c:if test="${op eq '新增'}">
+                <c:set var="icon" value="icon-file"/>
+            </c:if>
+            <c:if test="${op eq '修改'}">
+                <c:set var="icon" value="icon-edit"/>
+            </c:if>
+            <c:if test="${op eq '删除'}">
+                <c:set var="icon" value="icon-trash"/>
+            </c:if>
+
             <div class="control-group">
                 <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="<es:BackURL/>" class="btn">返回</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="${icon}"></i>
+                            ${op}
+                    </button>
+                    <a href="<es:BackURL/>" class="btn">
+                        <i class="icon-reply"></i>
+                        返回
+                    </a>
                 </div>
             </div>
 
@@ -46,10 +92,10 @@
         <c:choose>
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
-                $("#editForm :input").not(":submit,:button").prop("readonly", true);
+                $.app.readonlyForm($("#editForm"), false);
             </c:when>
             <c:when test="${op eq '查看'}">
-                $("#editForm :input").prop("readonly", true).remove(":button,:submit");
+                $.app.readonlyForm($("#editForm"), true);
             </c:when>
             <c:otherwise>
                 var validationEngine = $("#editForm").validationEngine();

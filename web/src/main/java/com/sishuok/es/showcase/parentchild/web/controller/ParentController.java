@@ -82,7 +82,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         }
         parentService.save(parent, childList);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "创建成功");
-        return "redirect:" + redirectUrl(null);
+        return redirectToUrl(null);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         }
         parentService.update(parent, childList);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
-        return "redirect:" + redirectUrl(backURL);
+        return redirectToUrl(backURL);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)

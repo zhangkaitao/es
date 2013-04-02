@@ -6,10 +6,16 @@
 
     <ul class="nav nav-tabs">
         <li class="active">
-            <a>文件管理[${op}]</a>
+            <a>
+                <i class="icon-file"></i>
+                ${op}
+            </a>
         </li>
         <li>
-            <a href="<es:BackURL/>" class="btn btn-link">返回列表</a>
+            <a href="<es:BackURL/>" class="btn btn-link">
+                <i class="icon-reply"></i>
+                返回
+            </a>
         </li>
     </ul>
 
@@ -49,8 +55,14 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="${op}">
-                    <a href="<es:BackURL/>" class="btn">返回</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="icon-file"></i>
+                        ${op}
+                    </button>
+                    <a href="<es:BackURL/>" class="btn">
+                        <i class="icon-reply"></i>
+                        返回
+                    </a>
                 </div>
             </div>
     </form:form>

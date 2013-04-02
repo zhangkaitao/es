@@ -3,6 +3,8 @@ drop table if exists `user_status_history`;
 drop trigger if exists `trigger_user_off_online`;
 drop table if exists `user_online`;
 drop table if exists `user_last_online`;
+drop table if exists `organization`;
+drop table if exists `job`;
 drop table if exists `menu`;
 ##user
 create table `user`(
@@ -106,6 +108,54 @@ begin
 end;
 
 
+create table `organization`(
+  `id`         bigint not null auto_increment,
+  `name`      varchar(100),
+  `parent_id` bigint,
+  `parent_ids`  varchar(200) default '',
+  `icon`       varchar(200),
+  `weight`    int,
+  `show`       bool,
+  constraint `pk_organization` primary key(`id`),
+  index idx_organization_name (`name`),
+  index idx_organization_parentId (`parent_id`),
+  index idx_organization_parentIds_weight (`parent_ids`, `weight`)
+) charset=utf8 ENGINE=InnoDB;
+alter table `organization` auto_increment=1000;
+
+create table `organization`(
+  `id`         bigint not null auto_increment,
+  `name`      varchar(100),
+  `parent_id` bigint,
+  `parent_ids`  varchar(200) default '',
+  `icon`       varchar(200),
+  `weight`    int,
+  `show`       bool,
+  constraint `pk_organization` primary key(`id`),
+  index idx_organization_name (`name`),
+  index idx_organization_parentId (`parent_id`),
+  index idx_organization_parentIds_weight (`parent_ids`, `weight`)
+) charset=utf8 ENGINE=InnoDB;
+alter table `organization` auto_increment=1000;
+
+create table `job`(
+  `id`         bigint not null auto_increment,
+  `name`      varchar(100),
+  `parent_id` bigint,
+  `parent_ids`  varchar(200) default '',
+  `icon`       varchar(200),
+  `weight`    int,
+  `show`       bool,
+  constraint `pk_job` primary key(`id`),
+  index idx_job_name (`name`),
+  index idx_job_parentId (`parent_id`),
+  index idx_job_parentIds_weight (`parent_ids`, `weight`)
+) charset=utf8 ENGINE=InnoDB;
+alter table `job` auto_increment=1000;
+
+
+
+
 create table `menu`(
   `id`         bigint not null auto_increment,
   `name`      varchar(100),
@@ -119,3 +169,4 @@ create table `menu`(
   index idx_menu_parentIds_weight (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `menu` auto_increment=1000;
+

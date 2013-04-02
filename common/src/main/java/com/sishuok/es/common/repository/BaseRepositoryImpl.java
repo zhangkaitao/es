@@ -13,6 +13,7 @@ import com.sishuok.es.common.utils.ReflectUtils;
 import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.ExtendedEntityManagerCreator;
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
@@ -152,7 +153,7 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @return
      */
     public <T> List<T> findAll(final String ql, final Object... params) {
-        return findAll(ql, null, params);
+        return findAll(ql, (Pageable) null, params);
     }
 
     /**
@@ -165,14 +166,42 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @return
      */
     public <T> List<T> findAll(final String ql, final Pageable pageable, final Object... params) {
-        Query query = entityManager.createQuery(ql);
+        Query query = entityManager.createQuery(ql + prepareOrder(pageable != null ? pageable.getSort() : null));
         setParameters(query, params);
-        if (pageable != null && pageable.getPageSize() > 0) {
+        if (pageable != null) {
             query.setFirstResult(pageable.getOffset());
             query.setMaxResults(pageable.getPageSize());
         }
+
         return query.getResultList();
     }
+
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql，sort存储排序信息 null表示不排序<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
+     * @param ql
+     * @param sort null表示不排序
+     * @param params
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> findAll(final String ql, final Sort sort, final Object... params) {
+
+        Query query = entityManager.createQuery(ql + prepareOrder(sort));
+        setParameters(query, params);
+        return query.getResultList();
+    }
+
+    private String prepareOrder(Sort sort) {
+        if(sort == null || !sort.iterator().hasNext()) {
+            return "";
+        }
+        StringBuilder orderBy = new StringBuilder("");
+        orderBy.append(" order by ");
+        orderBy.append(sort.toString().replace(":", " "));
+        return orderBy.toString();
+    }
+
 
     /**
      * <p>根据ql和按照索引顺序的params执行ql统计<br/>

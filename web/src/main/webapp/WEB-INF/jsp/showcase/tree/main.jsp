@@ -2,8 +2,8 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<iframe id="treeFrame" name="treeFrame" class="ui-layout-west" frameborder="0" scrolling="auto" src="${ctx}/showcase/tree/tree"></iframe>
-<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center" frameborder="0" scrolling="auto" src="/es-web/showcase/tree/maintain/4"></iframe>
+<iframe id="treeFrame" name="treeFrame" class="ui-layout-west" frameborder="0" scrolling="auto" src="${ctx}/showcase/tree/tree?async=true"></iframe>
+<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center" frameborder="0" scrolling="auto"></iframe>
 
 <es:contentFooter/>
 
@@ -16,9 +16,11 @@
            ,    west__togglerContent_closed:"显示树"
            ,    west__togglerTip_closed:    "显示树"
            ,    west__sliderTip:            "显示树"
+           ,    resizerTip:         "调整大小"
            ,    togglerTip_open: "隐藏树"
            ,    togglerTip_closed: "显示树"
            ,    center__maskContents:        true // IMPORTANT - enable iframe masking
+
            });
         });
 </script>

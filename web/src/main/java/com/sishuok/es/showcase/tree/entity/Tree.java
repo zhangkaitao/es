@@ -6,6 +6,7 @@
 package com.sishuok.es.showcase.tree.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.search.annotation.SearchPropertyMappings;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Formula;
@@ -135,6 +136,7 @@ public class Tree extends BaseEntity<Long> implements Treeable<Long> {
         return true;
     }
 
+    @Override
     public boolean isHasChildren() {
         return hasChildren;
     }

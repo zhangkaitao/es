@@ -5,14 +5,21 @@
  */
 package com.sishuok.es.common.plugin.serivce;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.service.BaseService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -26,6 +33,9 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     private final String UPDATE_CHILDREN_PARENT_IDS_QL;
     private final String FIND_SELF_AND_NEXT_SIBLINGS_QL;
     private final String FIND_NEXT_WEIGHT_QL;
+    private final String FIND_NAMES_BY_NAME_QL;
+    private final String FIND_ALL_BY_NAME_QL;
+    private final String FIND_ALL_QL;
 
     protected <R extends BaseRepository<M, ID>> BaseTreeableService() {
         String entityName = this.entityClass.getSimpleName();
@@ -40,6 +50,14 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
         FIND_NEXT_WEIGHT_QL =
                 String.format("select case when max(weight) is null then 1 else (max(weight) + 1) end from %s where parentId = ?1", entityName);
+
+        FIND_NAMES_BY_NAME_QL =
+                String.format("select t.name from %1$s t where t.name like concat(%2$s, ?1, %2$s)", entityName, "'%'");
+
+        FIND_ALL_BY_NAME_QL =
+                String.format("select t from %1$s t where t.name like concat(%2$s, ?1, %2$s)", entityName, "'%'");
+        FIND_ALL_QL =
+                String.format("select t from %1$s t ", entityName);
     }
 
     @Override
@@ -77,7 +95,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      */
     @Transactional
     public void move(M source, M target, String moveType) {
-        if(source == null || target == null || source.isRoot() || target.isRoot()) { //根节点不能移动
+        if(source == null || target == null || source.isRoot()) { //根节点不能移动
             return;
         }
 
@@ -176,5 +194,48 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
 
+    /**
+     * 查看与name模糊匹配的名称
+     * @param name
+     * @return
+     */
+    public Set<String> findNames(String name) {
+        return Sets.newHashSet(baseDefaultRepositoryImpl.<String>findAll(FIND_NAMES_BY_NAME_QL, new PageRequest(0, 20), name));
+    }
 
+
+    /**
+     * 查询子子孙孙
+     * @return
+     */
+    public List<M> findSelfAndChildren(String searchName, Sort sort) {
+        List<M> result = Lists.newArrayList();
+        List<M> models = findAllByName(searchName, sort);
+
+        if(models.isEmpty()) {
+            return result;
+        }
+
+        StringBuilder findChildrenHQL = new StringBuilder(FIND_ALL_QL);
+        findChildrenHQL.append("where ");
+        List<String> parentIds = Lists.newArrayList();
+        for(int i = 0; i < models.size(); i++) {
+            if(i > 0) {
+                findChildrenHQL.append(" or ");
+            }
+            findChildrenHQL.append(String.format("parentIds like concat(%1$s, ?%2$d , %1$s)", "'%'", i + 1));
+            parentIds.add(models.get(i).makeSelfAsNewParentIds());
+        }
+
+        result.addAll(baseDefaultRepositoryImpl.<M>findAll(findChildrenHQL.toString(), sort, parentIds.toArray()));
+        result.removeAll(models);
+        result.addAll(models);
+
+        return result;
+    }
+
+    public List<M> findAllByName(String searchName, Sort sort) {
+        List<M> models = (baseDefaultRepositoryImpl.<M>findAll(FIND_ALL_BY_NAME_QL, sort, searchName));
+        return models;
+    }
 }

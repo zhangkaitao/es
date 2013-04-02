@@ -2,9 +2,15 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a>
+            <i class="icon-file"></i>
+            添加子节点
+        </a>
+    </li>
+</ul>
 <form:form id="appendChildForm" method="post" commandName="child" cssClass="form-horizontal" enctype="multipart/form-data">
-    <fieldset>
-        <legend>添加子节点</legend>
 
         <es:showGlobalError commandName="child"/>
 
@@ -49,11 +55,16 @@
 
         <div class="control-group">
             <div class="controls">
-                <input type="submit" class="btn btn-primary" value="添加子节点">
-                <input id="toMaintain" type="button" class="btn" value="返回">
+                <button type="submit" class="btn btn-primary">
+                    <i class="icon-file"></i>
+                    添加子节点
+                </button>
+                <button id="toMaintain" type="button" class="btn">
+                    <i class="icon-reply"></i>
+                    返回
+                </button>
             </div>
         </div>
-    </fieldset>
 </form:form>
 </div>
 <es:contentFooter/>

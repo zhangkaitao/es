@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -50,23 +52,29 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
     }
 
 
-    @RequestMapping(value = "{id}/{status}", method = RequestMethod.GET)
+    @RequestMapping(value = "status/{status}", method = RequestMethod.GET)
     public String audit(
             HttpServletRequest request,
-            @PathVariable("id") Audit audit,
+            @RequestParam("ids") Long[] ids,
             @PathVariable("status") Stateable.AuditStatus status,
             @RequestParam(value = "comment", required = false) String comment,
             RedirectAttributes redirectAttributes
         ) {
 
-        if(audit.getStatus() != Stateable.AuditStatus.waiting) {
-            redirectAttributes.addFlashAttribute(Constants.ERROR, "数据已审核过，不能重复审核！");
-            return "redirect:" + request.getAttribute(Constants.BACK_URL);
+        List<Audit> auditList = new ArrayList<Audit>();
+        for(Long id : ids) {
+            Audit audit = auditService.findOne(id);
+            if(audit.getStatus() != Stateable.AuditStatus.waiting) {
+                redirectAttributes.addFlashAttribute(Constants.ERROR, "数据中有已通过审核的，不能重复审核！");
+                return "redirect:" + request.getAttribute(Constants.BACK_URL);
+            }
+            auditList.add(audit);
         }
-
-        audit.setStatus(status);
-        audit.setComment(comment);
-        auditService.update(audit);
+        for(Audit audit : auditList) {
+            audit.setStatus(status);
+            audit.setComment(comment);
+            auditService.update(audit);
+        }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 

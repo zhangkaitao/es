@@ -13,28 +13,21 @@
         <th sort="name">姓名</th>
         <th sort="weight">权重</th>
         <th>是否显示</th>
-        <th style="width: 50px">操作</th>
     </tr>
     </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m" varStatus="status">
         <tr id="${m.id}">
             <td class="check"><input type="checkbox" name="ids" value="${m.id}"></td>
-            <td>${m.id}</td>
+            <td>
+                <a href="${ctx}/showcase/move/${m.id}">${m.id}</a>
+            </td>
             <td>${m.name}</td>
             <td>
-                    ${m.weight}
+                 ${m.weight}
                 <es:movable page="${page}" first="${status.first}" last="${status.last}"/>
             </td>
-            <td>${m.show}</td>
-            <td>
-                <a class="btn btn-link btn-edit" title="修改" href="${ctx}/showcase/move/update/${m.id}">
-                    <span class=" icon-edit"></span>
-                </a>
-                <a class="btn btn-link btn-edit" title="删除" href="${ctx}/showcase/move/delete/${m.id}">
-                    <span class=" icon-trash"></span>
-                </a>
-            </td>
+            <td>${m.show?'是':'否'}</td>
         </tr>
     </c:forEach>
     </tbody>

@@ -5,11 +5,16 @@
  */
 package com.sishuok.es.showcase.tree.service;
 
+import com.google.common.collect.Sets;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.showcase.tree.entity.Tree;
 import com.sishuok.es.showcase.tree.repository.TreeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -19,9 +24,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TreeService extends BaseTreeableService<Tree, Long> {
 
+    private TreeRepository treeRepository;
+
     @Autowired
     public void setTreeRepository(TreeRepository treeRepository) {
         setBaseRepository(treeRepository);
+        this.treeRepository = treeRepository;
     }
 
 }

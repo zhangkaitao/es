@@ -14,7 +14,6 @@
         <th>出生日期</th>
         <th>性别</th>
         <th>是否显示</th>
-        <th style="width: 50px">操作</th>
     </tr>
     </thead>
     <tbody>
@@ -28,15 +27,8 @@
             <td>${m.age}</td>
             <td><spring:eval expression="m.birthday"/></td>
             <td>${m.sex.info}</td>
-            <td>${m.show}</td>
-            <td>
-                <a class="btn btn-link btn-edit" title="修改" href="${ctx}/showcase/deleted/update/${m.id}">
-                    <span class="icon-edit"></span>
-                </a>
-                <a class="btn btn-link btn-edit" title="删除" href="${ctx}/showcase/deleted/delete/${m.id}">
-                    <span class="icon-trash"></span>
-                </a>
-            </td>
+            <td>${m.show?'是':'否'}</td>
+
         </tr>
     </c:forEach>
     </tbody>

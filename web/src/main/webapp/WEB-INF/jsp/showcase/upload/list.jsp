@@ -1,13 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<es:showMessage/>
+
 <div class="panel" data-table="table">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="${ctx}/showcase/upload">
+                <i class="icon-table"></i>
+                所有文件列表
+            </a>
+        </li>
+    </ul>
+
+    <es:showMessage/>
+
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
                 <div class="btn-group">
                     <a class="btn btn-create">
+                        <span class="icon-file"></span>
                         新&nbsp;增
                     </a>
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">

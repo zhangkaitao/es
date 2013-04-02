@@ -2,9 +2,16 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 
 <es:contentHeader/>
+
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a>
+            <i class="icon-edit"></i>
+            维护树
+        </a>
+    </li>
+</ul>
 <form:form id="maintainForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
-    <fieldset>
-        <legend>维护树</legend>
 
         <es:showGlobalError commandName="m"/>
 
@@ -47,20 +54,32 @@
 
         <div class="control-group">
             <div class="controls">
-                <input id="updateTree" type="submit" class="btn btn-primary" value="修改">
+                <button id="updateTree" type="submit" class="btn btn-primary">
+                    <i class="icon-edit"></i>
+                    修改
+                </button>
                 <c:if test="${m.root == false}">
-                <input id="deleteTree" type="submit" class="btn btn-primary" value="删除">
+                <button id="deleteTree" type="submit" class="btn btn-primary">
+                    <i class="icon-remove"></i>
+                    删除
+                </button>
                 </c:if>
-                <input id="appendChild" type="submit" class="btn btn-primary" value="添加子节点">
+                <button id="appendChild" type="submit" class="btn btn-primary">
+                    <i class="icon-file"></i>
+                    添加子节点
+                </button>
                 <c:if test="${m.root == false}"><%-- 根节点不能移动 --%>
-                <input id="moveTree" type="submit" class="btn btn-primary" value="移动节点">
+                <button id="moveTree" type="submit" class="btn btn-primary">
+                    <i class="icon-move"></i>
+                    移动节点
+                </button>
                 </c:if>
             </div>
         </div>
-    </fieldset>
 </form:form>
 </div>
 <es:contentFooter/>
+<%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
 $(function () {
     $.validationEngineLanguage.allRules.name = {
@@ -70,28 +89,14 @@ $(function () {
     var validationEngine = $("#maintainForm").validationEngine();
     <es:showFieldError commandName="m"/>
 
-    $("#updateTree").click(function() {
-        this.form.action = "${ctx}/showcase/tree/update/${m.id}";
-    });
-    $("#deleteTree").click(function () {
-        var btn = this;
-        $.app.confirm({
-            message : "确认删除吗？",
-            ok : function() {
-                btn.form.action = "${ctx}/showcase/tree/delete/${m.id}";
-                btn.form.submit();
-          }
-      });
-      return false;
-  });
-  $("#appendChild").click(function () {
-      window.location.href = "${ctx}/showcase/tree/appendChild/${m.id}";
-      return false;
-  });
-  $("#moveTree").click(function () {
-      window.location.href = "${ctx}/showcase/tree/move/${m.id}";
-      return false;
-  });
+
+    $.zTree.initMaintainBtn(
+            "${ctx}/showcase/tree/update/${m.id}",
+            "${ctx}/showcase/tree/delete/${m.id}",
+            "${ctx}/showcase/tree/appendChild/${m.id}",
+            "${ctx}/showcase/tree/move/${m.id}?async=${param.async}"
+    );
+
 
 });
 </script>

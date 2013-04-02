@@ -76,6 +76,12 @@ public interface Treeable<ID extends Serializable> {
     public boolean isLeaf();
 
     /**
+     * 是否有孩子节点
+     * @return
+     */
+    public boolean isHasChildren();
+
+    /**
      * 根节点默认图标 如果没有默认 空即可  大小为16×16
      */
     public String getRootDefaultIcon();
@@ -89,4 +95,6 @@ public interface Treeable<ID extends Serializable> {
      * 树叶节点默认图标 如果没有默认 空即可  大小为16×16
      */
     public String getLeafDefaultIcon();
+
+
 }
