@@ -598,6 +598,15 @@ iframe[tabs="true"] {
     width: 300px;
 }
 
+.tree.ui-layout-center ,
+.tree.ui-layout-west {
+    overflow:	hidden;
+}
+.tree iframe {
+    padding:	0 !important; /* iframes should not have padding */
+    overflow:	auto !important;
+}
+
 .treeContent ul.ztree {
     margin-top: 2px;
     border: 1px solid #617775;

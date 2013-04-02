@@ -2,8 +2,12 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<iframe id="treeFrame" name="treeFrame" class="ui-layout-west" frameborder="0" scrolling="auto" src="${ctx}/admin/sys/organization/job/tree"></iframe>
-<iframe id="maintainFrame" name="maintainFrame" class="ui-layout-center" frameborder="0" scrolling="auto"></iframe>
+<div class="ui-layout-west tree">
+    <iframe id="treeFrame" name="treeFrame" width="100%" height="100%"  frameborder="0" scrolling="auto" src="${ctx}/admin/sys/organization/job/tree"></iframe>
+</div>
+<div class="ui-layout-center tree">
+    <iframe id="maintainFrame" name="maintainFrame" width="100%" height="100%"  frameborder="0" scrolling="auto"></iframe>
+</div>
 
 <es:contentFooter/>
 
@@ -19,7 +23,7 @@
            ,    togglerTip_open: "隐藏树"
            ,    togglerTip_closed: "显示树"
            ,    resizerTip:         "调整大小"
-           ,    center__maskContents:        true // IMPORTANT - enable iframe masking
+           ,    maskContents:        true // IMPORTANT - enable iframe masking
            });
         });
 </script>
