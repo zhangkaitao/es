@@ -16,7 +16,7 @@ $.app = {
             } else if(a.is(".btn-change-password")) {
                 url = ctx + "/admin/sys/user/loginUser/changePassword";
             }
-            $.tabs.activeTab(99999999, a.text(), url, true)
+            $.tabs.activeTab(99999999, "个人资料", url, true)
         });
 
     },
@@ -1817,39 +1817,39 @@ $(function () {
     });
     $.app.initDatetimePicker();
 
-//    $("[data-toggle='tooltip']").each(function() {
-//        var placement = $(this).data("placement") || "bottom";
-//        var my = "center top+15";
-//        var at = "center bottom";
-//        var arraw = "top";
-//        if(placement == "top") {
-//            my = "center bottom-15";
-//            at = "center top";
-//            arraw = "bottom";
-//        } else if(placement == "right") {
-//            my = "left+15 left";
-//            at = "right center";
-//            arraw = "left";
-//        } else if(placement == "left") {
-//            my = "right-15 center";
-//            at = "left center";
-//            arraw = "right";
-//        }
-//        $(this).tooltip({
-//            position: {
-//                my: my,
-//                at: at,
-//                using: function( position, feedback ) {
-//                    $( this ).css( position );
-//                    $( "<div>" )
-//                        .addClass( "arrow " + arraw )
-//                        .addClass( feedback.vertical )
-//                        .addClass( feedback.horizontal )
-//                        .appendTo( this );
-//                }
-//            }
-//        });
-//    })
+    $("[data-toggle='tooltip']").each(function() {
+        var placement = $(this).data("placement") || "bottom";
+        var my = "center top+10";
+        var at = "center bottom";
+        var arraw = "top";
+        if(placement == "top") {
+            my = "center bottom-10";
+            at = "center top";
+            arraw = "bottom";
+        } else if(placement == "right") {
+            my = "left+10 left";
+            at = "right center";
+            arraw = "left";
+        } else if(placement == "left") {
+            my = "right-10 center";
+            at = "left center";
+            arraw = "right";
+        }
+        $(this).tooltip({
+            position: {
+                my: my,
+                at: at,
+                using: function( position, feedback ) {
+                    $( this ).css( position );
+                    $( "<div>" )
+                        .addClass( "arrow " + arraw )
+                        .addClass( feedback.vertical )
+                        .addClass( feedback.horizontal )
+                        .appendTo( this );
+                }
+            }
+        });
+    })
 
     $(document).ajaxError(function(event,request, settings){
         $.app.alert({

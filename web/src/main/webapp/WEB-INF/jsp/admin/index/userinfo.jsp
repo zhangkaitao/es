@@ -1,19 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 
-<div class="userinfo">
+<div class="userinfo ">
     <shiro:user>
-        <a class="btn-view-info" title="点击查看个人资料"><es:username/></a>，欢迎您！
-        <a href="${ctx}/logout" title="点击退出系统">
-            <i class="icon-signin"></i>
-            退出
-        </a>
-        <div class="btn-group">
-            <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                更多
-                <i class="icon-caret-down"></i>
-            </a>
+        <a class="btn btn-link no-padding btn-view-info" data-toggle="tooltip" title="点击查看个人资料"><es:username/></a>，欢迎您！
 
+        <div class="btn-group">
+            <a class="btn btn-link  dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="icon-large icon-cogs"></i></a>
             <ul class="dropdown-menu pull-right">
                 <li>
                     <a class="btn-view-info">
@@ -29,5 +22,7 @@
                 </li>
             </ul>
         </div>
+        <a href="${ctx}/logout" class="btn btn-link no-padding" data-toggle="tooltip" title="退出"><i class="icon-large icon-signin"></i></a>
+        &nbsp;&nbsp;&nbsp;
     </shiro:user>
 </div>

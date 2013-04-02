@@ -200,7 +200,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @return
      */
     public Set<String> findNames(String name) {
-        return Sets.newHashSet(baseDefaultRepositoryImpl.<String>findAll(FIND_NAMES_BY_NAME_QL, new PageRequest(0, 20), name));
+        return Sets.newHashSet(baseDefaultRepositoryImpl.<String>findAll(FIND_NAMES_BY_NAME_QL, new PageRequest(0, 30), name));
     }
 
 
