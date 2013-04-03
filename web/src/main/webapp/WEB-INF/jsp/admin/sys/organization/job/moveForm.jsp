@@ -77,14 +77,16 @@ $(function () {
     ];
 
     var async = ${not empty param.async and param.async eq true};
-    var asyncUrl = "${ctx}/admin/sys/organization/job/ajax/asyncLoad?excludeId=${source.id}";
+    var loadUrl = "${ctx}/admin/sys/organization/job/ajax/load?excludeId=${source.id}";
     $.zTree.initSelectTree(
             zNodes,
             async,
-            asyncUrl,
+            loadUrl,
             $("#selectTree,#targetName"),
             "targetId",
-            "targetName"
+            "targetName",
+            true,
+            "${ctx}/admin/sys/organization/job/ajax/autocomplete"
     );
 
 

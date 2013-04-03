@@ -80,17 +80,16 @@ $(function () {
     ];
 
     var async = ${not empty param.async and param.async eq true};
-    var asyncUrl = "${ctx}/showcase/tree/ajax/asyncLoad?excludeId=${source.id}";
+    var loadUrl = "${ctx}/showcase/tree/ajax/load?excludeId=${source.id}";
     $.zTree.initSelectTree(
             zNodes,
             async,
-            asyncUrl,
+            loadUrl,
             $("#selectTree,#targetName"),
             "targetId",
             "targetName",
             true,
-            "${ctx}/showcase/tree/ajax/autocomplete",
-            "${ctx}/showcase/tree/tree"
+            "${ctx}/showcase/tree/ajax/autocomplete"
     );
 
     var validationEngine = $("#moveForm").validationEngine({

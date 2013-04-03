@@ -67,60 +67,68 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         List<M> models = null;
 
-        if(!async) {
-            if(StringUtils.hasLength(searchName)) {//按name模糊查
-                models = treeableService.findSelfAndChildren(searchName, searchable.getPage().getSort());
-            } else {
-                models = treeableService.findAllBySort(searchable);
+        if(StringUtils.hasLength(searchName)) {
+            if(!async) { //非异步 查自己和子子孙孙
+                models = treeableService.findSelfAndChildrenByName(searchName, null, searchable.getPage().getSort());
+            } else { //异步模式只查自己
+                models = treeableService.findAllByName(searchName, null, searchable.getPage().getSort());
+
             }
         } else {
-            if(StringUtils.hasLength(searchName)) {//按name模糊查
-                models = treeableService.findAllByName(searchName, searchable.getPage().getSort());
-            } else {
-                searchable.addSearchFilter("parentId_eq", 0);
+            if(!async) {  //非异步 查自己和子子孙孙
                 models = treeableService.findAllBySort(searchable);
-                if(models.size() > 0) {
-                    List<ID> ids = Lists.newArrayList();
-                    for(int i = 0 ; i < models.size(); i++) {
-                        ids.add(models.get(i).getId());
-                    }
-
-                    searchable.removeSearchFilter("parentId_eq");
-                    searchable.addSearchFilter("parentId_in", ids);
-                    models.addAll(treeableService.findAllBySort(searchable));
-                }
+            } else {  //异步模式只查根 和 根一级节点
+                models = treeableService.findRootAndChild(searchable);
             }
         }
+
 
         model.addAttribute("trees",
                 convertToZtreeList(
                         request.getContextPath(),
                         models,
-                        false));
+                        async));
 
         return getViewPrefix() + "/tree";
     }
 
 
-    @RequestMapping(value = "ajax/asyncLoad")
+    @RequestMapping(value = "ajax/load")
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     @ResponseBody
-    public Object asyncLoad(
+    public Object load(
             HttpServletRequest request,
-            @RequestParam(value = "id", required = false, defaultValue = "0") Long parentId,
-            @RequestParam(value = "excludeId", required = false) Long excludeId,
-            Pageable pageable,Model model) {
+            @RequestParam(value = "async", defaultValue = "true") boolean async,
+            @RequestParam(value = "searchName", required = false) String searchName,
+            @RequestParam(value = "id", required = false, defaultValue = "0") ID parentId,
+            @RequestParam(value = "excludeId", required = false) ID excludeId,
+            Searchable searchable) {
 
-        SearchableBuilder searchableBuilder = SearchableBuilder.newInstance();
-        searchableBuilder.addSearchFilter("parentId", SearchOperator.eq, parentId);
+        M excludeM = treeableService.findOne(excludeId);
 
-        if(excludeId != null) {
-            searchableBuilder.addSearchFilter("id", SearchOperator.notEq, excludeId);
+        if(async) { //异步模式下
+            if(parentId != null) { //只查某个节点下的 异步
+                searchable.addSearchFilter("parentId", SearchOperator.eq, parentId);
+            }
+            if(excludeM != null) { //排除自己 及 子子孙孙
+                searchable.addSearchFilter("id", SearchOperator.notEq, excludeId);
+                searchable.addSearchFilter("parentIds", SearchOperator.notLike, excludeM.makeSelfAsNewParentIds() + "%");
+            }
         }
-        searchableBuilder.setPage(pageable);
 
-        List<M> models = treeableService.findAllByNoPage(searchableBuilder.buildSearchable());
-        return convertToZtreeList(request.getContextPath(), models, true);
+        List<M> models = null;
+
+        if(StringUtils.hasLength(searchName)) {//按name模糊查
+            if(!async) {//非异步模式 查自己及子子孙孙 但排除
+                models = treeableService.findSelfAndChildrenByName(searchName, excludeM, searchable.getPage().getSort());
+            } else { //异步模式 只查匹配的一级
+                models = treeableService.findAllByName(searchName, excludeM, searchable.getPage().getSort());
+            }
+        } else { //根据有没有parentId加载
+            models = treeableService.findAllBySort(searchable);
+        }
+
+        return convertToZtreeList(request.getContextPath(), models, async);
     }
 
     @RequestMapping(value = "maintain/{id}", method = RequestMethod.GET)
@@ -197,20 +205,25 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         model.addAttribute("source", source);
 
-        if(!async) {
-            //排除自己及子子孙孙
-            searchable.addSearchFilter("search.id.notEq", "id", SearchOperator.notEq, source.getId());
-            searchable.addSearchFilter(
-                    "search.parentIds.notLike", "parentIds",
-                    SearchOperator.notLike,
-                    source.makeSelfAsNewParentIds()  + "%");
+        List<M> models = null;
 
-            model.addAttribute("trees", convertToZtreeList(
-                    request.getContextPath(),
-                    treeableService.findAllBySort(searchable),
-                    false));
+        //排除自己及子子孙孙
+        searchable.addSearchFilter("search.id.notEq", "id", SearchOperator.notEq, source.getId());
+        searchable.addSearchFilter(
+                "search.parentIds.notLike", "parentIds",
+                SearchOperator.notLike,
+                source.makeSelfAsNewParentIds()  + "%");
+
+        if(!async) {
+            models = treeableService.findAllBySort(searchable);
+        } else {
+            models = treeableService.findRootAndChild(searchable);
         }
 
+        model.addAttribute("trees", convertToZtreeList(
+                request.getContextPath(),
+                models,
+                async));
         return getViewPrefix() + "/moveForm";
     }
 

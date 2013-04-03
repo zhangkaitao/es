@@ -180,6 +180,9 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return 返回id对应的实体
      */
     public M findOne(ID id) {
+        if(id == null) {
+            return null;
+        }
         return baseRepository.findOne(id);
     }
 

@@ -4,12 +4,13 @@ $.zTree = {
     /**
      * 初始化可移动树
      */
-    initMovableTree : function(zNodes, renameUrl, removeUrl, addUrl, moveUrl, async, asyncUrl) {
+    initMovableTree : function(zNodes, renameUrl, removeUrl, addUrl, moveUrl, async, loadUrl) {
+        loadUrl = loadUrl + (loadUrl.indexOf("?") == -1 ? "?" : "&") + "async=" + async;
         var setting = {
             async: {
                 enable: async,
-                url:asyncUrl,
-                autoParam:["id", "level=lv"],
+                url:loadUrl,
+                autoParam:["id"],
                 dataFilter: $.zTree.filter
             },
             view: {
@@ -152,7 +153,8 @@ $.zTree = {
 
         var treeId = "tree" + this.index++;
         $("body").append("<ul id='" + treeId + "' class='ztree'></ul>");
-        return $.fn.zTree.init($("#" + treeId), setting, zNodes);
+        var zTree = $.fn.zTree.init($("#" + treeId), setting, zNodes);
+        return zTree;
 
     },
 
@@ -163,7 +165,8 @@ $.zTree = {
      * @param idDomId 要保存的编号的dom id
      * @param nameDomId 要保存的名称的dom id
      */
-    initSelectTree : function(zNodes, async, asyncUrl, btn, idDomId, nameDomId, autocomplete, autocompleteUrl, searchPrefixUrl) {
+    initSelectTree : function(zNodes, async, loadUrl, btn, idDomId, nameDomId, autocomplete, autocompleteUrl) {
+        loadUrl = loadUrl + (loadUrl.indexOf("?") == -1 ? "?" : "&") + "async=" + async;
         var id = this.index++;
         var treeContentStr =
             '<div id="treeContent{id}" class="treeContent" style="display:none; position: absolute;">' +
@@ -188,8 +191,8 @@ $.zTree = {
         var setting = {
             async: {
                 enable: async,
-                url:asyncUrl,
-                autoParam:["id", "level=lv"],
+                url:loadUrl,
+                autoParam:["id"],
                 dataFilter: $.zTree.filter
             },
             view: {
@@ -225,7 +228,7 @@ $.zTree = {
         }
 
         function onBodyDown(event) {
-            if (!(event.target.id == treeContent || $(event.target).closest("#" + treeContent).length > 0)) {
+            if (!($(event.target).closest(".ui-autocomplete").length > 0  || event.target.id == treeContent || $(event.target).closest("#" + treeContent).length > 0)) {
                 hideMenu();
             }
         }
@@ -235,10 +238,23 @@ $.zTree = {
         });
         window.treeNodeClick = hideMenu;
 
-        $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
+        var zTree = $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
 
         if(autocomplete) {
-            $.zTree.initAutocomplete($("#searchName" + id), async, autocompleteUrl, searchPrefixUrl);
+            $.zTree.initAutocomplete(
+                $("#searchName" + id),
+                async,
+                autocompleteUrl,
+                function(searchName) { //按照名字搜索
+                    var url = loadUrl + "&searchName=" + searchName;
+                    zTree.destroy();
+                    $.getJSON(url, function(zNodes) {
+                        if(zNodes.length > 0) { //如果没找到节点就不必展示
+                            zTree = $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
+                        }
+                    });
+                }
+            );
         }
 
     },
@@ -285,20 +301,21 @@ $.zTree = {
     return val.split( /,\s*/ );
     },
     extractLast : function( term ) {
-        return split( term ).pop();
+        return this.split( term ).pop();
     }
     ,
-    initAutocomplete : function(input, async, autocompleteUrl, searchPrefixUrl) {
+    initAutocomplete : function(input, async, autocompleteUrl, searchCallback) {
         $(input)
             .on( "keydown", function( event ) {
                 //回车查询
                 if(event.keyCode === $.ui.keyCode.ENTER) {
-                    location.href = searchPrefixUrl + "?async=" + async + "&searchName=" + $(this).val();
+                    searchCallback(input.val());
                 }
             })
             .autocomplete({
                 source: autocompleteUrl,
-                minLength:1
+                minLength:1,
+                select: function() {searchCallback(input.val());}
             });
     },
     filter : function(treeId, parentNode, childNodes) {

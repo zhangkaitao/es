@@ -48,13 +48,15 @@
                 //异步模式
                 async,
                 //异步加载url
-                "${ctx}/admin/sys/organization/job/ajax/asyncLoad"
+                "${ctx}/admin/sys/organization/job/ajax/load"
         );
 
         $.zTree.initAutocomplete(
                 $("[name='searchName']"),
                 async,
                 "${ctx}/admin/sys/organization/job/ajax/autocomplete",
-                "${ctx}/admin/sys/organization/job/tree");
+                function(searchName) {
+                    location.href = "${ctx}/admin/sys/organization/job/tree?async=" + async + "&searchName=" + searchName;
+                });
     });
 </script>

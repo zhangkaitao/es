@@ -8,6 +8,7 @@ package com.sishuok.es.common.plugin.serivce;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.service.BaseService;
@@ -208,9 +209,9 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * 查询子子孙孙
      * @return
      */
-    public List<M> findSelfAndChildren(String searchName, Sort sort) {
+    public List<M> findSelfAndChildrenByName(String searchName, M excludeM, Sort sort) {
         List<M> result = Lists.newArrayList();
-        List<M> models = findAllByName(searchName, sort);
+        List<M> models = findAllByName(searchName, excludeM, sort);
 
         if(models.isEmpty()) {
             return result;
@@ -220,11 +221,23 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         findChildrenHQL.append("where ");
         List<String> parentIds = Lists.newArrayList();
         for(int i = 0; i < models.size(); i++) {
+            if(i == 0) {
+                findChildrenHQL.append("(");
+            }
+
             if(i > 0) {
                 findChildrenHQL.append(" or ");
             }
             findChildrenHQL.append(String.format("parentIds like concat(%1$s, ?%2$d , %1$s)", "'%'", i + 1));
             parentIds.add(models.get(i).makeSelfAsNewParentIds());
+
+            if(i == models.size() - 1) {
+                findChildrenHQL.append(")");
+            }
+        }
+
+        if(excludeM != null) {
+            findChildrenHQL.append(" and id != " + excludeM.getId() + " and parentIds not like '" + excludeM.makeSelfAsNewParentIds() + "%'");
         }
 
         result.addAll(baseDefaultRepositoryImpl.<M>findAll(findChildrenHQL.toString(), sort, parentIds.toArray()));
@@ -234,8 +247,32 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         return result;
     }
 
-    public List<M> findAllByName(String searchName, Sort sort) {
-        List<M> models = (baseDefaultRepositoryImpl.<M>findAll(FIND_ALL_BY_NAME_QL, sort, searchName));
+    public List<M> findAllByName(String searchName, M excludeM, Sort sort) {
+        String hql = FIND_ALL_BY_NAME_QL;
+        if(excludeM != null) {
+            hql = hql + " and id != " + excludeM.getId() + " and parentIds not like '" + excludeM.makeSelfAsNewParentIds() + "%'";
+        }
+        return (baseDefaultRepositoryImpl.<M>findAll(hql, sort, searchName));
+    }
+
+    /**
+     * 查找根和一级节点
+     * @param searchable
+     * @return
+     */
+    public List<M> findRootAndChild(Searchable searchable) {
+        searchable.addSearchFilter("parentId_eq", 0);
+        List<M> models = findAllBySort(searchable);
+        if(models.size() > 0) {
+            List<ID> ids = Lists.newArrayList();
+            for(int i = 0 ; i < models.size(); i++) {
+                ids.add(models.get(i).getId());
+            }
+
+            searchable.removeSearchFilter("parentId_eq");
+            searchable.addSearchFilter("parentId_in", ids);
+            models.addAll(findAllBySort(searchable));
+        }
         return models;
     }
 }
