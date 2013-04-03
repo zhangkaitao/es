@@ -45,6 +45,12 @@ public interface Searchable {
     public void addSearchFilter(final String key, Object value);
 
     /**
+     * 移除指定key的过滤条件
+     * @param key
+     */
+    public void removeSearchFilter(final String key);
+
+    /**
      * 添加过滤条件
      * @param searchProperty 查询的属性名
      * @param operator 操作运算符

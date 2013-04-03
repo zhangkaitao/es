@@ -607,7 +607,7 @@ iframe[tabs="true"] {
     overflow:	auto !important;
 }
 
-.treeContent ul.ztree {
+.treeContent  {
     margin-top: 2px;
     border: 1px solid #617775;
     background: #f0f6e4;

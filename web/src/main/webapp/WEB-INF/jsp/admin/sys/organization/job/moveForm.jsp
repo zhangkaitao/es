@@ -84,7 +84,8 @@ $(function () {
             asyncUrl,
             $("#selectTree,#targetName"),
             "targetId",
-            "targetName");
+            "targetName"
+    );
 
 
     var validationEngine = $("#moveForm").validationEngine({

@@ -87,7 +87,11 @@ $(function () {
             asyncUrl,
             $("#selectTree,#targetName"),
             "targetId",
-            "targetName");
+            "targetName",
+            true,
+            "${ctx}/showcase/tree/ajax/autocomplete",
+            "${ctx}/showcase/tree/tree"
+    );
 
     var validationEngine = $("#moveForm").validationEngine({
         validationEventTrigger : "submit"

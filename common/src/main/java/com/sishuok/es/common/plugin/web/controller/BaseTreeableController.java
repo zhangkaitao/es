@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
+import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
@@ -76,8 +77,18 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             if(StringUtils.hasLength(searchName)) {//按name模糊查
                 models = treeableService.findAllByName(searchName, searchable.getPage().getSort());
             } else {
-                searchable.addSearchFilter("parentId", SearchOperator.eq, 0);
+                searchable.addSearchFilter("parentId_eq", 0);
                 models = treeableService.findAllBySort(searchable);
+                if(models.size() > 0) {
+                    List<ID> ids = Lists.newArrayList();
+                    for(int i = 0 ; i < models.size(); i++) {
+                        ids.add(models.get(i).getId());
+                    }
+
+                    searchable.removeSearchFilter("parentId_eq");
+                    searchable.addSearchFilter("parentId_in", ids);
+                    models.addAll(treeableService.findAllBySort(searchable));
+                }
             }
         }
 

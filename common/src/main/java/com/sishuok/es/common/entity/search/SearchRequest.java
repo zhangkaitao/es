@@ -6,6 +6,7 @@
 package com.sishuok.es.common.entity.search;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
 import com.sishuok.es.common.entity.specification.SearchSpecifications;
@@ -155,6 +156,11 @@ public final class SearchRequest implements Searchable {
         Map<String, Object> map = Maps.newHashMap();
         map.put(key, value);
         toSearchFilters(map);
+    }
+
+    @Override
+    public void removeSearchFilter(String key) {
+        getSearchFilterMap().remove(key);
     }
 
     @Override

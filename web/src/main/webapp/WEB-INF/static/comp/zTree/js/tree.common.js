@@ -163,11 +163,17 @@ $.zTree = {
      * @param idDomId 要保存的编号的dom id
      * @param nameDomId 要保存的名称的dom id
      */
-    initSelectTree : function(zNodes, async, asyncUrl, btn, idDomId, nameDomId) {
-
+    initSelectTree : function(zNodes, async, asyncUrl, btn, idDomId, nameDomId, autocomplete, autocompleteUrl, searchPrefixUrl) {
         var id = this.index++;
         var treeContentStr =
             '<div id="treeContent{id}" class="treeContent" style="display:none; position: absolute;">' +
+                (autocomplete ?
+                    '<div class="control-group tree-search" style="margin-top:5px;">' +
+                        '<label for="searchName{id}">名称</label>' +
+                        '<div class="controls">' +
+                            '<input type="text" id="searchName{id}" class="input-medium" placeholder="模糊匹配 回车键查询"/>' +
+                        '</div>' +
+                    '</div>' : '') +
                 '<ul id="treeSelect{id}" class="ztree"></ul>' +
                 '</div>';
 
@@ -230,6 +236,10 @@ $.zTree = {
         window.treeNodeClick = hideMenu;
 
         $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
+
+        if(autocomplete) {
+            $.zTree.initAutocomplete($("#searchName" + id), async, autocompleteUrl, searchPrefixUrl);
+        }
 
     },
     initMaintainBtn : function(updateUrl, deleteUrl, appendChildUrl, moveTreeUrl) {

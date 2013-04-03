@@ -116,9 +116,9 @@ public final class SearchSpecifications {
             case isNotNull:
                 return cb.isNotNull(expression);
             case in:
-                return expression.in(value);
+                return expression.in((Collection) value);
             case notIn:
-                return cb.not(expression.in(value));
+                 return cb.not(expression.in((Collection) value));
             case custom:
                 throw new InvlidSpecificationSearchOperatorException(searchFilter.getSearchProperty(), operator.toString());
         }

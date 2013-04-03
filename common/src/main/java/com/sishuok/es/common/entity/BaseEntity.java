@@ -24,19 +24,19 @@ import java.io.Serializable;
  * <p>Version: 1.0
  */
 @MappedSuperclass
-public abstract class BaseEntity<PK extends Serializable> extends AbstractEntity<PK> {
+public abstract class BaseEntity<ID extends Serializable> extends AbstractEntity<ID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private PK id;
+    private ID id;
 
     @Override
-    public PK getId() {
+    public ID getId() {
         return id;
     }
 
     @Override
-    public void setId(PK id) {
+    public void setId(ID id) {
         this.id = id;
     }
 

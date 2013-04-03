@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.common.entity.search.utils;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchPropertyMappingDefinition;
 import com.sishuok.es.common.entity.search.Searchable;
@@ -72,11 +73,11 @@ public final class SearchableConvertUtils {
             boolean isCollection = value instanceof Collection;
             boolean isArray = value != null && value.getClass().isArray();
             if(isCollection || isArray) {
-                List<Object> list = new ArrayList<Object>();
+                List<Object> list = Lists.newArrayList();
                 if(isCollection) {
                     list.addAll((Collection)value);
                 } else {
-                    list = new ArrayList<Object>(CollectionUtils.arrayToList(value));
+                    list = Lists.newArrayList(CollectionUtils.arrayToList(value));
                 }
                 int length = list.size();
                 for (int i = 0; i < length; i++) {

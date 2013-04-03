@@ -18,16 +18,16 @@ import java.io.Serializable;
  * <p>Date: 13-3-20 下午8:38
  * <p>Version: 1.0
  */
-public abstract class AbstractEntity<PK extends Serializable> implements Persistable<PK> {
+public abstract class AbstractEntity<ID extends Serializable> implements Persistable<ID> {
 
-    public abstract PK getId();
+    public abstract ID getId();
 
     /**
      * Sets the id of the entity.
      *
      * @param id the id to set
      */
-    public abstract void setId(final PK id);
+    public abstract void setId(final ID id);
 
     /*
      * (non-Javadoc)
