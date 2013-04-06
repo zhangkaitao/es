@@ -120,7 +120,14 @@
                     <input type="checkbox" name="ids" value="${m.id}" data-status="${m.status}" data-deleted="${m.deleted}"/>
                 </td>
                 <td>
-                    <a href="${ctx}/admin/sys/user/${m.id}">${m.id}</a>
+                    <div class="popover-content" style="display: none;">
+                        <c:set var="user" value="${m}"/>
+                        <%@include file="organizations.jspf"%>
+                    </div>
+
+                    <a href="${ctx}/admin/sys/user/${m.id}" rel="popover">
+                        ${m.id}
+                    </a>
                 </td>
                 <td>${m.username}</td>
                 <td>${m.email}</td>
@@ -139,5 +146,16 @@
 <script type="text/javascript">
     $(function() {
         initUserListButton();
+
+        $("[rel=popover]").each(function() {
+            var a = $(this);
+            a.popover({
+                placement : "right",
+                trigger : "hover",
+                html : "true",
+                title : "组织机构及工作职务",
+                content : a.prev(".popover-content").html()
+            });
+        });
     });
 </script>

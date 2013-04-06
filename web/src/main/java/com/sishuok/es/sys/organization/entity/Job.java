@@ -7,12 +7,15 @@ package com.sishuok.es.sys.organization.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Treeable;
+import com.sishuok.es.common.utils.SpringUtils;
+import com.sishuok.es.sys.organization.service.JobService;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 组织机构树
@@ -21,7 +24,7 @@ import javax.persistence.Table;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "job")
+@Table(name = "sys_job")
 public class Job extends BaseEntity<Long> implements Treeable<Long> {
 
     /**
@@ -47,7 +50,7 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
     /**
      * 是否有叶子节点
      */
-    @Formula(value = "(select count(*) from job f_t where f_t.parent_id = id)")
+    @Formula(value = "(select count(*) from sys_job f_t where f_t.parent_id = id)")
     private boolean hasChildren;
 
     /**
@@ -56,6 +59,12 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
     @Column(name = "`show`")
     private Boolean show;
 
+    public Job() {
+    }
+
+    public Job(Long id) {
+        setId(id);
+    }
 
     public String getName() {
         return name;
@@ -182,4 +191,5 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
     public String getLeafDefaultIcon() {
         return "static/comp/zTree/css/zTreeStyle/img/diy/leaf.png";
     }
+
 }

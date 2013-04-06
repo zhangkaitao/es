@@ -1,0 +1,28 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>组织机构</th>
+        <th>工作职务</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:if test="${empty user.organizations}">
+        <tr>
+            <td colspan="2">无</td>
+        </tr>
+    </c:if>
+    <c:forEach items="${user.organizations}" var="o">
+        <tr>
+            <td>
+                <sys:showOrganizationName id="${o.organization.id}"/>
+            </td>
+            <td>
+                <c:forEach items="${o.jobs}" var="j">
+                    <sys:showJobName id="${j.id}"/><br/>
+                </c:forEach>
+            </td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>

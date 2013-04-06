@@ -1,15 +1,34 @@
 $.zTree = {
     index : 1,
+    treeTemplate :
+        '<ul id="treeSelect{id}" class="ztree"></ul>',
+
+    selectTreeTemplate :
+        '<div id="treeContent{id}" class="treeContent" style="display:none; position: absolute;">{tree}</div>',
+
+    autocompleteTemplate :
+        '<div class="control-group tree-search" style="margin-top:5px;">' +
+            '<label for="searchName{id}">名称</label>' +
+            '<div class="controls">' +
+            '<input type="text" id="searchName{id}" class="input-medium" placeholder="模糊匹配 回车键查询"/>' +
+            '</div>' +
+        '</div>',
 
     /**
      * 初始化可移动树
      */
-    initMovableTree : function(zNodes, renameUrl, removeUrl, addUrl, moveUrl, async, loadUrl) {
-        loadUrl = loadUrl + (loadUrl.indexOf("?") == -1 ? "?" : "&") + "async=" + async;
+    initMovableTree : function(config) {
+
+        config.renameUrl = config.renameUrl || (config.urlPrefix + "/ajax/rename/{id}?newName={newName}");
+        config.removeUrl = config.removeUrl || (config.urlPrefix + "/ajax/delete/{id}");
+        config.addUrl = config.addUrl || (config.urlPrefix + "/ajax/appendChild/{id}");
+        config.moveUrl = config.moveUrl || (config.urlPrefix + "/ajax/move/{sourceId}/{targetId}/{moveType}");
+        config.loadUrl = config.loadUrl || (config.urlPrefix + "/ajax/load" + "?async=" + config.async + (config.excludeId ? "&excludeId=" + config.excludeId : ""));
+
         var setting = {
             async: {
-                enable: async,
-                url:loadUrl,
+                enable: config.async,
+                url: config.loadUrl,
                 autoParam:["id"],
                 dataFilter: $.zTree.filter
             },
@@ -98,7 +117,7 @@ $.zTree = {
          * @param treeNode
          */
         function onRename(e, treeId, treeNode) {
-            var url = renameUrl.replace("{id}", treeNode.id).replace("{newName}",treeNode.name);
+            var url = config.renameUrl.replace("{id}", treeNode.id).replace("{newName}",treeNode.name);
             $.getJSON(url, function (data) {
                 location.reload();
             });
@@ -110,7 +129,7 @@ $.zTree = {
          * @param treeNode
          */
         function onRemove(e, treeId, treeNode) {
-            var url = removeUrl.replace("{id}", treeNode.id);
+            var url = config.removeUrl.replace("{id}", treeNode.id);
             $.getJSON(url, function (data) {
                 location.reload();
             });
@@ -123,7 +142,7 @@ $.zTree = {
          * @param treeNode
          */
         function onAdd(e, treeId, treeNode) {
-            var url = addUrl.replace("{id}", treeNode.id);
+            var url = config.addUrl.replace("{id}", treeNode.id);
             $.getJSON(url, function(newNode) {
                 location.reload();
             });
@@ -145,53 +164,66 @@ $.zTree = {
             var sourceId = treeNodes[0].id;
             var targetId = targetNode.id;
             var moveType = moveType;
-            var url = moveUrl.replace("{sourceId}", sourceId).replace("{targetId}", targetId).replace("{moveType}", moveType);
+            var url = config.moveUrl.replace("{sourceId}", sourceId).replace("{targetId}", targetId).replace("{moveType}", moveType);
             $.getJSON(url, function (newNode) {
                 location.reload();
             });
         }
 
-        var treeId = "tree" + this.index++;
-        $("body").append("<ul id='" + treeId + "' class='ztree'></ul>");
-        var zTree = $.fn.zTree.init($("#" + treeId), setting, zNodes);
+        var autocomplateEnable = config.autocomplete && config.autocomplete.enable;
+
+        var id = this.index++;
+        var treeStr = (autocomplateEnable ? this.autocompleteTemplate : '') + this.treeTemplate;
+        $("body").append(treeStr.replace(/{id}/g, id));
+        var zTree = $.fn.zTree.init($("#treeSelect" + id), setting, config.zNodes);
+
+        if(autocomplateEnable) {
+            config.autocomplete.input = $("#searchName" + id);
+            config.autocomplete.async = config.autocomplete.async || config.async;
+            config.autocomplete.callback = config.autocomplete.callback || $.noop();
+            config.autocomplete.source = config.autocomplete.source || config.urlPrefix + "/ajax/autocomplete";
+            $.zTree.initAutocomplete(config.autocomplete);
+        }
+
         return zTree;
 
     },
 
     /**
-     *
+     * @param nodeType 节点类型
      * @param zNodes 所有节点
-     * @param btn 触发选择树的按钮
      * @param idDomId 要保存的编号的dom id
      * @param nameDomId 要保存的名称的dom id
+     * nodeType, zNodes, async, loadUrl, btn, idDomId, nameDomId, autocomplete, autocompleteUrl
      */
-    initSelectTree : function(zNodes, async, loadUrl, btn, idDomId, nameDomId, autocomplete, autocompleteUrl) {
-        loadUrl = loadUrl + (loadUrl.indexOf("?") == -1 ? "?" : "&") + "async=" + async;
+    initSelectTree : function(config) {
+        config.asyncLoadAll = config.asyncLoadAll || false;
+        config.loadUrl =
+            config.loadUrl || (config.urlPrefix + "/ajax/load" +
+                "?async=" + config.async +
+                "&asyncLoadAll=" + config.asyncLoadAll +
+                (config.excludeId ? "&excludeId=" + config.excludeId : ""));
+        var autocomplateEnable = config.autocomplete && config.autocomplete.enable;
+
         var id = this.index++;
-        var treeContentStr =
-            '<div id="treeContent{id}" class="treeContent" style="display:none; position: absolute;">' +
-                (autocomplete ?
-                    '<div class="control-group tree-search" style="margin-top:5px;">' +
-                        '<label for="searchName{id}">名称</label>' +
-                        '<div class="controls">' +
-                            '<input type="text" id="searchName{id}" class="input-medium" placeholder="模糊匹配 回车键查询"/>' +
-                        '</div>' +
-                    '</div>' : '') +
-                '<ul id="treeSelect{id}" class="ztree"></ul>' +
-                '</div>';
+        var treeStr = (autocomplateEnable ? this.autocompleteTemplate : '') + this.treeTemplate;
+        var treeContentStr = this.selectTreeTemplate.replace("{tree}", treeStr);
+        $("body").append(treeContentStr.replace(/{id}/g, id));
 
-        $("body").append(treeContentStr.replace(/\{id\}/g, id));
-
-        var $id = $("#" + idDomId);
-        var $name = $("#" + nameDomId);
+        var $id = $("#" + config.select.id);
+        var $name = $("#" + config.select.name);
         var treeContent = "treeContent" + id;
         var $treeContent = $("#" + treeContent);
         var treeSelect = "treeSelect" + id;
 
         var setting = {
+            check: {
+                enable: config.nodeType != "default",
+                chkStyle: config.nodeType
+            },
             async: {
-                enable: async,
-                url:loadUrl,
+                enable: config.async,
+                url:config.loadUrl,
                 autoParam:["id"],
                 dataFilter: $.zTree.filter
             },
@@ -204,61 +236,132 @@ $.zTree = {
                 }
             },
             callback: {
-                onClick: onClick
+                onClick: selectNode,
+                onCheck: selectNode
             }
         };
-
-        function onClick(e, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeSelect);
-            var nodes = zTree.getSelectedNodes();
-            var lastNode = nodes[nodes.length - 1];
-            $name.prop("value", lastNode.name);
-            $id.prop("value", lastNode.id);
+        if(config.nodeType == "checkbox") {
+            setting.check.chkboxType = {"Y":"", "N":""};
+        } else if(config.nodeType == "radio") {
+            setting.check.radioType = "level";
         }
 
+        function fullName(node) {
+            var names = node.name;
+
+            while((node = node.getParentNode())) {
+                if(node.root && !config.select.includeRoot) {
+                    break;
+                }
+                names = node.name + " > " + names;
+            }
+            return names;
+        }
+
+        function selectNode(e, treeId, treeNode) {
+            if(!setting.check.enable) {
+                var nodes = zTree.getSelectedNodes();
+                var lastNode = nodes[nodes.length - 1];
+                $name.prop("value", fullName(lastNode));
+                $id.prop("value", lastNode.id);
+            } else {
+                var nodes = zTree.getCheckedNodes(true);
+                var names = "";
+                var ids = "";
+                for (var i = 0, l = nodes.length; i < l; i++) {
+                    names += fullName(nodes[i]) + (i != l - 1 ? "," : "");
+                    ids += nodes[i].id + (i != l - 1 ? "," : "");
+                }
+
+                $name.prop("value", names);
+                $id.prop("value", ids);
+            }
+        }
+
+        var show = false;
         function showMenu() {
+            show = true;
             var nameOffset = $name.offset();
             $treeContent.css({left: nameOffset.left + "px", top: nameOffset.top + $name.outerHeight() + "px"}).slideDown("fast");
+
             $("body").bind("mousedown", onBodyDown);
         }
 
         function hideMenu() {
+            show = false;
             $treeContent.fadeOut("fast");
             $("body").unbind("mousedown", onBodyDown);
         }
 
         function onBodyDown(event) {
-            if (!($(event.target).closest(".ui-autocomplete").length > 0  || event.target.id == treeContent || $(event.target).closest("#" + treeContent).length > 0)) {
+            var isBtn = false;
+            config.select.btn.each(function() {
+                isBtn = isBtn ||
+                        event.target == this ||
+                        event.target.parentNode == this ||
+                        (event.target.parentNode ? event.target.parentNode.parentNode : null) == this;
+            });
+            if (!(isBtn || $(event.target).closest(".ui-autocomplete").length > 0  || event.target.id == treeContent || $(event.target).closest("#" + treeContent).length > 0)) {
                 hideMenu();
             }
         }
 
-        btn.click(function () {
-            showMenu();
+        config.select.btn.click(function () {
+            if(show) {
+                hideMenu();
+            } else {
+                showMenu();
+            }
         });
-        window.treeNodeClick = hideMenu;
 
-        var zTree = $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
+        $("#" + treeSelect).data("treeNodeClick", function() {
+            if(!setting.check.enable) {
+                hideMenu();
+            }
+        });
 
-        if(autocomplete) {
-            $.zTree.initAutocomplete(
-                $("#searchName" + id),
-                async,
-                autocompleteUrl,
-                function(searchName) { //按照名字搜索
-                    var url = loadUrl + "&searchName=" + searchName;
+        window.treeNodeClick = function(treeNode) {
+            $(treeNode).closest(".ztree").data("treeNodeClick")();
+        };
+        var zTree = null;
+        var initTree = function() {
+            zTree = $.fn.zTree.init($("#" + treeSelect), setting, config.zNodes);
+
+            if(autocomplateEnable) {
+                config.autocomplete.input = $("#searchName" + id);
+                config.autocomplete.async = config.autocomplete.async || config.async;
+                config.autocomplete.callback = config.autocomplete.callback || function(searchName) { //按照名字搜索
+                    var url = config.loadUrl + "&searchName=" + searchName;
                     zTree.destroy();
                     $.getJSON(url, function(zNodes) {
                         if(zNodes.length > 0) { //如果没找到节点就不必展示
                             zTree = $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
                         }
                     });
+                };
+                config.autocomplete.source = config.autocomplete.source || config.urlPrefix + "/ajax/autocomplete";
+                $.zTree.initAutocomplete(config.autocomplete);
+            }
+        };
+        var initialize = false;
+        if(config.lazy) {
+            config.select.btn.click(function() {
+                if(!initialize) {
+                    initTree();
+                    initialize = true;
                 }
-            );
+            });
+        } else {
+            initTree();
         }
 
     },
-    initMaintainBtn : function(updateUrl, deleteUrl, appendChildUrl, moveTreeUrl) {
+    initMaintainBtn : function(maintainUrlPrefix, id, async) {
+        var updateUrl = maintainUrlPrefix + "/update/" + id,
+            deleteUrl = maintainUrlPrefix + "/delete/" + id,
+            appendChildUrl = maintainUrlPrefix + "/appendChild/" + id,
+            moveTreeUrl = maintainUrlPrefix + "/move/" + id + "?async=" + async;
+
 
         $("#updateTree").click(function() {
             this.form.action = updateUrl;
@@ -266,6 +369,7 @@ $.zTree = {
         $("#deleteTree").click(function () {
             var btn = this;
             $.app.confirm({
+                width:500,
                 message : "确认删除吗？",
                 ok : function() {
                     btn.form.action = deleteUrl;
@@ -304,18 +408,19 @@ $.zTree = {
         return this.split( term ).pop();
     }
     ,
-    initAutocomplete : function(input, async, autocompleteUrl, searchCallback) {
+    initAutocomplete : function(config) {
+        var input = config.input;
         $(input)
             .on( "keydown", function( event ) {
                 //回车查询
                 if(event.keyCode === $.ui.keyCode.ENTER) {
-                    searchCallback(input.val());
+                    config.callback(input.val());
                 }
             })
             .autocomplete({
-                source: autocompleteUrl,
+                source: config.source,
                 minLength:1,
-                select: function() {searchCallback(input.val());}
+                select: function() {config.callback(input.val());}
             });
     },
     filter : function(treeId, parentNode, childNodes) {

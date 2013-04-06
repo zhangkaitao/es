@@ -7,6 +7,7 @@ package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
+import com.sishuok.es.sys.user.entity.UserOrganization;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.entity.UserStatusHistory;
 import com.sishuok.es.sys.user.exception.UserBlockedException;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -65,10 +67,28 @@ public class UserService extends BaseService<User, Long> {
         user.randomSalt();
         user.setPassword(passwordService.encryptPassword(user.getUsername(), user.getPassword(), user.getSalt()));
 
+
         return super.save(user);
     }
 
 
+    @Override
+    public User update(User user) {
+        for(UserOrganization userOrganization : user.getOrganizations()) {
+            UserOrganization dbUserOrganization = findUserOrganization(userOrganization);
+            if(dbUserOrganization != null) {
+                userOrganization.setId(dbUserOrganization.getId());
+            }
+        }
+
+        super.update(user);
+
+        return user;
+    }
+
+    public UserOrganization findUserOrganization(UserOrganization userOrganization) {
+        return userRepository.findUserOrganization(userOrganization.getUser(), userOrganization.getOrganization());
+    }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);

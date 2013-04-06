@@ -7,10 +7,14 @@ package com.sishuok.es.sys.organization.web.controller;
 
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.sys.organization.entity.Organization;
+import com.sishuok.es.sys.organization.entity.OrganizationType;
 import com.sishuok.es.sys.organization.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * <p>User: Zhang Kaitao
@@ -25,4 +29,11 @@ public class OrganizationController extends BaseTreeableController<Organization,
     public OrganizationController(OrganizationService organizationService) {
         super(organizationService);
     }
+
+    @Override
+    protected void setCommonData(Model model) {
+        super.setCommonData(model);
+        model.addAttribute("types", OrganizationType.values());
+    }
+
 }

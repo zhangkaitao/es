@@ -5,16 +5,25 @@
  */
 package com.sishuok.es.sys.user.entity;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.LogicDeleteable;
+import com.sishuok.es.sys.organization.entity.Organization;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -22,7 +31,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "user")
+@Table(name = "sys_user")
 public class User extends BaseEntity<Long> implements LogicDeleteable {
     public static final String USERNAME_PATTERN = "^[\\u4E00-\\u9FA5\\uf900-\\ufa2d_a-zA-Z][\\u4E00-\\u9FA5\\uf900-\\ufa2d\\w]{4,19}$";
     public static final String EMAIL_PATTERN = "^((([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+(\\.([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+)*)|((\\x22)((((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(([\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]|\\x21|[\\x23-\\x5b]|[\\x5d-\\x7e]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(\\\\([\\x01-\\x09\\x0b\\x0c\\x0d-\\x7f]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]))))*(((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(\\x22)))@((([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.)+(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.?";
@@ -43,7 +52,6 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     @Pattern(regexp = MOBILE_PHONE_NUMBER_PATTERN, message = "{user.mobile.phone.number.not.valid")
     @Column(name = "mobile_phone_number")
     private String mobilePhoneNumber;
-
 
     /**
      * 使用md5(username + original password + salt)加密存储
@@ -79,6 +87,32 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
      */
     private Boolean deleted = Boolean.FALSE;
 
+
+    /**
+     * 用户 组织机构 工作职务关联表
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = UserOrganization.class, mappedBy = "user", orphanRemoval = true)
+    @Fetch(FetchMode.SELECT)
+    @Basic(optional = true, fetch = FetchType.EAGER)
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    @OrderBy
+    private List<UserOrganization> organizations;
+
+    public List<UserOrganization> getOrganizations() {
+        if(organizations == null) {
+            organizations = Lists.newArrayList();
+        }
+        return organizations;
+    }
+
+    public void addOrganization(UserOrganization userOrganization) {
+        userOrganization.setUser(this);
+        getOrganizations().add(userOrganization);
+    }
+
+    public void setOrganizations(List<UserOrganization> organizations) {
+        this.organizations = organizations;
+    }
 
     public String getUsername() {
         return username;

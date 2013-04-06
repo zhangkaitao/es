@@ -20,7 +20,7 @@
 <!--[if lt IE 9]><script src="${ctx}/static/js/html5.js"></script><![endif]-->
 
 <link href="${ctx}/static/css/application.css" rel="stylesheet">
-<link href="${ctx}/static/css/theme/theme.blur.css" rel="stylesheet">
+<link href="${ctx}/static/css/theme/theme.blur.css?1" rel="stylesheet">
 
 <script>
     var ctx = '${ctx}';

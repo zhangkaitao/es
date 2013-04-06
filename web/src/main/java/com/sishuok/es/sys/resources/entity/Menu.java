@@ -20,7 +20,7 @@ import javax.persistence.Table;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "menu")
+@Table(name = "sys_resources_menu")
 public class Menu extends BaseEntity<Long> implements Treeable<Long> {
 
     /**

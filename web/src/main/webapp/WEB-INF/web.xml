@@ -64,6 +64,16 @@
     </filter-mapping>
 
 
+    <filter>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
     <!-- 同步会话数据到DB 一次请求最多同步一次 防止过多处理  需要放到Shiro过滤器之前-->
     <filter>
         <filter-name>syncOnlineSessionFilter</filter-name>
@@ -136,15 +146,6 @@
         <filter-name>httpPutFormFilter</filter-name>
         <servlet-name>spring</servlet-name>
     </filter-mapping>
-
-    <filter>
-        <filter-name>openEntityManagerInViewFilter</filter-name>
-   		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-   	</filter>
-   	<filter-mapping>
-   		<filter-name>openEntityManagerInViewFilter</filter-name>
-   		<url-pattern>/*</url-pattern>
-   	</filter-mapping>
 
     <servlet>
         <servlet-name>spring</servlet-name>

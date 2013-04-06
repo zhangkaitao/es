@@ -498,7 +498,7 @@ $.tabs = {
             }
         }
 
-        var tabs = $("#tabs").tabs({
+        var tabs = $(".tabs-bar").tabs({
             beforeActivate : function(event, ui) {
                 var tabs = $.tabs.tabs;
                 tabs.find(".menu").hide();
@@ -604,7 +604,7 @@ $.tabs = {
     },
 
     initTabScrollHideOrShowMoveBtn : function(panelId) {
-        var $ulWrapper = $("#tabs .ul-wrapper");
+        var $ulWrapper = $(".tabs-bar .ul-wrapper");
         var $lastLI = $ulWrapper.find("ul li:last");
         var $firstLI = $ulWrapper.find("ul li:first");
 
@@ -616,8 +616,8 @@ $.tabs = {
             var lastLILeftPos = lastLIOffsetLeft + $lastLI.width();
             var firstLIOffsetLeft = $firstLI.offset().left;
 
-            var $leftBtn = $("#tabs .icon-chevron-left");
-            var $rightBtn = $("#tabs .icon-chevron-right");
+            var $leftBtn = $(".tabs-bar .icon-chevron-left");
+            var $rightBtn = $(".tabs-bar .icon-chevron-right");
 
             if (ulWapperOffsetLeft == firstLIOffsetLeft) {
                 $leftBtn.hide();
@@ -633,7 +633,7 @@ $.tabs = {
 
         if(panelId) {
 
-            var $li = $("#tabs").find("li[aria-labelledby='" + $("#" + panelId).attr("aria-labelledby") + "']");
+            var $li = $(".tabs-bar").find("li[aria-labelledby='" + $("#" + panelId).attr("aria-labelledby") + "']");
 
             var liOffsetLeft = $li.offset().left;
             var liLeftPos = liOffsetLeft + $li.width();
@@ -666,7 +666,7 @@ $.tabs = {
     initTabScroll: function () {
         var move = function (step) {
             return function () {
-                var $ulWrapper = $("#tabs .ul-wrapper");
+                var $ulWrapper = $(".tabs-bar .ul-wrapper");
                 var $lastLI = $ulWrapper.find("ul li:last");
 
                 var leftPos = $ulWrapper.scrollLeft() + step;
@@ -701,10 +701,10 @@ $.tabs = {
             };
         };
 
-        $("#tabs .icon-chevron-left").click(function () {
+        $(".tabs-bar .icon-chevron-left").click(function () {
             move(-200)();
         });
-        $("#tabs .icon-chevron-right").click(function () {
+        $(".tabs-bar .icon-chevron-right").click(function () {
             move(200)();
         });
 
@@ -1851,7 +1851,10 @@ $(function () {
         });
     })
 
-    $(document).ajaxError(function(event,request, settings){
+    $(document).ajaxError(function(event, request, settings) {
+        if(request.status == 0) {// 中断的不处理
+            return;
+        }
         $.app.alert({
             title : "网络故障/系统故障(请截屏反馈给管理员)",
             message : "出错状态码:" + request.status + "[" + request.statusText + "]" + "<br/>出错页面????:" + settings.url

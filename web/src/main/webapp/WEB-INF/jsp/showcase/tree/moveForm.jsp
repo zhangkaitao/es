@@ -71,32 +71,35 @@
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
 $(function () {
-
+    var async = ${not empty param.async and param.async eq true};
     var zNodes =[
         <c:forEach items="${trees}" var="m">
         { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true,
-            click : "${m.click}", root : ${m.root},isParent:${m.isParent}},
+            click : "${m.click}", root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
         </c:forEach>
     ];
+    $.zTree.initSelectTree({
+        zNodes : zNodes,
+        nodeType : "default",
+        urlPrefix : "${ctx}/showcase/tree",
+        excludeId: "${source.id}",
+        async : async,
+        select : {
+            btn : $("#selectTree,#targetName"),
+            id : "targetId",
+            name : "targetName"
+        },
+        autocomplete : {
+            enable : true
+        }
+    });
 
-    var async = ${not empty param.async and param.async eq true};
-    var loadUrl = "${ctx}/showcase/tree/ajax/load?excludeId=${source.id}";
-    $.zTree.initSelectTree(
-            zNodes,
-            async,
-            loadUrl,
-            $("#selectTree,#targetName"),
-            "targetId",
-            "targetName",
-            true,
-            "${ctx}/showcase/tree/ajax/autocomplete"
-    );
+    $.zTree.initMoveBtn();
+
 
     var validationEngine = $("#moveForm").validationEngine({
         validationEventTrigger : "submit"
     });
-
-    $.zTree.initMoveBtn();
 
 });
 </script>

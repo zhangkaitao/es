@@ -83,7 +83,6 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
             }
         }
 
-
         session.setAttribute(LAST_SYNC_DB_TIMESTAMP, session.getLastAccessTime());
 
         //更新完后 重置标识

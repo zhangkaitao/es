@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader title="Easy-Scaffold脚手架" index="true"/>
 <div class="index-panel">
-    <div id="tabs" class="tabs-fix-top">
+    <div class="tabs-bar tabs-fix-top">
         <span class="icon-chevron-left" style="display: none;"></span>
 
         <div class="ul-wrapper">

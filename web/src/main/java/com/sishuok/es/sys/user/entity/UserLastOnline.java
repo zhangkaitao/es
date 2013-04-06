@@ -19,7 +19,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "user_last_online")
+@Table(name = "sys_user_last_online")
 public class UserLastOnline extends BaseEntity<Long> {
 
     /**

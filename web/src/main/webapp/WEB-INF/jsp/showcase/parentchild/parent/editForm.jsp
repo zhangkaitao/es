@@ -47,8 +47,8 @@
 
             <es:showGlobalError commandName="m"/>
             <form:hidden path="id"/>
-
-            <div class="prettyprint">
+            <h4 class="hr">父数据</h4>
+            <div>
                 <div class="control-group span4">
                     <form:label path="name" cssClass="control-label">名称</form:label>
                     <div class="controls">
@@ -95,10 +95,10 @@
                 <div class="clearfix"></div>
             </div>
             <br/>
-            <fieldset>
-                <legend class="no-margin">
-                    子列表
-                    <div class="btn-group">
+            <div >
+                <h4 class="hr">
+                    子数据&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="btn-group" style="font-weight: normal;">
                         <a class="btn btn-create-child">
                             <i class="icon-edit"></i>
                             新增
@@ -116,8 +116,8 @@
                             以此为模板复制一份
                         </a>
                     </div>
-                </legend>
-                <div>
+                </h4>
+                <div class="span9">
                     <table id="childTable" class="table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -149,8 +149,7 @@
                         </tbody>
                     </table>
                 </div>
-            </fieldset>
-
+            </div>
             <br/><br/>
 
             <c:if test="${op eq '新增'}">
@@ -163,7 +162,7 @@
                 <c:set var="icon" value="icon-trash"/>
             </c:if>
 
-            <div class="control-group">
+            <div class="control-group" style="width: 100%;float: left;padding: 20px 0;">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">
                         <i class="${icon}"></i>

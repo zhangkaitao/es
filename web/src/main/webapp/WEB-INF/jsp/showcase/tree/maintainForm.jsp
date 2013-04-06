@@ -89,13 +89,7 @@ $(function () {
     var validationEngine = $("#maintainForm").validationEngine();
     <es:showFieldError commandName="m"/>
 
-
-    $.zTree.initMaintainBtn(
-            "${ctx}/showcase/tree/update/${m.id}",
-            "${ctx}/showcase/tree/delete/${m.id}",
-            "${ctx}/showcase/tree/appendChild/${m.id}",
-            "${ctx}/showcase/tree/move/${m.id}?async=${param.async}"
-    );
+    $.zTree.initMaintainBtn("${ctx}/showcase/tree", "${m.id}", ${not empty param.async and param.async});
 
 
 });

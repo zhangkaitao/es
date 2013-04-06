@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.hibernate4.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,9 +28,6 @@ import java.util.List;
 public class UserOnlineService extends BaseService<UserOnline, String> {
 
     private UserOnlineRepository userOnlineRepository;
-
-    @Autowired
-    private UserLastOnlineService userLastOnlineService;
 
     @Autowired
     public void setUserOnlineRepository(UserOnlineRepository userOnlineRepository) {
@@ -52,9 +50,12 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
     public void offline(String sid) {
         UserOnline userOnline = findOne(sid);
         if(userOnline != null) {
-            delete(userOnline);
+           try {
+               delete(userOnline);
+           } catch (Exception e) {
+               //删除失败也无所谓
+           }
         }
-
         //游客 无需记录上次访问记录
         //此处使用数据库的触发器完成同步
 //        if(userOnline.getUserId() == null) {

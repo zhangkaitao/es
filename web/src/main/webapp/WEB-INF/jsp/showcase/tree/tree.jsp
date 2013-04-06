@@ -12,13 +12,6 @@
     </li>
 </ul>
 
-<div class="control-group tree-search">
-    <esform:label path="searchName">名称</esform:label>
-    <div class="controls">
-        <esform:input path="searchName" cssClass="input-medium" placeholder="模糊匹配 回车键查询"/>
-    </div>
-</div>
-
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
@@ -34,29 +27,17 @@
             </c:forEach>
         ];
 
-        $.zTree.initMovableTree(
-                zNodes,
-                //重命名url模式
-                "${ctx}/showcase/tree/ajax/rename/{id}?newName={newName}",
-                //删除url模式
-                "${ctx}/showcase/tree/ajax/delete/{id}",
-                //新增url模式
-                "${ctx}/showcase/tree/ajax/appendChild/{id}",
-                //移动url模式
-                "${ctx}/showcase/tree/ajax/move/{sourceId}/{targetId}/{moveType}",
-                //异步模式
-                async,
-                //异步加载url
-                "${ctx}/showcase/tree/ajax/load"
-        );
-
-        $.zTree.initAutocomplete(
-                $("[name='searchName']"),
-                async,
-                "${ctx}/showcase/tree/ajax/autocomplete",
-                 function(searchName) {
+        $.zTree.initMovableTree({
+            zNodes : zNodes,
+            urlPrefix : "${ctx}/showcase/tree",
+            async : async,
+            autocomplete : {
+                enable : true,
+                callback : function(searchName) {
                     location.href = "${ctx}/showcase/tree/tree?async=" + async + "&searchName=" + searchName;
-                });
+                }
+            }
+        });
 
     });
 </script>

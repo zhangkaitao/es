@@ -1,9 +1,11 @@
 package com.sishuok.es.test;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +19,7 @@ import javax.persistence.PersistenceContext;
 @ContextConfiguration(locations = {
         "classpath:spring-common.xml",
         "classpath:spring-config.xml",
+        "classpath:spring-cache.xml",
         "classpath:spring-shiro.xml"
         })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)

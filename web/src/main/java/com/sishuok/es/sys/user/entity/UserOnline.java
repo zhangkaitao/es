@@ -24,7 +24,7 @@ import java.util.Map;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "user_online")
+@Table(name = "sys_user_online")
 public class UserOnline extends AbstractEntity<String> {
 
     /**

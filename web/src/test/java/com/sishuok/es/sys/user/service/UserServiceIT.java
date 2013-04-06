@@ -17,51 +17,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-3-11 下午8:55
  * <p>Version: 1.0
  */
-public class UserServiceIT extends BaseIT {
+public class UserServiceIT extends BaseUserIT {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordService passwordService;
-
-    int maxtRetryCount = 10;
-
-    private String username = "__z__hang123";
-    private String email = "zhang@163.com";
-    private String mobilePhoneNumber = "15612345678";
-    String password = "12345";
-
-    @Before
-    public void setUp() {
-        userService.setPasswordService(passwordService);
-        passwordService.setMaxRetryCount(maxtRetryCount);
-
-        User user = userService.findByUsername(username);
-        if(user != null) {
-            userService.delete(user);
-        }
-        user = userService.findByEmail(email);
-        if(user != null) {
-            userService.delete(user);
-        }
-        user = userService.findByMobilePhoneNumber(mobilePhoneNumber);
-        if(user != null) {
-            userService.delete(user);
-        }
-    }
-
-    @After
-    public void tearDown() {
-        passwordService.clearLoginRecordCache(username);
-        passwordService.clearLoginRecordCache(email);
-        passwordService.clearLoginRecordCache(mobilePhoneNumber);
-    }
 
     @Test
     public void testLoginSuccessWithUsername() {
@@ -128,16 +92,6 @@ public class UserServiceIT extends BaseIT {
     }
 
 
-
-    private User createUser(String username, String email, String mobilePhoneNumber, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setMobilePhoneNumber(mobilePhoneNumber);
-        user.setPassword(password);
-        userService.saveAndFlush(user);
-        return user;
-    }
 
 
 }

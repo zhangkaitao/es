@@ -121,7 +121,7 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
     public String delete(
-            @ModelAttribute("m") M m,
+            @PathVariable("id") M m,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 

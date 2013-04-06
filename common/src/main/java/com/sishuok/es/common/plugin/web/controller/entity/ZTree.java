@@ -84,4 +84,8 @@ public class ZTree<ID extends Serializable> implements Serializable {
     public void setIsParent(boolean isParent) {
         this.isParent = isParent;
     }
+
+    public boolean isNocheck() {
+        return isIsParent();
+    }
 }

@@ -14,6 +14,7 @@ import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException
 import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
+import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 

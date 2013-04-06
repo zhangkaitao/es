@@ -1,8 +1,8 @@
 
 /*淡蓝色*/
 
-#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active,
-.ui-tabs .ui-tabs-nav li.ui-tabs-active:hover
+.tabs-bar.ui-tabs .ui-tabs-nav li.ui-tabs-active,
+.tabs-bar.ui-tabs .ui-tabs-nav li.ui-tabs-active:hover
 {
     background-color: #0099ff;
     background-repeat: no-repeat;
@@ -31,8 +31,7 @@
 #menu .ui-accordion-header a {
     color: #0099cc;
 }
-#menu li a,
-#tabs.ui-tabs .ui-tabs-nav li a{
+#menu li a{
     color: #0099ff;
 }
 
@@ -40,13 +39,11 @@
     background-color: #0099ff;
 }
 
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, #menu .li-wrapper.active, #menu .li-wrapper.active:hover, #tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active, .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, #menu .li-wrapper.active, #menu .li-wrapper.active:hover, .tabs-bar.ui-tabs .ui-tabs-nav li.ui-tabs-active, .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
     text-shadow: none;
 }
 
-a
-.btn-link
-{
+a,.ui-widget-content a,.btn-link {
     color: #0099ff;
 }
 
@@ -55,22 +52,22 @@ a
 }
 
 
-#tabs.ui-tabs .ui-tabs-nav li a {
+.ui-tabs .ui-tabs-nav li a, .tabs-bar.ui-tabs .ui-tabs-nav li a {
     color: #0099ff;
 }
 
 
-#tabs.ui-tabs .ui-tabs-nav li a {
-    color: #0099ff;
-}
-
-
-#tabs .icon-chevron-left, #tabs .icon-chevron-right {
+.tabs-bar .icon-chevron-left, .tabs-bar .icon-chevron-right {
     color: #0099ff;
 }
 
 .login .title {
     background: #0099ff;
+}
+
+
+a.btn-info,a.btn-warning, a.btn-primary, a.btn-inverse, .a.btn-success,.a.btn-danger {
+    color: #fff;
 }
 
 

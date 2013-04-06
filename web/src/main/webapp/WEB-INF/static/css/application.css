@@ -1,4 +1,17 @@
 /*bootstrap*/
+.popover {
+    max-width: none;
+}
+legend {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+legend.small {
+    font-size: 14px;
+}
 
 label,
 input,
@@ -146,12 +159,10 @@ input.search-query {
 .modal{
     width: 400px;
     font-size: 14px;
-
+    left: 60%;
 }
-
 .modal.fade.in {
-    top:15%;
-    /*left: 60%;*/
+    top: 15%;
 }
 
 .modal,.modal-backdrop {
@@ -369,11 +380,11 @@ iframe[tabs="true"] {
 }
 
 
-#tabs{
+.tabs-bar{
       background: none;
 }
 
-#tabs.tabs-fix-top {
+.tabs-bar.tabs-fix-top {
     position: relative;
     float: left;
     top:  62px;
@@ -384,30 +395,30 @@ iframe[tabs="true"] {
     z-index: 1;
 }
 
-#tabs ul {
+.tabs-bar ul {
     width: 100000px;
 }
 
 
-#tabs .ul-wrapper {
+.tabs-bar .ul-wrapper {
     width: 801px;
     overflow: hidden;
     float: left;
 }
 
-#tabs.ui-tabs .ui-tabs-nav {
+.tabs-bar.ui-tabs .ui-tabs-nav {
     margin-bottom: 0px;
     border: none;
 }
 
-#tabs.ui-tabs .ui-tabs-nav li a {
+.tabs-bar.ui-tabs .ui-tabs-nav li a {
     color: #0088cc;
     border: 0px;
     cursor: pointer;
     padding: 10px 20px;
 }
 
-#tabs.ui-tabs .ui-tabs-nav li{
+.tabs-bar.ui-tabs .ui-tabs-nav li{
     font-size: 12px;
     background-color: #f5f5f5;
     background-repeat: repeat-x;
@@ -425,7 +436,7 @@ iframe[tabs="true"] {
     border-bottom: 0px;
 }
 
-#tabs.ui-tabs .ui-tabs-nav li:hover {
+.tabs-bar.ui-tabs .ui-tabs-nav li:hover {
 
     background-color: #e6e6e6;
     background-repeat: repeat-x;
@@ -437,7 +448,7 @@ iframe[tabs="true"] {
 
 }
 
-#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+.tabs-bar.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
     background: none;
     border: none;
     color: #fff;
@@ -445,7 +456,7 @@ iframe[tabs="true"] {
 }
 
 
-#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-active,.ui-tabs .ui-tabs-nav li.ui-tabs-active:hover{
+.tabs-bar.ui-tabs .ui-tabs-nav li.ui-tabs-active,.tabs-bar.ui-tabs .ui-tabs-nav li.ui-tabs-active:hover{
     font-weight: bold;
     background: #0088cc;
     background: -ms-linear-gradient(top,#0069D6,#0088cc);
@@ -462,14 +473,14 @@ iframe[tabs="true"] {
 
 
 
-#tabs.ui-tabs .ui-tabs-nav li .menu, #tabs.ui-tabs .ui-tabs-nav li .menu:hover {
+.tabs-bar.ui-tabs .ui-tabs-nav li .menu, .tabs-bar.ui-tabs .ui-tabs-nav li .menu:hover {
     font-size: 12px;
     float: left;
     cursor: pointer;
     color: #fff;
 }
 
-#tabs .icon-chevron-left, #tabs .icon-chevron-right {
+.tabs-bar .icon-chevron-left, .tabs-bar .icon-chevron-right {
     position: absolute;
     top: 0px;
     z-index: 999;
@@ -492,10 +503,10 @@ iframe[tabs="true"] {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
 
 }
-#tabs .icon-chevron-left {
+.tabs-bar .icon-chevron-left {
     left: 0px;
 }
-#tabs .icon-chevron-right {
+.tabs-bar .icon-chevron-right {
     right: 0px;
 }
 
@@ -611,7 +622,7 @@ iframe[tabs="true"] {
     margin-top: 2px;
     border: 1px solid #617775;
     background: #f0f6e4;
-    width: 210px;
+    width: 240px;
     height: 250px;
     overflow-y: scroll;
     overflow-x: auto;
@@ -783,6 +794,17 @@ iframe[tabs="true"] {
     line-height: 28px;
     margin-right: 5px;
     margin-left: 10px;
+}
+
+.font-12 {
+    font-size: 12px;font-weight: normal;
+}
+.hr{
+    /*color:#555555;*/
+    border-bottom: 1px solid #ddd;
+    float: left;
+    width: 100%;
+
 }
 
 

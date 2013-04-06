@@ -56,10 +56,22 @@ public final class SearchSpecifications {
                     String[] names = StringUtils.split(entityProperty, ".");
                     Path expression = null;
                     for (String name : names) {
+                        boolean isCollection = name.contains("[") && name.contains("]");
+                        if(isCollection) {
+                            name = name.substring(0, name.indexOf('['));
+                        }
                         if(expression == null) {
-                            expression = root.get(name);
+                            if(isCollection) {
+                                expression = root.join(name);
+                            } else {
+                                expression = root.get(name);
+                            }
                         } else {
-                            expression = expression.get(name);
+                            if(isCollection && expression instanceof Join) {
+                                expression = ((Join) expression).join(name);
+                            } else {
+                                expression = expression.get(name);
+                            }
                         }
                     }
 

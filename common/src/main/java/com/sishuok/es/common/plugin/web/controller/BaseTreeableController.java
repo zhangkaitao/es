@@ -99,6 +99,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     public Object load(
             HttpServletRequest request,
             @RequestParam(value = "async", defaultValue = "true") boolean async,
+            @RequestParam(value = "asyncLoadAll", defaultValue = "false") boolean asyncLoadAll,
             @RequestParam(value = "searchName", required = false) String searchName,
             @RequestParam(value = "id", required = false, defaultValue = "0") ID parentId,
             @RequestParam(value = "excludeId", required = false) ID excludeId,
@@ -106,7 +107,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         M excludeM = treeableService.findOne(excludeId);
 
-        if(async) { //异步模式下
+        if(async && !asyncLoadAll) { //异步模式下 且非异步加载所有
             if(parentId != null) { //只查某个节点下的 异步
                 searchable.addSearchFilter("parentId", SearchOperator.eq, parentId);
             }
@@ -119,7 +120,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         List<M> models = null;
 
         if(StringUtils.hasLength(searchName)) {//按name模糊查
-            if(!async) {//非异步模式 查自己及子子孙孙 但排除
+            if(!async || asyncLoadAll) {//非异步模式 查自己及子子孙孙 但排除
                 models = treeableService.findSelfAndChildrenByName(searchName, excludeM, searchable.getPage().getSort());
             } else { //异步模式 只查匹配的一级
                 models = treeableService.findAllByName(searchName, excludeM, searchable.getPage().getSort());
@@ -128,7 +129,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             models = treeableService.findAllBySort(searchable);
         }
 
-        return convertToZtreeList(request.getContextPath(), models, async);
+        return convertToZtreeList(request.getContextPath(), models, async && !asyncLoadAll);
     }
 
     @RequestMapping(value = "maintain/{id}", method = RequestMethod.GET)

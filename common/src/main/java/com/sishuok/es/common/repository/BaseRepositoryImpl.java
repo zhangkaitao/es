@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.EntityManagerPlusOperations;
 import org.springframework.orm.jpa.ExtendedEntityManagerCreator;
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
 
@@ -271,9 +272,9 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
     public static <M extends AbstractEntity, ID extends Serializable> BaseRepositoryImpl<M, ID> defaultBaseRepositoryImpl(Class<M> entityClass) {
         DefaultRepositoryImpl<M, ID> defaultRepository = new DefaultRepositoryImpl<M, ID>(entityClass);
         EntityManagerFactory emf = SpringUtils.getBean(EntityManagerFactory.class);
-        EntityManager entityManager = ExtendedEntityManagerCreator.createContainerManagedEntityManager(emf);
-
-        defaultRepository.entityManager = entityManager;
+//        EntityManager entityManager = EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
+//
+        defaultRepository.entityManager = SharedEntityManagerCreator.createSharedEntityManager(emf);
         return defaultRepository;
     }
 
@@ -282,5 +283,6 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
             super(entityClass);
         }
     }
+
 
 }

@@ -7,12 +7,13 @@ package com.sishuok.es.sys.organization.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Treeable;
+import com.sishuok.es.common.utils.SpringUtils;
+import com.sishuok.es.sys.organization.service.JobService;
+import com.sishuok.es.sys.organization.service.OrganizationService;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 组织机构树
@@ -21,13 +22,19 @@ import javax.persistence.Table;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "organization")
+@Table(name = "sys_organization")
 public class Organization extends BaseEntity<Long> implements Treeable<Long> {
 
     /**
      * 标题
      */
     private String name;
+
+    /**
+     * 组织机构类型 默认 分公司
+     */
+    @Enumerated(EnumType.STRING)
+    private OrganizationType type = OrganizationType.branch_office;
     /**
      * 父路径
      */
@@ -47,7 +54,7 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
     /**
      * 是否有叶子节点
      */
-    @Formula(value = "(select count(*) from organization f_t where f_t.parent_id = id)")
+    @Formula(value = "(select count(*) from sys_organization f_t where f_t.parent_id = id)")
     private boolean hasChildren;
 
     /**
@@ -56,6 +63,12 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
     @Column(name = "`show`")
     private Boolean show;
 
+    public Organization() {
+    }
+
+    public Organization(Long id) {
+        setId(id);
+    }
 
     public String getName() {
         return name;
@@ -63,6 +76,14 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public OrganizationType getType() {
+        return type;
+    }
+
+    public void setType(OrganizationType type) {
+        this.type = type;
     }
 
     public Long getParentId() {
@@ -182,4 +203,6 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
     public String getLeafDefaultIcon() {
         return "static/comp/zTree/css/zTreeStyle/img/diy/leaf.png";
     }
+
+
 }

@@ -11,17 +11,24 @@ import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
+import com.sishuok.es.sys.organization.entity.Job;
+import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.user.entity.User;
+import com.sishuok.es.sys.user.entity.UserOrganization;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.sys.user.web.bind.annotation.CurrentUser;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * <p>User: Zhang Kaitao
@@ -47,6 +54,77 @@ public class UserController extends BaseCRUDController<User, Long> {
         model.addAttribute("booleanList", BooleanEnum.values());
     }
 
+
+    @RequestMapping(value = "create/discard", method = RequestMethod.POST)
+    @Override
+    public String create(
+            Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
+            RedirectAttributes redirectAttributes) {
+        throw new RuntimeException("discarded method");
+    }
+
+    @RequestMapping(value = "update/discard", method = RequestMethod.POST)
+    @Override
+    public String update(
+            Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
+            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
+            RedirectAttributes redirectAttributes) {
+        throw new RuntimeException("discarded method");
+    }
+
+
+    @RequestMapping(value = "create", method = RequestMethod.POST)
+    public String createWithOrganization(
+            Model model,
+            @Valid @ModelAttribute("m") User m, BindingResult result,
+            @RequestParam(value = "userOrganizationId", required = false) Long[] userOrganizationIds,
+            @RequestParam(value = "organizationId", required = false) Long[] organizationIds,
+            @RequestParam(value = "jobId", required = false) Long[][] jobIds,
+            RedirectAttributes redirectAttributes) {
+
+        fillUserOrganization(m, userOrganizationIds, organizationIds, jobIds);
+
+        return super.create(model, m, result, redirectAttributes);
+    }
+
+    private void fillUserOrganization(User m, Long[] userOrganizationIds, Long[] organizationIds, Long[][] jobIds) {
+        if(!ArrayUtils.isEmpty(userOrganizationIds)) {
+            for(int i = 0, l = userOrganizationIds.length; i < l; i++) {
+                UserOrganization userOrganization = new UserOrganization();
+                if(userOrganizationIds[i] != 0) {
+                    userOrganization.setId(userOrganizationIds[i]);
+                }
+                userOrganization.setOrganization(new Organization(organizationIds[i]));
+                //仅新增/修改一个 spring会自动split（“，”）--->给数组
+                if(l == 1) {
+                    for(int j = 0, l2 = jobIds.length; j < l2; j++) {
+                        userOrganization.addJob(new Job(jobIds[j][0]));
+                    }
+                } else {
+                    Long[] jobId = jobIds[i];
+                    for(int j = 0, l2 = jobId.length; j < l2; j++) {
+                        userOrganization.addJob(new Job(jobId[j]));
+                    }
+                }
+
+                m.addOrganization(userOrganization);
+            }
+        }
+    }
+
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    public String updateWithOrganization(
+            Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
+            @RequestParam(value = "userOrganizationId", required = false) Long[] userOrganizationIds,
+            @RequestParam(value = "organizationId", required = false) Long[] organizationIds,
+            @RequestParam(value = "jobId", required = false) Long[][] jobIds,
+            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
+            RedirectAttributes redirectAttributes) {
+
+        fillUserOrganization(m, userOrganizationIds, organizationIds, jobIds);
+
+        return super.update(model, m, result, backURL, redirectAttributes);
+    }
 
     @SearchableDefaults(value = "deleted_eq=0")
     @Override

@@ -20,12 +20,20 @@
         <form:hidden path="parentIds"/>
         <form:hidden path="weight"/>
 
-        <div class="control-group">
-            <form:label path="name" cssClass="control-label">名称</form:label>
-            <div class="controls">
-                <form:input path="name" cssClass="validate[required,custom[name]]" placeholder="小于50个字符"/>
-            </div>
+    <div class="control-group">
+        <form:label path="name" cssClass="control-label">名称</form:label>
+        <div class="controls">
+            <form:input path="name" cssClass="validate[required,custom[name]]" placeholder="小于50个字符"/>
         </div>
+    </div>
+
+
+    <div class="control-group">
+        <form:label path="name" cssClass="control-label">类型</form:label>
+        <div class="controls">
+            <form:select path="type" items="${types}" itemLabel="info" cssClass="validate[required]"/>
+        </div>
+    </div>
 
         <c:if test="${not empty m.icon}">
             <div class="control-group">
@@ -89,13 +97,8 @@ $(function () {
     var validationEngine = $("#maintainForm").validationEngine();
     <es:showFieldError commandName="m"/>
 
+    $.zTree.initMaintainBtn("${ctx}/admin/sys/organization/organization", "${m.id}", ${not empty param.async and param.async});
 
-    $.zTree.initMaintainBtn(
-            "${ctx}/admin/sys/organization/organization/update/${m.id}",
-            "${ctx}/admin/sys/organization/organization/delete/${m.id}",
-            "${ctx}/admin/sys/organization/organization/appendChild/${m.id}",
-            "${ctx}/admin/sys/organization/organization/move/${m.id}?async=${param.async}"
-    );
 
 
 });
