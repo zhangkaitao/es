@@ -538,8 +538,12 @@ iframe[tabs="true"] {
     text-align: center;
 }
 
-.table tr.active {
+.table > tbody > tr.active {
     color: #bd362f;
+}
+
+.popover {
+    color: #333;
 }
 
 .sort-table .sort-th {
@@ -558,6 +562,9 @@ iframe[tabs="true"] {
     color: #f89406!important;
 }
 
+.control-group {
+    margin-bottom: 0px;
+}
 .control-group .input-append{
     display:block;
 }
@@ -797,8 +804,18 @@ iframe[tabs="true"] {
 }
 
 .font-12 {
-    font-size: 12px;font-weight: normal;
+    font-size: 12px;
+    font-weight: normal;
 }
+
+.form-small .control-label {
+    width: 60px;
+}
+.form-small .controls{
+    margin-left: 70px;
+}
+
+
 .hr{
     /*color:#555555;*/
     border-bottom: 1px solid #ddd;

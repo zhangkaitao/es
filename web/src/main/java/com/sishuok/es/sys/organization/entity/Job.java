@@ -7,15 +7,12 @@ package com.sishuok.es.sys.organization.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Treeable;
-import com.sishuok.es.common.utils.SpringUtils;
-import com.sishuok.es.sys.organization.service.JobService;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * 组织机构树
@@ -75,6 +72,7 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
     }
 
     public Long getParentId() {
+
         return parentId;
     }
 

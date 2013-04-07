@@ -41,7 +41,7 @@
         </li>
     </ul>
 
-    <form:form id="editForm" method="post" commandName="m">
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-inline form-horizontal form-small">
         <es:showGlobalError commandName="m"/>
         <form:hidden path="id"/>
         <form:hidden path="deleted"/>
@@ -190,7 +190,7 @@
         </c:if>
 
         <div class="control-group" style="width: 100%;float: left;padding: 20px 0;">
-            <div class="controls">
+            <div>
                 <button type="submit" class="btn btn-primary">
                     <i class="${icon}"></i>
                         ${op}
