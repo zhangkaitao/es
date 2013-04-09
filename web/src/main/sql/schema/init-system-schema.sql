@@ -5,7 +5,9 @@ drop table if exists `sys_user_online`;
 drop table if exists `sys_user_last_online`;
 drop table if exists `sys_organization`;
 drop table if exists `sys_job`;
-drop table if exists `sys_menu`;
+drop table if exists `sys_resource`;
+drop table if exists `sys_permission`;
+drop table if exists `sys_role`;
 ##user
 create table `sys_user`(
   `id`         bigint not null auto_increment,
@@ -159,17 +161,42 @@ create table `sys_user_organization_job`(
   constraint `unique_sys_user_organization_job` unique(`user_organization_id`, `job_id`)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table `sys_resources_menu`(
+create table `sys_resource`(
   `id`         bigint not null auto_increment,
   `name`      varchar(100),
+  `identity`  varchar(100),
+  `url`      varchar(200),
   `parent_id` bigint,
   `parent_ids`  varchar(200) default '',
   `icon`       varchar(200),
   `weight`    int,
   `show`       bool,
-  constraint `pk_sys_resources_menu` primary key(`id`),
-  index idx_sys_resources_menu_parentId (`parent_id`),
-  index idx_sys_resources_menu_parentIds_weight (`parent_ids`, `weight`)
+  constraint `pk_sys_resource` primary key(`id`),
+  index idx_sys_resource_name (`name`),
+  index idx_sys_resource_identity (`identity`),
+  index idx_sys_resource_user (`url`),
+  index idx_sys_resource_parentId (`parent_id`),
+  index idx_sys_resource_parentIds_weight (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
-alter table `sys_resources_menu` auto_increment=1000;
+alter table `sys_resource` auto_increment=1000;
 
+
+create table `sys_permission`(
+  `id`         bigint not null auto_increment,
+  `name`      varchar(100),
+  `permission`  varchar(100),
+  constraint `pk_sys_permission` primary key(`id`),
+  index idx_sys_permission_name (`name`),
+  index idx_sys_permission_permission (`permission`)
+) charset=utf8 ENGINE=InnoDB;
+alter table `sys_permission` auto_increment=1000;
+
+create table `sys_role`(
+  `id`         bigint not null auto_increment,
+  `name`      varchar(100),
+  `role`  varchar(100),
+  constraint `pk_sys_role` primary key(`id`),
+  index idx_sys_role_name (`name`),
+  index idx_sys_role_role (`role`)
+) charset=utf8 ENGINE=InnoDB;
+alter table `sys_role` auto_increment=1000;

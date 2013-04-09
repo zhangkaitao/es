@@ -13,8 +13,8 @@ function initValidator(form) {
     //不能合并到一个 否则提交表单时有个黑屏阶段
     $.validationEngineLanguage.allRules.ajaxCall = ajaxCall;
     $.validationEngineLanguage.allRules.username = {
-        "regex": /^[\u4E00-\u9FA5\uf900-\ufa2d_a-zA-Z][\u4E00-\u9FA5\uf900-\ufa2d\w]{4,19}$/,
-        "alertText": "* 5到20个汉字、字母、数字或下划线组成，且必须以非数字开头"
+        "regex": /^[\u4E00-\u9FA5\uf900-\ufa2d_a-zA-Z][\u4E00-\u9FA5\uf900-\ufa2d\w]{1,19}$/,
+        "alertText": "* 2到20个汉字、字母、数字或下划线组成，且必须以非数字开头"
     };
     $.validationEngineLanguage.allRules.mobilePhoneNumber = {
         "regex": /^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/,

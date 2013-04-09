@@ -6,7 +6,7 @@
     <ul class="nav nav-tabs">
         <c:if test="${op eq '新增'}">
             <li <c:if test="${op eq '新增'}">class="active"</c:if>>
-                <a href="${ctx}/showcase/sample/create?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/permission/create?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
                     新增
                 </a>
@@ -15,19 +15,19 @@
 
         <c:if test="${not empty m.id}">
             <li <c:if test="${op eq '查看'}">class="active"</c:if>>
-                <a href="${ctx}/showcase/sample/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/permission/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-eye-open"></i>
                     查看
                 </a>
             </li>
             <li <c:if test="${op eq '修改'}">class="active"</c:if>>
-                <a href="${ctx}/showcase/sample/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/permission/update/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
             </li>
             <li <c:if test="${op eq '删除'}">class="active"</c:if>>
-                <a href="${ctx}/showcase/sample/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/permission/delete/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>
@@ -42,50 +42,25 @@
     </ul>
 
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-        <!--上一个地址 如果提交方式是get 需要加上-->
-        <%--<es:BackURL hiddenInput="true"/>--%>
 
             <es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
 
             <div class="control-group">
-                <form:label path="name" cssClass="control-label">名称</form:label>
+                <form:label path="name" cssClass="control-label">权限名称</form:label>
                 <div class="controls">
-                    <form:input path="name" cssClass="validate[required,custom[username],ajax[ajaxNameCall]]" placeholder="5到10个字母、数字、下划线"/>
+                    <form:input path="name" cssClass="validate[required]" placeholder="权限描述名"/>
                 </div>
             </div>
 
             <div class="control-group">
-                <form:label path="age" cssClass="control-label">年龄</form:label>
+                <form:label path="permission" cssClass="control-label">权限标识</form:label>
                 <div class="controls">
-                    <form:input path="age" cssClass="validate[required,custom[integer]]" placeholder="请输入年龄"/>
+                    <form:input path="permission" cssClass="validate[required]" placeholder="程序中使用的名称"/>
                 </div>
             </div>
 
-            <div class="control-group">
-                <form:label path="birthday" cssClass="control-label">出生日期</form:label>
-                <div class="controls input-append date">
-                    <form:input path="birthday" data-format="yyyy-MM-dd hh:mm:ss" placeholder="例如2013-02-07 11:58:11"/>
-                    <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <form:label path="sex" cssClass="control-label">性别</form:label>
-                <div class="controls">
-                    <form:select path="sex" cssClass="validate[required]">
-                        <form:option label="请选择" value=""/>
-                        <form:options items="${sexList}" itemLabel="info"></form:options>
-                    </form:select>
-                </div>
-            </div>
-            <div class="control-group">
-                <form:label path="show" cssClass="control-label">是否显示</form:label>
-                <div class="controls inline-radio">
-                    <form:radiobuttons path="show" items="${booleanList}" itemLabel="info" itemValue="value" cssClass="validate[required]"/>
-                </div>
-            </div>
 
             <c:if test="${op eq '新增'}">
                 <c:set var="icon" value="icon-file"/>
@@ -127,7 +102,7 @@
             <c:otherwise>
                 //自定义ajax验证  ajax[ajaxNameCall] 放到验证规则的最后（放到中间只有当submit时才验证）
                 $.validationEngineLanguage.allRules.ajaxNameCall= {
-                    "url": "${ctx}/showcase/sample/validate",
+                    "url": "${ctx}/admin/sys/permission/permission/validate",
                     //动态提取的数据。验证时一起发送
                     extraDataDynamic : ['#id'],
                     //验证失败时的消息

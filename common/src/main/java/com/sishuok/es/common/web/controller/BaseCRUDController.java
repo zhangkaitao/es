@@ -8,7 +8,6 @@ package com.sishuok.es.common.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.plugin.exception.SystemableException;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import org.springframework.ui.Model;
@@ -125,12 +124,7 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
-        try {
-            baseService.delete(m);
-            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
-        } catch (SystemableException e) {
-            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
-        }
+        baseService.delete(m);
         return redirectToUrl(backURL);
     }
 
@@ -140,12 +134,8 @@ public class BaseCRUDController<M extends AbstractEntity, ID extends Serializabl
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
-        try {
-            baseService.delete(ids);
-            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
-        } catch (SystemableException e) {
-            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
-        }
+        baseService.delete(ids);
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
         return redirectToUrl(backURL);
     }
 

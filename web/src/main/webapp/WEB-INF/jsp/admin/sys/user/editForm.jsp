@@ -88,7 +88,7 @@
                         <form:label path="password" cssClass="control-label">初始密码</form:label>
                         <div class="controls">
                             <form:password path="password" cssClass="validate[required,minSize[5],maxSize[100]]"
-                                           placeholder="请输入至少5位的初始密码"/>
+                                             placeholder="请输入至少5位的初始密码"/>
                         </div>
                     </div>
                 </c:when>

@@ -1335,8 +1335,7 @@ $.table = {
         }
         //modalDialog时 把当前url保存下来方便翻页和排序
         table.closest(".ui-dialog").data("url", backURL);
-
-        if (table.data("async") == "true") {
+        if (table.data("async") == true) {
             $.app.waiting();
 
             var tableId = table.attr("id");

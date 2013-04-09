@@ -8,8 +8,6 @@ package com.sishuok.es.common.service;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.LogicDeleteable;
-import com.sishuok.es.common.plugin.entity.Systemable;
-import com.sishuok.es.common.plugin.exception.SystemableException;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.BaseRepositoryImpl;
 import com.sishuok.es.common.utils.ReflectUtils;
@@ -123,31 +121,21 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
         }
 
         M model = models.get(0);
-        boolean systemableEntity =model instanceof Systemable;
         boolean logicDeleteableEntity = model instanceof LogicDeleteable;
 
-        String whereCondition = "";
-        if(systemableEntity) {
-            whereCondition = " and systemed = false";
-        }
 
         String entityName = this.entityClass.getSimpleName();
         int updateCount = 0;
         if(logicDeleteableEntity) {
             String hql = String.format(
-                    "update %s o set o.deleted=true where o in (?1) %s",
-                    entityName, whereCondition);
+                    "update %s o set o.deleted=true where o in (?1)", entityName);
             updateCount = baseDefaultRepositoryImpl.batchUpdate(hql, models);
         } else {
             String hql = String.format(
-                    "delete from %s o where o in (?1) %s",
-                    entityName, whereCondition);
+                    "delete from %s o where o in (?1)", entityName);
             updateCount = baseDefaultRepositoryImpl.batchUpdate(hql, models);
         }
 
-        if(systemableEntity && updateCount < models.size()) {
-            throw new SystemableException();
-        }
     }
 
     /**
@@ -159,9 +147,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
     public void delete(M m) {
         if(m == null) {
             return;
-        }
-        if(m instanceof Systemable) {
-            throw new SystemableException();
         }
         if(m instanceof LogicDeleteable) {
             ((LogicDeleteable) m).markDeleted();

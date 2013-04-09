@@ -1,3 +1,4 @@
+delete from `showcase_tree` where id >=1 and id<=11;
 insert into `showcase_tree`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '根', true);
 insert into `showcase_tree`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (2, 1, '0/1/', 1, '节点1', true);
 insert into `showcase_tree`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (3, 2, '0/1/2/', 1, '叶子11', true);

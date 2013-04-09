@@ -142,7 +142,7 @@
                 /jcaptcha* = anon
                 /logout = logout
                 /login = jCaptchaValidate,authc
-                /** = sysUser,onlineSession, user,perms,roles
+                /** = sysUser,onlineSession,user,perms,roles
             </value>
         </property>
     </bean>

@@ -8,17 +8,22 @@ package com.sishuok.es.common.plugin.serivce;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.service.BaseService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -274,5 +279,23 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             models.addAll(findAllBySort(searchable));
         }
         return models;
+    }
+
+    /**
+     * 递归查询祖先
+     * @param parentIds
+     * @return
+     */
+    public List<M> findAncestor(String parentIds) {
+        if(StringUtils.isEmpty(parentIds)) {
+            return Collections.EMPTY_LIST;
+        }
+        String[] ids = StringUtils.tokenizeToStringArray(parentIds, "/");
+
+        return Lists.reverse(findAllByNoPage(SearchableBuilder.newInstance().addSearchFilter("id", SearchOperator.in, ids).buildSearchable()));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(StringUtils.arrayToDelimitedString(StringUtils.tokenizeToStringArray("0/1/2/", "/"), ","));
     }
 }

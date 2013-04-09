@@ -26,18 +26,13 @@
     Job job = jobService.findOne(id);
 
     List<String> names = Lists.newArrayList();
-    int index = 0;
-    while (job != null) {
-        names.add(job.getName());
-
-        if(showParents == false) {
-            break;
-        }
-
-        job = jobService.findOne(job.getParentId());
-
-        if(includeRoot == false && job.isRoot()) {
-            break;
+    if(showParents == true) {
+        List<Job> parents = jobService.findAncestor(job.getParentIds());
+        for(Job o : parents) {
+            if(includeRoot == false && o.isRoot()) {
+                continue;
+            }
+            names.add(o.getName());
         }
     }
 

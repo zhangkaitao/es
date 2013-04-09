@@ -109,7 +109,7 @@ public final class SearchSpecifications {
         switch (operator) {
             case eq :
                 return cb.equal(expression, value);
-            case notEq:
+            case notEq://不走索引 慎用
                 return cb.notEqual(expression, value);
             case gt :
                 return cb.greaterThan(expression, (Comparable)value);
@@ -119,17 +119,25 @@ public final class SearchSpecifications {
                 return cb.lessThan(expression, (Comparable)value);
             case lte:
                 return cb.lessThanOrEqualTo(expression, (Comparable)value);
-            case like:
+            case prefixLike: //不走索引 慎用
+                return cb.like(expression, "%" + String.valueOf(value));
+            case prefixNotLike://不走索引 慎用
+                return cb.notLike(expression, "%" + String.valueOf(value));
+            case suffixLike:
+                return cb.like(expression, String.valueOf(value) + "%");
+            case suffixNotLike://不走索引 慎用
+                return cb.notLike(expression, String.valueOf(value) + "%");
+            case like://不走索引 慎用
                 return cb.like(expression, "%" + String.valueOf(value) + "%");
-            case notLike:
+            case notLike://不走索引 慎用
                 return cb.notLike(expression, "%" + String.valueOf(value) + "%");
-            case isNull:
+            case isNull://可能不走索引 慎用
                 return cb.isNull(expression);
-            case isNotNull:
+            case isNotNull://可能不走索引 慎用
                 return cb.isNotNull(expression);
             case in:
                 return expression.in((Collection) value);
-            case notIn:
+            case notIn://不走索引 慎用
                  return cb.not(expression.in((Collection) value));
             case custom:
                 throw new InvlidSpecificationSearchOperatorException(searchFilter.getSearchProperty(), operator.toString());

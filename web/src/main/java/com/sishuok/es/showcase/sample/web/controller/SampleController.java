@@ -98,13 +98,5 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
         return response.result();
     }
 
-    //@JsonDeserialize(contentAs = Sample.class)
-    @RequestMapping(value = "test", method = RequestMethod.POST)
-    @ResponseBody
-    public Object test(@RequestBody Map<String, Sample> sampleList) {
-        System.out.println("--------------"+sampleList);
-        return sampleList;
-    }
-
 
 }

@@ -24,19 +24,19 @@
     Organization organization = organizationService.findOne(id);
 
     List<String> names = Lists.newArrayList();
-    int index = 0;
-    while (organization != null) {
+    if (organization != null) {
         names.add(organization.getName());
 
-        if(showParents == false) {
-            break;
+        if(showParents == true) {
+            List<Organization> parents = organizationService.findAncestor(organization.getParentIds());
+            for(Organization o : parents) {
+                if(includeRoot == false && organization.isRoot()) {
+                    continue;
+                }
+                names.add(o.getName());
+            }
         }
 
-        organization = organizationService.findOne(organization.getParentId());
-
-        if(includeRoot == false && organization.isRoot()) {
-            break;
-        }
     }
 
     for(int l = names.size() - 1, i = l; i >= 0; i--) {

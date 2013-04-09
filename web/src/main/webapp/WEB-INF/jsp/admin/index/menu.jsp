@@ -51,9 +51,15 @@
                     <li><a href="${ctx}/admin/sys/organization/job">工作职务</a></li>
                 </ul>
             </li>
-            <li><a href="#">角色管理</a></li>
-            <li><a href="#">资源管理</a></li>
-            <li><a href="${ctx}/admin/sys/resources/menu">菜单管理</a></li>
+            <li><a href="${ctx}/admin/sys/resource">资源管理</a></li>
+            <li>
+                <a href="#">权限管理</a>
+                <ul>
+                    <li><a href="${ctx}/admin/sys/permission/permission">权限列表</a></li>
+                    <li><a href="${ctx}/admin/sys/permission/role">角色列表</a></li>
+                </ul>
+            </li>
+
         </ul>
         </div>
     </div>
