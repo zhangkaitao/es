@@ -6,8 +6,6 @@
 package com.sishuok.es.common.repository.callback;
 
 import com.sishuok.es.common.entity.search.SearchFilter;
-import com.sishuok.es.common.entity.search.SearchOperator;
-import com.sishuok.es.common.entity.search.SearchPropertyMappingDefinition;
 import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Pageable;
 

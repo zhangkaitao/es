@@ -20,10 +20,7 @@ public final class SearchFilter {
     private SearchOperator operator;
     private Object value;
 
-    /**
-     * 自定义查询映射信息
-     */
-    private SearchPropertyMappingDefinition.SearchPropertyMappingInfo searchPropertyMappingInfo;
+
 
     /**
      * @param searchProperty 属性名
@@ -31,23 +28,10 @@ public final class SearchFilter {
      * @param value    值
      */
     public SearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
-        this(searchProperty, operator, value, null);
-    }
-
-    /**
-     * @param searchProperty 属性名
-     * @param operator 操作
-     * @param value    值
-     * @param searchPropertyMappingInfo  自定义查询映射信息
-     */
-    public SearchFilter(
-            final String searchProperty, final SearchOperator operator, final Object value,
-            final SearchPropertyMappingDefinition.SearchPropertyMappingInfo searchPropertyMappingInfo) {
 
         this.searchProperty = searchProperty;
         this.operator = operator;
         this.value = value;
-        this.searchPropertyMappingInfo = searchPropertyMappingInfo;
     }
 
     public String getSearchProperty() {
@@ -63,9 +47,6 @@ public final class SearchFilter {
         if(operator != null && operator != SearchOperator.custom) {
             return operator;
         }
-        if (searchPropertyMappingInfo != null && StringUtils.isNotBlank(searchPropertyMappingInfo.getDefaultOperator())) {
-            return SearchOperator.valueBySymbol(searchPropertyMappingInfo.getDefaultOperator());
-        }
         throw new InvlidSpecificationSearchOperatorException(getSearchProperty(), getOperatorStr());
     }
 
@@ -80,9 +61,6 @@ public final class SearchFilter {
         if(operator != null && operator != SearchOperator.custom) {
             return operator.getSymbol();
         }
-        if(searchPropertyMappingInfo != null && StringUtils.isNotBlank(searchPropertyMappingInfo.getDefaultOperator())) {
-            return searchPropertyMappingInfo.getDefaultOperator();
-        }
         return "";
     }
 
@@ -90,9 +68,6 @@ public final class SearchFilter {
         return value;
     }
 
-    public SearchPropertyMappingDefinition.SearchPropertyMappingInfo getSearchPropertyMappingInfo() {
-        return searchPropertyMappingInfo;
-    }
 
     public void setValue(final Object value) {
         this.value = value;
@@ -106,18 +81,12 @@ public final class SearchFilter {
         this.searchProperty = searchProperty;
     }
 
-    public void setSearchPropertyMappingInfo(SearchPropertyMappingDefinition.SearchPropertyMappingInfo searchPropertyMappingInfo) {
-        this.searchPropertyMappingInfo = searchPropertyMappingInfo;
-    }
 
     /**
      * 得到实体属性名
      * @return
      */
     public String getEntityProperty() {
-        if(searchPropertyMappingInfo != null) {
-            return searchPropertyMappingInfo.getEntityProperty();
-        }
         return searchProperty;
     }
 
@@ -127,9 +96,6 @@ public final class SearchFilter {
      */
     public boolean isUnaryFilter() {
         String operatorStr = getSpecificationOperator().getSymbol();
-        if (operator == SearchOperator.custom) {
-            operatorStr = searchPropertyMappingInfo.getDefaultOperator();
-        }
         return operatorStr.startsWith("is");
     }
 

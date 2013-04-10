@@ -5,8 +5,6 @@
  */
 package com.sishuok.es.common.entity;
 
-import com.sishuok.es.common.entity.search.annotation.SearchPropertyMapping;
-import com.sishuok.es.common.entity.search.annotation.SearchPropertyMappings;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,28 +18,6 @@ import java.util.Set;
  * <p>Date: 13-1-14 下午2:06
  * <p>Version: 1.0
  */
-
-//自定义查询映射（查询自定义字段名-->实体字段名的映射）
-@SearchPropertyMappings(
-        {
-                @SearchPropertyMapping(
-                        searchProperty = "beginRegisterDate",
-                        entityProperty = "registerDate",
-                        defaultOperator = ">="
-                ),
-                @SearchPropertyMapping(
-                        searchProperty = "endRegisterDate",
-                        entityProperty = "registerDate",
-                        defaultOperator = "<="
-                ),
-                @SearchPropertyMapping(
-                        searchProperty = "realname",
-                        entityProperty = "baseInfo.realname",
-                        defaultOperator = "like"
-                )
-        }
-)
-
 @Entity
 @Table(name = "tbl_user")
 public class User extends BaseEntity<Long> {

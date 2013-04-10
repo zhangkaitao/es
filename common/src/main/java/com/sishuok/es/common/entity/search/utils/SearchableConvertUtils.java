@@ -7,7 +7,6 @@ package com.sishuok.es.common.entity.search.utils;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchFilter;
-import com.sishuok.es.common.entity.search.SearchPropertyMappingDefinition;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
@@ -30,21 +29,14 @@ import java.util.List;
 public final class SearchableConvertUtils {
     private static volatile ConversionService conversionService;
 
-    public static <T> void convertSearchValueToEntityValue(final Searchable search, final Class<T> entityClass) {
-        SearchPropertyMappingDefinition searchPropertyMappingDefinition = SearchPropertyMappingDefinition.newInstance(entityClass);
-
-        convertSearchValueToEntityValue(search, entityClass, searchPropertyMappingDefinition);
-    }
 
     /**
      *
      * @param search 查询条件
      * @param entityClass 实体类型
-     * @param mappingDefinition 自定义查询条件映射定义
      * @param <T>
      */
-    public static <T> void convertSearchValueToEntityValue(
-            final Searchable search, final Class<T> entityClass, final SearchPropertyMappingDefinition mappingDefinition) {
+    public static <T> void convertSearchValueToEntityValue(final Searchable search, final Class<T> entityClass) {
 
         if(search.isConverted()) {
             return;
@@ -57,9 +49,6 @@ public final class SearchableConvertUtils {
 
         for (SearchFilter searchFilter : searchFilters) {
             String searchProperty = searchFilter.getSearchProperty();
-            if(mappingDefinition != null && mappingDefinition.containsSearchPropertyMapping(searchProperty)) {
-                searchFilter.setSearchPropertyMappingInfo(mappingDefinition.getSearchPropertyMapping(searchProperty));
-            }
 
             //一元运算符不需要计算
             if(searchFilter.isUnaryFilter()) {

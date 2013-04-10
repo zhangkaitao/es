@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.common.repository.callback;
 
-import com.sishuok.es.common.entity.search.SearchPropertyMappingDefinition;
 import com.sishuok.es.common.entity.search.Searchable;
 
 import javax.persistence.Query;
