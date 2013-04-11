@@ -5,7 +5,7 @@
     <iframe id="treeFrame" name="treeFrame" width="100%" height="100%"  frameborder="0" scrolling="auto" src="${ctx}/showcase/tree/tree?async=true"></iframe>
 </div>
 <div class="ui-layout-center tree">
-    <iframe id="maintainFrame" name="maintainFrame" width="100%" height="100%"  frameborder="0" scrolling="auto"></iframe>
+    <iframe id="listFrame" name="listFrame" width="100%" height="100%"  frameborder="0" scrolling="auto"></iframe>
 </div>
 
 <es:contentFooter/>
@@ -13,7 +13,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('body').layout({
-                west__size:                    250
+                west__size:                    210
            ,    west__spacing_closed:        20
            ,    west__togglerLength_closed:    100
            ,    west__togglerContent_closed:"显示树"

@@ -7,6 +7,7 @@ package com.sishuok.es.common.repository.search;
 
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
+import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
@@ -475,6 +476,23 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Page<User> page = userRepository.findAll(search.getSpecifications(User.class), search.getPage());
         assertTrue(page.getContent().get(0).getId() > page.getContent().get(1).getId());
     }
+
+
+    @Test
+    public void testOr() {
+        int count = 15;
+        for (int i = 0; i < count; i++) {
+            User user = createUser();
+            user.getBaseInfo().setAge(i);
+            userRepository.save(user);
+        }
+        SearchRequest search = new SearchRequest();
+        search.addSearchFilter("baseInfo.age", SearchOperator.gt, 10);
+        search.addSearchFilter("baseInfo.age", SearchOperator.eq, 11)
+                .or("baseInfo.age", SearchOperator.eq, 12);
+        assertEquals(2, userRepository.count(search.getSpecifications(User.class)));
+    }
+
 
 
 }

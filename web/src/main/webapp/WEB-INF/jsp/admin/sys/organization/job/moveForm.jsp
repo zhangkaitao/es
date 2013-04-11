@@ -3,14 +3,8 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a>
-            <i class="icon-move"></i>
-            移动子节点
-        </a>
-    </li>
-</ul>
+<div class="panel">
+<%@include file="nav.jspf"%>
 
 <es:showMessage/>
 
@@ -39,6 +33,7 @@
             </div>
         </div>
 
+
         <div class="control-group">
             <label class="control-label">移动到目标节点</label>
             <div class="controls">
@@ -55,10 +50,12 @@
                     孩子节点
                 </button>
 
+
                 <a class="btn" href="<es:BackURL/>">
                     <i class="icon-reply"></i>
                     返回
                 </a>
+
             </div>
         </div>
 </form>
@@ -75,7 +72,6 @@ $(function () {
             click : "${m.click}", root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
         </c:forEach>
     ];
-
     $.zTree.initSelectTree({
         zNodes : zNodes,
         nodeType : "default",
@@ -91,13 +87,13 @@ $(function () {
             enable : true
         }
     });
+
     $.zTree.initMoveBtn();
+
 
     var validationEngine = $("#moveForm").validationEngine({
         validationEventTrigger : "submit"
     });
-
-
 
 });
 </script>

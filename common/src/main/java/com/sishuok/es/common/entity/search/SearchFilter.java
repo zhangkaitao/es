@@ -5,8 +5,11 @@
  */
 package com.sishuok.es.common.entity.search;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * <p>查询过滤条件</p>
@@ -20,7 +23,7 @@ public final class SearchFilter {
     private SearchOperator operator;
     private Object value;
 
-
+    private List<SearchFilter> orFilters;
 
     /**
      * @param searchProperty 属性名
@@ -34,16 +37,42 @@ public final class SearchFilter {
         this.value = value;
     }
 
+    /**
+     * 目前仅支持一级或操作
+     * 或 条件运算
+     * @param searchProperty
+     * @param operator
+     * @param value
+     * @return
+     */
+    public SearchFilter or(final String searchProperty, final SearchOperator operator, final Object value) {
+       return or(new SearchFilter(searchProperty, operator, value));
+    }
+    public SearchFilter or(SearchFilter orSearchFilter) {
+        if(orFilters == null) {
+            orFilters = Lists.newArrayList();
+        }
+        orFilters.add(orSearchFilter);
+        return this;
+    }
+
+    public List<SearchFilter> getOrFilters() {
+        return orFilters;
+    }
+    public boolean  hasOrSearchFilters() {
+        return !CollectionUtils.isEmpty(getOrFilters());
+    }
+
     public String getSearchProperty() {
         return searchProperty;
     }
 
 
     /**
-     * 获取 Specification 使用的操作符
+     * 获取 操作符
      * @return
      */
-    public SearchOperator getSpecificationOperator() throws InvlidSpecificationSearchOperatorException {
+    public SearchOperator getOperator() throws InvlidSpecificationSearchOperatorException {
         if(operator != null && operator != SearchOperator.custom) {
             return operator;
         }
@@ -95,7 +124,7 @@ public final class SearchFilter {
      * @return
      */
     public boolean isUnaryFilter() {
-        String operatorStr = getSpecificationOperator().getSymbol();
+        String operatorStr = getOperator().getSymbol();
         return operatorStr.startsWith("is");
     }
 

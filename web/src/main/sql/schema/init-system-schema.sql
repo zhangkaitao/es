@@ -5,6 +5,8 @@ drop table if exists `sys_user_online`;
 drop table if exists `sys_user_last_online`;
 drop table if exists `sys_organization`;
 drop table if exists `sys_job`;
+drop table if exists `sys_user_organization`;
+drop table if exists `sys_user_organization_job`;
 drop table if exists `sys_resource`;
 drop table if exists `sys_permission`;
 drop table if exists `sys_role`;

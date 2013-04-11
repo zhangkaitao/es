@@ -36,19 +36,8 @@ public interface Searchable {
      * @param operator 根据key提取的操作符 如lt
      * @param value
      */
-    public void addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value);
+    public SearchFilter addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value);
 
-    /**
-     * 添加过滤条件 如key="parent.id_eq" value = 1
-     * @param key
-     */
-    public void addSearchFilter(final String key, Object value);
-
-    /**
-     * 移除指定key的过滤条件
-     * @param key
-     */
-    public void removeSearchFilter(final String key);
 
     /**
      * 添加过滤条件
@@ -56,7 +45,22 @@ public interface Searchable {
      * @param operator 操作运算符
      * @param value 值
      */
-    public void addSearchFilter(final String searchProperty, SearchOperator operator, Object value);
+    public SearchFilter addSearchFilter(final String searchProperty, SearchOperator operator, Object value);
+
+    /**
+     * 添加过滤条件 如key="parent.id_eq" value = 1
+     * @param key
+     */
+    public SearchFilter addSearchFilter(final String key, Object value);
+
+    public SearchFilter addSearchFilter(SearchFilter searchFilter);
+
+    /**
+     * 移除指定key的过滤条件
+     * @param key
+     */
+    public SearchFilter removeSearchFilter(final String key);
+
 
 
     /**

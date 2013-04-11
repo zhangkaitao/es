@@ -64,7 +64,7 @@ public class Resource extends BaseEntity<Long> implements Treeable<Long> {
      * 是否显示
      */
     @Column(name = "`show`")
-    private Boolean show;
+    private Boolean show = Boolean.FALSE;
 
     public String getName() {
 

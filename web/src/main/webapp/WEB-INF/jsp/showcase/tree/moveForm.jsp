@@ -3,14 +3,8 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a>
-            <i class="icon-move"></i>
-            移动子节点
-        </a>
-    </li>
-</ul>
+<div class="panel">
+<%@include file="nav.jspf"%>
 
 <es:showMessage/>
 

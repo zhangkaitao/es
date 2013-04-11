@@ -11,6 +11,8 @@ import com.sishuok.es.sys.resource.repository.ResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-2-4 下午3:01

@@ -2,14 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a>
-            <i class="icon-file"></i>
-            添加子节点
-        </a>
-    </li>
-</ul>
+<%@include file="nav.jspf"%>
 <form:form id="appendChildForm" method="post" commandName="child" cssClass="form-horizontal" enctype="multipart/form-data">
 
         <es:showGlobalError commandName="child"/>
@@ -59,10 +52,10 @@
                     <i class="icon-file"></i>
                     添加子节点
                 </button>
-                <button id="toMaintain" type="button" class="btn">
+                <a class="btn" href="<es:BackURL/>">
                     <i class="icon-reply"></i>
                     返回
-                </button>
+                </a>
             </div>
         </div>
 </form:form>
@@ -76,10 +69,6 @@ $(function () {
     };
     var validationEngine = $("#appendChildForm").validationEngine();
     <es:showFieldError commandName="child"/>
-
-    $("#toMaintain").click(function() {
-        location.href = '${ctx}/showcase/tree/maintain/${parent.id}';
-    });
 
 
 });

@@ -41,7 +41,7 @@
                 </a>
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
-                    批量删除
+                    删除
                 </a>
 
                 <div class="btn-group">

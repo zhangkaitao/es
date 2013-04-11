@@ -39,7 +39,7 @@
                 </a>
                 <a class="btn btn-batch-delete">
                     <i class="icon-trash"></i>
-                    批量删除
+                    删除
                 </a>
             </div>
         </div>

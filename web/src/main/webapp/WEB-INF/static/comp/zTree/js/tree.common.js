@@ -175,12 +175,21 @@ $.zTree = {
         var id = this.index++;
         var treeStr = (autocomplateEnable ? this.autocompleteTemplate : '') + this.treeTemplate;
         $("body").append(treeStr.replace(/{id}/g, id));
-        var zTree = $.fn.zTree.init($("#treeSelect" + id), setting, config.zNodes);
+        var treeSelect = "treeSelect" + id;
+        var zTree = $.fn.zTree.init($("#" + treeSelect), setting, config.zNodes);
 
         if(autocomplateEnable) {
             config.autocomplete.input = $("#searchName" + id);
             config.autocomplete.async = config.autocomplete.async || config.async;
-            config.autocomplete.callback = config.autocomplete.callback || $.noop();
+            config.autocomplete.callback = config.autocomplete.callback || function(searchName) { //按照名字搜索
+                var url = config.loadUrl + "&searchName=" + searchName;
+                zTree.destroy();
+                $.getJSON(url, function(zNodes) {
+                    if(zNodes.length > 0) { //如果没找到节点就不必展示
+                        zTree = $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
+                    }
+                });
+            };
             config.autocomplete.source = config.autocomplete.source || config.urlPrefix + "/ajax/autocomplete";
             $.zTree.initAutocomplete(config.autocomplete);
         }
@@ -356,36 +365,67 @@ $.zTree = {
         }
 
     },
-    initMaintainBtn : function(maintainUrlPrefix, id, async) {
-        var updateUrl = maintainUrlPrefix + "/update/" + id,
-            deleteUrl = maintainUrlPrefix + "/delete/" + id,
-            appendChildUrl = maintainUrlPrefix + "/appendChild/" + id,
-            moveTreeUrl = maintainUrlPrefix + "/move/" + id + "?async=" + async;
+    initMaintainBtn : function(maintainUrlPrefix, table, async) {
+        var updateUrl = maintainUrlPrefix + "/update/{id}",
+            deleteUrl = maintainUrlPrefix + "/batch/delete",
+            appendChildUrl = maintainUrlPrefix + "/appendChild/{id}",
+            moveTreeUrl = maintainUrlPrefix + "/move/{id}?async=" + async;
 
+        $("#appendChild").click(function () {
+            var checkbox = $.table.getFirstSelectedCheckbox(table);
+            if(checkbox.size() == 0) {
+                return;
+            }
+            window.location.href = appendChildUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
+            return false;
+        });
+        $("#moveTree").click(function () {
+            var checkbox = $.table.getFirstSelectedCheckbox(table);
+            if(checkbox.size() == 0) {
+                return;
+            }
+
+            if(checkbox.filter("[root='true']").size() > 0) {
+                $.app.alert({
+                    message : "根节点不能移动！"
+                });
+                return;
+            }
+            window.location.href = moveTreeUrl.replace("{id}", checkbox.val()) + "&BackURL=" + $.table.encodeTableURL(table);
+            return false;
+        });
 
         $("#updateTree").click(function() {
-            this.form.action = updateUrl;
+            var checkbox = $.table.getFirstSelectedCheckbox(table);
+            if(checkbox.size() == 0) {
+                return;
+            }
+            window.location.href = updateUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
         });
+
         $("#deleteTree").click(function () {
+            var checkbox = $.table.getAllSelectedCheckbox(table);
+            if(checkbox.size() == 0) {
+                return;
+            }
+
+            if(checkbox.filter("[root='true']").size() > 0) {
+                $.app.alert({
+                    message : "您删除的数据中包含根节点，根节点不能删除！"
+                });
+                return;
+            }
             var btn = this;
             $.app.confirm({
                 width:500,
                 message : "确认删除吗？",
                 ok : function() {
-                    btn.form.action = deleteUrl;
-                    btn.form.submit();
+                    window.location.href = deleteUrl + "?" + checkbox.serialize() + "&BackURL=" + $.table.encodeTableURL(table);
                 }
             });
             return false;
         });
-        $("#appendChild").click(function () {
-            window.location.href = appendChildUrl;
-            return false;
-        });
-        $("#moveTree").click(function () {
-            window.location.href = moveTreeUrl;
-            return false;
-        });
+
 
     },
     initMoveBtn : function() {

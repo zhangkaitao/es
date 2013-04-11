@@ -1,4 +1,5 @@
 delete from `sys_user` where id>=1 and id<=1;
+/*默认admin/123456*/
 insert into `sys_user`
   (`id`, `username`, `email`, `mobile_phone_number`, `password`, `salt`, `create_date`, `status`, `admin`, `deleted`)
 values
@@ -6,7 +7,7 @@ values
 
 
 delete from `sys_organization` where id>=1 and id<=1;
-insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '组织机构', 'bloc', true);
+insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '组织机构', true);
 delete from `sys_job` where id>=1 and id<=1;
 insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '职务', true);
 
@@ -31,7 +32,7 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (8, 2, '0/1/2/', 6, '编辑器列表', 'example:editor', '/showcase/editor', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (9, 2, '0/1/2/', 7, '父子表（小数据量）', 'example:parentchild', '/showcase/parentchild', true);
+        values (9, 2, '0/1/2/', 7, '父子表（小数据量）', 'example:parentchild', '/showcase/parentchild/parent', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (10, 2, '0/1/2/', 8, '父子表（大数据量）', 'example:product', '/showcase/product', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
@@ -47,7 +48,7 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (16, 1, '0/1/', 1, '系统管理', '', '', true);
+        values (16, 1, '0/1/', 2, '系统管理', '', '', true);
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (17, 16, '0/1/16/', 1, '用户管理', '', '', true);
@@ -67,7 +68,14 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (24, 22, '0/1/16/22/', 2, '工作职务列表', 'sys:job', '/admin/sys/organization/job', true);
 
-
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (25, 16, '0/1/16/', 3, '资源管理', 'sys:resource', '/admin/sys/resource', true);
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (26, 16, '0/1/16/', 4, '权限管理', '', '', true);
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (27, 26, '0/1/16/26/', 1, '权限列表', 'sys:permission', '/admin/sys/permission/permission', true);
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (28, 26, '0/1/16/26/', 2, '角色列表', 'sys:role', '/admin/sys/permission/role', true);
 
 insert into `sys_permission` (`id`, `name`, `permission`) values (1, '新增', 'save');
 insert into `sys_permission` (`id`, `name`, `permission`) values (2,  '修改', 'update');

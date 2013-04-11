@@ -48,37 +48,46 @@ public final class SearchableConvertUtils {
         beanWrapper.setConversionService(getConversionService());
 
         for (SearchFilter searchFilter : searchFilters) {
-            String searchProperty = searchFilter.getSearchProperty();
-
-            //一元运算符不需要计算
-            if(searchFilter.isUnaryFilter()) {
-                continue;
-            }
-
-            String entityProperty = searchFilter.getEntityProperty();
-
-            Object value = searchFilter.getValue();
-
-            Object newValue = null;
-            boolean isCollection = value instanceof Collection;
-            boolean isArray = value != null && value.getClass().isArray();
-            if(isCollection || isArray) {
-                List<Object> list = Lists.newArrayList();
-                if(isCollection) {
-                    list.addAll((Collection)value);
-                } else {
-                    list = Lists.newArrayList(CollectionUtils.arrayToList(value));
+            convert(beanWrapper, searchFilter);
+            if(searchFilter.hasOrSearchFilters()) {
+                for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
+                    convert(beanWrapper, orSearchFilter);
                 }
-                int length = list.size();
-                for (int i = 0; i < length; i++) {
-                    list.set(i, getConvertedValue(beanWrapper, searchProperty, entityProperty, list.get(i)));
-                }
-                newValue = list;
-            } else {
-                newValue = getConvertedValue(beanWrapper, searchProperty, entityProperty, value);
             }
-            searchFilter.setValue(newValue);
         }
+    }
+
+    private static void convert(BeanWrapperImpl beanWrapper, SearchFilter searchFilter) {
+        String searchProperty = searchFilter.getSearchProperty();
+
+        //一元运算符不需要计算
+        if(searchFilter.isUnaryFilter()) {
+            return;
+        }
+
+        String entityProperty = searchFilter.getEntityProperty();
+
+        Object value = searchFilter.getValue();
+
+        Object newValue = null;
+        boolean isCollection = value instanceof Collection;
+        boolean isArray = value != null && value.getClass().isArray();
+        if(isCollection || isArray) {
+            List<Object> list = Lists.newArrayList();
+            if(isCollection) {
+                list.addAll((Collection)value);
+            } else {
+                list = Lists.newArrayList(CollectionUtils.arrayToList(value));
+            }
+            int length = list.size();
+            for (int i = 0; i < length; i++) {
+                list.set(i, getConvertedValue(beanWrapper, searchProperty, entityProperty, list.get(i)));
+            }
+            newValue = list;
+        } else {
+            newValue = getConvertedValue(beanWrapper, searchProperty, entityProperty, value);
+        }
+        searchFilter.setValue(newValue);
     }
 
     private static Object getConvertedValue(

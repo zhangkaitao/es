@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.common.entity.search;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.exception.SearchException;
@@ -42,6 +43,10 @@ public final class SearchRequest implements Searchable {
      */
     public SearchRequest(final Map<String, Object> searchParams) {
         this(searchParams, null, null);
+    }
+
+    public SearchRequest() {
+        this(null, null, null);
     }
 
     /**
@@ -90,9 +95,10 @@ public final class SearchRequest implements Searchable {
         }
     }
 
-    private void toSearchFilters(final Map<String, Object> searchParams) throws SearchException {
+    private List<SearchFilter> toSearchFilters(final Map<String, Object> searchParams) throws SearchException {
+        List<SearchFilter> searchFilters = Lists.newArrayList();
         if(searchParams == null || searchParams.size() == 0) {
-            return;
+            return searchFilters;
         }
         for (Map.Entry<String, Object> entry : searchParams.entrySet()) {
             String key = entry.getKey();
@@ -126,8 +132,9 @@ public final class SearchRequest implements Searchable {
             if (!allowBlankValue && isValueBlank) {
                 continue;
             }
-            addSearchFilter(key, searchProperty, operator, value);
+            searchFilters.add(addSearchFilter(key, searchProperty, operator, value));
         }
+        return searchFilters;
     }
 
     /**
@@ -147,25 +154,33 @@ public final class SearchRequest implements Searchable {
      * @param value
      * @see SearchFilter#SearchFilter(java.lang.String, SearchOperator, java.lang.Object)
      */
-    public void addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value) {
-        searchFilterMap.put(key, new SearchFilter(searchProperty, operator, value));
+    public SearchFilter addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value) {
+        SearchFilter searchFilter = new SearchFilter(searchProperty, operator, value);
+        searchFilterMap.put(key, searchFilter);
+        return searchFilter;
     }
 
     @Override
-    public void addSearchFilter(String key, Object value) {
+    public SearchFilter addSearchFilter(String key, Object value) {
         Map<String, Object> map = Maps.newHashMap();
         map.put(key, value);
-        toSearchFilters(map);
+        return toSearchFilters(map).get(0);
     }
 
     @Override
-    public void removeSearchFilter(String key) {
-        getSearchFilterMap().remove(key);
+    public SearchFilter addSearchFilter(SearchFilter searchFilter) {
+        searchFilterMap.put(searchFilter.getSearchProperty() + separator + searchFilter.getOperatorStr(), searchFilter);
+        return searchFilter;
     }
 
     @Override
-    public void addSearchFilter(String searchProperty, SearchOperator operator, Object value) {
-        addSearchFilter(searchProperty + separator + operator.toString(), value);
+    public SearchFilter removeSearchFilter(String key) {
+        return getSearchFilterMap().remove(key);
+    }
+
+    @Override
+    public SearchFilter addSearchFilter(String searchProperty, SearchOperator operator, Object value) {
+        return addSearchFilter(searchProperty + separator + operator.toString(), value);
     }
 
     public Collection<SearchFilter> getSearchFilters() {

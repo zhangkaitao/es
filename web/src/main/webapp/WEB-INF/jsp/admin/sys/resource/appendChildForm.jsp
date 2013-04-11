@@ -2,14 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a>
-            <i class="icon-file"></i>
-            添加子节点
-        </a>
-    </li>
-</ul>
+<%@include file="nav.jspf"%>
 <form:form id="appendChildForm" method="post" commandName="child" cssClass="form-horizontal" enctype="multipart/form-data">
 
         <es:showGlobalError commandName="child"/>
@@ -29,7 +22,24 @@
             </div>
         </div>
 
-        <c:if test="${not empty child.icon}">
+
+        <div class="control-group">
+            <form:label path="identity" cssClass="control-label">资源标识</form:label>
+            <div class="controls">
+                <form:input path="identity" placeholder="用于权限验证"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <form:label path="url" cssClass="control-label">URL地址</form:label>
+            <div class="controls">
+                <form:input path="url" placeholder="菜单跳转地址"/>
+            </div>
+        </div>
+
+
+
+    <c:if test="${not empty child.icon}">
             <div class="control-group">
                 <form:label path="icon" cssClass="control-label">当前显示的图标</form:label>
                 <div class="controls">
@@ -59,10 +69,10 @@
                     <i class="icon-file"></i>
                     添加子节点
                 </button>
-                <button id="toMaintain" type="button" class="btn">
+                <a class="btn" href="<es:BackURL/>">
                     <i class="icon-reply"></i>
                     返回
-                </button>
+                </a>
             </div>
         </div>
 </form:form>
@@ -76,10 +86,6 @@ $(function () {
     };
     var validationEngine = $("#appendChildForm").validationEngine();
     <es:showFieldError commandName="child"/>
-
-    $("#toMaintain").click(function() {
-        location.href = '${ctx}/admin/sys/organization/job/maintain/${parent.id}';
-    });
 
 
 });

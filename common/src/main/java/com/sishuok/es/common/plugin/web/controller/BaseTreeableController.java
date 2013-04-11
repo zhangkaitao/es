@@ -19,7 +19,6 @@ import com.sishuok.es.common.plugin.web.controller.entity.ZTree;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
-import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -92,6 +91,228 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/tree";
     }
 
+    @RequestMapping(value = "list/{current}", method = RequestMethod.GET)
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
+    public String list(
+            @PathVariable("current") M current,
+            Searchable searchable, Model model) {
+
+
+        if(current != null) {
+            SearchFilter searchFilter =
+                    new SearchFilter("parentIds", SearchOperator.suffixLike, current.makeSelfAsNewParentIds()).
+                    or("id", SearchOperator.eq, current.getId());
+
+            searchable.addSearchFilter(searchFilter);
+        }
+
+        model.addAttribute("page", treeableService.findAll(searchable));
+
+        return getViewPrefix() + "/list";
+    }
+
+
+    /**
+     * 仅返回表格数据
+     * @param searchable
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "list/{current}", headers = "table=true", method = RequestMethod.GET)
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
+    public String listTable(
+            @PathVariable("current") M current,
+            Searchable searchable, Model model) {
+
+        list(current, searchable, model);
+        return getViewPrefix() + "/listTable";
+
+    }
+
+
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String view(@PathVariable("id") M m, Model model) {
+        setCommonData(model);
+        model.addAttribute("m", m);
+        model.addAttribute(Constants.OP_NAME, "查看");
+        return getViewPrefix() + "/editForm";
+    }
+
+    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    public String updateForm(@PathVariable("id") M m, Model model) {
+        setCommonData(model);
+        model.addAttribute("m", m);
+        model.addAttribute(Constants.OP_NAME, "修改");
+        return getViewPrefix() + "/editForm";
+    }
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    public String update(
+            @RequestParam(value = Constants.BACK_URL) String backURL,
+            Model model, HttpServletRequest request,
+            @RequestParam(value = "file", required = false) MultipartFile file, @ModelAttribute("m") M m,
+            BindingResult result, RedirectAttributes redirectAttributes) {
+
+        if(!file.isEmpty()) {
+            m.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
+        }
+        if(result.hasErrors()) {
+            return updateForm(m, model);
+        }
+
+        treeableService.update(m);
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
+        return redirectToUrl(backURL);
+    }
+
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    public String deleteForm(@PathVariable("id") M m, Model model) {
+        setCommonData(model);
+        model.addAttribute("m", m);
+        model.addAttribute(Constants.OP_NAME, "删除");
+        return getViewPrefix() + "/editForm";
+    }
+
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+    public String deleteSelfAndChildren(
+            @RequestParam(value = Constants.BACK_URL) String backURL,
+            @ModelAttribute("m") M m, RedirectAttributes redirectAttributes) {
+
+        if(m.isRoot()) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, "您删除的数据中包含根节点，根节点不能删除");
+            return redirectToUrl(backURL);
+        }
+
+        treeableService.deleteSelfAndChild(m);
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
+        return  redirectToUrl(backURL);
+    }
+
+
+    @RequestMapping(value = "batch/delete")
+    public String deleteInBatch(
+            @RequestParam(value = "ids", required = false) ID[] ids,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
+            RedirectAttributes redirectAttributes) {
+
+        //如果要求不严格 此处可以删除判断 前台已经判断过了
+        Searchable searchable = SearchableBuilder.newInstance()
+                .addSearchFilter("id", SearchOperator.in, ids)
+                .buildSearchable();
+        List<M> mList = baseService.findAllByNoPage(searchable);
+        for(M m : mList) {
+            if(m.isRoot()) {
+                redirectAttributes.addFlashAttribute(Constants.ERROR, "您删除的数据中包含根节点，根节点不能删除");
+                return redirectToUrl(backURL);
+            }
+        }
+
+        baseService.delete(ids);
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
+        return redirectToUrl(backURL);
+    }
+
+
+    @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.GET)
+    public String appendChildForm(@PathVariable("parentId") M parent, Model model) {
+        setCommonData(model);
+        model.addAttribute("parent", parent);
+        if(!model.containsAttribute("child")) {
+            model.addAttribute("child", newModel());
+        }
+
+        model.addAttribute(Constants.OP_NAME, "添加子节点");
+
+        return getViewPrefix() + "/appendChildForm";
+    }
+
+    @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.POST)
+    public String appendChild(
+            Model model, HttpServletRequest request,
+            @RequestParam(value = Constants.BACK_URL) String backURL,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @PathVariable("parentId") M parent,
+            @ModelAttribute("child") M child, BindingResult result,
+            RedirectAttributes redirectAttributes) {
+
+        setCommonData(model);
+
+        if(!file.isEmpty()) {
+            child.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
+        }
+        if (result.hasErrors()) {
+            return appendChildForm(parent, model);
+        }
+
+        treeableService.appendChild(parent, child);
+
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "添加子节点成功");
+        return  redirectToUrl(backURL);
+    }
+
+    @RequestMapping(value = "move/{sourceId}", method = RequestMethod.GET)
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
+    public String showMoveForm(
+            HttpServletRequest request,
+            @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
+            @PathVariable("sourceId") M source,
+            Searchable searchable,
+            Model model) {
+
+        model.addAttribute("source", source);
+
+        List<M> models = null;
+
+        //排除自己及子子孙孙
+        searchable.addSearchFilter("search.id.notEq", "id", SearchOperator.notEq, source.getId());
+        searchable.addSearchFilter(
+                "search.parentIds.notLike", "parentIds",
+                SearchOperator.notLike,
+                source.makeSelfAsNewParentIds()  + "%");
+
+        if(!async) {
+            models = treeableService.findAllBySort(searchable);
+        } else {
+            models = treeableService.findRootAndChild(searchable);
+        }
+
+        model.addAttribute("trees", convertToZtreeList(
+                request.getContextPath(),
+                models,
+                async));
+
+        model.addAttribute(Constants.OP_NAME, "移动节点");
+
+        return getViewPrefix() + "/moveForm";
+    }
+
+    @RequestMapping(value = "move/{sourceId}", method = RequestMethod.POST)
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
+    public String move(
+            HttpServletRequest request,
+            @RequestParam(value = Constants.BACK_URL) String backURL,
+            @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
+            @PathVariable("sourceId") M source,
+            @RequestParam("targetId") M target,
+            @RequestParam("moveType") String moveType,
+            Searchable searchable,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if(target.isRoot() && !moveType.equals("inner")) {
+            model.addAttribute(Constants.ERROR, "不能移动到根节点之前或之后");
+            return showMoveForm(request, async, source, searchable, model);
+        }
+
+        treeableService.move(source, target, moveType);
+
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动节点成功");
+        return redirectToUrl(backURL);
+    }
+
+
+
+    /////////////////////////////////////ajax///////////////////////////////////////////////
 
     @RequestMapping(value = "ajax/load")
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
@@ -132,126 +353,8 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return convertToZtreeList(request.getContextPath(), models, async && !asyncLoadAll);
     }
 
-    @RequestMapping(value = "maintain/{id}", method = RequestMethod.GET)
-    public String maintain(@PathVariable("id") M m, Model model) {
-        setCommonData(model);
-        model.addAttribute("m", m);
-        return getViewPrefix() + "/maintainForm";
-    }
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-    public String update(
-            Model model, HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file, @ModelAttribute("m") M m,
-            BindingResult result, RedirectAttributes redirectAttributes) {
-
-        if(!file.isEmpty()) {
-            m.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
-        }
-        if(result.hasErrors()) {
-            return maintain(m, model);
-        }
-
-        treeableService.update(m);
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
-        return "redirect:" + redirectUrl(null);
-    }
-
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
-    public String deleteSelfAndChildren(@ModelAttribute("m") M m, RedirectAttributes redirectAttributes) {
-        treeableService.deleteSelfAndChild(m);
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
-        return "redirect:" + redirectUrl(null);
-    }
-
-    @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.GET)
-    public String showAppendChildForm(@PathVariable("parentId") M parent, Model model) {
-        setCommonData(model);
-        model.addAttribute("parent", parent);
-        if(!model.containsAttribute("child")) {
-            model.addAttribute("child", newModel());
-        }
-        return getViewPrefix() + "/appendChildForm";
-    }
-
-    @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.POST)
-    public String appendChild(
-            Model model, HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file,
-            @PathVariable("parentId") M parent, @ModelAttribute("child") M child, BindingResult result,
-            RedirectAttributes redirectAttributes) {
-
-        setCommonData(model);
-
-        if(!file.isEmpty()) {
-            child.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
-        }
-        if (result.hasErrors()) {
-            return showAppendChildForm(parent, model);
-        }
-
-        treeableService.appendChild(parent, child);
-
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "添加子节点成功");
-        return "redirect:" + redirectUrl(null);
-    }
 
 
-    @RequestMapping(value = "move/{sourceId}", method = RequestMethod.GET)
-    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
-    public String showMoveForm(
-            HttpServletRequest request,
-            @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
-            @PathVariable("sourceId") M source,
-            Searchable searchable,
-            Model model) {
-
-        model.addAttribute("source", source);
-
-        List<M> models = null;
-
-        //排除自己及子子孙孙
-        searchable.addSearchFilter("search.id.notEq", "id", SearchOperator.notEq, source.getId());
-        searchable.addSearchFilter(
-                "search.parentIds.notLike", "parentIds",
-                SearchOperator.notLike,
-                source.makeSelfAsNewParentIds()  + "%");
-
-        if(!async) {
-            models = treeableService.findAllBySort(searchable);
-        } else {
-            models = treeableService.findRootAndChild(searchable);
-        }
-
-        model.addAttribute("trees", convertToZtreeList(
-                request.getContextPath(),
-                models,
-                async));
-        return getViewPrefix() + "/moveForm";
-    }
-
-    @RequestMapping(value = "move/{sourceId}", method = RequestMethod.POST)
-    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
-    public String move(
-            HttpServletRequest request,
-            @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
-            @PathVariable("sourceId") M source,
-            @RequestParam("targetId") M target,
-            @RequestParam("moveType") String moveType,
-            Searchable searchable,
-            Model model,
-            RedirectAttributes redirectAttributes) {
-
-        if(target.isRoot() && !moveType.equals("inner")) {
-            model.addAttribute(Constants.ERROR, "不能移动到根节点之前或之后");
-            return showMoveForm(request, async, source, searchable, model);
-        }
-
-        treeableService.move(source, target, moveType);
-
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动节点成功");
-        return "redirect:" + redirectUrl(null);
-    }
-
-    /////////////////////////////////////ajax///////////////////////////////////////////////
     @RequestMapping(value = "ajax/appendChild/{parentId}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxAppendChild(@PathVariable("parentId") M parent) {

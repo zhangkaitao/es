@@ -17,7 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,38 +49,25 @@ public final class SearchSpecifications {
 
                 List<Predicate> predicateList = Lists.newArrayList();
                 for(SearchFilter searchFilter : searchFilters) {
-
-                    String entityProperty = searchFilter.getEntityProperty();
-
-                    String[] names = StringUtils.split(entityProperty, ".");
-                    Path expression = null;
-                    for (String name : names) {
-                        boolean isCollection = name.contains("[") && name.contains("]");
-                        if(isCollection) {
-                            name = name.substring(0, name.indexOf('['));
-                        }
-                        if(expression == null) {
-                            if(isCollection) {
-                                expression = root.join(name);
-                            } else {
-                                expression = root.get(name);
-                            }
-                        } else {
-                            if(isCollection && expression instanceof Join) {
-                                expression = ((Join) expression).join(name);
-                            } else {
-                                expression = expression.get(name);
-                            }
-                        }
-                    }
-
                     try {
-                        predicateList.add(transformOperatorToPredicate(searchFilter, cb, expression));
+                        Path path = toPath(root, searchFilter);
+                        Predicate predicate = transformOperatorToPredicate(searchFilter, cb, path);
+                        //拼or
+                        if(searchFilter.hasOrSearchFilters()) {
+                            List<Predicate> orPredicates = Lists.newArrayList(predicate);
+                            for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
+                                Path orPath = toPath(root, orSearchFilter);
+                                orPredicates.add(transformOperatorToPredicate(orSearchFilter, cb, orPath));
+                            }
+
+                            predicate = cb.or(orPredicates.toArray(new Predicate[0]));
+                        }
+
+                        predicateList.add(predicate);
                     } catch (ClassCastException e) {
                         throw new SearchException(
                                 "search class cast error. search property:" + searchFilter.getSearchProperty() +
-                                ",operator:" + searchFilter.getOperatorStr() + ",value:" + searchFilter.getValue()
-                                , e);
+                                ",operator:" + searchFilter.getOperatorStr() + ",value:" + searchFilter.getValue(), e);
                     }
                 }
 
@@ -89,6 +75,33 @@ public final class SearchSpecifications {
             }
         };
 
+    }
+
+    private static <T> Path toPath(Root<T> root, SearchFilter searchFilter) {
+        String entityProperty = searchFilter.getEntityProperty();
+
+        String[] names = StringUtils.split(entityProperty, ".");
+        Path expression = null;
+        for (String name : names) {
+            boolean isCollection = name.contains("[") && name.contains("]");
+            if(isCollection) {
+                name = name.substring(0, name.indexOf('['));
+            }
+            if(expression == null) {
+                if(isCollection) {
+                    expression = root.join(name);
+                } else {
+                    expression = root.get(name);
+                }
+            } else {
+                if(isCollection && expression instanceof Join) {
+                    expression = ((Join) expression).join(name);
+                } else {
+                    expression = expression.get(name);
+                }
+            }
+        }
+        return expression;
     }
 
 
@@ -104,7 +117,7 @@ public final class SearchSpecifications {
 
         Object value = searchFilter.getValue();
 
-        SearchOperator operator = searchFilter.getSpecificationOperator();
+        SearchOperator operator = searchFilter.getOperator();
 
         switch (operator) {
             case eq :

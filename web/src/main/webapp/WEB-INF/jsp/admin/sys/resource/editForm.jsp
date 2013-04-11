@@ -1,18 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-
 <es:contentHeader/>
+<div class="panel">
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a>
-            <i class="icon-edit"></i>
-            维护资源树
-        </a>
-    </li>
-</ul>
-<form:form id="maintainForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
+    <%@include file="nav.jspf"%>
 
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
         <es:showGlobalError commandName="m"/>
 
         <form:hidden path="id"/>
@@ -26,6 +19,7 @@
                 <form:input path="name" cssClass="validate[required,custom[name]]" placeholder="小于50个字符"/>
             </div>
         </div>
+
 
         <div class="control-group">
             <form:label path="identity" cssClass="control-label">资源标识</form:label>
@@ -43,7 +37,7 @@
 
 
 
-    <c:if test="${not empty m.icon}">
+        <c:if test="${not empty m.icon}">
             <div class="control-group">
                 <form:label path="icon" cssClass="control-label">当前显示的图标</form:label>
                 <div class="controls">
@@ -68,46 +62,52 @@
             </div>
         </div>
 
-        <div class="control-group">
-            <div class="controls">
-                <button id="updateTree" type="submit" class="btn btn-primary">
-                    <i class="icon-edit"></i>
-                    修改
-                </button>
-                <c:if test="${m.root == false}">
-                <button id="deleteTree" type="submit" class="btn btn-primary">
-                    <i class="icon-remove"></i>
-                    删除
-                </button>
-                </c:if>
-                <button id="appendChild" type="submit" class="btn btn-primary">
-                    <i class="icon-file"></i>
-                    添加子节点
-                </button>
-                <c:if test="${m.root == false}"><%-- 根节点不能移动 --%>
-                <button id="moveTree" type="submit" class="btn btn-primary">
-                    <i class="icon-move"></i>
-                    移动节点
-                </button>
-                </c:if>
+
+        <c:if test="${op eq '新增'}">
+                <c:set var="icon" value="icon-file"/>
+            </c:if>
+            <c:if test="${op eq '修改'}">
+                <c:set var="icon" value="icon-edit"/>
+            </c:if>
+            <c:if test="${op eq '删除'}">
+                <c:set var="icon" value="icon-trash"/>
+            </c:if>
+
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="${icon}"></i>
+                            ${op}
+                    </button>
+                    <a href="<es:BackURL/>" class="btn">
+                        <i class="icon-reply"></i>
+                        返回
+                    </a>
+                </div>
             </div>
-        </div>
-</form:form>
+
+
+    </form:form>
 </div>
 <es:contentFooter/>
-<%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
-$(function () {
-    $.validationEngineLanguage.allRules.name = {
-        "regex": /^.{1,50}$/,
-        "alertText": "* 小于50个字符"
-    };
-    var validationEngine = $("#maintainForm").validationEngine();
-    <es:showFieldError commandName="m"/>
-
-
-    $.zTree.initMaintainBtn("${ctx}/admin/sys/resource", "${m.id}", ${not empty param.async and param.async});
-
-
-});
+    $(function () {
+        <c:choose>
+            <c:when test="${op eq '删除'}">
+                //删除时不验证 并把表单readonly
+                $.app.readonlyForm($("#editForm"), ${m.root});
+            </c:when>
+            <c:when test="${op eq '查看'}">
+                $.app.readonlyForm($("#editForm"), true);
+            </c:when>
+            <c:otherwise>
+                $.validationEngineLanguage.allRules.name = {
+                    "regex": /^.{1,50}$/,
+                    "alertText": "* 小于50个字符"
+                };
+                var validationEngine = $("#editForm").validationEngine();
+                <es:showFieldError commandName="m"/>
+            </c:otherwise>
+        </c:choose>
+    });
 </script>

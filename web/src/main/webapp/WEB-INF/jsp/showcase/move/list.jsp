@@ -38,7 +38,7 @@
                 </a>
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
-                    批量删除
+                    删除
                 </a>
                 <a id="reweight" class="btn">
                     <span class="icon-cog"></span>
