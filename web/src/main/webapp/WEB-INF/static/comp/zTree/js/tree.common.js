@@ -131,7 +131,8 @@ $.zTree = {
         function onRemove(e, treeId, treeNode) {
             var url = config.removeUrl.replace("{id}", treeNode.id);
             $.getJSON(url, function (data) {
-                location.reload();
+                //无需刷新
+//                location.reload();
             });
         }
 
@@ -144,7 +145,7 @@ $.zTree = {
         function onAdd(e, treeId, treeNode) {
             var url = config.addUrl.replace("{id}", treeNode.id);
             $.getJSON(url, function(newNode) {
-                location.reload();
+//                location.reload();
             });
         }
 
@@ -166,7 +167,7 @@ $.zTree = {
             var moveType = moveType;
             var url = config.moveUrl.replace("{sourceId}", sourceId).replace("{targetId}", targetId).replace("{moveType}", moveType);
             $.getJSON(url, function (newNode) {
-                location.reload();
+//                location.reload();
             });
         }
 
@@ -373,7 +374,7 @@ $.zTree = {
 
         $("#appendChild").click(function () {
             var checkbox = $.table.getFirstSelectedCheckbox(table);
-            if(checkbox.size() == 0) {
+            if(!checkbox.length) {
                 return;
             }
             window.location.href = appendChildUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
@@ -381,11 +382,11 @@ $.zTree = {
         });
         $("#moveTree").click(function () {
             var checkbox = $.table.getFirstSelectedCheckbox(table);
-            if(checkbox.size() == 0) {
+            if(!checkbox.length) {
                 return;
             }
 
-            if(checkbox.filter("[root='true']").size() > 0) {
+            if(checkbox.filter("[root='true']").length) {
                 $.app.alert({
                     message : "根节点不能移动！"
                 });
@@ -397,7 +398,7 @@ $.zTree = {
 
         $("#updateTree").click(function() {
             var checkbox = $.table.getFirstSelectedCheckbox(table);
-            if(checkbox.size() == 0) {
+            if(!checkbox.length) {
                 return;
             }
             window.location.href = updateUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
@@ -405,11 +406,11 @@ $.zTree = {
 
         $("#deleteTree").click(function () {
             var checkbox = $.table.getAllSelectedCheckbox(table);
-            if(checkbox.size() == 0) {
+            if(!checkbox.length) {
                 return;
             }
 
-            if(checkbox.filter("[root='true']").size() > 0) {
+            if(checkbox.filter("[root='true']").length) {
                 $.app.alert({
                     message : "您删除的数据中包含根节点，根节点不能删除！"
                 });

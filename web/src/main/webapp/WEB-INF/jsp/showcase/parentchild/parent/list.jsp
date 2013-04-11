@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 
-<div data-table="table" class="panel">
+<div id="container" data-table="table" class="panel">
 
     <ul class="nav nav-tabs">
         <li <c:if test="${empty param['search.show_eq']}">class="active"</c:if>>

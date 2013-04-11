@@ -30,8 +30,8 @@ $.app = {
         var iframeId = "iframe-" + panelId;
         var iframe = $("#" + iframeId);
 
-        if (iframe.size() == 0 || forceRefresh) {
-            if(iframe.size() == 0) {
+        if (!iframe.length || forceRefresh) {
+            if(!iframe.length) {
                 iframe = $("iframe[tabs=true]:last").clone(true);
                 iframe.prop("id", iframeId);
                 $("iframe[tabs=true]:last").after(iframe);
@@ -416,7 +416,7 @@ $.menus = {
             li.children("a").wrap("<div class='li-wrapper'></div>");
             var liWrapper = li.children(".li-wrapper");
             var liUL = li.find("ul");
-            var hasChild = liUL.size() > 0;
+            var hasChild = liUL.length;
             if (hasChild) {
                 liUL.hide();
                 liWrapper.prepend('<span class="' + branchOpenIconClass + '"></span>')
@@ -484,7 +484,7 @@ $.tabs = {
             var currentMenu = $("#menu-" + tabPanelId.replace("tabs-", ""));
             $("#menu .li-wrapper.active").removeClass("active");
 
-            if(currentMenu.size() > 0) {
+            if(currentMenu.length) {
                 //把父菜单展示出来
                 currentMenu.parents("ul").each(function(){
                     //不能使用“ul:hidden” 因为它是把只有隐藏的都查出来
@@ -537,7 +537,7 @@ $.tabs = {
         $("#iframe-" + panelId).remove();
 
         var currentMenu = $("#menu-" + panelId.replace("tabs-", ""));
-        if(currentMenu.size() > 0) {
+        if(currentMenu.length) {
             currentMenu.attr("id", "");
             currentMenu.attr("panelIndex", "");
             $("#menu .li-wrapper.active").removeClass("active");
@@ -586,7 +586,7 @@ $.tabs = {
             var currentTabPanel = $("#tabs-" + panelIdOrIndex);
         }
 
-        if (currentTabPanel.size() == 0) {
+        if (!currentTabPanel.length) {
             currentTabPanel = $.tabs.createTab(title, panelIdOrIndex);
         }
 
@@ -749,13 +749,13 @@ $.parentchild = {
         //如果有trId则用trId中的数据更新当前表单
         if(options.trId) {
             var $tr = $("#" + options.trId);
-            if($tr.size() > 0 && $tr.find(":input").size() > 0) {
+            if($tr.length && $tr.find(":input").length) {
                 //因为是按顺序保存的 所以按照顺序获取  第一个是checkbox 跳过
                 var index = 1;
                 $(":input", options.form).not(options.excludeInputSelector).each(function() {
                     var $input = $(this);
                     var $trInput = $tr.find(":input").eq(index++);
-                    if($trInput.size() == 0) {
+                    if(!$trInput.length) {
                         return;
                     }
                     var $trInputClone = $trInput.clone(true).show();
@@ -832,7 +832,7 @@ $.parentchild = {
 
         var $tr = $("<tr></tr>");
         $tr.prop("id", options.trId);
-        if($lastTr.size() == 0 || options.alwaysNew) {
+        if(!$lastTr.length || options.alwaysNew) {
             $childTbody.append($tr);
         } else {
             $lastTr.replaceWith($tr);
@@ -985,7 +985,7 @@ $.parentchild = {
         $.table.initCheckbox($childTable);
         //绑定在切换页面时的事件 防止误前进/后退 造成数据丢失
         $(window).on('beforeunload',function(){
-            if($childTable.find(":input").size() > 0) {
+            if($childTable.find(":input").length) {
                 return "确定离开当前编辑页面吗？";
             }
         });
@@ -994,7 +994,7 @@ $.parentchild = {
         });
         $(".btn-update-child").click(function() {
             var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked:first");
-            if($trs.size() == 0) {
+            if(!$trs.length) {
                 $.app.alert({message : "请先选择要修改的数据！"});
                 return;
             }
@@ -1003,7 +1003,7 @@ $.parentchild = {
 
         $(".btn-copy-child").click(function() {
             var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked:first");
-            if($trs.size() == 0) {
+            if(!$trs.length) {
                 $.app.alert({message : "请先选择要复制的数据！"});
                 return;
             }
@@ -1013,7 +1013,7 @@ $.parentchild = {
 
         $(".btn-batch-delete-child").click(function() {
             var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked");
-            if($trs.size() == 0) {
+            if(!$trs.length) {
                 $.app.alert({message : "请先选择要删除的数据！"});
                 return;
             }
@@ -1060,6 +1060,7 @@ $.parentchild = {
     initChildList : function($table, loadUrl) {
         var openIcon = "icon-plus-sign";
         var closeIcon = "icon-minus-sign";
+
         $table.find("tr ." + openIcon).click(function() {
             var $a = $(this);
             //只显示当前的 其余的都隐藏
@@ -1114,7 +1115,7 @@ $.table = {
      * @param table
      */
     initTable: function (table) {
-        if(!table || table.size() == 0 || table.attr("initialized") == "true") {
+        if(!table || !table.length || table.attr("initialized") == "true") {
             return;
         }
 
@@ -1192,7 +1193,7 @@ $.table = {
     initSearchForm : function(table) {
         var id = $(table).attr("id");
         var searchForm = table.closest("[data-table='" + id + "']").find(".search-form");
-        if(searchForm.size() == 0) {
+        if(!searchForm.length) {
             return;
         }
 
@@ -1234,7 +1235,7 @@ $.table = {
      * @param table
      */
     initSort: function (table) {
-        if (table.size() == 0) {
+        if (!table.length) {
             return;
         }
 
@@ -1297,7 +1298,7 @@ $.table = {
      */
     turnPage: function (pageSize, pn, child) {
         var table = $(child).closest(".table-pagination").prev("table");
-        if(table.size () == 0) {
+        if(!table.length) {
             table = $(child).closest("table");
         }
 
@@ -1355,7 +1356,7 @@ $.table = {
                         $("#" + containerId).replaceWith(data);
                     } else {
                         var pagination = table.next(".table-pagination");
-                        if(pagination.size() > 0) {
+                        if(pagination.length) {
                             pagination.remove();
                         }
                         table.replaceWith(data);
@@ -1381,7 +1382,7 @@ $.table = {
         var $dialog = table.closest(".ui-dialog");
 
         var url = table.data("url");
-        if(!url && $dialog.size() > 0) {
+        if(!url && $dialog.length) {
             //modalDialog
             url = $dialog.data("url");
         }
@@ -1445,7 +1446,7 @@ $.table = {
     //格式化url前缀，默认清除url ? 后边的
     formatUrlPrefix : function(urlPrefix, $table) {
 
-        if($table && $table.size() > 0) {
+        if($table && $table.length) {
             urlPrefix = decodeURIComponent($.table.tableURL($table));
         }
 
@@ -1460,7 +1461,7 @@ $.table = {
     },
 
     initBatchDeleteSelected : function($table, urlPrefix) {
-        if(!$table || $table.size() == 0) {
+        if(!$table || !$table.length) {
             return;
         }
 
@@ -1468,7 +1469,7 @@ $.table = {
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getAllSelectedCheckbox($table);
-            if(checkbox.size() == 0)  return;
+            if(!checkbox.length)  return;
 
             $.app.confirm({
                 message: "确定删除选择的数据吗？",
@@ -1481,7 +1482,7 @@ $.table = {
     }
     ,
     initUpdateSelected : function($table, urlPrefix) {
-        if(!$table || $table.size() == 0) {
+        if(!$table || !$table.length) {
             return;
         }
         var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-update");
@@ -1489,13 +1490,13 @@ $.table = {
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getFirstSelectedCheckbox($table);
-            if(checkbox.size() == 0)  return;
+            if(!checkbox.length)  return;
             var id = checkbox.val();
             window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.table.encodeTableURL($table);
         });
     },
     initCreate : function($table, urlPrefix) {
-        if(!$table || $table.size() == 0) {
+        if(!$table || !$table.length) {
             return;
         }
         var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-create");
@@ -1510,7 +1511,7 @@ $.table = {
         });
     },
     initTableBtn : function($table) {
-        if(!$table || $table.size() == 0) {
+        if(!$table || !$table.length) {
             return;
         }
         $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-batch-delete").each(function() {
@@ -1530,7 +1531,7 @@ $.table = {
     },
     getFirstSelectedCheckbox :function($table) {
         var checkbox = $("#table :checkbox:checked:first");
-        if(checkbox.size() == 0) {
+        if(!checkbox.length) {
             $.app.alert({
                 message : "请先选择要操作的数据！"
             });
@@ -1539,7 +1540,7 @@ $.table = {
     },
     getAllSelectedCheckbox :function($table) {
         var checkbox = $("#table :checkbox:checked");
-        if(checkbox.size() == 0) {
+        if(!checkbox.length) {
             $.app.alert({
                 message : "请先选择要操作的数据！"
             });
@@ -1556,7 +1557,7 @@ $.movable = {
      * @param urlPrefix
      */
     initMoveableTable : function(table) {
-        if(table.size() == 0) {
+        if(!table.length) {
             return;
         }
         var urlPrefix = table.data("move-url-prefix");
@@ -1633,7 +1634,7 @@ $.movable = {
             var fromTR = fromTD.closest("tr");
             var fromId = fromTR.prop("id");
             var nextTR = fromTR.next("tr");
-            if(nextTR.size() > 0) {
+            if(nextTR.length) {
                 move(fromTD, fromId, nextTR.prop("id"), "down");
             } else {
                 var preTR = fromTR.prev("tr");

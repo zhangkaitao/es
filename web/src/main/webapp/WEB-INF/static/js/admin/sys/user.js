@@ -27,7 +27,7 @@ function initValidator(form) {
 function initUserListButton() {
     $(".change-password").click(function() {
         var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-        if(checkbox.size() == 0) return;
+        if(!checkbox.length) return;
         var id = checkbox.val();
         var url = ctx + "/admin/sys/user/changePassword?" + checkbox.serialize();
 
@@ -45,7 +45,7 @@ function initUserListButton() {
 
     $(".block-user,.unblocked-user").click(function() {
         var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-        if(checkbox.size() == 0) return;
+        if(!checkbox.length) return;
         var id = checkbox.val();
         var status = $(this).is(".unblocked-user") ? "normal" : "blocked";
         var url = ctx + "/admin/sys/user/changeStatus/" + status + "?" + checkbox.serialize();
@@ -66,7 +66,7 @@ function initUserListButton() {
     });
     $(".status-history").click(function() {
         var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-        if(checkbox.size() == 0) return;
+        if(!checkbox.length) return;
         var ids = $.app.joinVar(checkbox.val());
         var url = ctx + "/admin/sys/user/statusHistory?search.user.id_eq=" + ids;
 
@@ -75,7 +75,7 @@ function initUserListButton() {
     $(".last-online-info").click(function() {
 
         var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-        if(checkbox.size() == 0) return;
+        if(!checkbox.length) return;
         var ids = $.app.joinVar(checkbox.val());
         var url = ctx + "/admin/sys/user/lastOnline?search.userId_eq=" + ids;
 
@@ -86,7 +86,7 @@ function initUserListButton() {
     $(".recycle").click(function() {
 
         var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-        if(checkbox.size() == 0) return;
+        if(!checkbox.length) return;
 
 
         var url = ctx + "/admin/sys/user/recycle?" + checkbox.serialize();
@@ -104,7 +104,7 @@ function initUserListButton() {
 function initOnlineListButton() {
     $(".btn-force-logout").click(function() {
         var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-        if(checkbox.size() == 0) {
+        if(!checkbox.length) {
             return;
         }
         $.app.confirm({

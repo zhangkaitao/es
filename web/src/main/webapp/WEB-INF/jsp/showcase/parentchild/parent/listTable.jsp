@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table id="table" class="sort-table table table-bordered table-hover">
+<table id="table" class="sort-table table table-bordered table-hover" data-async="true">
     <thead>
     <tr>
         <th style="width: 20px;">&nbsp;</th>
