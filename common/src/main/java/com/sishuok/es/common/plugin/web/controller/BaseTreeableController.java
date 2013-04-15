@@ -62,15 +62,20 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             HttpServletRequest request,
             @RequestParam(value = "searchName", required = false) String searchName,
             @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
-            Searchable searchable,Model model) {
+            Searchable searchable, Model model) {
 
         List<M> models = null;
 
         if(StringUtils.hasLength(searchName)) {
+            searchable.addSearchFilter("name_like", searchName);
+            models = treeableService.findAllByName(searchable, null);
             if(!async) { //非异步 查自己和子子孙孙
-                models = treeableService.findSelfAndChildrenByName(searchName, null, searchable.getPage().getSort());
+                searchable.removeSearchFilter("name_like");
+                List<M> children = treeableService.findChildren(models, searchable);
+                models.removeAll(children);
+                models.addAll(children);
             } else { //异步模式只查自己
-                models = treeableService.findAllByName(searchName, null, searchable.getPage().getSort());
+
 
             }
         } else {
@@ -100,7 +105,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         if(current != null) {
             SearchFilter searchFilter =
-                    new SearchFilter("parentIds", SearchOperator.suffixLike, current.makeSelfAsNewParentIds()).
+                    new SearchFilter("parentIds", SearchOperator.prefixLike, current.makeSelfAsNewParentIds()).
                     or("id", SearchOperator.eq, current.getId());
 
             searchable.addSearchFilter(searchFilter);
@@ -199,7 +204,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         Searchable searchable = SearchableBuilder.newInstance()
                 .addSearchFilter("id", SearchOperator.in, ids)
                 .buildSearchable();
-        List<M> mList = baseService.findAllByNoPage(searchable);
+        List<M> mList = baseService.findAllByNoPageNoSort(searchable);
         for(M m : mList) {
             if(m.isRoot()) {
                 redirectAttributes.addFlashAttribute(Constants.ERROR, "您删除的数据中包含根节点，根节点不能删除");
@@ -264,9 +269,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         List<M> models = null;
 
         //排除自己及子子孙孙
-        searchable.addSearchFilter("search.id.notEq", "id", SearchOperator.notEq, source.getId());
+        searchable.addSearchFilter("id", SearchOperator.notEq, source.getId());
         searchable.addSearchFilter(
-                "search.parentIds.notLike", "parentIds",
+                "parentIds",
                 SearchOperator.notLike,
                 source.makeSelfAsNewParentIds()  + "%");
 
@@ -322,47 +327,55 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @RequestParam(value = "async", defaultValue = "true") boolean async,
             @RequestParam(value = "asyncLoadAll", defaultValue = "false") boolean asyncLoadAll,
             @RequestParam(value = "searchName", required = false) String searchName,
-            @RequestParam(value = "id", required = false, defaultValue = "0") ID parentId,
+            @RequestParam(value = "id", required = false) ID parentId,
             @RequestParam(value = "excludeId", required = false) ID excludeId,
             Searchable searchable) {
 
         M excludeM = treeableService.findOne(excludeId);
 
-        if(async && !asyncLoadAll) { //异步模式下 且非异步加载所有
-            if(parentId != null) { //只查某个节点下的 异步
-                searchable.addSearchFilter("parentId", SearchOperator.eq, parentId);
-            }
-            if(excludeM != null) { //排除自己 及 子子孙孙
-                searchable.addSearchFilter("id", SearchOperator.notEq, excludeId);
-                searchable.addSearchFilter("parentIds", SearchOperator.notLike, excludeM.makeSelfAsNewParentIds() + "%");
-            }
-        }
-
         List<M> models = null;
 
         if(StringUtils.hasLength(searchName)) {//按name模糊查
+            searchable.addSearchFilter("name_like", searchName);
+            models = treeableService.findAllByName(searchable, excludeM);
             if(!async || asyncLoadAll) {//非异步模式 查自己及子子孙孙 但排除
-                models = treeableService.findSelfAndChildrenByName(searchName, excludeM, searchable.getPage().getSort());
+                searchable.removeSearchFilter("name_like");
+                List<M> children = treeableService.findChildren(models, searchable);
+                models.removeAll(children);
+                models.addAll(children);
             } else { //异步模式 只查匹配的一级
-                models = treeableService.findAllByName(searchName, excludeM, searchable.getPage().getSort());
+
             }
         } else { //根据有没有parentId加载
-            models = treeableService.findAllBySort(searchable);
+
+            if(parentId != null) { //只查某个节点下的 异步
+                searchable.addSearchFilter("parentId", SearchOperator.eq, parentId);
+            }
+
+            if(async && !asyncLoadAll) { //异步模式下 且非异步加载所有
+                //排除自己 及 子子孙孙
+                treeableService.addExcludeSearchFilter(searchable, excludeM);
+
+            }
+
+            if(parentId == null && !asyncLoadAll) {
+                models = treeableService.findRootAndChild(searchable);
+            } else {
+                models = treeableService.findAllBySort(searchable);
+            }
         }
 
-        return convertToZtreeList(request.getContextPath(), models, async && !asyncLoadAll);
+        return convertToZtreeList(request.getContextPath(), models, async && !asyncLoadAll && parentId != null);
     }
-
-
 
     @RequestMapping(value = "ajax/appendChild/{parentId}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxAppendChild(@PathVariable("parentId") M parent) {
+    public Object ajaxAppendChild(HttpServletRequest request, @PathVariable("parentId") M parent) {
 
         M child = newModel();
         child.setName("新节点");
         treeableService.appendChild(parent, child);
-        return child;
+        return convertToZtree(child, request.getContextPath(), true);
     }
 
     @RequestMapping(value = "ajax/delete/{id}", method = RequestMethod.GET, produces = "application/json")
@@ -375,10 +388,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = "ajax/rename/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxRename(@PathVariable("id") M tree, @RequestParam("newName") String newName) {
+    public Object ajaxRename(HttpServletRequest request, @PathVariable("id") M tree, @RequestParam("newName") String newName) {
         tree.setName(newName);
         treeableService.update(tree);
-        return tree;
+        return convertToZtree(tree, request.getContextPath(), true);
     }
 
 
@@ -396,9 +409,14 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
 
     @RequestMapping("ajax/autocomplete")
+    @PageableDefaults(value = 30)
     @ResponseBody
-    public Set<String> autocomplete(@RequestParam("term") String term) {
-        return treeableService.findNames(term);
+    public Set<String> autocomplete(
+            Searchable searchable,
+            @RequestParam("term") String term,
+            @RequestParam(value = "excludeId", required = false) ID excludeId) {
+
+        return treeableService.findNames(searchable, term, excludeId);
     }
 
 
@@ -423,19 +441,23 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
         for(M m : models) {
-            ZTree<ID> zTree = new ZTree<ID>();
-            zTree.setId(m.getId());
-            zTree.setpId(m.getParentId());
-            zTree.setName(m.getName());
-            zTree.setIcon(contextPath + "/" + m.getIcon());
-            zTree.setOpen(!async);
-            zTree.setRoot(m.isRoot());
-            zTree.setIsParent(m.isHasChildren());
-            zTree.setClick("treeNodeClick(this, " + m.getId() + ", "+ m.getParentId() +")");
-
+            ZTree zTree = convertToZtree(m, contextPath, !async);
             zTrees.add(zTree);
         }
         return zTrees;
+    }
+
+    private ZTree convertToZtree(M m, String contextPath, boolean open) {
+        ZTree<ID> zTree = new ZTree<ID>();
+        zTree.setId(m.getId());
+        zTree.setpId(m.getParentId());
+        zTree.setName(m.getName());
+        zTree.setIcon(contextPath + "/" + m.getIcon());
+        zTree.setOpen(open);
+        zTree.setRoot(m.isRoot());
+        zTree.setIsParent(m.isHasChildren());
+
+        return zTree;
     }
 
 

@@ -19,6 +19,7 @@ $.app = {
             $.tabs.activeTab(99999999, "个人资料", url, true)
         });
 
+//        $("#menu").niceScroll({styler:"fb",cursorcolor:"#777", zindex:1});
     },
     /**
      * 异步加载url内容到tab
@@ -63,9 +64,14 @@ $.app = {
         $.tabs.initTabScrollHideOrShowMoveBtn(panelId);
     },
 
-    waiting : function(message) {
+    waiting : function(message, isSmall) {
         if(!message) {
             message = "装载中...";
+        }
+
+        message = '<img src="' + ctx + '/static/images/loading.gif" '+ (isSmall ? "width='20px'" : "") +'/> ' + message;
+        if(!isSmall) {
+            message = "<h4>"+message+"</h4>";
         }
         $.blockUI({
             fadeIn: 700,
@@ -78,10 +84,11 @@ $.app = {
                 '-webkit-border-radius': '10px',
                 '-moz-border-radius': '10px',
                 opacity:1,
-                color: '#000'
+                color: '#000',
+                width: isSmall ? "40%" : "30%"
 
             },
-            message: '<h4><img src="' + ctx + '/static/images/loading.gif" /> ' + message + ' </h4>'
+            message: message
         });
     }
     ,
@@ -384,6 +391,9 @@ $.layouts = {
                 togglerLength_open : 0
                 ,  resizable : false
                 ,  size: 95
+            },
+            south: {
+                resizable:false
             }
         });
     }
@@ -1446,7 +1456,11 @@ $.table = {
     //格式化url前缀，默认清除url ? 后边的
     formatUrlPrefix : function(urlPrefix, $table) {
 
-        if($table && $table.length) {
+        if(!urlPrefix) {
+            urlPrefix = $table.data("prefix-url");
+        }
+
+        if(!urlPrefix && $table && $table.length) {
             urlPrefix = decodeURIComponent($.table.tableURL($table));
         }
 
@@ -1849,7 +1863,11 @@ $(function () {
                 }
             }
         });
-    })
+    });
+
+//    if(!$("body").is(".index")) {
+//        $("html").niceScroll({styler:"fb",cursorcolor:"#777", zindex:1});
+//    }
 
     $(document).ajaxError(function(event, request, settings) {
         if(request.status == 0) {// 中断的不处理

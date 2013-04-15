@@ -6,9 +6,10 @@
 package com.sishuok.es.sys.user.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
+import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.entity.UserOrganization;
+import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -24,6 +25,6 @@ public interface UserRepository extends BaseRepository<User, Long> {
 
     User findByEmail(String email);
 
-    @Query("from UserOrganization where user=?1 and organization=?2")
-    UserOrganization findUserOrganization(User user, Organization organization);
+    @Query("from UserOrganizationJob where user=?1 and organization=?2 and job=?3")
+    UserOrganizationJob findUserOrganization(User user, Organization organization, Job job);
 }

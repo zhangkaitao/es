@@ -8,9 +8,11 @@
             |
             <a class="reverse-all" href="javascript:;">反选</a>
         </th>
-        <th style="width: 100px" sort="id">编号</th>
-        <th style="width: 150px" sort="name">姓名</th>
-        <th>是否显示</th>
+        <th style="width: 60px" sort="id">编号</th>
+        <th style="width: 150px" sort="name">名称</th>
+        <th sort="identity">资源标识</th>
+        <th sort="url">URL地址</th>
+        <th style="width: 65px">是否显示</th>
     </tr>
     <tbody>
     <c:forEach items="${page.content}" var="m">
@@ -20,6 +22,12 @@
                 <a class="btn btn-link btn-edit" href="${ctx}/admin/sys/resource/${m.id}">${m.id}</a>
             </td>
             <td>${m.name}</td>
+            <td>
+                <div style="width: 80px;overflow: hidden" data-toggle="tooltip" title="${m.identity}">${m.identity}</div>
+            </td>
+            <td>
+                <div style="width: 80px;overflow: hidden" data-toggle="tooltip" title="${m.url}">${m.url}</div>
+            </td>
             <td>${m.show ? '是' : '否'}</td>
         </tr>
     </c:forEach>

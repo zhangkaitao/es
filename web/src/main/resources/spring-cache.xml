@@ -5,7 +5,7 @@
        xsi:schemaLocation="
           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
-      default-lazy-init="true">
+      default-lazy-init="true" >
 
     <!--<cache:annotation-driven cache-manager="cacheManager" proxy-target-class="true"/>-->
 

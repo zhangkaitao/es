@@ -41,26 +41,50 @@
         </li>
     </ul>
 
-    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
+    <form:form id="editForm" method="post" commandName="m" cssClass="form-inline form-horizontal form-small">
 
-            <es:showGlobalError commandName="m"/>
+        <es:showGlobalError commandName="m"/>
 
-            <form:hidden path="id"/>
+        <form:hidden path="id"/>
 
-            <div class="control-group">
+        <div id="roleInfo">
+            <h4 class="hr">基本信息</h4>
+
+            <div class="control-group span3">
                 <form:label path="name" cssClass="control-label">角色名称</form:label>
                 <div class="controls">
-                    <form:input path="name" cssClass="validate[required]" placeholder="角色描述名"/>
+                    <form:input path="name" cssClass="validate[required] input-medium" placeholder="角色描述名"/>
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group span3">
                 <form:label path="role" cssClass="control-label">角色标识</form:label>
                 <div class="controls">
-                    <form:input path="role" cssClass="validate[required]" placeholder="程序中使用的名称"/>
+                    <form:input path="role" cssClass="validate[required] input-medium" placeholder="程序中使用的名称"/>
                 </div>
             </div>
 
+            <div class="control-group span3">
+                <form:label path="description" cssClass="control-label">详细描述</form:label>
+                <div class="controls">
+                    <form:input path="description"/>
+                </div>
+            </div>
+        </div>
+        <div id="permissionInfo">
+            <h4 class="hr">授权信息</h4>
+
+            <div id="resource">
+
+            </div>
+
+            <div id="permission">
+
+            </div>
+
+        </div>
+
+            <div class="clearfix"></div>
 
             <c:if test="${op eq '新增'}">
                 <c:set var="icon" value="icon-file"/>
@@ -72,8 +96,8 @@
                 <c:set var="icon" value="icon-trash"/>
             </c:if>
 
-            <div class="control-group">
-                <div class="controls">
+            <div class="control-group left-group">
+                <div>
                     <button type="submit" class="btn btn-primary">
                         <i class="${icon}"></i>
                             ${op}

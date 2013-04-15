@@ -162,7 +162,7 @@
                 <c:set var="icon" value="icon-trash"/>
             </c:if>
 
-            <div class="control-group" style="width: 100%;float: left;padding: 20px 0;">
+            <div class="control-group left-group">
                 <div>
                     <button type="submit" class="btn btn-primary">
                         <i class="${icon}"></i>

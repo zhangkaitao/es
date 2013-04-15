@@ -17,7 +17,6 @@ public class ZTree<ID extends Serializable> implements Serializable {
     private String name;
     private String icon;
     private boolean open;
-    private String click;
     private boolean root;
     private boolean isParent;
 
@@ -61,13 +60,6 @@ public class ZTree<ID extends Serializable> implements Serializable {
         this.open = open;
     }
 
-    public String getClick() {
-        return click;
-    }
-
-    public void setClick(String click) {
-        this.click = click;
-    }
 
     public boolean isRoot() {
         return root;

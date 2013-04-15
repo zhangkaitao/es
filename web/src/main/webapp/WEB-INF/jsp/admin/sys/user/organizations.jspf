@@ -7,19 +7,19 @@
     </tr>
     </thead>
     <tbody>
-    <c:if test="${empty user.organizations}">
+    <c:if test="${empty user.displayOrganizationJobs}">
         <tr>
             <td colspan="2">无</td>
         </tr>
     </c:if>
-    <c:forEach items="${user.organizations}" var="o">
+    <c:forEach items="${user.displayOrganizationJobs}" var="o">
         <tr>
             <td>
-                <sys:showOrganizationName id="${o.organization.id}"/>
+                <sys:showOrganizationName id="${o.key.id}"/>
             </td>
             <td>
-                <c:forEach items="${o.jobs}" var="j">
-                    <sys:showJobName id="${j.id}"/><br/>
+                <c:forEach items="${o.value}" var="oj">
+                    <sys:showJobName id="${oj.job.id}"/><br/>
                 </c:forEach>
             </td>
         </tr>

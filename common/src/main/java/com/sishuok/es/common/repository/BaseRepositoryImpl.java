@@ -8,15 +8,9 @@ package com.sishuok.es.common.repository;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.repository.callback.SearchCallback;
-import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import com.sishuok.es.common.utils.ReflectUtils;
 import com.sishuok.es.common.utils.SpringUtils;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
-import org.springframework.orm.jpa.EntityManagerPlusOperations;
-import org.springframework.orm.jpa.ExtendedEntityManagerCreator;
+import org.springframework.data.domain.*;
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
 
 import javax.persistence.*;
@@ -46,12 +40,17 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
     /**
      * 查询所有的QL
      */
-    protected final String QL_LIST_ALL;
+    protected String findAllQL;
     /**
      * 统计QL
      */
-    protected final String QL_COUNT_ALL;
+    protected String countAllQL;
 
+    private SearchCallback searchCallback = SearchCallback.DEFAULT;
+
+    public void setSearchCallback(SearchCallback searchCallback) {
+        this.searchCallback = searchCallback;
+    }
 
     protected BaseRepositoryImpl() {
         this(null);
@@ -72,14 +71,17 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
                 break;
             }
         }
-        QL_LIST_ALL = String.format("select o from %s o where 1=1 ", this.entityClass.getSimpleName());
-        QL_COUNT_ALL = String.format("select count(o) from %s o where 1=1 ", this.entityClass.getSimpleName());
-
+        findAllQL = String.format("select o from %s o where 1=1 ", this.entityClass.getSimpleName());
+        countAllQL = String.format("select count(o) from %s o where 1=1 ", this.entityClass.getSimpleName());
     }
 
+    public void setFindAllQL(String findAllQL) {
+        this.findAllQL = findAllQL;
+    }
 
-
-
+    public void setCountAllQL(String countAllQL) {
+        this.countAllQL = countAllQL;
+    }
 
     /**
      * <p>ql条件查询<br/>
@@ -93,7 +95,7 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @return
      */
     public List<M> find(final String ql, final Searchable search, SearchCallback searchCallback) {
-        convertSearchable(search);
+        BaseRepositoryImplHelper.convertSearchable(search, entityClass);
 
         StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
@@ -113,8 +115,8 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @param searchCallback
      * @return
      */
-    protected Long count(final String ql, final Searchable search, SearchCallback searchCallback) {
-        convertSearchable(search);
+    protected long count(final String ql, final Searchable search, SearchCallback searchCallback) {
+        BaseRepositoryImplHelper.convertSearchable(search, entityClass);
         StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
         Query query = entityManager.createQuery(s.toString());
@@ -130,7 +132,7 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @return
      */
     public M findOne(String ql, final Searchable search, SearchCallback searchCallback) {
-        convertSearchable(search);
+        BaseRepositoryImplHelper.convertSearchable(search, entityClass);
         StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, search);
         searchCallback.prepareOrder(s, search);
@@ -145,6 +147,12 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
         }
         return null;
     }
+
+
+
+
+
+
 
     /**
      * @see BaseRepositoryImpl#findAll(String, org.springframework.data.domain.Pageable, Object...) ;
@@ -167,8 +175,8 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @return
      */
     public <T> List<T> findAll(final String ql, final Pageable pageable, final Object... params) {
-        Query query = entityManager.createQuery(ql + prepareOrder(pageable != null ? pageable.getSort() : null));
-        setParameters(query, params);
+        Query query = entityManager.createQuery(ql + BaseRepositoryImplHelper.prepareOrder(pageable != null ? pageable.getSort() : null));
+        BaseRepositoryImplHelper.setParameters(query, params);
         if (pageable != null) {
             query.setFirstResult(pageable.getOffset());
             query.setMaxResults(pageable.getPageSize());
@@ -188,19 +196,9 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      */
     public <T> List<T> findAll(final String ql, final Sort sort, final Object... params) {
 
-        Query query = entityManager.createQuery(ql + prepareOrder(sort));
-        setParameters(query, params);
+        Query query = entityManager.createQuery(ql + BaseRepositoryImplHelper.prepareOrder(sort));
+        BaseRepositoryImplHelper.setParameters(query, params);
         return query.getResultList();
-    }
-
-    private String prepareOrder(Sort sort) {
-        if(sort == null || !sort.iterator().hasNext()) {
-            return "";
-        }
-        StringBuilder orderBy = new StringBuilder("");
-        orderBy.append(" order by ");
-        orderBy.append(sort.toString().replace(":", " "));
-        return orderBy.toString();
     }
 
 
@@ -211,11 +209,11 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      * @param params
      * @return
      */
-    protected Long countAll(final String ql, final Object... params) {
-           Query query = entityManager.createQuery(ql);
-           setParameters(query, params);
-          return (Long)query.getSingleResult();
-       }
+    protected long countAll(final String ql, final Object... params) {
+        Query query = entityManager.createQuery(ql);
+        BaseRepositoryImplHelper.setParameters(query, params);
+        return (Long)query.getSingleResult();
+    }
 
     /**
      * <p>根据ql和按照索引顺序的params查询一个实体<br/>
@@ -243,40 +241,61 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
      */
     public int batchUpdate(final String ql, final Object... params) {
         Query query = entityManager.createQuery(ql);
-        setParameters(query, params);
+        BaseRepositoryImplHelper.setParameters(query, params);
         return query.executeUpdate();
     }
 
-    /**
-     * 按顺序设置Query参数
-     * @param query
-     * @param params
-     */
-    protected void setParameters(Query query, Object[] params) {
-        if (params != null) {
-            for (int i = 0; i < params.length; i++) {
-                query.setParameter(i + 1, params[i]);
-            }
-        }
+
+    /** 与Spring Data Jpa类似的实现 */
+
+    public List<M> findAll() {
+        return findAll(findAllQL);
     }
 
-    /**
-     * 将Searchable中的字符串数据转换为Entity的实际值
-     * @param search
-     */
-    protected void convertSearchable(Searchable search) {
-        SearchableConvertUtils.convertSearchValueToEntityValue(search, entityClass);
+    public List<M> findAll(Sort sort) {
+        return findAll(findAllQL, sort);
+    }
+
+    public Page<M> findAll(Pageable pageable) {
+        return new PageImpl<M>(
+            this.<M>findAll(findAllQL, pageable),
+            pageable,
+            countAll(countAllQL)
+        );
+    }
+
+    public Page<M> findAll(Searchable searchable) {
+        return new PageImpl<M>(
+                find(findAllQL, searchable, searchCallback),
+                searchable.getPage(),
+                count(countAllQL, searchable, searchCallback)
+        );
+    }
+
+    public List<M> findAllByNoPageNoSort(Searchable searchable) {
+        searchable.removePageable();
+        searchable.removeSort();
+        return find(findAllQL, searchable, searchCallback);
+    }
+
+    public List<M> findAllBySort(Searchable searchable) {
+        searchable.removePageable();
+        return find(findAllQL, searchable, searchCallback);
+    }
+
+    public long count(Searchable searchable) {
+        return count(countAllQL, searchable, searchCallback);
     }
 
 
     public static <M extends AbstractEntity, ID extends Serializable> BaseRepositoryImpl<M, ID> defaultBaseRepositoryImpl(Class<M> entityClass) {
         DefaultRepositoryImpl<M, ID> defaultRepository = new DefaultRepositoryImpl<M, ID>(entityClass);
         EntityManagerFactory emf = SpringUtils.getBean(EntityManagerFactory.class);
-//        EntityManager entityManager = EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
-//
+
         defaultRepository.entityManager = SharedEntityManagerCreator.createSharedEntityManager(emf);
         return defaultRepository;
     }
+
 
     private static class DefaultRepositoryImpl<M extends AbstractEntity, ID extends Serializable> extends BaseRepositoryImpl<M, ID> {
         public DefaultRepositoryImpl(Class<M> entityClass) {

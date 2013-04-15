@@ -8,13 +8,14 @@ package com.sishuok.es.sys.user.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.entity.UserOrganization;
+import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.sys.user.web.bind.annotation.CurrentUser;
@@ -22,13 +23,13 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Arrays;
 
 /**
  * <p>User: Zhang Kaitao
@@ -55,6 +56,45 @@ public class UserController extends BaseCRUDController<User, Long> {
     }
 
 
+
+    @RequestMapping(value = "main", method = RequestMethod.GET)
+    public String main(Model model) {
+        return getViewPrefix() + "/main";
+    }
+
+    @RequestMapping(value = "tree", method = RequestMethod.GET)
+    public String tree(Model model) {
+        return getViewPrefix() + "/tree";
+    }
+
+
+    @RequestMapping(value = "list/discard", method = RequestMethod.GET)
+    @PageableDefaults(sort = "id=desc")
+    public String list(Searchable searchable, Model model) {
+        throw new RuntimeException("discarded method");
+    }
+
+    @RequestMapping(value = {"{organization}/{job}"}, method = RequestMethod.GET)
+    @PageableDefaults(sort = "id=desc")
+    @SearchableDefaults(value = "deleted_eq=0")
+    public String list(
+            @PathVariable("organization") Organization organization,
+            @PathVariable("job") Job job,
+            Searchable searchable, Model model) {
+
+        setCommonData(model);
+
+        if(organization != null && !organization.isRoot()) {
+            searchable.addSearchFilter("organization", organization);
+        }
+        if(job != null && !job.isRoot()) {
+            searchable.addSearchFilter("job", job);
+        }
+
+        return super.list(searchable, model);
+    }
+
+
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)
     @Override
     public String create(
@@ -77,61 +117,55 @@ public class UserController extends BaseCRUDController<User, Long> {
     public String createWithOrganization(
             Model model,
             @Valid @ModelAttribute("m") User m, BindingResult result,
-            @RequestParam(value = "userOrganizationId", required = false) Long[] userOrganizationIds,
             @RequestParam(value = "organizationId", required = false) Long[] organizationIds,
             @RequestParam(value = "jobId", required = false) Long[][] jobIds,
             RedirectAttributes redirectAttributes) {
 
-        fillUserOrganization(m, userOrganizationIds, organizationIds, jobIds);
+        fillUserOrganization(m, organizationIds, jobIds);
 
         return super.create(model, m, result, redirectAttributes);
     }
 
-    private void fillUserOrganization(User m, Long[] userOrganizationIds, Long[] organizationIds, Long[][] jobIds) {
-        if(!ArrayUtils.isEmpty(userOrganizationIds)) {
-            for(int i = 0, l = userOrganizationIds.length; i < l; i++) {
-                UserOrganization userOrganization = new UserOrganization();
-                if(userOrganizationIds[i] != 0) {
-                    userOrganization.setId(userOrganizationIds[i]);
-                }
-                userOrganization.setOrganization(new Organization(organizationIds[i]));
-                //仅新增/修改一个 spring会自动split（“，”）--->给数组
-                if(l == 1) {
-                    for(int j = 0, l2 = jobIds.length; j < l2; j++) {
-                        userOrganization.addJob(new Job(jobIds[j][0]));
-                    }
-                } else {
-                    Long[] jobId = jobIds[i];
-                    for(int j = 0, l2 = jobId.length; j < l2; j++) {
-                        userOrganization.addJob(new Job(jobId[j]));
-                    }
-                }
+    private void fillUserOrganization(User m, Long[] organizationIds, Long[][] jobIds) {
+        if(ArrayUtils.isEmpty(organizationIds)) {
+            return;
+        }
+        for (int i = 0, l = organizationIds.length; i < l; i++) {
 
-                m.addOrganization(userOrganization);
+            //仅新增/修改一个 spring会自动split（“，”）--->给数组
+            if (l == 1) {
+                for (int j = 0, l2 = jobIds.length; j < l2; j++) {
+                    UserOrganizationJob userOrganizationJob = new UserOrganizationJob();
+                    userOrganizationJob.setOrganization(new Organization(organizationIds[i]));
+                    userOrganizationJob.setJob(new Job(jobIds[i][0]));
+                    m.addOrganizationJob(userOrganizationJob);
+                }
+            } else {
+                Long[] jobId = jobIds[i];
+                for (int j = 0, l2 = jobId.length; j < l2; j++) {
+                    UserOrganizationJob userOrganizationJob = new UserOrganizationJob();
+                    userOrganizationJob.setOrganization(new Organization(organizationIds[i]));
+                    userOrganizationJob.setJob(new Job(jobId[j]));
+                    m.addOrganizationJob(userOrganizationJob);
+                }
             }
+
         }
     }
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public String updateWithOrganization(
             Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
-            @RequestParam(value = "userOrganizationId", required = false) Long[] userOrganizationIds,
             @RequestParam(value = "organizationId", required = false) Long[] organizationIds,
             @RequestParam(value = "jobId", required = false) Long[][] jobIds,
             @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
             RedirectAttributes redirectAttributes) {
 
-        fillUserOrganization(m, userOrganizationIds, organizationIds, jobIds);
+        fillUserOrganization(m, organizationIds, jobIds);
 
         return super.update(model, m, result, backURL, redirectAttributes);
     }
 
-    @SearchableDefaults(value = "deleted_eq=0")
-    @Override
-    public String list(Searchable searchable, Model model) {
-        setCommonData(model);
-        return super.list(searchable, model);
-    }
 
     @RequestMapping(value = "changePassword")
     public String changePassword(
@@ -143,7 +177,7 @@ public class UserController extends BaseCRUDController<User, Long> {
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "改密成功！");
 
-        return "redirect:" + request.getAttribute(Constants.BACK_URL);
+        return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
     }
 
     @RequestMapping(value = "changeStatus/{newStatus}")
@@ -163,7 +197,7 @@ public class UserController extends BaseCRUDController<User, Long> {
             redirectAttributes.addFlashAttribute(Constants.MESSAGE, "封禁成功！");
         }
 
-        return "redirect:" + request.getAttribute(Constants.BACK_URL);
+        return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
     }
 
     @RequestMapping(value = "recycle")
@@ -174,7 +208,7 @@ public class UserController extends BaseCRUDController<User, Long> {
             userService.update(user);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "还原成功！");
-        return "redirect:" + request.getAttribute(Constants.BACK_URL);
+        return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
     }
 
     /**

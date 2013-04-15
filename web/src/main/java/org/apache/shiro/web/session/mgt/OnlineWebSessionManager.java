@@ -50,10 +50,18 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
     @Override
     public void setAttribute(SessionKey sessionKey, Object attributeKey, Object value) throws InvalidSessionException {
         super.setAttribute(sessionKey, attributeKey, value);
-        if(value != null) {
+        if(value != null && needMarkAttributeChanged(attributeKey)) {
             OnlineSession s = (OnlineSession) doGetSession(sessionKey);
             s.markAttributeChanged();
         }
+    }
+
+    private boolean needMarkAttributeChanged(Object attributeKey) {
+        //优化 flash属性没必要持久化
+        if("org.springframework.web.servlet.support.SessionFlashMapManager.FLASH_MAPS".equals(attributeKey)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

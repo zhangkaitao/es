@@ -43,6 +43,7 @@ public class UserCacheAspect implements InitializingBean {
       * @param cacheName
      */
     public void setCacheName(String cacheName) {
+
         this.cacheName = cacheName;
     }
 

@@ -1,3 +1,4 @@
+<%@ page import="com.sishuok.es.sys.organization.entity.Job" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
@@ -45,6 +46,7 @@
         <es:showGlobalError commandName="m"/>
         <form:hidden path="id"/>
         <form:hidden path="deleted"/>
+        <form:hidden path="salt"/>
         <div id="baseinfo">
             <h4 class="hr">用户基本信息</h4>
             <div class="control-group span4">
@@ -153,18 +155,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${m.organizations}" var="o">
+                    <c:forEach items="${m.displayOrganizationJobs}" var="o">
                         <tr>
                             <td>
-                                <input type='hidden' name='userOrganizationId' value='${o.id}' readonly='true'>
-                                <input type='hidden' id='organizationId_${o.organization.id}' name='organizationId' value='${o.organization.id}'>
-                                <sys:showOrganizationName id="${o.organization.id}"/>
+                                <input type='hidden' id='organizationId_${o.key.id}' name='organizationId' value='${o.key.id}'>
+                                <sys:showOrganizationName id="${o.key.id}"/>
                             </td>
                             <td>
-                                <input type='hidden' name='jobId' value='${o.jobIds}'>
-                                <c:forEach items="${o.jobs}" var="j">
-                                    <sys:showJobName id="${j.id}"/><br/>
+                                <c:set var="jobIds" value=""/>
+                                <c:forEach items="${o.value}" var="oj" varStatus="status">
+                                    <c:set var="jobIds" value="${jobIds}${status.count == 1 ? '' : ','}${oj.job.id}"/>
+                                    <sys:showJobName id="${oj.job.id}"/><br/>
                                 </c:forEach>
+                                <input type='hidden' name='jobId' value='${jobIds}'>
                             </td>
                             <td>
                                 <a class='btn btn-link btn-edit btn-delete-organization' href='javascript:;'
@@ -189,7 +192,7 @@
             <c:set var="icon" value="icon-trash"/>
         </c:if>
 
-        <div class="control-group" style="width: 100%;float: left;padding: 20px 0;">
+        <div class="control-group left-group">
             <div>
                 <button type="submit" class="btn btn-primary">
                     <i class="${icon}"></i>
@@ -250,7 +253,6 @@
 
         $.zTree.initSelectTree({
             zNodes : [],
-            nodeType : "checkbox",
             urlPrefix : "${ctx}/admin/sys/organization/job",
             async : true,
             asyncLoadAll : true,
@@ -263,6 +265,12 @@
             },
             autocomplete : {
                 enable : true
+            },
+            setting :{
+                check : {
+                    enable:true,
+                    chkStyle:"checkbox"
+                }
             }
         });
 
@@ -291,7 +299,6 @@
             var template =
                     "<tr>" +
                         "<td>" +
-                            "<input type='hidden' name='userOrganizationId' value='0' readonly='true'>" +
                             "<input type='hidden' id='organizationId_{organizationId}' name='organizationId' value='{organizationId}'>" +
                             "{organizationName}" +
                         "</td>" +

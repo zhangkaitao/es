@@ -60,6 +60,12 @@
                     <form:input path="permission" cssClass="validate[required]" placeholder="程序中使用的名称"/>
                 </div>
             </div>
+            <div class="control-group">
+                <form:label path="description" cssClass="control-label">详细描述</form:label>
+                <div class="controls">
+                    <form:input path="description"/>
+                </div>
+            </div>
 
 
             <c:if test="${op eq '新增'}">

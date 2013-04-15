@@ -26,6 +26,9 @@
     Job job = jobService.findOne(id);
 
     List<String> names = Lists.newArrayList();
+
+    names.add(job.getName());
+
     if(showParents == true) {
         List<Job> parents = jobService.findAncestor(job.getParentIds());
         for(Job o : parents) {
@@ -35,6 +38,7 @@
             names.add(o.getName());
         }
     }
+
 
     for(int l = names.size() - 1, i = l; i >= 0; i--) {
         if(i != l) {

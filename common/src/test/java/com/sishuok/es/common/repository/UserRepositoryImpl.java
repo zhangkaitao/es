@@ -61,7 +61,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
      */
     public Page<User> findAllByDefault(final Searchable search) {
         long total = countAllByDefault(search);
-        List<User> contentList = find(QL_LIST_ALL, search, SearchCallback.DEFAULT);
+        List<User> contentList = find(findAllQL, search, SearchCallback.DEFAULT);
         return new PageImpl(contentList, search.getPage(), total);
     }
 
@@ -72,7 +72,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
      * @return
      */
     public long countAllByDefault(final Searchable search) {
-        return count(QL_COUNT_ALL, search, SearchCallback.DEFAULT);
+        return count(countAllQL, search, SearchCallback.DEFAULT);
     }
 
 
@@ -98,7 +98,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
      * @return
      */
     public long countAllByCustom(final Searchable search) {
-        return count(QL_COUNT_ALL, search, customSearchCallback);
+        return count(countAllQL, search, customSearchCallback);
     }
 
     /**
@@ -109,7 +109,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
      */
     public Page<User> findAllByCustom(final Searchable search) {
         long total = countAllByCustom(search);
-        List<User> contentList = find(QL_LIST_ALL, search, customSearchCallback);
+        List<User> contentList = find(findAllQL, search, customSearchCallback);
         return new PageImpl(contentList, search.getPage(), total);
     }
 

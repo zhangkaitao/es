@@ -23,16 +23,6 @@
     <%--more--%>
     <div id="searchMore" class="accordion-body collapse">
         <div class="accordion-inner">
-
-            <esform:label path="search.id_in">组织机构</esform:label>
-            <esform:input path="search.organizations[0].organization.name_like" cssClass="input-medium" placeholder="模糊查询"/>
-            &nbsp;&nbsp;
-
-            <esform:label path="search.id_in">工作职务</esform:label>
-            <esform:input path="search.organizations[0].jobs[0].name_like" cssClass="input-medium" placeholder="模糊查询"/>
-
-            <br/><br/>
-
             <esform:label path="search.createDate_gte">创建时间从</esform:label>
 
             <div class="input-append date">

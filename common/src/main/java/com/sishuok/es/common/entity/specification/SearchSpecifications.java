@@ -13,6 +13,8 @@ import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOp
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.ejb.criteria.path.RootImpl;
+import org.springframework.core.GenericCollectionTypeResolver;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
@@ -47,19 +49,19 @@ public final class SearchSpecifications {
                     return cb.conjunction();
                 }
 
+
                 List<Predicate> predicateList = Lists.newArrayList();
                 for(SearchFilter searchFilter : searchFilters) {
                     try {
-                        Path path = toPath(root, searchFilter);
+                        Path path = toPath(query, root, searchFilter);
                         Predicate predicate = transformOperatorToPredicate(searchFilter, cb, path);
                         //拼or
                         if(searchFilter.hasOrSearchFilters()) {
                             List<Predicate> orPredicates = Lists.newArrayList(predicate);
                             for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
-                                Path orPath = toPath(root, orSearchFilter);
+                                Path orPath = toPath(query, root, orSearchFilter);
                                 orPredicates.add(transformOperatorToPredicate(orSearchFilter, cb, orPath));
                             }
-
                             predicate = cb.or(orPredicates.toArray(new Predicate[0]));
                         }
 
@@ -71,36 +73,43 @@ public final class SearchSpecifications {
                     }
                 }
 
+
+
                 return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
             }
         };
 
     }
 
-    private static <T> Path toPath(Root<T> root, SearchFilter searchFilter) {
+    private static <T> Path toPath(CriteriaQuery<?> query, Root<T> root, SearchFilter searchFilter) {
         String entityProperty = searchFilter.getEntityProperty();
 
         String[] names = StringUtils.split(entityProperty, ".");
         Path expression = null;
+
         for (String name : names) {
             boolean isCollection = name.contains("[") && name.contains("]");
             if(isCollection) {
                 name = name.substring(0, name.indexOf('['));
+                //执行distinct 否则 多级join 可能造成重复数据
+                query.distinct(true);
             }
             if(expression == null) {
                 if(isCollection) {
-                    expression = root.join(name);
+                    expression = root.join(name, JoinType.INNER);
                 } else {
                     expression = root.get(name);
                 }
             } else {
                 if(isCollection && expression instanceof Join) {
-                    expression = ((Join) expression).join(name);
+                    expression = ((Join) expression).join(name, JoinType.INNER);
+
                 } else {
                     expression = expression.get(name);
                 }
             }
         }
+
         return expression;
     }
 
@@ -132,14 +141,14 @@ public final class SearchSpecifications {
                 return cb.lessThan(expression, (Comparable)value);
             case lte:
                 return cb.lessThanOrEqualTo(expression, (Comparable)value);
-            case prefixLike: //不走索引 慎用
-                return cb.like(expression, "%" + String.valueOf(value));
-            case prefixNotLike://不走索引 慎用
-                return cb.notLike(expression, "%" + String.valueOf(value));
-            case suffixLike:
+            case prefixLike:
                 return cb.like(expression, String.valueOf(value) + "%");
-            case suffixNotLike://不走索引 慎用
+            case prefixNotLike://不走索引 慎用
                 return cb.notLike(expression, String.valueOf(value) + "%");
+            case suffixLike://不走索引 慎用
+                return cb.like(expression, "%" + String.valueOf(value));
+            case suffixNotLike://不走索引 慎用
+                return cb.notLike(expression, "%" + String.valueOf(value));
             case like://不走索引 慎用
                 return cb.like(expression, "%" + String.valueOf(value) + "%");
             case notLike://不走索引 慎用

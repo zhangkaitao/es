@@ -31,9 +31,9 @@ public final class SearchRequest implements Searchable {
 
     private final Map<String, SearchFilter> searchFilterMap = Maps.newHashMap();
 
-    private final Pageable page;
+    private Pageable page;
 
-    private final Sort sort;
+    private Sort sort;
 
     private boolean converted;
 
@@ -96,9 +96,9 @@ public final class SearchRequest implements Searchable {
     }
 
     private List<SearchFilter> toSearchFilters(final Map<String, Object> searchParams) throws SearchException {
-        List<SearchFilter> searchFilters = Lists.newArrayList();
+        List<SearchFilter> result = Lists.newArrayList();
         if(searchParams == null || searchParams.size() == 0) {
-            return searchFilters;
+            return result;
         }
         for (Map.Entry<String, Object> entry : searchParams.entrySet()) {
             String key = entry.getKey();
@@ -132,33 +132,16 @@ public final class SearchRequest implements Searchable {
             if (!allowBlankValue && isValueBlank) {
                 continue;
             }
-            searchFilters.add(addSearchFilter(key, searchProperty, operator, value));
+
+            SearchFilter searchFilter = new SearchFilter(searchProperty, operator, value);
+            addSearchFilter(searchFilter);
+            result.add(searchFilter);
         }
-        return searchFilters;
-    }
-
-    /**
-     * 操作符是否允许为空
-     *
-     * @param operator
-     * @return
-     */
-    private boolean isAllowBlankValue(final SearchOperator operator) {
-        return operator == SearchOperator.isNotNull || operator == SearchOperator.isNull;
+        return result;
     }
 
 
-    /**
-     * @param searchProperty
-     * @param operator
-     * @param value
-     * @see SearchFilter#SearchFilter(java.lang.String, SearchOperator, java.lang.Object)
-     */
-    public SearchFilter addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value) {
-        SearchFilter searchFilter = new SearchFilter(searchProperty, operator, value);
-        searchFilterMap.put(key, searchFilter);
-        return searchFilter;
-    }
+
 
     @Override
     public SearchFilter addSearchFilter(String key, Object value) {
@@ -167,20 +150,24 @@ public final class SearchRequest implements Searchable {
         return toSearchFilters(map).get(0);
     }
 
+
+    @Override
+    public SearchFilter addSearchFilter(String searchProperty, SearchOperator operator, Object value) {
+        SearchFilter searchFilter = new SearchFilter(searchProperty, operator, value);
+        return addSearchFilter(searchFilter);
+    }
+
+
     @Override
     public SearchFilter addSearchFilter(SearchFilter searchFilter) {
-        searchFilterMap.put(searchFilter.getSearchProperty() + separator + searchFilter.getOperatorStr(), searchFilter);
+        String key = searchFilter.getSearchProperty() + separator + searchFilter.getOperator();
+        searchFilterMap.put(key, searchFilter);
         return searchFilter;
     }
 
     @Override
     public SearchFilter removeSearchFilter(String key) {
         return getSearchFilterMap().remove(key);
-    }
-
-    @Override
-    public SearchFilter addSearchFilter(String searchProperty, SearchOperator operator, Object value) {
-        return addSearchFilter(searchProperty + separator + operator.toString(), value);
     }
 
     public Collection<SearchFilter> getSearchFilters() {
@@ -232,16 +219,51 @@ public final class SearchRequest implements Searchable {
     public boolean hasPageable() {
         return this.page != null && this.page.getPageSize() > 0;
     }
+    @Override
+    public void removeSort() {
+        this.sort = null;
+        if(this.page != null) {
+            this.page = new PageRequest(page.getPageNumber(), page.getPageSize(), null);
+        }
+    }
+
+
+
+    @Override
+    public void removePageable() {
+        this.page = null;
+    }
 
     @Override
     public boolean containsSearchProperty(String searchProperty) {
-        return searchFilterMap.containsKey(searchProperty);
+        return
+                searchFilterMap.containsKey(searchProperty) ||
+                searchFilterMap.containsKey(searchProperty + separator + SearchOperator.custom);
     }
 
     @Override
     public Object getValue(String searchProperty) {
-        return searchFilterMap.get(searchProperty).getValue();
+        SearchFilter searchFilter = searchFilterMap.get(searchProperty);
+        if(searchFilter == null) {
+            searchFilter = searchFilterMap.get(searchProperty + separator + SearchOperator.custom);
+        }
+        if(searchFilter == null) {
+            return null;
+        }
+        return searchFilter.getValue();
     }
+
+    /**
+     * 操作符是否允许为空
+     *
+     * @param operator
+     * @return
+     */
+    private boolean isAllowBlankValue(final SearchOperator operator) {
+        return operator == SearchOperator.isNotNull || operator == SearchOperator.isNull;
+    }
+
+
 
 
     @Override

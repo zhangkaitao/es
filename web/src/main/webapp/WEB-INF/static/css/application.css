@@ -213,6 +213,10 @@ html, body {
     /*overflow:	auto; *//* when page gets too small */
 }
 
+.index {
+    overflow: hidden;
+}
+
 .bg {
     background:#eee;
 }
@@ -295,7 +299,7 @@ html, body {
     padding: 1px 1px 1px 1px;
 }
 
-.ui-layout-resizer-north{
+.index-panel > .ui-layout-resizer-north{
     background: #0088cc;
 }
 
@@ -821,7 +825,10 @@ iframe[tabs="true"] {
     border-bottom: 1px solid #ddd;
     float: left;
     width: 100%;
+}
 
+.left-group{
+    width: 100%;float: left;padding: 20px 0;
 }
 
 

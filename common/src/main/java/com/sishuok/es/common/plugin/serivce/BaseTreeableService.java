@@ -5,24 +5,21 @@
  */
 package com.sishuok.es.common.plugin.serivce;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.service.BaseService;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -39,9 +36,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     private final String UPDATE_CHILDREN_PARENT_IDS_QL;
     private final String FIND_SELF_AND_NEXT_SIBLINGS_QL;
     private final String FIND_NEXT_WEIGHT_QL;
-    private final String FIND_NAMES_BY_NAME_QL;
-    private final String FIND_ALL_BY_NAME_QL;
-    private final String FIND_ALL_QL;
 
     protected <R extends BaseRepository<M, ID>> BaseTreeableService() {
         String entityName = this.entityClass.getSimpleName();
@@ -57,13 +51,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         FIND_NEXT_WEIGHT_QL =
                 String.format("select case when max(weight) is null then 1 else (max(weight) + 1) end from %s where parentId = ?1", entityName);
 
-        FIND_NAMES_BY_NAME_QL =
-                String.format("select t.name from %1$s t where t.name like concat(%2$s, ?1, %2$s)", entityName, "'%'");
-
-        FIND_ALL_BY_NAME_QL =
-                String.format("select t from %1$s t where t.name like concat(%2$s, ?1, %2$s)", entityName, "'%'");
-        FIND_ALL_QL =
-                String.format("select t from %1$s t ", entityName);
     }
 
     @Override
@@ -76,7 +63,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     @Transactional
     public void deleteSelfAndChild(M m) {
-        baseDefaultRepositoryImpl.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
+        baseRepositoryImpl.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
     }
 
     @Transactional
@@ -88,7 +75,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
    public int nextWeight(ID id) {
-        return baseDefaultRepositoryImpl.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
+        return baseRepositoryImpl.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
    }
     
 
@@ -186,7 +173,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         source.setWeight(newWeight);
         update(source);
         String newSourceChildrenParentIds = source.makeSelfAsNewParentIds();
-        baseDefaultRepositoryImpl.batchUpdate(UPDATE_CHILDREN_PARENT_IDS_QL, newSourceChildrenParentIds, oldSourceChildrenParentIds);
+        baseRepositoryImpl.batchUpdate(UPDATE_CHILDREN_PARENT_IDS_QL, newSourceChildrenParentIds, oldSourceChildrenParentIds);
     }
 
     /**
@@ -196,7 +183,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @return
      */
     protected List<M> findSelfAndNextSiblings(String parentIds, int currentWeight) {
-        return baseDefaultRepositoryImpl.findAll(FIND_SELF_AND_NEXT_SIBLINGS_QL, parentIds, currentWeight);
+        return baseRepositoryImpl.findAll(FIND_SELF_AND_NEXT_SIBLINGS_QL, parentIds, currentWeight);
     }
 
 
@@ -205,8 +192,24 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @param name
      * @return
      */
-    public Set<String> findNames(String name) {
-        return Sets.newHashSet(baseDefaultRepositoryImpl.<String>findAll(FIND_NAMES_BY_NAME_QL, new PageRequest(0, 30), name));
+    public Set<String> findNames(Searchable searchable, String name, ID excludeId) {
+        M excludeM = findOne(excludeId);
+
+        searchable.addSearchFilter("name", SearchOperator.like, name);
+        addExcludeSearchFilter(searchable, excludeM);
+
+        return Sets.newHashSet(
+                Lists.transform(
+                        findAll(searchable).getContent(),
+                        new Function<M, String>() {
+                            @Override
+                            public String apply(M input) {
+                                return input.getName();
+                            }
+                        }
+                )
+        );
+
     }
 
 
@@ -214,50 +217,26 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * 查询子子孙孙
      * @return
      */
-    public List<M> findSelfAndChildrenByName(String searchName, M excludeM, Sort sort) {
-        List<M> result = Lists.newArrayList();
-        List<M> models = findAllByName(searchName, excludeM, sort);
+    public List<M> findChildren(List<M> parents, Searchable searchable) {
 
-        if(models.isEmpty()) {
-            return result;
+        if(parents.isEmpty()) {
+            return Collections.EMPTY_LIST;
         }
 
-        StringBuilder findChildrenHQL = new StringBuilder(FIND_ALL_QL);
-        findChildrenHQL.append("where ");
-        List<String> parentIds = Lists.newArrayList();
-        for(int i = 0; i < models.size(); i++) {
-            if(i == 0) {
-                findChildrenHQL.append("(");
-            }
-
-            if(i > 0) {
-                findChildrenHQL.append(" or ");
-            }
-            findChildrenHQL.append(String.format("parentIds like concat(%1$s, ?%2$d , %1$s)", "'%'", i + 1));
-            parentIds.add(models.get(i).makeSelfAsNewParentIds());
-
-            if(i == models.size() - 1) {
-                findChildrenHQL.append(")");
-            }
+        SearchFilter orSearchFilter = new SearchFilter("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
+        for(int i = 1; i < parents.size(); i++) {
+            orSearchFilter.or(new SearchFilter("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds()));
         }
 
-        if(excludeM != null) {
-            findChildrenHQL.append(" and id != " + excludeM.getId() + " and parentIds not like '" + excludeM.makeSelfAsNewParentIds() + "%'");
-        }
+        searchable.addSearchFilter(orSearchFilter);
 
-        result.addAll(baseDefaultRepositoryImpl.<M>findAll(findChildrenHQL.toString(), sort, parentIds.toArray()));
-        result.removeAll(models);
-        result.addAll(models);
-
-        return result;
+        List<M> children = findAllBySort(searchable);
+        return children;
     }
 
-    public List<M> findAllByName(String searchName, M excludeM, Sort sort) {
-        String hql = FIND_ALL_BY_NAME_QL;
-        if(excludeM != null) {
-            hql = hql + " and id != " + excludeM.getId() + " and parentIds not like '" + excludeM.makeSelfAsNewParentIds() + "%'";
-        }
-        return (baseDefaultRepositoryImpl.<M>findAll(hql, sort, searchName));
+    public List<M> findAllByName(Searchable searchable, M excludeM) {
+        addExcludeSearchFilter(searchable, excludeM);
+        return findAllBySort(searchable);
     }
 
     /**
@@ -292,10 +271,17 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         }
         String[] ids = StringUtils.tokenizeToStringArray(parentIds, "/");
 
-        return Lists.reverse(findAllByNoPage(SearchableBuilder.newInstance().addSearchFilter("id", SearchOperator.in, ids).buildSearchable()));
+        return Lists.reverse(findAllByNoPageNoSort(SearchableBuilder.newInstance().addSearchFilter("id", SearchOperator.in, ids).buildSearchable()));
     }
 
-    public static void main(String[] args) {
-        System.out.println(StringUtils.arrayToDelimitedString(StringUtils.tokenizeToStringArray("0/1/2/", "/"), ","));
+
+    public void addExcludeSearchFilter(Searchable searchable, M excludeM) {
+        if(excludeM == null) {
+            return;
+        }
+        searchable.addSearchFilter("id", SearchOperator.notEq, excludeM.getId());
+        searchable.addSearchFilter("parentIds", SearchOperator.suffixNotLike, excludeM.makeSelfAsNewParentIds());
     }
+
+
 }

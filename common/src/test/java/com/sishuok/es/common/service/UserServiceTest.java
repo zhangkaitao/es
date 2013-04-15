@@ -33,10 +33,10 @@ import static org.junit.Assert.*;
 public class UserServiceTest extends BaseUserIT {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Test
     public void testSave() {
@@ -196,7 +196,7 @@ public class UserServiceTest extends BaseUserIT {
         searchParams.put("username_like", "zhang");
         Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
 
-        List<User> userList = userService.findAllByNoPage(search);
+        List<User> userList = userService.findAllByNoPageNoSort(search);
         assertEquals(count, userList.size());
         assertTrue(userList.contains(lastUser));
     }

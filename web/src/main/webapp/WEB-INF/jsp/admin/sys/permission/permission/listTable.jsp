@@ -10,7 +10,8 @@
         </th>
         <th style="width: 100px" sort="id">编号</th>
         <th style="width: 150px" sort="name">权限名称</th>
-        <th>权限标识</th>
+        <th sort="permission">权限标识</th>
+        <th>详细描述</th>
     </tr>
     <tbody>
     <c:forEach items="${page.content}" var="m">
@@ -21,6 +22,7 @@
             </td>
             <td>${m.name}</td>
             <td>${m.permission}</td>
+            <td>${m.description}</td>
         </tr>
     </c:forEach>
     </tbody>

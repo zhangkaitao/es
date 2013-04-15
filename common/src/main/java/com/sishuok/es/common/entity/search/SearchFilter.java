@@ -73,10 +73,7 @@ public final class SearchFilter {
      * @return
      */
     public SearchOperator getOperator() throws InvlidSpecificationSearchOperatorException {
-        if(operator != null && operator != SearchOperator.custom) {
-            return operator;
-        }
-        throw new InvlidSpecificationSearchOperatorException(getSearchProperty(), getOperatorStr());
+        return operator;
     }
 
     /**
@@ -87,7 +84,7 @@ public final class SearchFilter {
      * @return
      */
     public String getOperatorStr() {
-        if(operator != null && operator != SearchOperator.custom) {
+        if(operator != null) {
             return operator.getSymbol();
         }
         return "";

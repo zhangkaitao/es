@@ -10,7 +10,8 @@
         </th>
         <th style="width: 100px" sort="id">编号</th>
         <th style="width: 150px" sort="name">角色名称</th>
-        <th>角色标识</th>
+        <th sort="role">角色标识</th>
+        <th>详细描述</th>
     </tr>
     <tbody>
     <c:forEach items="${page.content}" var="m">
@@ -21,6 +22,7 @@
             </td>
             <td>${m.name}</td>
             <td>${m.role}</td>
+            <td>${m.description}</td>
         </tr>
     </c:forEach>
     </tbody>

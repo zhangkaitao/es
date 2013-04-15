@@ -68,13 +68,11 @@ $(function () {
     var async = ${not empty param.async and param.async eq true};
     var zNodes =[
         <c:forEach items="${trees}" var="m">
-        { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true,
-            click : "${m.click}", root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
+        { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true, root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
         </c:forEach>
     ];
     $.zTree.initSelectTree({
         zNodes : zNodes,
-        nodeType : "default",
         urlPrefix : "${ctx}/admin/sys/organization/job",
         excludeId: "${source.id}",
         async : async,

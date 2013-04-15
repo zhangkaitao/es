@@ -29,14 +29,6 @@ public interface Searchable {
      */
     public Collection<SearchFilter> getSearchFilters();
 
-    /**
-     * 添加查询过滤条件
-     * @param key 前台传入的查询条件名字 如age_lt
-     * @param searchProperty 根据key提取的属性名 如age
-     * @param operator 根据key提取的操作符 如lt
-     * @param value
-     */
-    public SearchFilter addSearchFilter(final String key, final String searchProperty, final SearchOperator operator, final Object value);
 
 
     /**
@@ -107,11 +99,15 @@ public interface Searchable {
      */
     public boolean hashSort();
 
+    public void removeSort();
+
     /**
      * 是否有分页
      * @return
      */
     public boolean hasPageable();
+
+    public void removePageable();
 
     /**
      * 是否包含查询属性

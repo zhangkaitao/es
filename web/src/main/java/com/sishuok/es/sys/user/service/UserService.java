@@ -7,22 +7,17 @@ package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.entity.UserOrganization;
+import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import com.sishuok.es.sys.user.entity.UserStatus;
-import com.sishuok.es.sys.user.entity.UserStatusHistory;
 import com.sishuok.es.sys.user.exception.UserBlockedException;
 import com.sishuok.es.sys.user.exception.UserNotExistsException;
 import com.sishuok.es.sys.user.exception.UserPasswordNotMatchException;
 import com.sishuok.es.sys.user.repository.UserRepository;
+import com.sishuok.es.sys.user.repository.UserRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.config.AopConfigUtils;
 import org.springframework.aop.framework.AopContext;
-import org.springframework.aop.framework.AopProxy;
-import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -46,8 +41,9 @@ public class UserService extends BaseService<User, Long> {
     private PasswordService passwordService;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public void setUserRepository(UserRepository userRepository, UserRepositoryImpl userRepositoryImpl) {
         setBaseRepository(userRepository);
+        setBaseRepositoryImpl(userRepositoryImpl);
         this.userRepository = userRepository;
     }
     @Autowired
@@ -57,7 +53,7 @@ public class UserService extends BaseService<User, Long> {
     @Autowired
     public void setPasswordService(PasswordService passwordService) {
         this.passwordService = passwordService;
-    }
+        }
 
     @Override
     public User save(User user) {
@@ -69,25 +65,34 @@ public class UserService extends BaseService<User, Long> {
 
 
         return super.save(user);
-    }
+        }
 
 
     @Override
     public User update(User user) {
-        for(UserOrganization userOrganization : user.getOrganizations()) {
-            UserOrganization dbUserOrganization = findUserOrganization(userOrganization);
-            if(dbUserOrganization != null) {
-                userOrganization.setId(dbUserOrganization.getId());
+
+        List<UserOrganizationJob> localUserOrganizationJobs = user.getOrganizationJobs();
+        for(int i = 0, l = localUserOrganizationJobs.size(); i < l; i++) {
+            UserOrganizationJob localUserOrganizationJob = localUserOrganizationJobs.get(i);
+            UserOrganizationJob dbUserOrganizationJob = findUserOrganizationJob(localUserOrganizationJob);
+
+            if(dbUserOrganizationJob != null) {//出现在先删除再添加的情况
+                dbUserOrganizationJob.setJob(localUserOrganizationJob.getJob());
+                dbUserOrganizationJob.setOrganization(localUserOrganizationJob.getOrganization());
+                dbUserOrganizationJob.setUser(localUserOrganizationJob.getUser());
+                localUserOrganizationJobs.set(i, dbUserOrganizationJob);
             }
         }
 
-        super.update(user);
 
-        return user;
+        return super.update(user);
     }
 
-    public UserOrganization findUserOrganization(UserOrganization userOrganization) {
-        return userRepository.findUserOrganization(userOrganization.getUser(), userOrganization.getOrganization());
+    public UserOrganizationJob findUserOrganizationJob(UserOrganizationJob userOrganizationJob) {
+        return userRepository.findUserOrganization(
+                userOrganizationJob.getUser(),
+                userOrganizationJob.getOrganization(),
+                userOrganizationJob.getJob());
     }
 
     public User findByUsername(String username) {

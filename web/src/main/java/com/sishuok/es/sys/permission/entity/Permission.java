@@ -24,8 +24,19 @@ import javax.persistence.Table;
 @Table(name = "sys_permission")
 public class Permission extends BaseEntity<Long> {
 
+    /**
+     * 前端显示名称
+     */
     private String name;
+    /**
+     * 系统中验证时使用的权限标识
+     */
     private String permission;
+
+    /**
+     * 详细描述
+     */
+    private String description;
 
     public String getName() {
         return name;
@@ -41,5 +52,13 @@ public class Permission extends BaseEntity<Long> {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

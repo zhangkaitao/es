@@ -7,6 +7,7 @@ package com.sishuok.es.common.entity.search.utils;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchFilter;
+import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
@@ -60,10 +61,16 @@ public final class SearchableConvertUtils {
     private static void convert(BeanWrapperImpl beanWrapper, SearchFilter searchFilter) {
         String searchProperty = searchFilter.getSearchProperty();
 
+        //自定义的也不转换
+        if(searchFilter.getOperator() == SearchOperator.custom) {
+            return;
+        }
+
         //一元运算符不需要计算
         if(searchFilter.isUnaryFilter()) {
             return;
         }
+
 
         String entityProperty = searchFilter.getEntityProperty();
 

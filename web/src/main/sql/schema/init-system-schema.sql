@@ -5,7 +5,6 @@ drop table if exists `sys_user_online`;
 drop table if exists `sys_user_last_online`;
 drop table if exists `sys_organization`;
 drop table if exists `sys_job`;
-drop table if exists `sys_user_organization`;
 drop table if exists `sys_user_organization_job`;
 drop table if exists `sys_resource`;
 drop table if exists `sys_permission`;
@@ -147,20 +146,13 @@ create table `sys_job`(
 alter table `sys_job` auto_increment=1000;
 
 
-create table `sys_user_organization`(
+create table `sys_user_organization_job`(
   `id`         bigint not null auto_increment,
   `user_id`   bigint,
   `organization_id` bigint,
-  constraint `pk_sys_user_organization` primary key(`id`),
-  constraint `unique_sys_user_organization` unique(`user_id`, `organization_id`)
-) charset=utf8 ENGINE=InnoDB;
-
-create table `sys_user_organization_job`(
-  `id`         bigint not null auto_increment,
-  `user_organization_id`   bigint,
   `job_id` bigint,
   constraint `pk_sys_user_organization_job` primary key(`id`),
-  constraint `unique_sys_user_organization_job` unique(`user_organization_id`, `job_id`)
+  constraint `unique_sys_user_organization_job` unique(`user_id`, `organization_id`, `job_id`)
 ) charset=utf8 ENGINE=InnoDB;
 
 create table `sys_resource`(
@@ -187,6 +179,7 @@ create table `sys_permission`(
   `id`         bigint not null auto_increment,
   `name`      varchar(100),
   `permission`  varchar(100),
+  `description`      varchar(200),
   constraint `pk_sys_permission` primary key(`id`),
   index idx_sys_permission_name (`name`),
   index idx_sys_permission_permission (`permission`)
@@ -197,6 +190,7 @@ create table `sys_role`(
   `id`         bigint not null auto_increment,
   `name`      varchar(100),
   `role`  varchar(100),
+  `description`      varchar(200),
   constraint `pk_sys_role` primary key(`id`),
   index idx_sys_role_name (`name`),
   index idx_sys_role_role (`role`)

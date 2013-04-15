@@ -6,8 +6,10 @@
 package com.sishuok.es.sys.user.entity;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.LogicDeleteable;
+import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.*;
@@ -24,7 +26,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * <p>User: Zhang Kaitao
@@ -93,27 +95,49 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     /**
      * 用户 组织机构 工作职务关联表
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = UserOrganization.class, mappedBy = "user", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = UserOrganizationJob.class, mappedBy = "user", orphanRemoval = true)
     @Fetch(FetchMode.SELECT)
     @Basic(optional = true, fetch = FetchType.EAGER)
     @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     @OrderBy
-    private List<UserOrganization> organizations;
+    private List<UserOrganizationJob> organizationJobs;
 
-    public List<UserOrganization> getOrganizations() {
-        if(organizations == null) {
-            organizations = Lists.newArrayList();
+    public List<UserOrganizationJob> getOrganizationJobs() {
+        if(organizationJobs == null) {
+            organizationJobs = Lists.newArrayList();
         }
-        return organizations;
+        return organizationJobs;
     }
 
-    public void addOrganization(UserOrganization userOrganization) {
-        userOrganization.setUser(this);
-        getOrganizations().add(userOrganization);
+    public void addOrganizationJob(UserOrganizationJob userOrganizationJob) {
+        userOrganizationJob.setUser(this);
+        getOrganizationJobs().add(userOrganizationJob);
     }
 
-    public void setOrganizations(List<UserOrganization> organizations) {
-        this.organizations = organizations;
+    public void setOrganizationJobs(List<UserOrganizationJob> organizationJobs) {
+        this.organizationJobs = organizationJobs;
+    }
+
+
+    private transient Map<Organization, List<UserOrganizationJob>> organizationJobsMap;
+    @Transient
+    public Map<Organization, List<UserOrganizationJob>> getDisplayOrganizationJobs() {
+        if(organizationJobsMap != null) {
+            return organizationJobsMap;
+        }
+
+        organizationJobsMap = Maps.newHashMap();
+
+        for(UserOrganizationJob userOrganizationJob : getOrganizationJobs()) {
+            Organization organization = userOrganizationJob.getOrganization();
+            List<UserOrganizationJob> userOrganizationJobList = organizationJobsMap.get(organization);
+            if(userOrganizationJobList == null) {
+                userOrganizationJobList = Lists.newArrayList();
+                organizationJobsMap.put(organization, userOrganizationJobList);
+            }
+            userOrganizationJobList.add(userOrganizationJob);
+        }
+        return organizationJobsMap;
     }
 
     public String getUsername() {
@@ -201,4 +225,6 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     public void setAdmin(Boolean admin) {
         this.admin = admin;
     }
+
+
 }

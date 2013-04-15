@@ -24,14 +24,11 @@
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
     var async = ${not empty param.async and param.async eq true};
-    function treeNodeClick(node, id, pId) {
-        parent.frames['listFrame'].location.href='${ctx}/admin/sys/organization/organization/list/' + id + "?async=" + async ;
-    }
+
     $(function() {
         var zNodes =[
             <c:forEach items="${trees}" var="m">
-            { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true,
-                click : "${m.click}", root : ${m.root},isParent:${m.isParent}},
+            { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true, root : ${m.root},isParent:${m.isParent}},
             </c:forEach>
         ];
 
@@ -41,6 +38,13 @@
             async : async,
             autocomplete : {
                 enable : true
+            },
+            setting : {
+                callback : {
+                    onClick: function(event, treeId, treeNode, clickFlag) {
+                        parent.frames['listFrame'].location.href='${ctx}/admin/sys/organization/organization/list/' + treeNode.id + "?async=" + async ;
+                    }
+                }
             }
         });
 

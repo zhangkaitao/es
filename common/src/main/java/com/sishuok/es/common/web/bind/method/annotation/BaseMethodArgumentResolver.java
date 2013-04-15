@@ -36,11 +36,18 @@ public abstract class BaseMethodArgumentResolver implements HandlerMethodArgumen
 
         Map<String, String> variables = getUriTemplateVariables(request);
 
+        int namePrefixLength = namePrefix.length();
         for (String name : variables.keySet()) {
             if (name.startsWith(namePrefix)) {
+
                 //page.pn  则截取 pn
                 if(subPrefix) {
-                    result.put(name.substring(namePrefix.length() + 1), new String[] {variables.get(name)});
+                    char ch = name.charAt(namePrefix.length());
+                    //如果下一个字符不是 数字 . _  则不可能是查询 只是前缀类似
+                    if(illegalChar(ch)) {
+                        continue;
+                    }
+                    result.put(name.substring(namePrefixLength + 1), new String[] {variables.get(name)});
                 } else {
                     result.put(name, new String[] {variables.get(name)});
                 }
@@ -53,7 +60,12 @@ public abstract class BaseMethodArgumentResolver implements HandlerMethodArgumen
             if (name.startsWith(namePrefix)) {
                 //page.pn  则截取 pn
                 if(subPrefix) {
-                    result.put(name.substring(namePrefix.length() + 1), request.getParameterValues(name));
+                    char ch = name.charAt(namePrefix.length());
+                    //如果下一个字符不是 数字 . _  则不可能是查询 只是前缀类似
+                    if(illegalChar(ch)) {
+                        continue;
+                    }
+                    result.put(name.substring(namePrefixLength + 1), request.getParameterValues(name));
                 } else {
                     result.put(name, request.getParameterValues(name));
                 }
@@ -62,6 +74,11 @@ public abstract class BaseMethodArgumentResolver implements HandlerMethodArgumen
 
         return result;
     }
+
+    private boolean illegalChar(char ch) {
+        return ch != '.' && ch != '_' && !(ch >= '0' && ch <= '9');
+    }
+
 
     @SuppressWarnings("unchecked")
     protected final Map<String, String> getUriTemplateVariables(NativeWebRequest request) {

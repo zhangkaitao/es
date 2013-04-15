@@ -20,8 +20,20 @@ import javax.persistence.Table;
 @Table(name = "sys_role")
 public class Role extends BaseEntity<Long> {
 
+    /**
+     * 前端显示名称
+     */
     private String name;
+    /**
+     * 系统中验证时使用的角色标识
+     */
     private String role;
+
+    /**
+     * 详细描述
+     */
+    private String description;
+
 
     public String getName() {
         return name;
@@ -37,5 +49,13 @@ public class Role extends BaseEntity<Long> {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
