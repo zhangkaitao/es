@@ -9,6 +9,7 @@ drop table if exists `sys_user_organization_job`;
 drop table if exists `sys_resource`;
 drop table if exists `sys_permission`;
 drop table if exists `sys_role`;
+drop table if exists `sys_role_resource_permission`;
 ##user
 create table `sys_user`(
   `id`         bigint not null auto_increment,
@@ -196,3 +197,13 @@ create table `sys_role`(
   index idx_sys_role_role (`role`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `sys_role` auto_increment=1000;
+
+
+create table `sys_role_resource_permission`(
+  `id`         bigint not null auto_increment,
+  `role_id`   bigint,
+  `resource_id` bigint,
+  `permission_ids` varchar(500),
+  constraint `pk_role_resource_permission` primary key(`id`),
+  constraint `unique_sys_role_resource_permission` unique(`role_id`, `resource_id`)
+) charset=utf8 ENGINE=InnoDB;

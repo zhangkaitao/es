@@ -5,10 +5,15 @@
  */
 package com.sishuok.es.sys.permission.entity;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.sys.user.entity.UserOrganizationJob;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * 角色表
@@ -35,6 +40,17 @@ public class Role extends BaseEntity<Long> {
     private String description;
 
 
+    /**
+     * 用户 组织机构 工作职务关联表
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = RoleResourcePermission.class, mappedBy = "role", orphanRemoval = true)
+    @Fetch(FetchMode.SELECT)
+    @Basic(optional = true, fetch = FetchType.EAGER)
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    @OrderBy
+    private List<RoleResourcePermission> resourcePermissions;
+
+
     public String getName() {
         return name;
     }
@@ -58,4 +74,21 @@ public class Role extends BaseEntity<Long> {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public List<RoleResourcePermission> getResourcePermissions() {
+        if(resourcePermissions == null) {
+            resourcePermissions = Lists.newArrayList();
+        }
+        return resourcePermissions;
+    }
+
+    public void setResourcePermissions(List<RoleResourcePermission> resourcePermissions) {
+        this.resourcePermissions = resourcePermissions;
+    }
+
+    public void addResourcePermission(RoleResourcePermission roleResourcePermission) {
+        roleResourcePermission.setRole(this);
+        getResourcePermissions().add(roleResourcePermission);
+    }
+
 }
