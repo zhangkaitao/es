@@ -345,6 +345,58 @@ $.app = {
         });
 
         return array.join(separator);
+    },
+
+    /**
+     * 异步加载table子内容(父子表格)
+     * @param toggleEle
+     * @param tableEle
+     * @param asyncLoadURL
+     */
+    toggleLoadTable : function(tableEle, asyncLoadURL) {
+        var openIcon = "icon-plus-sign";
+        var closeIcon = "icon-minus-sign";
+        $(tableEle).find("tr .toggle-child").click(function() {
+            var $a = $(this);
+            //只显示当前的 其余的都隐藏
+            $a.closest("table")
+                .find(".toggle-child." + closeIcon).not($a).removeClass(closeIcon).addClass(openIcon)
+                .end().end()
+                .find(".child-data").not($a.closest("tr").next("tr")).hide();
+
+            //如果是ie7
+            if($(this).closest("html").hasClass("ie7")) {
+                var $aClone = $(this).clone(true);
+                if($aClone.hasClass(closeIcon)) {
+                    $aClone.addClass(openIcon).removeClass(closeIcon);
+                } else {
+                    $aClone.addClass(closeIcon).removeClass(openIcon);
+                }
+                $(this).after($aClone);
+                $(this).remove();
+                $a = $aClone;
+            } else {
+                $a.toggleClass(openIcon);
+                $a.toggleClass(closeIcon);
+            }
+
+            var $currentTr = $a.closest("tr");
+            var $dataTr = $currentTr.next("tr");
+            if(!$dataTr.hasClass("child-data")) {
+                $.app.waiting();
+                $dataTr = $("<tr class='child-data' style='display: none;'></tr>");
+                var $dataTd = $("<td colspan='" + $currentTr.find("td").size() + "'></td>");
+                $dataTr.append($dataTd);
+                $currentTr.after($dataTr);
+                $dataTd.load(asyncLoadURL.replace("{parentId}", $a.data("id")),function() {
+                    $.app.waitingOver();
+                });
+            }
+            $dataTr.toggle();
+
+            return false;
+        });
+
     }
 
 };
@@ -1061,58 +1113,7 @@ $.parentchild = {
             });
         });
     }
-    ,
-    /**
-     * 初始化父子列表中子列表
-     * @param $table 父表格
-     * @param loadUrl 装载子表格的地址
-     */
-    initChildList : function($table, loadUrl) {
-        var openIcon = "icon-plus-sign";
-        var closeIcon = "icon-minus-sign";
 
-        $table.find("tr ." + openIcon).click(function() {
-            var $a = $(this);
-            //只显示当前的 其余的都隐藏
-            $a.closest("table")
-                .find("." + closeIcon).not($a).removeClass(closeIcon).addClass(openIcon)
-                .end().end()
-                .find(".child-data").not($a.closest("tr").next("tr")).hide();
-
-            //如果是ie7
-            if($(this).closest("html").hasClass("ie7")) {
-                var $aClone = $(this).clone(true);
-                if($aClone.hasClass(closeIcon)) {
-                    $aClone.addClass(openIcon).removeClass(closeIcon);
-                } else {
-                    $aClone.addClass(closeIcon).removeClass(openIcon);
-                }
-                $(this).after($aClone);
-                $(this).remove();
-                $a = $aClone;
-            } else {
-                $a.toggleClass(openIcon);
-                $a.toggleClass(closeIcon);
-            }
-
-            var $currentTr = $a.closest("tr");
-            var $dataTr = $currentTr.next("tr");
-            if(!$dataTr.hasClass("child-data")) {
-                $.app.waiting();
-                $dataTr = $("<tr class='child-data' style='display: none;'></tr>");
-                var $dataTd = $("<td colspan='" + $currentTr.find("td").size() + "'></td>");
-                $dataTr.append($dataTd);
-                $currentTr.after($dataTr);
-                $dataTd.load(loadUrl.replace("{parentId}", $a.data("id")),function() {
-                    $.app.waitingOver();
-                });
-            }
-            $dataTr.toggle();
-
-            return false;
-        });
-
-    }
 }
 
 
@@ -1530,12 +1531,11 @@ $.table = {
         }
         $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-batch-delete").each(function() {
             var $btn = $(this);
-
+            var url = $btn.attr("href");
+            if(!url || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0) {//没有url就不处理了
+                return;
+            }
             $btn.off("click").on("click", function() {
-                var url = $btn.attr("href");
-                if(!url || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0) {//没有url就不处理了
-                    return;
-                }
                 window.location.href = url + (url.indexOf("?") == -1 ? "?" : "&") + "BackURL=" + $.table.encodeTableURL($table);
                 return false;
             });
@@ -1553,7 +1553,7 @@ $.table = {
         return checkbox;
     },
     getAllSelectedCheckbox :function($table) {
-        var checkbox = $("#table :checkbox:checked");
+        var checkbox = $table.find(":checkbox:checked");
         if(!checkbox.length) {
             $.app.alert({
                 message : "请先选择要操作的数据！"
@@ -1709,6 +1709,35 @@ $.movable = {
     tdOrder : function(td) {
         var tdIndex = td.closest("tr").children("td").index(td);
         return td.closest("table").find("thead > tr > th").eq(tdIndex).prop("order");
+    }
+};
+
+$.btn = {
+    /**
+     * 初始化改变显示隐藏的btn
+     */
+    initChangeShowStatus : function(urlPrefix, tableId) {
+        $(".status-show,.status-hide").off("click").on("click", function() {
+            var $table = $("#" + tableId);
+            var checkbox = $.table.getAllSelectedCheckbox($table);
+            if(checkbox.size() == 0) {
+                return;
+            }
+            var isShow = $(this).is(".status-show");
+            var title = isShow ? "显示数据" : "隐藏数据";
+            var message = isShow ? "确认显示数据吗？" : "确认隐藏数据吗？";
+            var url = isShow ?
+                urlPrefix + "/changeStatus/true?" + checkbox.serialize():
+                urlPrefix + "/changeStatus/false?" + checkbox.serialize();
+            $.app.confirm({
+                title : title,
+                message : message,
+                ok : function() {
+                    $.table.reloadTable($table, url, $.table.tableURL($table));
+                }
+            });
+        });
+
     }
 };
 
@@ -1880,7 +1909,4 @@ $(function () {
         $.app.waitingOver();
     });
 });
-
-
-
 

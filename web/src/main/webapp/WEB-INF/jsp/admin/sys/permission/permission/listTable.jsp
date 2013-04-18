@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table id="table" class="sort-table table table-bordered table-hover" data-async="true">
+<table id="table" class="sort-table table table-bordered table-hover">
     <thead>
     <tr>
         <th style="width: 80px">
@@ -12,6 +12,7 @@
         <th style="width: 150px" sort="name">权限名称</th>
         <th sort="permission">权限标识</th>
         <th>详细描述</th>
+        <th>状态</th>
     </tr>
     <tbody>
     <c:forEach items="${page.content}" var="m">
@@ -23,6 +24,7 @@
             <td>${m.name}</td>
             <td>${m.permission}</td>
             <td>${m.description}</td>
+            <td>${m.show eq true ? '可用' : '不可用'}</td>
         </tr>
     </c:forEach>
     </tbody>

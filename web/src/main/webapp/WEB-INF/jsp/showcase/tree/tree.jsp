@@ -6,16 +6,16 @@
 
 <ul class="nav nav-tabs">
     <li <c:if test="${empty param['search.show_eq']}">class="active"</c:if>>
-        <a href="${ctx}/showcase/tree/tree">
+        <a href="${ctx}/showcase/tree/tree?async=${not empty param.async and param.async eq true}">
             <i class="icon-table"></i>
             所有
             <i class="icon-refresh" title="点击刷新"></i>
         </a>
     </li>
     <li <c:if test="${not empty param['search.show_eq']}">class="active"</c:if>>
-        <a href="${ctx}/showcase/tree/tree?search.show_eq=true">
+        <a href="${ctx}/showcase/tree/tree?async=${not empty param.async and param.async eq true}&search.show_eq=true">
             <i class="icon-table"></i>
-            可显示的
+            显示的
         </a>
     </li>
 </ul>
@@ -37,13 +37,15 @@
             zNodes : zNodes,
             urlPrefix : "${ctx}/showcase/tree",
             async : async,
+            onlyShow:${param['search.show_eq'] eq true},
             autocomplete : {
                 enable : true
             },
             setting : {
                 callback : {
                     onClick: function(event, treeId, treeNode, clickFlag) {
-                        parent.frames['listFrame'].location.href='${ctx}/showcase/tree/list/' + treeNode.id + "?async=" + async ;
+                        parent.frames['listFrame'].location.href=
+                                '${ctx}/showcase/tree/list/' + treeNode.id + "?async=" + async;
                     }
                 }
             }

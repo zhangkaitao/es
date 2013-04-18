@@ -21,7 +21,7 @@
     <c:forEach items="${page.content}" var="m">
         <tr>
             <td>
-                <a data-id="${m.id}" class="btn-link icon-plus-sign"></a>
+                <a data-id="${m.id}" class="btn-link toggle-child icon-plus-sign"></a>
             </td>
             <td class="check">
                 <input type="checkbox" name="ids" value="${m.id}">
@@ -41,8 +41,7 @@
 <es:page page="${parents}"/>
 <script type="text/javascript">
     $(function() {
-        $.parentchild.initChildList($("#table"), "${ctx}/showcase/parentchild/parent/child/{parentId}");
-
+        $.app.toggleLoadTable($("#table"), "${ctx}/showcase/parentchild/parent/child/{parentId}")
     });
 </script>
 

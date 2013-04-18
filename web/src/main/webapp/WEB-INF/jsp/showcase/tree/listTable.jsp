@@ -26,8 +26,3 @@
     </tbody>
 </table>
 <es:page page="${page}"/>
-
-<%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
-<script type="text/javascript">
-    $.zTree.initMaintainBtn("${ctx}/showcase/tree", $("#table"), ${not empty param.async and param.async});
-</script>

@@ -8,6 +8,8 @@ package com.sishuok.es.sys.permission.repository;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.entity.Role;
+import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * <p>User: Zhang Kaitao
@@ -16,4 +18,6 @@ import com.sishuok.es.sys.permission.entity.Role;
  */
 public interface RoleRepository extends BaseRepository<Role, Long> {
 
+    @Query("from RoleResourcePermission where role=?1 and resourceId=?2")
+    RoleResourcePermission findRoleResourcePermission(Role role, Long resourceId);
 }

@@ -8,9 +8,9 @@
             |
             <a class="reverse-all" href="javascript:;">反选</a>
         </th>
-        <th style="width: 100px" sort="id">编号</th>
-        <th style="width: 150px" sort="name">姓名</th>
-        <th>是否显示</th>
+        <th style="width: 70px" sort="id">编号</th>
+        <th sort="name">名称</th>
+        <th style="width: 60px;">是否显示</th>
     </tr>
     <tbody>
     <c:forEach items="${page.content}" var="m">
@@ -19,15 +19,12 @@
             <td>
                 <a class="btn btn-link btn-edit" href="${ctx}/admin/sys/organization/job/${m.id}">${m.id}</a>
             </td>
-            <td>${m.name}</td>
+            <td>
+                <sys:showJobName id="${m.id}"/>
+            </td>
             <td>${m.show ? '是' : '否'}</td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
 <es:page page="${page}"/>
-
-<%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
-<script type="text/javascript">
-    $.zTree.initMaintainBtn("${ctx}/admin/sys/organization/job", $("#table"), ${not empty param.async and param.async});
-</script>

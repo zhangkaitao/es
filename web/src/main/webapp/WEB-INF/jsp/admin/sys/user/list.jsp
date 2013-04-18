@@ -102,6 +102,7 @@
             <table id="table" class="sort-table table table-bordered table-hover" data-prefix-url="${ctx}/admin/sys/user">
                 <thead>
                 <tr>
+                    <th style="width: 20px;">&nbsp;</th>
                     <th style="width: 80px;">
                         <a class="check-all" href="javascript:;">全选</a>
                         |
@@ -118,16 +119,15 @@
                 <tbody>
                 <c:forEach items="${page.content}" var="m">
                     <tr>
+                        <td>
+                            <a data-id="${m.id}" class="btn-link toggle-child icon-plus-sign" title="点击查看/隐藏组织机构和工作职务"></a>
+                        </td>
+
                         <td class="check">
                             <input type="checkbox" name="ids" value="${m.id}" data-status="${m.status}" data-deleted="${m.deleted}"/>
                         </td>
                         <td>
-                            <div class="popover-content" style="display: none;">
-                                <c:set var="user" value="${m}"/>
-                                <%@include file="organizations.jspf"%>
-                            </div>
-
-                            <a href="${ctx}/admin/sys/user/${m.id}" rel="popover">
+                            <a href="${ctx}/admin/sys/user/${m.id}">
                                 ${m.id}
                             </a>
                         </td>
@@ -148,20 +148,7 @@
 <script type="text/javascript">
     $(function() {
         initUserListButton();
-
-        $("[rel=popover]").each(function() {
-            var a = $(this);
-            a.popover({
-                placement : "right",
-                trigger : "hover",
-                html : "true",
-                title : "组织机构及工作职务",
-                content : a.prev(".popover-content").html()
-            });
-        });
-
-
-
+        $.app.toggleLoadTable($("#table"), "${ctx}/admin/sys/user/organizations/{parentId}")
     });
 </script>
 

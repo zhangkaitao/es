@@ -58,12 +58,12 @@
            ,    north__spacing_closed:        20
            ,    north__togglerLength_closed:    200
            ,    initClosed : true
-           ,    north__togglerContent_closed:"显示组织机构和工作职务"
-           ,    north__togglerTip_closed:    "显示组织机构和工作职务"
-           ,    north__sliderTip:            "显示组织机构和工作职务"
+           ,    north__togglerContent_closed:"显示组织机构和工作职务查询"
+           ,    north__togglerTip_closed:    "显示组织机构和工作职务查询"
+           ,    north__sliderTip:            "显示组织机构和工作职务查询"
            ,    resizerTip:         "调整大小"
-           ,    togglerTip_open: "隐藏组织机构和工作职务"
-           ,    togglerTip_closed: "显示组织机构和工作职务"
+           ,    togglerTip_open: "隐藏组织机构和工作职务查询"
+           ,    togglerTip_closed: "显示组织机构和工作职务查询"
            ,    maskContents:        true // IMPORTANT - enable iframe masking
            ,    north__onopen : loadIframePage
            ,    north__onclose_start:	$.layout.callbacks.pseudoClose

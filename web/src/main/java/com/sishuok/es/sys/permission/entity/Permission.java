@@ -38,6 +38,12 @@ public class Permission extends BaseEntity<Long> {
      */
     private String description;
 
+    /**
+     * 是否显示 也表示是否可用 为了统一 都使用这个
+     */
+    @Column(name = "`show`")
+    private Boolean show = Boolean.FALSE;
+
     public String getName() {
         return name;
     }
@@ -60,5 +66,13 @@ public class Permission extends BaseEntity<Long> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getShow() {
+        return show;
+    }
+
+    public void setShow(Boolean show) {
+        this.show = show;
     }
 }

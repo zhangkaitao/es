@@ -67,8 +67,17 @@
                 </div>
             </div>
 
+            <div class="control-group">
+                <form:label path="show" cssClass="control-label">状态</form:label>
+                <div class="controls inline-radio">
+                    <form:radiobuttons
+                            path="show" items="${availableList}" itemLabel="info" itemValue="value" cssClass="validate[required]"/>
+                </div>
+            </div>
 
-            <c:if test="${op eq '新增'}">
+
+
+        <c:if test="${op eq '新增'}">
                 <c:set var="icon" value="icon-file"/>
             </c:if>
             <c:if test="${op eq '修改'}">

@@ -22,7 +22,7 @@
                 <a class="btn btn-link btn-edit" href="${ctx}/admin/sys/resource/${m.id}">${m.id}</a>
             </td>
             <td>
-                <sys:showResourceName id="${m.id}"/>
+                ${m.name}
             </td>
             <td>
                 <div style="width: 80px;overflow: hidden" data-toggle="tooltip" title="${m.identity}">${m.identity}</div>

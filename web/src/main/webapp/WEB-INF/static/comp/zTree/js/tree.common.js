@@ -80,7 +80,8 @@ $.zTree = {
         }
 
         if(config,setting) {
-            setting = $.extend(setting, config.setting);
+            setting = $.extend(true, config.setting, setting);
+            config.setting = setting;
         }
 
         function drop(treeId, nodes, targetNode) {
@@ -230,7 +231,7 @@ $.zTree = {
             $.zTree.initAutocomplete(config.autocomplete);
         }
 
-        return zTree;
+        return treeSelect;
 
     },
 
@@ -248,7 +249,8 @@ $.zTree = {
                 "?async=" + config.async +
                 "&asyncLoadAll=" + config.asyncLoadAll +
                 (config.excludeId ? "&excludeId=" + config.excludeId : "") +
-                (config.onlyShow ? "&search.show_eq=true" : ""));
+                (config.onlyShow ? "&search.show_eq=true" : "") +
+                "&onlyCheckLeaf=" + (config.setting && config.setting.check && config.setting.check.onlyCheckLeaf));
         var autocomplateEnable = config.autocomplete && config.autocomplete.enable;
 
         var id = this.index++;
@@ -284,7 +286,8 @@ $.zTree = {
         };
 
         if(config.setting) {
-            setting = $.extend(setting, config.setting);
+
+            setting = $.extend(true, config.setting, setting);
         }
 
         function fullName(node) {
@@ -310,9 +313,14 @@ $.zTree = {
                 var nodes = zTree.getCheckedNodes(true);
                 var names = "";
                 var ids = "";
+                var onlySelectLeaf = config.setting.check && config.setting.check.onlySelectLeaf;
                 for (var i = 0, l = nodes.length; i < l; i++) {
-                    names += fullName(nodes[i]) + (i != l - 1 ? "," : "");
-                    ids += nodes[i].id + (i != l - 1 ? "," : "");
+                    var node = nodes[i];
+                    if(onlySelectLeaf && node.isParent) {
+                        continue;
+                    }
+                    names += fullName(node) + (i != l - 1 ? "," : "");
+                    ids += node.id + (i != l - 1 ? "," : "");
                 }
 
                 $name.prop("value", names);
@@ -359,6 +367,7 @@ $.zTree = {
 
         var zTree = null;
         var initTree = function() {
+            $.zTree.prepareZNodes(config.zNodes, config);
             zTree = $.fn.zTree.init($("#" + treeSelect), setting, config.zNodes);
 
             if(autocomplateEnable) {
@@ -368,7 +377,9 @@ $.zTree = {
                     var url = config.loadUrl + "&searchName=" + searchName;
                     zTree.destroy();
                     $.getJSON(url, function(zNodes) {
-                        if(zNodes.length > 0) { //如果没找到节点就不必展示
+                        var zNodesLength = zNodes.length;
+                        if(zNodesLength > 0) { //如果没找到节点就不必展示
+                            $.zTree.prepareZNodes(zNodes, config);
                             zTree = $.fn.zTree.init($("#" + treeSelect), setting, zNodes);
                         }
                     });
@@ -394,14 +405,37 @@ $.zTree = {
             initTree();
         }
 
+        return treeSelect;
+
     },
-    initMaintainBtn : function(maintainUrlPrefix, table, async) {
+    prepareZNodes : function(zNodes, config) {
+        if(!zNodes) {
+            return;
+        }
+        var zNodesLength = zNodes.length;
+        if(!zNodesLength) {
+            return;
+        }
+        var onlySelectLeaf = config.setting && config.setting.check && config.setting.check.onlySelectLeaf;
+
+        for(var i = 0; i < zNodesLength; i++) {
+            var node = zNodes[i];
+
+            if(onlySelectLeaf && node.isParent) {
+                node.nocheck = true;
+            } else {
+                node.nocheck = false;
+            }
+        }
+    },
+    initMaintainBtn : function(maintainUrlPrefix, tableId, async) {
         var updateUrl = maintainUrlPrefix + "/update/{id}",
             deleteUrl = maintainUrlPrefix + "/batch/delete",
             appendChildUrl = maintainUrlPrefix + "/appendChild/{id}",
             moveTreeUrl = maintainUrlPrefix + "/move/{id}?async=" + async;
 
-        $("#appendChild").click(function () {
+        $("#appendChild").off("click").on("click", function () {
+            var table = $("#" + tableId);
             var checkbox = $.table.getFirstSelectedCheckbox(table);
             if(!checkbox.length) {
                 return;
@@ -409,7 +443,8 @@ $.zTree = {
             window.location.href = appendChildUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
             return false;
         });
-        $("#moveTree").click(function () {
+        $("#moveTree").off("click").on("click", function () {
+            var table = $("#" + tableId);
             var checkbox = $.table.getFirstSelectedCheckbox(table);
             if(!checkbox.length) {
                 return;
@@ -425,7 +460,8 @@ $.zTree = {
             return false;
         });
 
-        $("#updateTree").click(function() {
+        $("#updateTree").off("click").on("click", function() {
+            var table = $("#" + tableId);
             var checkbox = $.table.getFirstSelectedCheckbox(table);
             if(!checkbox.length) {
                 return;
@@ -433,7 +469,8 @@ $.zTree = {
             window.location.href = updateUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
         });
 
-        $("#deleteTree").click(function () {
+        $("#deleteTree").off("click").on("click", function () {
+            var table = $("#" + tableId);
             var checkbox = $.table.getAllSelectedCheckbox(table);
             if(!checkbox.length) {
                 return;
@@ -445,7 +482,6 @@ $.zTree = {
                 });
                 return;
             }
-            var btn = this;
             $.app.confirm({
                 width:500,
                 message : "确认删除吗？",

@@ -14,6 +14,7 @@ import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
+import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import com.sishuok.es.sys.user.entity.UserStatus;
@@ -210,6 +211,14 @@ public class UserController extends BaseCRUDController<User, Long> {
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "还原成功！");
         return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
     }
+
+
+
+    @RequestMapping("/organizations/{user}")
+    public String permissions(@PathVariable("user") User user) {
+        return getViewPrefix() + "/organizationsTable";
+    }
+
 
     /**
      * 验证返回格式

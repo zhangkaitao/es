@@ -73,6 +73,10 @@ public class UserService extends BaseService<User, Long> {
 
         List<UserOrganizationJob> localUserOrganizationJobs = user.getOrganizationJobs();
         for(int i = 0, l = localUserOrganizationJobs.size(); i < l; i++) {
+
+            //设置关系 防止丢失 报 A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
+            localUserOrganizationJobs.get(i).setUser(user);
+
             UserOrganizationJob localUserOrganizationJob = localUserOrganizationJobs.get(i);
             UserOrganizationJob dbUserOrganizationJob = findUserOrganizationJob(localUserOrganizationJob);
 

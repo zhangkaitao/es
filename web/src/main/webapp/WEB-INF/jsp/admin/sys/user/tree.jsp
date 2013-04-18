@@ -2,14 +2,6 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
-
-
-<div id="organizationTree" class="scroll-pane"></div>
-
-<div id="jobTree" class="scroll-pane"></div>
-<es:contentFooter/>
-<%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
-<%--<%@include file="/WEB-INF/jsp/common/import-nicescroll.jspf"%>--%>
 <style>
     .scroll-pane
     {
@@ -22,6 +14,16 @@
         margin-right: 30px;
     }
 </style>
+
+
+
+<div id="organizationTree" class="scroll-pane"></div>
+
+<div id="jobTree" class="scroll-pane"></div>
+<es:contentFooter/>
+<%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
+
+
 <script type="text/javascript">
     var async = ${not empty param.async and param.async eq true};
     function onClick() {
@@ -45,7 +47,7 @@
         $.zTree.initMovableTree({
             zNodes : null,
             urlPrefix : "${ctx}/admin/sys/organization/organization",
-//            onlyShow : true,
+            onlyShow : true,
             async : true,
             asyncLoadAll : false,
             editable : false,

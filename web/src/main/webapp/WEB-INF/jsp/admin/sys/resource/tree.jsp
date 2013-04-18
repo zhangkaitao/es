@@ -15,7 +15,7 @@
     <li <c:if test="${not empty param['search.show_eq']}">class="active"</c:if>>
         <a href="${ctx}/admin/sys/resource/tree?search.show_eq=true&async=${not empty param.async and param.async eq true}">
             <i class="icon-table"></i>
-            可显示的
+            显示的
         </a>
     </li>
 </ul>
@@ -35,6 +35,7 @@
             zNodes : zNodes,
             urlPrefix : "${ctx}/admin/sys/resource",
             async : async,
+            onlyShow:${param['search.show_eq'] eq true},
             autocomplete : {
                 enable : true
             },

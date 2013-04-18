@@ -1,13 +1,13 @@
 <%@ tag import="com.sishuok.es.common.utils.SpringUtils" %>
-<%@ tag import="com.sishuok.es.sys.organization.service.JobService" %>
-<%@ tag import="com.sishuok.es.sys.organization.entity.Job" %>
 <%@ tag import="java.util.List" %>
 <%@ tag import="com.google.common.collect.Lists" %>
+<%@ tag import="com.sishuok.es.sys.resource.service.ResourceService" %>
+<%@ tag import="com.sishuok.es.sys.resource.entity.Resource" %>
 <%@ tag pageEncoding="UTF-8"%>
-<%@ attribute name="id" type="java.lang.Long" required="true" description="当前要展示的组织机构的名字" %>
+<%@ attribute name="id" type="java.lang.Long" required="true" description="当前要展示的资源的名字" %>
 <%@ attribute name="showParents" type="java.lang.Boolean" required="false" description="是否显示父亲" %>
 <%@ attribute name="includeRoot" type="java.lang.Boolean" required="false" description="是否包含根" %>
-<%!private JobService jobService;%>
+<%!private ResourceService resourceService;%>
 <%
     if(showParents == null) {
         showParents = true;
@@ -16,19 +16,19 @@
         includeRoot = true;
     }
 
-    if(jobService == null) {
-        jobService = SpringUtils.getBean(JobService.class);
+    if(resourceService == null) {
+        resourceService = SpringUtils.getBean(ResourceService.class);
     }
 
-    Job job = jobService.findOne(id);
+    Resource resource = resourceService.findOne(id);
 
     List<String> names = Lists.newArrayList();
 
-    names.add(job.getName());
+    names.add(resource.getName());
 
     if(showParents == true) {
-        List<Job> parents = jobService.findAncestor(job.getParentIds());
-        for(Job o : parents) {
+        List<Resource> parents = resourceService.findAncestor(resource.getParentIds());
+        for(Resource o : parents) {
             if(includeRoot == false && o.isRoot()) {
                 continue;
             }

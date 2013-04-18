@@ -34,13 +34,13 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (9, 2, '0/1/2/', 7, '父子表（小数据量）', 'example:parentchild', '/showcase/parentchild/parent', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (10, 2, '0/1/2/', 8, '父子表（大数据量）', 'example:product', '/showcase/product', true);
+        values (10, 2, '0/1/2/', 8, '父子表（大数据量）', '', '', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (11, 10, '0/1/2/10/', 1, '类别列表', 'example:product:category', '/showcase/product/category', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (12, 10, '0/1/2/10/', 2, '产品列表', 'example:product:product', '/showcase/product/product', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (13, 2, '0/1/2/', 9, '状态管理', 'example:status', '/showcase/status', true);
+        values (13, 2, '0/1/2/', 9, '状态管理', '', '', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (14, 13, '0/1/2/13/', 1, '审核状态列表', 'example:status:audit', '/showcase/status/audit', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
@@ -77,13 +77,10 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (28, 26, '0/1/16/26/', 2, '角色列表', 'sys:role', '/admin/sys/permission/role', true);
 
-insert into `sys_permission` (`id`, `name`, `permission`, `description`) values (1, '所有', 'all', '所有数据操作的权限');
-insert into `sys_permission` (`id`, `name`, `permission`, `description`) values (2, '新增', 'save', '新增数据操作的权限');
-insert into `sys_permission` (`id`, `name`, `permission`, `description`) values (3,  '修改', 'update', '修改数据操作的权限');
-insert into `sys_permission` (`id`, `name`, `permission`, `description`) values (4,  '删除', 'delete', '删除数据操作的权限');
-insert into `sys_permission` (`id`, `name`, `permission`, `description`) values (5,  '查看', 'view', '查看数据操作的权限');
+insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (1, '所有', 'all', '所有数据操作的权限', 1);
+insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (2, '新增', 'save', '新增数据操作的权限', 1);
+insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (3,  '修改', 'update', '修改数据操作的权限', 1);
+insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (4,  '删除', 'delete', '删除数据操作的权限', 1);
+insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (5,  '查看', 'view', '查看数据操作的权限', 1);
 
-insert into `sys_role` (`id`, `name`, `role`, `description`) values (1,  '管理员', 'admin', '拥有所有权限');
-
-
-
+insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (1,  '管理员', 'admin', '拥有所有权限', 1);

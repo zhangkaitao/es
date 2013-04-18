@@ -10,6 +10,7 @@ drop table if exists `sys_resource`;
 drop table if exists `sys_permission`;
 drop table if exists `sys_role`;
 drop table if exists `sys_role_resource_permission`;
+drop table if exists `sys_group`;
 ##user
 create table `sys_user`(
   `id`         bigint not null auto_increment,
@@ -123,10 +124,10 @@ create table `sys_organization`(
   `weight`    int,
   `show`       bool,
   constraint `pk_sys_organization` primary key(`id`),
-  index idx_sys_organization_name (`name`),
-  index idx_sys_organization_type (`type`),
-  index idx_sys_organization_parentId (`parent_id`),
-  index idx_sys_organization_parentIds_weight (`parent_ids`, `weight`)
+  index `idx_sys_organization_name` (`name`),
+  index `idx_sys_organization_type` (`type`),
+  index `idx_sys_organization_parent_id` (`parent_id`),
+  index `idx_sys_organization_parent_ids_weight` (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `sys_organization` auto_increment=1000;
 
@@ -140,9 +141,9 @@ create table `sys_job`(
   `weight`    int,
   `show`       bool,
   constraint `pk_sys_job` primary key(`id`),
-  index idx_sys_job_name (`name`),
-  index idx_sys_job_parentId (`parent_id`),
-  index idx_sys_job_parentIds_weight (`parent_ids`, `weight`)
+  index `idx_sys_job_nam` (`name`),
+  index `idx_sys_job_parent_id` (`parent_id`),
+  index `idx_sys_job_parent_ids_weight` (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `sys_job` auto_increment=1000;
 
@@ -167,11 +168,11 @@ create table `sys_resource`(
   `weight`    int,
   `show`       bool,
   constraint `pk_sys_resource` primary key(`id`),
-  index idx_sys_resource_name (`name`),
-  index idx_sys_resource_identity (`identity`),
-  index idx_sys_resource_user (`url`),
-  index idx_sys_resource_parentId (`parent_id`),
-  index idx_sys_resource_parentIds_weight (`parent_ids`, `weight`)
+  index `idx_sys_resource_name` (`name`),
+  index `idx_sys_resource_identity` (`identity`),
+  index `idx_sys_resource_user` (`url`),
+  index `idx_sys_resource_parent_id` (`parent_id`),
+  index `idx_sys_resource_parent_ids_weight` (`parent_ids`, `weight`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `sys_resource` auto_increment=1000;
 
@@ -181,9 +182,11 @@ create table `sys_permission`(
   `name`      varchar(100),
   `permission`  varchar(100),
   `description`      varchar(200),
+  `show`       bool,
   constraint `pk_sys_permission` primary key(`id`),
   index idx_sys_permission_name (`name`),
-  index idx_sys_permission_permission (`permission`)
+  index idx_sys_permission_permission (`permission`),
+  index idx_sys_permission_show (`show`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `sys_permission` auto_increment=1000;
 
@@ -192,9 +195,11 @@ create table `sys_role`(
   `name`      varchar(100),
   `role`  varchar(100),
   `description`      varchar(200),
+  `show`       bool,
   constraint `pk_sys_role` primary key(`id`),
-  index idx_sys_role_name (`name`),
-  index idx_sys_role_role (`role`)
+  index `idx_sys_role_name` (`name`),
+  index `idx_sys_role_role` (`role`),
+  index `idx_sys_role_show` (`show`)
 ) charset=utf8 ENGINE=InnoDB;
 alter table `sys_role` auto_increment=1000;
 
@@ -206,4 +211,16 @@ create table `sys_role_resource_permission`(
   `permission_ids` varchar(500),
   constraint `pk_role_resource_permission` primary key(`id`),
   constraint `unique_sys_role_resource_permission` unique(`role_id`, `resource_id`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `sys_group`(
+  `id`         bigint not null auto_increment,
+  `name`       varchar(100),
+  `type`       varchar(50),
+  `show`       bool,
+  `default_group` bool,
+  constraint `pk_group` primary key(`id`),
+  index `idx_sys_group_type` (`type`),
+  index `idx_sys_group_show` (`show`),
+  index `idx_sys_group_default_group` (`default_group`)
 ) charset=utf8 ENGINE=InnoDB;

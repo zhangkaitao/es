@@ -145,10 +145,19 @@
                 </a>
             </div>
             <div id="selectedOrganization" class="span9">
-                <div class="muted font-12" style="margin: 10px auto;">已选择的组织机构和工作机构</div>
+                <div class="muted font-12" style="margin: 10px auto;">
+                    已选择的组织机构和工作机构
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="btn btn-link btn-delete-all-organization">删除选中</a>
+                </div>
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
+                        <th style="width: 80px">
+                            <a class="check-all" href="javascript:;">全选</a>
+                            |
+                            <a class="reverse-all" href="javascript:;">反选</a>
+                        </th>
                         <th>组织机构</th>
                         <th>工作职务</th>
                         <th style="width: 20px;">&nbsp;</th>
@@ -157,6 +166,7 @@
                     <tbody>
                     <c:forEach items="${m.displayOrganizationJobs}" var="o">
                         <tr>
+                            <td class="check"><input type="checkbox"></td>
                             <td>
                                 <input type='hidden' id='organizationId_${o.key.id}' name='organizationId' value='${o.key.id}'>
                                 <sys:showOrganizationName id="${o.key.id}"/>
@@ -220,11 +230,13 @@
                 $.app.readonlyForm($("#editForm"), false);
                 $("#selectOrganization").remove();
                 $(".btn-delete-organization").remove();
+                $(".btn-delete-all-organization").remove();
             </c:when>
             <c:when test="${op eq '查看'}">
                 $.app.readonlyForm($("#editForm"), true);
                 $("#selectOrganization").remove();
                 $(".btn-delete-organization").remove();
+                $(".btn-delete-all-organization").remove();
             </c:when>
             <c:otherwise>
                 initValidator($("#editForm"));
@@ -232,7 +244,7 @@
             </c:otherwise>
         </c:choose>
 
-        $.zTree.initSelectTree({
+        var organizationTreeId = $.zTree.initSelectTree({
             zNodes : [],
             nodeType : "default",
             fullName:true,
@@ -251,7 +263,7 @@
             }
         });
 
-        $.zTree.initSelectTree({
+        var jobTreeId = $.zTree.initSelectTree({
             zNodes : [],
             urlPrefix : "${ctx}/admin/sys/organization/job",
             async : true,
@@ -298,6 +310,7 @@
 
             var template =
                     "<tr>" +
+                        "<td class='check'><input type='checkbox'></td>" +
                         "<td>" +
                             "<input type='hidden' id='organizationId_{organizationId}' name='organizationId' value='{organizationId}'>" +
                             "{organizationName}" +
@@ -316,7 +329,32 @@
                             .replace("{jobId}", jobId)
                             .replace("{jobName}", jobName.replace(",", "<br/>").replace(">", "&gt;"))
             );
+            //更新表格的全选反选
+            $.table.initCheckbox($("#selectedOrganization table"));
+            $.fn.zTree.getZTreeObj(jobTreeId).checkAllNodes(false);
+            $.fn.zTree.getZTreeObj(organizationTreeId).checkAllNodes(false);
+            $("#organizationId,#organizationName,#jobId,#jobName").val("");
         });
+
+        $.table.initCheckbox($("#selectedOrganization table"));
+
+        $(".btn-delete-all-organization").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($("#selectedOrganization table"));
+            if(!checkbox.length) {
+                return;
+            }
+            $.app.confirm({
+                title : "确认删除组织机构和工作职务",
+                message : "确认删除选中的组织机构和工作职务吗？",
+                ok : function() {
+                    checkbox.each(function() {
+                        $(this).closest("tr").remove();
+                    });
+                }
+            });
+
+        });
+
     });
 
     function removeOrganization(a) {

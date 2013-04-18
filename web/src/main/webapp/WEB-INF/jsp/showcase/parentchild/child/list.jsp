@@ -12,6 +12,11 @@
         </tr>
       </thead>
       <tbody>
+      <c:if test="${empty page.content}">
+          <tr>
+              <td colspan="6">无</td>
+          </tr>
+      </c:if>
       <c:forEach items="${page.content}" var="child">
         <tr>
             <td>${child.id}</td>
