@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div id="menu">
-    <div class="scoll-pane">
     <c:forEach items="${menus}" var="m">
         <div>
             <h3><a href="#">${m.name}</a></h3>
@@ -13,5 +12,4 @@
             </div>
         </div>
     </c:forEach>
-    </div>
 </div>

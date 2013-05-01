@@ -96,7 +96,7 @@
     $(function() {
         var tableId = "table";
         var urlPrefix = "${ctx}/showcase/tree";
-        $.btn.initChangeShowStatus(urlPrefix, tableId);
+        $.btn.initChangeShowStatus(urlPrefix + "/changeStatus", tableId);
         $.zTree.initMaintainBtn(urlPrefix, tableId, ${not empty param.async and param.async});
     });
 

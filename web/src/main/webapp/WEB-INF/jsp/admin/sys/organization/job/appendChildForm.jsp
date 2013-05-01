@@ -10,8 +10,8 @@
         <div class="control-group">
             <label class="control-label">父节点名称</label>
             <div class="controls">
-                 <es:showAttachment filename="${parent.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
-                 ${parent.name}
+                <conf:showIcon iconIdentity="${parent.icon}"/>
+                ${parent.name}
             </div>
         </div>
 
@@ -22,20 +22,10 @@
             </div>
         </div>
 
-        <c:if test="${not empty child.icon}">
-            <div class="control-group">
-                <form:label path="icon" cssClass="control-label">当前显示的图标</form:label>
-                <div class="controls">
-                    <es:showAttachment filename="${child.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
-                    <form:hidden path="icon"/>
-                </div>
-            </div>
-        </c:if>
-
         <div class="control-group">
-            <label for="file" class="control-label">子节点图标</label>
+            <form:label path="icon" cssClass="control-label">子节点图标</form:label>
             <div class="controls">
-                <input type="file" id="file" name="file" class="custom-file-input"/>
+                <form:input path="icon" cssClass="input-medium"/>
             </div>
         </div>
 
@@ -61,6 +51,7 @@
 </form:form>
 </div>
 <es:contentFooter/>
+<%@include file="/WEB-INF/jsp/common/admin/import-conf-js.jspf"%>
 <script type="text/javascript">
 $(function () {
     $.validationEngineLanguage.allRules.name = {
@@ -70,6 +61,7 @@ $(function () {
     var validationEngine = $("#appendChildForm").validationEngine();
     <es:showFieldError commandName="child"/>
 
+    $.conf.icon.initIconList($("#icon"));
 
 });
 </script>

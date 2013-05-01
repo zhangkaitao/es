@@ -5,6 +5,12 @@
  */
 package com.sishuok.es.sys.user.service;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.sishuok.es.common.entity.search.SearchOperator;
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
@@ -24,6 +30,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -204,5 +212,25 @@ public class UserService extends BaseService<User, Long> {
         for(Long id : ids) {
             proxyUserService.changeStatus(opUser, findOne(id), newStatus, reason);
         }
+    }
+
+    public Set<Map<String, Object>> findIdAndNames(Searchable searchable, String usernme) {
+
+        searchable.addSearchFilter("username", SearchOperator.like, usernme);
+
+        return Sets.newHashSet(
+                Lists.transform(
+                        findAll(searchable).getContent(),
+                        new Function<User, Map<String, Object>>() {
+                            @Override
+                            public Map<String, Object> apply(User input) {
+                                Map<String, Object> data = Maps.newHashMap();
+                                data.put("label", input.getUsername());
+                                data.put("value", input.getId());
+                                return data;
+                            }
+                        }
+                )
+        );
     }
 }

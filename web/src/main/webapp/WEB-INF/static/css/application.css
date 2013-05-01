@@ -28,6 +28,11 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="search"]
     padding: 5px;
 }
 
+
+textarea {
+    height: auto;
+}
+
 .input-append input,
 .input-prepend input,
 .input-append select,
@@ -72,16 +77,8 @@ input.search-query {
 }
 
 /*btn-group 嵌套 btn-group时*/
-.btn-group > .btn-group:first-child > .btn + .dropdown-toggle {
-    border-bottom-right-radius: 0px;
-    -webkit-border-top-right-radius: 0px;
-    border-top-right-radius: 0px;
-    -moz-border-radius-bottomright: 0px;
-    -moz-border-radius-topright: 0px;
-    border-right: 0px;
-}
 
-.btn-group > .btn-group:last-child > .btn {
+.btn-group > .btn-group.last > .btn {
     border-bottom-left-radius: 0px;
     -webkit-border-top-left-radius: 0px;
     border-top-left-radius: 0px;
@@ -90,6 +87,14 @@ input.search-query {
     border-left: 0px;
 }
 
+.btn-group > .btn-group.first > .btn:first-child {
+    border-bottom-right-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    border-top-right-radius: 0px;
+    -moz-border-radius-bottomright: 0px;
+    -moz-border-radius-topright: 0px;
+    border-right: 0px;
+}
 
 .input-mini {
     width: 20px;
@@ -198,6 +203,32 @@ input.search-query {
 .ui-dialog-titlebar.no-title > .ui-button {
     top: 100%;
     z-index: 1;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-size: 13px;
+}
+.icon6[class^="icon-"], .icon6[class*=" icon-"] {
+    font-size:280px;
+}
+.icon5[class^="icon-"], .icon5[class*=" icon-"] {
+    font-size:140px;
+}
+
+.icon4[class^="icon-"], .icon4[class*=" icon-"] {
+    font-size:123px;
+}
+
+.icon3[class^="icon-"], .icon3[class*=" icon-"] {
+    font-size:61px;
+}
+
+.icon2[class^="icon-"], .icon2[class*=" icon-"] {
+    font-size:30px;
+}
+
+.icon1[class^="icon-"], .icon1[class*=" icon-"] {
+    font-size:13px;
 }
 
 
@@ -764,7 +795,6 @@ iframe[tabs="true"] {
     padding: 5px 20px;
 }
 
-
 .jcaptcha-img {
     cursor: pointer;
 }
@@ -815,8 +845,18 @@ iframe[tabs="true"] {
 .form-small .control-label {
     width: 60px;
 }
+
 .form-small .controls{
     margin-left: 70px;
+}
+
+.form-medium .control-label {
+    width: 90px;
+    margin-right: 10px;
+}
+
+.form-medium .controls{
+    margin-left: 90px;
 }
 
 
@@ -831,6 +871,84 @@ iframe[tabs="true"] {
     width: 100%;float: left;padding: 20px 0;
 }
 
+.sys-icon-list{
+    width: 320px;
+    height: 315px;
+    position: absolute;
+    background: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #a1acb8;
+    padding: 3px 0 3px 0;
+}
+
+/**系统管理 css start*/
+.sys-icon-list .nav {
+    margin: 0 0 5px 3px;
+}
+
+.sys-icon-list .tab-pane {
+    width: 300px;
+    height: 250px;
+    padding: 10px;
+    overflow: hidden;
+}
+.sys-icon-list .tab-pane i {
+    margin: 5px;
+}
+.auth {
+    float: left;
+    margin: 10px;
+}
+
+.auth .left, .auth .right {
+    float: left;
+    width: 220px;
+    height: 170px;
+}
+.auth .left .list,.auth .right .list {
+    float: left;
+    width: 220px;
+    height: 150px;
+    overflow: auto;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #a1acb8;
+}
+
+.auth .btns {
+    float: left;
+    margin: 60px 5px 5px 5px;
+    text-align: center;
+    vertical-align: middle;
+    border: 0;
+}
+
+.auth .btns .btn {
+    display: block;
+}
+.auth .btns .btn > [class^="icon-"] {
+    font-size: 18px;
+}
+.auth ul {
+    list-style-type: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+    min-height: 100px;
+}
+.auth  li {
+    margin: 5px;
+    padding: 5px;
+    cursor: move;
+}
+
+.auth .ui-state-highlight {
+    height: 1.5em;
+    line-height: 1.2em;
+}
+/**系统管理 css end*/
 
 /*去除IE 虚线框*/
 a,input,textarea{blr:expression(this.onFocus=this.close());} /* 只支持IE，过多使用效率低 */

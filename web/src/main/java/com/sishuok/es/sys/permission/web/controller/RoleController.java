@@ -41,8 +41,6 @@ public class RoleController extends BaseCRUDController<Role, Long> {
 
     @Autowired
     private PermissionService permissionService;
-    @Autowired
-    private ResourceService resourceService;
 
     @Autowired
     public RoleController(RoleService roleService) {

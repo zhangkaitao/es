@@ -11,6 +11,8 @@ drop table if exists `sys_permission`;
 drop table if exists `sys_role`;
 drop table if exists `sys_role_resource_permission`;
 drop table if exists `sys_group`;
+drop table if exists `sys_group_relation`;
+drop table if exists `sys_auth`;
 ##user
 create table `sys_user`(
   `id`         bigint not null auto_increment,
@@ -209,7 +211,7 @@ create table `sys_role_resource_permission`(
   `role_id`   bigint,
   `resource_id` bigint,
   `permission_ids` varchar(500),
-  constraint `pk_role_resource_permission` primary key(`id`),
+  constraint `pk_sys_role_resource_permission` primary key(`id`),
   constraint `unique_sys_role_resource_permission` unique(`role_id`, `resource_id`)
 ) charset=utf8 ENGINE=InnoDB;
 
@@ -219,8 +221,46 @@ create table `sys_group`(
   `type`       varchar(50),
   `show`       bool,
   `default_group` bool,
-  constraint `pk_group` primary key(`id`),
+  constraint `pk_sys_group` primary key(`id`),
   index `idx_sys_group_type` (`type`),
   index `idx_sys_group_show` (`show`),
   index `idx_sys_group_default_group` (`default_group`)
 ) charset=utf8 ENGINE=InnoDB;
+
+
+create table `sys_group_relation`(
+  `id`         bigint not null auto_increment,
+  `group_id`       bigint,
+  `organization_id`        bigint,
+  `user_id`        bigint,
+  `start_user_id`        bigint,
+  `end_user_id`        bigint,
+  constraint `pk_sys_group_relation` primary key(`id`),
+  index `idx_sys_group_relation_group` (`group_id`),
+  index `idx_sys_group_relation_organization` (`organization_id`),
+  index `idx_sys_group_relation_user` (`user_id`),
+  index `idx_sys_group_relation_start_user_id` (`start_user_id`),
+  index `idx_sys_group_relation_end_user_id` (`end_user_id`)
+) charset=utf8 ENGINE=InnoDB;
+
+
+
+create table `sys_auth`(
+  `id`         bigint not null auto_increment,
+  `organization_id`       bigint,
+  `job_id`       bigint,
+  `user_id`        bigint,
+  `group_id`       bigint,
+  `role_ids`       varchar(500),
+  `type`           varchar(50),
+  constraint `pk_sys_auth` primary key(`id`),
+  index `idx_sys_auth_organization` (`organization_id`),
+  index `idx_sys_auth_job` (`job_id`),
+  index `idx_sys_auth_user` (`user_id`),
+  index `idx_sys_auth_group` (`group_id`),
+  index `idx_sys_auth_type` (`type`)
+) charset=utf8 ENGINE=InnoDB;
+
+
+
+

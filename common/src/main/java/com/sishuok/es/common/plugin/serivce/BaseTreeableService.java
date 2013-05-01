@@ -279,7 +279,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         if(excludeM == null) {
             return;
         }
-        searchable.addSearchFilter("id", SearchOperator.notEq, excludeM.getId());
+        searchable.addSearchFilter("id", SearchOperator.ne, excludeM.getId());
         searchable.addSearchFilter("parentIds", SearchOperator.suffixNotLike, excludeM.makeSelfAsNewParentIds());
     }
 

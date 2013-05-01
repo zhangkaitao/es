@@ -1128,6 +1128,9 @@
 			return (fontCss && ((typeof fontCss) != "function")) ? fontCss : {};
 		},
 		makeNodeIcoClass: function(setting, node) {
+            if(setting.noSwitchIcon) {
+                return node.iconSkin;
+            }
 			var icoCss = ["ico"];
 			if (!node.isAjaxing) {
 				icoCss[0] = (node.iconSkin ? node.iconSkin + "_" : "") + icoCss[0];
@@ -1290,6 +1293,12 @@
 			}
 		},
 		replaceIcoClass: function(node, obj, newName) {
+
+            var treeId = node.tId.substr(0, node.tId.lastIndexOf("_"));
+            if(data.getSetting(treeId).noSwitchIcon) {
+                return;
+            }
+
 			if (!obj || node.isAjaxing) return;
 			var tmpName = obj.attr("class");
 			if (tmpName == undefined) return;
@@ -1304,6 +1313,7 @@
 			obj.attr("class", tmpList.join("_"));
 		},
 		replaceSwitchClass: function(node, obj, newName) {
+
 			if (!obj) return;
 			var tmpName = obj.attr("class");
 			if (tmpName == undefined) return;

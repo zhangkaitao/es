@@ -123,7 +123,7 @@
 
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
-        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*.*(..))" />
+        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
@@ -156,6 +156,7 @@
     <bean class="org.springframework.data.repository.support.DomainClassConverter" lazy-init="false">
         <constructor-arg ref="conversionService"/>
     </bean>
+
 
 
 </beans>

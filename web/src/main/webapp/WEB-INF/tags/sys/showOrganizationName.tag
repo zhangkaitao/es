@@ -23,6 +23,11 @@
 
     Organization organization = organizationService.findOne(id);
 
+    if(organization == null) {
+        out.write(String.format("编号[%d]数据不存在", id));
+        return;
+    }
+
     List<String> names = Lists.newArrayList();
     if (organization != null) {
         names.add(organization.getName());
@@ -39,10 +44,17 @@
 
     }
 
+    StringBuilder s = new StringBuilder();
+    s.append(String.format("<a class='btn btn-link' href='%s/admin/sys/organization/organization/%d'>", request.getContextPath(), id));
+
     for(int l = names.size() - 1, i = l; i >= 0; i--) {
         if(i != l) {
-            out.write(" &gt; ");
+            s.append(" &gt; ");
         }
-        out.write(names.get(i));
+        s.append(names.get(i));
     }
+
+    s.append("</a>");
+    out.write(s.toString());
+
 %>

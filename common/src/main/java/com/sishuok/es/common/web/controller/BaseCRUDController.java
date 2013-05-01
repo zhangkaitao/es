@@ -24,19 +24,27 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午1:20
  * <p>Version: 1.0
  */
-public class BaseCRUDController<M extends AbstractEntity, ID extends Serializable> extends BaseController<M, ID> {
+public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Serializable> extends BaseController<M, ID> {
 
+    /**
+     * 列表也设置common data
+     */
+    private boolean listAlsoSetCommonData = false;
+    public void setListAlsoSetCommonData(boolean listAlsoSetCommonData) {
+        this.listAlsoSetCommonData = listAlsoSetCommonData;
+    }
 
     protected  <S extends BaseService<M, ID>> BaseCRUDController(S baseService) {
         super(baseService);
     }
 
-
-
     @RequestMapping(method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
     public String list(Searchable searchable, Model model) {
         model.addAttribute("page", baseService.findAll(searchable));
+        if(listAlsoSetCommonData) {
+            setCommonData(model);
+        }
         return getViewPrefix() + "/list";
     }
 

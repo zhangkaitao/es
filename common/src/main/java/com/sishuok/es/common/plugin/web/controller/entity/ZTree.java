@@ -15,10 +15,11 @@ public class ZTree<ID extends Serializable> implements Serializable {
     private ID id;
     private ID pId;
     private String name;
-    private String icon;
+    private String iconSkin;
     private boolean open;
     private boolean root;
     private boolean isParent;
+    private boolean nocheck = false;
 
     public ID getId() {
         return id;
@@ -44,12 +45,12 @@ public class ZTree<ID extends Serializable> implements Serializable {
         this.name = name;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getIconSkin() {
+        return iconSkin;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
     }
 
     public boolean isOpen() {
@@ -78,6 +79,10 @@ public class ZTree<ID extends Serializable> implements Serializable {
     }
 
     public boolean isNocheck() {
-        return isIsParent();
+        return nocheck;
+    }
+
+    public void setNocheck(boolean nocheck) {
+        this.nocheck = nocheck;
     }
 }

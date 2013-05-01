@@ -197,7 +197,7 @@ public class Resource extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getRootDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/root.png";
+        return "ztree_setting";
     }
 
     /**
@@ -206,7 +206,7 @@ public class Resource extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getBranchDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/folder.png";
+        return "ztree_folder";
     }
 
     /**
@@ -216,7 +216,7 @@ public class Resource extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getLeafDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/file.png";
+        return "ztree_file";
     }
 
 }

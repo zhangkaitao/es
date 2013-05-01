@@ -45,6 +45,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     @Autowired
     protected ParentController(ParentService parentService) {
         super(parentService);
+        setListAlsoSetCommonData(true);
         this.parentService = parentService;
     }
 
@@ -55,13 +56,6 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    @PageableDefaults(sort = "id=desc")
-    public String list(Searchable searchable, Model model) {
-        setCommonData(model);
-        model.addAttribute("page", baseService.findAll(searchable));
-        return getViewPrefix() + "/list";
-    }
 
 
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)

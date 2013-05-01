@@ -48,12 +48,13 @@ public class SearchBindStatus extends BindStatus {
         } else {
             value = parameters;
         }
-        if(value == null || (value instanceof String && !StringUtils.hasLength((String) value))) {
-            Object attributeValue = pageContext.findAttribute(name);
-            if(attributeValue != null) {
-                value = attributeValue;
-            }
-        }
+        //万一同名就选中了
+//        if(value == null || (value instanceof String && !StringUtils.hasLength((String) value))) {
+//            Object attributeValue = pageContext.findAttribute(name);
+//            if(attributeValue != null) {
+//                value = attributeValue;
+//            }
+//        }
         return value;
     }
 

@@ -15,14 +15,11 @@
     }
 </style>
 
-
-
 <div id="organizationTree" class="scroll-pane"></div>
 
 <div id="jobTree" class="scroll-pane"></div>
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
-
 
 <script type="text/javascript">
     var async = ${not empty param.async and param.async eq true};
@@ -79,10 +76,8 @@
                 }
             }
         });
-//
-//        $(".scroll-pane").niceScroll({domfocus:true});
-//        $(".scroll-pane").mouseover(function() {
-//            $(".scroll-pane").getNiceScroll().resize();
-//        });
+
+        $(".scroll-pane").niceScroll({domfocus:true, hidecursordelay: 2000});
+
     });
 </script>

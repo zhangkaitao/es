@@ -1,0 +1,104 @@
+/**
+ * Copyright (c) 2005-2012 https://github.com/zhangkaitao
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+package com.sishuok.es.sys.group.service;
+
+import com.sishuok.es.common.service.BaseService;
+import com.sishuok.es.sys.group.entity.GroupRelation;
+import com.sishuok.es.sys.group.repository.GroupRelationRepository;
+import com.sishuok.es.sys.organization.entity.Organization;
+import com.sishuok.es.sys.organization.service.OrganizationService;
+import com.sishuok.es.sys.user.entity.User;
+import com.sishuok.es.sys.user.service.UserService;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Set;
+
+/**
+ * <p>User: Zhang Kaitao
+ * <p>Date: 13-2-4 下午3:01
+ * <p>Version: 1.0
+ */
+@Service
+public class GroupRelationService extends BaseService<GroupRelation, Long> {
+
+    private GroupRelationRepository groupRelationRepository;
+
+
+    @Autowired
+    public void setGroupRelationRepository(GroupRelationRepository groupRelationRepository) {
+        setBaseRepository(groupRelationRepository);
+        this.groupRelationRepository = groupRelationRepository;
+    }
+
+
+    public void appendRelation(Long groupId, Long[] organizationIds) {
+        if(ArrayUtils.isEmpty(organizationIds)) {
+            return;
+        }
+        for(Long organizationId : organizationIds) {
+            if(organizationId == null) {
+                continue;
+            }
+            GroupRelation r = groupRelationRepository.findByGroupIdAndOrganizationId(groupId, organizationId);
+            if(r == null) {
+                r = new GroupRelation();
+                r.setGroupId(groupId);
+                r.setOrganizationId(organizationId);
+                save(r);
+            }
+        }
+    }
+
+    public void appendRelation(Long groupId, Long[] userIds, Long[] startUserIds, Long[] endUserIds) {
+        if(ArrayUtils.isEmpty(userIds) && ArrayUtils.isEmpty(startUserIds)) {
+            return;
+        }
+        if(!ArrayUtils.isEmpty(userIds)) {
+            for(Long userId : userIds) {
+                if(userId == null) {
+                    continue;
+                }
+                GroupRelation r = groupRelationRepository.findByGroupIdAndUserId(groupId, userId);
+                if(r == null) {
+                    r = new GroupRelation();
+                    r.setGroupId(groupId);
+                    r.setUserId(userId);
+                    save(r);
+                }
+            }
+        }
+
+        if(!ArrayUtils.isEmpty(startUserIds)) {
+            for(int i = 0, l = startUserIds.length; i < l; i++) {
+                Long startUserId = startUserIds[i];
+                Long endUserId = endUserIds[i];
+                //范围查 如果在指定范围内 就没必要再新增一个 如当前是[10,20] 如果数据库有[9,21]
+                GroupRelation r = groupRelationRepository.findByGroupIdAndStartUserIdLessThanEqualAndEndUserIdGreaterThanEqual(groupId, startUserId, endUserId);
+
+                if(r == null) {
+                    //删除范围内的
+                    groupRelationRepository.deleteInRange(groupId, startUserId, endUserId);
+                    r = new GroupRelation();
+                    r.setGroupId(groupId);
+                    r.setStartUserId(startUserId);
+                    r.setEndUserId(endUserId);
+                    save(r);
+                }
+
+            }
+        }
+    }
+
+    /*public Set<Group> findUserGroup(User user) {
+        return userGroupRelationRepository.findUserGroup(user.getId());
+    }
+
+    public Set<Group> findOrganizationGroup(Set<Long> organizationIds) {
+        return organizationGroupRelationRepository.findOrganizationGroup(organizationIds);  //To change body of created methods use File | Settings | File Templates.
+    }*/
+}

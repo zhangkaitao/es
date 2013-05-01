@@ -19,10 +19,12 @@
                   <sys:showResourceName id="${o.resourceId}"/>
               </td>
               <td>
+                  <span style="line-height: 30px;">
                   <c:forEach items="${o.permissionIds}" var="permissionId" varStatus="status">
-                      <c:if test="${status.count > 1}">,</c:if>
+                      <c:if test="${status.count > 1}">|</c:if>
                       <sys:showPermissionName id="${permissionId}"/>
                   </c:forEach>
+                  </span>
               </td>
           </tr>
       </c:forEach>

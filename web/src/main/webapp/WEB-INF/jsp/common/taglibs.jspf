@@ -7,4 +7,5 @@
 
 <%@taglib prefix="es" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="sys" tagdir="/WEB-INF/tags/sys" %>
+<%@taglib prefix="conf" tagdir="/WEB-INF/tags/conf" %>
 <%@taglib prefix="esform" uri="http://www.sishuok.com/tags/es-form" %>

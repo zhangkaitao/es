@@ -31,20 +31,13 @@ public class UserStatusHistoryController extends BaseCRUDController<UserStatusHi
     @Autowired
     public UserStatusHistoryController(UserStatusHistoryService userStatusHistoryService) {
         super(userStatusHistoryService);
+        setListAlsoSetCommonData(true);
         this.userStatusHistoryService = userStatusHistoryService;
     }
 
     @Override
     protected void setCommonData(Model model) {
         model.addAttribute("statusList", UserStatus.values());
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    @PageableDefaults(sort = "id=desc")
-    @Override
-    public String list(Searchable searchable, Model model) {
-        setCommonData(model);
-        return super.list(searchable, model);
     }
 
 }

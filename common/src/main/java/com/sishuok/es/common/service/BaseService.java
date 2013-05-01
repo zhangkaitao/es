@@ -97,7 +97,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      *
      * @param id 主键
      */
-    @Transactional
     public void delete(ID id) {
         M m = findOne(id);
         delete(m);
@@ -108,7 +107,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      *
      * @param ids 实体
      */
-    @Transactional
     public void delete(ID[] ids) {
         if(ArrayUtils.isEmpty(ids)) {
             return;
@@ -153,7 +151,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      *
      * @param m 实体
      */
-    @Transactional
     public void delete(M m) {
         if(m == null) {
             return;

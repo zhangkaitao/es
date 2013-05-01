@@ -112,7 +112,7 @@
     </form:form>
 </div>
 <es:contentFooter/>
-<%@include file="../include/import-js.jspf"%>
+<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 <script type="text/javascript">
     $(function () {
         $("#editForm").find(":checkbox,:radio").filter(":not(:checked)").next("label").andSelf().remove();
@@ -122,7 +122,7 @@
         $.app.readonlyForm($("#editForm"), true);
         </c:when>
         <c:when test="${op eq '修改个人资料'}">
-        initValidator($("#editForm"));
+        $.sys.user.initValidator($("#editForm"));
         <es:showFieldError commandName="m"/>
         </c:when>
         </c:choose>

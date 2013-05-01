@@ -40,6 +40,7 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
     @Autowired
     public DeletedSampleController(DeletedSampleService sampleService) {
         super(sampleService);
+        setListAlsoSetCommonData(true);
         this.sampleService = sampleService;
     }
 
@@ -49,13 +50,6 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
         model.addAttribute("booleanList", BooleanEnum.values());
     }
 
-    @PageableDefaults(sort = "id=desc")
-    @SearchableDefaults(value = "deleted_eq=false")
-    @Override
-    public String list(Searchable searchable, Model model) {
-        setCommonData(model);
-        return super.list(searchable, model);    //To change body of overridden methods use File | Settings | File Templates.
-    }
 
     /**
      * 验证失败返回true

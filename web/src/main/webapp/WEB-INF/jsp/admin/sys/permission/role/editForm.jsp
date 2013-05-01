@@ -154,12 +154,14 @@
                             <sys:showResourceName id="${o.resourceId}"/>
                         </td>
                         <td>
+                            <span style="line-height: 30px">
                             <c:set var="permissionIds" value=""/>
                             <c:forEach items="${o.permissionIds}" var="permissionId" varStatus="status">
                                 <c:set var="permissionIds" value="${permissionIds}${status.count == 1 ? '' : ','}${permissionId}"/>
-                                <c:if test="${status.count > 1}">,</c:if>
+                                <c:if test="${status.count > 1}">|</c:if>
                                 <sys:showPermissionName id="${permissionId}"/>
                             </c:forEach>
+                            </span>
                             <input type='hidden' name='permissionIds' value='${permissionIds}'>
                         </td>
                         <td>

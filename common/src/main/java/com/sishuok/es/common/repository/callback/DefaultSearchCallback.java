@@ -90,12 +90,12 @@ public class DefaultSearchCallback implements SearchCallback {
             if(searchFilter.isUnaryFilter()) {
                 continue;
             }
-            query.setParameter(paramPrefix + paramIndex++, formtValue(searchFilter, searchFilter.getValue()));
+                query.setParameter(paramPrefix + paramIndex++, formtValue(searchFilter, searchFilter.getValue()));
 
             if(searchFilter.hasOrSearchFilters()) {
                 for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
 
-                    query.setParameter(paramPrefix + paramIndex++, formtValue(searchFilter, orSearchFilter.getValue()));
+                    query.setParameter(paramPrefix + paramIndex++, formtValue(orSearchFilter, orSearchFilter.getValue()));
                 }
             }
         }

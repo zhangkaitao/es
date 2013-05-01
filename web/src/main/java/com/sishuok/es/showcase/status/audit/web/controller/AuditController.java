@@ -37,6 +37,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
     @Autowired
     public AuditController(AuditService auditService) {
         super(auditService);
+        setListAlsoSetCommonData(true);
         this.auditService = auditService;
     }
 
@@ -45,11 +46,6 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
         model.addAttribute("statusList", Stateable.AuditStatus.values());
     }
 
-    @Override
-    public String list(Searchable searchable, Model model) {
-        setCommonData(model);
-        return super.list(searchable, model);
-    }
 
 
     @RequestMapping(value = "status/{status}", method = RequestMethod.GET)

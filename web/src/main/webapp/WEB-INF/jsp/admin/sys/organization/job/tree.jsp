@@ -30,7 +30,7 @@
     $(function() {
         var zNodes =[
             <c:forEach items="${trees}" var="m">
-            { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true, root : ${m.root},isParent:${m.isParent}},
+            { id:${m.id}, pId:${m.pId}, name:"${m.name}", iconSkin:"${m.iconSkin}", open: true, root : ${m.root},isParent:${m.isParent}},
             </c:forEach>
         ];
 

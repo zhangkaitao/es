@@ -2,8 +2,8 @@
 <form id="searchForm" class="form-inline search-form" data-change-search="true">
 
 
-    <esform:label path="search.username_like">用户名</esform:label>
-    <esform:input path="search.username_like" cssClass="input-small" placeholder="模糊匹配"/>
+    <esform:label path="search.user.username_like">用户名</esform:label>
+    <esform:input path="search.user.username_like" cssClass="input-small" placeholder="模糊匹配"/>
     &nbsp;&nbsp;
 
     <esform:label path="search.opDate_gte">操作时间从</esform:label>

@@ -96,7 +96,7 @@
     $(function() {
         var tableId = "table";
         var urlPrefix = "${ctx}/admin/sys/organization/job";
-        $.btn.initChangeShowStatus(urlPrefix, tableId);
+        $.btn.initChangeShowStatus(urlPrefix + "/changeStatus", tableId);
         $.zTree.initMaintainBtn(urlPrefix, tableId, ${not empty param.async and param.async});
     });
 

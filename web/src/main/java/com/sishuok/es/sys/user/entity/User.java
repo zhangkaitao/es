@@ -102,6 +102,15 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     @OrderBy
     private List<UserOrganizationJob> organizationJobs;
 
+    public User() {
+    }
+
+    public User(Long id) {
+        setId(id);
+    }
+
+
+
     public List<UserOrganizationJob> getOrganizationJobs() {
         if(organizationJobs == null) {
             organizationJobs = Lists.newArrayList();

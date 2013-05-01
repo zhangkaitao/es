@@ -17,15 +17,19 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <div class="btn-group">
-                    <a class="btn btn-create">
+                <div class="btn-group first">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
                         <span class="icon-file"></span>
                         新&nbsp;增
-                    </a>
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
+                        <li>
+                            <a class="btn btn-create">
+                                <span class="icon-file"></span>
+                                普通新增
+                            </a>
+                        </li>
                         <li>
                             <a id="ajaxCreate" class="btn" href="${ctx}/showcase/upload/ajax/create">
                                 <span class="icon-file"></span>

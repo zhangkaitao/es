@@ -60,7 +60,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a id="moveTree" class="btn btn-custom btn-custom">
+                            <a id="moveTree" class="btn">
                                 <i class="icon-move"></i>
                                 移动节点
                             </a>
@@ -96,7 +96,7 @@
     $(function() {
         var tableId = "table";
         var urlPrefix = "${ctx}/admin/sys/resource";
-        $.btn.initChangeShowStatus(urlPrefix, tableId);
+        $.btn.initChangeShowStatus(urlPrefix + "/changeStatus", tableId);
         $.zTree.initMaintainBtn(urlPrefix, tableId, ${not empty param.async and param.async});
     });
 

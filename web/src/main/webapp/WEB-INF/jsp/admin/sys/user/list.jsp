@@ -46,7 +46,7 @@
                     <span class="icon-trash"></span>
                     删除
                 </a>
-                <div class="btn-group">
+                <div class="btn-group last">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-wrench"></i>
                         更多操作
@@ -144,10 +144,10 @@
     <es:page page="${page}"/>
 </div>
 <es:contentFooter/>
-<%@include file="include/import-js.jspf"%>
+<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 <script type="text/javascript">
     $(function() {
-        initUserListButton();
+        $.sys.user.initUserListButton();
         $.app.toggleLoadTable($("#table"), "${ctx}/admin/sys/user/organizations/{parentId}")
     });
 </script>

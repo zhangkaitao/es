@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+    <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <form id="searchForm" class="form-inline search-form" data-change-search="true">
 

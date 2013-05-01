@@ -34,7 +34,7 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (9, 2, '0/1/2/', 7, '父子表（小数据量）', 'example:parentchild', '/showcase/parentchild/parent', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (10, 2, '0/1/2/', 8, '父子表（大数据量）', '', '', true);
+        values (10, 2, '0/1/2/', 8, '父子表（大数据量）管理', '', '', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (11, 10, '0/1/2/10/', 1, '类别列表', 'example:product:category', '/showcase/product/category', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
@@ -57,25 +57,36 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (19, 17, '0/1/16/17/', 2, '在线用户列表', 'sys:user:online', '/admin/sys/user/online', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (20, 17, '0/1/16/17/', 3, '状态变更历史', 'sys:user:statusHistory', '/admin/sys/user/statusHistory', true);
+        values (20, 17, '0/1/16/17/', 3, '状态变更历史列表', 'sys:user:statusHistory', '/admin/sys/user/statusHistory', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (21, 17, '0/1/16/17/', 4, '用户最后在线历史', 'sys:user:lastOnline', '/admin/sys/user/lastOnline', true);
+        values (21, 17, '0/1/16/17/', 4, '用户最后在线历史列表', 'sys:user:lastOnline', '/admin/sys/user/lastOnline', true);
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (22, 16, '0/1/16/', 2, '组织机构', '', '', true);
+        values (22, 16, '0/1/16/', 2, '组织机构滚傈', '', '', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (23, 22, '0/1/16/22/', 1, '组织机构列表', 'sys:organization', '/admin/sys/organization/organization', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (24, 22, '0/1/16/22/', 2, '工作职务列表', 'sys:job', '/admin/sys/organization/job', true);
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (25, 16, '0/1/16/', 3, '资源管理', 'sys:resource', '/admin/sys/resource', true);
+        values (25, 16, '0/1/16/', 3, '资源列表', 'sys:resource', '/admin/sys/resource', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (26, 16, '0/1/16/', 4, '权限管理', '', '', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (27, 26, '0/1/16/26/', 1, '权限列表', 'sys:permission', '/admin/sys/permission/permission', true);
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (28, 26, '0/1/16/26/', 2, '角色列表', 'sys:role', '/admin/sys/permission/role', true);
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (29, 16, '0/1/16/', 5, '分组列表', 'sys:group', '/admin/sys/group', true);
+
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (30, 16, '0/1/16/', 6, '授权列表', 'sys:auth', '/admin/sys/auth', true);
+
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (31, 1, '0/1/', 3, '配置管理', '', '', true);
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (32, 31, '0/1/31/', 1, '图标管理', 'conf:icon', '/admin/conf/icon', true);
+
 
 insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (1, '所有', 'all', '所有数据操作的权限', 1);
 insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (2, '新增', 'save', '新增数据操作的权限', 1);

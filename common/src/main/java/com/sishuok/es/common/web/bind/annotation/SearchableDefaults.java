@@ -19,7 +19,7 @@ package com.sishuok.es.common.web.bind.annotation;
 import java.lang.annotation.*;
 
 /**
- * <p>默认的查询参数数据，先从参数找，参数找不到从方法上找</p>
+ * <p>先从参数找，参数找不到从方法上找，否则使用默认的查询参数</p>
  * <pre>
  *     格式如下：
  *     value = {"baseInfo.age_lt=123", "name_like=abc", "id_in=1,2,3,4"}

@@ -13,8 +13,6 @@ import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOp
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.ejb.criteria.path.RootImpl;
-import org.springframework.core.GenericCollectionTypeResolver;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
@@ -131,7 +129,7 @@ public final class SearchSpecifications {
         switch (operator) {
             case eq :
                 return cb.equal(expression, value);
-            case notEq://不走索引 慎用
+            case ne://不走索引 慎用
                 return cb.notEqual(expression, value);
             case gt :
                 return cb.greaterThan(expression, (Comparable)value);

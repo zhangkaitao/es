@@ -14,7 +14,7 @@ import java.util.Arrays;
  * <p>查询操作符</p>
  */
 public enum SearchOperator {
-    eq("等于", "="), notEq("不等于", "!="),
+    eq("等于", "="), ne("不等于", "!="),
     gt("大于", ">"), gte("大于等于", ">="), lt("小于", "<"), lte("小于等于", "<="),
     prefixLike("前缀模糊匹配", "like"), prefixNotLike("前缀模糊不匹配", "not like"),
     suffixLike("后缀模糊匹配", "like"), suffixNotLike("后缀模糊不匹配", "not like"),

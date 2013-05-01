@@ -31,6 +31,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -217,6 +219,18 @@ public class UserController extends BaseCRUDController<User, Long> {
     @RequestMapping("/organizations/{user}")
     public String permissions(@PathVariable("user") User user) {
         return getViewPrefix() + "/organizationsTable";
+    }
+
+
+
+    @RequestMapping("ajax/autocomplete")
+    @PageableDefaults(value = 30)
+    @ResponseBody
+    public Set<Map<String, Object>> autocomplete(
+            Searchable searchable,
+            @RequestParam("term") String term) {
+
+        return userService.findIdAndNames(searchable, term);
     }
 
 

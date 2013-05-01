@@ -177,13 +177,14 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
     }
 
 
+
     /**
      * 根节点默认图标 如果没有默认 空即可
      * @return
      */
     @Override
     public String getRootDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/root.png";
+        return "ztree_root_open";
     }
 
     /**
@@ -192,7 +193,7 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getBranchDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/branch.png";
+        return "ztree_branch";
     }
 
     /**
@@ -202,8 +203,7 @@ public class Organization extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getLeafDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/leaf.png";
+        return "ztree_leaf";
     }
-
 
 }

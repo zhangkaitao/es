@@ -46,10 +46,10 @@
 
 </div>
 <es:contentFooter/>
-<%@include file="../include/import-js.jspf"%>
+<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 <script type="text/javascript">
     $(function () {
-        initValidator($("#editForm"));
+        $.sys.user.initValidator($("#editForm"));
         <es:showFieldError commandName="m"/>
 
     });

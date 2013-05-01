@@ -16,7 +16,7 @@ $.app = {
             } else if(a.is(".btn-change-password")) {
                 url = ctx + "/admin/sys/user/loginUser/changePassword";
             }
-            $.tabs.activeTab(99999999, "个人资料", url, true)
+            $.tabs.activeTab($.app.nextCustomTabIndex(), "个人资料", url, true)
         });
 
 //        $("#menu").niceScroll({styler:"fb",cursorcolor:"#777", zindex:1});
@@ -107,6 +107,9 @@ $.app = {
      * @param settings
      */
     modalDialog : function(title, url, settings) {
+
+        $.app.waiting();
+
         var defaultSettings = {
             title : title,
             closeText : "关闭",
@@ -131,7 +134,7 @@ $.app = {
             settings = {};
         }
         settings = $.extend({}, defaultSettings, settings);
-        $.app.waiting();
+
         $.ajax({
             url: url,
             headers: { table:true }
@@ -397,6 +400,40 @@ $.app = {
             return false;
         });
 
+    },
+
+    initAutocomplete : function(config) {
+
+        var defaultConfig = {
+            minLength : 1,
+            enterSearch : false,
+            focus: function( event, ui ) {
+                config.input.val( ui.item.label );
+                return false;
+            },
+            renderItem : function( ul, item ) {
+                return $( "<li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append( "<a>" + item.label + "</a>" )
+                    .appendTo( ul );
+            }
+        };
+
+        config = $.extend(defaultConfig, config, true);
+
+        $(config.input)
+            .on( "keydown", function( event ) {
+                //回车查询
+                if(config.enterSearch && event.keyCode === $.ui.keyCode.ENTER) {
+                    config.select(event, {item:{value:$(this).val()}});
+                }
+            })
+            .autocomplete({
+            source : config.source,
+            minLength : config.minLength,
+            focus : config.focus,
+            select : config.select
+        }).data( "ui-autocomplete" )._renderItem = config.renderItem;
     }
 
 };
@@ -540,6 +577,8 @@ $.menus = {
 
 $.tabs = {
     tabs: null,
+    /*自己创建tab时起始索引*/
+    customTabStartIndex : 9999999999,
     /**初始化tab */
     initTab: function () {
         function activeMenu(tabPanelId) {
@@ -615,6 +654,14 @@ $.tabs = {
      */
     createTab : function(title, panelIndex) {
         var tabs = $.tabs.tabs;
+
+        if(tabs.find(".ui-tabs-panel").length > 50) {
+            $.app.alert({
+                message : "您打开的面板太多，为提高系统运行速度，请先关闭一些！"
+            });
+            return;
+        }
+
         var lastPanel = tabs.find(".ui-tabs-panel:last");
         var newPanelIndex = panelIndex || parseInt(lastPanel.data("index")) + 1 || 1;
         var newPanelId = "tabs-" + newPanelIndex;
@@ -770,8 +817,24 @@ $.tabs = {
             move(200)();
         });
 
+    },
+    /**
+     * 获取下一个自定义panel的索引
+     */
+    nextCustomTabIndex : function() {
+        var tabs = $.tabs.tabs;
+        var maxIndex = $.tabs.customTabStartIndex;
+        tabs.find(".ui-tabs-panel").each(function() {
+            var index = parseInt($(this).attr("id").replace("tabs-"));
+            if(maxIndex < index) {
+                maxIndex = index;
+            }
+        });
+
+        return maxIndex + 1;
+
     }
-}
+};
 
 $.parentchild = {
     /**
@@ -1161,7 +1224,7 @@ $.table = {
                 }
                 event.stopPropagation();
             });
-            $(this).off("click").on("click", function (event) {
+            $(this).closest("tr").off("click").on("click", function (event) {
                 var checked = checkbox.is(":checked");
                 if(checked) {
                     checkbox.closest("tr").removeClass("active");
@@ -1713,31 +1776,38 @@ $.movable = {
 };
 
 $.btn = {
+    initChangeStatus : function(urlPrefix, tableId, config) {
+        $(config.btns.join(",")).each(function(i) {
+            $(this).off("click").on("click", function() {
+                var $table = $("#" + tableId);
+                var checkbox = $.table.getAllSelectedCheckbox($table);
+                if(checkbox.size() == 0) {
+                    return;
+                }
+                var title = config.titles[i];
+                var message = config.messages[i];
+                var status = config.status[i];
+                var url = urlPrefix + "/" + status + "?" + checkbox.serialize();
+                $.app.confirm({
+                    title : title,
+                    message : message,
+                    ok : function() {
+                        $.table.reloadTable($table, url, $.table.tableURL($table));
+                    }
+                });
+            });
+        });
+    },
     /**
      * 初始化改变显示隐藏的btn
      */
     initChangeShowStatus : function(urlPrefix, tableId) {
-        $(".status-show,.status-hide").off("click").on("click", function() {
-            var $table = $("#" + tableId);
-            var checkbox = $.table.getAllSelectedCheckbox($table);
-            if(checkbox.size() == 0) {
-                return;
-            }
-            var isShow = $(this).is(".status-show");
-            var title = isShow ? "显示数据" : "隐藏数据";
-            var message = isShow ? "确认显示数据吗？" : "确认隐藏数据吗？";
-            var url = isShow ?
-                urlPrefix + "/changeStatus/true?" + checkbox.serialize():
-                urlPrefix + "/changeStatus/false?" + checkbox.serialize();
-            $.app.confirm({
-                title : title,
-                message : message,
-                ok : function() {
-                    $.table.reloadTable($table, url, $.table.tableURL($table));
-                }
-            });
+        $.btn.initChangeStatus(urlPrefix, tableId, {
+            btns : [".status-show", ".status-hide"],
+            titles : ['显示数据', '隐藏数据'],
+            messages : ['确认显示数据吗？', '确认隐藏数据吗？'],
+            status : ['true', 'false']
         });
-
     }
 };
 
@@ -1860,38 +1930,14 @@ $(function () {
     });
     $.app.initDatetimePicker();
 
+    $.layout = top.$.layout;
+    $.app = top.$.app;
+    $.tabs = top.$.tabs;
+    $.menus = top.$.menus;
+
     $("[data-toggle='tooltip']").each(function() {
-        var placement = $(this).data("placement") || "bottom";
-        var my = "center top+10";
-        var at = "center bottom";
-        var arraw = "top";
-        if(placement == "top") {
-            my = "center bottom-10";
-            at = "center top";
-            arraw = "bottom";
-        } else if(placement == "right") {
-            my = "left+10 left";
-            at = "right center";
-            arraw = "left";
-        } else if(placement == "left") {
-            my = "right-10 center";
-            at = "left center";
-            arraw = "right";
-        }
-        $(this).tooltip({
-            position: {
-                my: my,
-                at: at,
-                using: function( position, feedback ) {
-                    $( this ).css( position );
-                    $( "<div>" )
-                        .addClass( "arrow " + arraw )
-                        .addClass( feedback.vertical )
-                        .addClass( feedback.horizontal )
-                        .appendTo( this );
-                }
-            }
-        });
+
+        $(this).tooltip();
     });
 
 //    if(!$("body").is(".index")) {

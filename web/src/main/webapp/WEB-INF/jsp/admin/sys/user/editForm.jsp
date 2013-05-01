@@ -116,81 +116,8 @@
             </div>
         </div>
 
-
-        <div id="organization" class="form-inline" style="float: left;width: 100%;">
-            <h4 class="hr">组织机构信息</h4>
-            <div id="selectOrganization" class="span9">
-                <label>组织机构</label>&nbsp;
-                <div class="input-append" title="选择组织机构">
-                    <input type="hidden" id="organizationId" value="${target.id}">
-                    <input type="text" id="organizationName" class="input-medium" value="${target.name}"
-                           readonly="readonly">
-                    <a id="selectOrganizationTree" href="javascript:;">
-                        <span class="add-on"><i class="icon-chevron-down"></i></span>
-                    </a>
-                </div>
-                &nbsp;&nbsp;
-                <label>工作职务</label>&nbsp;
-                <div class="input-append" title="选择工作职务">
-                    <input type="hidden" id="jobId" value="${target.id}">
-                    <input type="text" id="jobName" class="input-medium" value="${target.name}" readonly="readonly">
-                    <a id="selectJobTree" href="javascript:;">
-                        <span class="add-on"><i class="icon-chevron-down"></i></span>
-                    </a>
-                </div>
-                &nbsp;
-                <a class="btn btn-warning btn-add-organization">
-                    <i class="icon-file"></i>
-                    添加
-                </a>
-            </div>
-            <div id="selectedOrganization" class="span9">
-                <div class="muted font-12" style="margin: 10px auto;">
-                    已选择的组织机构和工作机构
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="btn btn-link btn-delete-all-organization">删除选中</a>
-                </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th style="width: 80px">
-                            <a class="check-all" href="javascript:;">全选</a>
-                            |
-                            <a class="reverse-all" href="javascript:;">反选</a>
-                        </th>
-                        <th>组织机构</th>
-                        <th>工作职务</th>
-                        <th style="width: 20px;">&nbsp;</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${m.displayOrganizationJobs}" var="o">
-                        <tr>
-                            <td class="check"><input type="checkbox"></td>
-                            <td>
-                                <input type='hidden' id='organizationId_${o.key.id}' name='organizationId' value='${o.key.id}'>
-                                <sys:showOrganizationName id="${o.key.id}"/>
-                            </td>
-                            <td>
-                                <c:set var="jobIds" value=""/>
-                                <c:forEach items="${o.value}" var="oj" varStatus="status">
-                                    <c:set var="jobIds" value="${jobIds}${status.count == 1 ? '' : ','}${oj.job.id}"/>
-                                    <sys:showJobName id="${oj.job.id}"/><br/>
-                                </c:forEach>
-                                <input type='hidden' name='jobId' value='${jobIds}'>
-                            </td>
-                            <td>
-                                <a class='btn btn-link btn-edit btn-delete-organization' href='javascript:;'
-                                   onclick='removeOrganization(this);'>
-                                    <i class='icon-trash'></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <c:set var="displayOrganizationJobs" value="${m.displayOrganizationJobs}"/>
+        <%@include file="/WEB-INF/jsp/admin/sys/organization/selectOrganizationAndJob.jspf"%>
 
         <c:if test="${op eq '新增'}">
             <c:set var="icon" value="icon-file"/>
@@ -220,7 +147,7 @@
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
-<%@include file="include/import-js.jspf"%>
+<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 <script type="text/javascript">
     $(function () {
 
@@ -228,144 +155,20 @@
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
                 $.app.readonlyForm($("#editForm"), false);
-                $("#selectOrganization").remove();
-                $(".btn-delete-organization").remove();
-                $(".btn-delete-all-organization").remove();
+                $.sys.user.edit.removeOrganizationBtn();
             </c:when>
             <c:when test="${op eq '查看'}">
                 $.app.readonlyForm($("#editForm"), true);
-                $("#selectOrganization").remove();
-                $(".btn-delete-organization").remove();
-                $(".btn-delete-all-organization").remove();
+                $.sys.user.edit.removeOrganizationBtn();
             </c:when>
             <c:otherwise>
-                initValidator($("#editForm"));
+                $.sys.user.initValidator($("#editForm"));
                 <es:showFieldError commandName="m"/>
             </c:otherwise>
         </c:choose>
 
-        var organizationTreeId = $.zTree.initSelectTree({
-            zNodes : [],
-            nodeType : "default",
-            fullName:true,
-            urlPrefix : "${ctx}/admin/sys/organization/organization",
-            async : true,
-            asyncLoadAll : true,
-            lazy : true,
-            select : {
-                btn : $("#selectOrganizationTree,#organizationName"),
-                id : "organizationId",
-                name : "organizationName",
-                includeRoot: true
-            },
-            autocomplete : {
-                enable : true
-            }
-        });
-
-        var jobTreeId = $.zTree.initSelectTree({
-            zNodes : [],
-            urlPrefix : "${ctx}/admin/sys/organization/job",
-            async : true,
-            asyncLoadAll : true,
-            lazy : true,
-            select : {
-                btn : $("#selectJobTree,#jobName"),
-                id : "jobId",
-                name : "jobName",
-                includeRoot: true
-            },
-            autocomplete : {
-                enable : true
-            },
-            setting :{
-                check : {
-                    enable:true,
-                    chkStyle:"checkbox"
-                }
-            }
-        });
-
-        $(".btn-add-organization").click(function() {
-            var organizationId = $("#organizationId").val();
-
-            if(!organizationId) {
-                $.app.alert({
-                    message : "请选择组织机构"
-                });
-                return;
-            }
-
-            if($("#organizationId_" + organizationId).size() > 0) {
-                $.app.alert({
-                    message : "您已经选择了此组织机构，不能重复选择！"
-                });
-                return;
-            }
-
-
-            var organizationName = $("#organizationName").val();
-            var jobId = $("#jobId").val();
-            var jobName = $("#jobName").val();
-
-            var template =
-                    "<tr>" +
-                        "<td class='check'><input type='checkbox'></td>" +
-                        "<td>" +
-                            "<input type='hidden' id='organizationId_{organizationId}' name='organizationId' value='{organizationId}'>" +
-                            "{organizationName}" +
-                        "</td>" +
-                        "<td>" +
-                            "<input type='hidden' name='jobId' value='{jobId}'>" +
-                            "{jobName}" +
-                        "</td>" +
-                        "<td>" +
-                            "<a class='btn btn-link btn-edit btn-delete-organization' href='javascript:;' onclick='removeOrganization(this);'><i class='icon-trash'></i></a>" +
-                        "</td>" +
-                    "</tr>";
-            $("#selectedOrganization .table tbody").append(
-                    template.replace(/{organizationId}/g, organizationId)
-                            .replace("{organizationName}", organizationName.replace(",", "<br/>").replace(">", "&gt;"))
-                            .replace("{jobId}", jobId)
-                            .replace("{jobName}", jobName.replace(",", "<br/>").replace(">", "&gt;"))
-            );
-            //更新表格的全选反选
-            $.table.initCheckbox($("#selectedOrganization table"));
-            $.fn.zTree.getZTreeObj(jobTreeId).checkAllNodes(false);
-            $.fn.zTree.getZTreeObj(organizationTreeId).checkAllNodes(false);
-            $("#organizationId,#organizationName,#jobId,#jobName").val("");
-        });
-
-        $.table.initCheckbox($("#selectedOrganization table"));
-
-        $(".btn-delete-all-organization").click(function() {
-            var checkbox = $.table.getAllSelectedCheckbox($("#selectedOrganization table"));
-            if(!checkbox.length) {
-                return;
-            }
-            $.app.confirm({
-                title : "确认删除组织机构和工作职务",
-                message : "确认删除选中的组织机构和工作职务吗？",
-                ok : function() {
-                    checkbox.each(function() {
-                        $(this).closest("tr").remove();
-                    });
-                }
-            });
-
-        });
+        $.sys.organization.initSelectForm("organizationId", "jobId");
 
     });
-
-    function removeOrganization(a) {
-        $.app.confirm({
-            message : "确认删除吗？",
-            ok : function() {
-                $(a).closest('tr').remove();
-            }
-        });
-
-    }
-
 
 </script>

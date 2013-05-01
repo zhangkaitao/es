@@ -1,6 +1,6 @@
 
 <script src="${ctx}/static/comp/jquery-ui-bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery-ui-1.10.2.custom.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery.layout-latest.js" type="text/javascript"></script>
 <%--<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery.layout.pseudoClose.min-1.1.js" type="text/javascript"></script>--%>
 <script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery.blockUI.js" type="text/javascript"></script>
@@ -13,4 +13,7 @@
 <script src="${ctx}/static/comp/jQuery-Validation-Engine/js/jquery.validationEngine.js" charset="utf-8" type="text/javascript"></script>
 <script src="${ctx}/static/comp/jQuery-Validation-Engine/js/languages/jquery.validationEngine-zh_CN.js" charset="utf-8" type="text/javascript"></script>
 
-<script src="${ctx}/static/js/application.js?3" type="text/javascript"></script>
+<script src="${ctx}/static/comp/nicescroll/jquery.nicescroll.min.js?2"></script>
+<script src="${ctx}/static/comp/nicescroll/jquery.nicescroll.plus.js?2"></script>
+
+<script src="${ctx}/static/js/application.js?4" type="text/javascript"></script>

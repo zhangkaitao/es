@@ -38,6 +38,7 @@ public class ShowController extends BaseCRUDController<Show, Long> {
     @Autowired
     public ShowController(ShowService showService) {
         super(showService);
+        setListAlsoSetCommonData(true);
         this.showService = showService;
     }
 
@@ -45,13 +46,6 @@ public class ShowController extends BaseCRUDController<Show, Long> {
     protected void setCommonData(Model model) {
         model.addAttribute("statusList", Stateable.ShowStatus.values());
     }
-
-    @Override
-    public String list(Searchable searchable, Model model) {
-        setCommonData(model);
-        return super.list(searchable, model);
-    }
-
 
     @RequestMapping(value = "status/{status}", method = RequestMethod.GET)
     public String audit(

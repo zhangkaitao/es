@@ -12,7 +12,14 @@
 
     Permission permission = permissionService.findOne(id);
 
-    out.write(String.format(
-            "<span title='%s'>%s&nbsp;&nbsp;(%s)</span>",
-            permission.getDescription(), permission.getName(), permission.getPermission()));
+    if(permission == null) {
+        out.write(String.format("编号[%d]数据不存在", id));
+    }
+
+    StringBuilder s = new StringBuilder();
+    s.append(String.format("<a class='btn btn-link' href='%s/admin/sys/permission/permission/%d'>", request.getContextPath(), id));
+    s.append(String.format("<span title='%s'>%s[%s]</span>", permission.getDescription(), permission.getName(), permission.getPermission()));
+    s.append("</a>");
+    out.write(s.toString());
+
 %>

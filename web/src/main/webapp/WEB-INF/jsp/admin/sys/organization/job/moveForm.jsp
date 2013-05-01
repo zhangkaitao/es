@@ -16,7 +16,7 @@
             <label class="control-label">源节点</label>
             <div class="controls">
                 <span class="help-inline" style="padding: 4px;">
-                    <es:showAttachment filename="${source.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
+                    <conf:showIcon iconIdentity="${source.icon}"/>
                     ${source.name}
                 </span>
             </div>
@@ -68,7 +68,7 @@ $(function () {
     var async = ${not empty param.async and param.async eq true};
     var zNodes =[
         <c:forEach items="${trees}" var="m">
-        { id:${m.id}, pId:${m.pId}, name:"${m.name}", icon:"${m.icon}", open: true, root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
+        { id:${m.id}, pId:${m.pId}, name:"${m.name}", iconSkin:"${m.iconSkin}", open: true, root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
         </c:forEach>
     ];
     $.zTree.initSelectTree({

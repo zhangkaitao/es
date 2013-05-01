@@ -22,8 +22,8 @@ import java.util.List;
 public class ResourceService extends BaseTreeableService<Resource, Long> {
 
     @Autowired
-    public void setTreeRepository(ResourceRepository treeRepository) {
-        setBaseRepository(treeRepository);
+    public void setResourceRepository(ResourceRepository resourceRepository) {
+        setBaseRepository(resourceRepository);
     }
 
 }

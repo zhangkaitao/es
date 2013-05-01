@@ -159,7 +159,7 @@ public class Tree extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getRootDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/root.png";
+        return "ztree_root_open";
     }
 
     /**
@@ -168,7 +168,7 @@ public class Tree extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getBranchDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/branch.png";
+        return "ztree_branch";
     }
 
     /**
@@ -178,6 +178,6 @@ public class Tree extends BaseEntity<Long> implements Treeable<Long> {
      */
     @Override
     public String getLeafDefaultIcon() {
-        return "static/comp/zTree/css/zTreeStyle/img/diy/leaf.png";
+        return "ztree_leaf";
     }
 }

@@ -18,12 +18,10 @@ import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.common.plugin.web.controller.entity.ZTree;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
-import com.sishuok.es.common.web.upload.FileUploadUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +74,6 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
                 models.addAll(children);
             } else { //异步模式只查自己
 
-
             }
         } else {
             if(!async) {  //非异步 查自己和子子孙孙
@@ -91,7 +88,8 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
                 convertToZtreeList(
                         request.getContextPath(),
                         models,
-                        async));
+                        async,
+                        true));
 
         return getViewPrefix() + "/tree";
     }
@@ -105,8 +103,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         if(current != null) {
             SearchFilter searchFilter =
-                    new SearchFilter("parentIds", SearchOperator.prefixLike, current.makeSelfAsNewParentIds()).
-                    or("id", SearchOperator.eq, current.getId());
+                    new SearchFilter("parentIds", SearchOperator.prefixLike, current.makeSelfAsNewParentIds());
+
+            searchFilter.or("id", SearchOperator.eq, current.getId());
 
             searchable.addSearchFilter(searchFilter);
         }
@@ -155,12 +154,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     public String update(
             @RequestParam(value = Constants.BACK_URL) String backURL,
             Model model, HttpServletRequest request,
-            @RequestParam(value = "file", required = false) MultipartFile file, @ModelAttribute("m") M m,
+            @ModelAttribute("m") M m,
             BindingResult result, RedirectAttributes redirectAttributes) {
 
-        if(!file.isEmpty()) {
-            m.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
-        }
         if(result.hasErrors()) {
             return updateForm(m, model);
         }
@@ -235,16 +231,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     public String appendChild(
             Model model, HttpServletRequest request,
             @RequestParam(value = Constants.BACK_URL) String backURL,
-            @RequestParam(value = "file", required = false) MultipartFile file,
             @PathVariable("parentId") M parent,
             @ModelAttribute("child") M child, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
         setCommonData(model);
 
-        if(!file.isEmpty()) {
-            child.setIcon(FileUploadUtils.upload(request, file, result, FileUploadUtils.IMAGE_EXTENSION));
-        }
         if (result.hasErrors()) {
             return appendChildForm(parent, model);
         }
@@ -269,7 +261,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         List<M> models = null;
 
         //排除自己及子子孙孙
-        searchable.addSearchFilter("id", SearchOperator.notEq, source.getId());
+        searchable.addSearchFilter("id", SearchOperator.ne, source.getId());
         searchable.addSearchFilter(
                 "parentIds",
                 SearchOperator.notLike,
@@ -284,7 +276,8 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         model.addAttribute("trees", convertToZtreeList(
                 request.getContextPath(),
                 models,
-                async));
+                async,
+                true));
 
         model.addAttribute(Constants.OP_NAME, "移动节点");
 
@@ -329,6 +322,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @RequestParam(value = "searchName", required = false) String searchName,
             @RequestParam(value = "id", required = false) ID parentId,
             @RequestParam(value = "excludeId", required = false) ID excludeId,
+            @RequestParam(value = "onlyCheckLeaf", required = false, defaultValue = "false") boolean onlyCheckLeaf,
             Searchable searchable) {
 
         M excludeM = treeableService.findOne(excludeId);
@@ -365,7 +359,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             }
         }
 
-        return convertToZtreeList(request.getContextPath(), models, async && !asyncLoadAll && parentId != null);
+        return convertToZtreeList(
+                request.getContextPath(),
+                models,
+                async && !asyncLoadAll && parentId != null,
+                onlyCheckLeaf);
     }
 
     @RequestMapping(value = "ajax/appendChild/{parentId}", method = RequestMethod.GET, produces = "application/json")
@@ -375,7 +373,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         M child = newModel();
         child.setName("新节点");
         treeableService.appendChild(parent, child);
-        return convertToZtree(child, request.getContextPath(), true);
+        return convertToZtree(child, request.getContextPath(), true, true);
     }
 
     @RequestMapping(value = "ajax/delete/{id}", method = RequestMethod.GET, produces = "application/json")
@@ -391,7 +389,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     public Object ajaxRename(HttpServletRequest request, @PathVariable("id") M tree, @RequestParam("newName") String newName) {
         tree.setName(newName);
         treeableService.update(tree);
-        return convertToZtree(tree, request.getContextPath(), true);
+        return convertToZtree(tree, request.getContextPath(), true, true);
     }
 
 
@@ -433,7 +431,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return redirectUrl("/" + getViewPrefix() + "/success");
     }
 
-    private List<ZTree<ID>> convertToZtreeList(String contextPath, List<M> models, boolean async) {
+    private List<ZTree<ID>> convertToZtreeList(String contextPath, List<M> models, boolean async, boolean onlySelectLeaf) {
         List<ZTree<ID>> zTrees = Lists.newArrayList();
 
         if(models == null || models.isEmpty()) {
@@ -441,21 +439,27 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
         for(M m : models) {
-            ZTree zTree = convertToZtree(m, contextPath, !async);
+            ZTree zTree = convertToZtree(m, contextPath, !async, onlySelectLeaf);
             zTrees.add(zTree);
         }
         return zTrees;
     }
 
-    private ZTree convertToZtree(M m, String contextPath, boolean open) {
+    private ZTree convertToZtree(M m, String contextPath, boolean open, boolean onlyCheckLeaf) {
         ZTree<ID> zTree = new ZTree<ID>();
         zTree.setId(m.getId());
         zTree.setpId(m.getParentId());
         zTree.setName(m.getName());
-        zTree.setIcon(contextPath + "/" + m.getIcon());
+        zTree.setIconSkin(m.getIcon());
         zTree.setOpen(open);
         zTree.setRoot(m.isRoot());
         zTree.setIsParent(m.isHasChildren());
+
+        if(onlyCheckLeaf && zTree.isIsParent()) {
+            zTree.setNocheck(true);
+        } else {
+            zTree.setNocheck(false);
+        }
 
         return zTree;
     }

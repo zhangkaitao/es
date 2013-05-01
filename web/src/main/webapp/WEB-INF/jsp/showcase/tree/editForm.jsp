@@ -20,20 +20,10 @@
             </div>
         </div>
 
-        <c:if test="${not empty m.icon}">
-            <div class="control-group">
-                <form:label path="icon" cssClass="control-label">当前显示的图标</form:label>
-                <div class="controls">
-                    <es:showAttachment filename="${m.icon}" showImage="true" width="auto" height="16" isDownload="false"/>
-                    <form:hidden path="icon"/>
-                </div>
-            </div>
-        </c:if>
-
         <div class="control-group">
-            <label for="file" class="control-label">图标</label>
+            <form:label path="icon" cssClass="control-label">图标</form:label>
             <div class="controls">
-                <input type="file" id="file" name="file" class="custom-file-input"/>
+                <form:input path="icon" cssClass="input-medium"/><conf:showIcon iconIdentity="${m.icon}"/>
             </div>
         </div>
 
@@ -73,6 +63,7 @@
     </form:form>
 </div>
 <es:contentFooter/>
+<%@include file="/WEB-INF/jsp/common/admin/import-conf-js.jspf"%>
 <script type="text/javascript">
     $(function () {
         <c:choose>
@@ -92,5 +83,8 @@
                 <es:showFieldError commandName="m"/>
             </c:otherwise>
         </c:choose>
+
+        $.conf.icon.initIconList($("#icon"));
+
     });
 </script>

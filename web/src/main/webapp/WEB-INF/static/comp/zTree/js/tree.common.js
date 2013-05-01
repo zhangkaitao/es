@@ -35,6 +35,7 @@ $.zTree = {
         }
 
         var setting = {
+            noSwitchIcon:true,
             async: {
                 enable: config.async,
                 url: config.loadUrl,
@@ -166,7 +167,7 @@ $.zTree = {
             var url = config.addUrl.replace("{id}", treeNode.id);
             $.app.waiting("操作中...", true);
             $.getJSON(url, function(newNode) {
-                var node = { id:newNode.id, pId:newNode.pId, name:newNode.name, icon:newNode.icon, open: true,
+                var node = { id:newNode.id, pId:newNode.pId, name:newNode.name, iconSkin:newNode.iconSkin, open: true,
                     click : newNode.click, root :newNode.root,isParent:newNode.isParent};
                 zTree.addNodes(treeNode, node);
                 $.app.waitingOver();
@@ -210,10 +211,14 @@ $.zTree = {
         var treeSelect = "treeSelect" + id;
         var zTree = $.fn.zTree.init($("#" + treeSelect), setting, config.zNodes);
 
+
         if(autocomplateEnable) {
+            if(!config.autocomplete.minLength) config.autocomplete.minLength = 0;
+            config.autocomplete.enterSearch = true;
             config.autocomplete.input = $("#searchName" + id);
             config.autocomplete.async = config.autocomplete.async || config.async;
-            config.autocomplete.callback = config.autocomplete.callback || function(searchName) { //按照名字搜索
+            config.autocomplete.select = config.autocomplete.select || function(event, ui) { //按照名字搜索
+                var searchName = ui.item.value;
                 var url = config.loadUrl + "&searchName=" + searchName;
                 zTree.destroy();
                 $.getJSON(url, function(zNodes) {
@@ -228,7 +233,7 @@ $.zTree = {
                   (config.onlyShow ? "&search.show_eq=true" : "");
 
             config.treeId = treeSelect;
-            $.zTree.initAutocomplete(config.autocomplete);
+            $.app.initAutocomplete(config.autocomplete);
         }
 
         return treeSelect;
@@ -250,7 +255,7 @@ $.zTree = {
                 "&asyncLoadAll=" + config.asyncLoadAll +
                 (config.excludeId ? "&excludeId=" + config.excludeId : "") +
                 (config.onlyShow ? "&search.show_eq=true" : "") +
-                "&onlyCheckLeaf=" + (config.setting && config.setting.check && config.setting.check.onlyCheckLeaf));
+                "&onlyCheckLeaf=" + ((config.setting && config.setting.check && config.setting.check.onlyCheckLeaf) ? true : false));
         var autocomplateEnable = config.autocomplete && config.autocomplete.enable;
 
         var id = this.index++;
@@ -265,6 +270,7 @@ $.zTree = {
         var treeSelect = "treeSelect" + id;
 
         var setting = {
+            noSwitchIcon:true,
             async: {
                 enable: config.async,
                 url:config.loadUrl,
@@ -324,13 +330,13 @@ $.zTree = {
                 }
 
                 $name.prop("value", names);
+                $name.change();
                 $id.prop("value", ids);
+                $id.change();
             }
         }
 
-        var show = false;
         function showMenu() {
-            show = true;
             var nameOffset = $name.offset();
             $treeContent.css({left: nameOffset.left + "px", top: nameOffset.top + $name.outerHeight() + "px"}).slideDown("fast");
 
@@ -338,7 +344,6 @@ $.zTree = {
         }
 
         function hideMenu() {
-            show = false;
             $treeContent.fadeOut("fast");
             $("body").unbind("mousedown", onBodyDown);
         }
@@ -357,7 +362,7 @@ $.zTree = {
         }
 
         config.select.btn.click(function () {
-            if(show) {
+            if($treeContent.is(":visible")) {
                 hideMenu();
             } else {
                 showMenu();
@@ -371,9 +376,12 @@ $.zTree = {
             zTree = $.fn.zTree.init($("#" + treeSelect), setting, config.zNodes);
 
             if(autocomplateEnable) {
+                if(!config.autocomplete.minLength) config.autocomplete.minLength = 0;
+                config.autocomplete.enterSearch = true;
                 config.autocomplete.input = $("#searchName" + id);
                 config.autocomplete.async = config.autocomplete.async || config.async;
-                config.autocomplete.callback = config.autocomplete.callback || function(searchName) { //按照名字搜索
+                config.autocomplete.select = config.autocomplete.select || function(event, ui) { //按照名字搜索
+                    var searchName = ui.item.value;
                     var url = config.loadUrl + "&searchName=" + searchName;
                     zTree.destroy();
                     $.getJSON(url, function(zNodes) {
@@ -390,7 +398,7 @@ $.zTree = {
                        (config.onlyShow ? "&search.show_eq=true" : "");
 
                 config.treeId = treeSelect;
-                $.zTree.initAutocomplete(config.autocomplete);
+                $.app.initAutocomplete(config.autocomplete);
             }
         };
         var initialize = false;
@@ -514,26 +522,11 @@ $.zTree = {
         return this.split( term ).pop();
     }
     ,
-    initAutocomplete : function(config) {
-        var input = $(config.input);
-        input
-            .on( "keydown", function( event ) {
-                //回车查询
-                if(event.keyCode === $.ui.keyCode.ENTER) {
-                    config.callback(input.val());
-                }
-            })
-            .autocomplete({
-                source: config.source,
-                minLength:1,
-                select: function() {config.callback(input.val());}
-            });
-    },
     filter : function(treeId, parentNode, childNodes) {
         if (!childNodes) return null;
-        for (var i=0, l=childNodes.length; i<l; i++) {
-            childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
-        }
+//        for (var i=0, l=childNodes.length; i<l; i++) {
+//            childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+//        }
         return childNodes;
     }
 
