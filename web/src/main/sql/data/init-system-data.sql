@@ -53,7 +53,7 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (17, 16, '0/1/16/', 1, '用户管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (18, 17, '0/1/16/17/', 1, '用户列表', 'sys:user', '/admin/sys/user', true);;
+        values (18, 17, '0/1/16/17/', 1, '用户列表', 'sys:user', '/admin/sys/user/main', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (19, 17, '0/1/16/17/', 2, '在线用户列表', 'sys:user:online', '/admin/sys/user/online', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
