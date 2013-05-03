@@ -5,9 +5,12 @@
  */
 package com.sishuok.es.sys.auth.service;
 
+import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.auth.entity.Auth;
 import com.sishuok.es.sys.auth.repository.AuthRepository;
+import com.sishuok.es.sys.auth.repository.AuthRepositoryImpl;
 import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.service.GroupService;
 import com.sishuok.es.sys.organization.entity.Job;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -31,17 +35,27 @@ import java.util.Arrays;
 public class AuthService extends BaseService<Auth, Long> {
 
     private AuthRepository authRepository;
+    private AuthRepositoryImpl authRepositoryImpl;
 
     @Autowired
     private UserService userService;
     @Autowired
     private GroupService groupService;
 
+
+
     @Autowired
     public void setAuthRepository(AuthRepository authRepository) {
         setBaseRepository(authRepository);
         this.authRepository = authRepository;
     }
+
+    @Autowired
+    public void setAuthRepositoryImpl(AuthRepositoryImpl authRepositoryImpl) {
+        setBaseRepositoryImpl(authRepositoryImpl);
+        this.authRepositoryImpl = authRepositoryImpl;
+    }
+
 
     //why m is po??
     public void addUserAuth(Long[] userIds, Auth m) {
@@ -145,5 +159,23 @@ public class AuthService extends BaseService<Auth, Long> {
         save(auth);
 
 
+    }
+
+    /**
+     * 根据用户信息获取 角色
+     *  1.1、用户  根据用户绝对匹配
+     *  1.2、组织机构 根据组织机构绝对匹配 此处需要注意 祖先需要自己获取
+     *  1.3、工作职务 根据工作职务绝对匹配 此处需要注意 祖先需要自己获取
+     *  1.4、组织机构和工作职务  根据组织机构和工作职务绝对匹配 此处不匹配祖先
+     *  1.5、组  根据组绝对匹配
+     * @param userId
+     * @param groupIds
+     * @param organizationIds
+     * @param jobIds
+     * @param organizationJobIds
+     * @return
+     */
+    public Set<Long> findRoleIds(Long userId, Set<Long> groupIds, Set<Long> organizationIds, Set<Long> jobIds, Set<Long[]> organizationJobIds) {
+        return authRepositoryImpl.findRoleIds(userId, groupIds, organizationIds, jobIds, organizationJobIds);
     }
 }

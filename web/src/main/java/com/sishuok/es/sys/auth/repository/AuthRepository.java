@@ -20,4 +20,6 @@ public interface AuthRepository extends BaseRepository<Auth, Long> {
     Auth findByGroupId(Long groupId);
 
     Auth findByOrganizationIdAndJobId(Long organizationId, Long jobId);
+
+
 }

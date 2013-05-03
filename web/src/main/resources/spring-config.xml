@@ -34,18 +34,22 @@
     </jpa:repositories>
 
     <!-- 数据源 -->
-    <bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
-        <property name="driver" value="${connection.driver_class}"/>
-        <property name="driverUrl" value="${connection.url}"/>
-        <property name="user" value="${connection.username}"/>
-        <property name="password" value="${connection.password}"/>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
+        <property name="targetDataSource">
+            <bean class="org.logicalcobwebs.proxool.ProxoolDataSource">
+                <property name="driver" value="${connection.driver_class}"/>
+                <property name="driverUrl" value="${connection.url}"/>
+                <property name="user" value="${connection.username}"/>
+                <property name="password" value="${connection.password}"/>
 
-        <property name="alias" value="${proxool.alias}"/>
-        <property name="trace" value="${proxool.trace}"/>
-        <property name="maximumConnectionCount" value="${proxool.maximum.connection.count}"/>
-        <property name="minimumConnectionCount" value="${proxool.minimum.connection.count}"/>
-        <property name="statistics" value="${proxool.statistics}"/>
-        <property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}"/>
+                <property name="alias" value="${proxool.alias}"/>
+                <property name="trace" value="${proxool.trace}"/>
+                <property name="maximumConnectionCount" value="${proxool.maximum.connection.count}"/>
+                <property name="minimumConnectionCount" value="${proxool.minimum.connection.count}"/>
+                <property name="statistics" value="${proxool.statistics}"/>
+                <property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}"/>
+            </bean>
+        </property>
     </bean>
 
     <!-- jpa Entity Factory 配置 -->

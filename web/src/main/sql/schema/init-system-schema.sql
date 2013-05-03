@@ -1,18 +1,18 @@
-drop table if exists `sys_user`;
-drop table if exists `sys_user_status_history`;
-drop trigger if exists `trigger_sys_user_off_online`;
-drop table if exists `sys_user_online`;
-drop table if exists `sys_user_last_online`;
-drop table if exists `sys_organization`;
-drop table if exists `sys_job`;
-drop table if exists `sys_user_organization_job`;
-drop table if exists `sys_resource`;
-drop table if exists `sys_permission`;
-drop table if exists `sys_role`;
-drop table if exists `sys_role_resource_permission`;
-drop table if exists `sys_group`;
-drop table if exists `sys_group_relation`;
-drop table if exists `sys_auth`;
+drop table if exists `sys_user`;;
+drop table if exists `sys_user_status_history`;;
+drop trigger if exists `trigger_sys_user_off_online`;;
+drop table if exists `sys_user_online`;;
+drop table if exists `sys_user_last_online`;;
+drop table if exists `sys_organization`;;
+drop table if exists `sys_job`;;
+drop table if exists `sys_user_organization_job`;;
+drop table if exists `sys_resource`;;
+drop table if exists `sys_permission`;;
+drop table if exists `sys_role`;;
+drop table if exists `sys_role_resource_permission`;;
+drop table if exists `sys_group`;;
+drop table if exists `sys_group_relation`;;
+drop table if exists `sys_auth`;;
 ##user
 create table `sys_user`(
   `id`         bigint not null auto_increment,
@@ -30,8 +30,8 @@ create table `sys_user`(
   constraint `unique_sys_user_email` unique(`email`),
   constraint `unique_sys_user_mobile_phone_number` unique(`mobile_phone_number`),
   index `idx_sys_user_status` (`status`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_user` auto_increment=1000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_user` auto_increment=1000;;
 
 create table `sys_user_status_history`(
   `id`         bigint not null auto_increment,
@@ -43,7 +43,7 @@ create table `sys_user_status_history`(
   constraint `pk_sys_user_block_history` primary key(`id`),
   index `idx_sys_user_block_history_user_id_block_date` (`user_id`,`op_date`),
   index `idx_sys_user_block_history_op_user_id_op_date` (`op_user_id`, `op_date`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 
 create table `sys_user_online`(
@@ -66,7 +66,7 @@ create table `sys_user_online`(
   index `idx_sys_user_online_start_timestsamp` (`start_timestsamp`),
   index `idx_sys_user_online_last_access_time` (`last_access_time`),
   index `idx_sys_user_online_user_agent` (`user_agent`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 
 create table `sys_user_last_online`(
@@ -89,11 +89,10 @@ create table `sys_user_last_online`(
   index `idx_sys_user_last_online_last_login_timestamp` (`last_login_timestamp`),
   index `idx_sys_user_last_online_last_stop_timestamp` (`last_stop_timestamp`),
   index `idx_sys_user_last_online_user_agent` (`user_agent`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 create trigger `trigger_sys_user_off_online`
-after delete
-on `sys_user_online`for each row
+after delete on `sys_user_online`for each row
 begin
    if OLD.`user_id` is not null then
       if not exists(select `user_id` from `sys_user_last_online` where `user_id` = OLD.`user_id`) then
@@ -113,7 +112,7 @@ begin
         where `user_id` = OLD.`user_id`;
       end if ;
    end if;
-end;
+end;;
 
 
 create table `sys_organization`(
@@ -130,8 +129,8 @@ create table `sys_organization`(
   index `idx_sys_organization_type` (`type`),
   index `idx_sys_organization_parent_id` (`parent_id`),
   index `idx_sys_organization_parent_ids_weight` (`parent_ids`, `weight`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_organization` auto_increment=1000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_organization` auto_increment=1000;;
 
 
 create table `sys_job`(
@@ -146,8 +145,8 @@ create table `sys_job`(
   index `idx_sys_job_nam` (`name`),
   index `idx_sys_job_parent_id` (`parent_id`),
   index `idx_sys_job_parent_ids_weight` (`parent_ids`, `weight`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_job` auto_increment=1000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_job` auto_increment=1000;;
 
 
 create table `sys_user_organization_job`(
@@ -157,7 +156,7 @@ create table `sys_user_organization_job`(
   `job_id` bigint,
   constraint `pk_sys_user_organization_job` primary key(`id`),
   constraint `unique_sys_user_organization_job` unique(`user_id`, `organization_id`, `job_id`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 create table `sys_resource`(
   `id`         bigint not null auto_increment,
@@ -175,8 +174,8 @@ create table `sys_resource`(
   index `idx_sys_resource_user` (`url`),
   index `idx_sys_resource_parent_id` (`parent_id`),
   index `idx_sys_resource_parent_ids_weight` (`parent_ids`, `weight`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_resource` auto_increment=1000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_resource` auto_increment=1000;;
 
 
 create table `sys_permission`(
@@ -189,8 +188,8 @@ create table `sys_permission`(
   index idx_sys_permission_name (`name`),
   index idx_sys_permission_permission (`permission`),
   index idx_sys_permission_show (`show`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_permission` auto_increment=1000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_permission` auto_increment=1000;;
 
 create table `sys_role`(
   `id`         bigint not null auto_increment,
@@ -202,8 +201,8 @@ create table `sys_role`(
   index `idx_sys_role_name` (`name`),
   index `idx_sys_role_role` (`role`),
   index `idx_sys_role_show` (`show`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_role` auto_increment=1000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_role` auto_increment=1000;;
 
 
 create table `sys_role_resource_permission`(
@@ -213,7 +212,7 @@ create table `sys_role_resource_permission`(
   `permission_ids` varchar(500),
   constraint `pk_sys_role_resource_permission` primary key(`id`),
   constraint `unique_sys_role_resource_permission` unique(`role_id`, `resource_id`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 create table `sys_group`(
   `id`         bigint not null auto_increment,
@@ -225,7 +224,7 @@ create table `sys_group`(
   index `idx_sys_group_type` (`type`),
   index `idx_sys_group_show` (`show`),
   index `idx_sys_group_default_group` (`default_group`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 
 create table `sys_group_relation`(
@@ -241,7 +240,7 @@ create table `sys_group_relation`(
   index `idx_sys_group_relation_user` (`user_id`),
   index `idx_sys_group_relation_start_user_id` (`start_user_id`),
   index `idx_sys_group_relation_end_user_id` (`end_user_id`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 
 
@@ -259,7 +258,7 @@ create table `sys_auth`(
   index `idx_sys_auth_user` (`user_id`),
   index `idx_sys_auth_group` (`group_id`),
   index `idx_sys_auth_type` (`type`)
-) charset=utf8 ENGINE=InnoDB;
+) charset=utf8 ENGINE=InnoDB;;
 
 
 

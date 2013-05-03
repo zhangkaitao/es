@@ -11,13 +11,8 @@ import com.sishuok.es.sys.user.exception.UserBlockedException;
 import com.sishuok.es.sys.user.exception.UserNotExistsException;
 import com.sishuok.es.sys.user.exception.UserPasswordNotMatchException;
 import com.sishuok.es.sys.user.exception.UserPasswordRetryLimitExceedException;
-import com.sishuok.es.test.BaseIT;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>User: Zhang Kaitao
@@ -74,7 +69,7 @@ public class UserServiceIT extends BaseUserIT {
     @Test(expected = UserBlockedException.class)
     public void testLoginFailWithStatusBlocked() {
         User user = createUser(username, email, mobilePhoneNumber, password);
-        userService.changeStatus(user, user, UserStatus.blocked, "test");
+        userService.changeStatus(user, user, UserStatus.blocked, "sql");
         userService.login(username, password);
     }
 

@@ -83,7 +83,7 @@
                         <userName>${connection.username}</userName>
                         <password>${connection.password}</password>
                     </appDbConnectionSettings>
-                    <sqlDelimiter>;</sqlDelimiter>
+                    <sqlDelimiter>;;</sqlDelimiter>
                     <dbDataScriptsDirectory>
                         <param>src/main/sql/data</param>
                     </dbDataScriptsDirectory>

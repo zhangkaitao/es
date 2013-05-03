@@ -100,7 +100,7 @@ public class UserRealmIT extends BaseIT {
     @Test(expected = LockedAccountException.class)
     public void testLoginFailWithSysBlocked() {
         User user = createUser(username, password);
-        userService.changeStatus(user, user, UserStatus.blocked, "test");
+        userService.changeStatus(user, user, UserStatus.blocked, "sql");
 
         UsernamePasswordToken upToken = new UsernamePasswordToken(username, password);
         Subject subject = SecurityUtils.getSubject();

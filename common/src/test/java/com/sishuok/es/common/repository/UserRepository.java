@@ -8,6 +8,7 @@ package com.sishuok.es.common.repository;
 import com.sishuok.es.common.entity.SchoolType;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
+import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -69,6 +70,5 @@ public interface UserRepository extends BaseRepository<User, Long> {
      */
     @Query("select u from User u, BaseInfo bi, SchoolInfo si where bi.user=u and si.user=u and bi.sex=?1 and si.type=?2")
     public User findByBaseInfoSexAndShcoolInfoSetType(Sex sex, SchoolType type);
-
 
 }

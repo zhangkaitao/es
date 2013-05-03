@@ -23,7 +23,6 @@
     Job job = jobService.findOne(id);
 
     if(job == null) {
-        out.write(String.format("编号[%d]数据不存在", id));
         return;
     }
 

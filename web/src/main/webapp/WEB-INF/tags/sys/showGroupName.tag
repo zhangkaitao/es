@@ -13,7 +13,6 @@
     Group group = groupService.findOne(id);
 
     if(group == null) {
-        out.write(String.format("编号[%d]数据不存在", id));
         return;
     }
 

@@ -16,7 +16,6 @@
     User user = userService.findOne(id);
 
     if(user == null) {
-        out.write(String.format("编号[%d]数据不存在", id));
         return;
     }
     out.write(

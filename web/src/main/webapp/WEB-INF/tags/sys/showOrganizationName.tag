@@ -24,7 +24,6 @@
     Organization organization = organizationService.findOne(id);
 
     if(organization == null) {
-        out.write(String.format("编号[%d]数据不存在", id));
         return;
     }
 

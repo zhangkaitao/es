@@ -54,7 +54,6 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
 
     protected BaseRepositoryImpl() {
         this(null);
-
     }
 
 
@@ -147,11 +146,6 @@ public abstract class BaseRepositoryImpl<M extends AbstractEntity, ID extends Se
         }
         return null;
     }
-
-
-
-
-
 
 
     /**

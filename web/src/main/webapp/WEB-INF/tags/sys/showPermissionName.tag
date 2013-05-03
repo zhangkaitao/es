@@ -13,7 +13,7 @@
     Permission permission = permissionService.findOne(id);
 
     if(permission == null) {
-        out.write(String.format("编号[%d]数据不存在", id));
+        return;
     }
 
     StringBuilder s = new StringBuilder();

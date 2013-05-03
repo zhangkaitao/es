@@ -1,4 +1,4 @@
-drop table if exists `conf_icon`;
+drop table if exists `conf_icon`;;
 
 create table `conf_icon`(
   `id`         bigint not null auto_increment,
@@ -15,5 +15,5 @@ create table `conf_icon`(
   `description`  varchar(100),
   constraint `pk_conf_icon` primary key(`id`),
   constraint `unique_conf_icon_identity` unique(`identity`)
-) charset=utf8 ENGINE=InnoDB;
-alter table `sys_user` auto_increment=2000;
+) charset=utf8 ENGINE=InnoDB;;
+alter table `conf_icon` auto_increment=2000;;

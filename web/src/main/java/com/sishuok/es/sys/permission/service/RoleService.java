@@ -5,14 +5,17 @@
  */
 package com.sishuok.es.sys.permission.service;
 
+import com.google.common.collect.Sets;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
 import com.sishuok.es.sys.permission.repository.RoleRepository;
+import com.sishuok.es.sys.resource.entity.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -51,4 +54,24 @@ public class RoleService extends BaseService<Role, Long> {
         return roleRepository.findRoleResourcePermission(
                 roleResourcePermission.getRole(), roleResourcePermission.getResourceId());
     }
+
+    /**
+     * 获取可用的角色列表
+     * @param roleIds
+     * @return
+     */
+    public Set<Role> findShowRoles(Set<Long> roleIds) {
+
+        Set<Role> roles = Sets.newHashSet();
+
+        //TODO 如果角色很多 此处应该写查询
+        for(Role role : findAll()) {
+            if(Boolean.TRUE.equals(role.getShow()) && roleIds.contains(role.getId())) {
+                roles.add(role);
+            }
+        }
+        return roles;
+    }
+
+
 }

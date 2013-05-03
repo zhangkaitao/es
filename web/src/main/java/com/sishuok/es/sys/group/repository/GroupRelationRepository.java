@@ -11,6 +11,7 @@ import com.sishuok.es.sys.group.entity.GroupRelation;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,15 +38,15 @@ public interface GroupRelationRepository extends BaseRepository<GroupRelation, L
      * @param endUserId
      */
     @Modifying
-    @Query("delete from GroupRelation where groupId=?1 and ((startUserId>=?2 and endUserId<=?3) or (userId>=?2 and userId<=?3))")
-    void deleteInRange(Long groupId, Long startUserId, Long endUserId);
+    @Query("delete from GroupRelation where (startUserId>=?1 and endUserId<=?2) or (userId>=?1 and userId<=?2)")
+    void deleteInRange(Long startUserId, Long endUserId);
 
     GroupRelation findByGroupIdAndOrganizationId(Long groupId, Long organizationId);
-/*
 
-    @Query("select group from OrganizationGroupRelation where organization.id in (?1)")
-    Set<Group> findOrganizationGroup(Set<Long> organizationIds);
+    @Query("select groupId from GroupRelation where userId=?1 or (startUserId<=?1 and endUserId>=?1))")
+    List<Long> findGroupIds(Long userId);
 
-    @Query("select group from UserGroupRelation where user.id=?1 or (startUserId >= ?1 and endUserId <= ?1)")
-    Set<Group> findUserGroup(Long userId);*/
+    @Query("select groupId from GroupRelation where userId=?1 or (startUserId<=?1 and endUserId>=?1) or (organizationId in (?2))")
+    List<Long> findGroupIds(Long userId, Set<Long> organizationIds);
+
 }

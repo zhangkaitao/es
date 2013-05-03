@@ -34,9 +34,15 @@ import java.util.Set;
 @Service
 public class GroupService extends BaseService<Group, Long> {
 
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private GroupRelationService groupRelationService;
+
     @Autowired
     public void setGroupRepository(GroupRepository groupRepository) {
         setBaseRepository(groupRepository);
+        this.groupRepository = groupRepository;
     }
 
     public Set<Map<String, Object>> findIdAndNames(Searchable searchable, String groupName) {
@@ -59,4 +65,25 @@ public class GroupService extends BaseService<Group, Long> {
         );
     }
 
+    /**
+     * 获取可用的的分组编号列表
+     * @param userId
+     * @param organizationIds
+     * @return
+     */
+    public Set<Long> findShowGroupIds(Long userId, Set<Long> organizationIds) {
+        Set<Long> groupIds = Sets.newHashSet();
+        groupIds.addAll(groupRepository.findDefaultGroupIds());
+        groupIds.addAll(groupRelationService.findGroupIds(userId, organizationIds));
+
+
+        //TODO 如果分组数量很多 建议此处查询时直接带着是否可用的标识去查
+        for(Group group : findAll()) {
+            if(Boolean.FALSE.equals(group.getShow())) {
+                groupIds.remove(group.getId());
+            }
+        }
+
+        return groupIds;
+    }
 }

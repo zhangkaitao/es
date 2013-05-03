@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.group.service;
 
+import com.google.common.collect.Sets;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.group.entity.GroupRelation;
 import com.sishuok.es.sys.group.repository.GroupRelationRepository;
@@ -82,7 +83,7 @@ public class GroupRelationService extends BaseService<GroupRelation, Long> {
 
                 if(r == null) {
                     //删除范围内的
-                    groupRelationRepository.deleteInRange(groupId, startUserId, endUserId);
+                    groupRelationRepository.deleteInRange(startUserId, endUserId);
                     r = new GroupRelation();
                     r.setGroupId(groupId);
                     r.setStartUserId(startUserId);
@@ -94,11 +95,12 @@ public class GroupRelationService extends BaseService<GroupRelation, Long> {
         }
     }
 
-    /*public Set<Group> findUserGroup(User user) {
-        return userGroupRelationRepository.findUserGroup(user.getId());
+    public Set<Long> findGroupIds(Long userId, Set<Long> organizationIds) {
+        if(organizationIds.isEmpty()) {
+            return Sets.newHashSet(groupRelationRepository.findGroupIds(userId));
+        }
+
+        return Sets.newHashSet(groupRelationRepository.findGroupIds(userId, organizationIds));
     }
 
-    public Set<Group> findOrganizationGroup(Set<Long> organizationIds) {
-        return organizationGroupRelationRepository.findOrganizationGroup(organizationIds);  //To change body of created methods use File | Settings | File Templates.
-    }*/
 }

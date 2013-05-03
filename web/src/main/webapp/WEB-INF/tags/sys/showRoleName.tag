@@ -15,7 +15,7 @@
     Role role = roleService.findOne(id);
 
     if(role == null) {
-        out.write(String.format("编号[%d]数据不存在", id));
+        return;
     }
 
     StringBuilder s = new StringBuilder();

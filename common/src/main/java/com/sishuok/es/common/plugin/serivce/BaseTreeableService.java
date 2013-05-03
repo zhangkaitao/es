@@ -20,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>User: Zhang Kaitao
@@ -258,6 +256,28 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             models.addAll(findAllBySort(searchable));
         }
         return models;
+    }
+
+    public Set<ID> findAncestorIds(Iterable<ID> currentIds) {
+        Set<ID> parents = Sets.newHashSet();
+        for(ID currentId : currentIds) {
+            parents.addAll(findAncestorIds(currentId));
+        }
+        return parents;
+    }
+
+    public Set<ID> findAncestorIds(ID currentId) {
+        Set ids = Sets.newHashSet();
+        M m = findOne(currentId);
+        if(m == null) {
+            return ids;
+        }
+        for(String idStr : StringUtils.tokenizeToStringArray(m.getParentIds(), "/")) {
+            if(StringUtils.hasLength(idStr)) {
+                ids.add(Long.valueOf(idStr));
+            }
+        }
+        return ids;
     }
 
     /**
