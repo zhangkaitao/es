@@ -5,16 +5,20 @@
  */
 package com.sishuok.es.common.service;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.support.InjectBaseDependencyHelper;
 import com.sishuok.es.common.repository.BaseRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.Assert;
+import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -38,6 +42,9 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
 
     @Override
     public void afterPropertiesSet() throws Exception {
+
+        InjectBaseDependencyHelper.findAndInjectBaseRepositoryDependency(this);
+
         Assert.notNull(baseRepository, "BaseRepository required, Class is:" + getClass());
 
     }
@@ -175,7 +182,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
     public List<M> findAllWithNoPageNoSort(Searchable searchable) {
         searchable.removePageable();
         searchable.removeSort();
-        return baseRepository.findAll(searchable).getContent();
+        return Lists.newArrayList(baseRepository.findAll(searchable).getContent());
     }
 
     /**
@@ -185,7 +192,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public List<M> findAllWithSort(Searchable searchable) {
-        return baseRepository.findAll(searchable).getContent();
+        return Lists.newArrayList(baseRepository.findAll(searchable).getContent());
     }
 
 

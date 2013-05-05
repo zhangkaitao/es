@@ -6,17 +6,15 @@
 package com.sishuok.es.showcase.tree.web.controller;
 
 import com.sishuok.es.common.Constants;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.showcase.tree.entity.Tree;
 import com.sishuok.es.showcase.tree.service.TreeService;
-import com.sishuok.es.sys.permission.entity.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao
@@ -27,13 +25,9 @@ import java.util.Set;
 @RequestMapping(value = "/showcase/tree")
 public class TreeController extends BaseTreeableController<Tree, Long> {
 
-    private TreeService treeService;
-
     @Autowired
-    public void setTreeService(TreeService treeService) {
-        setTreeableService(treeService);
-        this.treeService = treeService;
-    }
+    @BaseComponent
+    private TreeService treeService;
 
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(

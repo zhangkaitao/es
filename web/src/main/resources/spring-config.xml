@@ -187,7 +187,7 @@
     <!--设置BaseRepositoryImplHelper辅助类所需的entityManagerFactory-->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod"
-                  value="com.sishuok.es.common.repository.BaseRepositoryImplHelper.setEntityManagerFactory"/>
+                  value="com.sishuok.es.common.repository.RepositoryHelper.setEntityManagerFactory"/>
         <property name="arguments" ref="entityManagerFactory"/>
     </bean>
 

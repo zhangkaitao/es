@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.index.web;
 
-import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.index.web.entity.Menu;
@@ -40,7 +39,7 @@ public class IndexController {
                         .addSearchFilter("show", SearchOperator.eq, true)
                         .addSort(new Sort(Sort.Direction.DESC, "parentId", "weight"));
 
-        List<Resource> resources = Lists.newArrayList(resourceService.findAllWithSort(searchable));
+        List<Resource> resources = resourceService.findAllWithSort(searchable);
         List<Menu> menus = MenuUtils.convertToMenus(resources);
         model.addAttribute("menus", menus);
 

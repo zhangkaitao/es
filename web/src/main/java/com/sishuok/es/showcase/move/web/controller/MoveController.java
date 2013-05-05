@@ -7,6 +7,7 @@ package com.sishuok.es.showcase.move.web.controller;
 
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.validate.group.Create;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseMovableController;
 import com.sishuok.es.showcase.move.entity.Move;
 import com.sishuok.es.showcase.move.service.MoveService;
@@ -29,13 +30,9 @@ import javax.validation.Valid;
 @RequestMapping(value = "/showcase/move")
 public class MoveController extends BaseMovableController<Move, Long> {
 
-    private MoveService moveService;
-
     @Autowired
-    public void setMoveService(MoveService moveService) {
-        setMovableService(moveService);
-        this.moveService = moveService;
-    }
+    @BaseComponent
+    private MoveService moveService;
 
 
     public void setCommonData(Model model) {

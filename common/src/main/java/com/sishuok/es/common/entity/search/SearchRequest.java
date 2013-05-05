@@ -5,20 +5,13 @@
  */
 package com.sishuok.es.common.entity.search;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.exception.SearchException;
-import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
-import com.sishuok.es.common.entity.specification.SearchSpecifications;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.util.Assert;
 
 import java.util.*;
 
@@ -262,18 +255,6 @@ public final class SearchRequest extends Searchable {
     public Map<String, SearchFilter> getSearchFilterMap() {
         return searchFilterMap;
     }
-
-
-    /**
-     * 按条件拼的Specification
-     * @param entityClass
-     * @param <T>
-     * @return
-     */
-    public <T> Specification<T> getSpecifications(final Class<T> entityClass) {
-        return SearchSpecifications.<T>bySearch(this, entityClass);
-    }
-
 
 
     public boolean isConverted() {

@@ -16,7 +16,7 @@ $.app = {
             } else if(a.is(".btn-change-password")) {
                 url = ctx + "/admin/sys/user/loginUser/changePassword";
             }
-            $.tabs.activeTab($.app.nextCustomTabIndex(), "个人资料", url, true)
+            $.tabs.activeTab($.tabs.nextCustomTabIndex(), "个人资料", url, true)
         });
 
 //        $("#menu").niceScroll({styler:"fb",cursorcolor:"#777", zindex:1});

@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.upload.web.controller;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.showcase.upload.entity.Upload;
@@ -30,13 +31,10 @@ import javax.validation.Valid;
 @RequestMapping(value = "showcase/upload")
 public class UploadController extends BaseCRUDController<Upload, Long> {
 
+    @Autowired
+    @BaseComponent
     private UploadService uploadService;
 
-    @Autowired
-    public void setUploadService(UploadService uploadService) {
-        setBaseService(uploadService);
-        this.uploadService = uploadService;
-    }
 
     //不再是默认的create，因为下边的create具有多个参数，因此无法覆盖默认的create，因此为了使用该url 我们把父类的url改掉
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)

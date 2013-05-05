@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.move.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseMovableService;
 import com.sishuok.es.showcase.move.entity.Move;
 import com.sishuok.es.showcase.move.repository.MoveRepository;
@@ -21,8 +22,7 @@ public class MoveService extends BaseMovableService<Move, Long> {
 
 
     @Autowired
-    private void setMoveRepository(MoveRepository moveRepository) {
-        setBaseRepository(moveRepository);
-    }
+    @BaseComponent
+    private MoveRepository moveRepository;
 
 }

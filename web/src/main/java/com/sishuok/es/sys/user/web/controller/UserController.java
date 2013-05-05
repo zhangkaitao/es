@@ -8,6 +8,7 @@ package com.sishuok.es.sys.user.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
@@ -43,13 +44,9 @@ import java.util.Set;
 @RequestMapping(value = "/admin/sys/user")
 public class UserController extends BaseCRUDController<User, Long> {
 
-    private UserService userService;
-
     @Autowired
-    public void setUserService(UserService userService) {
-        setBaseService(userService);
-        this.userService = userService;
-    }
+    @BaseComponent
+    private UserService userService;
 
     @Override
     protected void setCommonData(Model model) {

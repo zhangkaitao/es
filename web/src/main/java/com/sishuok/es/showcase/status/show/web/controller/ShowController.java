@@ -7,6 +7,7 @@ package com.sishuok.es.showcase.status.show.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Stateable;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.status.show.entity.Show;
@@ -33,16 +34,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/showcase/status/show")
 public class ShowController extends BaseCRUDController<Show, Long> {
 
+    @Autowired
+    @BaseComponent
     private ShowService showService;
 
     public ShowController() {
         setListAlsoSetCommonData(true);
-    }
-
-    @Autowired
-    public void setShowService(ShowService showService) {
-        setBaseService(showService);
-        this.showService = showService;
     }
 
     @Override

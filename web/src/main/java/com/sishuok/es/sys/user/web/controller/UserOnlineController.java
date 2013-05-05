@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.user.web.controller;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.service.UserOnlineService;
@@ -25,16 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/admin/sys/user/online")
 public class UserOnlineController extends BaseCRUDController<UserOnline, String> {
 
+    @Autowired
+    @BaseComponent
     private UserOnlineService userOnlineService;
 
     @Autowired
     private OnlineSessionDAO onlineSessionDAO;
 
-    @Autowired
-    public void setUserOnlineService(UserOnlineService userOnlineService) {
-        setBaseService(userOnlineService);
-        this.userOnlineService = userOnlineService;
-    }
 
     @RequestMapping("/forceLogout")
     public String forceLogout(@RequestParam(value = "ids") String[] ids) {

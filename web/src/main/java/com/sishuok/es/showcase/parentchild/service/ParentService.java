@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.parentchild.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.parentchild.entity.Child;
 import com.sishuok.es.showcase.parentchild.entity.Parent;
@@ -22,16 +23,12 @@ import java.util.List;
 @Service
 public class ParentService extends BaseService<Parent, Long> {
 
+    @Autowired
+    @BaseComponent
     private ParentRepository parentRepository;
 
     @Autowired
     private ChildService childService;
-
-    @Autowired
-    public void setParentRepository(ParentRepository parentRepository) {
-        setBaseRepository(parentRepository);
-        this.parentRepository = parentRepository;
-    }
 
 
     public void save(Parent parent, List<Child> childList) {

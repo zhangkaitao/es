@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.group.service;
 
 import com.google.common.collect.Sets;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.group.entity.GroupRelation;
 import com.sishuok.es.sys.group.repository.GroupRelationRepository;
@@ -27,14 +28,9 @@ import java.util.Set;
 @Service
 public class GroupRelationService extends BaseService<GroupRelation, Long> {
 
-    private GroupRelationRepository groupRelationRepository;
-
-
     @Autowired
-    public void setGroupRelationRepository(GroupRelationRepository groupRelationRepository) {
-        setBaseRepository(groupRelationRepository);
-        this.groupRelationRepository = groupRelationRepository;
-    }
+    @BaseComponent
+    private GroupRelationRepository groupRelationRepository;
 
 
     public void appendRelation(Long groupId, Long[] organizationIds) {

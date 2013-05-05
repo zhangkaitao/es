@@ -149,15 +149,6 @@ public abstract class Searchable {
      */
     public abstract Collection<SearchFilter> getSearchFilters();
 
-    /**
-     * 返回一个Entity的Specification
-     * @param entityClass
-     * @param <T>
-     * @return
-     */
-    public abstract <T> Specification<T> getSpecifications(final Class<T> entityClass);
-
-
 
     /**
      * 是否已经转换过了 避免多次转换

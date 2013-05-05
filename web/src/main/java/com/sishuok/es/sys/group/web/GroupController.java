@@ -8,6 +8,7 @@ package com.sishuok.es.sys.group.web;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.group.entity.Group;
@@ -36,6 +37,8 @@ import java.util.Set;
 @RequestMapping(value = "/admin/sys/group")
 public class GroupController extends BaseCRUDController<Group, Long> {
 
+    @Autowired
+    @BaseComponent
     private GroupService groupService;
 
     @Autowired
@@ -46,11 +49,6 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         setListAlsoSetCommonData(true);
     }
 
-    @Autowired
-    public void setGroupService(GroupService groupService) {
-        setBaseService(groupService);
-        this.groupService = groupService;
-    }
 
     @Override
     protected void setCommonData(Model model) {

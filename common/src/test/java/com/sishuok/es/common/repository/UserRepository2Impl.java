@@ -65,7 +65,7 @@ public class UserRepository2Impl {
      */
     public Page<User> findAllByDefault(final Searchable searchable) {
         long total = countAllByDefault(searchable);
-        List<User> contentList = BaseRepositoryImplHelper.find(findAllQL, searchable, SearchCallback.DEFAULT);
+        List<User> contentList = RepositoryHelper.find(findAllQL, searchable, SearchCallback.DEFAULT);
         return new PageImpl(contentList, searchable.getPage(), total);
     }
 
@@ -77,7 +77,7 @@ public class UserRepository2Impl {
      */
     public long countAllByDefault(final Searchable searchable) {
         searchable.convert(User.class);
-        return BaseRepositoryImplHelper.count(countAllQL, searchable, SearchCallback.DEFAULT);
+        return RepositoryHelper.count(countAllQL, searchable, SearchCallback.DEFAULT);
     }
 
 
@@ -103,7 +103,7 @@ public class UserRepository2Impl {
      * @return
      */
     public long countAllByCustom(final Searchable searchable) {
-        return BaseRepositoryImplHelper.count(countAllQL, searchable, customSearchCallback);
+        return RepositoryHelper.count(countAllQL, searchable, customSearchCallback);
     }
 
     /**
@@ -114,7 +114,7 @@ public class UserRepository2Impl {
      */
     public Page<User> findAllByCustom(final Searchable searchable) {
         long total = countAllByCustom(searchable);
-        List<User> contentList = BaseRepositoryImplHelper.find(findAllQL, searchable, customSearchCallback);
+        List<User> contentList = RepositoryHelper.find(findAllQL, searchable, customSearchCallback);
         return new PageImpl(contentList, searchable.getPage(), total);
     }
 

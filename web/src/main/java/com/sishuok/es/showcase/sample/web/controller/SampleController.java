@@ -8,6 +8,7 @@ package com.sishuok.es.showcase.sample.web.controller;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.sample.entity.Sample;
@@ -35,13 +36,9 @@ import java.util.Map;
 @RequestMapping(value = "/showcase/sample")
 public class SampleController extends BaseCRUDController<Sample, Long> {
 
-    private SampleService sampleService;
-
     @Autowired
-    public void setSampleService(SampleService sampleService) {
-        setBaseService(sampleService);
-        this.sampleService = sampleService;
-    }
+    @BaseComponent
+    private SampleService sampleService;
 
     @Override
     protected void setCommonData(Model model) {

@@ -6,21 +6,14 @@
 package com.sishuok.es.sys.resource.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.entity.search.SearchFilter;
-import com.sishuok.es.common.entity.search.SearchOperator;
-import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
-import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
-import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,13 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/resource")
 public class ResourceController extends BaseTreeableController<Resource, Long> {
 
-    private ResourceService resourceService;
-
     @Autowired
-    public void setResourceService(ResourceService resourceService) {
-        setTreeableService(resourceService);
-        this.resourceService = resourceService;
-    }
+    @BaseComponent
+    private ResourceService resourceService;
 
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(

@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.conf.icon.service;
 
-import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.conf.icon.entity.Icon;
 import com.sishuok.es.conf.icon.repository.IconRepository;
@@ -20,13 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class IconService extends BaseService<Icon, Long> {
 
-    private IconRepository iconRepository;
-
     @Autowired
-    public void setIconRepository(IconRepository iconRepository) {
-        setBaseRepository(iconRepository);
-        this.iconRepository = iconRepository;
-    }
+    @BaseComponent
+    private IconRepository iconRepository;
 
     public Icon findByIdentity(String identity) {
         return iconRepository.findByIdentity(identity);

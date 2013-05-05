@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.organization.web.controller;
 
 import com.sishuok.es.common.Constants;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.showcase.tree.entity.Tree;
 import com.sishuok.es.sys.organization.entity.Job;
@@ -29,13 +30,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/organization/job")
 public class JobController extends BaseTreeableController<Job, Long> {
 
+    @Autowired
+    @BaseComponent
     private JobService jobService;
 
-    @Autowired
-    public void setJobService(JobService jobService) {
-        setTreeableService(jobService);
-        this.jobService = jobService;
-    }
 
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(

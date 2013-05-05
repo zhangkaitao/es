@@ -57,7 +57,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.sex_eq", "male");
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.sex_notEq", "male");
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(0, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(0, userRepository.count(search));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.age_eq", "15");
         SearchRequest search = new SearchRequest(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -102,7 +102,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("registerDate_eq", dateStr);
         SearchRequest search = new SearchRequest(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -122,7 +122,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("baseInfo.birthday_gt", dateStrFrom);
         searchParams.put("baseInfo.birthday_lt", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -142,7 +142,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("baseInfo.birthday_gte", dateStrFrom);
         searchParams.put("baseInfo.birthday_lte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -156,7 +156,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("username_isNotNull", null);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
     @Test
@@ -171,7 +171,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -187,7 +187,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids.toArray(new Long[count]));
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
     @Test
@@ -202,7 +202,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids.get(0));
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(1, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(1, userRepository.count(search));
     }
 
 
@@ -226,7 +226,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate", dateStrFrom);
         searchParams.put("endRegisterDate", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
     /**
@@ -249,7 +249,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -273,7 +273,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate_lTe", dateStrFrom);
         searchParams.put("endRegisterDate_gTe", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -297,7 +297,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate1_lte", dateStrFrom);
         searchParams.put("endRegisterDate1_gte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -321,7 +321,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(count, userRepository.count(search));
     }
 
 
@@ -345,7 +345,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams).setPage(0, 10);   //分页页码从0开始
-        assertEquals(10, userRepository.findAll(search.getSpecifications(User.class), search.getPage()).getNumberOfElements());
+        assertEquals(10, userRepository.findAll(search).getNumberOfElements());
     }
 
     /**
@@ -368,7 +368,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams).setPage(new PageRequest(1, 5));
-        assertEquals(5, userRepository.findAll(search.getSpecifications(User.class), search.getPage()).getNumberOfElements());
+        assertEquals(5, userRepository.findAll(search).getNumberOfElements());
     }
 
 
@@ -392,7 +392,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams).setPage(2, 10); //没有那么多数据
-        assertEquals(0, userRepository.findAll(search.getSpecifications(User.class), search.getPage()).getNumberOfElements());
+        assertEquals(0, userRepository.findAll(search).getNumberOfElements());
     }
 
 
@@ -421,7 +421,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
                 Searchable.newSearchable(searchParams)
                 .addSort(Sort.Direction.DESC, "id").addSort(Sort.Direction.DESC, "username");
 
-        List<User> list = userRepository.findAll(search.getSpecifications(User.class), search.getSort());
+        List<User> list = userRepository.findAll(search).getContent();
         assertTrue(list.get(0).getId() > list.get(1).getId());
 
     }
@@ -454,7 +454,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         Searchable search =
                 Searchable.newSearchable(searchParams).setPage(new PageRequest(0, 10, sort)); //分页出错时 取最后10个
 
-        Page<User> page = userRepository.findAll(search.getSpecifications(User.class), search.getPage());
+        Page<User> page = userRepository.findAll(search);
         assertTrue(page.getContent().get(0).getId() > page.getContent().get(1).getId());
     }
 
@@ -475,7 +475,7 @@ public class SearchUserRepositoryIT extends BaseUserIT {
                 )
         );
 
-        assertEquals(2, userRepository.count(search.getSpecifications(User.class)));
+        assertEquals(2, userRepository.count(search));
     }
 
 

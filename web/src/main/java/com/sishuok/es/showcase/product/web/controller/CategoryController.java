@@ -7,6 +7,7 @@ package com.sishuok.es.showcase.product.web.controller;
 
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseMovableController;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.showcase.product.entity.Category;
@@ -25,13 +26,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/showcase/product/category")
 public class CategoryController extends BaseMovableController<Category, Long> {
 
-    private CategoryService categoryService;
-
     @Autowired
-    public void setCategoryService(CategoryService categoryService) {
-        setMovableService(categoryService);
-        this.categoryService = categoryService;
-    }
+    @BaseComponent
+    private CategoryService categoryService;
 
     @Override
     protected void setCommonData(Model model) {

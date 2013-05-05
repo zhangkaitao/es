@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatusHistory;
@@ -33,13 +34,9 @@ import java.util.Date;
 @Service
 public class UserStatusHistoryService extends BaseService<UserStatusHistory, Long> {
 
-    private UserStatusHistoryRepository userStatusHistoryRepository;
-
     @Autowired
-    public void setUserStatusHistoryRepository(UserStatusHistoryRepository userStatusHistoryRepository) {
-        setBaseRepository(userStatusHistoryRepository);
-        this.userStatusHistoryRepository = userStatusHistoryRepository;
-    }
+    @BaseComponent
+    private UserStatusHistoryRepository userStatusHistoryRepository;
 
 
     public void log(User opUser, User user, UserStatus newStatus, String reason) {

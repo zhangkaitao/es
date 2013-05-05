@@ -11,6 +11,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -43,23 +45,19 @@ public class UserService extends BaseService<User, Long> {
 
     private static final Logger log = LoggerFactory.getLogger("es-sys-user");
 
+    @Autowired
+    @BaseComponent
     private UserRepository userRepository;
-    private UserStatusHistoryService userStatusHistoryService;
-    private PasswordService passwordService;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        setBaseRepository(userRepository);
-        this.userRepository = userRepository;
-    }
+    private UserStatusHistoryService userStatusHistoryService;
+
     @Autowired
-    public void setUserStatusHistoryService(UserStatusHistoryService userStatusHistoryService) {
-        this.userStatusHistoryService = userStatusHistoryService;
-    }
-    @Autowired
+    private PasswordService passwordService;
+
     public void setPasswordService(PasswordService passwordService) {
         this.passwordService = passwordService;
-        }
+    }
 
     @Override
     public User save(User user) {

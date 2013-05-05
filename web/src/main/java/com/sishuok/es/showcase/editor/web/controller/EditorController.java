@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.editor.web.controller;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.editor.entity.Editor;
 import com.sishuok.es.showcase.editor.service.EditorService;
@@ -23,13 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/showcase/editor")
 public class EditorController extends BaseCRUDController<Editor, Long> {
 
-    private EditorService editorService;
-
     @Autowired
-    public void setEditorService(EditorService editorService) {
-        setBaseService(editorService);
-        this.editorService = editorService;
-    }
+    @BaseComponent
+    private EditorService editorService;
 
     /**
      * 验证失败返回true

@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.AvailableEnum;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.entity.Role;
@@ -37,16 +38,12 @@ import java.util.Set;
 @RequestMapping(value = "/admin/sys/permission/role")
 public class RoleController extends BaseCRUDController<Role, Long> {
 
+    @Autowired
+    @BaseComponent
     private RoleService roleService;
 
     @Autowired
     private PermissionService permissionService;
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
-        setBaseService(roleService);
-        this.roleService = roleService;
-    }
 
     @Override
     protected void setCommonData(Model model) {

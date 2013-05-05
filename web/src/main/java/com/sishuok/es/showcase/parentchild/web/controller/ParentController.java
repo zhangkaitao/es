@@ -9,6 +9,7 @@ import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.FormModel;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
@@ -37,19 +38,17 @@ import java.util.List;
 @RequestMapping(value = "/showcase/parentchild/parent")
 public class ParentController extends BaseCRUDController<Parent, Long> {
 
+    @Autowired
+    @BaseComponent
     private ParentService parentService;
 
+    @Autowired
     private ChildService childService;
 
     protected ParentController() {
         setListAlsoSetCommonData(true);
     }
 
-    @Autowired
-    public void setParentService(ParentService parentService) {
-        setBaseService(parentService);
-        this.parentService = parentService;
-    }
 
     @Override
     protected void setCommonData(Model model) {

@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.user.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.UserLastOnline;
 import com.sishuok.es.sys.user.entity.UserOnline;
@@ -27,13 +28,9 @@ import java.util.List;
 @Service
 public class UserOnlineService extends BaseService<UserOnline, String> {
 
-    private UserOnlineRepository userOnlineRepository;
-
     @Autowired
-    public void setUserOnlineRepository(UserOnlineRepository userOnlineRepository) {
-        setBaseRepository(userOnlineRepository);
-        this.userOnlineRepository = userOnlineRepository;
-    }
+    @BaseComponent
+    private UserOnlineRepository userOnlineRepository;
 
     /**
      * 上线

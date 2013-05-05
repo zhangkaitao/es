@@ -6,6 +6,7 @@
 package com.sishuok.es.common.service;
 
 import com.sishuok.es.common.entity.User;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class UserService extends BaseService<User, Long> {
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        setBaseRepository(userRepository);
-    }
+    @BaseComponent
+    UserRepository userRepository;
 }

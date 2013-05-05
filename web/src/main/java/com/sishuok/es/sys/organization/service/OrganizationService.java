@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.organization.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.repository.OrganizationRepository;
@@ -23,9 +24,9 @@ import java.util.Set;
 public class OrganizationService extends BaseTreeableService<Organization, Long> {
 
     @Autowired
-    public void setTreeRepository(OrganizationRepository organizationRepository) {
-        setBaseRepository(organizationRepository);
-    }
+    @BaseComponent
+    private OrganizationRepository organizationRepository;
+
 
     /**
      * 过滤仅获取可显示的数据

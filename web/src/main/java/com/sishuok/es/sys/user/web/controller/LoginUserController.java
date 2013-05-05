@@ -7,6 +7,7 @@ package com.sishuok.es.sys.user.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseController;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatus;
@@ -33,6 +34,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/admin/sys/user/loginUser")
 public class LoginUserController extends BaseController<User, Long> {
 
+    @Autowired
+    @BaseComponent
     private UserService userService;
 
     @Autowired
@@ -41,11 +44,6 @@ public class LoginUserController extends BaseController<User, Long> {
     @Autowired
     private UserLastOnlineService userLastOnlineService;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        setBaseService(userService);
-        this.userService = userService;
-    }
 
     @Override
     public void setCommonData(Model model) {

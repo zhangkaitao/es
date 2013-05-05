@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.user.web.controller;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.user.entity.UserLastOnline;
 import com.sishuok.es.sys.user.service.UserLastOnlineService;
@@ -21,11 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/admin/sys/user/lastOnline")
 public class UserLastOnlineController extends BaseCRUDController<UserLastOnline, Long> {
 
+    @Autowired
+    @BaseComponent
     private UserLastOnlineService userLastOnlineService;
 
-    @Autowired
-    public void setUserLastOnlineService(UserLastOnlineService userLastOnlineService) {
-        setBaseService(userLastOnlineService);
-        this.userLastOnlineService = userLastOnlineService;
-    }
 }

@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.organization.web.controller;
 
 import com.sishuok.es.common.Constants;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.entity.OrganizationType;
@@ -28,13 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/organization/organization")
 public class OrganizationController extends BaseTreeableController<Organization, Long> {
 
+    @Autowired
+    @BaseComponent
     private OrganizationService organizationService;
 
-    @Autowired
-    public void setOrganizationService(OrganizationService organizationService) {
-        setTreeableService(organizationService);
-        this.organizationService = organizationService;
-    }
 
     @Override
     protected void setCommonData(Model model) {

@@ -39,15 +39,15 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     private BaseTreeableService<M, ID> treeableService;
 
-    public void setTreeableService(BaseTreeableService<M, ID> treeableService) {
-        setBaseService(treeableService);
-        this.treeableService = treeableService;
-    }
-
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        Assert.notNull(treeableService, "treeable service must not null");
+
+        Assert.isTrue(
+                BaseTreeableService.class.isAssignableFrom(baseService.getClass()),
+                "baseService must be BaseTreeableService subclass");
+
+        this.treeableService = (BaseTreeableService<M, ID>) this.baseService;
     }
 
 

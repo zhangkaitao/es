@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.auth.service;
 
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.auth.entity.Auth;
 import com.sishuok.es.sys.auth.repository.AuthRepository;
@@ -33,20 +34,14 @@ import java.util.Set;
 @Service
 public class AuthService extends BaseService<Auth, Long> {
 
+    @Autowired
+    @BaseComponent
     private AuthRepository authRepository;
 
     @Autowired
     private UserService userService;
     @Autowired
     private GroupService groupService;
-
-
-
-    @Autowired
-    public void setAuthRepository(AuthRepository authRepository) {
-        setBaseRepository(authRepository);
-        this.authRepository = authRepository;
-    }
 
 
     //why m is po??

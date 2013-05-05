@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.editor.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.editor.entity.Editor;
 import com.sishuok.es.showcase.editor.repository.EditorRepository;
@@ -19,13 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class EditorService extends BaseService<Editor, Long> {
 
-    private EditorRepository sampleRepository;
-
     @Autowired
-    public void setEditorRepository(EditorRepository sampleRepository) {
-        setBaseRepository(sampleRepository);
-        this.sampleRepository = sampleRepository;
-    }
+    @BaseComponent
+    private EditorRepository sampleRepository;
 
 
 }

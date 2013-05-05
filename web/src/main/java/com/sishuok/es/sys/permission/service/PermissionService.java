@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.permission.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.repository.PermissionRepository;
@@ -19,13 +20,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class PermissionService extends BaseService<Permission, Long> {
 
+    @Autowired
+    @BaseComponent
     private PermissionRepository permissionRepository;
 
-    @Autowired
-    public void setPermissionRepository(PermissionRepository permissionRepository) {
-        setBaseRepository(permissionRepository);
-        this.permissionRepository = permissionRepository;
-    }
 
 
 }

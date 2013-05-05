@@ -6,6 +6,7 @@
 package com.sishuok.es.common.web.controller;
 
 import com.sishuok.es.common.entity.AbstractEntity;
+import com.sishuok.es.common.inject.support.InjectBaseDependencyHelper;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -51,7 +52,8 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(this.baseService, "base service must set");
+        InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
+        Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
     }
 
 

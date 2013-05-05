@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.status.audit.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.status.audit.entity.Audit;
 import com.sishuok.es.showcase.status.audit.repository.AuditRepository;
@@ -19,12 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuditService extends BaseService<Audit, Long> {
 
+    @Autowired
+    @BaseComponent
     private AuditRepository sampleRepository;
 
-    @Autowired
-    public void setAuditRepository(AuditRepository sampleRepository) {
-        setBaseRepository(sampleRepository);
-        this.sampleRepository = sampleRepository;
-    }
 
 }

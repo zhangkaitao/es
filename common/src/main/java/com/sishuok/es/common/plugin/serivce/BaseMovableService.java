@@ -37,7 +37,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
     /**
      * 默认步长1000
      */
-    protected <R extends BaseRepository<M, ID>> BaseMovableService() {
+    protected BaseMovableService() {
         this(1000);
 
     }

@@ -26,19 +26,19 @@ public class BaseRepositoryImplHelperIT extends BaseUserIT {
 
     @Before
     public void setUp() {
-        BaseRepositoryImplHelper.setEntityManagerFactory(entityManagerFactory);
+        RepositoryHelper.setEntityManagerFactory(entityManagerFactory);
     }
 
 
     public void testGetEntityManager() {
-        Assert.assertNotNull(BaseRepositoryImplHelper.getEntityManager());
+        Assert.assertNotNull(RepositoryHelper.getEntityManager());
     }
 
     public void testFind() {
 
         User user = createUser();
 
-//        BaseRepositoryImplHelper.find();
+//        RepositoryHelper.find();
 
     }
 

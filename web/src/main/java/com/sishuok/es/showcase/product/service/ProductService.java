@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.product.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.product.entity.Product;
 import com.sishuok.es.showcase.product.repository.ProductRepository;
@@ -20,9 +21,8 @@ import org.springframework.stereotype.Service;
 public class ProductService extends BaseService<Product, Long> {
 
     @Autowired
-    public void setProductRepository(ProductRepository categoryRepository) {
-        setBaseRepository(categoryRepository);
-    }
+    @BaseComponent
+    private ProductRepository productRepository;
 
 
 }

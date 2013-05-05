@@ -8,6 +8,7 @@ package com.sishuok.es.conf.icon.web.controller;
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.validate.ValidateResponse;
@@ -40,6 +41,8 @@ import java.util.List;
 @RequestMapping(value = "/admin/conf/icon")
 public class IconController extends BaseCRUDController<Icon, Long> {
 
+    @Autowired
+    @BaseComponent
     private IconService iconService;
 
     @Value("${icon.css.file.src}")
@@ -47,12 +50,6 @@ public class IconController extends BaseCRUDController<Icon, Long> {
 
     public IconController() {
         setListAlsoSetCommonData(true);
-    }
-
-    @Autowired
-    public void setIconService(IconService iconService) {
-        setBaseService(iconService);
-        this.iconService = iconService;
     }
 
     @Override

@@ -22,12 +22,12 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- *  BaseRepositoryImpl辅助类
+ *  仓库辅助类
  * <p>User: Zhang Kaitao
  * <p>Date: 13-4-14 下午5:28
  * <p>Version: 1.0
  */
-public class BaseRepositoryImplHelper {
+public class RepositoryHelper {
 
     private static EntityManager entityManager;
 
@@ -36,7 +36,7 @@ public class BaseRepositoryImplHelper {
      * 建议使用如下代码配置即可
      * <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
      *   <property name="staticMethod"
-     *             value="com.sishuok.es.common.repository.BaseRepositoryImplHelper.setEntityManagerFactory"/>
+     *             value="com.sishuok.es.common.repository.RepositoryHelper.setEntityManagerFactory"/>
      *   <property name="arguments" ref="entityManagerFactory"/>
      * </bean>
      * @param entityManagerFactory
@@ -47,7 +47,7 @@ public class BaseRepositoryImplHelper {
 
     public static EntityManager getEntityManager() {
         Assert.notNull(entityManager, "entityManager must null, please see " +
-                "[com.sishuok.es.common.repository.BaseRepositoryImplHelper#setEntityManagerFactory]");
+                "[com.sishuok.es.common.repository.RepositoryHelper#setEntityManagerFactory]");
 
         return entityManager;
     }
@@ -126,7 +126,7 @@ public class BaseRepositoryImplHelper {
 
 
     /**
-     * @see BaseRepositoryImplHelper#findAll(String, org.springframework.data.domain.Pageable, Object...)
+     * @see RepositoryHelper#findAll(String, org.springframework.data.domain.Pageable, Object...)
      * @param ql
      * @param params
      * @param <M>
@@ -171,7 +171,7 @@ public class BaseRepositoryImplHelper {
      */
     public static <M> List<M> findAll(final String ql, final Sort sort, final Object... params) {
 
-        Query query = getEntityManager().createQuery(ql + BaseRepositoryImplHelper.prepareOrder(sort));
+        Query query = getEntityManager().createQuery(ql + RepositoryHelper.prepareOrder(sort));
         setParameters(query, params);
 
         return query.getResultList();

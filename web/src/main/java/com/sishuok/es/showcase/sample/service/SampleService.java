@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.sample.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.sample.entity.Sample;
 import com.sishuok.es.showcase.sample.repository.SampleRepository;
@@ -19,13 +20,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SampleService extends BaseService<Sample, Long> {
 
+    @Autowired
+    @BaseComponent
     private SampleRepository sampleRepository;
 
-    @Autowired
-    public void setSampleRepository(SampleRepository sampleRepository) {
-        setBaseRepository(sampleRepository);
-        this.sampleRepository = sampleRepository;
-    }
 
     public Sample findByName(String name) {
         return sampleRepository.findByName(name);

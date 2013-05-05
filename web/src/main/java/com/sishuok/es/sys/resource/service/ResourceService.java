@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.resource.service;
 
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.repository.ResourceRepository;
@@ -22,8 +23,8 @@ import java.util.List;
 public class ResourceService extends BaseTreeableService<Resource, Long> {
 
     @Autowired
-    public void setResourceRepository(ResourceRepository resourceRepository) {
-        setBaseRepository(resourceRepository);
-    }
+    @BaseComponent
+    private ResourceRepository resourceRepository;
+
 
 }

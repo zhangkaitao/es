@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.permission.service;
 
 import com.google.common.collect.Sets;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
@@ -25,13 +26,9 @@ import java.util.Set;
 @Service
 public class RoleService extends BaseService<Role, Long> {
 
-    private RoleRepository roleRepository;
-
     @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        setBaseRepository(roleRepository);
-        this.roleRepository = roleRepository;
-    }
+    @BaseComponent
+    private RoleRepository roleRepository;
 
     @Override
     public Role update(Role role) {

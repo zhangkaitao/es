@@ -9,6 +9,7 @@ import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Movable;
 import com.sishuok.es.common.plugin.serivce.BaseMovableService;
+import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
@@ -32,16 +33,16 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
 
     private BaseMovableService movableService;
 
-    public void setMovableService(BaseMovableService<M, ID> movableService) {
-        setBaseService(movableService);
-        this.movableService = movableService;
-    }
-
-
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        Assert.notNull(movableService, "movable service must not null");
+
+        Assert.isTrue(
+                BaseMovableService.class.isAssignableFrom(baseService.getClass()),
+                "baseService must be BaseMovableService subclass");
+
+        this.movableService = (BaseMovableService<M, ID>) this.baseService;
+
     }
 
     @RequestMapping(method = RequestMethod.GET)

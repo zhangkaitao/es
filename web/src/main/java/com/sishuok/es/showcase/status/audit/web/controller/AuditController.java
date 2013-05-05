@@ -7,6 +7,7 @@ package com.sishuok.es.showcase.status.audit.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Stateable;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.status.audit.entity.Audit;
@@ -32,16 +33,12 @@ import java.util.List;
 @RequestMapping(value = "/showcase/status/audit")
 public class AuditController extends BaseCRUDController<Audit, Long> {
 
+    @Autowired
+    @BaseComponent
     private AuditService auditService;
 
     public AuditController() {
         setListAlsoSetCommonData(true);
-    }
-
-    @Autowired
-    public void setAuditService(AuditService auditService) {
-        setBaseService(auditService);
-        this.auditService = auditService;
     }
 
     @Override

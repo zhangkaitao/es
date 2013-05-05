@@ -93,7 +93,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         }
 
         String ql = "from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, BaseRepositoryImplHelper.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
+        assertEquals(count, RepositoryHelper.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         }
 
         String ql = "select count(o) from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, BaseRepositoryImplHelper.countAll(ql, ids, realnamePrefix + "%", birthdayList));
+        assertEquals(count, RepositoryHelper.countAll(ql, ids, realnamePrefix + "%", birthdayList));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
             lastUser = userRepository.save(user);
         }
         String ql = "select u from User u where u=?1 and u.baseInfo.realname like ?2";
-        assertEquals(lastUser, BaseRepositoryImplHelper.findOne(ql, lastUser, realnamePrefix + "%"));
+        assertEquals(lastUser, RepositoryHelper.findOne(ql, lastUser, realnamePrefix + "%"));
     }
 
     @Test
@@ -140,10 +140,10 @@ public class UserRepositoryImplIT extends BaseUserIT {
         }
 
         String ql = "update BaseInfo set realname=?1";
-        assertEquals(count, BaseRepositoryImplHelper.batchUpdate(ql, realname));
+        assertEquals(count, RepositoryHelper.batchUpdate(ql, realname));
 
         String findOneQL = "select u from User u where u=?1";
-        User user = BaseRepositoryImplHelper.findOne(findOneQL, lastUser);
+        User user = RepositoryHelper.findOne(findOneQL, lastUser);
         assertEquals(realname, user.getBaseInfo().getRealname());
 
     }

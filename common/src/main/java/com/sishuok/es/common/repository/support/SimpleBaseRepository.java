@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.common.repository.BaseRepositoryImplHelper;
+import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.repository.callback.SearchCallback;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -174,10 +174,10 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
         if(logicDeleteableEntity) {
             String ql = getQueryString(LOGIC_DELETE_ALL_QUERY_STRING, entityName);
-            BaseRepositoryImplHelper.batchUpdate(ql, models);
+            RepositoryHelper.batchUpdate(ql, models);
         } else {
             String ql = getQueryString(DELETE_ALL_QUERY_STRING, entityName);
-            BaseRepositoryImplHelper.batchUpdate(ql, models);
+            RepositoryHelper.batchUpdate(ql, models);
         }
     }
 
@@ -197,15 +197,15 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     @Override
     public List<M> findAll(final Sort sort) {
-        return BaseRepositoryImplHelper.findAll(findAllQL, sort);
+        return RepositoryHelper.findAll(findAllQL, sort);
     }
 
     @Override
     public Page<M> findAll(final Pageable pageable) {
         return new PageImpl<M>(
-                BaseRepositoryImplHelper.<M>findAll(findAllQL, pageable),
+                RepositoryHelper.<M>findAll(findAllQL, pageable),
                 pageable,
-                BaseRepositoryImplHelper.countAll(countAllQL)
+                RepositoryHelper.countAll(countAllQL)
         );
     }
 
@@ -217,7 +217,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Override
     public Page<M> findAll(final Searchable searchable) {
         searchable.convert(entityClass);
-        List<M> list = BaseRepositoryImplHelper.find(findAllQL, searchable, searchCallback);
+        List<M> list = RepositoryHelper.find(findAllQL, searchable, searchCallback);
         long total = searchable.hasPageable() ? count(searchable) : list.size();
         return new PageImpl<M>(
                 list,
@@ -229,7 +229,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Override
     public long count(final Searchable searchable) {
         searchable.convert(entityClass);
-        return BaseRepositoryImplHelper.count(countAllQL, searchable, searchCallback);
+        return RepositoryHelper.count(countAllQL, searchable, searchCallback);
     }
 
 }

@@ -12,6 +12,7 @@ import com.google.common.collect.Sets;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.entity.GroupType;
@@ -34,16 +35,13 @@ import java.util.Set;
 @Service
 public class GroupService extends BaseService<Group, Long> {
 
+    @Autowired
+    @BaseComponent
     private GroupRepository groupRepository;
 
     @Autowired
     private GroupRelationService groupRelationService;
 
-    @Autowired
-    public void setGroupRepository(GroupRepository groupRepository) {
-        setBaseRepository(groupRepository);
-        this.groupRepository = groupRepository;
-    }
 
     public Set<Map<String, Object>> findIdAndNames(Searchable searchable, String groupName) {
 

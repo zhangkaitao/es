@@ -7,6 +7,7 @@ package com.sishuok.es.sys.auth.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
@@ -33,6 +34,8 @@ import javax.validation.Valid;
 @RequestMapping(value = "/admin/sys/auth")
 public class AuthController extends BaseCRUDController<Auth, Long> {
 
+    @Autowired
+    @BaseComponent
     private AuthService authService;
 
     @Autowired
@@ -42,11 +45,6 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
         setListAlsoSetCommonData(true);
     }
 
-    @Autowired
-    public void setAuthService(AuthService authService) {
-        setBaseService(authService);
-        this.authService = authService;
-    }
 
     @Override
     protected void setCommonData(Model model) {
