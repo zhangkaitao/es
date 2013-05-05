@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>查询条件接口</p>
@@ -18,18 +19,64 @@ import java.util.List;
  * <p>Date: 13-1-16 上午8:47
  * <p>Version: 1.0
  */
-public interface Searchable {
+public abstract class Searchable {
 
-    //查询参数分隔符
-    public static final String separator = "_";
 
     /**
-     * 获取查询过滤条件
+     * 创建一个新的查询
      * @return
      */
-    public Collection<SearchFilter> getSearchFilters();
+    public static Searchable newSearchable() {
+        return new SearchRequest();
+    }
+
+    /**
+     * 创建一个新的查询
+     * @return
+     */
+    public static Searchable newSearchable(final Map<String, Object> searchParams) {
+        return new SearchRequest(searchParams);
+    }
+
+    /**
+     * 创建一个新的查询
+     * @return
+     */
+    public static Searchable newSearchable(final Map<String, Object> searchParams, final Pageable page) {
+        return new SearchRequest(searchParams, page);
+    }
+
+    /**
+     * 创建一个新的查询
+     * @return
+     */
+    public static Searchable newSearchable(final Map<String, Object> searchParams, final Sort sort) {
+        return new SearchRequest(searchParams, sort);
+    }
+
+    /**
+     * 创建一个新的查询
+     * @return
+     */
+    public static Searchable newSearchable(final Map<String, Object> searchParams, final Pageable page, final Sort sort) {
+        return new SearchRequest(searchParams, page, sort);
+    }
 
 
+    /**
+     * 添加查询参数
+     * @param key  如 name_like
+     * @param value  如果是in查询 多个值之间","分隔
+     * @return
+     */
+    public abstract Searchable addSearchParam(final String key, final Object value);
+
+    /**
+     * 添加一组查询参数
+     * @param searchParams
+     * @return
+     */
+    public abstract Searchable addAllSearchParams(final Map<String, Object> searchParams);
 
     /**
      * 添加过滤条件
@@ -37,91 +84,137 @@ public interface Searchable {
      * @param operator 操作运算符
      * @param value 值
      */
-    public SearchFilter addSearchFilter(final String searchProperty, SearchOperator operator, Object value);
+    public abstract Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value);
 
     /**
      * 添加过滤条件 如key="parent.id_eq" value = 1
      * @param key
      */
-    public SearchFilter addSearchFilter(final String key, Object value);
+    public abstract Searchable addSearchFilter(final String key, final Object value);
 
-    public SearchFilter addSearchFilter(SearchFilter searchFilter);
+    public abstract Searchable addSearchFilter(final SearchFilter searchFilter);
+
+    /**
+     * 添加多个and连接的过滤条件
+     * @param searchFilters
+     * @return
+     */
+    public abstract Searchable addSearchFilters(Collection<SearchFilter> searchFilters);
+
+    /**
+     * 添加多个or连接的过滤条件
+     * @param searchFilters
+     * @return
+     */
+    public abstract Searchable addOrSearchFilters(Collection<SearchFilter> searchFilters);
 
     /**
      * 移除指定key的过滤条件
      * @param key
      */
-    public SearchFilter removeSearchFilter(final String key);
-
+    public abstract Searchable removeSearchFilter(final String key);
 
 
     /**
-     * 获取分页和排序信息
+     * 把字符串类型的值转化为entity属性值
+     * @param entityClass
+     * @param <T>
+     */
+    public abstract <T> Searchable convert(final Class<T> entityClass);
+
+    /**
+     * 标识为已经转换过了 避免多次转换
+     */
+    public abstract Searchable markConverted();
+
+    public abstract Searchable setPage(final Pageable page);
+
+    /**
+     * @param pageNumber 分页页码 索引从 0 开始
+     * @param pageSize  每页大小
      * @return
      */
-    public Pageable getPage();
+    public abstract Searchable setPage(final int pageNumber, final int pageSize);
+
+    public abstract Searchable addSort(final Sort sort);
+
+    public abstract Searchable addSort(final Sort.Direction direction, String property);
+
+
+
 
     /**
-     * 获取排序信息
+     * 获取查询过滤条件
      * @return
      */
-    public Sort getSort();
+    public abstract Collection<SearchFilter> getSearchFilters();
 
     /**
-     * 返回一个Domain的Specification
-     * @param domainClass
+     * 返回一个Entity的Specification
+     * @param entityClass
      * @param <T>
      * @return
      */
-    public <T> Specification<T> getSpecifications(final Class<T> domainClass);
+    public abstract <T> Specification<T> getSpecifications(final Class<T> entityClass);
+
 
 
     /**
      * 是否已经转换过了 避免多次转换
      * @return
      */
-    public boolean isConverted();
+    public abstract boolean isConverted();
 
-    /**
-     * 标识为已经转换过了 避免多次转换
-     */
-    public void markConverted();
 
     /**
      * 是否有查询参数
      * @return
      */
-    public boolean hasSearchFilter();
+    public abstract boolean hasSearchFilter();
 
     /**
      * 是否有排序
      * @return
      */
-    public boolean hashSort();
+    public abstract boolean hashSort();
 
-    public void removeSort();
+    public abstract void removeSort();
 
     /**
      * 是否有分页
      * @return
      */
-    public boolean hasPageable();
+    public abstract boolean hasPageable();
 
-    public void removePageable();
+    public abstract void removePageable();
+
+    /**
+     * 获取分页和排序信息
+     * @return
+     */
+    public abstract Pageable getPage();
+
+    /**
+     * 获取排序信息
+     * @return
+     */
+    public abstract Sort getSort();
+
 
     /**
      * 是否包含查询属性
       * @param searchProperty
      * @return
      */
-    public boolean containsSearchProperty(String searchProperty);
+    public abstract boolean containsSearchProperty(final String searchProperty);
 
     /**
      * 获取查询属性对应的值
      * @param searchProperty
      * @return
      */
-    public Object getValue(String searchProperty);
+    public abstract <T> T getValue(final String searchProperty);
+
 
 
 }

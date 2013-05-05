@@ -27,11 +27,13 @@ public class UserStatusHistoryController extends BaseCRUDController<UserStatusHi
 
     private UserStatusHistoryService userStatusHistoryService;
 
+    public UserStatusHistoryController() {
+        setListAlsoSetCommonData(true);
+    }
 
     @Autowired
-    public UserStatusHistoryController(UserStatusHistoryService userStatusHistoryService) {
-        super(userStatusHistoryService);
-        setListAlsoSetCommonData(true);
+    public void setUserStatusHistoryService(UserStatusHistoryService userStatusHistoryService) {
+        setBaseService(userStatusHistoryService);
         this.userStatusHistoryService = userStatusHistoryService;
     }
 

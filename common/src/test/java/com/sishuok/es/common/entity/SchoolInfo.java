@@ -16,7 +16,7 @@ import javax.persistence.*;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_user_schoolinfo")
+@Table(name = "user_schoolinfo")
 public class SchoolInfo extends BaseEntity<Long> {
 
     @JsonIgnore

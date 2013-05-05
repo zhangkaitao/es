@@ -29,14 +29,14 @@ import javax.validation.Valid;
 @RequestMapping(value = "/showcase/move")
 public class MoveController extends BaseMovableController<Move, Long> {
 
-    @Autowired
     private MoveService moveService;
 
     @Autowired
-    public MoveController(MoveService moveService) {
-        super(moveService);
+    public void setMoveService(MoveService moveService) {
+        setMovableService(moveService);
         this.moveService = moveService;
     }
+
 
     public void setCommonData(Model model) {
         model.addAttribute("booleanList", BooleanEnum.values());

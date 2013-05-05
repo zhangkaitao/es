@@ -34,10 +34,13 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
 
     private AuditService auditService;
 
-    @Autowired
-    public AuditController(AuditService auditService) {
-        super(auditService);
+    public AuditController() {
         setListAlsoSetCommonData(true);
+    }
+
+    @Autowired
+    public void setAuditService(AuditService auditService) {
+        setBaseService(auditService);
         this.auditService = auditService;
     }
 

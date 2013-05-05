@@ -7,11 +7,14 @@ package com.sishuok.es.showcase.sample.web.controller;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.sample.entity.Sample;
 import com.sishuok.es.showcase.sample.entity.Sex;
 import com.sishuok.es.showcase.sample.service.SampleService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -35,8 +38,8 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
     private SampleService sampleService;
 
     @Autowired
-    public SampleController(SampleService sampleService) {
-        super(sampleService);
+    public void setSampleService(SampleService sampleService) {
+        setBaseService(sampleService);
         this.sampleService = sampleService;
     }
 

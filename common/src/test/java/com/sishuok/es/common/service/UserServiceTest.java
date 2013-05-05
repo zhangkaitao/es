@@ -6,7 +6,6 @@
 package com.sishuok.es.common.service;
 
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
@@ -15,9 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +31,6 @@ public class UserServiceTest extends BaseUserIT {
     @Autowired
     UserService userService;
 
-    @PersistenceContext
-    EntityManager entityManager;
-
     @Test
     public void testSave() {
         User dbUser = userService.save(createUser());
@@ -47,15 +40,13 @@ public class UserServiceTest extends BaseUserIT {
     @Test
     public void testUpdate() {
         User dbUser = userService.save(createUser());
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         String newUsername = "zhang$$$$" + System.currentTimeMillis();
         dbUser.setUsername(newUsername);
         userService.update(dbUser);
 
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         assertEquals(newUsername, userService.findOne(dbUser.getId()).getUsername());
     }
@@ -63,11 +54,9 @@ public class UserServiceTest extends BaseUserIT {
     @Test
     public void testDeleteById() {
         User dbUser = userService.save(createUser());
-        entityManager.flush();
-        entityManager.clear();
+        clear();
         userService.delete(dbUser.getId());
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         assertNull(userService.findOne(dbUser.getId()));
     }
@@ -75,11 +64,9 @@ public class UserServiceTest extends BaseUserIT {
     @Test
     public void testDeleteByEntity() {
         User dbUser = userService.save(createUser());
-        entityManager.flush();
-        entityManager.clear();
+        clear();
         userService.delete(dbUser);
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         assertNull(userService.findOne(dbUser.getId()));
     }
@@ -87,8 +74,7 @@ public class UserServiceTest extends BaseUserIT {
     @Test
     public void testFindOne() {
         User dbUser = userService.save(createUser());
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         assertNotNull(userService.findOne(dbUser.getId()));
     }
@@ -97,8 +83,7 @@ public class UserServiceTest extends BaseUserIT {
     @Test
     public void testExists() {
         User dbUser = userService.save(createUser());
-        entityManager.flush();
-        entityManager.clear();
+        clear();
         assertTrue(userService.exists(dbUser.getId()));
     }
 
@@ -194,9 +179,9 @@ public class UserServiceTest extends BaseUserIT {
 
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("username_like", "zhang");
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
+        Searchable search = Searchable.newSearchable(searchParams);
 
-        List<User> userList = userService.findAllByNoPageNoSort(search);
+        List<User> userList = userService.findAllWithNoPageNoSort(search);
         assertEquals(count, userList.size());
         assertTrue(userList.contains(lastUser));
     }
@@ -216,9 +201,9 @@ public class UserServiceTest extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("username_like", "zhang");
         Sort sortDesc = new Sort(Sort.Direction.DESC, "id");
-        Searchable search = SearchableBuilder.newInstance(searchParams).setSort(sortDesc).buildSearchable();
+        Searchable search = Searchable.newSearchable(searchParams).addSort(sortDesc);
 
-        List<User> userList = userService.findAllBySort(search);
+        List<User> userList = userService.findAllWithSort(search);
         assertEquals(count, userList.size());
         assertTrue(userList.contains(lastUser));
 
@@ -237,7 +222,7 @@ public class UserServiceTest extends BaseUserIT {
         Pageable pageable = new PageRequest(0, 5, sortAsc);
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("username_like", "zhang");
-        Searchable search = SearchableBuilder.newInstance(searchParams).setSort(sortAsc).setPage(pageable).buildSearchable();
+        Searchable search = Searchable.newSearchable(searchParams).setPage(pageable);
 
         Page<User> userPage = userService.findAll(search);
         assertEquals(5, userPage.getNumberOfElements());

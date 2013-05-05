@@ -8,6 +8,7 @@ package com.sishuok.es.common.web.controller;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -23,7 +24,7 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午3:56
  * <p>Version: 1.0
  */
-public abstract class BaseController<M extends AbstractEntity, ID extends Serializable> {
+public abstract class BaseController<M extends AbstractEntity, ID extends Serializable> implements InitializingBean {
 
     protected BaseService<M, ID> baseService;
 
@@ -32,18 +33,25 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
      */
     protected final Class<M> entityClass;
 
-    /**
-     * 当前模块 视图的前缀
-     * 默认
-     * 1、获取当前类头上的@RequestMapping中的value作为前缀
-     * 2、如果没有就使用当前模型小写的简单类名
-     */
     private String viewPrefix;
 
-    protected  <S extends BaseService<M, ID>> BaseController(S baseService) {
-        this.baseService = baseService;
+
+    protected  <S extends BaseService<M, ID>> BaseController() {
         this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
         setViewPrefix(defaultViewPrefix());
+    }
+
+    /**
+     * 设置基础service
+     * @param baseService
+     */
+    public void setBaseService(BaseService<M, ID> baseService) {
+        this.baseService = baseService;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(this.baseService, "base service must set");
     }
 
 
@@ -55,6 +63,12 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
     }
 
 
+    /**
+     * 当前模块 视图的前缀
+     * 默认
+     * 1、获取当前类头上的@RequestMapping中的value作为前缀
+     * 2、如果没有就使用当前模型小写的简单类名
+     */
     public void setViewPrefix(String viewPrefix) {
         if(viewPrefix.startsWith("/")) {
             viewPrefix = viewPrefix.substring(1);
@@ -86,28 +100,18 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
         return result.hasErrors();
     }
 
-
     /**
-     * 获取返回时（比如CRUD）的URL
-     * @param backURL
+     * @param backURL null 将重定向到默认getViewPrefix()
      * @return
      */
-    protected String redirectUrl(String backURL) {
+    protected String redirectToUrl(String backURL) {
         if(!StringUtils.hasLength(backURL)) {
             backURL = getViewPrefix();
         }
         if(!backURL.startsWith("/") && !backURL.startsWith("http")) {
             backURL =  "/" + backURL;
         }
-        return backURL;
-    }
-
-    /**
-     * @param backURL null 将重定向到默认getViewPrefix()
-     * @return
-     */
-    protected String redirectToUrl(String backURL) {
-        return "redirect:" + redirectUrl(backURL);
+        return "redirect:" + backURL;
     }
 
     protected String defaultViewPrefix() {

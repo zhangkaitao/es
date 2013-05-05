@@ -9,6 +9,8 @@ import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 
 import javax.persistence.Query;
 
@@ -90,11 +92,11 @@ public class DefaultSearchCallback implements SearchCallback {
             if(searchFilter.isUnaryFilter()) {
                 continue;
             }
-                query.setParameter(paramPrefix + paramIndex++, formtValue(searchFilter, searchFilter.getValue()));
+
+            query.setParameter(paramPrefix + paramIndex++, formtValue(searchFilter, searchFilter.getValue()));
 
             if(searchFilter.hasOrSearchFilters()) {
                 for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
-
                     query.setParameter(paramPrefix + paramIndex++, formtValue(orSearchFilter, orSearchFilter.getValue()));
                 }
             }
@@ -125,11 +127,15 @@ public class DefaultSearchCallback implements SearchCallback {
         }
     }
 
-
     public void prepareOrder(StringBuilder ql, Searchable search) {
+        String alias = "o";
         if(search.hashSort()) {
             ql.append(" order by ");
-            ql.append(search.getSort().toString().replace(":", " "));
+            for (Sort.Order order : search.getSort()) {
+                ql.append(String.format("%s%s %s, ", alias + ".", order.getProperty(), order.getDirection().name().toLowerCase()));
+            }
+
+            ql.delete(ql.length() - 2, ql.length());
         }
     }
 

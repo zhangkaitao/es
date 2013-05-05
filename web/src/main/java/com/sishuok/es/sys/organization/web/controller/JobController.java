@@ -32,11 +32,10 @@ public class JobController extends BaseTreeableController<Job, Long> {
     private JobService jobService;
 
     @Autowired
-    public JobController(JobService jobService) {
-        super(jobService);
+    public void setJobService(JobService jobService) {
+        setTreeableService(jobService);
         this.jobService = jobService;
     }
-
 
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(

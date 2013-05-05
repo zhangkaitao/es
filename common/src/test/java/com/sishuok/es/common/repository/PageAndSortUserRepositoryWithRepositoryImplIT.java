@@ -32,9 +32,6 @@ public class PageAndSortUserRepositoryWithRepositoryImplIT extends BaseUserIT {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
-
     @Test
     public void testFindAllForPage() {
         for (int i = 0; i < 15; i++) {

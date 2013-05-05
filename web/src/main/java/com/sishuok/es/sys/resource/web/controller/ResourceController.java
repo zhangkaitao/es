@@ -35,12 +35,12 @@ import javax.servlet.http.HttpServletRequest;
 public class ResourceController extends BaseTreeableController<Resource, Long> {
 
     private ResourceService resourceService;
+
     @Autowired
-    public ResourceController(ResourceService resourceService) {
-        super(resourceService);
+    public void setResourceService(ResourceService resourceService) {
+        setTreeableService(resourceService);
         this.resourceService = resourceService;
     }
-
 
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(

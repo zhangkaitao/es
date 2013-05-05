@@ -31,11 +31,10 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
     private OnlineSessionDAO onlineSessionDAO;
 
     @Autowired
-    public UserOnlineController(UserOnlineService userOnlineService) {
-        super(userOnlineService);
+    public void setUserOnlineService(UserOnlineService userOnlineService) {
+        setBaseService(userOnlineService);
         this.userOnlineService = userOnlineService;
     }
-
 
     @RequestMapping("/forceLogout")
     public String forceLogout(@RequestParam(value = "ids") String[] ids) {

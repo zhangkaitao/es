@@ -28,12 +28,12 @@ import java.util.Set;
 public class TreeController extends BaseTreeableController<Tree, Long> {
 
     private TreeService treeService;
+
     @Autowired
-    public TreeController(TreeService treeService) {
-        super(treeService);
+    public void setTreeService(TreeService treeService) {
+        setTreeableService(treeService);
         this.treeService = treeService;
     }
-
 
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(

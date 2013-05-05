@@ -9,6 +9,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-14 下午4:25
@@ -17,4 +20,17 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @ContextConfiguration({"classpath:spring-common.xml", "classpath:spring-test.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+
+    public void clear() {
+        flush();
+        entityManager.clear();
+    }
+
+    public void flush() {
+        entityManager.flush();
+    }
 }

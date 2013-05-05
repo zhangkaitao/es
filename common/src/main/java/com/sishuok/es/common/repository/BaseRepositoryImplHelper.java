@@ -6,17 +6,226 @@
 package com.sishuok.es.common.repository;
 
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
+import com.sishuok.es.common.entity.search.exception.SearchException;
+import com.sishuok.es.common.repository.callback.SearchCallback;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.orm.jpa.SharedEntityManagerCreator;
+import org.springframework.util.Assert;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
+ *  BaseRepositoryImpl辅助类
  * <p>User: Zhang Kaitao
  * <p>Date: 13-4-14 下午5:28
  * <p>Version: 1.0
  */
 public class BaseRepositoryImplHelper {
+
+    private static EntityManager entityManager;
+
+    /**
+     * 设置EntityManagerFactory 然后自动创建需要的EntityManager
+     * 建议使用如下代码配置即可
+     * <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+     *   <property name="staticMethod"
+     *             value="com.sishuok.es.common.repository.BaseRepositoryImplHelper.setEntityManagerFactory"/>
+     *   <property name="arguments" ref="entityManagerFactory"/>
+     * </bean>
+     * @param entityManagerFactory
+     */
+    public static void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        entityManager = SharedEntityManagerCreator.createSharedEntityManager(entityManagerFactory);
+    }
+
+    public static EntityManager getEntityManager() {
+        Assert.notNull(entityManager, "entityManager must null, please see " +
+                "[com.sishuok.es.common.repository.BaseRepositoryImplHelper#setEntityManagerFactory]");
+
+        return entityManager;
+    }
+
+    /**
+     * <p>ql条件查询<br/>
+     * searchCallback默认实现请参考 {@see com.sishuok.es.common.repository.callback.DefaultSearchCallback}<br/>
+     *
+     * 测试用例请参考：{@see com.sishuok.es.common.repository.UserRepositoryImplForCustomSearchIT}
+     * 和{@see com.sishuok.es.common.repository.UserRepositoryImplForDefaultSearchIT}
+     * @param ql
+     * @param searchable 查询条件、分页 排序
+     * @param searchCallback 查询回调  自定义设置查询条件和赋值
+     * @return
+     */
+    public static <M> List<M> find(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+
+        assertConverted(searchable);
+
+        StringBuilder s = new StringBuilder(ql);
+        searchCallback.prepareQL(s, searchable);
+        searchCallback.prepareOrder(s, searchable);
+        Query query = getEntityManager().createQuery(s.toString());
+        searchCallback.setValues(query, searchable);
+        searchCallback.setPageable(query, searchable);
+
+        return query.getResultList();
+    }
+
+    /**
+     * <p>按条件统计<br/>
+     * 测试用例请参考：{@see com.sishuok.es.common.repository.UserRepositoryImplForCustomSearchIT}
+     * 和{@see com.sishuok.es.common.repository.UserRepositoryImplForDefaultSearchIT}
+     * @param ql
+     * @param searchable
+     * @param searchCallback
+     * @return
+     */
+    public static long count(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+
+        assertConverted(searchable);
+
+        StringBuilder s = new StringBuilder(ql);
+        searchCallback.prepareQL(s, searchable);
+        Query query = getEntityManager().createQuery(s.toString());
+        searchCallback.setValues(query, searchable);
+
+        return (Long) query.getSingleResult();
+    }
+
+    /**
+     * 按条件查询一个实体
+     * @param ql
+     * @param searchable
+     * @param searchCallback
+     * @return
+     */
+    public static <M> M findOne(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+
+        assertConverted(searchable);
+
+        StringBuilder s = new StringBuilder(ql);
+        searchCallback.prepareQL(s, searchable);
+        searchCallback.prepareOrder(s, searchable);
+        Query query = getEntityManager().createQuery(s.toString());
+        searchCallback.setValues(query, searchable);
+        searchCallback.setPageable(query, searchable);
+        query.setMaxResults(1);
+        List<M> result = query.getResultList();
+
+        if(result.size() > 0) {
+            return result.get(0);
+        }
+        return null;
+    }
+
+
+    /**
+     * @see BaseRepositoryImplHelper#findAll(String, org.springframework.data.domain.Pageable, Object...)
+     * @param ql
+     * @param params
+     * @param <M>
+     * @return
+     */
+    public static <M> List<M> findAll(final String ql, final Object... params) {
+
+        //此处必须 (Pageable) null  否则默认有调用自己了 可变参列表
+        return findAll(ql, (Pageable) null, params);
+
+    }
+
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql，pageable存储分页信息 null表示不分页<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
+     * @param ql
+     * @param pageable null表示不分页
+     * @param params
+     * @param <M>
+     * @return
+     */
+    public static <M> List<M> findAll(final String ql, final Pageable pageable, final Object... params) {
+
+        Query query = getEntityManager().createQuery(ql + prepareOrder(pageable != null ? pageable.getSort() : null));
+        setParameters(query, params);
+        if (pageable != null) {
+            query.setFirstResult(pageable.getOffset());
+            query.setMaxResults(pageable.getPageSize());
+        }
+
+        return query.getResultList();
+    }
+
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql，sort存储排序信息 null表示不排序<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
+     * @param ql
+     * @param sort null表示不排序
+     * @param params
+     * @param <M>
+     * @return
+     */
+    public static <M> List<M> findAll(final String ql, final Sort sort, final Object... params) {
+
+        Query query = getEntityManager().createQuery(ql + BaseRepositoryImplHelper.prepareOrder(sort));
+        setParameters(query, params);
+
+        return query.getResultList();
+    }
+
+
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql统计<br/>
+     * 具体使用请参考测试用例：com.sishuok.es.common.repository.UserRepositoryImplIT#testCountAll()
+     * @param ql
+     * @param params
+     * @return
+     */
+    public static long countAll(final String ql, final Object... params) {
+
+        Query query = entityManager.createQuery(ql);
+        setParameters(query, params);
+
+        return (Long)query.getSingleResult();
+    }
+
+    /**
+     * <p>根据ql和按照索引顺序的params查询一个实体<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindOne()}
+     * @param ql
+     * @param params
+     * @param <M>
+     * @return
+     */
+    public static <M> M findOne(final String ql, final Object... params) {
+
+        List<M> list = findAll(ql, new PageRequest(0, 1), params);
+
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * <p>执行批处理语句.如 之间insert, update, delete 等.<br/>
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testBatchUpdate()}
+     * @param ql
+     * @param params
+     * @return
+     */
+    public static int batchUpdate(final String ql, final Object... params) {
+
+        Query query = getEntityManager().createQuery(ql);
+        setParameters(query, params);
+
+        return query.executeUpdate();
+    }
+
 
     /**
      * 按顺序设置Query参数
@@ -32,14 +241,10 @@ public class BaseRepositoryImplHelper {
     }
 
     /**
-     * 将Searchable中的字符串数据转换为Entity的实际值
-     * @param search
+     * 拼排序
+     * @param sort
+     * @return
      */
-    public static void convertSearchable(Searchable search, Class<?> entityClass) {
-        SearchableConvertUtils.convertSearchValueToEntityValue(search, entityClass);
-    }
-
-
     public static String prepareOrder(Sort sort) {
         if(sort == null || !sort.iterator().hasNext()) {
             return "";
@@ -50,5 +255,21 @@ public class BaseRepositoryImplHelper {
         return orderBy.toString();
     }
 
+
+    public static <T> JpaEntityInformation<T, ?> getMetadata(Class<T> entityClass) {
+        return JpaEntityInformationSupport.getMetadata(entityClass, entityManager);
+    }
+
+    public static String getEntityName(Class<?> entityClass) {
+        return getMetadata(entityClass).getEntityName();
+    }
+
+
+    private static void assertConverted(Searchable searchable) {
+        if(!searchable.isConverted()) {
+            throw new SearchException("searchable property value not covert to entity value, " +
+                    "user [com.sishuok.es.common.entity.search.Searchable#convert] to covert");
+        }
+    }
 
 }

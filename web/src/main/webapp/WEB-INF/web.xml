@@ -13,8 +13,7 @@
          <param-value>
              classpath:spring-common.xml,
              classpath:spring-cache.xml,
-             classpath:spring-config.xml,
-             classpath:spring-shiro.xml
+             classpath:spring-config.xml
          </param-value>
      </context-param>
      <listener>

@@ -29,7 +29,11 @@ import java.util.List;
  * <p>Date: 13-1-14 下午4:30
  * <p>Version: 1.0
  */
-public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
+public class UserRepository2Impl {
+
+    private String findAllQL = "from User where 1=1 ";
+    private String countAllQL = "select count(o) from User o where 1=1 ";
+
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -56,23 +60,24 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
 
     /**
      * 按条件分页/排序查询，
-     * @param search
+     * @param searchable
      * @return
      */
-    public Page<User> findAllByDefault(final Searchable search) {
-        long total = countAllByDefault(search);
-        List<User> contentList = find(findAllQL, search, SearchCallback.DEFAULT);
-        return new PageImpl(contentList, search.getPage(), total);
+    public Page<User> findAllByDefault(final Searchable searchable) {
+        long total = countAllByDefault(searchable);
+        List<User> contentList = BaseRepositoryImplHelper.find(findAllQL, searchable, SearchCallback.DEFAULT);
+        return new PageImpl(contentList, searchable.getPage(), total);
     }
 
     /**
      * 按条件统计
      *
-     * @param search
+     * @param searchable
      * @return
      */
-    public long countAllByDefault(final Searchable search) {
-        return count(countAllQL, search, SearchCallback.DEFAULT);
+    public long countAllByDefault(final Searchable searchable) {
+        searchable.convert(User.class);
+        return BaseRepositoryImplHelper.count(countAllQL, searchable, SearchCallback.DEFAULT);
     }
 
 
@@ -94,23 +99,23 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User, Long> {
     /**
      * 按条件统计
      *
-     * @param search
+     * @param searchable
      * @return
      */
-    public long countAllByCustom(final Searchable search) {
-        return count(countAllQL, search, customSearchCallback);
+    public long countAllByCustom(final Searchable searchable) {
+        return BaseRepositoryImplHelper.count(countAllQL, searchable, customSearchCallback);
     }
 
     /**
      * 按条件分页/排序查询，
      *
-     * @param search
+     * @param searchable
      * @return
      */
-    public Page<User> findAllByCustom(final Searchable search) {
-        long total = countAllByCustom(search);
-        List<User> contentList = find(findAllQL, search, customSearchCallback);
-        return new PageImpl(contentList, search.getPage(), total);
+    public Page<User> findAllByCustom(final Searchable searchable) {
+        long total = countAllByCustom(searchable);
+        List<User> contentList = BaseRepositoryImplHelper.find(findAllQL, searchable, customSearchCallback);
+        return new PageImpl(contentList, searchable.getPage(), total);
     }
 
 

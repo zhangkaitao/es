@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.auth.service;
 
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.auth.entity.Auth;
 import com.sishuok.es.sys.auth.repository.AuthRepository;
@@ -35,7 +34,6 @@ import java.util.Set;
 public class AuthService extends BaseService<Auth, Long> {
 
     private AuthRepository authRepository;
-    private AuthRepositoryImpl authRepositoryImpl;
 
     @Autowired
     private UserService userService;
@@ -48,12 +46,6 @@ public class AuthService extends BaseService<Auth, Long> {
     public void setAuthRepository(AuthRepository authRepository) {
         setBaseRepository(authRepository);
         this.authRepository = authRepository;
-    }
-
-    @Autowired
-    public void setAuthRepositoryImpl(AuthRepositoryImpl authRepositoryImpl) {
-        setBaseRepositoryImpl(authRepositoryImpl);
-        this.authRepositoryImpl = authRepositoryImpl;
     }
 
 
@@ -176,6 +168,6 @@ public class AuthService extends BaseService<Auth, Long> {
      * @return
      */
     public Set<Long> findRoleIds(Long userId, Set<Long> groupIds, Set<Long> organizationIds, Set<Long> jobIds, Set<Long[]> organizationJobIds) {
-        return authRepositoryImpl.findRoleIds(userId, groupIds, organizationIds, jobIds, organizationJobIds);
+        return authRepository.findRoleIds(userId, groupIds, organizationIds, jobIds, organizationJobIds);
     }
 }

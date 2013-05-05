@@ -5,17 +5,18 @@
  */
 package com.sishuok.es.common.repository.search;
 
+import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
+import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
 import com.sishuok.es.common.repository.UserRepository;
-import com.sishuok.es.common.repository.UserRepositoryImpl;
+import com.sishuok.es.common.repository.UserRepository2;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +44,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
+    private UserRepository userRepository;
 
     @Test
     public void testEqForEnum() {
@@ -59,8 +58,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.sex_eq", "male");
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
     @Test
@@ -73,8 +72,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.sex_notEq", "male");
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(0, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(0, userRepository.count(search.getSpecifications(User.class)));
     }
 
     @Test
@@ -88,7 +87,7 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.age_eq", "15");
         SearchRequest search = new SearchRequest(searchParams);
-        assertEquals(count, userRepositoryImpl.count(search));
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
@@ -105,7 +104,7 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("registerDate_eq", dateStr);
         SearchRequest search = new SearchRequest(searchParams);
-        assertEquals(count, userRepositoryImpl.count(search));
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
@@ -124,8 +123,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.birthday_gt", dateStrFrom);
         searchParams.put("baseInfo.birthday_lt", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
@@ -144,8 +143,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.birthday_gte", dateStrFrom);
         searchParams.put("baseInfo.birthday_lte", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
@@ -158,8 +157,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("username_isNotNull", null);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
     @Test
@@ -173,8 +172,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
@@ -189,8 +188,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids.toArray(new Long[count]));
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
     @Test
@@ -204,13 +203,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids.get(0));
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(1, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(1, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -228,12 +227,12 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate", dateStrFrom);
         searchParams.put("endRegisterDate", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -251,13 +250,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test(expected = InvlidSpecificationSearchOperatorException.class)
@@ -275,13 +274,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate_lTe", dateStrFrom);
         searchParams.put("endRegisterDate_gTe", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test(expected = InvalidSearchPropertyException.class)
@@ -299,13 +298,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate1_lte", dateStrFrom);
         searchParams.put("endRegisterDate1_gte", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test(expected = InvalidSearchValueException.class)
@@ -323,13 +322,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.count(search));
+        Searchable search = Searchable.newSearchable(searchParams);
+        assertEquals(count, userRepository.count(search.getSpecifications(User.class)));
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -347,16 +346,12 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
-        Searchable search =
-                SearchableBuilder
-                        .newInstance(searchParams)
-                        .setPage(new PageRequest(0, 10))   //分页页码从0开始
-                        .buildSearchable();
-        assertEquals(10, userRepositoryImpl.findAll(search).getNumberOfElements());
+        Searchable search = Searchable.newSearchable(searchParams).setPage(0, 10);   //分页页码从0开始
+        assertEquals(10, userRepository.findAll(search.getSpecifications(User.class), search.getPage()).getNumberOfElements());
     }
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -374,17 +369,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
-        Searchable search =
-                SearchableBuilder
-                        .newInstance(searchParams)
-                        .setPage(new PageRequest(1, 5))
-                        .buildSearchable();
-        assertEquals(5, userRepositoryImpl.findAll(search).getNumberOfElements());
+        Searchable search = Searchable.newSearchable(searchParams).setPage(new PageRequest(1, 5));
+        assertEquals(5, userRepository.findAll(search.getSpecifications(User.class), search.getPage()).getNumberOfElements());
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -402,17 +393,13 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("beginRegisterDate_lte", dateStrFrom);
         searchParams.put("endRegisterDate_gte", dateStrEnd);
-        Searchable search =
-                SearchableBuilder
-                        .newInstance(searchParams)
-                        .setPage(new PageRequest(2, 10)) //没有那么多数据
-                        .buildSearchable();
-        assertEquals(0, userRepositoryImpl.findAll(search).getNumberOfElements());
+        Searchable search = Searchable.newSearchable(searchParams).setPage(2, 10); //没有那么多数据
+        assertEquals(0, userRepository.findAll(search.getSpecifications(User.class), search.getPage()).getNumberOfElements());
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -432,23 +419,18 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         searchParams.put("endRegisterDate_gte", dateStrEnd);
 
 
-        Sort.Order idAsc = new Sort.Order(Sort.Direction.DESC, "id");
-        Sort.Order usernameDesc = new Sort.Order(Sort.Direction.DESC, "username");
-        Sort sort = new Sort(idAsc, usernameDesc);
         Searchable search =
-                SearchableBuilder
-                        .newInstance(searchParams)
-                        .setSort(sort)
-                        .buildSearchable();
+                Searchable.newSearchable(searchParams)
+                        .addSort(Sort.Direction.DESC, "id").addSort(Sort.Direction.DESC, "username");
 
-        List<User> list = userRepositoryImpl.findAllBySort(search);
+        List<User> list = userRepository.findAll(search.getSpecifications(User.class), search.getSort());
         assertTrue(list.get(0).getId() > list.get(1).getId());
 
     }
 
 
     /**
-     * @throws java.text.ParseException
+     * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
     @Test
@@ -472,12 +454,9 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         Sort.Order usernameDesc = new Sort.Order(Sort.Direction.DESC, "username");
         Sort sort = new Sort(idAsc, usernameDesc);
         Searchable search =
-                SearchableBuilder
-                        .newInstance(searchParams)
-                        .setPage(new PageRequest(0, 10, sort)) //分页出错时 取最后10个
-                        .buildSearchable();
+                Searchable.newSearchable(searchParams).setPage(new PageRequest(0, 10, sort)); //分页出错时 取最后10个
 
-        Page<User> page = userRepositoryImpl.findAll(search);
+        Page<User> page = userRepository.findAll(search.getSpecifications(User.class), search.getPage());
         assertTrue(page.getContent().get(0).getId() > page.getContent().get(1).getId());
     }
 
@@ -490,13 +469,16 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
             user.getBaseInfo().setAge(i);
             userRepository.save(user);
         }
-        SearchRequest search = new SearchRequest();
-        search.addSearchFilter("baseInfo.age", SearchOperator.gt, 10);
-        search.addSearchFilter("baseInfo.age", SearchOperator.eq, 11)
-                .or("baseInfo.age", SearchOperator.eq, 12);
-        assertEquals(2, userRepositoryImpl.count(search));
-    }
+        Searchable search = Searchable.newSearchable();
+        search.addOrSearchFilters(
+                Lists.newArrayList(
+                        SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.gt, 10),
+                        SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.eq, 12)
+                )
+        );
 
+        assertEquals(2, userRepository.count(search.getSpecifications(User.class)));
+    }
 
 
 }

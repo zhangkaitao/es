@@ -8,7 +8,6 @@ package com.sishuok.es.index.web;
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.index.web.entity.Menu;
 import com.sishuok.es.index.web.utils.MenuUtils;
 import com.sishuok.es.sys.resource.entity.Resource;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -38,12 +36,11 @@ public class IndexController {
     public String index(Model model) {
 
         Searchable searchable =
-                SearchableBuilder.newInstance().
-                        addSearchFilter("show", SearchOperator.eq, true).
-                        setSort(new Sort(Sort.Direction.DESC, "parentId", "weight")).
-                        buildSearchable();
+                Searchable.newSearchable()
+                        .addSearchFilter("show", SearchOperator.eq, true)
+                        .addSort(new Sort(Sort.Direction.DESC, "parentId", "weight"));
 
-        List<Resource> resources = resourceService.findAllBySort(searchable);
+        List<Resource> resources = Lists.newArrayList(resourceService.findAllWithSort(searchable));
         List<Menu> menus = MenuUtils.convertToMenus(resources);
         model.addAttribute("menus", menus);
 

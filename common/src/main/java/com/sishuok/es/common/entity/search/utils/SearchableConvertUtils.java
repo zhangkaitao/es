@@ -11,6 +11,7 @@ import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
+import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
@@ -28,8 +29,41 @@ import java.util.List;
  * <p>Version: 1.0
  */
 public final class SearchableConvertUtils {
+
     private static volatile ConversionService conversionService;
 
+    /**
+     * 设置用于类型转换的conversionService
+     * 把如下代码放入spring配置文件即可
+     * <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+     *     <property name="staticMethod"
+     *               value="com.sishuok.es.common.entity.search.utils.SearchableConvertUtils.setConversionService"/>
+     *     <property name="arguments" ref="conversionService"/>
+     * </bean>
+     * @param conversionService
+     */
+    public static void setConversionService(ConversionService conversionService) {
+        SearchableConvertUtils.conversionService = conversionService;
+    }
+
+
+    public static ConversionService getConversionService() {
+        if (conversionService == null) {
+            synchronized (SearchableConvertUtils.class) {
+                if (conversionService == null) {
+                    try {
+                        conversionService = SpringUtils.getBean(ConversionService.class);
+                    } catch (Exception e) {
+                        throw new SearchException("conversionService is null, " +
+                                "search param convert must use conversionService. " +
+                                "please see [com.sishuok.es.common.entity.search.utils." +
+                                "SearchableConvertUtils#setConversionService]");
+                    }
+                }
+            }
+        }
+        return conversionService;
+    }
 
     /**
      *
@@ -156,18 +190,4 @@ public final class SearchableConvertUtils {
     }
 */
 
-    public static ConversionService getConversionService() {
-        if (conversionService == null) {
-            synchronized (SearchableConvertUtils.class) {
-                if (conversionService == null) {
-                    try {
-                        conversionService = SpringUtils.getBean(ConversionService.class);
-                    } catch (Exception e) {
-                        throw new IllegalArgumentException("search param conver must use conversionService");
-                    }
-                }
-            }
-        }
-        return conversionService;
-    }
 }

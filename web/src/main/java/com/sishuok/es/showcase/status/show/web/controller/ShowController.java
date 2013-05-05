@@ -35,10 +35,13 @@ public class ShowController extends BaseCRUDController<Show, Long> {
 
     private ShowService showService;
 
-    @Autowired
-    public ShowController(ShowService showService) {
-        super(showService);
+    public ShowController() {
         setListAlsoSetCommonData(true);
+    }
+
+    @Autowired
+    public void setShowService(ShowService showService) {
+        setBaseService(showService);
         this.showService = showService;
     }
 

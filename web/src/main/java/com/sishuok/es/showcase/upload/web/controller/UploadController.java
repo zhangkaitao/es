@@ -33,8 +33,8 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
     private UploadService uploadService;
 
     @Autowired
-    public UploadController(UploadService uploadService) {
-        super(uploadService);
+    public void setUploadService(UploadService uploadService) {
+        setBaseService(uploadService);
         this.uploadService = uploadService;
     }
 

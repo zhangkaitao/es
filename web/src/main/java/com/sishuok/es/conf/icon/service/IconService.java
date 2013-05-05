@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class IconService extends BaseService<Icon, Long> {
 
     private IconRepository iconRepository;
+
     @Autowired
     public void setIconRepository(IconRepository iconRepository) {
         setBaseRepository(iconRepository);

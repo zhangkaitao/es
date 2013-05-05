@@ -37,10 +37,13 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
 
     private DeletedSampleService sampleService;
 
-    @Autowired
-    public DeletedSampleController(DeletedSampleService sampleService) {
-        super(sampleService);
+    public DeletedSampleController() {
         setListAlsoSetCommonData(true);
+    }
+
+    @Autowired
+    public void setSampleService(DeletedSampleService sampleService) {
+        setBaseService(sampleService);
         this.sampleService = sampleService;
     }
 

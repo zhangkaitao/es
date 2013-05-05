@@ -7,7 +7,10 @@ package com.sishuok.es.common.entity.search;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
+import com.sishuok.es.common.entity.search.exception.SearchException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.util.CollectionUtils;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -19,6 +22,10 @@ import java.util.List;
  */
 public final class SearchFilter {
 
+    //查询参数分隔符
+    public static final String separator = "_";
+
+    private String key;
     private String searchProperty;
     private SearchOperator operator;
     private Object value;
@@ -26,28 +33,78 @@ public final class SearchFilter {
     private List<SearchFilter> orFilters;
 
     /**
-     * @param searchProperty 属性名
-     * @param operator 操作
-     * @param value    值
+     * 根据查询key和值生成SearchFilter
+     * @param key 如 name_like
+     * @param value
+     * @return
      */
-    public SearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
+    public static SearchFilter newSearchFilter(final String key, final Object value) {
 
-        this.searchProperty = searchProperty;
-        this.operator = operator;
-        this.value = value;
+        Assert.notNull(key, "SearchFilter key must not null");
+
+        String[] searchs = StringUtils.split(key, separator);
+
+        if (searchs.length == 0) {
+            throw new SearchException("SearchFilter key format must be : property or property_op");
+        }
+
+        String searchProperty = searchs[0];
+
+        SearchOperator operator = null;
+        if (searchs.length == 1) {
+            operator = SearchOperator.custom;
+        } else {
+            try {
+                operator = SearchOperator.valueOf(searchs[1]);
+            } catch (IllegalArgumentException e) {
+                throw new InvlidSpecificationSearchOperatorException(searchProperty, searchs[1]);
+            }
+        }
+
+        boolean allowBlankValue = SearchOperator.isAllowBlankValue(operator);
+        boolean isValueBlank = value == null;
+        isValueBlank = isValueBlank || (value instanceof String && StringUtils.isBlank((String) value));
+        isValueBlank = isValueBlank || (value instanceof List && ((List)value).size() == 0);
+        //过滤掉空值，即不参与查询
+        if (!allowBlankValue && isValueBlank) {
+            return null;
+        }
+
+        SearchFilter searchFilter = SearchFilter.newSearchFilter(searchProperty, operator, value);
+
+        return searchFilter;
     }
 
+
     /**
-     * 目前仅支持一级或操作
-     * 或 条件运算
+     * 根据查询属性、操作符和值生成SearchFilter
      * @param searchProperty
      * @param operator
      * @param value
      * @return
      */
-    public SearchFilter or(final String searchProperty, final SearchOperator operator, final Object value) {
-       return or(new SearchFilter(searchProperty, operator, value));
+    public static SearchFilter newSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
+        return new SearchFilter(searchProperty, operator, value);
     }
+
+    /**
+     * @param searchProperty 属性名
+     * @param operator 操作
+     * @param value    值
+     */
+    private SearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
+        this.searchProperty = searchProperty;
+        this.operator = operator;
+        this.value = value;
+        this.key = this.searchProperty + separator + this.operator;
+    }
+
+    /**
+     * 目前仅支持一级或操作
+     * 或 条件运算
+     * @param orSearchFilter
+     * @return
+     */
     public SearchFilter or(SearchFilter orSearchFilter) {
         if(orFilters == null) {
             orFilters = Lists.newArrayList();
@@ -63,10 +120,14 @@ public final class SearchFilter {
         return !CollectionUtils.isEmpty(getOrFilters());
     }
 
+    public String getKey() {
+        return key;
+
+    }
+
     public String getSearchProperty() {
         return searchProperty;
     }
-
 
     /**
      * 获取 操作符

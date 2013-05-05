@@ -12,10 +12,11 @@ import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.BaseRepository;
+import com.sishuok.es.common.repository.BaseRepositoryImplHelper;
 import com.sishuok.es.common.service.BaseService;
+import com.sishuok.es.common.utils.ReflectUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -36,7 +37,8 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     private final String FIND_NEXT_WEIGHT_QL;
 
     protected <R extends BaseRepository<M, ID>> BaseTreeableService() {
-        String entityName = this.entityClass.getSimpleName();
+        Class<M> entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
+        String entityName = BaseRepositoryImplHelper.getEntityName(entityClass);
 
         DELETE_CHILDREN_QL = String.format("delete from %s where id=?1 or parentIds like concat(?2, %s)", entityName, "'%'");
 
@@ -61,7 +63,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     @Transactional
     public void deleteSelfAndChild(M m) {
-        baseRepositoryImpl.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
+        BaseRepositoryImplHelper.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
     }
 
     @Transactional
@@ -73,7 +75,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
    public int nextWeight(ID id) {
-        return baseRepositoryImpl.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
+        return BaseRepositoryImplHelper.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
    }
     
 
@@ -171,7 +173,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         source.setWeight(newWeight);
         update(source);
         String newSourceChildrenParentIds = source.makeSelfAsNewParentIds();
-        baseRepositoryImpl.batchUpdate(UPDATE_CHILDREN_PARENT_IDS_QL, newSourceChildrenParentIds, oldSourceChildrenParentIds);
+        BaseRepositoryImplHelper.batchUpdate(UPDATE_CHILDREN_PARENT_IDS_QL, newSourceChildrenParentIds, oldSourceChildrenParentIds);
     }
 
     /**
@@ -181,7 +183,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @return
      */
     protected List<M> findSelfAndNextSiblings(String parentIds, int currentWeight) {
-        return baseRepositoryImpl.findAll(FIND_SELF_AND_NEXT_SIBLINGS_QL, parentIds, currentWeight);
+        return BaseRepositoryImplHelper.<M>findAll(FIND_SELF_AND_NEXT_SIBLINGS_QL, parentIds, currentWeight);
     }
 
 
@@ -221,20 +223,21 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             return Collections.EMPTY_LIST;
         }
 
-        SearchFilter orSearchFilter = new SearchFilter("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
+        List<SearchFilter> orSearchFilters = Lists.newArrayList();
+        orSearchFilters.add(SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds()));
         for(int i = 1; i < parents.size(); i++) {
-            orSearchFilter.or(new SearchFilter("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds()));
+            orSearchFilters.add(SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds()));
         }
 
-        searchable.addSearchFilter(orSearchFilter);
+        searchable.addOrSearchFilters(orSearchFilters);
 
-        List<M> children = findAllBySort(searchable);
+        List<M> children = findAllWithSort(searchable);
         return children;
     }
 
     public List<M> findAllByName(Searchable searchable, M excludeM) {
         addExcludeSearchFilter(searchable, excludeM);
-        return findAllBySort(searchable);
+        return findAllWithSort(searchable);
     }
 
     /**
@@ -244,17 +247,20 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      */
     public List<M> findRootAndChild(Searchable searchable) {
         searchable.addSearchFilter("parentId_eq", 0);
-        List<M> models = findAllBySort(searchable);
-        if(models.size() > 0) {
-            List<ID> ids = Lists.newArrayList();
-            for(int i = 0 ; i < models.size(); i++) {
-                ids.add(models.get(i).getId());
-            }
+        List<M> models = findAllWithSort(searchable);
 
-            searchable.removeSearchFilter("parentId_eq");
-            searchable.addSearchFilter("parentId_in", ids);
-            models.addAll(findAllBySort(searchable));
+        if(models.size() == 0) {
+            return models;
         }
+            List<ID> ids = Lists.newArrayList();
+        for (int i = 0; i < models.size(); i++) {
+            ids.add(models.get(i).getId());
+        }
+        searchable.removeSearchFilter("parentId_eq");
+        searchable.addSearchFilter("parentId_in", ids);
+
+        models.addAll(findAllWithSort(searchable));
+
         return models;
     }
 
@@ -291,7 +297,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         }
         String[] ids = StringUtils.tokenizeToStringArray(parentIds, "/");
 
-        return Lists.reverse(findAllByNoPageNoSort(SearchableBuilder.newInstance().addSearchFilter("id", SearchOperator.in, ids).buildSearchable()));
+        return Lists.reverse(findAllWithNoPageNoSort(Searchable.newSearchable().addSearchFilter("id", SearchOperator.in, ids)));
     }
 
 

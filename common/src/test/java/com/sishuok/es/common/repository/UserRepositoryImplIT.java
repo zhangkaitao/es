@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +34,7 @@ import static org.junit.Assert.assertNotNull;
 public class UserRepositoryImplIT extends BaseUserIT {
 
     @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
+    private UserRepository2Impl userRepositoryImpl;
     @Autowired
     private UserRepository userRepository;
 
@@ -95,7 +93,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         }
 
         String ql = "from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, userRepositoryImpl.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
+        assertEquals(count, BaseRepositoryImplHelper.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
     }
 
     @Test
@@ -113,7 +111,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         }
 
         String ql = "select count(o) from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, userRepositoryImpl.countAll(ql, ids, realnamePrefix + "%", birthdayList));
+        assertEquals(count, BaseRepositoryImplHelper.countAll(ql, ids, realnamePrefix + "%", birthdayList));
     }
 
     @Test
@@ -127,7 +125,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
             lastUser = userRepository.save(user);
         }
         String ql = "select u from User u where u=?1 and u.baseInfo.realname like ?2";
-        assertEquals(lastUser, userRepositoryImpl.findOne(ql, lastUser, realnamePrefix + "%"));
+        assertEquals(lastUser, BaseRepositoryImplHelper.findOne(ql, lastUser, realnamePrefix + "%"));
     }
 
     @Test
@@ -142,10 +140,10 @@ public class UserRepositoryImplIT extends BaseUserIT {
         }
 
         String ql = "update BaseInfo set realname=?1";
-        assertEquals(count, userRepositoryImpl.batchUpdate(ql, realname));
+        assertEquals(count, BaseRepositoryImplHelper.batchUpdate(ql, realname));
 
         String findOneQL = "select u from User u where u=?1";
-        User user = userRepositoryImpl.findOne(findOneQL, lastUser);
+        User user = BaseRepositoryImplHelper.findOne(findOneQL, lastUser);
         assertEquals(realname, user.getBaseInfo().getRealname());
 
     }

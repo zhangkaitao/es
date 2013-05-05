@@ -10,8 +10,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
+import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import com.sishuok.es.common.entity.specification.SearchSpecifications;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,7 +29,7 @@ import java.util.*;
  * <p>Version: 1.0
  */
 
-public final class SearchRequest implements Searchable {
+public final class SearchRequest extends Searchable {
 
     private final Map<String, SearchFilter> searchFilterMap = Maps.newHashMap();
 
@@ -53,7 +55,7 @@ public final class SearchRequest implements Searchable {
      * @param searchParams
      * @see SearchRequest#SearchRequest(java.util.Map<java.lang.String,java.lang.Object>)
      */
-    public SearchRequest(Map<String, Object> searchParams, final Pageable page) {
+    public SearchRequest(final Map<String, Object> searchParams, final Pageable page) {
         this(searchParams, page, null);
     }
 
@@ -61,7 +63,7 @@ public final class SearchRequest implements Searchable {
      * @param searchParams
      * @see SearchRequest#SearchRequest(java.util.Map<java.lang.String,java.lang.Object>)
      */
-    public SearchRequest(Map<String, Object> searchParams, final Sort sort) {
+    public SearchRequest(final Map<String, Object> searchParams, final Sort sort) {
         this(searchParams, null, sort);
     }
 
@@ -81,94 +83,177 @@ public final class SearchRequest implements Searchable {
     public SearchRequest(final Map<String, Object> searchParams, final Pageable page, final Sort sort) {
         toSearchFilters(searchParams);
 
-        //合并排序
-        if(sort == null) {
-            this.sort = page != null ? page.getSort() : null;
-        } else {
-            this.sort = (page != null ? sort.and(page.getSort()) : sort);
-        }
-        //把排序合并到page中
-        if(page != null) {
-            this.page = new PageRequest(page.getPageNumber(), page.getPageSize(), this.sort);
-        } else {
-            this.page = null;
-        }
+        merge(sort, page);
     }
 
-    private List<SearchFilter> toSearchFilters(final Map<String, Object> searchParams) throws SearchException {
-        List<SearchFilter> result = Lists.newArrayList();
+
+    private void toSearchFilters(final Map<String, Object> searchParams) throws SearchException {
         if(searchParams == null || searchParams.size() == 0) {
-            return result;
+            return;
         }
         for (Map.Entry<String, Object> entry : searchParams.entrySet()) {
             String key = entry.getKey();
-            Assert.notNull(key, "SearchRequest params key must not null");
             Object value = entry.getValue();
 
-            String[] searchs = StringUtils.split(key, separator);
-
-            if (searchs.length == 0) {
-                throw new SearchException("SearchRequest params key format must be : property or property_op");
-            }
-
-            String searchProperty = searchs[0];
-
-            SearchOperator operator = null;
-            if (searchs.length == 1) {
-                operator = SearchOperator.custom;
-            } else {
-                try {
-                    operator = SearchOperator.valueOf(searchs[1]);
-                } catch (IllegalArgumentException e) {
-                    throw new InvlidSpecificationSearchOperatorException(searchProperty, searchs[1]);
-                }
-            }
-
-            boolean allowBlankValue = isAllowBlankValue(operator);
-            boolean isValueBlank = value == null;
-            isValueBlank = isValueBlank || (value instanceof String && StringUtils.isBlank((String) value));
-            isValueBlank = isValueBlank || (value instanceof List && ((List)value).size() == 0);
-            //过滤掉空值，即不参与查询
-            if (!allowBlankValue && isValueBlank) {
-                continue;
-            }
-
-            SearchFilter searchFilter = new SearchFilter(searchProperty, operator, value);
-            addSearchFilter(searchFilter);
-            result.add(searchFilter);
+            addSearchFilter(SearchFilter.newSearchFilter(key, value));
         }
-        return result;
     }
 
 
-
+    @Override
+    public Searchable addSearchParam(final String key, final Object value) {
+        addSearchFilter(SearchFilter.newSearchFilter(key, value));
+        return this;
+    }
 
     @Override
-    public SearchFilter addSearchFilter(String key, Object value) {
+    public Searchable addAllSearchParams(Map<String, Object> searchParams) {
+        toSearchFilters(searchParams);
+        return this;
+    }
+
+    @Override
+    public Searchable addSearchFilters(Collection<SearchFilter> searchFilters) {
+        if(CollectionUtils.isEmpty(searchFilters)) {
+            return this;
+        }
+        for(SearchFilter searchFilter : searchFilters) {
+            addSearchFilter(searchFilter);
+        }
+        return this;
+    }
+
+    @Override
+    public Searchable addOrSearchFilters(Collection<SearchFilter> searchFilters) {
+        if(CollectionUtils.isEmpty(searchFilters)) {
+            return this;
+        }
+        Iterator<SearchFilter> iter = searchFilters.iterator();
+        SearchFilter first = iter.next();
+        while(iter.hasNext()) {
+            first.or(iter.next());
+        }
+        addSearchFilter(first);
+
+        return this;
+    }
+
+    @Override
+    public Searchable addSearchFilter(final String key, final Object value) {
         Map<String, Object> map = Maps.newHashMap();
         map.put(key, value);
-        return toSearchFilters(map).get(0);
+        toSearchFilters(map);
+        return this;
     }
 
 
     @Override
-    public SearchFilter addSearchFilter(String searchProperty, SearchOperator operator, Object value) {
-        SearchFilter searchFilter = new SearchFilter(searchProperty, operator, value);
+    public Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
+        SearchFilter searchFilter = SearchFilter.newSearchFilter(searchProperty, operator, value);
         return addSearchFilter(searchFilter);
     }
 
-
     @Override
-    public SearchFilter addSearchFilter(SearchFilter searchFilter) {
-        String key = searchFilter.getSearchProperty() + separator + searchFilter.getOperator();
+    public Searchable addSearchFilter(SearchFilter searchFilter) {
+        if(searchFilter == null) {
+            return this;
+        }
+        String key = searchFilter.getKey();
         searchFilterMap.put(key, searchFilter);
-        return searchFilter;
+        return this;
+    }
+
+    /**
+     * @param key
+     * @return
+     */
+    @Override
+    public Searchable removeSearchFilter(final String key) {
+        if(key == null) {
+            return this;
+        }
+        Iterator<Map.Entry<String, SearchFilter>> entries = searchFilterMap.entrySet().iterator();
+
+        while(entries.hasNext()) {
+            Map.Entry<String, SearchFilter> entry = entries.next();
+            SearchFilter searchFilter = entry.getValue();
+            boolean hasFirstRemoved = false;
+            if(key.equals(entry.getKey())) {
+                entries.remove();
+                hasFirstRemoved = true;
+            }
+
+            //如果移除的有or查询 则删除第一个 后续的跟上
+            if(hasFirstRemoved && searchFilter.hasOrSearchFilters()) {
+                List<SearchFilter> orSearchFilters = searchFilter.getOrFilters();
+                orSearchFilters.remove(0);//第一个移除即可
+                SearchFilter first = orSearchFilters.remove(1);//变成新的根
+                for(SearchFilter orSearchFilter : orSearchFilters) {
+                    first.or(orSearchFilter);
+                }
+                addSearchFilter(first);
+            }
+
+            //考虑or的情况
+            if(!hasFirstRemoved && searchFilter.hasOrSearchFilters()) {
+                Iterator<SearchFilter> orIter = searchFilter.getOrFilters().iterator();
+
+                if(orIter.hasNext()) {
+                    SearchFilter orSearchFilter = orIter.next();
+                    if(key.equals(orSearchFilter.getKey())) {
+                        orIter.remove();
+                    }
+                }
+            }
+        }
+
+        return this;
     }
 
     @Override
-    public SearchFilter removeSearchFilter(String key) {
-        return getSearchFilterMap().remove(key);
+    public Searchable setPage(final Pageable page) {
+        merge(sort, page);
+        return this;
     }
+
+    @Override
+    public Searchable setPage(int pageNumber, int pageSize) {
+        merge(sort, new PageRequest(pageNumber, pageSize));
+        return this;
+    }
+
+    @Override
+    public Searchable addSort(final Sort sort) {
+        merge(sort, page);
+        return this;
+    }
+
+    @Override
+    public Searchable addSort(final Sort.Direction direction, final String property) {
+        merge(new Sort(direction, property), page);
+        return this;
+    }
+
+
+
+
+    @Override
+    public <T> Searchable convert(final Class<T> entityClass) {
+        SearchableConvertUtils.convertSearchValueToEntityValue(this, entityClass);
+        markConverted();
+        return this;
+    }
+
+
+    @Override
+    public Searchable markConverted() {
+        this.converted = true;
+        return this;
+    }
+
+
+
+
 
     public Collection<SearchFilter> getSearchFilters() {
         return Collections.unmodifiableCollection(searchFilterMap.values());
@@ -178,13 +263,6 @@ public final class SearchRequest implements Searchable {
         return searchFilterMap;
     }
 
-    public Pageable getPage() {
-        return page;
-    }
-
-    public Sort getSort() {
-        return sort;
-    }
 
     /**
      * 按条件拼的Specification
@@ -196,13 +274,10 @@ public final class SearchRequest implements Searchable {
         return SearchSpecifications.<T>bySearch(this, entityClass);
     }
 
+
+
     public boolean isConverted() {
         return converted;
-    }
-
-    @Override
-    public void markConverted() {
-        this.converted = true;
     }
 
     @Override
@@ -227,25 +302,31 @@ public final class SearchRequest implements Searchable {
         }
     }
 
-
-
     @Override
     public void removePageable() {
         this.page = null;
+    }
+
+    public Pageable getPage() {
+        return page;
+    }
+
+    public Sort getSort() {
+        return sort;
     }
 
     @Override
     public boolean containsSearchProperty(String searchProperty) {
         return
                 searchFilterMap.containsKey(searchProperty) ||
-                searchFilterMap.containsKey(searchProperty + separator + SearchOperator.custom);
+                searchFilterMap.containsKey(searchProperty + SearchFilter.separator + SearchOperator.custom);
     }
 
     @Override
     public Object getValue(String searchProperty) {
         SearchFilter searchFilter = searchFilterMap.get(searchProperty);
         if(searchFilter == null) {
-            searchFilter = searchFilterMap.get(searchProperty + separator + SearchOperator.custom);
+            searchFilter = searchFilterMap.get(searchProperty + SearchFilter.separator + SearchOperator.custom);
         }
         if(searchFilter == null) {
             return null;
@@ -253,16 +334,30 @@ public final class SearchRequest implements Searchable {
         return searchFilter.getValue();
     }
 
-    /**
-     * 操作符是否允许为空
-     *
-     * @param operator
-     * @return
-     */
-    private boolean isAllowBlankValue(final SearchOperator operator) {
-        return operator == SearchOperator.isNotNull || operator == SearchOperator.isNull;
-    }
 
+
+
+    private void merge(Sort sort, Pageable page) {
+        if(sort == null) {
+            sort = this.sort;
+        }
+        if(page == null) {
+            page = this.page;
+        }
+
+        //合并排序
+        if(sort == null) {
+            this.sort = page != null ? page.getSort() : null;
+        } else {
+            this.sort = (page != null ? sort.and(page.getSort()) : sort);
+        }
+        //把排序合并到page中
+        if(page != null) {
+            this.page = new PageRequest(page.getPageNumber(), page.getPageSize(), this.sort);
+        } else {
+            this.page = null;
+        }
+    }
 
 
 

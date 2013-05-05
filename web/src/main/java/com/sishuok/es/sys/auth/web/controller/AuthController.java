@@ -38,13 +38,15 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
     @Autowired
     private RoleService roleService;
 
-    @Autowired
-    public AuthController(AuthService authService) {
-        super(authService);
-        this.authService = authService;
+    public AuthController() {
         setListAlsoSetCommonData(true);
     }
 
+    @Autowired
+    public void setAuthService(AuthService authService) {
+        setBaseService(authService);
+        this.authService = authService;
+    }
 
     @Override
     protected void setCommonData(Model model) {

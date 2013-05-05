@@ -42,6 +42,17 @@ public enum SearchOperator {
         return Arrays.toString(SearchOperator.values());
     }
 
+    /**
+     * 操作符是否允许为空
+     *
+     * @param operator
+     * @return
+     */
+    public static boolean isAllowBlankValue(final SearchOperator operator) {
+        return operator == SearchOperator.isNotNull || operator == SearchOperator.isNull;
+    }
+
+
     public static SearchOperator valueBySymbol(String symbol) throws SearchException {
         symbol = formatSymbol(symbol);
         for(SearchOperator operator : values()) {

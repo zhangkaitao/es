@@ -46,11 +46,10 @@ public class UserController extends BaseCRUDController<User, Long> {
     private UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
-        super(userService);
+    public void setUserService(UserService userService) {
+        setBaseService(userService);
         this.userService = userService;
     }
-
 
     @Override
     protected void setCommonData(Model model) {

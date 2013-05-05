@@ -12,6 +12,7 @@ import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,7 +26,7 @@ import java.util.List;
  * <p>Date: 13-1-14 下午2:18
  * <p>Version: 1.0
  */
-public interface UserRepository extends BaseRepository<User, Long> {
+public interface UserRepository extends BaseRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     @Modifying
     @Query("update BaseInfo bi set bi.realname=?1 where bi.user.id=?2")

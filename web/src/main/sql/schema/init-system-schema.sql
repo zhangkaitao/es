@@ -213,6 +213,7 @@ create table `sys_role_resource_permission`(
   constraint `pk_sys_role_resource_permission` primary key(`id`),
   constraint `unique_sys_role_resource_permission` unique(`role_id`, `resource_id`)
 ) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_role_resource_permission` auto_increment=1000;
 
 create table `sys_group`(
   `id`         bigint not null auto_increment,
@@ -259,6 +260,7 @@ create table `sys_auth`(
   index `idx_sys_auth_group` (`group_id`),
   index `idx_sys_auth_type` (`type`)
 ) charset=utf8 ENGINE=InnoDB;;
+alter table `sys_auth` auto_increment=1000;
 
 
 

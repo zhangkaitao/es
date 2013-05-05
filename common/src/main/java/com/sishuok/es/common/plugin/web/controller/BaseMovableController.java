@@ -14,6 +14,7 @@ import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.AjaxResponse;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,11 +32,17 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
 
     private BaseMovableService movableService;
 
-    protected <S extends BaseMovableService> BaseMovableController(S movableService) {
-        super(movableService);
+    public void setMovableService(BaseMovableService<M, ID> movableService) {
+        setBaseService(movableService);
         this.movableService = movableService;
     }
 
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        Assert.notNull(movableService, "movable service must not null");
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     @PageableDefaults(value = 10, sort = "weight=desc")

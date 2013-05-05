@@ -23,11 +23,9 @@ public class UserLastOnlineController extends BaseCRUDController<UserLastOnline,
 
     private UserLastOnlineService userLastOnlineService;
 
-
     @Autowired
-    public UserLastOnlineController(UserLastOnlineService userLastOnlineService) {
-        super(userLastOnlineService);
+    public void setUserLastOnlineService(UserLastOnlineService userLastOnlineService) {
+        setBaseService(userLastOnlineService);
         this.userLastOnlineService = userLastOnlineService;
     }
-
 }

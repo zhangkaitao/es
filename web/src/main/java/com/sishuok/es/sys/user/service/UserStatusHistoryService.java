@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.user.service;
 
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatusHistory;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -51,17 +53,12 @@ public class UserStatusHistoryService extends BaseService<UserStatusHistory, Lon
     }
 
     public UserStatusHistory findLastHistory(final User user) {
-        Specification<UserStatusHistory> specification = new Specification<UserStatusHistory>(){
-            @Override
-            public Predicate toPredicate(
-                    Root<UserStatusHistory> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        Searchable searchable = Searchable.newSearchable()
+                .addSearchParam("user_eq", user)
+                .addSort(Sort.Direction.DESC, "opDate")
+                .setPage(0, 1);
 
-                query.where(cb.equal(root.get("user"), user));
-                query.orderBy(cb.desc(root.get("opDate")));
-                return query.getRestriction();
-            }
-        };
-        Page<UserStatusHistory> page = userStatusHistoryRepository.findAll(specification, new PageRequest(0, 1));
+        Page<UserStatusHistory> page = userStatusHistoryRepository.findAll(searchable);
 
         if(page.hasContent()) {
             return page.getContent().get(0);

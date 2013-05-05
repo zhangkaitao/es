@@ -19,7 +19,7 @@ import java.util.Set;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "user")
 public class User extends BaseEntity<Long> {
     @Column(name = "username", unique = true, length = 200)
     private String username;

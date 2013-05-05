@@ -25,12 +25,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/showcase/product/category")
 public class CategoryController extends BaseMovableController<Category, Long> {
 
-    @Autowired
     private CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
-        super(categoryService);
+    public void setCategoryService(CategoryService categoryService) {
+        setMovableService(categoryService);
         this.categoryService = categoryService;
     }
 

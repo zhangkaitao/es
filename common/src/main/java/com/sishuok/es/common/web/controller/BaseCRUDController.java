@@ -26,16 +26,27 @@ import java.io.Serializable;
  */
 public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Serializable> extends BaseController<M, ID> {
 
+
+    private boolean listAlsoSetCommonData = false;
+
+    private String permissionPrefix;
+
     /**
      * 列表也设置common data
      */
-    private boolean listAlsoSetCommonData = false;
     public void setListAlsoSetCommonData(boolean listAlsoSetCommonData) {
         this.listAlsoSetCommonData = listAlsoSetCommonData;
     }
 
-    protected  <S extends BaseService<M, ID>> BaseCRUDController(S baseService) {
-        super(baseService);
+    /**
+     * 权限前缀
+     */
+    public void setPermissionPrefix(String permissionPrefix) {
+        this.permissionPrefix = permissionPrefix;
+    }
+
+    protected  <S extends BaseService<M, ID>> BaseCRUDController() {
+        super();
     }
 
     @RequestMapping(method = RequestMethod.GET)

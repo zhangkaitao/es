@@ -18,7 +18,7 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "tbl_user_baseinfo")
+@Table(name = "user_baseinfo")
 public class BaseInfo extends BaseEntity<Long> {
 
     @JsonIgnore

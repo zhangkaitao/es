@@ -19,7 +19,6 @@ import com.sishuok.es.sys.user.exception.UserBlockedException;
 import com.sishuok.es.sys.user.exception.UserNotExistsException;
 import com.sishuok.es.sys.user.exception.UserPasswordNotMatchException;
 import com.sishuok.es.sys.user.repository.UserRepository;
-import com.sishuok.es.sys.user.repository.UserRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
@@ -49,9 +48,8 @@ public class UserService extends BaseService<User, Long> {
     private PasswordService passwordService;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository, UserRepositoryImpl userRepositoryImpl) {
+    public void setUserRepository(UserRepository userRepository) {
         setBaseRepository(userRepository);
-        setBaseRepositoryImpl(userRepositoryImpl);
         this.userRepository = userRepository;
     }
     @Autowired

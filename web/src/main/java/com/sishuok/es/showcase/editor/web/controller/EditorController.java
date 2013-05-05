@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/showcase/editor")
 public class EditorController extends BaseCRUDController<Editor, Long> {
 
-    private EditorService sampleService;
+    private EditorService editorService;
 
     @Autowired
-    public EditorController(EditorService sampleService) {
-        super(sampleService);
-        this.sampleService = sampleService;
+    public void setEditorService(EditorService editorService) {
+        setBaseService(editorService);
+        this.editorService = editorService;
     }
 
     /**
@@ -40,7 +40,6 @@ public class EditorController extends BaseCRUDController<Editor, Long> {
     @Override
     protected boolean hasError(Editor m, BindingResult result) {
         Assert.notNull(m);
-
 
         return result.hasErrors();
     }

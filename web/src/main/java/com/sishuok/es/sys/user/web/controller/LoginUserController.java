@@ -42,8 +42,8 @@ public class LoginUserController extends BaseController<User, Long> {
     private UserLastOnlineService userLastOnlineService;
 
     @Autowired
-    public LoginUserController(UserService userService) {
-        super(userService);
+    public void setUserService(UserService userService) {
+        setBaseService(userService);
         this.userService = userService;
     }
 

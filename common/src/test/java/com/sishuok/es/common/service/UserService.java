@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 @Service()
 public class UserService extends BaseService<User, Long> {
 
-
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         setBaseRepository(userRepository);

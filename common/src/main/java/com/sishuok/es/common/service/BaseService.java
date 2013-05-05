@@ -7,21 +7,14 @@ package com.sishuok.es.common.service;
 
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.common.repository.BaseRepositoryImpl;
-import com.sishuok.es.common.utils.ReflectUtils;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,33 +29,16 @@ import java.util.List;
 public abstract class BaseService<M extends AbstractEntity, ID extends Serializable> implements InitializingBean {
 
 
-    protected final Class<M> entityClass;
     protected BaseRepository<M, ID> baseRepository;
 
-    protected BaseRepositoryImpl<M, ID> baseRepositoryImpl;
-    //使用自定义的Repository实现 替代默认的
-    private boolean useDefaultBaseRepositoryImpl = false;
-
-    public BaseService() {
-        this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
-    }
 
     public void setBaseRepository(BaseRepository<M, ID> baseRepository) {
         this.baseRepository = baseRepository;
     }
 
-    public void setBaseRepositoryImpl(BaseRepositoryImpl<M, ID> baseRepositoryImpl) {
-        useDefaultBaseRepositoryImpl = false;
-        this.baseRepositoryImpl = baseRepositoryImpl;
-    }
-
     @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(baseRepository, "BaseRepository required, Class is:" + getClass());
-
-        if(baseRepositoryImpl == null) {
-            this.baseRepositoryImpl = BaseRepositoryImpl.defaultBaseRepositoryImpl(entityClass);
-        }
 
     }
 
@@ -98,52 +74,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @param id 主键
      */
     public void delete(ID id) {
-        M m = findOne(id);
-        delete(m);
-    }
-
-    /**
-     * 根据主键删除相应实体
-     *
-     * @param ids 实体
-     */
-    public void delete(ID[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
-            return;
-        }
-        List<M> models = new ArrayList<M>();
-        for(ID id : ids) {
-            M model = null;
-            try {
-                model = (M)entityClass.newInstance();
-            }catch (Exception e) {
-                throw new RuntimeException("batch delete " + entityClass.getName() + " error", e);
-            }
-            try {
-                BeanUtils.setProperty(model, "id", id);
-            } catch (Exception e) {
-                throw new RuntimeException("batch delete " + entityClass.getName() + " error, can not set id", e);
-            }
-
-            models.add(model);
-        }
-
-        M model = models.get(0);
-        boolean logicDeleteableEntity = model instanceof LogicDeleteable;
-
-
-        String entityName = this.entityClass.getSimpleName();
-        int updateCount = 0;
-        if(logicDeleteableEntity) {
-            String hql = String.format(
-                    "update %s o set o.deleted=true where o in (?1)", entityName);
-            updateCount = baseRepositoryImpl.batchUpdate(hql, models);
-        } else {
-            String hql = String.format(
-                    "delete from %s o where o in (?1)", entityName);
-            updateCount = baseRepositoryImpl.batchUpdate(hql, models);
-        }
-
+        baseRepository.delete(id);
     }
 
     /**
@@ -152,17 +83,19 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @param m 实体
      */
     public void delete(M m) {
-        if(m == null) {
-            return;
-        }
-        if(m instanceof LogicDeleteable) {
-            ((LogicDeleteable) m).markDeleted();
-            baseRepository.save(m);
-        } else {
-            baseRepository.delete(m);
-        }
-
+        baseRepository.delete(m);
     }
+
+    /**
+     * 根据主键删除相应实体
+     *
+     * @param ids 实体
+     */
+    public void delete(ID[] ids) {
+        baseRepository.delete(ids);
+    }
+
+
 
 
     /**
@@ -172,9 +105,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return 返回id对应的实体
      */
     public M findOne(ID id) {
-        if(id == null) {
-            return null;
-        }
         return baseRepository.findOne(id);
     }
 
@@ -203,9 +133,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public List<M> findAll() {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.findAll();
-        }
         return baseRepository.findAll();
     }
 
@@ -216,9 +143,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public List<M> findAll(Sort sort) {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.findAll(sort);
-        }
         return baseRepository.findAll(sort);
     }
 
@@ -229,9 +153,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public Page<M> findAll(Pageable pageable) {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.findAll(pageable);
-        }
         return baseRepository.findAll(pageable);
     }
 
@@ -242,10 +163,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public Page<M> findAll(Searchable searchable) {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.findAll(searchable);
-        }
-        return baseRepository.findAll(searchable.getSpecifications(entityClass), searchable.getPage());
+        return baseRepository.findAll(searchable);
     }
 
     /**
@@ -254,11 +172,10 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @param searchable 条件
      * @return
      */
-    public List<M> findAllByNoPageNoSort(Searchable searchable) {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.findAllByNoPageNoSort(searchable);
-        }
-        return baseRepository.findAll(searchable.getSpecifications(entityClass));
+    public List<M> findAllWithNoPageNoSort(Searchable searchable) {
+        searchable.removePageable();
+        searchable.removeSort();
+        return baseRepository.findAll(searchable).getContent();
     }
 
     /**
@@ -267,11 +184,8 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @param searchable 条件
      * @return
      */
-    public List<M> findAllBySort(Searchable searchable) {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.findAllBySort(searchable);
-        }
-        return baseRepository.findAll(searchable.getSpecifications(entityClass), searchable.getSort());
+    public List<M> findAllWithSort(Searchable searchable) {
+        return baseRepository.findAll(searchable).getContent();
     }
 
 
@@ -282,10 +196,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public Long count(Searchable searchable) {
-        if(!useDefaultBaseRepositoryImpl) {
-            return baseRepositoryImpl.count(searchable);
-        }
-        return baseRepository.count(searchable.getSpecifications(entityClass));
+        return baseRepository.count(searchable);
     }
 
 

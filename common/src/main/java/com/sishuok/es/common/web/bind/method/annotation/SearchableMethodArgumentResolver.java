@@ -6,7 +6,6 @@
 package com.sishuok.es.common.web.bind.method.annotation;
 
 import com.google.common.collect.Lists;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import org.apache.commons.lang3.StringUtils;
@@ -85,23 +84,23 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
         SearchableDefaults searchDefaults = getSearchableDefaults(parameter);
 
-        SearchableBuilder builder = null;
+        Searchable searchable = null;
         //自定义覆盖默认
         if(searcheableMap.size() == 0) {
-            builder = getDefaultFromAnnotation(searchDefaults);
+            searchable = getDefaultFromAnnotation(searchDefaults);
         } else {
-            builder = SearchableBuilder.newInstance();
+            searchable = Searchable.newSearchable();
             for(String name : searcheableMap.keySet()) {
                 String[] mapValues = filterSearchValues(searcheableMap.get(name));
 
                 if(mapValues.length == 1) {
                     if(name.endsWith("in")) {
-                         builder.addSearchParam(name, StringUtils.split(mapValues[0], ",; "));
+                        searchable.addSearchParam(name, StringUtils.split(mapValues[0], ",; "));
                     } else {
-                         builder.addSearchParam(name, mapValues[0]);
+                        searchable.addSearchParam(name, mapValues[0]);
                     }
                 } else {
-                    builder.addSearchParam(name, mapValues);
+                    searchable.addSearchParam(name, mapValues);
                 }
             }
         }
@@ -109,18 +108,18 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
         Pageable pageable = (Pageable) pageableMethodArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
         //默认分页及排序
         if(searchDefaults == null) {
-            builder.setPage(pageable);
+            searchable.setPage(pageable);
         }
         //needPage=true 分页及排序
         if(searchDefaults != null && searchDefaults.needPage()) {
-            builder.setPage(pageable);
+            searchable.setPage(pageable);
         }
         //needPage=false needSort=true  不要分页，但排序
         if (searchDefaults != null && !searchDefaults.needPage() && searchDefaults.needSort()) {
-            builder.setSort(pageable.getSort());
+            searchable.addSort(pageable.getSort());
         }
 
-        return builder.buildSearchable();
+        return searchable;
     }
 
     private String[] filterSearchValues(String[] values) {
@@ -156,35 +155,35 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
 
 
-    private SearchableBuilder getDefaultFromAnnotation(SearchableDefaults searchableDefaults) {
+    private Searchable getDefaultFromAnnotation(SearchableDefaults searchableDefaults) {
 
-        SearchableBuilder builder = defaultSearchable(searchableDefaults);
-        if(builder != null) {
-            return builder;
+        Searchable searchable = defaultSearchable(searchableDefaults);
+        if(searchable != null) {
+            return searchable;
         }
 
-        return SearchableBuilder.newInstance();
+        return Searchable.newSearchable();
     }
 
-    private SearchableBuilder defaultSearchable(SearchableDefaults searchableDefaults) {
+    private Searchable defaultSearchable(SearchableDefaults searchableDefaults) {
 
         if(searchableDefaults == null) {
             return null;
         }
 
-        SearchableBuilder builder = SearchableBuilder.newInstance();
+        Searchable searchable = Searchable.newSearchable();
         for(String searchParam : searchableDefaults.value()) {
             String[] searchPair = searchParam.split("=");
             String paramName = searchPair[0];
             String paramValue = searchPair[1];
             if(paramName.endsWith("in")) {
-                builder.addSearchParam(paramName, StringUtils.split(paramValue, ",; "));
+                searchable.addSearchParam(paramName, StringUtils.split(paramValue, ",; "));
             } else {
-                builder.addSearchParam(paramName, paramValue);
+                searchable.addSearchParam(paramName, paramValue);
             }
         }
 
-        return builder;
+        return searchable;
     }
 
 }

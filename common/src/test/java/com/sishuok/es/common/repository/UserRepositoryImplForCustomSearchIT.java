@@ -6,18 +6,15 @@
 package com.sishuok.es.common.repository;
 
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * <p>User Repository集成测试</p>
@@ -30,10 +27,7 @@ import static org.junit.Assert.assertTrue;
 public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
 
     @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
-
-    @Autowired
-    private UserRepository userRepository;
+    private UserRepository2 userRepository2;
 
 
     @Test
@@ -42,12 +36,10 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname("zhang" + i);
-            userRepository.save(user);
+            userRepository2.save(user);
         }
-        Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("realname_like", "zhang");
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(count, userRepositoryImpl.findAllByCustom(search).getNumberOfElements());
+        Searchable search = Searchable.newSearchable().addSearchParam("realname_like", "zhang");
+        assertEquals(count, userRepository2.findAllByCustom(search).getNumberOfElements());
     }
 
 
@@ -57,16 +49,12 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname("zhang" + i);
-            userRepository.save(user);
+            userRepository2.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("realname_like", "zhang");
-        Searchable search =
-                SearchableBuilder
-                        .newInstance(searchParams)
-                        .setPage(new PageRequest(0, 5))
-                        .buildSearchable();
-        assertEquals(5, userRepositoryImpl.findAllByCustom(search).getSize());
+        Searchable search = Searchable.newSearchable(searchParams).setPage(0, 5);
+        assertEquals(5, userRepository2.findAllByCustom(search).getSize());
     }
 
     @Test
@@ -75,12 +63,10 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname("zhang" + i);
-            userRepository.save(user);
+            userRepository2.save(user);
         }
-        Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("realname", "zhang1");
-        Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-        assertEquals(6, userRepositoryImpl.countAllByCustom(search));
+        Searchable search = Searchable.newSearchable().addSearchParam("realname", "zhang1");
+        assertEquals(6, userRepository2.countAllByCustom(search));
     }
 
     @Test
@@ -89,12 +75,10 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
          for (int i = 0; i < count; i++) {
              User user = createUser();
              user.getBaseInfo().setRealname("zhang" + i);
-             userRepository.save(user);
+             userRepository2.save(user);
          }
-         Map<String, Object> searchParams = new HashMap<String, Object>();
-         searchParams.put("realname", "zhanga");
-         Searchable search = SearchableBuilder.newInstance(searchParams).buildSearchable();
-         assertEquals(0, userRepositoryImpl.countAllByCustom(search));
+         Searchable search = Searchable.newSearchable().addSearchParam("realname", "zhanga");
+         assertEquals(0, userRepository2.countAllByCustom(search));
      }
 
 

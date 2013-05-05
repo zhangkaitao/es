@@ -129,4 +129,6 @@
         </property>
     </bean>-->
 
+    <import resource="spring-shiro-mvc.xml"/>
+
 </beans>

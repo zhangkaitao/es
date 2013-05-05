@@ -29,9 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 public class OrganizationController extends BaseTreeableController<Organization, Long> {
 
     private OrganizationService organizationService;
+
     @Autowired
-    public OrganizationController(OrganizationService organizationService) {
-        super(organizationService);
+    public void setOrganizationService(OrganizationService organizationService) {
+        setTreeableService(organizationService);
         this.organizationService = organizationService;
     }
 

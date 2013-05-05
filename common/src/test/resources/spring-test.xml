@@ -13,8 +13,10 @@
 
     <context:component-scan base-package="com.sishuok.es.common.service"></context:component-scan>
 
-    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
+    <!--类型转换服务 查询时转换数据使用-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
 
+    <!--使用内嵌的H2数据库测试-->
     <jdbc:embedded-database id="dataSource" type="H2"/>
 
     <bean id="entityManagerFactory"
@@ -42,18 +44,35 @@
         <property name="packagesToScan" value="com.sishuok.es.common.entity"/>
     </bean>
 
+    <jpa:repositories
+            base-package="com.sishuok.es.common.repository"
+            repository-impl-postfix="Impl"
+            factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
+            entity-manager-factory-ref="entityManagerFactory"
+            transaction-manager-ref="transactionManager">
+    </jpa:repositories>
+
+
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-    <jpa:repositories
-            base-package="com.sishuok.es.common.repository"
-            repository-impl-postfix="Impl"
-            entity-manager-factory-ref="entityManagerFactory"
-            transaction-manager-ref="transactionManager">
-    </jpa:repositories>
+
+    <!--设置查询字符串转换器的conversion service-->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod"
+                    value="com.sishuok.es.common.entity.search.utils.SearchableConvertUtils.setConversionService"/>
+        <property name="arguments" ref="conversionService"/>
+    </bean>
+
+    <!--设置BaseRepositoryImplHelper辅助类所需的entityManagerFactory-->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod"
+                   value="com.sishuok.es.common.repository.BaseRepositoryImplHelper.setEntityManagerFactory"/>
+        <property name="arguments" ref="entityManagerFactory"/>
+    </bean>
 
 
 </beans>

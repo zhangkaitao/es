@@ -14,11 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
 
 /**
  * <p>User: Zhang Kaitao
@@ -32,11 +29,10 @@ public class PermissionController extends BaseCRUDController<Permission, Long> {
     private PermissionService permissionService;
 
     @Autowired
-    public PermissionController(PermissionService permissionService) {
-        super(permissionService);
+    public void setPermissionService(PermissionService permissionService) {
+        setBaseService(permissionService);
         this.permissionService = permissionService;
     }
-
 
     @Override
     protected void setCommonData(Model model) {

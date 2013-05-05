@@ -642,7 +642,7 @@
 
         <aspectj.version>1.7.1</aspectj.version>
         <spring.version>3.2.2.RELEASE</spring.version>
-        <spring.data.jpa.version>1.2.0.RELEASE</spring.data.jpa.version>
+        <spring.data.jpa.version>1.3.1.RELEASE</spring.data.jpa.version>
 
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
         <hibernate.ehcache.version>4.2.0.Final</hibernate.ehcache.version>
@@ -653,7 +653,7 @@
 
         <ehcache.core.version>2.6.5</ehcache.core.version>
 
-        <shiro.version>1.2.0</shiro.version>
+        <shiro.version>1.2.1</shiro.version>
         <quartz.version>2.1.7</quartz.version>
 
         <slf4j.version>1.7.3</slf4j.version>

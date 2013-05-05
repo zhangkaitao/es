@@ -6,9 +6,8 @@
 package com.sishuok.es.sys.auth.repository;
 
 import com.google.common.collect.Sets;
-import com.sishuok.es.common.repository.BaseRepositoryImpl;
-import com.sishuok.es.sys.auth.entity.Auth;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,10 @@ import java.util.Set;
  * <p>Date: 13-5-2 下午3:31
  * <p>Version: 1.0
  */
-public class AuthRepositoryImpl extends BaseRepositoryImpl<Auth, Long> {
+public class AuthRepositoryImpl {
+
+    @PersistenceContext
+    private EntityManager em;
 
 
     public Set<Long> findRoleIds(Long userId, Set<Long> groupIds, Set<Long> organizationIds, Set<Long> jobIds, Set<Long[]> organizationJobIds) {
@@ -54,7 +56,7 @@ public class AuthRepositoryImpl extends BaseRepositoryImpl<Auth, Long> {
             }
         }
 
-        Query q = entityManager.createQuery(hql.toString());
+        Query q = em.createQuery(hql.toString());
 
         q.setParameter("userId", userId);
 

@@ -8,8 +8,6 @@ package com.sishuok.es.conf.icon.web.controller;
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
-import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.validate.ValidateResponse;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,7 +29,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -49,10 +45,13 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     @Value("${icon.css.file.src}")
     private String iconClassFile;
 
-    @Autowired
-    public IconController(IconService iconService) {
-        super(iconService);
+    public IconController() {
         setListAlsoSetCommonData(true);
+    }
+
+    @Autowired
+    public void setIconService(IconService iconService) {
+        setBaseService(iconService);
         this.iconService = iconService;
     }
 
@@ -209,10 +208,10 @@ public class IconController extends BaseCRUDController<Icon, Long> {
 
         List<String> cssList = Lists.newArrayList();
 
-        Searchable searchable = SearchableBuilder.newInstance().buildSearchable();
-        searchable.addSearchFilter("type_in", new IconType[] {IconType.upload_file, IconType.css_sprite});
+        Searchable searchable = Searchable.newSearchable()
+                .addSearchFilter("type_in", new IconType[]{IconType.upload_file, IconType.css_sprite});
 
-        List<Icon> iconList = iconService.findAllByNoPageNoSort(searchable);
+        List<Icon> iconList = iconService.findAllWithNoPageNoSort(searchable);
 
         for(Icon icon : iconList) {
 

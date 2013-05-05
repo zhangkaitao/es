@@ -43,12 +43,10 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     private PermissionService permissionService;
 
     @Autowired
-    public RoleController(RoleService roleService) {
-        super(roleService);
+    public void setRoleService(RoleService roleService) {
+        setBaseService(roleService);
         this.roleService = roleService;
     }
-
-
 
     @Override
     protected void setCommonData(Model model) {

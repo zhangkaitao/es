@@ -37,15 +37,17 @@ import java.util.List;
 @RequestMapping(value = "/showcase/parentchild/parent")
 public class ParentController extends BaseCRUDController<Parent, Long> {
 
-    @Autowired
     private ParentService parentService;
-    @Autowired
+
     private ChildService childService;
 
-    @Autowired
-    protected ParentController(ParentService parentService) {
-        super(parentService);
+    protected ParentController() {
         setListAlsoSetCommonData(true);
+    }
+
+    @Autowired
+    public void setParentService(ParentService parentService) {
+        setBaseService(parentService);
         this.parentService = parentService;
     }
 

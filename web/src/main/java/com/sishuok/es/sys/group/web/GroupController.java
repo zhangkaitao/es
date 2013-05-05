@@ -42,10 +42,13 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     private GroupRelationService groupRelationService;
 
 
-    @Autowired
-    public GroupController(GroupService groupService) {
-        super(groupService);
+    public GroupController() {
         setListAlsoSetCommonData(true);
+    }
+
+    @Autowired
+    public void setGroupService(GroupService groupService) {
+        setBaseService(groupService);
         this.groupService = groupService;
     }
 

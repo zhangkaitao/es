@@ -31,14 +31,14 @@ import javax.validation.Valid;
 @RequestMapping(value = "/showcase/product/product")
 public class ProductController extends BaseCRUDController<Product, Long> {
 
-    @Autowired
-    private ProductService categoryService;
+    private ProductService productService;
 
     @Autowired
-    public ProductController(ProductService categoryService) {
-        super(categoryService);
-        this.categoryService = categoryService;
+    public void setProductService(ProductService productService) {
+        setBaseService(productService);
+        this.productService = productService;
     }
+
 
     @Override
     protected void setCommonData(Model model) {

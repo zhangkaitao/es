@@ -7,7 +7,7 @@ package com.sishuok.es.common.plugin.serivce;
 
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.entity.search.builder.SearchableBuilder;
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Movable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.service.BaseService;
@@ -16,14 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -234,13 +229,8 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
     }
 
     private Integer findNextWeight() {
-        Page<M> page = baseRepository.findAll(new Specification<M>() {
-            @Override
-            public Predicate toPredicate(Root<M> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                query.orderBy(cb.desc(root.get("weight")));
-                return query.getRestriction();
-            }
-        }, new PageRequest(0, 1));
+        Searchable searchable = Searchable.newSearchable().setPage(0, 1).addSort(Sort.Direction.DESC, "weight");
+        Page<M> page = findAll(searchable);
 
         if(!page.hasContent()) {
             return stepLength;
@@ -257,7 +247,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         Map<String, Object> searchParams = Maps.newHashMap();
         searchParams.put("weight_lt", weight);
         Sort sort = new Sort(Sort.Direction.DESC, "weight");
-        Page<M> page = findAll(SearchableBuilder.newInstance(searchParams).setSort(sort).setPage(pageable).buildSearchable());
+        Page<M> page = findAll(Searchable.newSearchable(searchParams).addSort(sort).setPage(pageable));
 
         if(page.hasContent()) {
             return page.getContent().get(0);
@@ -271,7 +261,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         Map<String, Object> searchParams = Maps.newHashMap();
         searchParams.put("weight_gt", weight);
         Sort sort = new Sort(Sort.Direction.ASC, "weight");
-        Page<M> page = findAll(SearchableBuilder.newInstance(searchParams).setSort(sort).setPage(pageable).buildSearchable());
+        Page<M> page = findAll(Searchable.newSearchable(searchParams).addSort(sort).setPage(pageable));
 
         if (page.hasContent()) {
             return page.getContent().get(0);
@@ -284,7 +274,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         Map<String, Object> searchParams = Maps.newHashMap();
         searchParams.put("weight_gte", minWeight);
         searchParams.put("weight_lte", maxWeight);
-        return count(SearchableBuilder.newInstance(searchParams).buildSearchable());
+        return count(Searchable.newSearchable(searchParams));
     }
 
     //@Query(value = "from Move m where m.weight>=?1 and m.weight <= ?2 order by m.weight asc")
@@ -293,8 +283,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         searchParams.put("weight_gte", minWeight);
         searchParams.put("weight_lte", maxWeight);
 
-        Sort sort = new Sort(Sort.Direction.ASC, "weight");
-        return findAllBySort(SearchableBuilder.newInstance(searchParams).setSort(sort).buildSearchable());
+        return findAllWithSort(Searchable.newSearchable(searchParams).addSort(Sort.Direction.ASC, "weight"));
     }
 
 
@@ -305,7 +294,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         searchParams.put("weight_lte", maxWeight);
 
         Sort sort = new Sort(Sort.Direction.DESC, "weight");
-        return findAllBySort(SearchableBuilder.newInstance(searchParams).setSort(sort).buildSearchable());
+        return findAllWithSort(Searchable.newSearchable(searchParams).addSort(sort));
     }
 
 
