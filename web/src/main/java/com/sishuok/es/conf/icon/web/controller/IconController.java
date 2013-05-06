@@ -206,7 +206,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         List<String> cssList = Lists.newArrayList();
 
         Searchable searchable = Searchable.newSearchable()
-                .addSearchFilter("type_in", new IconType[]{IconType.upload_file, IconType.css_sprite});
+                .addSearchParam("type_in", new IconType[]{IconType.upload_file, IconType.css_sprite});
 
         List<Icon> iconList = iconService.findAllWithNoPageNoSort(searchable);
 

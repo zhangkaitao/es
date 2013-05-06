@@ -63,7 +63,7 @@ public class RepositoryHelper {
      * @param searchCallback 查询回调  自定义设置查询条件和赋值
      * @return
      */
-    public static <M> List<M> find(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+    public static <M> List<M> findAll(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
 
         assertConverted(searchable);
 
@@ -141,7 +141,7 @@ public class RepositoryHelper {
 
     /**
      * <p>根据ql和按照索引顺序的params执行ql，pageable存储分页信息 null表示不分页<br/>
-     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testFindAll()}
      * @param ql
      * @param pageable null表示不分页
      * @param params
@@ -162,7 +162,7 @@ public class RepositoryHelper {
 
     /**
      * <p>根据ql和按照索引顺序的params执行ql，sort存储排序信息 null表示不排序<br/>
-     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindAll()}
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testFindAll()}
      * @param ql
      * @param sort null表示不排序
      * @param params
@@ -179,23 +179,8 @@ public class RepositoryHelper {
 
 
     /**
-     * <p>根据ql和按照索引顺序的params执行ql统计<br/>
-     * 具体使用请参考测试用例：com.sishuok.es.common.repository.UserRepositoryImplIT#testCountAll()
-     * @param ql
-     * @param params
-     * @return
-     */
-    public static long countAll(final String ql, final Object... params) {
-
-        Query query = entityManager.createQuery(ql);
-        setParameters(query, params);
-
-        return (Long)query.getSingleResult();
-    }
-
-    /**
      * <p>根据ql和按照索引顺序的params查询一个实体<br/>
-     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testFindOne()}
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testFindOne()}
      * @param ql
      * @param params
      * @param <M>
@@ -211,9 +196,25 @@ public class RepositoryHelper {
         return null;
     }
 
+
+    /**
+     * <p>根据ql和按照索引顺序的params执行ql统计<br/>
+     * 具体使用请参考测试用例：com.sishuok.es.common.repository.UserRepository2ImplIT#testCountAll()
+     * @param ql
+     * @param params
+     * @return
+     */
+    public static long count(final String ql, final Object... params) {
+
+        Query query = entityManager.createQuery(ql);
+        setParameters(query, params);
+
+        return (Long)query.getSingleResult();
+    }
+
     /**
      * <p>执行批处理语句.如 之间insert, update, delete 等.<br/>
-     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepositoryImplIT#testBatchUpdate()}
+     * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testBatchUpdate()}
      * @param ql
      * @param params
      * @return

@@ -23,8 +23,8 @@ public class UserSearchCallback extends DefaultSearchCallback {
     public void prepareQL(StringBuilder ql, Searchable search) {
         super.prepareQL(ql, search);
 
-        boolean hasOrganization = search.containsSearchProperty("organization");
-        boolean hasJob = search.containsSearchProperty("job");
+        boolean hasOrganization = search.containsSearchKey("organization");
+        boolean hasJob = search.containsSearchKey("job");
         if(hasOrganization || hasJob) {
             ql.append(" and exists(select 1 from UserOrganizationJob oj");
             if(hasOrganization) {
@@ -53,13 +53,13 @@ public class UserSearchCallback extends DefaultSearchCallback {
     public void setValues(Query query, Searchable search) {
         super.setValues(query, search);
 
-        if(search.containsSearchProperty("organization")) {
+        if(search.containsSearchKey("organization")) {
             Organization organization = (Organization) search.getValue("organization");
             query.setParameter("organizationId", organization.getId());
             query.setParameter("organizationParentIds", organization.makeSelfAsNewParentIds() + "%");
         }
 
-        if(search.containsSearchProperty("job")) {
+        if(search.containsSearchKey("job")) {
             Job job = (Job) search.getValue("job");
             query.setParameter("jobId", job.getId());
             query.setParameter("jobParentIds", job.makeSelfAsNewParentIds() + "%");

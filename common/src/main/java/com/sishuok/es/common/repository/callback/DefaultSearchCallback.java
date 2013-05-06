@@ -128,11 +128,10 @@ public class DefaultSearchCallback implements SearchCallback {
     }
 
     public void prepareOrder(StringBuilder ql, Searchable search) {
-        String alias = "o";
         if(search.hashSort()) {
             ql.append(" order by ");
             for (Sort.Order order : search.getSort()) {
-                ql.append(String.format("%s%s %s, ", alias + ".", order.getProperty(), order.getDirection().name().toLowerCase()));
+                ql.append(String.format("%s %s, ", order.getProperty(), order.getDirection().name().toLowerCase()));
             }
 
             ql.delete(ql.length() - 2, ql.length());

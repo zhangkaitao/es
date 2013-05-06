@@ -15,7 +15,6 @@ import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
-import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import com.sishuok.es.sys.user.entity.UserStatus;
@@ -31,7 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -84,10 +82,10 @@ public class UserController extends BaseCRUDController<User, Long> {
         setCommonData(model);
 
         if(organization != null && !organization.isRoot()) {
-            searchable.addSearchFilter("organization", organization);
+            searchable.addSearchParam("organization", organization);
         }
         if(job != null && !job.isRoot()) {
-            searchable.addSearchFilter("job", job);
+            searchable.addSearchParam("job", job);
         }
 
         return super.list(searchable, model);

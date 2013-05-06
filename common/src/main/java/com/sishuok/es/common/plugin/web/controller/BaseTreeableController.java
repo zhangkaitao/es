@@ -72,7 +72,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         List<M> models = null;
 
         if(StringUtils.hasLength(searchName)) {
-            searchable.addSearchFilter("name_like", searchName);
+            searchable.addSearchParam("name_like", searchName);
             models = treeableService.findAllByName(searchable, null);
             if(!async) { //非异步 查自己和子子孙孙
                 searchable.removeSearchFilter("name_like");
@@ -109,9 +109,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
 
         if(current != null) {
-            searchable.addOrSearchFilters(Lists.newArrayList(
+            searchable.addOrSearchFilters(
                     SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, current.makeSelfAsNewParentIds()),
-                    SearchFilter.newSearchFilter("id", SearchOperator.eq, current.getId())
+                    Lists.newArrayList(SearchFilter.newSearchFilter("id", SearchOperator.eq, current.getId())
             ));
         }
 
@@ -333,7 +333,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         List<M> models = null;
 
         if(StringUtils.hasLength(searchName)) {//按name模糊查
-            searchable.addSearchFilter("name_like", searchName);
+            searchable.addSearchParam("name_like", searchName);
             models = treeableService.findAllByName(searchable, excludeM);
             if(!async || asyncLoadAll) {//非异步模式 查自己及子子孙孙 但排除
                 searchable.removeSearchFilter("name_like");

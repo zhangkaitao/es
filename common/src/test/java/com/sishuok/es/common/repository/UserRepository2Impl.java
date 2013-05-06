@@ -20,7 +20,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- * <p>跟以前普通DAO实现一样，无需加@Repository，系统会自动扫描，实现格式：</p>
+ * <p>跟以前普通DAO实现一样，无需加@Repository，系统会自动扫描，并加到相关的Repository接口中，实现格式：</p>
  * <pre>
  *     JpaRepository接口+<jpa:repositories repository-impl-postfix="Impl"></jpa:repositories>中的repository-impl-postfix
  *     repository-impl-postfix默认为Impl
@@ -65,7 +65,7 @@ public class UserRepository2Impl {
      */
     public Page<User> findAllByDefault(final Searchable searchable) {
         long total = countAllByDefault(searchable);
-        List<User> contentList = RepositoryHelper.find(findAllQL, searchable, SearchCallback.DEFAULT);
+        List<User> contentList = RepositoryHelper.findAll(findAllQL, searchable, SearchCallback.DEFAULT);
         return new PageImpl(contentList, searchable.getPage(), total);
     }
 
@@ -84,13 +84,13 @@ public class UserRepository2Impl {
     private SearchCallback customSearchCallback = new DefaultSearchCallback() {
         @Override
         public void prepareQL(StringBuilder hql, Searchable search) {
-            if(search.containsSearchProperty("realname_like")) {
+            if(search.containsSearchKey("realname_like")) {
                 hql.append(" and exists(select 1 from BaseInfo bi where o = bi.user and bi.realname like :realname )");
             }
         }
         @Override
         public void setValues(Query query, Searchable search) {
-            if(search.containsSearchProperty("realname_like")) {
+            if(search.containsSearchKey("realname_like")) {
                 query.setParameter("realname", "%" + search.getValue("realname") + "%");
             }
         }
@@ -114,7 +114,7 @@ public class UserRepository2Impl {
      */
     public Page<User> findAllByCustom(final Searchable searchable) {
         long total = countAllByCustom(searchable);
-        List<User> contentList = RepositoryHelper.find(findAllQL, searchable, customSearchCallback);
+        List<User> contentList = RepositoryHelper.findAll(findAllQL, searchable, customSearchCallback);
         return new PageImpl(contentList, searchable.getPage(), total);
     }
 

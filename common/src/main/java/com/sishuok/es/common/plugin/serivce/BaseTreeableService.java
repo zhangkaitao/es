@@ -13,7 +13,6 @@ import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Treeable;
-import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
@@ -223,13 +222,12 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             return Collections.EMPTY_LIST;
         }
 
-        List<SearchFilter> orSearchFilters = Lists.newArrayList();
-        orSearchFilters.add(SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds()));
+        SearchFilter first = SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
+        List<SearchFilter> others = Lists.newArrayList();
         for(int i = 1; i < parents.size(); i++) {
-            orSearchFilters.add(SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds()));
+            others.add(SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds()));
         }
-
-        searchable.addOrSearchFilters(orSearchFilters);
+        searchable.addOrSearchFilters(first, others);
 
         List<M> children = findAllWithSort(searchable);
         return children;
@@ -246,7 +244,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @return
      */
     public List<M> findRootAndChild(Searchable searchable) {
-        searchable.addSearchFilter("parentId_eq", 0);
+        searchable.addSearchParam("parentId_eq", 0);
         List<M> models = findAllWithSort(searchable);
 
         if(models.size() == 0) {
@@ -257,7 +255,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             ids.add(models.get(i).getId());
         }
         searchable.removeSearchFilter("parentId_eq");
-        searchable.addSearchFilter("parentId_in", ids);
+        searchable.addSearchParam("parentId_in", ids);
 
         models.addAll(findAllWithSort(searchable));
 

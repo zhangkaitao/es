@@ -5,6 +5,9 @@
  */
 package com.sishuok.es.common.entity.search;
 
+import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
+import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
+import com.sishuok.es.common.entity.search.exception.SearchException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,7 +37,7 @@ public abstract class Searchable {
      * 创建一个新的查询
      * @return
      */
-    public static Searchable newSearchable(final Map<String, Object> searchParams) {
+    public static Searchable newSearchable(final Map<String, Object> searchParams) throws SearchException {
         return new SearchRequest(searchParams);
     }
 
@@ -42,7 +45,8 @@ public abstract class Searchable {
      * 创建一个新的查询
      * @return
      */
-    public static Searchable newSearchable(final Map<String, Object> searchParams, final Pageable page) {
+    public static Searchable newSearchable(final Map<String, Object> searchParams, final Pageable page)
+            throws SearchException {
         return new SearchRequest(searchParams, page);
     }
 
@@ -50,7 +54,8 @@ public abstract class Searchable {
      * 创建一个新的查询
      * @return
      */
-    public static Searchable newSearchable(final Map<String, Object> searchParams, final Sort sort) {
+    public static Searchable newSearchable(final Map<String, Object> searchParams, final Sort sort)
+            throws SearchException {
         return new SearchRequest(searchParams, sort);
     }
 
@@ -64,19 +69,20 @@ public abstract class Searchable {
 
 
     /**
-     * 添加查询参数
+     * 添加过滤条件 如key="parent.id_eq" value = 1
+     * 如果添加时不加操作符 默认是custom 即如key=parent 实际key是parent_custom
      * @param key  如 name_like
      * @param value  如果是in查询 多个值之间","分隔
      * @return
      */
-    public abstract Searchable addSearchParam(final String key, final Object value);
+    public abstract Searchable addSearchParam(final String key, final Object value) throws SearchException;
 
     /**
      * 添加一组查询参数
      * @param searchParams
      * @return
      */
-    public abstract Searchable addAllSearchParams(final Map<String, Object> searchParams);
+    public abstract Searchable addSearchParams(final Map<String, Object> searchParams) throws SearchException;
 
     /**
      * 添加过滤条件
@@ -84,13 +90,8 @@ public abstract class Searchable {
      * @param operator 操作运算符
      * @param value 值
      */
-    public abstract Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value);
-
-    /**
-     * 添加过滤条件 如key="parent.id_eq" value = 1
-     * @param key
-     */
-    public abstract Searchable addSearchFilter(final String key, final Object value);
+    public abstract Searchable addSearchFilter(
+            final String searchProperty, final SearchOperator operator, final Object value) throws SearchException;
 
     public abstract Searchable addSearchFilter(final SearchFilter searchFilter);
 
@@ -103,10 +104,11 @@ public abstract class Searchable {
 
     /**
      * 添加多个or连接的过滤条件
-     * @param searchFilters
+     * @param first 第一个
+     * @param others 其他
      * @return
      */
-    public abstract Searchable addOrSearchFilters(Collection<SearchFilter> searchFilters);
+    public abstract Searchable addOrSearchFilters(SearchFilter first, Collection<SearchFilter> others);
 
     /**
      * 移除指定key的过滤条件
@@ -120,7 +122,8 @@ public abstract class Searchable {
      * @param entityClass
      * @param <T>
      */
-    public abstract <T> Searchable convert(final Class<T> entityClass);
+    public abstract <T> Searchable convert(final Class<T> entityClass)
+            throws InvalidSearchValueException, InvalidSearchPropertyException;
 
     /**
      * 标识为已经转换过了 避免多次转换
@@ -193,18 +196,20 @@ public abstract class Searchable {
 
 
     /**
-     * 是否包含查询属性
-      * @param searchProperty
+     * 是否包含查询键  如 name_like
+     * 不能获取or的
+      * @param key
      * @return
      */
-    public abstract boolean containsSearchProperty(final String searchProperty);
+    public abstract boolean containsSearchKey(final String key);
 
     /**
      * 获取查询属性对应的值
-     * @param searchProperty
+     * 不能获取or的
+     * @param key
      * @return
      */
-    public abstract <T> T getValue(final String searchProperty);
+    public abstract <T> T getValue(final String key);
 
 
 

@@ -382,7 +382,7 @@
 					}
 
 					// get the position of the first error, there should be at least one, no need to check this
-					//var destination = form.find(".formError:not('.greenPopup'):first").offset().top;
+					//var destination = form.findAll(".formError:not('.greenPopup'):first").offset().top;
 					if (options.isOverflown) {
 						var overflowDIV = $(options.overflownDIV);
 						if(!overflowDIV.length) return false;
@@ -835,7 +835,7 @@
 				return custom_message;
 			var id = '#' + field.attr("id");
 			// If we have custom messages for the element's id, get the message for the rule from the id.
-			// Otherwise, if we have custom messages for the element's classes, use the first class message we find instead.
+			// Otherwise, if we have custom messages for the element's classes, use the first class message we findAll instead.
 			if (typeof options.custom_error_messages[id] != "undefined" &&
 				typeof options.custom_error_messages[id][rule] != "undefined" ) {
 						  custom_message = options.custom_error_messages[id][rule]['message'];

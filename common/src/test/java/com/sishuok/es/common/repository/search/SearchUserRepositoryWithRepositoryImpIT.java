@@ -14,9 +14,8 @@ import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
-import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
+import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
 import com.sishuok.es.common.repository.UserRepository;
-import com.sishuok.es.common.repository.UserRepository2;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,7 +258,7 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
      * @throws ParseException
      * @see com.sishuok.es.common.entity.User @SearchPropertyMappings注解定义的自定义查询条件
      */
-    @Test(expected = InvlidSpecificationSearchOperatorException.class)
+    @Test(expected = InvlidSearchOperatorException.class)
     public void testCustomSearchWithInvlidSpecificationSearchOperator() throws ParseException {
         int count = 15;
         String dateStr = "2012-01-15 16:59:00";
@@ -471,8 +470,8 @@ public class SearchUserRepositoryWithRepositoryImpIT extends BaseUserIT {
         }
         Searchable search = Searchable.newSearchable();
         search.addOrSearchFilters(
+                SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.gt, 10),
                 Lists.newArrayList(
-                        SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.gt, 10),
                         SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.eq, 12)
                 )
         );

@@ -692,7 +692,7 @@
             //,	paneSelector:			""			// MUST be pane-specific - jQuery selector for pane
             ,	contentSelector:		".ui-layout-content" // INNER div/element to auto-size so only it scrolls, not the entire pane!
             ,	contentIgnoreSelector:	".ui-layout-ignore"	// element(s) to 'ignore' when measuring 'content'
-            ,	findNestedContent:		false		// true = $P.find(contentSelector), false = $P.children(contentSelector)
+            ,	findNestedContent:		false		// true = $P.findAll(contentSelector), false = $P.children(contentSelector)
             //	GENERIC ROOT-CLASSES - for auto-generated classNames
             ,	paneClass:				"ui-layout-pane"	// Layout Pane
             ,	resizerClass:			"ui-layout-resizer"	// Resizer Bar
@@ -769,7 +769,7 @@
              */
             //	CHILD/NESTED LAYOUTS
             ,	children:				null		// Layout-options for nested/child layout - even {} is valid as options
-            ,	containerSelector:		''			// if child is NOT 'directly nested', a selector to find it/them (can have more than one child layout!)
+            ,	containerSelector:		''			// if child is NOT 'directly nested', a selector to findAll it/them (can have more than one child layout!)
             ,	initChildren:			true		// true = child layout will be created as soon as _this_ layout completes initialization
             ,	destroyChildren:		true		// true = destroy child-layout if this pane is destroyed
             ,	resizeChildren:			true		// true = trigger child-layout.resizeAll() when this pane is resized
@@ -1808,7 +1808,7 @@
                 sC.ref		= (o.name ? o.name +' layout / ' : '') + tag + (id ? "#"+id : cls ? '.['+cls+']' : ''); // used in messages
                 sC.isBody	= (tag === "BODY");
 
-                // try to find a parent-layout
+                // try to findAll a parent-layout
                 if (!isChild && !sC.isBody) {
                     $parent = $N.closest("."+ $.layout.defaults.panes.paneClass);
                     parent	= $parent.data("parentLayout");
@@ -2302,7 +2302,7 @@
                 }
                 //	states common to ALL panes
                 s.tagName	= $P[0].tagName;
-                s.edge		= pane;		// useful if pane is (or about to be) 'swapped' - easy find out where it is (or is going)
+                s.edge		= pane;		// useful if pane is (or about to be) 'swapped' - easy findAll out where it is (or is going)
                 s.noRoom	= false;	// true = pane 'automatically' hidden due to insufficient room - will unhide automatically
                 s.isVisible	= true;		// false = pane is invisible - closed OR hidden - simplify logic
 

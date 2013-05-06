@@ -33,9 +33,6 @@ public class SpecificationUserRepositoryIT extends BaseUserIT {
     @Autowired
     private UserRepository userRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     private User user;
 
     @Before
@@ -60,8 +57,7 @@ public class SpecificationUserRepositoryIT extends BaseUserIT {
             }
         };
 
-        userRepository.flush();
-        entityManager.flush();
+        clear();
 
         User dbUser = userRepository.findOne(spec);
         assertNotNull(dbUser);

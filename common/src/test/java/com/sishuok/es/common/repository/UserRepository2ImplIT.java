@@ -31,12 +31,10 @@ import static org.junit.Assert.assertNotNull;
  * <p>Version: 1.0
  */
 
-public class UserRepositoryImplIT extends BaseUserIT {
+public class UserRepository2ImplIT extends BaseUserIT {
 
     @Autowired
-    private UserRepository2Impl userRepositoryImpl;
-    @Autowired
-    private UserRepository userRepository;
+    private UserRepository2 userRepository2;
 
     private User user;
 
@@ -56,24 +54,22 @@ public class UserRepositoryImplIT extends BaseUserIT {
 
     @Test
     public void testFindBaseInfoByUserId() {
-        userRepository.save(user);
+        userRepository2.save(user);
 
-        userRepository.flush();
-        entityManager.clear();
+        clear();
 
-        BaseInfo baseInfo = userRepositoryImpl.findBaseInfoByUserId(user.getId());
+        BaseInfo baseInfo = userRepository2.findBaseInfoByUserId(user.getId());
         assertNotNull(baseInfo);
     }
 
 
     @Test
     public void findAllSchoolTypeByUserId() {
-        userRepository.save(user);
+        userRepository2.save(user);
 
-        userRepository.flush();
-        entityManager.clear();
+        clear();
 
-        List<SchoolInfo> schoolInfoList = userRepositoryImpl.findAllSchoolTypeByUserId(user.getId());
+        List<SchoolInfo> schoolInfoList = userRepository2.findAllSchoolTypeByUserId(user.getId());
         assertEquals(user.getSchoolInfoSet().size(), schoolInfoList.size());
     }
 
@@ -87,7 +83,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname(realnamePrefix + i);
-            userRepository.save(user);
+            userRepository2.save(user);
             ids.add(user.getId());
             birthdayList.add(user.getBaseInfo().getBirthday());
         }
@@ -105,13 +101,13 @@ public class UserRepositoryImplIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname(realnamePrefix + i);
-            userRepository.save(user);
+            userRepository2.save(user);
             ids.add(user.getId());
             birthdayList.add(user.getBaseInfo().getBirthday());
         }
 
         String ql = "select count(o) from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, RepositoryHelper.countAll(ql, ids, realnamePrefix + "%", birthdayList));
+        assertEquals(count, RepositoryHelper.count(ql, ids, realnamePrefix + "%", birthdayList));
     }
 
     @Test
@@ -122,7 +118,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname(realnamePrefix + i);
-            lastUser = userRepository.save(user);
+            lastUser = userRepository2.save(user);
         }
         String ql = "select u from User u where u=?1 and u.baseInfo.realname like ?2";
         assertEquals(lastUser, RepositoryHelper.findOne(ql, lastUser, realnamePrefix + "%"));
@@ -136,7 +132,7 @@ public class UserRepositoryImplIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setRealname(realname);
-            lastUser = userRepository.save(user);
+            lastUser = userRepository2.save(user);
         }
 
         String ql = "update BaseInfo set realname=?1";

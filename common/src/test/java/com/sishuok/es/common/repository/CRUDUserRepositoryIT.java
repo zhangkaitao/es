@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  * <p>Version: 1.0
  */
 
-public class SimpleUserRepositoryIT extends BaseUserIT {
+public class CRUDUserRepositoryIT extends BaseUserIT {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -55,15 +55,13 @@ public class SimpleUserRepositoryIT extends BaseUserIT {
     @Test
     public void testUpdate() {
         User dbUser = userRepository.save(user);
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         String newUsername = "zhang$$$$" + System.currentTimeMillis();
         dbUser.setUsername(newUsername);
         userRepository.save(dbUser);
 
-        entityManager.flush();
-        entityManager.clear();
+        clear();
 
         assertEquals(newUsername, userRepository.findOne(dbUser.getId()).getUsername());
     }

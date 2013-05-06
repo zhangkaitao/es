@@ -62,7 +62,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     @PageableDefaults(sort = "id=desc")
     public String list(@PathVariable("type") GroupType type, Searchable searchable, Model model) {
 
-        searchable.addSearchFilter("type_eq", type);
+        searchable.addSearchParam("type_eq", type);
 
         return list(searchable, model);
     }
@@ -146,7 +146,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     @PageableDefaults(sort = "id=desc")
     public String listGroupRelation(@PathVariable("group") Group group, Searchable searchable, Model model) {
 
-        searchable.addSearchFilter("groupId_eq", group.getId());
+        searchable.addSearchParam("groupId_eq", group.getId());
 
         Page page = null;
         if(group.getType() == GroupType.user) {

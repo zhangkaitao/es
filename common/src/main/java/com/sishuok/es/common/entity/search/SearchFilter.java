@@ -6,7 +6,7 @@
 package com.sishuok.es.common.entity.search;
 
 import com.google.common.collect.Lists;
-import com.sishuok.es.common.entity.search.exception.InvlidSpecificationSearchOperatorException;
+import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.util.CollectionUtils;
@@ -38,7 +38,7 @@ public final class SearchFilter {
      * @param value
      * @return
      */
-    public static SearchFilter newSearchFilter(final String key, final Object value) {
+    public static SearchFilter newSearchFilter(final String key, final Object value) throws SearchException {
 
         Assert.notNull(key, "SearchFilter key must not null");
 
@@ -57,7 +57,7 @@ public final class SearchFilter {
             try {
                 operator = SearchOperator.valueOf(searchs[1]);
             } catch (IllegalArgumentException e) {
-                throw new InvlidSpecificationSearchOperatorException(searchProperty, searchs[1]);
+                throw new InvlidSearchOperatorException(searchProperty, searchs[1]);
             }
         }
 
@@ -133,7 +133,7 @@ public final class SearchFilter {
      * 获取 操作符
      * @return
      */
-    public SearchOperator getOperator() throws InvlidSpecificationSearchOperatorException {
+    public SearchOperator getOperator() throws InvlidSearchOperatorException {
         return operator;
     }
 

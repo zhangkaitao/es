@@ -419,7 +419,7 @@ $.widget = function( name, base, prototype ) {
 		widgetFullName: fullName
 	});
 
-	// If this widget is being redefined then we need to find all widgets that
+	// If this widget is being redefined then we need to findAll all widgets that
 	// are inheriting from it and redefine all of them so that they inherit from
 	// the new version of this widget. We're essentially trying to replace one
 	// level in the prototype chain.
@@ -2699,7 +2699,7 @@ $.ui.ddmanager = {
 			}
 
 			if (this.options.greedy) {
-				// find droppable parents with same scope
+				// findAll droppable parents with same scope
 				scope = this.options.scope;
 				parent = this.element.parents(":data(ui-droppable)").filter(function () {
 					return $.data(this, "ui-droppable").options.scope === scope;
@@ -4795,7 +4795,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 		} else {
 
-			//When entering a new container, we will find the item with the least distance and append our item near it
+			//When entering a new container, we will findAll the item with the least distance and append our item near it
 			dist = 10000;
 			itemWithLeastDistance = null;
 			floating = innermostContainer.floating || isFloating(this.currentItem);
@@ -7452,7 +7452,7 @@ $.extend(Datepicker.prototype, {
 	 */
 	_showDatepicker: function(input) {
 		input = input.target || input;
-		if (input.nodeName.toLowerCase() !== "input") { // find from button/image trigger
+		if (input.nodeName.toLowerCase() !== "input") { // findAll from button/image trigger
 			input = $("input", input.parentNode)[0];
 		}
 
@@ -8730,7 +8730,7 @@ $.extend(Datepicker.prototype, {
 /*
  * Bind hover events for datepicker elements.
  * Done via delegate so the binding only occurs once in the lifetime of the parent div.
- * Global instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
+ * Global instActive, set by _updateDatepicker allows the handlers to findAll their way back to the active picker.
  */
 function bindHover(dpDiv) {
 	var selector = "button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";
@@ -11309,7 +11309,7 @@ $.widget( "ui.spinner", {
 			options = this.options;
 
 		// make sure we're at a valid step
-		// - find out where we are relative to the base (min or 0)
+		// - findAll out where we are relative to the base (min or 0)
 		base = options.min !== null ? options.min : 0;
 		aboveMin = value - base;
 		// - round to the nearest step
@@ -11902,7 +11902,7 @@ $.widget( "ui.tabs", {
 			.attr( "role", "tabpanel" );
 	},
 
-	// allow overriding how to find the list for rare usage scenarios (#7715)
+	// allow overriding how to findAll the list for rare usage scenarios (#7715)
 	_getList: function() {
 		return this.element.find( "ol,ul" ).eq( 0 );
 	},

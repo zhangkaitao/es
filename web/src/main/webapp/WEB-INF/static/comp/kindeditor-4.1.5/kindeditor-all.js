@@ -8177,7 +8177,7 @@ SWFUpload.prototype.loadFlash = function () {
 	targetElement = document.getElementById(this.settings.button_placeholder_id) || this.settings.button_placeholder;
 
 	if (targetElement == undefined) {
-		throw "Could not find the placeholder element: " + this.settings.button_placeholder_id;
+		throw "Could not findAll the placeholder element: " + this.settings.button_placeholder_id;
 	}
 
 	// Append the container and load the flash
@@ -8254,7 +8254,7 @@ SWFUpload.prototype.getMovieElement = function () {
 	}
 
 	if (this.movieElement === null) {
-		throw "Could not find Flash element";
+		throw "Could not findAll Flash element";
 	}
 
 	return this.movieElement;

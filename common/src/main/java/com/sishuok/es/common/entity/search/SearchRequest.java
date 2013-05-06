@@ -56,7 +56,7 @@ public final class SearchRequest extends Searchable {
      * @param searchParams
      * @see SearchRequest#SearchRequest(java.util.Map<java.lang.String,java.lang.Object>)
      */
-    public SearchRequest(final Map<String, Object> searchParams, final Sort sort) {
+    public SearchRequest(final Map<String, Object> searchParams, final Sort sort) throws SearchException{
         this(searchParams, null, sort);
     }
 
@@ -73,7 +73,9 @@ public final class SearchRequest extends Searchable {
      * @param page         分页
      * @param sort         排序
      */
-    public SearchRequest(final Map<String, Object> searchParams, final Pageable page, final Sort sort) {
+    public SearchRequest(final Map<String, Object> searchParams, final Pageable page, final Sort sort)
+            throws SearchException {
+
         toSearchFilters(searchParams);
 
         merge(sort, page);
@@ -94,16 +96,24 @@ public final class SearchRequest extends Searchable {
 
 
     @Override
-    public Searchable addSearchParam(final String key, final Object value) {
+    public Searchable addSearchParam(final String key, final Object value) throws SearchException {
         addSearchFilter(SearchFilter.newSearchFilter(key, value));
         return this;
     }
 
     @Override
-    public Searchable addAllSearchParams(Map<String, Object> searchParams) {
+    public Searchable addSearchParams(Map<String, Object> searchParams) throws SearchException  {
         toSearchFilters(searchParams);
         return this;
     }
+
+
+    @Override
+    public Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
+        SearchFilter searchFilter = SearchFilter.newSearchFilter(searchProperty, operator, value);
+        return addSearchFilter(searchFilter);
+    }
+
 
     @Override
     public Searchable addSearchFilters(Collection<SearchFilter> searchFilters) {
@@ -117,33 +127,17 @@ public final class SearchRequest extends Searchable {
     }
 
     @Override
-    public Searchable addOrSearchFilters(Collection<SearchFilter> searchFilters) {
-        if(CollectionUtils.isEmpty(searchFilters)) {
-            return this;
-        }
-        Iterator<SearchFilter> iter = searchFilters.iterator();
-        SearchFilter first = iter.next();
+    public Searchable addOrSearchFilters(SearchFilter first, Collection<SearchFilter> others) {
+
+        Iterator<SearchFilter> iter = others.iterator();
+
         while(iter.hasNext()) {
             first.or(iter.next());
         }
+
         addSearchFilter(first);
 
         return this;
-    }
-
-    @Override
-    public Searchable addSearchFilter(final String key, final Object value) {
-        Map<String, Object> map = Maps.newHashMap();
-        map.put(key, value);
-        toSearchFilters(map);
-        return this;
-    }
-
-
-    @Override
-    public Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
-        SearchFilter searchFilter = SearchFilter.newSearchFilter(searchProperty, operator, value);
-        return addSearchFilter(searchFilter);
     }
 
     @Override
@@ -165,35 +159,38 @@ public final class SearchRequest extends Searchable {
         if(key == null) {
             return this;
         }
-        Iterator<Map.Entry<String, SearchFilter>> entries = searchFilterMap.entrySet().iterator();
 
-        while(entries.hasNext()) {
-            Map.Entry<String, SearchFilter> entry = entries.next();
-            SearchFilter searchFilter = entry.getValue();
-            boolean hasFirstRemoved = false;
-            if(key.equals(entry.getKey())) {
-                entries.remove();
-                hasFirstRemoved = true;
+        SearchFilter searchFilter = searchFilterMap.remove(key);
+
+        if(searchFilter == null) {
+            searchFilter = searchFilterMap.remove(getCustomKey(key));
+        }
+
+        if(searchFilter == null) {
+            return this;
+        }
+
+        //如果移除的有or查询 则删除第一个 后续的跟上
+        if(searchFilter != null && searchFilter.hasOrSearchFilters()) {
+            List<SearchFilter> orSearchFilters = searchFilter.getOrFilters();
+            SearchFilter first = orSearchFilters.remove(1);//变成新的根
+            orSearchFilters.remove(0);//第一个移除即可
+            for(SearchFilter orSearchFilter : orSearchFilters) {
+                first.or(orSearchFilter);
             }
+            addSearchFilter(first);
+        }
 
-            //如果移除的有or查询 则删除第一个 后续的跟上
-            if(hasFirstRemoved && searchFilter.hasOrSearchFilters()) {
-                List<SearchFilter> orSearchFilters = searchFilter.getOrFilters();
-                orSearchFilters.remove(0);//第一个移除即可
-                SearchFilter first = orSearchFilters.remove(1);//变成新的根
-                for(SearchFilter orSearchFilter : orSearchFilters) {
-                    first.or(orSearchFilter);
-                }
-                addSearchFilter(first);
-            }
-
-            //考虑or的情况
-            if(!hasFirstRemoved && searchFilter.hasOrSearchFilters()) {
-                Iterator<SearchFilter> orIter = searchFilter.getOrFilters().iterator();
+        //考虑or的情况
+        for(SearchFilter obj : getSearchFilters()) {
+            if(obj.hasOrSearchFilters()) {
+                Iterator<SearchFilter> orIter = obj.getOrFilters().iterator();
 
                 if(orIter.hasNext()) {
                     SearchFilter orSearchFilter = orIter.next();
-                    if(key.equals(orSearchFilter.getKey())) {
+                    String orKey = orSearchFilter.getKey();
+                    if(key.equals(orKey)
+                            || (getCustomKey(key)).equals(orKey)) {
                         orIter.remove();
                     }
                 }
@@ -201,6 +198,10 @@ public final class SearchRequest extends Searchable {
         }
 
         return this;
+    }
+
+    private String getCustomKey(String key) {
+        return key + SearchFilter.separator + SearchOperator.custom;
     }
 
     @Override
@@ -297,17 +298,17 @@ public final class SearchRequest extends Searchable {
     }
 
     @Override
-    public boolean containsSearchProperty(String searchProperty) {
+    public boolean containsSearchKey(String key) {
         return
-                searchFilterMap.containsKey(searchProperty) ||
-                searchFilterMap.containsKey(searchProperty + SearchFilter.separator + SearchOperator.custom);
+                searchFilterMap.containsKey(key) ||
+                searchFilterMap.containsKey(getCustomKey(key));
     }
 
     @Override
-    public Object getValue(String searchProperty) {
-        SearchFilter searchFilter = searchFilterMap.get(searchProperty);
+    public Object getValue(String key) {
+        SearchFilter searchFilter = searchFilterMap.get(key);
         if(searchFilter == null) {
-            searchFilter = searchFilterMap.get(searchProperty + SearchFilter.separator + SearchOperator.custom);
+            searchFilter = searchFilterMap.get(getCustomKey(key));
         }
         if(searchFilter == null) {
             return null;
