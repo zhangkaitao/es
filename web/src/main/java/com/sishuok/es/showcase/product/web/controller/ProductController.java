@@ -36,6 +36,10 @@ public class ProductController extends BaseCRUDController<Product, Long> {
     @BaseComponent
     private ProductService productService;
 
+    public ProductController() {
+        setResourceIdentity("showcase:product");
+    }
+
     @Override
     protected void setCommonData(Model model) {
         model.addAttribute("booleanList", BooleanEnum.values());

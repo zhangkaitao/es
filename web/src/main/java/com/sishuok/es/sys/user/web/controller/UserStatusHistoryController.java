@@ -32,6 +32,7 @@ public class UserStatusHistoryController extends BaseCRUDController<UserStatusHi
 
     public UserStatusHistoryController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("sys:userStatusHistory");
     }
 
 

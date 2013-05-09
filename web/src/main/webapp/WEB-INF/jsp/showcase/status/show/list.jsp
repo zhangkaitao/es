@@ -5,19 +5,19 @@
 <div data-table="table" class="panel">
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty param['search.status_eq']}">class="active"</c:if>>
+        <li ${empty param['search.status_eq'] ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/show">
                 <i class="icon-table"></i>
                 所有数据列表
             </a>
         </li>
-        <li <c:if test="${param['search.status_eq'] eq 'show'}">class="active"</c:if>>
+        <li ${param['search.status_eq'] eq 'show' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/show?search.status_eq=show">
                 <i class="icon-table"></i>
                 显示的数据列表
             </a>
         </li>
-        <li <c:if test="${param['search.status_eq'] eq 'hide'}">class="active"</c:if>>
+        <li ${param['search.status_eq'] eq 'hide' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/show?search.status_eq=hide">
                 <i class="icon-table"></i>
                 隐藏的数据列表
@@ -31,19 +31,25 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="showcase:statusShow:create">
                 <a class="btn btn-create">
                     <span class="icon-file"></span>
                     新增
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:statusShow:update">
                 <a class="btn btn-update">
                     <span class="icon-edit"></span>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:statusShow:delete">
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
-
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:statusShow:audit">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-pencil"></i>
@@ -65,6 +71,7 @@
                         </li>
                     </ul>
                 </div>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

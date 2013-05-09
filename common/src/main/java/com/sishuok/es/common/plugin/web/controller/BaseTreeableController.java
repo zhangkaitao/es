@@ -17,6 +17,7 @@ import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.common.plugin.web.controller.entity.ZTree;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
+import com.sishuok.es.common.web.controller.permission.PermissionList;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -39,6 +40,19 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     private BaseTreeableService<M, ID> treeableService;
 
+    protected PermissionList permissionList = null;
+
+    /**
+     * 权限前缀：如sys:user
+     * 则生成的新增权限为 sys:user:create
+     */
+    public void setResourceIdentity(String resourceIdentity) {
+        if(!StringUtils.isEmpty(resourceIdentity)) {
+            permissionList = PermissionList.newPermissionList(resourceIdentity);
+        }
+    }
+
+
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
@@ -58,6 +72,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = {"", "main"}, method = RequestMethod.GET)
     public String main() {
+
+        if(permissionList != null) {
+            permissionList.assertHasViewPermission();
+        }
+
         return getViewPrefix() + "/main";
     }
 
@@ -68,6 +87,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @RequestParam(value = "searchName", required = false) String searchName,
             @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
             Searchable searchable, Model model) {
+
+        if(permissionList != null) {
+            permissionList.assertHasViewPermission();
+        }
 
         List<M> models = null;
 
@@ -107,6 +130,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @PathVariable("current") M current,
             Searchable searchable, Model model) {
 
+        if(permissionList != null) {
+            permissionList.assertHasViewPermission();
+        }
 
         if(current != null) {
             searchable.addOrSearchFilters(
@@ -142,6 +168,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String view(@PathVariable("id") M m, Model model) {
+        if(permissionList != null) {
+            permissionList.assertHasViewPermission();
+        }
+
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "查看");
@@ -150,6 +180,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String updateForm(@PathVariable("id") M m, Model model) {
+
+        if(permissionList != null) {
+            permissionList.assertHasUpdatePermission();
+        }
+
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "修改");
@@ -162,6 +197,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @ModelAttribute("m") M m,
             BindingResult result, RedirectAttributes redirectAttributes) {
 
+        if(permissionList != null) {
+            permissionList.assertHasUpdatePermission();
+        }
+
         if(result.hasErrors()) {
             return updateForm(m, model);
         }
@@ -173,6 +212,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
     public String deleteForm(@PathVariable("id") M m, Model model) {
+
+
+        if(permissionList != null) {
+            permissionList.assertHasDeletePermission();
+        }
+
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "删除");
@@ -183,6 +228,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     public String deleteSelfAndChildren(
             @RequestParam(value = Constants.BACK_URL) String backURL,
             @ModelAttribute("m") M m, RedirectAttributes redirectAttributes) {
+
+
+        if(permissionList != null) {
+            permissionList.assertHasDeletePermission();
+        }
 
         if(m.isRoot()) {
             redirectAttributes.addFlashAttribute(Constants.ERROR, "您删除的数据中包含根节点，根节点不能删除");
@@ -200,6 +250,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @RequestParam(value = "ids", required = false) ID[] ids,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
+
+
+        if(permissionList != null) {
+            permissionList.assertHasDeletePermission();
+        }
 
         //如果要求不严格 此处可以删除判断 前台已经判断过了
         Searchable searchable = Searchable.newSearchable().addSearchFilter("id", SearchOperator.in, ids);
@@ -219,6 +274,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.GET)
     public String appendChildForm(@PathVariable("parentId") M parent, Model model) {
+
+
+        if(permissionList != null) {
+            permissionList.assertHasCreatePermission();
+        }
+
         setCommonData(model);
         model.addAttribute("parent", parent);
         if(!model.containsAttribute("child")) {
@@ -237,6 +298,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @PathVariable("parentId") M parent,
             @ModelAttribute("child") M child, BindingResult result,
             RedirectAttributes redirectAttributes) {
+
+
+        if(permissionList != null) {
+            permissionList.assertHasCreatePermission();
+        }
 
         setCommonData(model);
 
@@ -258,6 +324,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @PathVariable("sourceId") M source,
             Searchable searchable,
             Model model) {
+
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
 
         model.addAttribute("source", source);
 
@@ -300,6 +370,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             Model model,
             RedirectAttributes redirectAttributes) {
 
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
+
         if(target.isRoot() && !moveType.equals("inner")) {
             model.addAttribute(Constants.ERROR, "不能移动到根节点之前或之后");
             return showMoveForm(request, async, source, searchable, model);
@@ -327,6 +401,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @RequestParam(value = "excludeId", required = false) ID excludeId,
             @RequestParam(value = "onlyCheckLeaf", required = false, defaultValue = "false") boolean onlyCheckLeaf,
             Searchable searchable) {
+
 
         M excludeM = treeableService.findOne(excludeId);
 
@@ -373,6 +448,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     @ResponseBody
     public Object ajaxAppendChild(HttpServletRequest request, @PathVariable("parentId") M parent) {
 
+
+        if(permissionList != null) {
+            permissionList.assertHasCreatePermission();
+        }
+
+
         M child = newModel();
         child.setName("新节点");
         treeableService.appendChild(parent, child);
@@ -382,6 +463,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     @RequestMapping(value = "ajax/delete/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxDeleteSelfAndChildren(@PathVariable("id") ID id) {
+
+
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
+
         M tree = treeableService.findOne(id);
         treeableService.deleteSelfAndChild(tree);
         return tree;
@@ -390,6 +477,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     @RequestMapping(value = "ajax/rename/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxRename(HttpServletRequest request, @PathVariable("id") M tree, @RequestParam("newName") String newName) {
+
+
+        if(permissionList != null) {
+            permissionList.assertHasUpdatePermission();
+        }
+
         tree.setName(newName);
         treeableService.update(tree);
         return convertToZtree(tree, request.getContextPath(), true, true);
@@ -401,6 +494,12 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     public Object ajaxMove(
             @PathVariable("sourceId") M source, @PathVariable("targetId") M target,
             @PathVariable("moveType") String moveType) {
+
+
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
+
 
         treeableService.move(source, target, moveType);
 

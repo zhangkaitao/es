@@ -5,14 +5,14 @@
 
 
 <ul class="nav nav-tabs">
-    <li <c:if test="${empty param['search.show_eq']}">class="active"</c:if>>
+    <li ${empty param['search.show_eq'] ? 'class="active"' : ''}>
         <a href="${ctx}/admin/sys/organization/organization/tree">
             <i class="icon-table"></i>
             所有
             <i class="icon-refresh" title="点击刷新"></i>
         </a>
     </li>
-    <li <c:if test="${not empty param['search.show_eq']}">class="active"</c:if>>
+    <li ${not empty param['search.show_eq'] ? 'class="active"' : ''}>
         <a href="${ctx}/admin/sys/organization/organization/tree?search.show_eq=true">
             <i class="icon-table"></i>
             显示的
@@ -37,6 +37,7 @@
             urlPrefix : "${ctx}/admin/sys/organization/organization",
             async : async,
             onlyShow:${param['search.show_eq'] eq true},
+            permission: <es:treePermission resourceIdentity="sys:resource"/>,
             autocomplete : {
                 enable : true
             },

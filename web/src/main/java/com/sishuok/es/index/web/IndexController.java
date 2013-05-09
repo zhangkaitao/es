@@ -7,9 +7,7 @@ package com.sishuok.es.index.web;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.index.web.entity.Menu;
-import com.sishuok.es.index.web.utils.MenuUtils;
-import com.sishuok.es.sys.resource.entity.Resource;
+import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -31,16 +29,12 @@ public class IndexController {
     @Autowired
     private ResourceService resourceService;
 
+
     @RequestMapping(value = {"/{index:index;?.*}"})
     public String index(Model model) {
 
-        Searchable searchable =
-                Searchable.newSearchable()
-                        .addSearchFilter("show", SearchOperator.eq, true)
-                        .addSort(new Sort(Sort.Direction.DESC, "parentId", "weight"));
+        List<Menu> menus = resourceService.findMenus();
 
-        List<Resource> resources = resourceService.findAllWithSort(searchable);
-        List<Menu> menus = MenuUtils.convertToMenus(resources);
         model.addAttribute("menus", menus);
 
         return "admin/index/index";

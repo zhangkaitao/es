@@ -40,6 +40,7 @@ public class ShowController extends BaseCRUDController<Show, Long> {
 
     public ShowController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("showcase:statusShow");
     }
 
     @Override
@@ -55,6 +56,7 @@ public class ShowController extends BaseCRUDController<Show, Long> {
             RedirectAttributes redirectAttributes
         ) {
 
+        this.permissionList.assertHasPermission("audit");
 
         for(Long id : ids) {
             Show show = showService.findOne(id);

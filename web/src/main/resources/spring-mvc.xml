@@ -119,15 +119,10 @@
     </bean>
 
     <!-- 控制器异常处理 -->
-<!--    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="exceptionMappings">
-              <props>
-                  <prop key="java.lang.Exception">
-                        error_all
-                </prop>
-            </props>
-        </property>
-    </bean>-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+        <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
+    </bean>
+    <bean class="com.sishuok.es.common.exception.web.DefaultExceptionHandler"/>
 
     <import resource="spring-shiro-mvc.xml"/>
 

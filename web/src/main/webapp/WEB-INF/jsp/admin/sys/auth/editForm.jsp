@@ -4,9 +4,10 @@
 <div class="panel">
 
     <ul class="nav nav-tabs">
+        <shiro:hasPermission name="sys:auth:create">
         <c:if test="${op eq '新增'}">
             <c:forEach items="${types}" var="t">
-                <li <c:if test="${t eq type}">class="active"</c:if>>
+                <li ${t eq type ? 'class="active"' : ''}>
                     <a href="${ctx}/admin/sys/auth/${t}/create?BackURL=<es:BackURL/>">
                         <i class="icon-file"></i>
                         新增${t.info}授权
@@ -14,26 +15,31 @@
                 </li>
             </c:forEach>
         </c:if>
+        </shiro:hasPermission>
 
         <c:if test="${not empty m.id}">
-            <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+            <li ${op eq '查看' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/auth/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-eye-open"></i>
                     查看
                 </a>
             </li>
-            <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+            <shiro:hasPermission name="sys:auth:update">
+            <li ${op eq '修改' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/auth/update/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
             </li>
-            <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="sys:auth:delete">
+            <li ${op eq '删除' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/auth/delete/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>
             </li>
+            </shiro:hasPermission>
         </c:if>
         <li>
             <a href="<es:BackURL/>" class="btn btn-link">

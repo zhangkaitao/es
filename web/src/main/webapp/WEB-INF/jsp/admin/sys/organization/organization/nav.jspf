@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <ul class="nav nav-tabs">
     <c:if test="${op eq '添加子节点'}">
-        <li <c:if test="${op eq '添加子节点'}">class="active"</c:if>>
+        <li ${op eq '添加子节点' ? 'class="active"' : ''}>
         <a>
             <i class="icon-file"></i>
             添加子节点
@@ -15,31 +15,38 @@
     </c:if>
 
     <c:if test="${not empty id}">
-        <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+        <li ${op eq '查看' ? 'class="active"' : ''}>
         <a href="${ctx}/admin/sys/organization/organization/${id}?BackURL=<es:BackURL/>">
             <i class="icon-eye-open"></i>
             查看
         </a>
         </li>
-        <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+        <shiro:hasPermission name="sys:organization:update">
+        <li ${op eq '修改' ? 'class="active"' : ''}>
         <a href="${ctx}/admin/sys/organization/organization/update/${id}?BackURL=<es:BackURL/>">
             <i class="icon-edit"></i>
             修改
         </a>
         </li>
+        </shiro:hasPermission>
+
         <c:if test="${(not m.root) and (not source.root)}">
-        <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+        <shiro:hasPermission name="sys:organization:delete">
+        <li ${op eq '删除' ? 'class="active"' : ''}>
         <a href="${ctx}/admin/sys/organization/organization/delete/${id}?BackURL=<es:BackURL/>">
             <i class="icon-trash"></i>
             删除
         </a>
         </li>
-        <li <c:if test="${op eq '移动节点'}">class="active"</c:if>>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="sys:organization:update">
+        <li ${op eq '移动节点' ? 'class="active"' : ''}>
         <a href="${ctx}/admin/sys/organization/organization/move/${id}?BackURL=<es:BackURL/>">
             <i class="icon-move"></i>
             移动节点
         </a>
         </li>
+        </shiro:hasPermission>
         </c:if>
     </c:if>
     <li>

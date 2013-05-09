@@ -3,8 +3,7 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
 <style>
-    .scroll-pane
-    {
+    .scroll-pane {
         width: 384px;
         height: 100%;
         overflow: auto;
@@ -49,6 +48,7 @@
             asyncLoadAll : false,
             editable : false,
             containerId : "organizationTree",
+
             autocomplete : {
                 enable : true
             },

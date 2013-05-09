@@ -611,6 +611,12 @@
             <groupId>com.octo.captcha</groupId>
             <artifactId>jcaptcha-integration-simple-servlet</artifactId>
             <version>${jcaptcha.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

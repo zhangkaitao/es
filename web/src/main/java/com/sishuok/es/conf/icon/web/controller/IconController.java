@@ -50,6 +50,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
 
     public IconController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("conf:icon");
     }
 
     @Override
@@ -197,6 +198,11 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     @RequestMapping(value = "/genCssFile")
     @ResponseBody
     public String genIconCssFile(HttpServletRequest request) {
+
+
+        this.permissionList.assertHasEditPermission();
+
+
         String uploadFileTemplate = ".%1$s{background:url(%2$s/%3$s);width:%4$spx;height:%5$spx;display:inline-block;vertical-align: middle;%6$s}";
         String cssSpriteTemplate = ".%1$s{background:url(%2$s/%3$s) no-repeat -%4$spx -%5$spx;width:%6$spx;height:%7$spx;display:inline-block;vertical-align: middle;%8$s}";
 

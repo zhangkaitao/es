@@ -35,6 +35,9 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
     @BaseComponent
     private UploadService uploadService;
 
+    public UploadController() {
+        setResourceIdentity("showcase:upload");
+    }
 
     //不再是默认的create，因为下边的create具有多个参数，因此无法覆盖默认的create，因此为了使用该url 我们把父类的url改掉
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)

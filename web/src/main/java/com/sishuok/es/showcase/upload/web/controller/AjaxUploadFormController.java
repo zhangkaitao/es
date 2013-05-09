@@ -8,6 +8,7 @@ package com.sishuok.es.showcase.upload.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.showcase.upload.entity.Upload;
 import com.sishuok.es.showcase.upload.service.UploadService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ public class AjaxUploadFormController {
     @Autowired
     private UploadService uploadService;
 
+    @RequiresPermissions("showcase:upload:create")
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String showCreateForm(Model model) {
         model.addAttribute(Constants.OP_NAME, "新增");
@@ -38,6 +40,7 @@ public class AjaxUploadFormController {
         return "showcase/upload/ajax/editForm";
     }
 
+    @RequiresPermissions("showcase:upload:create")
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String create(@Valid Upload upload, RedirectAttributes redirectAttributes) {
 

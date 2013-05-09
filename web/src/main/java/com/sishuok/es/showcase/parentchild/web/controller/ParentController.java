@@ -47,6 +47,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
 
     protected ParentController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("showcase:parentchild");
     }
 
 
@@ -139,6 +140,9 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     //////////////////////////////////child////////////////////////////////////
     @RequestMapping(value = "child/create", method = RequestMethod.GET)
     public String showChildCreateForm(Model model) {
+
+        this.permissionList.assertHasEditPermission();
+
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "新增");
         if(!model.containsAttribute("child")) {
@@ -151,6 +155,9 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
             Model model,
             @PathVariable("id") Child child,
             @RequestParam(value = "copy", defaultValue = "false") boolean isCopy) {
+
+        this.permissionList.assertHasEditPermission();
+
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, isCopy ? "复制" : "修改");
         if(!model.containsAttribute("child")) {
@@ -168,6 +175,9 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     @RequestMapping(value = "child/delete/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Child deleteChild(@PathVariable("id") Child child) {
+
+        this.permissionList.assertHasEditPermission();
+
         childService.delete(child);
         return child;
     }
@@ -176,6 +186,9 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     @RequestMapping(value = "child/batch/delete")
     @ResponseBody
     public Object deleteChildInBatch(@RequestParam(value = "ids", required = false) Long[] ids) {
+
+        this.permissionList.assertHasEditPermission();
+
         childService.delete(ids);
         return ids;
     }
@@ -183,6 +196,8 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     @RequestMapping(value = "child/{parentId}", method = RequestMethod.GET)
     @PageableDefaults(value = Integer.MAX_VALUE, sort = "id=desc")
     public String listChild(Model model, @PathVariable("parentId") Long parentId, Searchable searchable) {
+
+        this.permissionList.assertHasEditPermission();
 
         searchable.addSearchFilter("parent.id", SearchOperator.eq, parentId);
 

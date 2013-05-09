@@ -33,9 +33,14 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
     @Autowired
     private OnlineSessionDAO onlineSessionDAO;
 
+    public UserOnlineController() {
+        setResourceIdentity("sys:userOnline");
+    }
 
     @RequestMapping("/forceLogout")
     public String forceLogout(@RequestParam(value = "ids") String[] ids) {
+
+        this.permissionList.assertHasEditPermission();
 
         for(String id : ids) {
             UserOnline online = userOnlineService.findOne(id);

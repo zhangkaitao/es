@@ -10,7 +10,9 @@ import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
+import com.sishuok.es.common.web.controller.permission.PermissionList;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,7 +31,10 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     private boolean listAlsoSetCommonData = false;
 
-    private String permissionPrefix;
+
+    protected PermissionList permissionList = null;
+
+
 
     /**
      * 列表也设置common data
@@ -39,19 +44,24 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     }
 
     /**
-     * 权限前缀
+     * 权限前缀：如sys:user
+     * 则生成的新增权限为 sys:user:create
      */
-    public void setPermissionPrefix(String permissionPrefix) {
-        this.permissionPrefix = permissionPrefix;
+    public void setResourceIdentity(String resourceIdentity) {
+        if(StringUtils.hasLength(resourceIdentity)) {
+            permissionList = PermissionList.newPermissionList(resourceIdentity);
+        }
     }
 
-    protected  <S extends BaseService<M, ID>> BaseCRUDController() {
-        super();
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
     public String list(Searchable searchable, Model model) {
+
+        if(permissionList != null) {
+            this.permissionList.assertHasViewPermission();
+        }
+
         model.addAttribute("page", baseService.findAll(searchable));
         if(listAlsoSetCommonData) {
             setCommonData(model);
@@ -76,6 +86,11 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String view(Model model, @PathVariable("id") M m) {
+
+        if(permissionList != null) {
+            this.permissionList.assertHasViewPermission();
+        }
+
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "查看");
@@ -84,6 +99,11 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String showCreateForm(Model model) {
+
+        if(permissionList != null) {
+            this.permissionList.assertHasCreatePermission();
+        }
+
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "新增");
         if(!model.containsAttribute("m")) {
@@ -98,6 +118,10 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             Model model, @Valid @ModelAttribute("m") M m, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
+        if(permissionList != null) {
+            this.permissionList.assertHasCreatePermission();
+        }
+
         if (hasError(m, result)) {
             return showCreateForm(model);
         }
@@ -109,6 +133,11 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String showUpdateForm(@PathVariable("id") M m, Model model) {
+
+        if(permissionList != null) {
+            this.permissionList.assertHasUpdatePermission();
+        }
+
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "修改");
         model.addAttribute("m", m);
@@ -121,6 +150,10 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
             RedirectAttributes redirectAttributes) {
 
+        if(permissionList != null) {
+            this.permissionList.assertHasUpdatePermission();
+        }
+
         if (hasError(m, result)) {
             return showUpdateForm(m, model);
         }
@@ -131,6 +164,11 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
     public String showDeleteForm(@PathVariable("id") M m, Model model) {
+
+        if(permissionList != null) {
+            this.permissionList.assertHasDeletePermission();
+        }
+
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "删除");
         model.addAttribute("m", m);
@@ -143,6 +181,11 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
+
+        if(permissionList != null) {
+            this.permissionList.assertHasDeletePermission();
+        }
+
         baseService.delete(m);
         return redirectToUrl(backURL);
     }
@@ -153,19 +196,16 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
+
+        if(permissionList != null) {
+            this.permissionList.assertHasDeletePermission();
+        }
+
         baseService.delete(ids);
+
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
         return redirectToUrl(backURL);
     }
-
-//ajax 删除方式
-//    @RequestMapping(value = "batch/delete", method = RequestMethod.POST)
-//    @ResponseBody
-//    public AjaxResponse deleteInBatch(@RequestParam(value = "ids", required = false) ID[] ids) {
-//        AjaxResponse response = new AjaxResponse();
-//        baseService.delete(ids);
-//        return response;
-//    }
 
 
 

@@ -14,34 +14,39 @@
 <div class="panel">
 
     <ul class="nav nav-tabs">
+        <shiro:hasPermission name="sys:role:create">
         <c:if test="${op eq '新增'}">
-            <li <c:if test="${op eq '新增'}">class="active"</c:if>>
+            <li ${op eq '新增' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/role/create?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
                     新增
                 </a>
             </li>
         </c:if>
-
+        </shiro:hasPermission>
         <c:if test="${not empty m.id}">
-            <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+            <li ${op eq '查看' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/role/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-eye-open"></i>
                     查看
                 </a>
             </li>
-            <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+            <shiro:hasPermission name="sys:role:update">
+            <li ${op eq '修改' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/role/update/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
             </li>
-            <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="sys:role:delete">
+            <li ${op eq '删除' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/role/delete/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>
             </li>
+            </shiro:hasPermission>
         </c:if>
         <li>
             <a href="<es:BackURL/>" class="btn btn-link">

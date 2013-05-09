@@ -30,6 +30,10 @@ public class CategoryController extends BaseMovableController<Category, Long> {
     @BaseComponent
     private CategoryService categoryService;
 
+    public CategoryController() {
+        setResourceIdentity("showcase:productCategory");
+    }
+
     @Override
     protected void setCommonData(Model model) {
         model.addAttribute("booleanList", BooleanEnum.values());
@@ -44,8 +48,10 @@ public class CategoryController extends BaseMovableController<Category, Long> {
             @PathVariable(value = "selectType") String selectType,
             @MatrixVariable(value = "domId", pathVar = "selectType") String domId,
                 @MatrixVariable(value = "domName", pathVar = "selectType", required = false) String domName) {
-        model.addAttribute("selectType", selectType);
 
+        this.permissionList.assertHasViewPermission();
+
+        model.addAttribute("selectType", selectType);
         model.addAttribute("domId", domId);
         model.addAttribute("domName", domName);
 

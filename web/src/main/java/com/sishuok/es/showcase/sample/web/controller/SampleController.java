@@ -40,6 +40,10 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
     @BaseComponent
     private SampleService sampleService;
 
+    public SampleController() {
+        setResourceIdentity("showcase:sample");
+    }
+
     @Override
     protected void setCommonData(Model model) {
         model.addAttribute("sexList", Sex.values());

@@ -40,6 +40,10 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
     @BaseComponent
     private DeletedSampleService sampleService;
 
+    public DeletedSampleController() {
+        setResourceIdentity("showcase:deleted");
+    }
+
     @Autowired
     public void setSampleService(DeletedSampleService sampleService) {
         setBaseService(sampleService);

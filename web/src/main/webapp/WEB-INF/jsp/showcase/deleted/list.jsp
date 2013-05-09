@@ -5,13 +5,13 @@
 
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${param['search.deleted_eq'] ne 'TRUE'}">class="active"</c:if>>
+        <li ${param['search.deleted_eq'] ne 'TRUE' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/deleted">
                 <i class="icon-table"></i>
                 所有示例列表
             </a>
         </li>
-        <li <c:if test="${param['search.deleted_eq'] eq 'TRUE'}">class="active"</c:if>>
+        <li ${param['search.deleted_eq'] eq 'TRUE' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/deleted?search.deleted_eq=TRUE">
                 <i class="icon-table"></i>
                 已删除的示例列表
@@ -19,24 +19,29 @@
         </li>
     </ul>
 
-
     <es:showMessage/>
 
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="showcase:deleted:create">
                 <a class="btn btn-create" href="${ctx}/showcase/deleted/create">
                     <span class="icon-file"></span>
                     新增
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:deleted:update">
                 <a class="btn btn-update">
                     <span class="icon-edit"></span>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:deleted:delete">
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

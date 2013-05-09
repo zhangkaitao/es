@@ -174,7 +174,7 @@ $.sys = {
                 var id = checkbox.val();
                 var url = ctx + "/admin/sys/user/changePassword?" + checkbox.serialize();
 
-                $.app.confirm({
+                var model = $.app.confirm({
                     title: "修改密码",
                     message : "请输入新密码：<br/><input type='password' id='password' class='input-medium'/>",
                     ok : function() {

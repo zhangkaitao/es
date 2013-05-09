@@ -46,6 +46,10 @@ public class UserController extends BaseCRUDController<User, Long> {
     @BaseComponent
     private UserService userService;
 
+    public UserController() {
+        setResourceIdentity("sys:user");
+    }
+
     @Override
     protected void setCommonData(Model model) {
         model.addAttribute("statusList", UserStatus.values());
@@ -70,6 +74,14 @@ public class UserController extends BaseCRUDController<User, Long> {
     public String list(Searchable searchable, Model model) {
         throw new RuntimeException("discarded method");
     }
+
+    @RequestMapping(value = {""}, method = RequestMethod.GET)
+    @PageableDefaults(sort = "id=desc")
+    @SearchableDefaults(value = "deleted_eq=0")
+    public String listAll(Searchable searchable, Model model) {
+        return list(null, null, searchable, model);
+    }
+
 
     @RequestMapping(value = {"{organization}/{job}"}, method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")

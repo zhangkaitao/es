@@ -35,8 +35,8 @@ import static org.springframework.data.jpa.repository.query.QueryUtils.*;
 public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaRepository<M, ID>
         implements BaseRepository<M, ID> {
 
-    public static final String LOGIC_DELETE_ALL_QUERY_STRING = "update %s o set o.deleted=true where %s in (?1)";
-    public static final String DELETE_ALL_QUERY_STRING = "delete from %s o where %s in (?1)";
+    public static final String LOGIC_DELETE_ALL_QUERY_STRING = "update %s o set o.deleted=true where o in (?1)";
+    public static final String DELETE_ALL_QUERY_STRING = "delete from %s o where o in (?1)";
     public static final String FIND_QUERY_STRING = "from %s o where 1=1 ";
     public static final String COUNT_QUERY_STRING = "select count(o) from %s o where 1=1 ";
 
@@ -164,7 +164,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Override
     public void deleteInBatch(final Iterable<M> entities) {
         Iterator<M> iter = entities.iterator();
-        if(entities == null || entities.iterator().hasNext()) {
+        if(entities == null || !iter.hasNext()) {
             return;
         }
 
@@ -173,10 +173,10 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         boolean logicDeleteableEntity = LogicDeleteable.class.isAssignableFrom(this.entityClass);
 
         if(logicDeleteableEntity) {
-            String ql = getQueryString(LOGIC_DELETE_ALL_QUERY_STRING, entityName);
+            String ql = String.format(LOGIC_DELETE_ALL_QUERY_STRING, entityName);
             RepositoryHelper.batchUpdate(ql, models);
         } else {
-            String ql = getQueryString(DELETE_ALL_QUERY_STRING, entityName);
+            String ql =  String.format(DELETE_ALL_QUERY_STRING, entityName);
             RepositoryHelper.batchUpdate(ql, models);
         }
     }

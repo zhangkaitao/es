@@ -31,6 +31,9 @@ public class PermissionController extends BaseCRUDController<Permission, Long> {
     @BaseComponent
     private PermissionService permissionService;
 
+    public PermissionController() {
+        setResourceIdentity("sys:permission");
+    }
 
     @Override
     protected void setCommonData(Model model) {
@@ -45,6 +48,7 @@ public class PermissionController extends BaseCRUDController<Permission, Long> {
             @RequestParam("ids") Long[] ids
     ) {
 
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Permission permission = permissionService.findOne(id);

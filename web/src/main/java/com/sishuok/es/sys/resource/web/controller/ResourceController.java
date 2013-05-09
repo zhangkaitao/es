@@ -31,6 +31,10 @@ public class ResourceController extends BaseTreeableController<Resource, Long> {
     @BaseComponent
     private ResourceService resourceService;
 
+    public ResourceController() {
+        setResourceIdentity("sys:resource");
+    }
+
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(
             HttpServletRequest request,
@@ -38,6 +42,7 @@ public class ResourceController extends BaseTreeableController<Resource, Long> {
             @RequestParam("ids") Long[] ids
     ) {
 
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Resource resource = resourceService.findOne(id);

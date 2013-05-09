@@ -3,7 +3,7 @@
 <div class="sys-icon-list">
     <ul class="nav nav-tabs">
         <c:forEach items="${types}" var="t" varStatus="status">
-            <li <c:if test="${status.first}">class="active"</c:if>><a href="#${t}" data-toggle="tab">${t.info}</a></li>
+            <li ${status.first ? 'class="active"' : ''}><a href="#${t}" data-toggle="tab">${t.info}</a></li>
         </c:forEach>
     </ul>
     <div class="tab-content">

@@ -6,19 +6,19 @@
 
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty param['search.show_eq']}">class="active"</c:if>>
+        <li ${empty param['search.show_eq'] ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/product/product">
                 <i class="icon-table"></i>
                 所有产品列表
             </a>
         </li>
-        <li <c:if test="${param['search.show_eq'] eq 'true'}">class="active"</c:if>>
+        <li ${param['search.show_eq'] eq 'true' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/product/product?search.show_eq=true">
                 <i class="icon-table"></i>
                 可显示的产品列表
             </a>
         </li>
-        <li <c:if test="${param['search.show_eq'] eq 'false'}">class="active"</c:if>>
+        <li ${param['search.show_eq'] eq 'false' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/product/product?search.show_eq=false">
                 <i class="icon-table"></i>
                 隐藏的产品列表
@@ -38,18 +38,24 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="showcase:product:create">
                 <a class="btn btn-create">
                     <span class="icon-file"></span>
                     新增
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:product:update">
                 <a class="btn btn-update">
                     <span class="icon-edit"></span>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:product:delete">
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

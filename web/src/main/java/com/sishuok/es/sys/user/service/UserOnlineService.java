@@ -45,14 +45,14 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
      * @param sid
      */
     public void offline(String sid) {
-        UserOnline userOnline = findOne(sid);
-        if(userOnline != null) {
            try {
-               delete(userOnline);
+                UserOnline userOnline = findOne(sid);
+                if(userOnline != null) {
+                    delete(userOnline);
+                }
            } catch (Exception e) {
                //删除失败也无所谓
            }
-        }
         //游客 无需记录上次访问记录
         //此处使用数据库的触发器完成同步
 //        if(userOnline.getUserId() == null) {

@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
 
     @PersistenceContext
-    EntityManager entityManager;
+    protected EntityManager entityManager;
 
 
     public void clear() {

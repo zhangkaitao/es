@@ -5,7 +5,7 @@
 
     <ul class="nav nav-tabs">
         <c:forEach items="${types}" var="t">
-            <li <c:if test="${t eq type}">class="active"</c:if>>
+            <li ${t eq type ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/auth?search.type_eq=${t}">
                     <i class="icon-table"></i>
                     ${t.info}授权列表
@@ -19,6 +19,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="sys:auth:create">
                 <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-file"></i>
                     批量新增
@@ -34,14 +35,20 @@
                         </li>
                     </c:forEach>
                 </ul>
+                </shiro:hasPermission>
+
+                <shiro:hasPermission name="sys:auth:update">
                 <a id="update" class="btn btn-update">
                     <i class="icon-edit"></i>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:auth:delete">
                 <a class="btn btn-batch-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

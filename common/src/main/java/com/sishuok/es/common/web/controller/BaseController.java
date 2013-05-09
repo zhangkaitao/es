@@ -56,7 +56,6 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
         Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
     }
 
-
     /**
      * 设置通用数据
      * @param model

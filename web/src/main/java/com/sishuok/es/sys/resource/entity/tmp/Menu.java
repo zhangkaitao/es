@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.index.web.entity;
+package com.sishuok.es.sys.resource.entity.tmp;
 
 import com.google.common.collect.Lists;
 
@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * 界面是那个使用的菜单对象
  * <p>User: Zhang Kaitao
  * <p>Date: 13-4-9 下午4:20
  * <p>Version: 1.0

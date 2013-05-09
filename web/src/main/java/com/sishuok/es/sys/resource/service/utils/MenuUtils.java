@@ -3,11 +3,10 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.index.web.utils;
+package com.sishuok.es.sys.resource.service.utils;
 
-import com.google.common.collect.Lists;
-import com.sishuok.es.index.web.entity.Menu;
 import com.sishuok.es.sys.resource.entity.Resource;
+import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
@@ -26,7 +25,6 @@ public class MenuUtils {
         if(resources.size() == 0) {
             return Collections.EMPTY_LIST;
         }
-
 
         Menu root = convertToMenu(resources.remove(resources.size() - 1));
 

@@ -1,5 +1,5 @@
 <%@tag pageEncoding="UTF-8" description="构建子菜单" %>
-<%@ attribute name="menu" type="com.sishuok.es.index.web.entity.Menu" required="true" description="当前菜单" %>
+<%@ attribute name="menu" type="com.sishuok.es.sys.resource.entity.tmp.Menu" required="true" description="当前菜单" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="es" tagdir="/WEB-INF/tags" %>

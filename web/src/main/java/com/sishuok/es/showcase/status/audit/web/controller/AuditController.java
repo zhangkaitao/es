@@ -39,6 +39,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
 
     public AuditController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("sys:statusAudit");
     }
 
     @Override
@@ -56,6 +57,8 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
             @RequestParam(value = "comment", required = false) String comment,
             RedirectAttributes redirectAttributes
         ) {
+
+        this.permissionList.assertHasPermission("audit");
 
         List<Audit> auditList = new ArrayList<Audit>();
         for(Long id : ids) {

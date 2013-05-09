@@ -43,6 +43,7 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
 
     public AuthController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("sys:auth");
     }
 
 
@@ -93,6 +94,7 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
             @Valid @ModelAttribute("m") Auth m, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
+        this.permissionList.assertHasCreatePermission();
 
         if (hasError(m, result)) {
             return showCreateForm(model);

@@ -5,7 +5,7 @@
 
     <ul class="nav nav-tabs">
         <c:if test="${op eq '新增'}">
-            <li <c:if test="${op eq '新增'}">class="active"</c:if>>
+            <li ${op eq '新增' ? 'class="active"' : ''}>
                 <a>
                     <i class="icon-file"></i>
                     新增

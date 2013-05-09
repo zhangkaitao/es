@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
+<div class="scroll-pane">
 <table id="table" class="sort-table table table-bordered table-hover" data-async="true" style="width:1000px;max-width: 1000px;">
     <thead>
     <tr>
@@ -38,5 +39,6 @@
     </c:forEach>
     </tbody>
 </table>
+</div>
 <es:page page="${page}"/>
 

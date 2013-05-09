@@ -7,6 +7,7 @@ package com.sishuok.es.showcase.upload.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class BatchAjaxUploadController {
     private String baseDir = FileUploadUtils.getDefaultBaseDir();
 
 
+    @RequiresPermissions("showcase:upload:create")
     @RequestMapping(value = "ajaxUpload", method = RequestMethod.GET)
     public String showAjaxUploadForm(Model model) {
         model.addAttribute(Constants.OP_NAME, "新增");

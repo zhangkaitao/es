@@ -29,6 +29,10 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
     @BaseComponent
     private TreeService treeService;
 
+    public TreeController() {
+        setResourceIdentity("showcase:tree");
+    }
+
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(
             HttpServletRequest request,
@@ -36,6 +40,8 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
             @RequestParam("ids") Long[] ids
     ) {
 
+
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Tree tree = treeService.findOne(id);

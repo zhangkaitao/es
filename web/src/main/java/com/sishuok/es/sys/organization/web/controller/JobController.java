@@ -35,6 +35,10 @@ public class JobController extends BaseTreeableController<Job, Long> {
     private JobService jobService;
 
 
+    public JobController() {
+        setResourceIdentity("sys:job");
+    }
+
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(
             HttpServletRequest request,
@@ -42,6 +46,7 @@ public class JobController extends BaseTreeableController<Job, Long> {
             @RequestParam("ids") Long[] ids
     ) {
 
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Job job = jobService.findOne(id);

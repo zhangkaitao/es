@@ -10,19 +10,19 @@
     </c:if>
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty param['search.show_eq']}">class="active"</c:if>>
+        <li ${empty param['search.show_eq'] ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/organization/organization/list/${id}">
                 <i class="icon-table"></i>
                 所有
             </a>
         </li>
-        <li <c:if test="${param['search.show_eq'] eq 'true'}">class="active"</c:if>>
+        <li ${param['search.show_eq'] eq 'true' ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/organization/organization/list/${id}?search.show_eq=true">
                 <i class="icon-table"></i>
                 显示的
             </a>
         </li>
-        <li <c:if test="${param['search.show_eq'] eq 'false'}">class="active"</c:if>>
+        <li ${param['search.show_eq'] eq 'false' ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/organization/organization/list/${id}?search.show_eq=false">
                 <i class="icon-table"></i>
                 隐藏的
@@ -40,18 +40,25 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="sys:organization:create">
                 <a id="appendChild" class="btn btn-custom">
                     <i class="icon-file"></i>
                     添加子节点
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:organization:update">
                 <a id="updateTree" class="btn btn-custom">
                     <i class="icon-edit"></i>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:organization:delete">
                 <a id="deleteTree" class="btn btn-custom">
                     <i class="icon-trash"></i>
                     删除
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:organization:update">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-pencil"></i>
@@ -81,6 +88,7 @@
                     </ul>
                 </div>
             </div>
+            </shiro:hasPermission>
         </div>
         <div class="span8">
             <%@include file="searchForm.jsp"%>

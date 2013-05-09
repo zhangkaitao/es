@@ -45,6 +45,10 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     @Autowired
     private PermissionService permissionService;
 
+    public RoleController() {
+        setResourceIdentity("sys:role");
+    }
+
     @Override
     protected void setCommonData(Model model) {
         super.setCommonData(model);
@@ -132,6 +136,8 @@ public class RoleController extends BaseCRUDController<Role, Long> {
             @PathVariable("newStatus") Boolean newStatus,
             @RequestParam("ids") Long[] ids
     ) {
+
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Role role = roleService.findOne(id);

@@ -233,7 +233,7 @@ $.app = {
                 .replace("{title}", options.title)
                 .replace("{message}", options.message)
                 .replace("{cancelTitle}", options.cancelTitle)
-                .replace("{okTitle}", options.okTitle), top.window.document);
+                .replace("{okTitle}", options.okTitle));
 
 
         if(options.alert) {
@@ -243,7 +243,7 @@ $.app = {
         }
         modalDom.find(".modal-footer > .btn-ok").click(options.ok);
 
-        modalDom.modal();
+        return modalDom.modal();
     }
     ,
     isImage : function(filename) {
@@ -1931,7 +1931,7 @@ $(function () {
     $.app.initDatetimePicker();
 
     $.layout = top.$.layout;
-    $.app = top.$.app;
+//    $.app = top.$.app;
     $.tabs = top.$.tabs;
     $.menus = top.$.menus;
 

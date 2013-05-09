@@ -34,6 +34,19 @@ $.zTree = {
             config.editable = true;
         }
 
+        if(!config.permission) {
+            config.permission = {};
+        }
+        config.permission = $.extend({
+            create: false,
+            update: false,
+            remove : false,
+            move : false
+        }, config.permission);
+
+        console.info(config.permission);
+
+
         var setting = {
             noSwitchIcon:true,
             async: {
@@ -43,18 +56,20 @@ $.zTree = {
                 dataFilter: $.zTree.filter
             },
             view: {
-                addHoverDom: addHoverDom,
-                removeHoverDom: removeHoverDom,
+                addHoverDom: config.permission.create ? addHoverDom : null,
+                removeHoverDom: config.permission.create ? removeHoverDom : null,
                 selectedMulti: false
             },
             edit: {
                 enable: true,
                 editNameSelectAll: true,
-                showRemoveBtn : function(treeId, treeNode) {return !treeNode.root;},
-                showRenameBtn: true,
+                showRemoveBtn : config.permission.remove ? function(treeId, treeNode) {return !treeNode.root;} : null,
+                showRenameBtn: config.permission.update,
                 removeTitle: "移除",
                 renameTitle: "重命名",
                 drag : {
+                    isMove: config.permission.move,
+                    isCopy : false,
                     prev: drop,
                     inner: drop,
                     next: drop

@@ -11,6 +11,7 @@ import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
+import com.sishuok.es.common.web.controller.permission.PermissionList;
 import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.entity.GroupType;
 import com.sishuok.es.sys.group.service.GroupRelationService;
@@ -47,6 +48,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
 
     public GroupController() {
         setListAlsoSetCommonData(true);
+        setResourceIdentity("sys:group");
     }
 
 
@@ -101,6 +103,8 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             @RequestParam("ids") Long[] ids
     ) {
 
+        this.permissionList.assertHasUpdatePermission();
+
         for(Long id : ids) {
             Group group = groupService.findOne(id);
             group.setShow(newStatus);
@@ -116,6 +120,8 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             @PathVariable("newStatus") Boolean newStatus,
             @RequestParam("ids") Long[] ids
     ) {
+
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Group group = groupService.findOne(id);
@@ -146,6 +152,8 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     @PageableDefaults(sort = "id=desc")
     public String listGroupRelation(@PathVariable("group") Group group, Searchable searchable, Model model) {
 
+        this.permissionList.assertHasViewPermission();
+
         searchable.addSearchParam("groupId_eq", group.getId());
 
         Page page = null;
@@ -167,6 +175,8 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     @PageableDefaults(sort = "id=desc")
     public String listGroupRelationTable(@PathVariable("group") Group group, Searchable searchable, Model model) {
 
+        this.permissionList.assertHasViewPermission();
+
         this.listGroupRelation(group, searchable, model);
         return getViewPrefix() + "/relation/relationListTable";
 
@@ -178,6 +188,8 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             @RequestParam("ids") Long[] ids,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
+
+        this.permissionList.assertHasDeletePermission();
 
         if (group.getType() == GroupType.user) {
             groupRelationService.delete(ids);
@@ -194,6 +206,9 @@ public class GroupController extends BaseCRUDController<Group, Long> {
 
     @RequestMapping(value = "{group}/batch/append", method = RequestMethod.GET)
     public String showBatchAppendGroupRelationForm(@PathVariable("group") Group group) {
+
+        this.permissionList.assertHasAnyPermission(
+                new String[] {PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
 
         if(group.getType() == GroupType.user) {
             return getViewPrefix() + "/relation/appendUserGroupRelation";
@@ -215,6 +230,9 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             @RequestParam(value = "endIds", required = false) Long[] endIds,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
+
+        this.permissionList.assertHasAnyPermission(
+                new String[] {PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
 
         if(group.getType() == GroupType.organization) {
             groupRelationService.appendRelation(group.getId(), ids);

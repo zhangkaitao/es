@@ -4,7 +4,7 @@
 <div data-table="table" class="panel">
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty type}">class="active"</c:if>>
+        <li ${empty type ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/group/${group.id}/listRelation">
                 <i class="icon-table"></i>
                 查看组 &gt; ${group.type.info} &gt; ${group.name}
@@ -23,14 +23,18 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="sys:group:create or sys:group:update">
                 <a class="btn btn-custom" href="${ctx}/admin/sys/group/${group.id}/batch/append">
                     <span class="icon-file"></span>
                     批量新增
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:group:delete">
                 <a class="btn btn-custom btn-batch-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

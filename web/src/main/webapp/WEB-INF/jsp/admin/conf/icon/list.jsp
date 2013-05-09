@@ -4,14 +4,14 @@
 <div data-table="table" class="panel">
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty param['search.type_eq']}">class="active"</c:if>>
+        <li ${empty param['search.type_eq'] ? 'class="active"' : ''}>
             <a href="${ctx}/admin/conf/icon">
                 <i class="icon-table"></i>
                 所有图标列表
             </a>
         </li>
         <c:forEach items="${types}" var="t">
-            <li <c:if test="${param['search.type_eq'] eq t}">class="active"</c:if>>
+            <li ${param['search.type_eq'] eq t ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/conf/icon?search.type_eq=${t}">
                     <i class="icon-table"></i>
                     ${t.info}列表
@@ -25,6 +25,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="conf:icon:create">
                 <div class="btn-group first">
                     <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-file"></i>
@@ -43,20 +44,27 @@
 
                     </ul>
                 </div>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="conf:icon:update">
                 <a id="update" class="btn btn-update">
                     <i class="icon-edit"></i>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="conf:icon:delete">
                 <a class="btn btn-batch-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="conf:icon:create or conf:icon:update or conf:icon:delete">
                 <a class="btn btn-gen-css-file"
                    data-toggle="tooltip" data-placement="bottom" data-html="true"
                    title="生成相应的样式表文件(icon.css)<br/>标识符作为css class使用">
                     <i class="icon-asterisk"></i>
                     生成样式表
                 </a>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

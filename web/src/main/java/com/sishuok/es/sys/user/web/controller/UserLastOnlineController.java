@@ -26,4 +26,7 @@ public class UserLastOnlineController extends BaseCRUDController<UserLastOnline,
     @BaseComponent
     private UserLastOnlineService userLastOnlineService;
 
+    public UserLastOnlineController() {
+        setResourceIdentity("sys:userLastOnline");
+    }
 }

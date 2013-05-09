@@ -28,6 +28,10 @@ public class EditorController extends BaseCRUDController<Editor, Long> {
     @BaseComponent
     private EditorService editorService;
 
+    public EditorController() {
+        setResourceIdentity("showcase:editor");
+    }
+
     /**
      * 验证失败返回true
      * @param m

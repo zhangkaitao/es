@@ -1,2 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script src="${ctx}/static/js/admin/sys.js?2"></script>
+<script src="${ctx}/static/js/admin/sys.js?3"></script>
+<script type="text/javascript">
+    $(function() {
+        $(".scroll-pane").niceScroll({domfocus:true, hidecursordelay: 2000});
+    });
+</script>

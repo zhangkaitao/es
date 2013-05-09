@@ -34,6 +34,9 @@ public class MoveController extends BaseMovableController<Move, Long> {
     @BaseComponent
     private MoveService moveService;
 
+    public MoveController() {
+        setResourceIdentity("showcase:move");
+    }
 
     public void setCommonData(Model model) {
         model.addAttribute("booleanList", BooleanEnum.values());

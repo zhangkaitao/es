@@ -4,14 +4,14 @@
 <div data-table="table" class="panel">
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty type}">class="active"</c:if>>
+        <li ${empty type ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/group">
                 <i class="icon-table"></i>
                 所有分组列表
             </a>
         </li>
         <c:forEach items="${types}" var="t">
-        <li <c:if test="${t eq type}">class="active"</c:if>>
+        <li ${t eq type ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/group/list/${t}">
                 <i class="icon-table"></i>
                 ${t.info}分组列表
@@ -26,6 +26,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="sys:group:create">
                 <div class="btn-group first">
                     <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-file"></i>
@@ -47,15 +48,20 @@
                         </li>
                     </ul>
                 </div>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:group:update">
                 <a id="update" class="btn btn-update">
                     <i class="icon-edit"></i>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:group:delete">
                 <a class="btn btn-batch-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
-
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:group:update">
                 <div class="btn-group last">
                     <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
                         <span class="icon-wrench"></span>
@@ -91,6 +97,7 @@
                         </li>
                     </ul>
                 </div>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

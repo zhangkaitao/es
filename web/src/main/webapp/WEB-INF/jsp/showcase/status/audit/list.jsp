@@ -6,25 +6,25 @@
 
 
     <ul class="nav nav-tabs">
-        <li <c:if test="${empty param['search.status_eq']}">class="active"</c:if>>
+        <li ${empty param['search.status_eq'] ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/audit">
                 <i class="icon-table"></i>
                 所有数据列表
             </a>
         </li>
-        <li <c:if test="${param['search.status_eq'] eq 'waiting'}">class="active"</c:if>>
+        <li ${param['search.status_eq'] eq 'waiting' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/audit?search.status_eq=waiting">
                 <i class="icon-table"></i>
                 等待审核列表
             </a>
         </li>
-        <li <c:if test="${param['search.status_eq'] eq 'fail'}">class="active"</c:if>>
+        <li ${param['search.status_eq'] eq 'fail' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/audit?search.status_eq=fail">
                 <i class="icon-table"></i>
                 审核失败列表
             </a>
         </li>
-        <li <c:if test="${param['search.status_eq'] eq 'success'}">class="active"</c:if>>
+        <li ${param['search.status_eq'] eq 'success' ? 'class="active"' : ''}>
             <a href="${ctx}/showcase/status/audit?search.status_eq=success">
                 <i class="icon-table"></i>
                 审核通过列表
@@ -37,18 +37,25 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="showcase:statusAudit:create">
                 <a class="btn btn-create">
                     <span class="icon-file"></span>
                     新增
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:statusAudit:update">
                 <a class="btn btn-update">
                     <span class="icon-edit"></span>
                     修改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:statusAudit:delete">
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:statusAudit:audit">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-pencil"></i>
@@ -70,6 +77,7 @@
                         </li>
                     </ul>
                 </div>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

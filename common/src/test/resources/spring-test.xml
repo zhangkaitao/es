@@ -41,7 +41,7 @@
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
         </property>
 
-        <property name="packagesToScan" value="com.sishuok.es.common.entity"/>
+        <property name="packagesToScan" value="com.sishuok.es"/>
     </bean>
 
     <jpa:repositories

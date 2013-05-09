@@ -5,7 +5,7 @@
 
     <ul class="nav nav-tabs">
         <c:if test="${op eq '新增'}">
-            <li <c:if test="${op eq '新增'}">class="active"</c:if>>
+            <li ${op eq '新增' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/permission/create?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
                     新增
@@ -14,19 +14,19 @@
         </c:if>
 
         <c:if test="${not empty m.id}">
-            <li <c:if test="${op eq '查看'}">class="active"</c:if>>
+            <li ${op eq '查看' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/permission/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-eye-open"></i>
                     查看
                 </a>
             </li>
-            <li <c:if test="${op eq '修改'}">class="active"</c:if>>
+            <li ${op eq '修改' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/permission/update/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
             </li>
-            <li <c:if test="${op eq '删除'}">class="active"</c:if>>
+            <li ${op eq '删除' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/permission/delete/${m.id}?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除

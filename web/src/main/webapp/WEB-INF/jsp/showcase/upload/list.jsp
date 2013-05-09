@@ -17,6 +17,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
+                <shiro:hasPermission name="showcase:upload:create">
                 <div class="btn-group first">
                     <a class="btn dropdown-toggle" data-toggle="dropdown">
                         <span class="icon-file"></span>
@@ -44,14 +45,19 @@
                         </li>
                     </ul>
                 </div>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:upload:update">
                 <a class="btn btn-update">
                     <span class="icon-edit"></span>
                     修&nbsp;改
                 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="showcase:upload:delete">
                 <a class="btn btn-batch-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
+                </shiro:hasPermission>
             </div>
         </div>
         <div class="span8">

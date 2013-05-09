@@ -33,6 +33,9 @@ public class OrganizationController extends BaseTreeableController<Organization,
     @BaseComponent
     private OrganizationService organizationService;
 
+    public OrganizationController() {
+        setResourceIdentity("sys:organization");
+    }
 
     @Override
     protected void setCommonData(Model model) {
@@ -49,6 +52,7 @@ public class OrganizationController extends BaseTreeableController<Organization,
             @RequestParam("ids") Long[] ids
     ) {
 
+        this.permissionList.assertHasUpdatePermission();
 
         for(Long id : ids) {
             Organization organization = organizationService.findOne(id);

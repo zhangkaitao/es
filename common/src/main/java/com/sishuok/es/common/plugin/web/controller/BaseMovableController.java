@@ -13,9 +13,11 @@ import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
+import com.sishuok.es.common.web.controller.permission.PermissionList;
 import com.sishuok.es.common.web.validate.AjaxResponse;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +35,9 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
 
     private BaseMovableService movableService;
 
+
+
+
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
@@ -49,12 +54,18 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     @PageableDefaults(value = 10, sort = "weight=desc")
     @Override
     public String list(Searchable searchable, Model model) {
+
         return super.list(searchable, model);
     }
 
     @RequestMapping(value = "up/{fromId}/{toId}")
     @ResponseBody
     public AjaxResponse up(@PathVariable("fromId") Long fromId, @PathVariable("toId") Long toId) {
+
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
+
         AjaxResponse ajaxResponse = new AjaxResponse("移动位置成功");
         try {
             movableService.up(fromId, toId);
@@ -68,6 +79,12 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     @RequestMapping(value = "down/{fromId}/{toId}")
     @ResponseBody
     public AjaxResponse down(@PathVariable("fromId") Long fromId, @PathVariable("toId") Long toId) {
+
+
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
+
         AjaxResponse ajaxResponse = new AjaxResponse("移动位置成功");
         try {
             movableService.down(fromId, toId);
@@ -81,6 +98,11 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     @RequestMapping(value = "reweight")
     @ResponseBody
     public AjaxResponse reweight() {
+
+        if(this.permissionList != null) {
+            this.permissionList.assertHasEditPermission();
+        }
+
         AjaxResponse ajaxResponse = new AjaxResponse("优化权重成功！");
         try {
             movableService.reweight();
