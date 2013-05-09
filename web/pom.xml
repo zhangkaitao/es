@@ -51,7 +51,7 @@
                             <encoding>UTF-8</encoding>
                             <src>src/main/messages</src>
                             <dest>target/${project.artifactId}/WEB-INF/classes</dest>
-                            <includes>messages.properties,horoscope.properties,nba.properties</includes>
+                            <includes>messages.properties</includes>
                         </configuration>
                     </execution>
                 </executions>
