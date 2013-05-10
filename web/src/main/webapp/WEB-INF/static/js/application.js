@@ -1425,6 +1425,7 @@ $.table = {
         }
         //modalDialog时 把当前url保存下来方便翻页和排序
         table.closest(".ui-dialog").data("url", backURL);
+
         if (table.data("async") == true) {
             $.app.waiting();
 
@@ -1456,6 +1457,11 @@ $.table = {
                     table = $("#" + tableId);
                     table.data("url", backURL);
                     $.table.initTable(table);
+
+                    var callback = table.data("async-callback");
+                    if(callback && window[callback]) {
+                        window[callback](table);
+                    }
 
                     $.app.waitingOver();
                 });

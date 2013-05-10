@@ -57,5 +57,4 @@
     </div>
     <%@include file="listTable.jsp"%>
 </div>
-
 <es:contentFooter/>

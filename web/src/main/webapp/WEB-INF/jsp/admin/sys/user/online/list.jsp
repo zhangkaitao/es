@@ -55,11 +55,14 @@
 </div>
 <c:if test="${empty header['container']}">
 <es:contentFooter/>
-</c:if>
 <%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 <script type="text/javascript">
-    $(function() {
+    function callback() {
         $(".scroll-pane").niceScroll({domfocus:true, hidecursordelay: 2000});
         $.sys.user.initOnlineListButton();
+    }
+    $(function() {
+        callback();
     });
 </script>
+</c:if>
