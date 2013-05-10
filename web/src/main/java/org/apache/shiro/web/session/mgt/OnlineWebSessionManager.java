@@ -98,7 +98,7 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
                 try {
                     SessionKey key = new DefaultSessionKey(userOnline.getId());
                     Session session = retrieveSession(key);
-                    //仅从cache中删除 db的批量删除
+                    //仅从cache中删除 db的删除
                     if(session != null) {
                         session.setAttribute(ShiroConstants.ONLY_CLEAR_CACHE, true);
                     }

@@ -101,7 +101,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
     @Override
     protected void doDelete(Session session) {
         OnlineSession onlineSession = (OnlineSession)session;
-        //定时任务批量删除的此时就不删除了
+        //定时任务删除的此时就不删除了
         if(onlineSession.getAttribute(ShiroConstants.ONLY_CLEAR_CACHE) == null) {
             userOnlineService.offline(String.valueOf(onlineSession.getId()));
         }

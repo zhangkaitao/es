@@ -267,7 +267,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
         baseService.delete(ids);
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
     }
 

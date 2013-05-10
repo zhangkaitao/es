@@ -39,7 +39,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
 
     public AuditController() {
         setListAlsoSetCommonData(true);
-        setResourceIdentity("sys:statusAudit");
+        setResourceIdentity("showcase:statusAudit");
     }
 
     @Override

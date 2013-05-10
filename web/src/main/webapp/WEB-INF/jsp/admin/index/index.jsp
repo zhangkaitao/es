@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader title="Easy-Scaffold脚手架" index="true"/>
+${user1}
 <div class="index-panel">
     <div class="tabs-bar tabs-fix-top">
         <span class="icon-chevron-left" style="display: none;"></span>

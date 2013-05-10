@@ -21,5 +21,6 @@
         <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
     </div>
     <input type="submit" class="btn" value="查询"/>
+    <a class="btn btn-link btn-clear-search">清空</a>
 
 </form>

@@ -32,7 +32,7 @@ import java.util.List;
 public interface BaseRepository<M, ID extends Serializable> extends JpaRepository<M, ID> {
 
     /**
-     * 根据主键批量删除
+     * 根据主键删除
      * @param ids
      */
     public void delete(ID[] ids);

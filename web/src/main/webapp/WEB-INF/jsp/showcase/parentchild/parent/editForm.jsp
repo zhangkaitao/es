@@ -113,9 +113,9 @@
                             <i class="icon-edit"></i>
                             修改
                         </a>
-                        <a class="btn btn-batch-delete-child">
+                        <a class="btn btn-delete-child">
                             <i class="icon-trash"></i>
-                            批量删除
+                            删除
                         </a>
                         <a class='btn btn-copy-child'>
                             <i class="icon-copy"></i>

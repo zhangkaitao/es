@@ -1136,7 +1136,7 @@ $.parentchild = {
         });
 
 
-        $(".btn-batch-delete-child").click(function() {
+        $(".btn-delete-child").click(function() {
             var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked");
             if(!$trs.length) {
                 $.app.alert({message : "请先选择要删除的数据！"});
@@ -1204,8 +1204,8 @@ $.table = {
 
         //初始化table里的a标签
         $.table.initTableBtn(table);
-        //初始化批量删除和修改按钮
-        $.table.initBatchDeleteSelected(table);
+        //初始化删除和修改按钮
+        $.table.initDeleteSelected(table);
         $.table.initUpdateSelected(table);
         $.table.initCreate(table);
 
@@ -1267,9 +1267,24 @@ $.table = {
     initSearchForm : function(table) {
         var id = $(table).attr("id");
         var searchForm = table.closest("[data-table='" + id + "']").find(".search-form");
+
         if(!searchForm.length) {
             return;
         }
+
+
+        searchForm.find(".btn-clear-search").click(function() {
+
+            if (table.data("async") == true) {
+                var resetBtn = searchForm.find("input[type='reset']");
+                if(!resetBtn.length) {
+                    searchForm.append("<input type='reset' style='display:none'>");
+                    resetBtn = searchForm.find("input[type='reset']");
+                }
+                resetBtn.click();
+            }
+            turnSearch(table, searchForm, true);
+        });
 
         var turnSearch = function(table, searchForm, isSearchAll) {
             var url = $.table.tableURL(table);
@@ -1292,7 +1307,7 @@ $.table = {
         });
 
         if(searchForm.is("[data-change-search=true]")) {
-            searchForm.find(":input:not(:button,:submit)").off("change").on("change", function() {
+            searchForm.find(":input:not(:button,:submit,:reset)").off("change").on("change", function() {
                 turnSearch(table, searchForm, false);
             });
         }
@@ -1419,13 +1434,15 @@ $.table = {
 
             if(!containerId) {//只有只替换表格时使用
                 headers.table = true;
+            } else {
+                headers.container = true;
             }
 
             $.ajax({
                 url: url,
+                async:true,
                 headers: headers
             }).done(function (data) {
-                    $.app.waitingOver();
                     if (containerId) {//装载到容器
                         $("#" + containerId).replaceWith(data);
                     } else {
@@ -1440,7 +1457,7 @@ $.table = {
                     table.data("url", backURL);
                     $.table.initTable(table);
 
-
+                    $.app.waitingOver();
                 });
         } else {
             window.location.href = url;
@@ -1538,12 +1555,12 @@ $.table = {
         return urlPrefix;
     },
 
-    initBatchDeleteSelected : function($table, urlPrefix) {
+    initDeleteSelected : function($table, urlPrefix) {
         if(!$table || !$table.length) {
             return;
         }
 
-        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-batch-delete");
+        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-delete");
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getAllSelectedCheckbox($table);
@@ -1592,7 +1609,7 @@ $.table = {
         if(!$table || !$table.length) {
             return;
         }
-        $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-batch-delete").each(function() {
+        $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-delete").each(function() {
             var $btn = $(this);
             var url = $btn.attr("href");
             if(!url || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0) {//没有url就不处理了

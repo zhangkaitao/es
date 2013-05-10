@@ -42,7 +42,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="sys:role:delete">
-                <a class="btn btn-batch-delete">
+                <a class="btn btn-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>

@@ -199,7 +199,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             groupRelationService.delete(ids);
         }
 
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
 
     }

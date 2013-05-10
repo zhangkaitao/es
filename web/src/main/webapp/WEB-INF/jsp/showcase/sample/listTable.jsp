@@ -2,7 +2,7 @@
     <div data-table="table">
        <a class='btn-create'>  新增
        <a class='btn-update'>  修改
-       <a class='btn-batch-delete'> 批量删除
+       <a class='btn-delete'> 删除
 
        <a class='btn-custom'> 自定义按钮 系统不处理
 

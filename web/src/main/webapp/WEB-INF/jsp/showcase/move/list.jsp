@@ -41,7 +41,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:move:deleted">
-                <a class="btn btn-batch-delete">
+                <a class="btn btn-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
