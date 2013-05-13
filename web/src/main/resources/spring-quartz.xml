@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+      default-lazy-init="true">
+
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method='destroy'>
+        <property name="triggers">
+            <list>
+                <ref bean="autoClearDeletedRoleRelationTrigger" />
+                <ref bean="autoClearDeletedGroupRelationTrigger" />
+            </list>
+        </property>
+    </bean>
+
+    <!--自动清理删除的角色对应的关系-->
+    <bean id="autoClearDeletedRoleRelation"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="roleQuartzService" />
+        <property name="targetMethod" value="autoClearDeletedRoleRelation" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoClearDeletedRoleRelationTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="autoClearDeletedGroupRelation" />
+        <!-- 每天2点执行 -->
+        <property name="cronExpression" value="0 0 2 * * ?" />
+    </bean>
+
+
+    <!--自动清理删除的分组对应的关系-->
+    <bean id="autoClearDeletedGroupRelation"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="groupQuartzService" />
+        <property name="targetMethod" value="autoClearDeletedGroupRelation" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoClearDeletedGroupRelationTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="autoClearDeletedGroupRelation" />
+        <!-- 每天2点20执行执行 -->
+        <property name="cronExpression" value="0 20 2 * * ?" />
+    </bean>
+
+
+
+
+</beans>

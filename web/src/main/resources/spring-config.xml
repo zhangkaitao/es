@@ -191,7 +191,8 @@
         <property name="arguments" ref="entityManagerFactory"/>
     </bean>
 
-
+    <import resource="spring-cache.xml"/>
     <import resource="spring-shiro-config.xml"/>
+    <import resource="spring-quartz.xml"/>
 
 </beans>

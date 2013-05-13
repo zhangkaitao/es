@@ -12,7 +12,6 @@
          <param-name>contextConfigLocation</param-name>
          <param-value>
              classpath:spring-common.xml,
-             classpath:spring-cache.xml,
              classpath:spring-config.xml
          </param-value>
      </context-param>

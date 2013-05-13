@@ -49,4 +49,12 @@ public interface GroupRelationRepository extends BaseRepository<GroupRelation, L
     @Query("select groupId from GroupRelation where userId=?1 or (startUserId<=?1 and endUserId>=?1) or (organizationId in (?2))")
     List<Long> findGroupIds(Long userId, Set<Long> organizationIds);
 
+
+    //无需删除用户 因为用户并不逻辑删除
+    @Modifying
+    @Query("delete from GroupRelation r where " +
+            "not exists (select 1 from Group g where r.groupId = g.id) or " +
+            "not exists(select 1 from Organization o where r.organizationId = o.id)")
+    void clearDeletedGroupRelation();
+
 }
