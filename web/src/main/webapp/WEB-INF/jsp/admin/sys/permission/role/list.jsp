@@ -107,7 +107,7 @@
             });
         });
 
-        $.app.toggleLoadTable($("#table"), "${ctx}/admin/sys/permission/role/permissions/{parentId}")
+        $.app.toggleLoadTable($("#table"), "${ctx}/admin/sys/permission/role/{parentId}/permissions")
     });
 </script>
 

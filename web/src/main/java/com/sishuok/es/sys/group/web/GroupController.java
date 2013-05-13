@@ -60,7 +60,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     }
 
 
-    @RequestMapping(value = "list/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "{type}/list", method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
     public String list(@PathVariable("type") GroupType type, Searchable searchable, Model model) {
 
@@ -76,7 +76,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
 
 
 
-    @RequestMapping(value = "create/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "{type}/create", method = RequestMethod.GET)
     public String showCreateFormWithType(@PathVariable("type") GroupType type, Model model) {
         if(!model.containsAttribute("m")) {
             Group group = new Group();
@@ -86,7 +86,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         return super.showCreateForm(model);
     }
 
-    @RequestMapping(value = "create/{type}", method = RequestMethod.POST)
+    @RequestMapping(value = "{type}/create", method = RequestMethod.POST)
     public String create(
             Model model, @Valid @ModelAttribute("m") Group m, BindingResult result,
             RedirectAttributes redirectAttributes) {

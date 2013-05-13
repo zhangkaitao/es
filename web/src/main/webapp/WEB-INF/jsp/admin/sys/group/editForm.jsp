@@ -7,9 +7,9 @@
         <shiro:hasPermission name="sys:group:create">
         <c:if test="${op eq '新增'}">
             <li ${op eq '新增' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/group/create?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/group/${type}/create?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
-                    新增
+                    新增${type.info}
                 </a>
             </li>
         </c:if>

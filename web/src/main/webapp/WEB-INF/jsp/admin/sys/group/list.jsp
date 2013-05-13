@@ -12,7 +12,7 @@
         </li>
         <c:forEach items="${types}" var="t">
         <li ${t eq type ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/group/list/${t}">
+            <a href="${ctx}/admin/sys/group/${t}/list">
                 <i class="icon-table"></i>
                 ${t.info}分组列表
             </a>
@@ -34,18 +34,14 @@
                         <i class="caret"></i>
                     </a>
                     <ul class="dropdown-menu">
+                        <c:forEach items="${types}" var="t">
                         <li>
-                            <a class="btn" href="${ctx}/admin/sys/group/create/user">
+                            <a class="btn" href="${ctx}/admin/sys/group/${t}/create">
                                 <i class="icon-file"></i>
-                                用户组
+                                ${t.info}
                             </a>
                         </li>
-                        <li>
-                            <a class="btn" href="${ctx}/admin/sys/group/create/organization">
-                                <i class="icon-file"></i>
-                                组织机构组
-                            </a>
-                        </li>
+                        </c:forEach>
                     </ul>
                 </div>
                 </shiro:hasPermission>

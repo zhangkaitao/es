@@ -60,13 +60,13 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
     }
 
 
-    @RequestMapping(value = "update/discard/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update/discard", method = RequestMethod.POST)
     @Override
     public String update(Model model, @Valid @ModelAttribute("m") Upload upload, BindingResult result, @RequestParam(value = "BackURL", required = false) String backURL, RedirectAttributes redirectAttributes) {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             Model model,
             HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file,

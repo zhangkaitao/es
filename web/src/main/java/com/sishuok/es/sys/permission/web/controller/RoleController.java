@@ -66,7 +66,7 @@ public class RoleController extends BaseCRUDController<Role, Long> {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "update/discard", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update/discard", method = RequestMethod.POST)
     @Override
     public String update(
             Model model, @Valid @ModelAttribute("m") Role m, BindingResult result,
@@ -91,7 +91,7 @@ public class RoleController extends BaseCRUDController<Role, Long> {
         return super.create(model, role, result, redirectAttributes);
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String updateWithResourcePermission(
             Model model,
             @Valid @ModelAttribute("m") Role role, BindingResult result,
@@ -134,7 +134,8 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     public String changeStatus(
             HttpServletRequest request,
             @PathVariable("newStatus") Boolean newStatus,
-            @RequestParam("ids") Long[] ids
+            @RequestParam("ids") Long[] ids,
+            RedirectAttributes redirectAttributes
     ) {
 
         this.permissionList.assertHasUpdatePermission();
@@ -145,11 +146,13 @@ public class RoleController extends BaseCRUDController<Role, Long> {
             roleService.update(role);
         }
 
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
+
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
 
 
-    @RequestMapping("/permissions/{role}")
+    @RequestMapping("{role}/permissions")
     public String permissions(@PathVariable("role") Role role) {
         return getViewPrefix() + "/permissionsTable";
     }

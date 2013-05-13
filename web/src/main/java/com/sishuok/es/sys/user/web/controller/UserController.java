@@ -112,7 +112,7 @@ public class UserController extends BaseCRUDController<User, Long> {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "update/discard", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update/discard", method = RequestMethod.POST)
     @Override
     public String update(
             Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
@@ -162,7 +162,7 @@ public class UserController extends BaseCRUDController<User, Long> {
         }
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String updateWithOrganization(
             Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
             @RequestParam(value = "organizationId", required = false) Long[] organizationIds,
@@ -222,7 +222,7 @@ public class UserController extends BaseCRUDController<User, Long> {
 
 
 
-    @RequestMapping("/organizations/{user}")
+    @RequestMapping("{user}/organizations")
     public String permissions(@PathVariable("user") User user) {
         return getViewPrefix() + "/organizationsTable";
     }

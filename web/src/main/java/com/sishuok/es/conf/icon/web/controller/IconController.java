@@ -102,13 +102,13 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "update/discard/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update/discard", method = RequestMethod.POST)
     @Override
     public String update(Model model, @Valid @ModelAttribute("m") Icon icon, BindingResult result, @RequestParam(value = "BackURL", required = false) String backURL, RedirectAttributes redirectAttributes) {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             HttpServletRequest request,
             Model model,
@@ -125,7 +125,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "delete/discard", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete/discard", method = RequestMethod.POST)
     @Override
     public String delete(
             @PathVariable("id") Icon m,
@@ -136,7 +136,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)
     public String delete(
             HttpServletRequest request,
             @PathVariable("id") Icon m,
