@@ -25,7 +25,7 @@
             </li>
             <shiro:hasPermission name="showcase:parentchild:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/parentchild/parent/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/showcase/parentchild/parent/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
@@ -33,7 +33,7 @@
             </shiro:hasPermission>
             <shiro:hasPermission name="showcase:parentchild:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/parentchild/parent/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/showcase/parentchild/parent/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>
@@ -213,8 +213,8 @@
             },
 
             createUrl : "${ctx}/showcase/parentchild/parent/child/create",
-            updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",
-            deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}",
+            updateUrl : "${ctx}/showcase/parentchild/parent/child/{id}/update",
+            deleteUrl : "${ctx}/showcase/parentchild/parent/child/{id}/delete",
             batchDeleteUrl : "${ctx}/showcase/parentchild/parent/child/batch/delete"
 
         });

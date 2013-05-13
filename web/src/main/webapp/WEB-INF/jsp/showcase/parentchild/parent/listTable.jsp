@@ -41,7 +41,7 @@
 <es:page page="${parents}"/>
 <script type="text/javascript">
     $(function() {
-        $.app.toggleLoadTable($("#table"), "${ctx}/showcase/parentchild/parent/child/{parentId}")
+        $.app.toggleLoadTable($("#table"), "${ctx}/showcase/parentchild/parent/{parentId}/child")
     });
 </script>
 

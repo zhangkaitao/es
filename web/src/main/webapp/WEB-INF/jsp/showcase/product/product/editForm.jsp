@@ -24,7 +24,7 @@
             </li>
             <shiro:hasPermission name="showcase:product:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/product/product/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/showcase/product/product/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
@@ -32,7 +32,7 @@
             </shiro:hasPermission>
             <shiro:hasPermission name="showcase:product:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/product/product/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/showcase/product/product/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>

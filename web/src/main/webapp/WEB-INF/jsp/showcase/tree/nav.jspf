@@ -20,7 +20,7 @@
 
         <shiro:hasPermission name="showcase:tree:update">
         <li ${op eq '修改' ? 'class="active"' : ''}>
-        <a href="${ctx}/showcase/tree/update/${id}?BackURL=<es:BackURL/>">
+        <a href="${ctx}/showcase/tree/${id}/update?BackURL=<es:BackURL/>">
             <i class="icon-edit"></i>
             修改
         </a>
@@ -30,7 +30,7 @@
         <c:if test="${(not m.root) and (not source.root)}">
         <shiro:hasPermission name="showcase:tree:delete">
         <li ${op eq '删除' ? 'class="active"' : ''}>
-        <a href="${ctx}/showcase/tree/delete/${id}?BackURL=<es:BackURL/>">
+        <a href="${ctx}/showcase/tree/${id}/delete?BackURL=<es:BackURL/>">
             <i class="icon-trash"></i>
             删除
         </a>
@@ -41,7 +41,7 @@
 
         <shiro:hasPermission name="showcase:tree:create">
             <li ${op eq '添加子节点' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/tree/appendChild/${id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/showcase/tree/${id}/appendChild?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
                     添加子节点
                 </a>
@@ -49,7 +49,7 @@
         </shiro:hasPermission>
         <shiro:hasPermission name="showcase:tree:update">
             <li ${op eq '移动节点' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/tree/move/${id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/showcase/tree/${id}/move?BackURL=<es:BackURL/>">
                     <i class="icon-move"></i>
                     移动节点
                 </a>
@@ -63,7 +63,7 @@
 
                 <c:if test="${not m.leaf}">
                     <li ${op eq '查看子节点' ? 'class="active"' : ''}>
-                        <a href="${ctx}/showcase/tree/children/${id}?BackURL=<es:BackURL/>">
+                        <a href="${ctx}/showcase/tree/${id}/children?BackURL=<es:BackURL/>">
                             <i class="icon-list"></i>
                             查看子节点
                         </a>
@@ -71,7 +71,7 @@
                 </c:if>
                 <c:if test="${not m.root}">
                     <li>
-                        <a href="${ctx}/showcase/tree/update/${m.parentId}?BackURL=<es:BackURL/>">
+                        <a href="${ctx}/showcase/tree/${m.parentId}/update?BackURL=<es:BackURL/>">
                             <i class="icon-reply"></i>
                             父节点
                         </a>

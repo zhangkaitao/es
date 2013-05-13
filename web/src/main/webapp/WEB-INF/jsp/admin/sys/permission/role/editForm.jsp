@@ -30,7 +30,7 @@
             </li>
             <shiro:hasPermission name="sys:role:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/permission/role/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/role/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
@@ -38,7 +38,7 @@
             </shiro:hasPermission>
             <shiro:hasPermission name="sys:role:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/permission/role/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/role/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>

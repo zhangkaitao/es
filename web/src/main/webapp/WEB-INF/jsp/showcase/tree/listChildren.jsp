@@ -7,25 +7,25 @@
 
     <ul class="nav nav-tabs">
         <li ${empty param['search.show_eq'] ? 'class="active"' : ''}>
-            <a href="${ctx}/showcase/tree/children/${parent.id}">
+            <a href="${ctx}/showcase/tree/${parent.id}/children">
                 <i class="icon-table"></i>
                 [${parent.name}]子节点列表
             </a>
         </li>
         <li ${param['search.show_eq'] eq 'true' ? 'class="active"' : ''}>
-            <a href="${ctx}/showcase/tree/children/${parent.id}?search.show_eq=true">
+            <a href="${ctx}/showcase/tree/${parent.id}/children?search.show_eq=true">
                 <i class="icon-table"></i>
                 显示的
             </a>
         </li>
         <li ${param['search.show_eq'] eq 'false' ? 'class="active"' : ''}>
-            <a href="${ctx}/showcase/tree/children/${parent.id}?search.show_eq=false">
+            <a href="${ctx}/showcase/tree/${parent.id}/children?search.show_eq=false">
                 <i class="icon-table"></i>
                 隐藏的
             </a>
         </li>
         <li>
-            <a href="${ctx}/showcase/tree/update/${parent.id}">
+            <a href="${ctx}/showcase/tree/${parent.id}/update">
                 <i class="icon-reply"></i>
                 返回父节点
             </a>
@@ -38,7 +38,7 @@
         <div class="span4">
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:tree:create">
-                <a class="btn btn-custom" href="${ctx}/showcase/tree/appendChild/${parent.id}?BackURL=<es:BackURL/>">
+                <a class="btn btn-custom" href="${ctx}/showcase/tree/${parent.id}/appendChild?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
                     添加子节点
                 </a>

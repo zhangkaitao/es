@@ -7,25 +7,25 @@
 
     <ul class="nav nav-tabs">
         <li ${empty param['search.show_eq'] ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/organization/job/children/${parent.id}">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/children">
                 <i class="icon-table"></i>
                 [${parent.name}]子节点列表
             </a>
         </li>
         <li ${param['search.show_eq'] eq 'true' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/organization/job/children/${parent.id}?search.show_eq=true">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/children?search.show_eq=true">
                 <i class="icon-table"></i>
                 显示的
             </a>
         </li>
         <li ${param['search.show_eq'] eq 'false' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/organization/job/children/${parent.id}?search.show_eq=false">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/children?search.show_eq=false">
                 <i class="icon-table"></i>
                 隐藏的
             </a>
         </li>
         <li>
-            <a href="${ctx}/admin/sys/organization/job/update/${parent.id}">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/update">
                 <i class="icon-reply"></i>
                 返回父节点
             </a>

@@ -19,10 +19,10 @@ $.zTree = {
      */
     initMovableTree : function(config) {
 
-        config.renameUrl = config.renameUrl || (config.urlPrefix + "/ajax/rename/{id}?newName={newName}");
-        config.removeUrl = config.removeUrl || (config.urlPrefix + "/ajax/delete/{id}");
-        config.addUrl = config.addUrl || (config.urlPrefix + "/ajax/appendChild/{id}");
-        config.moveUrl = config.moveUrl || (config.urlPrefix + "/ajax/move/{sourceId}/{targetId}/{moveType}");
+        config.renameUrl = config.renameUrl || (config.urlPrefix + "/ajax/{id}/rename?newName={newName}");
+        config.removeUrl = config.removeUrl || (config.urlPrefix + "/ajax/{id}/delete");
+        config.addUrl = config.addUrl || (config.urlPrefix + "/ajax/{id}/appendChild");
+        config.moveUrl = config.moveUrl || (config.urlPrefix + "/ajax/{sourceId}/{targetId}/{moveType}/move");
         config.asyncLoadAll = config.asyncLoadAll || false;
         config.loadUrl = config.loadUrl || (config.urlPrefix + "/ajax/load" +
                 "?async=" + config.async +
@@ -452,9 +452,9 @@ $.zTree = {
         }
     },
     initMaintainBtn : function(maintainUrlPrefix, tableId, async) {
-        var updateUrl = maintainUrlPrefix + "/update/{id}",
+        var updateUrl = maintainUrlPrefix + "/{id}/update",
             deleteUrl = maintainUrlPrefix + "/batch/delete",
-            moveTreeUrl = maintainUrlPrefix + "/move/{id}?async=" + async;
+            moveTreeUrl = maintainUrlPrefix + "/{id}/move?async=" + async;
 
         $("#moveTree").off("click").on("click", function () {
             var table = $("#" + tableId);

@@ -139,7 +139,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/editForm";
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.GET)
     public String updateForm(@PathVariable("id") M m, Model model, RedirectAttributes redirectAttributes) {
 
         if(permissionList != null) {
@@ -158,7 +158,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         model.addAttribute(Constants.OP_NAME, "修改");
         return getViewPrefix() + "/editForm";
     }
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             Model model,
             @ModelAttribute("m") M m, BindingResult result,
@@ -178,7 +178,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return redirectToUrl(getViewPrefix() + "/success");
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.GET)
     public String deleteForm(@PathVariable("id") M m, Model model) {
 
 
@@ -192,7 +192,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/editForm";
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)
     public String deleteSelfAndChildren(
             Model model,
             @ModelAttribute("m") M m, BindingResult result,
@@ -241,7 +241,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     }
 
 
-    @RequestMapping(value = "appendChild/{parent}", method = RequestMethod.GET)
+    @RequestMapping(value = "{parent}/appendChild", method = RequestMethod.GET)
     public String appendChildForm(@PathVariable("parent") M parent, Model model) {
 
 
@@ -259,7 +259,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/appendChildForm";
     }
 
-    @RequestMapping(value = "appendChild/{parent}", method = RequestMethod.POST)
+    @RequestMapping(value = "{parent}/appendChild", method = RequestMethod.POST)
     public String appendChild(
             Model model,
             @PathVariable("parent") M parent,
@@ -283,7 +283,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return redirectToUrl(getViewPrefix() + "/success");
     }
 
-    @RequestMapping(value = "move/{source}", method = RequestMethod.GET)
+    @RequestMapping(value = "{source}/move", method = RequestMethod.GET)
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String showMoveForm(
             HttpServletRequest request,
@@ -322,7 +322,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/moveForm";
     }
 
-    @RequestMapping(value = "move/{source}", method = RequestMethod.POST)
+    @RequestMapping(value = "{source}/move", method = RequestMethod.POST)
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String move(
             HttpServletRequest request,
@@ -349,7 +349,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return redirectToUrl(getViewPrefix() + "/success");
     }
 
-    @RequestMapping(value = "children/{parent}", method = RequestMethod.GET)
+    @RequestMapping(value = "{parent}/children", method = RequestMethod.GET)
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String list(
             HttpServletRequest request,
@@ -376,7 +376,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
      * @param model
      * @return
      */
-    @RequestMapping(value = "children/{parent}", headers = "table=true", method = RequestMethod.GET)
+    @RequestMapping(value = "{parent}/children", headers = "table=true", method = RequestMethod.GET)
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String listTable(
             HttpServletRequest request,
@@ -448,9 +448,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
                 onlyCheckLeaf);
     }
 
-    @RequestMapping(value = "ajax/appendChild/{parentId}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{parent}/appendChild", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxAppendChild(HttpServletRequest request, @PathVariable("parentId") M parent) {
+    public Object ajaxAppendChild(HttpServletRequest request, @PathVariable("parent") M parent) {
 
 
         if(permissionList != null) {
@@ -464,7 +464,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return convertToZtree(child, request.getContextPath(), true, true);
     }
 
-    @RequestMapping(value = "ajax/delete/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{id}/delete", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxDeleteSelfAndChildren(@PathVariable("id") ID id) {
 
@@ -478,7 +478,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return tree;
     }
 
-    @RequestMapping(value = "ajax/rename/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{id}/rename", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxRename(HttpServletRequest request, @PathVariable("id") M tree, @RequestParam("newName") String newName) {
 
@@ -493,7 +493,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     }
 
 
-    @RequestMapping(value = "ajax/move/{sourceId}/{targetId}/{moveType}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{sourceId}/{targetId}/{moveType}/move", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxMove(
             @PathVariable("sourceId") M source, @PathVariable("targetId") M target,

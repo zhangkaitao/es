@@ -851,8 +851,8 @@ $.parentchild = {
                     height:500,
                     buttons:{}
                 },
-                updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}" 修改时url模板 {id} 表示修改时的id,
-                deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}  删除时url模板 {id} 表示删除时的id,
+                updateUrl : "${ctx}/showcase/parentchild/parent/child/{id}/update" 修改时url模板 {id} 表示修改时的id,
+                deleteUrl : "${ctx}/showcase/parentchild/parent/child/{id}/delete  删除时url模板 {id} 表示删除时的id,
             }
      * @param options
      * @return {boolean}
@@ -1099,8 +1099,8 @@ $.parentchild = {
      *     prefixParamName : "" 子表单 参数前缀,
      *     modalSettings:{} 打开的模态窗口设置
      *     createUrl : "${ctx}/showcase/parentchild/parent/child/create",
-     *     updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}" 修改时url模板 {id} 表示修改时的id,
-     *     deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}  删除时url模板 {id} 表示删除时的id,
+     *     updateUrl : "${ctx}/showcase/parentchild/parent/child/{id}/update" 修改时url模板 {id} 表示修改时的id,
+     *     deleteUrl : "${ctx}/showcase/parentchild/parent/child/{id}/delete  删除时url模板 {id} 表示删除时的id,
      * }
      */
     initParentForm : function(options) {
@@ -1593,7 +1593,7 @@ $.table = {
             var checkbox = $.table.getFirstSelectedCheckbox($table);
             if(!checkbox.length)  return;
             var id = checkbox.val();
-            window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.table.encodeTableURL($table);
+            window.location.href = urlPrefix + "/" + id + "/update?BackURL=" + $.table.encodeTableURL($table);
         });
     },
     initCreate : function($table, urlPrefix) {
@@ -1631,7 +1631,7 @@ $.table = {
         //支持双击编辑
         $table.children("tbody").children("tr").off("dblclick").on("dblclick", function() {
             var id = $(this).find(":checkbox[name=ids]").val();
-            window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.table.encodeTableURL($table);
+            window.location.href = urlPrefix + "/" + id + "/update?BackURL=" + $.table.encodeTableURL($table);
         });
 
     },
@@ -1658,7 +1658,7 @@ $.table = {
 $.movable = {
     /**
      * urlPrefix：指定移动URL的前缀，
-     * 如/sample，生成的URL格式为/sample/move/{direction:方向(up|down)}/{fromId}/{toId}
+     * 如/sample，生成的URL格式为/sample/{fromId}/{toId}/{direction:方向(up|down)}
      * @param table
      * @param urlPrefix
      */
@@ -1668,7 +1668,7 @@ $.movable = {
         }
         var urlPrefix = table.data("move-url-prefix");
         if(!urlPrefix) {
-            $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/move'&gt;<br/>自动生成：/move/{direction:方向(up|down)}/{fromId}/{toId}"});
+            $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/sample'&gt;<br/>自动生成：/sample/{fromId}/{toId}/{direction:方向(up|down)}"});
         }
         var fixHelper = function (e, tr) {
             var $originals = tr.children();
@@ -1766,7 +1766,7 @@ $.movable = {
                 }
             }
             $.app.waiting("正在移动");
-            var url = urlPrefix + "/" + direction + "/" + fromId + "/" + toId;
+            var url = urlPrefix + "/" + fromId + "/" + toId + "/" + direction;
             $.getJSON(url, function(data) {
                 $.app.waitingOver();
                 if(data.success) {

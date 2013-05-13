@@ -28,7 +28,7 @@
             </li>
             <shiro:hasPermission name="conf:icon:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/conf/icon/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/conf/icon/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
@@ -36,7 +36,7 @@
             </shiro:hasPermission>
             <shiro:hasPermission name="conf:icon:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/conf/icon/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/conf/icon/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>

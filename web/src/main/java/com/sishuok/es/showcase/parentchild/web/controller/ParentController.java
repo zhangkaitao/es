@@ -82,19 +82,19 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     }
 
     @Override
-    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.GET)
     public String showUpdateForm(@PathVariable("id") Parent parent, Model model) {
         model.addAttribute("childList", childService.findByParent(parent, null).getContent());
         return super.showUpdateForm(parent, model);
     }
 
-    @RequestMapping(value = "update/discard/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update/discard", method = RequestMethod.POST)
     @Override
     public String update(Model model, @Valid @ModelAttribute("m") Parent parent, BindingResult result, @RequestParam(value = "BackURL", required = false) String backURL, RedirectAttributes redirectAttributes) {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             Model model,
             @Valid @ModelAttribute("parent") Parent parent, BindingResult result,
@@ -110,7 +110,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         return redirectToUrl(backURL);
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.GET)
     @Override
     public String showDeleteForm(@PathVariable("id") Parent parent, Model model) {
         model.addAttribute("childList", childService.findByParent(parent, null).getContent());
@@ -150,7 +150,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         }
         return "showcase/parentchild/child/editForm";
     }
-    @RequestMapping(value = "child/update/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "child/{id}/update", method = RequestMethod.GET)
     public String showChildUpdateForm(
             Model model,
             @PathVariable("id") Child child,
@@ -172,7 +172,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         return "showcase/parentchild/child/editForm";
     }
 
-    @RequestMapping(value = "child/delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "child/{id}/delete", method = RequestMethod.POST)
     @ResponseBody
     public Child deleteChild(@PathVariable("id") Child child) {
 
@@ -193,9 +193,9 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         return ids;
     }
 
-    @RequestMapping(value = "child/{parentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "{parent}/child", method = RequestMethod.GET)
     @PageableDefaults(value = Integer.MAX_VALUE, sort = "id=desc")
-    public String listChild(Model model, @PathVariable("parentId") Long parentId, Searchable searchable) {
+    public String listChild(Model model, @PathVariable("parent") Long parentId, Searchable searchable) {
 
         this.permissionList.assertHasEditPermission();
 
