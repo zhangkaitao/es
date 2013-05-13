@@ -10,7 +10,7 @@
         <c:if test="${op eq '新增'}">
             <c:forEach items="${types}" var="t">
                 <li ${type eq t ? 'class="active"' : ''}>
-                    <a href="${ctx}/admin/conf/icon/create/${t}?BackURL=<es:BackURL/>">
+                    <a href="${ctx}/admin/conf/icon/${t}/create?BackURL=<es:BackURL/>">
                         <i class="icon-file"></i>
                         新增${t.info}
                     </a>

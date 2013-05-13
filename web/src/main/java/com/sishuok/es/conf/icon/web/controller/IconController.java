@@ -72,7 +72,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "create/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "{type}/create", method = RequestMethod.GET)
     public String showCreateForm(@PathVariable(value = "type") IconType type, Model model) {
         Icon icon = new Icon();
         icon.setType(type);
@@ -85,7 +85,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "create/{type}", method = RequestMethod.POST)
+    @RequestMapping(value = "{type}/create", method = RequestMethod.POST)
     public String create(
             HttpServletRequest request,
             Model model,

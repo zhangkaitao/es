@@ -35,7 +35,7 @@
                     <ul class="dropdown-menu">
                         <c:forEach items="${types}" var="t">
                             <li>
-                                <a class="btn" href="${ctx}/admin/conf/icon/create/${t}">
+                                <a class="btn" href="${ctx}/admin/conf/icon/${t}/create">
                                     <i class="icon-file"></i>
                                     ${t.info}
                                 </a>
