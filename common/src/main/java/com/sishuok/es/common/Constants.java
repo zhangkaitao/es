@@ -32,6 +32,8 @@ public interface Constants {
      */
     String BACK_URL = "BackURL";
 
+    String IGNORE_BACK_URL = "ignoreBackURL";
+
     /**
      * 当前请求的地址 带参数
      */

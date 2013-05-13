@@ -49,13 +49,6 @@
                     <i class="icon-chevron-down"></i>
                     孩子节点
                 </button>
-
-
-                <a class="btn" href="<es:BackURL/>">
-                    <i class="icon-reply"></i>
-                    返回
-                </a>
-
             </div>
         </div>
 </form>

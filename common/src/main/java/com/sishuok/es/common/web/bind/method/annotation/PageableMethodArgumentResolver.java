@@ -164,7 +164,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
             int order = 0;
             String orderStr = name.substring(sortNamePrefix.length(), propertyIndex - 1);
             try {
-                if(StringUtils.hasLength(orderStr)) {
+                if(!StringUtils.isEmpty(orderStr)) {
                     order = Integer.valueOf(orderStr);
                 }
             } catch (Exception e) {
@@ -175,13 +175,6 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
             Sort.Direction direction = Sort.Direction.fromString(sortMap.get(name)[0]);
 
             orderedSortList.add(new OrderedSort(property, direction, order));
-        }
-
-        //jq grid sort
-        String sortProperty = webRequest.getParameter("sidx");
-        String direction = webRequest.getParameter("sord");
-        if(StringUtils.hasLength(sortProperty)) {
-            orderedSortList.add(new OrderedSort(sortProperty, Sort.Direction.fromString(direction), 0));
         }
 
         Collections.sort(orderedSortList);

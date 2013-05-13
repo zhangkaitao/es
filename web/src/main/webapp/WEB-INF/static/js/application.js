@@ -1611,7 +1611,7 @@ $.table = {
             return false;
         });
     },
-    initTableBtn : function($table) {
+    initTableBtn : function($table, urlPrefix) {
         if(!$table || !$table.length) {
             return;
         }
@@ -1625,7 +1625,13 @@ $.table = {
                 window.location.href = url + (url.indexOf("?") == -1 ? "?" : "&") + "BackURL=" + $.table.encodeTableURL($table);
                 return false;
             });
+        });
 
+        urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
+        //支持双击编辑
+        $table.children("tbody").children("tr").off("dblclick").on("dblclick", function() {
+            var id = $(this).find(":checkbox[name=ids]").val();
+            window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.table.encodeTableURL($table);
         });
 
     },
@@ -1815,7 +1821,7 @@ $.btn = {
                     title : title,
                     message : message,
                     ok : function() {
-                        $.table.reloadTable($table, url, $.table.tableURL($table));
+                        window.location.href = url;
                     }
                 });
             });
@@ -1960,7 +1966,7 @@ $(function () {
 
     $("[data-toggle='tooltip']").each(function() {
 
-        $(this).tooltip();
+        $(this).tooltip({delay:300});
     });
 
 //    if(!$("body").is(".index")) {

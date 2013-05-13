@@ -13,6 +13,7 @@ import com.sishuok.es.showcase.tree.service.TreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,7 +38,8 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
     public String changeStatus(
             HttpServletRequest request,
             @PathVariable("newStatus") Boolean newStatus,
-            @RequestParam("ids") Long[] ids
+            @RequestParam("ids") Long[] ids,
+            RedirectAttributes redirectAttributes
     ) {
 
 
@@ -48,7 +50,7 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
             tree.setShow(newStatus);
             treeService.update(tree);
         }
-
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }

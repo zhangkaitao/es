@@ -11,6 +11,7 @@ import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Query;
 
@@ -22,6 +23,29 @@ import javax.persistence.Query;
 public class DefaultSearchCallback implements SearchCallback {
 
     private static final String paramPrefix = "param_";
+
+    private String alias;
+    private String aliasWithDot;
+    public DefaultSearchCallback() {
+        this("");
+    }
+
+    public DefaultSearchCallback(String alias) {
+        this.alias = alias;
+        if(!StringUtils.isEmpty(alias)) {
+            this.aliasWithDot = alias + ".";
+        } else {
+            this.aliasWithDot = "";
+        }
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public String getAliasWithDot() {
+        return aliasWithDot;
+    }
 
     @Override
     public void prepareQL(StringBuilder ql, Searchable search) {
@@ -63,6 +87,7 @@ public class DefaultSearchCallback implements SearchCallback {
         String entityProperty = searchFilter.getEntityProperty();
         String operatorStr = searchFilter.getOperatorStr();
         //实体名称
+        condition.append(getAliasWithDot());
         condition.append(entityProperty);
         //操作符
         //1、如果是自定义查询符号，则使用SearchPropertyMappings中定义的默认的操作符
@@ -131,7 +156,7 @@ public class DefaultSearchCallback implements SearchCallback {
         if(search.hashSort()) {
             ql.append(" order by ");
             for (Sort.Order order : search.getSort()) {
-                ql.append(String.format("%s %s, ", order.getProperty(), order.getDirection().name().toLowerCase()));
+                ql.append(String.format("%s%s %s, ", getAliasWithDot(), order.getProperty(), order.getDirection().name().toLowerCase()));
             }
 
             ql.delete(ql.length() - 2, ql.length());

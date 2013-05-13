@@ -6,6 +6,7 @@
     <%@include file="nav.jspf"%>
 
     <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal" enctype="multipart/form-data">
+
         <es:showGlobalError commandName="m"/>
 
         <form:hidden path="id"/>
@@ -68,10 +69,6 @@
                         <i class="${icon}"></i>
                             ${op}
                     </button>
-                    <a href="<es:BackURL/>" class="btn">
-                        <i class="icon-reply"></i>
-                        返回
-                    </a>
                 </div>
             </div>
 

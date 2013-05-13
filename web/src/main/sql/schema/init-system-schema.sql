@@ -1,3 +1,5 @@
+#如果复制到mysql中执行时 加上
+#DELIMITER ;;
 drop table if exists `sys_user`;;
 drop table if exists `sys_user_status_history`;;
 drop trigger if exists `trigger_sys_user_off_online`;;

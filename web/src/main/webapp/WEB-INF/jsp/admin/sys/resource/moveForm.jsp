@@ -49,13 +49,6 @@
                     <i class="icon-chevron-down"></i>
                     孩子节点
                 </button>
-
-
-                <a class="btn" href="<es:BackURL/>">
-                    <i class="icon-reply"></i>
-                    返回
-                </a>
-
             </div>
         </div>
 </form>
@@ -65,17 +58,11 @@
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
 $(function () {
-    var async = ${not empty param.async and param.async eq true};
-    var zNodes =[
-        <c:forEach items="${trees}" var="m">
-        { id:${m.id}, pId:${m.pId}, name:"${m.name}", iconSkin:"${m.iconSkin}", open: true, root : ${m.root},isParent:${m.isParent}, nocheck:${m.nocheck}},
-        </c:forEach>
-    ];
     $.zTree.initSelectTree({
-        zNodes : zNodes,
+        zNodes : null,
         urlPrefix : "${ctx}/admin/sys/resource",
         excludeId: "${source.id}",
-        async : async,
+        async : true,
         select : {
             btn : $("#selectTree,#targetName"),
             id : "targetId",

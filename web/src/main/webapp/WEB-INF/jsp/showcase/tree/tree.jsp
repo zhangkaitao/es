@@ -45,8 +45,9 @@
             setting : {
                 callback : {
                     onClick: function(event, treeId, treeNode, clickFlag) {
-                        parent.frames['listFrame'].location.href=
-                                '${ctx}/showcase/tree/list/' + treeNode.id + "?async=" + async;
+                        var url = '${ctx}/showcase/tree/update/' + treeNode.id;
+                        parent.frames['listFrame'].location.href= url + "?BackURL=" + url;
+                                ;
                     }
                 }
             }

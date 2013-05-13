@@ -35,10 +35,10 @@ import static org.springframework.data.jpa.repository.query.QueryUtils.*;
 public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaRepository<M, ID>
         implements BaseRepository<M, ID> {
 
-    public static final String LOGIC_DELETE_ALL_QUERY_STRING = "update %s o set o.deleted=true where o in (?1)";
-    public static final String DELETE_ALL_QUERY_STRING = "delete from %s o where o in (?1)";
-    public static final String FIND_QUERY_STRING = "from %s o where 1=1 ";
-    public static final String COUNT_QUERY_STRING = "select count(o) from %s o where 1=1 ";
+    public static final String LOGIC_DELETE_ALL_QUERY_STRING = "update %s x set x.deleted=true where x in (?1)";
+    public static final String DELETE_ALL_QUERY_STRING = "delete from %s x where x in (?1)";
+    public static final String FIND_QUERY_STRING = "from %s x where 1=1 ";
+    public static final String COUNT_QUERY_STRING = "select count(x) from %s x where 1=1 ";
 
     private final EntityManager em;
     private final JpaEntityInformation<M, ID> entityInformation;

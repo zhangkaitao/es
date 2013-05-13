@@ -161,11 +161,11 @@
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
                 $.app.readonlyForm($("#editForm"), false);
-                $.sys.user.edit.removeOrganizationBtn();
+                $.sys.organization.removeOrganizationBtn();
             </c:when>
             <c:when test="${op eq '查看'}">
                 $.app.readonlyForm($("#editForm"), true);
-                $.sys.user.edit.removeOrganizationBtn();
+                $.sys.organization.removeOrganizationBtn();
             </c:when>
             <c:otherwise>
                 $.sys.user.initValidator($("#editForm"));

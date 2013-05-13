@@ -45,10 +45,11 @@ $.conf = {
                             callback(btn.find("i").attr("class"));
                         }
 
-                        if(!btn.length) {
+                        if(!btn.length && target.closest(".sys-icon-list").length) {
                             return;
                         }
                     }
+
                     iconList.find(".tab-pane").getNiceScroll().hide();
                     iconList.fadeOut("fast");
                     $("body").unbind("mousedown", onBodyDown);

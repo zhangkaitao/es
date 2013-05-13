@@ -13,8 +13,7 @@
           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
       default-lazy-init="true">
 
-
-    <context:property-placeholder location="classpath:resources.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:resources.properties"/>
 
     <!-- 扫描注解Bean -->
     <context:component-scan base-package="com.sishuok.es">
@@ -159,6 +158,7 @@
                 <value>classpath:ValidationMessages</value>
             </list>
         </property>
+        <property name="useCodeAsDefaultMessage" value="true"/>
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="cacheSeconds" value="60"/>
     </bean>

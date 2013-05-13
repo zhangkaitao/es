@@ -44,7 +44,7 @@
             setting : {
                 callback : {
                     onClick: function(event, treeId, treeNode, clickFlag) {
-                        parent.frames['listFrame'].location.href='${ctx}/admin/sys/organization/organization/list/' + treeNode.id + "?async=" + async ;
+                        parent.frames['listFrame'].location.href='${ctx}/admin/sys/organization/organization/update/' + treeNode.id + "?async=" + async;
                     }
                 }
             }

@@ -147,7 +147,7 @@ public class UserAuthService {
                 Resource resource = resourceService.findOne(rrp.getResourceId());
 
                 //不可用 即没查到 或者标识字符串不存在
-                if(resource == null || !StringUtils.hasLength(resource.getIdentity()) || Boolean.FALSE.equals(resource.getShow())) {
+                if(resource == null || StringUtils.isEmpty(resource.getIdentity()) || Boolean.FALSE.equals(resource.getShow())) {
                     continue;
                 }
 

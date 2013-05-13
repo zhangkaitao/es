@@ -454,18 +454,8 @@ $.zTree = {
     initMaintainBtn : function(maintainUrlPrefix, tableId, async) {
         var updateUrl = maintainUrlPrefix + "/update/{id}",
             deleteUrl = maintainUrlPrefix + "/batch/delete",
-            appendChildUrl = maintainUrlPrefix + "/appendChild/{id}",
             moveTreeUrl = maintainUrlPrefix + "/move/{id}?async=" + async;
 
-        $("#appendChild").off("click").on("click", function () {
-            var table = $("#" + tableId);
-            var checkbox = $.table.getFirstSelectedCheckbox(table);
-            if(!checkbox.length) {
-                return;
-            }
-            window.location.href = appendChildUrl.replace("{id}", checkbox.val()) + "?BackURL=" + $.table.encodeTableURL(table);
-            return false;
-        });
         $("#moveTree").off("click").on("click", function () {
             var table = $("#" + tableId);
             var checkbox = $.table.getFirstSelectedCheckbox(table);

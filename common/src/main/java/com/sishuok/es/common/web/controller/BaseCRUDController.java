@@ -48,7 +48,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
      * 则生成的新增权限为 sys:user:create
      */
     public void setResourceIdentity(String resourceIdentity) {
-        if(StringUtils.hasLength(resourceIdentity)) {
+        if(!StringUtils.isEmpty(resourceIdentity)) {
             permissionList = PermissionList.newPermissionList(resourceIdentity);
         }
     }

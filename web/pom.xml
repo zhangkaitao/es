@@ -22,7 +22,7 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
                     <stopPort>9999</stopPort>
                     <webAppConfig>
                         <contextPath>/${project.build.finalName}</contextPath>
@@ -131,6 +131,22 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
+
+
+        <!-- x-gen user -->
+        <dependency>
+            <groupId>com.sishuok</groupId>
+            <artifactId>x-gen</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>bsh</groupId>
+            <artifactId>bsh</artifactId>
+            <version>1.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
 

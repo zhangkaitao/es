@@ -3,7 +3,11 @@
     <c:if test="${empty noOrganizationAndJobTitle}">
         <h4 class="hr">组织机构和工作职务信息</h4>
     </c:if>
+
     <div id="selectOrganization" class="span9">
+        <div class="muted font-12" style="margin: 10px auto;">
+            请选择组织机构和工作职务
+        </div>
         <label>组织机构</label>&nbsp;
         <div class="input-append" title="选择组织机构">
             <input type="hidden" id="organizationId" value="${target.id}">
@@ -27,6 +31,10 @@
             <i class="icon-file"></i>
             添加
         </a>
+        <div class="muted font-12" style="margin: 10px auto;">
+            注意：添加的数据是临时的，还需要点击页面下方的[新增/修改]保存该数据
+        </div>
+
     </div>
     <div id="selectedOrganization" class="span9">
         <div class="muted font-12" style="margin: 10px auto;">

@@ -3,9 +3,6 @@
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-zTree-css.jspf"%>
 <style>
-    #resourceInfo, #permissionInfo {
-        height: 80px;
-    }
     #resourceInfo, #appendResourcePermissionBtn {
         padding-top: 20px;
     }
@@ -97,38 +94,43 @@
 
 
         </div>
-        <div id="resourcePermissionInfo">
+        <div id="resourcePermissionInfo" class="span10">
             <h4 class="hr">授权信息</h4>
             <div id="selectResourcePermission">
-            <div id="resourceInfo" class="span3">
-                <label>资源</label>&nbsp;
-                <div class="input-append" title="选择资源">
-                    <input type="hidden" id="resourceId" value="${target.id}">
-                    <input type="text" id="resourceName" class="input-medium" value="${target.name}"
-                           readonly="readonly">
-                    <a id="selectResourceTree" href="javascript:;">
-                        <span class="add-on"><i class="icon-chevron-down"></i></span>
-                    </a>
+                <div class="muted font-12" style="margin: 10px auto;">
+                    请选择授权的角色
+                </div>
+                <div id="resourceInfo" class="span3">
+                    <label>资源</label>&nbsp;
+                    <div class="input-append" title="选择资源">
+                        <input type="hidden" id="resourceId" value="${target.id}">
+                        <input type="text" id="resourceName" class="input-medium" value="${target.name}"
+                               readonly="readonly">
+                        <a id="selectResourceTree" href="javascript:;">
+                            <span class="add-on"><i class="icon-chevron-down"></i></span>
+                        </a>
+                    </div>
                 </div>
 
-            </div>
+                <div id="permissionInfo" class="span4">
+                    <label>权限</label>&nbsp;
+                    <select id="permissions" multiple="multiple">
+                        <c:forEach items="${permissions}" var="p">
+                            <option value="${p.id}" title="${p.description}">${p.name}&nbsp;&nbsp;(${p.permission})</option>
+                        </c:forEach>
+                    </select>
+                </div>
 
-            <div id="permissionInfo" class="span4">
-                <label>权限</label>&nbsp;
-                <select id="permissions" multiple="multiple">
-                    <c:forEach items="${permissions}" var="p">
-                        <option value="${p.id}" title="${p.description}">${p.name}&nbsp;&nbsp;(${p.permission})</option>
-                    </c:forEach>
-                </select>
-            </div>
-
-            <div id="appendResourcePermissionBtn" class="control-group span2">
-                &nbsp;
-                <a class="btn btn-warning btn-add-resource-permission">
-                    <i class="icon-file"></i>
-                    添加
-                </a>
-            </div>
+                <div id="appendResourcePermissionBtn" class="control-group span2">
+                    &nbsp;
+                    <a class="btn btn-warning btn-add-resource-permission">
+                        <i class="icon-file"></i>
+                        添加
+                    </a>
+                </div>
+                <div class="muted font-12" style="margin: 10px auto;float: left;width: 100%;">
+                    注意：添加的数据是临时的，还需要点击页面下方的[新增/修改]保存该数据
+                </div>
             </div>
 
             <div id="selectedResourcePermssion" class="span9">
@@ -180,8 +182,6 @@
                     </tbody>
                 </table>
             </div>
-
-
         </div>
 
             <div class="clearfix"></div>

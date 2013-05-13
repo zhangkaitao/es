@@ -58,11 +58,11 @@ class SimpleBaseRepositoryFactory<M, ID extends Serializable> extends JpaReposit
             SearchableQuery searchableQuery = AnnotationUtils.findAnnotation(repositoryInterface, SearchableQuery.class);
             if(searchableQuery != null) {
                 String countAllQL = searchableQuery.countAllQuery();
-                if(StringUtils.hasLength(countAllQL)) {
+                if(!StringUtils.isEmpty(countAllQL)) {
                     repository.setCountAllQL(countAllQL);
                 }
                 String findAllQL = searchableQuery.countAllQuery();
-                if(StringUtils.hasLength(findAllQL)) {
+                if(!StringUtils.isEmpty(findAllQL)) {
                     repository.setFindAllQL(findAllQL);
                 }
                 Class<? extends SearchCallback> callbackClass = searchableQuery.callbackClass();
