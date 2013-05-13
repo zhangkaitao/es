@@ -134,12 +134,12 @@
 
 
         <!-- x-gen user -->
-        <dependency>
-            <groupId>com.sishuok</groupId>
-            <artifactId>x-gen</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.sishuok</groupId>-->
+            <!--<artifactId>x-gen</artifactId>-->
+            <!--<version>1.0</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>bsh</groupId>
             <artifactId>bsh</artifactId>
