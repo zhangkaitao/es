@@ -21,10 +21,10 @@
             <td>${m.host}</td>
             <td>${m.systemHost}</td>
             <td>${m.userAgent}</td>
-            <td><time:prettyTime date="${m.lastLoginTimestamp}"/></td>
-            <td><time:prettyTime date="${m.lastStopTimestamp}"/></td>
+            <td><time:PrettyTime date="${m.lastLoginTimestamp}"/></td>
+            <td><time:PrettyTime date="${m.lastStopTimestamp}"/></td>
             <td>${m.loginCount}</td>
-            <td><time:prettySecond seconds="${m.totalOnlineTime}"/></td>
+            <td><time:PrettySecond seconds="${m.totalOnlineTime}"/></td>
         </tr>
     </c:forEach>
     </tbody>
