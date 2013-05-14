@@ -14,6 +14,7 @@
     &nbsp;
     <button type="submit" class="btn ">查询</button>
     <a class="btn btn-link accordion-toggle" data-toggle="collapse" href="#searchMore">高级查询</a>
+    <a class="btn btn-link btn-clear-search">清空</a>
 
     <%--more--%>
     <div id="searchMore" class="accordion-body collapse">

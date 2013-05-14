@@ -54,10 +54,6 @@
                         <i class="${icon}"></i>
                             ${op}
                     </button>
-                    <a href="<es:BackURL/>" class="btn">
-                        <i class="icon-reply"></i>
-                        返回
-                    </a>
                 </div>
             </div>
 

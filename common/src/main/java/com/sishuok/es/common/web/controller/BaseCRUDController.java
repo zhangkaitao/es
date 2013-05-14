@@ -48,7 +48,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
      * 则生成的新增权限为 sys:user:create
      */
     public void setResourceIdentity(String resourceIdentity) {
-        if(StringUtils.hasLength(resourceIdentity)) {
+        if(!StringUtils.isEmpty(resourceIdentity)) {
             permissionList = PermissionList.newPermissionList(resourceIdentity);
         }
     }
@@ -131,7 +131,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     }
 
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.GET)
     public String showUpdateForm(@PathVariable("id") M m, Model model) {
 
         if(permissionList != null) {
@@ -144,7 +144,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         return getViewPrefix() + "/editForm";
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             Model model, @Valid @ModelAttribute("m") M m, BindingResult result,
             @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
@@ -162,7 +162,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         return redirectToUrl(backURL);
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.GET)
     public String showDeleteForm(@PathVariable("id") M m, Model model) {
 
         if(permissionList != null) {
@@ -175,7 +175,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         return getViewPrefix() + "/editForm";
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)
     public String delete(
             @PathVariable("id") M m,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
@@ -203,11 +203,8 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
         baseService.delete(ids);
 
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
     }
-
-
-
 
 }

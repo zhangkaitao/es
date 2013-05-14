@@ -19,6 +19,10 @@ import javax.persistence.Query;
  */
 public class UserSearchCallback extends DefaultSearchCallback {
 
+    public UserSearchCallback() {
+        super("x");
+    }
+
     @Override
     public void prepareQL(StringBuilder ql, Searchable search) {
         super.prepareQL(ql, search);

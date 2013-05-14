@@ -25,7 +25,7 @@
         </li>
         <shiro:hasPermission name="sys:user:create">
         <li ${op eq '修改' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/update/${m.id}?BackURL=<es:BackURL/>">
+            <a href="${ctx}/admin/sys/user/${m.id}/update?BackURL=<es:BackURL/>">
                 <i class="icon-edit"></i>
                 修改
             </a>
@@ -33,7 +33,7 @@
         </shiro:hasPermission>
         <shiro:hasPermission name="sys:user:delete">
         <li ${op eq '删除' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/delete/${m.id}?BackURL=<es:BackURL/>">
+            <a href="${ctx}/admin/sys/user/${m.id}/delete?BackURL=<es:BackURL/>">
                 <i class="icon-trash"></i>
                 删除
             </a>
@@ -161,11 +161,11 @@
             <c:when test="${op eq '删除'}">
                 //删除时不验证 并把表单readonly
                 $.app.readonlyForm($("#editForm"), false);
-                $.sys.user.edit.removeOrganizationBtn();
+                $.sys.organization.removeOrganizationBtn();
             </c:when>
             <c:when test="${op eq '查看'}">
                 $.app.readonlyForm($("#editForm"), true);
-                $.sys.user.edit.removeOrganizationBtn();
+                $.sys.organization.removeOrganizationBtn();
             </c:when>
             <c:otherwise>
                 $.sys.user.initValidator($("#editForm"));

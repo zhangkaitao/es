@@ -66,6 +66,13 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
     @Transactional
+    public void deleteSelfAndChild(List<M> mList) {
+        for(M m : mList) {
+            deleteSelfAndChild(m);
+        }
+    }
+
+    @Transactional
     public void appendChild(M parent, M child) {
         child.setParentId(parent.getId());
         child.setParentIds(parent.makeSelfAsNewParentIds());
@@ -277,7 +284,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             return ids;
         }
         for(String idStr : StringUtils.tokenizeToStringArray(m.getParentIds(), "/")) {
-            if(StringUtils.hasLength(idStr)) {
+            if(!StringUtils.isEmpty(idStr)) {
                 ids.add(Long.valueOf(idStr));
             }
         }

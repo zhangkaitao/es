@@ -1,3 +1,6 @@
+#如果复制到mysql中执行时 加上
+#DELIMITER ;;
+
 drop table if exists `showcase_sample`;;
 drop table if exists `showcase_moveable`;;
 drop table if exists `showcase_upload`;;

@@ -523,14 +523,13 @@ iframe[tabs="true"] {
     border-color: #0069D6;
     color: #fff;
     border: 1px solid #135aa4;
-
+    padding-right: 3px;
 }
 
 
 
 .tabs-bar.ui-tabs .ui-tabs-nav li .menu, .tabs-bar.ui-tabs .ui-tabs-nav li .menu:hover {
     font-size: 12px;
-    float: left;
     cursor: pointer;
     color: #fff;
 }
@@ -859,6 +858,10 @@ iframe[tabs="true"] {
 
 .font-12 {
     font-size: 12px;
+    font-weight: normal;
+}
+.font-14 {
+    font-size: 14px;
     font-weight: normal;
 }
 

@@ -851,8 +851,8 @@ $.parentchild = {
                     height:500,
                     buttons:{}
                 },
-                updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}" 修改时url模板 {id} 表示修改时的id,
-                deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}  删除时url模板 {id} 表示删除时的id,
+                updateUrl : "${ctx}/showcase/parentchild/parent/child/{id}/update" 修改时url模板 {id} 表示修改时的id,
+                deleteUrl : "${ctx}/showcase/parentchild/parent/child/{id}/delete  删除时url模板 {id} 表示删除时的id,
             }
      * @param options
      * @return {boolean}
@@ -1099,8 +1099,8 @@ $.parentchild = {
      *     prefixParamName : "" 子表单 参数前缀,
      *     modalSettings:{} 打开的模态窗口设置
      *     createUrl : "${ctx}/showcase/parentchild/parent/child/create",
-     *     updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}" 修改时url模板 {id} 表示修改时的id,
-     *     deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}  删除时url模板 {id} 表示删除时的id,
+     *     updateUrl : "${ctx}/showcase/parentchild/parent/child/{id}/update" 修改时url模板 {id} 表示修改时的id,
+     *     deleteUrl : "${ctx}/showcase/parentchild/parent/child/{id}/delete  删除时url模板 {id} 表示删除时的id,
      * }
      */
     initParentForm : function(options) {
@@ -1136,7 +1136,7 @@ $.parentchild = {
         });
 
 
-        $(".btn-batch-delete-child").click(function() {
+        $(".btn-delete-child").click(function() {
             var $trs = $childTable.find("tbody tr").has(".check :checkbox:checked");
             if(!$trs.length) {
                 $.app.alert({message : "请先选择要删除的数据！"});
@@ -1204,8 +1204,8 @@ $.table = {
 
         //初始化table里的a标签
         $.table.initTableBtn(table);
-        //初始化批量删除和修改按钮
-        $.table.initBatchDeleteSelected(table);
+        //初始化删除和修改按钮
+        $.table.initDeleteSelected(table);
         $.table.initUpdateSelected(table);
         $.table.initCreate(table);
 
@@ -1267,9 +1267,24 @@ $.table = {
     initSearchForm : function(table) {
         var id = $(table).attr("id");
         var searchForm = table.closest("[data-table='" + id + "']").find(".search-form");
+
         if(!searchForm.length) {
             return;
         }
+
+
+        searchForm.find(".btn-clear-search").click(function() {
+
+            if (table.data("async") == true) {
+                var resetBtn = searchForm.find("input[type='reset']");
+                if(!resetBtn.length) {
+                    searchForm.append("<input type='reset' style='display:none'>");
+                    resetBtn = searchForm.find("input[type='reset']");
+                }
+                resetBtn.click();
+            }
+            turnSearch(table, searchForm, true);
+        });
 
         var turnSearch = function(table, searchForm, isSearchAll) {
             var url = $.table.tableURL(table);
@@ -1292,7 +1307,7 @@ $.table = {
         });
 
         if(searchForm.is("[data-change-search=true]")) {
-            searchForm.find(":input:not(:button,:submit)").off("change").on("change", function() {
+            searchForm.find(":input:not(:button,:submit,:reset)").off("change").on("change", function() {
                 turnSearch(table, searchForm, false);
             });
         }
@@ -1410,6 +1425,7 @@ $.table = {
         }
         //modalDialog时 把当前url保存下来方便翻页和排序
         table.closest(".ui-dialog").data("url", backURL);
+
         if (table.data("async") == true) {
             $.app.waiting();
 
@@ -1419,13 +1435,15 @@ $.table = {
 
             if(!containerId) {//只有只替换表格时使用
                 headers.table = true;
+            } else {
+                headers.container = true;
             }
 
             $.ajax({
                 url: url,
+                async:true,
                 headers: headers
             }).done(function (data) {
-                    $.app.waitingOver();
                     if (containerId) {//装载到容器
                         $("#" + containerId).replaceWith(data);
                     } else {
@@ -1440,7 +1458,12 @@ $.table = {
                     table.data("url", backURL);
                     $.table.initTable(table);
 
+                    var callback = table.data("async-callback");
+                    if(callback && window[callback]) {
+                        window[callback](table);
+                    }
 
+                    $.app.waitingOver();
                 });
         } else {
             window.location.href = url;
@@ -1538,12 +1561,12 @@ $.table = {
         return urlPrefix;
     },
 
-    initBatchDeleteSelected : function($table, urlPrefix) {
+    initDeleteSelected : function($table, urlPrefix) {
         if(!$table || !$table.length) {
             return;
         }
 
-        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-batch-delete");
+        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-delete");
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getAllSelectedCheckbox($table);
@@ -1570,7 +1593,7 @@ $.table = {
             var checkbox = $.table.getFirstSelectedCheckbox($table);
             if(!checkbox.length)  return;
             var id = checkbox.val();
-            window.location.href = urlPrefix + "/update/" + id + "?BackURL=" + $.table.encodeTableURL($table);
+            window.location.href = urlPrefix + "/" + id + "/update?BackURL=" + $.table.encodeTableURL($table);
         });
     },
     initCreate : function($table, urlPrefix) {
@@ -1588,11 +1611,11 @@ $.table = {
             return false;
         });
     },
-    initTableBtn : function($table) {
+    initTableBtn : function($table, urlPrefix) {
         if(!$table || !$table.length) {
             return;
         }
-        $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-batch-delete").each(function() {
+        $table.closest("[data-table=" + $table.attr("id") + "]").find(".btn").not(".btn-custom,.btn-create,.btn-update,.btn-delete").each(function() {
             var $btn = $(this);
             var url = $btn.attr("href");
             if(!url || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0) {//没有url就不处理了
@@ -1602,7 +1625,13 @@ $.table = {
                 window.location.href = url + (url.indexOf("?") == -1 ? "?" : "&") + "BackURL=" + $.table.encodeTableURL($table);
                 return false;
             });
+        });
 
+        urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
+        //支持双击编辑
+        $table.children("tbody").children("tr").off("dblclick").on("dblclick", function() {
+            var id = $(this).find(":checkbox[name=ids]").val();
+            window.location.href = urlPrefix + "/" + id + "/update?BackURL=" + $.table.encodeTableURL($table);
         });
 
     },
@@ -1629,7 +1658,7 @@ $.table = {
 $.movable = {
     /**
      * urlPrefix：指定移动URL的前缀，
-     * 如/sample，生成的URL格式为/sample/move/{direction:方向(up|down)}/{fromId}/{toId}
+     * 如/sample，生成的URL格式为/sample/{fromId}/{toId}/{direction:方向(up|down)}
      * @param table
      * @param urlPrefix
      */
@@ -1639,7 +1668,7 @@ $.movable = {
         }
         var urlPrefix = table.data("move-url-prefix");
         if(!urlPrefix) {
-            $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/move'&gt;<br/>自动生成：/move/{direction:方向(up|down)}/{fromId}/{toId}"});
+            $.app.alert({message : "请添加移动地址URL，如&lt;table move-url-prefix='/sample'&gt;<br/>自动生成：/sample/{fromId}/{toId}/{direction:方向(up|down)}"});
         }
         var fixHelper = function (e, tr) {
             var $originals = tr.children();
@@ -1737,7 +1766,7 @@ $.movable = {
                 }
             }
             $.app.waiting("正在移动");
-            var url = urlPrefix + "/" + direction + "/" + fromId + "/" + toId;
+            var url = urlPrefix + "/" + fromId + "/" + toId + "/" + direction;
             $.getJSON(url, function(data) {
                 $.app.waitingOver();
                 if(data.success) {
@@ -1792,7 +1821,7 @@ $.btn = {
                     title : title,
                     message : message,
                     ok : function() {
-                        $.table.reloadTable($table, url, $.table.tableURL($table));
+                        window.location.href = url;
                     }
                 });
             });
@@ -1937,7 +1966,7 @@ $(function () {
 
     $("[data-toggle='tooltip']").each(function() {
 
-        $(this).tooltip();
+        $(this).tooltip({delay:300});
     });
 
 //    if(!$("body").is(".index")) {
@@ -1948,11 +1977,14 @@ $(function () {
         if(request.status == 0) {// 中断的不处理
             return;
         }
-        $.app.alert({
-            title : "网络故障/系统故障(请截屏反馈给管理员)",
-            message : "出错状态码:" + request.status + "[" + request.statusText + "]" + "<br/>出错页面????:" + settings.url
-        });
+
         $.app.waitingOver();
+
+        top.$.app.alert({
+            title : "网络故障/系统故障",
+            //<refresh>中间的按钮在ajax方式中删除不显示
+            message : request.responseText.replace(/(<refresh>.*<\/refresh>)/g, "")
+        });
     });
 });
 

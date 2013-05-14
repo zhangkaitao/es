@@ -21,13 +21,13 @@
                 </a>
             </li>
             <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/permission/permission/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/permission/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
             </li>
             <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/permission/permission/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/permission/permission/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>

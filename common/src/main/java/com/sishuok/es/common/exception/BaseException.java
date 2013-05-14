@@ -6,11 +6,7 @@
 package com.sishuok.es.common.exception;
 
 import com.sishuok.es.common.utils.MessageUtils;
-import com.sishuok.es.common.utils.SpringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.util.StringUtils;
-
-import java.util.Locale;
 
 /**
  * 基础异常
@@ -65,7 +61,7 @@ public class BaseException extends RuntimeException {
     @Override
     public String getMessage() {
         String message = null;
-        if(StringUtils.hasLength(code)) {
+        if(!StringUtils.isEmpty(code)) {
             message = MessageUtils.message(code, args);
         }
         if(message == null) {

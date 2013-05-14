@@ -6,16 +6,15 @@
 package com.sishuok.es.common.web.controller;
 
 import com.sishuok.es.common.utils.ImagesUtils;
-import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.entity.AjaxUploadResponse;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
+import com.sishuok.es.common.utils.LogUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,7 +80,7 @@ public class AjaxUploadController {
                 }
                 continue;
             } catch (IOException e) {
-                LogUtils.error("file upload error", e);
+                LogUtils.logError("file upload error", e);
                 ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.server.error"));
                 continue;
             } catch (InvalidExtensionException e) {

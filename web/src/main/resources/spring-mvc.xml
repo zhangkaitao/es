@@ -18,6 +18,7 @@
     <!-- 注意事项请参考：http://jinnianshilongnian.iteye.com/blog/1762632 -->
     <context:component-scan base-package="com.sishuok.es" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!-- 会自动注册了validator  ConversionService  -->
@@ -122,7 +123,7 @@
     <bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
         <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
     </bean>
-    <bean class="com.sishuok.es.common.exception.web.DefaultExceptionHandler"/>
+    <bean class="com.sishuok.es.exception.web.DefaultExceptionHandler"/>
 
     <import resource="spring-shiro-mvc.xml"/>
 

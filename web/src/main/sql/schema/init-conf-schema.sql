@@ -1,3 +1,6 @@
+#如果复制到mysql中执行时 加上
+#DELIMITER ;;
+
 drop table if exists `conf_icon`;;
 
 create table `conf_icon`(

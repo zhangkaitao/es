@@ -22,7 +22,7 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
                     <stopPort>9999</stopPort>
                     <webAppConfig>
                         <contextPath>/${project.build.finalName}</contextPath>
@@ -83,7 +83,6 @@
                         <userName>${connection.username}</userName>
                         <password>${connection.password}</password>
                     </appDbConnectionSettings>
-                    <sqlDelimiter>;;</sqlDelimiter>
                     <dbDataScriptsDirectory>
                         <param>src/main/sql/data</param>
                     </dbDataScriptsDirectory>
@@ -97,6 +96,7 @@
                         create database ${db.name} CHARACTER SET 'utf8';
                     </dbCreateStatements>
                     <dbDropStatements>drop database ${db.name}; </dbDropStatements>
+                    <sqlDelimiter>;;</sqlDelimiter>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -131,6 +131,22 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
+
+
+        <!-- x-gen user -->
+        <!--<dependency>-->
+            <!--<groupId>com.sishuok</groupId>-->
+            <!--<artifactId>x-gen</artifactId>-->
+            <!--<version>1.0</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>bsh</groupId>
+            <artifactId>bsh</artifactId>
+            <version>1.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
 
@@ -179,7 +195,7 @@
                 <connection.url><![CDATA[ jdbc:h2:mem:es;DB_CLOSE_DELAY=-1 ]]></connection.url>
                 <connection.username>sa</connection.username>
                 <connection.password>sa</connection.password>
-                <jpa.showSql>fal</jpa.showSql>
+                <jpa.showSql>false</jpa.showSql>
                 <jpa.generateDdl>true</jpa.generateDdl>
                 <jpa.database>H2</jpa.database>
                 <jpa.databasePlatform>org.hibernate.dialect.H2Dialect</jpa.databasePlatform>

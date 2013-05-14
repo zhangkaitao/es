@@ -123,8 +123,8 @@
                 noTitle : true,
                 buttons:{}
             },
-            updateUrl : "${ctx}/showcase/parentchild/parent/child/update/{id}",
-            deleteUrl : "${ctx}/showcase/parentchild/parent/child/delete/{id}",
+            updateUrl : "${ctx}/showcase/parentchild/parent/child/{id}/update",
+            deleteUrl : "${ctx}/showcase/parentchild/parent/child/{id}/delete",
             alwaysNew : "${param.copy}"
         });
     });

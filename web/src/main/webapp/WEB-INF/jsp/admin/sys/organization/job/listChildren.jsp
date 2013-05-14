@@ -4,61 +4,60 @@
 
 <div data-table="table" class="panel">
 
-    <c:set var="id" value="0"/>
-    <c:if test="${not empty current}">
-        <c:set var="id" value="${current.id}"/>
-    </c:if>
 
     <ul class="nav nav-tabs">
         <li ${empty param['search.show_eq'] ? 'class="active"' : ''}>
-            <a href="${ctx}/showcase/tree/list/${id}">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/children">
                 <i class="icon-table"></i>
-                所有
+                [${parent.name}]子节点列表
             </a>
         </li>
         <li ${param['search.show_eq'] eq 'true' ? 'class="active"' : ''}>
-            <a href="${ctx}/showcase/tree/list/${id}?search.show_eq=true">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/children?search.show_eq=true">
                 <i class="icon-table"></i>
                 显示的
             </a>
         </li>
         <li ${param['search.show_eq'] eq 'false' ? 'class="active"' : ''}>
-            <a href="${ctx}/showcase/tree/list/${id}?search.show_eq=false">
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/children?search.show_eq=false">
                 <i class="icon-table"></i>
                 隐藏的
             </a>
         </li>
+        <li>
+            <a href="${ctx}/admin/sys/organization/job/${parent.id}/update">
+                <i class="icon-reply"></i>
+                返回父节点
+            </a>
+        </li>
     </ul>
 
-    <es:showMessage/>
-    <%--<c:if test="${not empty message}">--%>
-        <%--<script type="text/javascript">--%>
-            <%--parent.window.frames['treeFrame'].window.location.reload();--%>
-        <%--</script>--%>
-    <%--</c:if>--%>
+    <%@include file="refreshTreeMessage.jsp"%>
+
+
 
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <shiro:hasPermission name="showcase:tree:create">
+                <shiro:hasPermission name="sys:job:create">
                 <a id="appendChild" class="btn btn-custom">
                     <i class="icon-file"></i>
                     添加子节点
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="showcase:tree:update">
+                <shiro:hasPermission name="sys:job:update">
                 <a id="updateTree" class="btn btn-custom">
                     <i class="icon-edit"></i>
                     修改
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="showcase:tree:delete">
+                <shiro:hasPermission name="sys:job:delete">
                 <a id="deleteTree" class="btn btn-custom">
                     <i class="icon-trash"></i>
                     删除
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="showcase:tree:update">
+                <shiro:hasPermission name="sys:job:update">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-pencil"></i>
@@ -87,14 +86,14 @@
                         </li>
                     </ul>
                 </div>
-                </shiro:hasPermission>
             </div>
+            </shiro:hasPermission>
         </div>
         <div class="span8">
             <%@include file="searchForm.jsp"%>
         </div>
     </div>
-    <%@include file="listTable.jsp"%>
+    <%@include file="listChildrenTable.jsp"%>
 
 </div>
 
@@ -103,7 +102,7 @@
 <script type="text/javascript">
     $(function() {
         var tableId = "table";
-        var urlPrefix = "${ctx}/showcase/tree";
+        var urlPrefix = "${ctx}/admin/sys/organization/job";
         $.btn.initChangeShowStatus(urlPrefix + "/changeStatus", tableId);
         $.zTree.initMaintainBtn(urlPrefix, tableId, ${not empty param.async and param.async});
     });

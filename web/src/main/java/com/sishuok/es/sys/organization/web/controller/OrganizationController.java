@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,7 +50,8 @@ public class OrganizationController extends BaseTreeableController<Organization,
     public String changeStatus(
             HttpServletRequest request,
             @PathVariable("newStatus") Boolean newStatus,
-            @RequestParam("ids") Long[] ids
+            @RequestParam("ids") Long[] ids,
+            RedirectAttributes redirectAttributes
     ) {
 
         this.permissionList.assertHasUpdatePermission();
@@ -60,6 +62,7 @@ public class OrganizationController extends BaseTreeableController<Organization,
             organizationService.update(organization);
         }
 
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }

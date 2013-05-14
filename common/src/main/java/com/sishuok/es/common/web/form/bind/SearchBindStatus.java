@@ -38,7 +38,7 @@ public class SearchBindStatus extends BindStatus {
     }
 
     public static Object getValue(PageContext pageContext, String name) {
-        if(!StringUtils.hasLength(name)) {
+        if(StringUtils.isEmpty(name)) {
             return null;
         }
         Object value = null;
@@ -49,7 +49,7 @@ public class SearchBindStatus extends BindStatus {
             value = parameters;
         }
         //万一同名就选中了
-//        if(value == null || (value instanceof String && !StringUtils.hasLength((String) value))) {
+//        if(value == null || (value instanceof String && StringUtils.isEmpty((String) value))) {
 //            Object attributeValue = pageContext.findAttribute(name);
 //            if(attributeValue != null) {
 //                value = attributeValue;

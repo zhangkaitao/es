@@ -27,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Set;
 
@@ -94,7 +96,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         List<M> models = null;
 
-        if(StringUtils.hasLength(searchName)) {
+        if(!StringUtils.isEmpty(searchName)) {
             searchable.addSearchParam("name_like", searchName);
             models = treeableService.findAllByName(searchable, null);
             if(!async) { //非异步 查自己和子子孙孙
@@ -124,47 +126,6 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/tree";
     }
 
-    @RequestMapping(value = "list/{current}", method = RequestMethod.GET)
-    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
-    public String list(
-            @PathVariable("current") M current,
-            Searchable searchable, Model model) {
-
-        if(permissionList != null) {
-            permissionList.assertHasViewPermission();
-        }
-
-        if(current != null) {
-            searchable.addOrSearchFilters(
-                    SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, current.makeSelfAsNewParentIds()),
-                    Lists.newArrayList(SearchFilter.newSearchFilter("id", SearchOperator.eq, current.getId())
-            ));
-        }
-
-        model.addAttribute("page", treeableService.findAll(searchable));
-
-        return getViewPrefix() + "/list";
-    }
-
-
-    /**
-     * 仅返回表格数据
-     * @param searchable
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "list/{current}", headers = "table=true", method = RequestMethod.GET)
-    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
-    public String listTable(
-            @PathVariable("current") M current,
-            Searchable searchable, Model model) {
-
-        list(current, searchable, model);
-        return getViewPrefix() + "/listTable";
-
-    }
-
-
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String view(@PathVariable("id") M m, Model model) {
@@ -178,39 +139,46 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/editForm";
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
-    public String updateForm(@PathVariable("id") M m, Model model) {
+    @RequestMapping(value = "{id}/update", method = RequestMethod.GET)
+    public String updateForm(@PathVariable("id") M m, Model model, RedirectAttributes redirectAttributes) {
 
         if(permissionList != null) {
             permissionList.assertHasUpdatePermission();
         }
+
+
+        if(m == null) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, "您修改的数据不存在！");
+            return redirectToUrl(getViewPrefix() + "/success");
+        }
+
 
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "修改");
         return getViewPrefix() + "/editForm";
     }
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
-            @RequestParam(value = Constants.BACK_URL) String backURL,
-            Model model, HttpServletRequest request,
-            @ModelAttribute("m") M m,
-            BindingResult result, RedirectAttributes redirectAttributes) {
+            Model model,
+            @ModelAttribute("m") M m, BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
         if(permissionList != null) {
             permissionList.assertHasUpdatePermission();
         }
 
+
         if(result.hasErrors()) {
-            return updateForm(m, model);
+            return updateForm(m, model, redirectAttributes);
         }
 
         treeableService.update(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
-        return redirectToUrl(backURL);
+        return redirectToUrl(getViewPrefix() + "/success");
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.GET)
     public String deleteForm(@PathVariable("id") M m, Model model) {
 
 
@@ -224,10 +192,11 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/editForm";
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)
     public String deleteSelfAndChildren(
-            @RequestParam(value = Constants.BACK_URL) String backURL,
-            @ModelAttribute("m") M m, RedirectAttributes redirectAttributes) {
+            Model model,
+            @ModelAttribute("m") M m, BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
 
         if(permissionList != null) {
@@ -235,13 +204,13 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
         if(m.isRoot()) {
-            redirectAttributes.addFlashAttribute(Constants.ERROR, "您删除的数据中包含根节点，根节点不能删除");
-            return redirectToUrl(backURL);
+            result.reject("您删除的数据中包含根节点，根节点不能删除");
+            return deleteForm(m, model);
         }
 
         treeableService.deleteSelfAndChild(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
-        return  redirectToUrl(backURL);
+        return redirectToUrl(getViewPrefix() + "/success");
     }
 
 
@@ -266,14 +235,14 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             }
         }
 
-        baseService.delete(ids);
-        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量删除成功");
+        treeableService.deleteSelfAndChild(mList);
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
     }
 
 
-    @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.GET)
-    public String appendChildForm(@PathVariable("parentId") M parent, Model model) {
+    @RequestMapping(value = "{parent}/appendChild", method = RequestMethod.GET)
+    public String appendChildForm(@PathVariable("parent") M parent, Model model) {
 
 
         if(permissionList != null) {
@@ -281,7 +250,6 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
         setCommonData(model);
-        model.addAttribute("parent", parent);
         if(!model.containsAttribute("child")) {
             model.addAttribute("child", newModel());
         }
@@ -291,11 +259,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/appendChildForm";
     }
 
-    @RequestMapping(value = "appendChild/{parentId}", method = RequestMethod.POST)
+    @RequestMapping(value = "{parent}/appendChild", method = RequestMethod.POST)
     public String appendChild(
-            Model model, HttpServletRequest request,
-            @RequestParam(value = Constants.BACK_URL) String backURL,
-            @PathVariable("parentId") M parent,
+            Model model,
+            @PathVariable("parent") M parent,
             @ModelAttribute("child") M child, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
@@ -313,23 +280,21 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         treeableService.appendChild(parent, child);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "添加子节点成功");
-        return  redirectToUrl(backURL);
+        return redirectToUrl(getViewPrefix() + "/success");
     }
 
-    @RequestMapping(value = "move/{sourceId}", method = RequestMethod.GET)
+    @RequestMapping(value = "{source}/move", method = RequestMethod.GET)
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String showMoveForm(
             HttpServletRequest request,
             @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
-            @PathVariable("sourceId") M source,
+            @PathVariable("source") M source,
             Searchable searchable,
             Model model) {
 
         if(this.permissionList != null) {
             this.permissionList.assertHasEditPermission();
         }
-
-        model.addAttribute("source", source);
 
         List<M> models = null;
 
@@ -357,14 +322,13 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return getViewPrefix() + "/moveForm";
     }
 
-    @RequestMapping(value = "move/{sourceId}", method = RequestMethod.POST)
+    @RequestMapping(value = "{source}/move", method = RequestMethod.POST)
     @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
     public String move(
             HttpServletRequest request,
-            @RequestParam(value = Constants.BACK_URL) String backURL,
             @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
-            @PathVariable("sourceId") M source,
-            @RequestParam("targetId") M target,
+            @PathVariable("source") M source,
+            @RequestParam("target") M target,
             @RequestParam("moveType") String moveType,
             Searchable searchable,
             Model model,
@@ -382,8 +346,48 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         treeableService.move(source, target, moveType);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动节点成功");
-        return redirectToUrl(backURL);
+        return redirectToUrl(getViewPrefix() + "/success");
     }
+
+    @RequestMapping(value = "{parent}/children", method = RequestMethod.GET)
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
+    public String list(
+            HttpServletRequest request,
+            @PathVariable("parent") M parent,
+            Searchable searchable, Model model) throws UnsupportedEncodingException {
+
+        if(permissionList != null) {
+            permissionList.assertHasViewPermission();
+        }
+
+        if(parent != null) {
+            searchable.addSearchFilter("parentId", SearchOperator.eq, parent.getId());
+        }
+
+        model.addAttribute("page", treeableService.findAll(searchable));
+
+        return getViewPrefix() + "/listChildren";
+    }
+
+
+    /**
+     * 仅返回表格数据
+     * @param searchable
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "{parent}/children", headers = "table=true", method = RequestMethod.GET)
+    @PageableDefaults(sort = {"parentIds=asc", "weight=asc"})
+    public String listTable(
+            HttpServletRequest request,
+            @PathVariable("parent") M parent,
+            Searchable searchable, Model model) throws UnsupportedEncodingException {
+
+        list(request, parent, searchable, model);
+        return getViewPrefix() + "/listChildrenTable";
+
+    }
+
 
 
 
@@ -407,7 +411,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         List<M> models = null;
 
-        if(StringUtils.hasLength(searchName)) {//按name模糊查
+        if(!StringUtils.isEmpty(searchName)) {//按name模糊查
             searchable.addSearchParam("name_like", searchName);
             models = treeableService.findAllByName(searchable, excludeM);
             if(!async || asyncLoadAll) {//非异步模式 查自己及子子孙孙 但排除
@@ -444,9 +448,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
                 onlyCheckLeaf);
     }
 
-    @RequestMapping(value = "ajax/appendChild/{parentId}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{parent}/appendChild", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Object ajaxAppendChild(HttpServletRequest request, @PathVariable("parentId") M parent) {
+    public Object ajaxAppendChild(HttpServletRequest request, @PathVariable("parent") M parent) {
 
 
         if(permissionList != null) {
@@ -460,7 +464,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return convertToZtree(child, request.getContextPath(), true, true);
     }
 
-    @RequestMapping(value = "ajax/delete/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{id}/delete", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxDeleteSelfAndChildren(@PathVariable("id") ID id) {
 
@@ -474,7 +478,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         return tree;
     }
 
-    @RequestMapping(value = "ajax/rename/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{id}/rename", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxRename(HttpServletRequest request, @PathVariable("id") M tree, @RequestParam("newName") String newName) {
 
@@ -489,7 +493,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
     }
 
 
-    @RequestMapping(value = "ajax/move/{sourceId}/{targetId}/{moveType}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "ajax/{sourceId}/{targetId}/{moveType}/move", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Object ajaxMove(
             @PathVariable("sourceId") M source, @PathVariable("targetId") M target,
@@ -527,7 +531,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @Override
     protected String redirectToUrl(String backURL) {
-        if(StringUtils.hasLength(backURL)) {
+        if(!StringUtils.isEmpty(backURL)) {
             return super.redirectToUrl(backURL);
         }
         return super.redirectToUrl("/" + getViewPrefix() + "/success");

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-
+<div class="panel">
 <%@include file="nav.jspf"%>
 <form:form id="appendChildForm" method="post" commandName="child" cssClass="form-horizontal" enctype="multipart/form-data">
 
@@ -42,10 +42,6 @@
                     <i class="icon-file"></i>
                     添加子节点
                 </button>
-                <a class="btn" href="<es:BackURL/>">
-                    <i class="icon-reply"></i>
-                    返回
-                </a>
             </div>
         </div>
 </form:form>

@@ -7,6 +7,8 @@ package com.sishuok.es.sys.auth.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.sys.auth.entity.Auth;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Set;
 
@@ -22,7 +24,6 @@ public interface AuthRepository extends BaseRepository<Auth, Long> {
     Auth findByGroupId(Long groupId);
 
     Auth findByOrganizationIdAndJobId(Long organizationId, Long jobId);
-
 
     ///////////委托给AuthRepositoryImpl实现
     public Set<Long> findRoleIds(Long userId, Set<Long> groupIds, Set<Long> organizationIds, Set<Long> jobIds, Set<Long[]> organizationJobIds);

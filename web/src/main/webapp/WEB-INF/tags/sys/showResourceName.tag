@@ -42,7 +42,7 @@
     }
 
     StringBuilder s = new StringBuilder();
-    s.append(String.format("<a class='btn btn-link' href='%s/admin/sys/resource/%d'>", request.getContextPath(), id));
+    s.append(String.format("<a class='btn btn-link no-padding' href='%s/admin/sys/resource/%d'>", request.getContextPath(), id));
 
     for(int l = names.size() - 1, i = l; i >= 0; i--) {
         if(i != l) {

@@ -25,7 +25,7 @@
         <div class="control-group">
             <label class="control-label">目标节点</label>
             <div class="controls input-append" title="选择目标节点">
-                <input type="hidden" id="targetId" name="targetId" value="${target.id}">
+                <input type="hidden" id="targetId" name="target" value="${target.id}">
                 <input type="text" id="targetName" name="targetName" value="${target.name}" class="validate[required]" readonly="readonly">
                 <a id="selectTree"  href="javascript:;">
                     <span class="add-on"><i class="icon-chevron-down"></i></span>
@@ -49,13 +49,10 @@
                     <i class="icon-chevron-down"></i>
                     孩子节点
                 </button>
-
-
                 <a class="btn" href="<es:BackURL/>">
                     <i class="icon-reply"></i>
                     返回
                 </a>
-
             </div>
         </div>
 </form>
@@ -65,12 +62,11 @@
 <%@include file="/WEB-INF/jsp/common/import-zTree-js.jspf"%>
 <script type="text/javascript">
 $(function () {
-    var async = ${not empty param.async and param.async eq true};
     $.zTree.initSelectTree({
-        zNodes : [],
+        zNodes : null,
         urlPrefix : "${ctx}/showcase/tree",
         excludeId: "${source.id}",
-        async : async,
+        async : true,
         select : {
             btn : $("#selectTree,#targetName"),
             id : "targetId",

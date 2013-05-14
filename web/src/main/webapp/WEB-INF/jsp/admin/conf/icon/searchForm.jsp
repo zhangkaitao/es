@@ -6,4 +6,5 @@
     <esform:input path="search.identity_like" cssClass="input-medium" placeholder="模糊查询"/>
     &nbsp;
     <input type="submit" class="btn " value="查询"/>
+    <a class="btn btn-link btn-clear-search">清空</a>
 </form>

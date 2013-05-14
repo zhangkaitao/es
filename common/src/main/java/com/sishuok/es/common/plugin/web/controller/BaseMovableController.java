@@ -58,7 +58,7 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
         return super.list(searchable, model);
     }
 
-    @RequestMapping(value = "up/{fromId}/{toId}")
+    @RequestMapping(value = "{fromId}/{toId}/up")
     @ResponseBody
     public AjaxResponse up(@PathVariable("fromId") Long fromId, @PathVariable("toId") Long toId) {
 
@@ -76,7 +76,7 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
         return ajaxResponse;
     }
 
-    @RequestMapping(value = "down/{fromId}/{toId}")
+    @RequestMapping(value = "{fromId}/{toId}/down")
     @ResponseBody
     public AjaxResponse down(@PathVariable("fromId") Long fromId, @PathVariable("toId") Long toId) {
 

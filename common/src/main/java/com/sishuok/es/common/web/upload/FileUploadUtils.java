@@ -5,10 +5,10 @@
  */
 package com.sishuok.es.common.web.upload;
 
-import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.security.Coder;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
+import com.sishuok.es.common.utils.LogUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,11 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Date;
 
 import static org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
-import static org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeException;
 
 /**
  * 文件上传工具类
@@ -104,7 +102,7 @@ public class FileUploadUtils {
         try {
             return upload(request, getDefaultBaseDir(), file, allowedExtension, DEFAULT_MAX_SIZE);
         } catch (IOException e) {
-            LogUtils.error("file upload error", e);
+            LogUtils.logError("file upload error", e);
             result.reject("upload.server.error");
         } catch (InvalidExtensionException.InvalidImageExtensionException e) {
             result.reject("upload.not.allow.image.extension");

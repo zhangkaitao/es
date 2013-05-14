@@ -2,10 +2,10 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <div class="ui-layout-west tree">
-    <iframe id="treeFrame" name="treeFrame" width="100%" height="100%"  frameborder="0" scrolling="auto" src="${ctx}/admin/sys/resource/tree?async=true"></iframe>
+    <iframe name="treeFrame" width="100%" height="100%"  frameborder="0" scrolling="auto" src="${ctx}/admin/sys/resource/tree?async=true"></iframe>
 </div>
 <div class="ui-layout-center tree">
-    <iframe id="listFrame" name="listFrame" width="100%" height="100%"  frameborder="0" scrolling="auto"></iframe>
+    <iframe name="listFrame" width="100%" height="100%"  frameborder="0" scrolling="auto"></iframe>
 </div>
 
 <es:contentFooter/>

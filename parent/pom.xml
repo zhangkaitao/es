@@ -407,6 +407,12 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring.data.jpa.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- hibernate相关jar包 -->
@@ -513,6 +519,12 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-quartz</artifactId>
             <version>${shiro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>quartz</artifactId>
+                    <groupId>org.opensymphony.quartz</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- quartz -->
@@ -520,6 +532,12 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>${quartz.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>c3p0</artifactId>
+                    <groupId>c3p0</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- encache 相关jar包 -->
@@ -660,7 +678,7 @@
         <ehcache.core.version>2.6.5</ehcache.core.version>
 
         <shiro.version>1.2.1</shiro.version>
-        <quartz.version>2.1.7</quartz.version>
+        <quartz.version>1.8.6</quartz.version>
 
         <slf4j.version>1.7.3</slf4j.version>
         <logback.version>1.0.10</logback.version>

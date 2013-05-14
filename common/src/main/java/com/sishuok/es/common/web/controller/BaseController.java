@@ -106,7 +106,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
      * @return
      */
     protected String redirectToUrl(String backURL) {
-        if(!StringUtils.hasLength(backURL)) {
+        if(StringUtils.isEmpty(backURL)) {
             backURL = getViewPrefix();
         }
         if(!backURL.startsWith("/") && !backURL.startsWith("http")) {

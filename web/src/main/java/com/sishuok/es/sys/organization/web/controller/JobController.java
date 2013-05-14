@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,7 +44,8 @@ public class JobController extends BaseTreeableController<Job, Long> {
     public String changeStatus(
             HttpServletRequest request,
             @PathVariable("newStatus") Boolean newStatus,
-            @RequestParam("ids") Long[] ids
+            @RequestParam("ids") Long[] ids,
+            RedirectAttributes redirectAttributes
     ) {
 
         this.permissionList.assertHasUpdatePermission();
@@ -53,7 +55,7 @@ public class JobController extends BaseTreeableController<Job, Long> {
             job.setShow(newStatus);
             jobService.update(job);
         }
-
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }

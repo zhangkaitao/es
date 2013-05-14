@@ -7,9 +7,9 @@
         <shiro:hasPermission name="sys:group:create">
         <c:if test="${op eq '新增'}">
             <li ${op eq '新增' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/group/create?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/group/${type}/create?BackURL=<es:BackURL/>">
                     <i class="icon-file"></i>
-                    新增
+                    新增${type.info}
                 </a>
             </li>
         </c:if>
@@ -24,7 +24,7 @@
             </li>
             <shiro:hasPermission name="sys:group:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/group/update/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/group/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
@@ -32,7 +32,7 @@
             </shiro:hasPermission>
             <shiro:hasPermission name="sys:group:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/admin/sys/group/delete/${m.id}?BackURL=<es:BackURL/>">
+                <a href="${ctx}/admin/sys/group/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>

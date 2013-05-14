@@ -75,12 +75,12 @@ public class ProductController extends BaseCRUDController<Product, Long> {
         return super.create(model, product, result, redirectAttributes);
     }
 
-    @RequestMapping(value = {"/category-{categoryId}/update/{m}", "/update/{m}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/category-{categoryId}/{m}/update", "/{m}/update"}, method = RequestMethod.GET)
     public String showUpdateForm(@PathVariable("m") Product product, Model model) {
         return super.showUpdateForm(product, model);
     }
 
-    @RequestMapping(value = {"/category-{categoryId}/update/{id}", "/update/{id}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/category-{categoryId}/{id}/update", "/{id}/update"}, method = RequestMethod.POST)
     public String update(
             Model model,
             @Valid @ModelAttribute("m") Product product, BindingResult result,
@@ -90,12 +90,12 @@ public class ProductController extends BaseCRUDController<Product, Long> {
         return super.update(model, product, result, backURL, redirectAttributes);
     }
 
-    @RequestMapping(value = {"/category-{categoryId}/delete/{id}", "/delete/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/category-{categoryId}/{id}/delete", "/{id}/delete"}, method = RequestMethod.GET)
     public String showDeleteForm(@PathVariable("id") Product product, Model model) {
         return super.showDeleteForm(product, model);
     }
 
-    @RequestMapping(value = {"/category-{categoryId}/delete/{id}", "/delete/{id}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/category-{categoryId}/{id}/delete", "/{id}/delete"}, method = RequestMethod.POST)
     public String delete(@ModelAttribute("m") Product product, @RequestParam(value = "BackURL", required = false) String backURL, RedirectAttributes redirectAttributes) {
         return super.delete(product, backURL, redirectAttributes);
     }

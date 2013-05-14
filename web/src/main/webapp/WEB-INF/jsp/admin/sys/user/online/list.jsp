@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
+<c:if test="${empty header['container']}">
 <es:contentHeader/>
 <style type="text/css">
     .scroll-pane {
@@ -9,8 +10,8 @@
         overflow: auto;
     }
 </style>
-
-<div data-table="table" class="panel">
+</c:if>
+<div data-table="table" class="panel" id="panel">
 
     <ul class="nav nav-tabs">
         <li ${empty param['search.userId_eq'] and empty param['search.userId_gt'] ? 'class="active"' : ''}>
@@ -52,12 +53,16 @@
     </div>
     <%@include file="listTable.jsp"%>
 </div>
+<c:if test="${empty header['container']}">
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 <script type="text/javascript">
-    $(function() {
+    function callback() {
         $(".scroll-pane").niceScroll({domfocus:true, hidecursordelay: 2000});
         $.sys.user.initOnlineListButton();
+    }
+    $(function() {
+        callback();
     });
-
 </script>
+</c:if>

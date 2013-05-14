@@ -30,7 +30,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="sys:group:delete">
-                <a class="btn btn-custom btn-batch-delete">
+                <a class="btn btn-custom btn-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
@@ -48,7 +48,7 @@
 <es:contentFooter/>
 <script type="text/javascript">
     $(function() {
-        $(".btn-batch-delete").off("click").on("click", function() {
+        $(".btn-delete").off("click").on("click", function() {
             var table = $("#table");
             var checkbox = $.table.getAllSelectedCheckbox(table);
             if(!checkbox.length) {

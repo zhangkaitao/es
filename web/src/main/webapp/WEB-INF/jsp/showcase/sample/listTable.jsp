@@ -2,14 +2,15 @@
     <div data-table="table">
        <a class='btn-create'>  新增
        <a class='btn-update'>  修改
-       <a class='btn-batch-delete'> 批量删除
+       <a class='btn-delete'> 删除
 
        <a class='btn-custom'> 自定义按钮 系统不处理
 
     异步表格：
     table
         data-async="true"
-        data-async-container 制定异步内容加载到的容器
+        data-async-container 设定异步内容加载到的容器
+        data-async-callback  设定异步内容加载完成后执行的回调 默认到当前window里边去找同名的函数，自动注入当前table
         data-url 异步加载时使用的url
         data-prefix 指定分页/排序的字段前缀
     search form (class='search-form')

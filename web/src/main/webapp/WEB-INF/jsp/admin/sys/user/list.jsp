@@ -47,7 +47,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="sys:user:delete">
-                <a class="btn btn-batch-delete">
+                <a class="btn btn-delete">
                     <span class="icon-trash"></span>
                     删除
                 </a>
@@ -159,7 +159,7 @@
 <script type="text/javascript">
     $(function() {
         $.sys.user.initUserListButton();
-        $.app.toggleLoadTable($("#table"), "${ctx}/admin/sys/user/organizations/{parentId}")
+        $.app.toggleLoadTable($("#table"), "${ctx}/admin/sys/user/{parentId}/organizations")
     });
 </script>
 

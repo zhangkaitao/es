@@ -72,7 +72,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "create/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "{type}/create", method = RequestMethod.GET)
     public String showCreateForm(@PathVariable(value = "type") IconType type, Model model) {
         Icon icon = new Icon();
         icon.setType(type);
@@ -85,7 +85,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "create/{type}", method = RequestMethod.POST)
+    @RequestMapping(value = "{type}/create", method = RequestMethod.POST)
     public String create(
             HttpServletRequest request,
             Model model,
@@ -102,13 +102,13 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "update/discard/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update/discard", method = RequestMethod.POST)
     @Override
     public String update(Model model, @Valid @ModelAttribute("m") Icon icon, BindingResult result, @RequestParam(value = "BackURL", required = false) String backURL, RedirectAttributes redirectAttributes) {
         throw new RuntimeException("discarded method");
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             HttpServletRequest request,
             Model model,
@@ -125,7 +125,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "delete/discard", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete/discard", method = RequestMethod.POST)
     @Override
     public String delete(
             @PathVariable("id") Icon m,
@@ -136,7 +136,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)
     public String delete(
             HttpServletRequest request,
             @PathVariable("id") Icon m,
@@ -276,47 +276,5 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-    /**
-     * 转换图标为sql的
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-//        readClass();
-        readUploadFile();
-    }
-
-    private static void readUploadFile() throws IOException {
-         String fromFile = "E:\\workspace\\git\\es\\web\\src\\main\\webapp\\WEB-INF\\static\\comp\\zTree\\css\\zTreeStyle\\img\\diy\\icon.txt";
-        String toFile = "C:\\Documents and Settings\\Administrator\\桌面\\b.sql";
-        String template = "insert into `conf_icon` (`id`, `identity`, `img_src`, `type`, `width`, `height`) values(%1$d, '%2$s', '%3$s', 'upload_file', %4$d, %5$d);";
-
-        List<String> list = FileUtils.readLines(new File(fromFile));
-        FileWriter writer = new FileWriter(toFile);
-
-        int count = 300;
-        for(int i = 0, l = list.size(); i < l; i+=2) {
-            writer.write(String.format(template, count++, list.get(i), list.get(i+1), 16, 16));
-            writer.write("\r\n");
-        }
-
-        writer.close();
-    }
-
-//    private static void readClass() {
-//        String fromFile = "C:\\Documents and Settings\\Administrator\\桌面\\a.sql";
-//        String toFile = "C:\\Documents and Settings\\Administrator\\桌面\\b.sql";
-//        String template = "insert into `conf_icon` (`id`, `identity`, `css_class`, `type`) values(%1$d, '%2$s', '%2$s', 'css_class');";
-//
-//        List<String> cssClassList = FileUtils.readLines(new File(fromFile));
-//        FileWriter writer = new FileWriter(toFile);
-//
-//        for(int i = 1, l = cssClassList.size(); i < l; i++) {
-//            writer.write(String.format(template, i, cssClassList.get(i)));
-//            writer.write("\r\n");
-//        }
-//
-//        writer.close();
-//    }
 
 }

@@ -41,17 +41,13 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
     private DeletedSampleService sampleService;
 
     public DeletedSampleController() {
+        setListAlsoSetCommonData(true);
         setResourceIdentity("showcase:deleted");
-    }
-
-    @Autowired
-    public void setSampleService(DeletedSampleService sampleService) {
-        setBaseService(sampleService);
-        this.sampleService = sampleService;
     }
 
     @Override
     protected void setCommonData(Model model) {
+        super.setCommonData(model);
         model.addAttribute("sexList", Sex.values());
         model.addAttribute("booleanList", BooleanEnum.values());
     }

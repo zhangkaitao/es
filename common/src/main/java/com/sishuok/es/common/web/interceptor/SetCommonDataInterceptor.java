@@ -79,7 +79,7 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
     private String extractCurrentURL(HttpServletRequest request, boolean needQueryString) {
         String url = request.getRequestURI();
         String queryString = request.getQueryString();
-        if (StringUtils.hasLength(queryString)) {
+        if (!StringUtils.isEmpty(queryString)) {
             queryString = "?" + queryString;
             for(String pattern : excludeParameterPattern) {
                 queryString = queryString.replaceAll(pattern, "");
@@ -88,7 +88,7 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
                 queryString = "?" + queryString.substring(1);
             }
         }
-        if(StringUtils.hasLength(queryString) && needQueryString) {
+        if(!StringUtils.isEmpty(queryString) && needQueryString) {
             url = url + queryString;
         }
         return getBasePath(request) + url;
@@ -109,7 +109,7 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
         if(StringUtils.isEmpty(url)) {
             url = request.getHeader("Referer");
         }
-        if(StringUtils.hasLength(url) && url.startsWith(request.getContextPath())) {
+        if(!StringUtils.isEmpty(url) && url.startsWith(request.getContextPath())) {
             url = getBasePath(request) + url;
         }
         return url;

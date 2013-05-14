@@ -10,5 +10,6 @@
     <esform:input id="searchCategoryId" path="search.category.id_in" cssClass="input-medium" placeholder="多个使用空格分隔"/>
 
     <button type="submit" class="btn ">查询</button>
+    <a class="btn btn-link btn-clear-search">清空</a>
 
 </form>

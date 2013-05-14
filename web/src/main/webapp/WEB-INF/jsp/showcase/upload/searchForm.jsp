@@ -8,5 +8,6 @@
     <esform:input path="search.name_like" cssClass="input-small" placeholder="模糊查询"/>
     &nbsp;&nbsp;
     <button type="submit" class="btn">查询</button>
+    <a class="btn btn-link btn-clear-search">清空</a>
 
 </form>

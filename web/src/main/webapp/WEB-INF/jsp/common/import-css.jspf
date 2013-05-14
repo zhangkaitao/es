@@ -3,9 +3,9 @@
 <link type="text/css" href="${ctx}/static/comp/jquery-ui-bootstrap/css/bootstrap.css" rel="stylesheet">
 
 <link type="text/css" href="${ctx}/static/comp/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.2.custom.css" rel="stylesheet"/>
-<link type="text/css" href="${ctx}/static/comp/jquery-ui-bootstrap/css/font-awesome.min.css" rel="stylesheet"/>
+<link type="text/css" href="${ctx}/static/comp/jquery-ui-bootstrap/css/font-wesome/font-awesome.min.css" rel="stylesheet"/>
 <!--[if IE 7]>
-<link rel="stylesheet" href="${ctx}/static/comp/jquery-ui-bootstrap/css/font-awesome-ie7.min.css">
+<link rel="stylesheet" href="${ctx}/static/comp/jquery-ui-bootstrap/css/font-wesome/font-awesome-ie7.min.css">
 <![endif]-->
 <!--[if lt IE 9]>
 <link rel="stylesheet" type="text/css" href="${ctx}/static/comp/jquery-ui-bootstrap/css/custom-theme/jquery.ui.1.10.2.ie.css"/>

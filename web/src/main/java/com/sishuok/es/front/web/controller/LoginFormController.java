@@ -44,34 +44,34 @@ public class LoginFormController {
     public String loginForm(HttpServletRequest request, ModelMap model) {
 
         //表示退出
-        if(StringUtils.hasLength(request.getParameter("logout"))) {
+        if(!StringUtils.isEmpty(request.getParameter("logout"))) {
             model.addAttribute(Constants.MESSAGE, messageSource.getMessage("user.logout.success", null, null));
         }
 
         //表示用户删除了 @see org.apache.shiro.web.filter.user.SysUserFilter
-        if(StringUtils.hasLength(request.getParameter("notfound"))) {
+        if(!StringUtils.isEmpty(request.getParameter("notfound"))) {
             model.addAttribute(Constants.ERROR, messageSource.getMessage("user.notfound", null, null));
         }
 
         //表示用户被管理员强制退出
-        if(StringUtils.hasLength(request.getParameter("forcelogout"))) {
+        if(!StringUtils.isEmpty(request.getParameter("forcelogout"))) {
             model.addAttribute(Constants.ERROR, messageSource.getMessage("user.forcelogout", null, null));
         }
 
         //表示用户输入的验证码错误
-        if(StringUtils.hasLength(request.getParameter("jcaptchaError"))) {
+        if(!StringUtils.isEmpty(request.getParameter("jcaptchaError"))) {
             model.addAttribute(Constants.ERROR, messageSource.getMessage("jcaptcha.validate.error", null, null));
         }
 
 
         //表示用户锁定了 @see org.apache.shiro.web.filter.user.SysUserFilter
-        if(StringUtils.hasLength(request.getParameter("blocked"))) {
+        if(!StringUtils.isEmpty(request.getParameter("blocked"))) {
             User user = (User) request.getAttribute(Constants.CURRENT_USER);
             String reason = userStatusHistoryService.getLastReason(user);
             model.addAttribute(Constants.ERROR, messageSource.getMessage("user.blocked", new Object[]{reason}, null));
         }
 
-        if(StringUtils.hasLength(request.getParameter("unknown"))) {
+        if(!StringUtils.isEmpty(request.getParameter("unknown"))) {
             model.addAttribute(Constants.ERROR, messageSource.getMessage("user.unknown.error", null, null));
         }
 

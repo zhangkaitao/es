@@ -32,7 +32,7 @@ public class InjectBaseDependencyHelper {
         final Set<Object> candidates =
                 findDependencies(baseService, BaseComponent.class);
 
-        if(candidates.size() > 1) {
+        if(candidates.size() == 0 || candidates.size() > 1) {
             throw new IllegalStateException(
                     "expect 1 @BaseComponent anntation BaseRepository subclass bean, but found " + candidates.size() +
                    ", please check class [" + baseService.getClass() + "] @BaseComponent annotation.");

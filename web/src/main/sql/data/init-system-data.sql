@@ -1,3 +1,6 @@
+#如果复制到mysql中执行时 加上
+#DELIMITER ;;
+
 delete from `sys_user` where id>=1 and id<=1000;;
 /*默认admin/123456*/
 insert into `sys_user`
@@ -106,20 +109,18 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
         values (23, 22, '0/1/16/22/', 1, '组织机构列表', 'sys:organization', '/admin/sys/organization/organization', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (24, 22, '0/1/16/22/', 2, '工作职务列表', 'sys:job', '/admin/sys/organization/job', true);;
-
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (25, 16, '0/1/16/', 3, '资源列表', 'sys:resource', '/admin/sys/resource', true);;
+        values (29, 16, '0/1/16/', 3, '分组列表', 'sys:group', '/admin/sys/group', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (26, 16, '0/1/16/', 4, '权限管理', '', '', true);;
+        values (25, 16, '0/1/16/', 4, '资源列表', 'sys:resource', '/admin/sys/resource', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (26, 16, '0/1/16/', 5, '权限管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (27, 26, '0/1/16/26/', 1, '权限列表', 'sys:permission', '/admin/sys/permission/permission', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (28, 26, '0/1/16/26/', 2, '角色列表', 'sys:role', '/admin/sys/permission/role', true);;
+        values (28, 26, '0/1/16/26/', 2, '授权权限给角色', 'sys:role', '/admin/sys/permission/role', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (29, 16, '0/1/16/', 5, '分组列表', 'sys:group', '/admin/sys/group', true);;
-
-insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (30, 16, '0/1/16/', 6, '授权列表', 'sys:auth', '/admin/sys/auth', true);;
+        values (30, 26, '0/1/16/26/', 3, '授权角色给实体', 'sys:auth', '/admin/sys/auth', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (31, 1, '0/1/', 3, '配置管理', '', '', true);;

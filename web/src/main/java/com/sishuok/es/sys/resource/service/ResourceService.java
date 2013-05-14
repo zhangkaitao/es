@@ -79,6 +79,7 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
     }
 
 
+    @SuppressWarnings("unchecked")
     public static List<Menu> convertToMenus(List<Resource> resources) {
 
         if(resources.size() == 0) {
@@ -122,7 +123,6 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
     }
 
     private static Menu convertToMenu(Resource resource) {
-        Menu menu = new Menu(resource.getId(), resource.getName(), resource.getIcon(), resource.getUrl());
-        return menu;
+        return new Menu(resource.getId(), resource.getName(), resource.getIcon(), resource.getUrl());
     }
 }

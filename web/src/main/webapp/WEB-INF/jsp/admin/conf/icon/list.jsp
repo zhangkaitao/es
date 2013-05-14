@@ -35,7 +35,7 @@
                     <ul class="dropdown-menu">
                         <c:forEach items="${types}" var="t">
                             <li>
-                                <a class="btn" href="${ctx}/admin/conf/icon/create/${t}">
+                                <a class="btn" href="${ctx}/admin/conf/icon/${t}/create">
                                     <i class="icon-file"></i>
                                     ${t.info}
                                 </a>
@@ -52,7 +52,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="conf:icon:delete">
-                <a class="btn btn-batch-delete">
+                <a class="btn btn-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
