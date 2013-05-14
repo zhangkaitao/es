@@ -83,7 +83,6 @@
                         <userName>${connection.username}</userName>
                         <password>${connection.password}</password>
                     </appDbConnectionSettings>
-                    <sqlDelimiter>;;</sqlDelimiter>
                     <dbDataScriptsDirectory>
                         <param>src/main/sql/data</param>
                     </dbDataScriptsDirectory>
@@ -97,6 +96,7 @@
                         create database ${db.name} CHARACTER SET 'utf8';
                     </dbCreateStatements>
                     <dbDropStatements>drop database ${db.name}; </dbDropStatements>
+                    <sqlDelimiter>;;</sqlDelimiter>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -195,7 +195,7 @@
                 <connection.url><![CDATA[ jdbc:h2:mem:es;DB_CLOSE_DELAY=-1 ]]></connection.url>
                 <connection.username>sa</connection.username>
                 <connection.password>sa</connection.password>
-                <jpa.showSql>fal</jpa.showSql>
+                <jpa.showSql>false</jpa.showSql>
                 <jpa.generateDdl>true</jpa.generateDdl>
                 <jpa.database>H2</jpa.database>
                 <jpa.databasePlatform>org.hibernate.dialect.H2Dialect</jpa.databasePlatform>

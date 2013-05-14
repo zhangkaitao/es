@@ -1,5 +1,6 @@
 #如果复制到mysql中执行时 加上
 #DELIMITER ;;
+
 delete from `sys_user` where id>=1 and id<=1000;;
 /*默认admin/123456*/
 insert into `sys_user`

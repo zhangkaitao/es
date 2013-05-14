@@ -159,6 +159,23 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!-- 错误页面映射 -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/WEB-INF/jsp/error/error.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/WEB-INF/jsp/error/error.jsp</location>
+    </error-page>
 
     <!--如果 发现报 该错误 No mapping found for HTTP request with URI  加入下mapping
     <servlet-mapping>

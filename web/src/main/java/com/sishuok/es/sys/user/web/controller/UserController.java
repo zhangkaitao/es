@@ -254,7 +254,9 @@ public class UserController extends BaseCRUDController<User, Long> {
     public Object validate(
             @RequestParam("fieldId") String fieldId, @RequestParam("fieldValue") String fieldValue,
             @RequestParam(value = "id", required = false) Long id) {
+
         ValidateResponse response = ValidateResponse.newInstance();
+
 
         if ("username".equals(fieldId)) {
             User user = userService.findByUsername(fieldValue);
@@ -285,6 +287,7 @@ public class UserController extends BaseCRUDController<User, Long> {
                 response.validateFail(fieldId, "手机号已被其他人使用");
             }
         }
+
         return response.result();
     }
 

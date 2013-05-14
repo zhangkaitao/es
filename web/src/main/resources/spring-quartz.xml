@@ -21,7 +21,7 @@
         <property name="concurrent" value="false" />
     </bean>
     <bean id="autoClearDeletedRoleRelationTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="autoClearDeletedGroupRelation" />
+        <property name="jobDetail" ref="autoClearDeletedRoleRelation" />
         <!-- 每天2点执行 -->
         <property name="cronExpression" value="0 0 2 * * ?" />
     </bean>

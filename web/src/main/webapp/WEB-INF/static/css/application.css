@@ -860,6 +860,10 @@ iframe[tabs="true"] {
     font-size: 12px;
     font-weight: normal;
 }
+.font-14 {
+    font-size: 14px;
+    font-weight: normal;
+}
 
 .form-small .control-label {
     width: 60px;

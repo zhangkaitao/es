@@ -1977,11 +1977,14 @@ $(function () {
         if(request.status == 0) {// 中断的不处理
             return;
         }
-        $.app.alert({
-            title : "网络故障/系统故障(请截屏反馈给管理员)",
-            message : "出错状态码:" + request.status + "[" + request.statusText + "]" + "<br/>出错页面????:" + settings.url
-        });
+
         $.app.waitingOver();
+
+        top.$.app.alert({
+            title : "网络故障/系统故障",
+            //<refresh>中间的按钮在ajax方式中删除不显示
+            message : request.responseText.replace(/(<refresh>.*<\/refresh>)/g, "")
+        });
     });
 });
 

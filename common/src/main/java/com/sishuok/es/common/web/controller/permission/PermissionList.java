@@ -8,7 +8,7 @@ package com.sishuok.es.common.web.controller.permission;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.utils.MessageUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.util.StringUtils;
 
@@ -39,6 +39,27 @@ public class PermissionList implements Serializable {
      */
     private Map<String, String> resourcePermissions = Maps.newHashMap();
 
+
+    /**
+     * 自动生成 create update delete 的权限串
+     * @param resourceIdentity
+     * @return
+     */
+    public static PermissionList newPermissionList(String resourceIdentity) {
+
+        PermissionList permissionList = new PermissionList();
+
+        permissionList.resourceIdentity = resourceIdentity;
+
+        permissionList.resourcePermissions.put(CREATE_PERMISSION, resourceIdentity + ":" + CREATE_PERMISSION);
+        permissionList.resourcePermissions.put(UPDATE_PERMISSION, resourceIdentity + ":" + UPDATE_PERMISSION);
+        permissionList.resourcePermissions.put(DELETE_PERMISSION, resourceIdentity + ":" + DELETE_PERMISSION);
+        permissionList.resourcePermissions.put(VIEW_PERMISSION, resourceIdentity + ":" + VIEW_PERMISSION);
+
+        return permissionList;
+    }
+
+
     /**
      * 添加权限 自动生成如showcase:sample:permission
      * @param permission
@@ -47,20 +68,6 @@ public class PermissionList implements Serializable {
         resourcePermissions.put(permission, resourceIdentity + ":" + permission);
     }
 
-
-    /**
-     * 自动生成 create update delete 的权限串
-     * @param resourceIdentity
-     * @return
-     */
-    public static PermissionList newPermissionList(String resourceIdentity) {
-        PermissionList permissionList = new PermissionList();
-        permissionList.resourcePermissions.put(CREATE_PERMISSION, resourceIdentity + ":" + CREATE_PERMISSION);
-        permissionList.resourcePermissions.put(UPDATE_PERMISSION, resourceIdentity + ":" + UPDATE_PERMISSION);
-        permissionList.resourcePermissions.put(DELETE_PERMISSION, resourceIdentity + ":" + DELETE_PERMISSION);
-        permissionList.resourcePermissions.put(VIEW_PERMISSION, resourceIdentity + ":" + VIEW_PERMISSION);
-        return permissionList;
-    }
 
     public void assertHasCreatePermission() {
         assertHasPermission(CREATE_PERMISSION, "no.create.permission");
@@ -99,8 +106,11 @@ public class PermissionList implements Serializable {
             errorCode = getDefaultErrorCode();
         }
         String resourcePermission = resourcePermissions.get(permission);
+        if(resourcePermission == null) {
+            resourcePermission = this.resourceIdentity + ":" + permission;
+        }
         if(!SecurityUtils.getSubject().isPermitted(resourcePermission)) {
-            throw new UnauthenticatedException(MessageUtils.message(errorCode, resourcePermission));
+            throw new UnauthorizedException(MessageUtils.message(errorCode, resourcePermission));
         }
     }
 
@@ -114,15 +124,18 @@ public class PermissionList implements Serializable {
         }
 
         if(permissions == null || permissions.length == 0) {
-            throw new UnauthenticatedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
+            throw new UnauthorizedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
         }
 
         Subject subject = SecurityUtils.getSubject();
 
         for(String permission : permissions) {
             String resourcePermission = resourcePermissions.get(permission);
+            if(resourcePermission == null) {
+                resourcePermission = this.resourceIdentity + ":" + permission;
+            }
             if(!subject.isPermitted(resourcePermission)) {
-                throw new UnauthenticatedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
+                throw new UnauthorizedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
             }
         }
 
@@ -137,19 +150,22 @@ public class PermissionList implements Serializable {
             errorCode = getDefaultErrorCode();
         }
         if(permissions == null || permissions.length == 0) {
-            throw new UnauthenticatedException(MessageUtils.message(errorCode, Arrays.toString(permissions)));
+            throw new UnauthorizedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
         }
 
         Subject subject = SecurityUtils.getSubject();
 
         for(String permission : permissions) {
             String resourcePermission = resourcePermissions.get(permission);
+            if(resourcePermission == null) {
+                resourcePermission = this.resourceIdentity + ":" + permission;
+            }
             if(subject.isPermitted(resourcePermission)) {
                 return;
             }
         }
 
-        throw new UnauthenticatedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
+        throw new UnauthorizedException(MessageUtils.message(errorCode, resourceIdentity + ":" + Arrays.toString(permissions)));
     }
 
     private String getDefaultErrorCode() {

@@ -138,6 +138,20 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
 
 
     //////////////////////////////////child////////////////////////////////////
+
+    @RequestMapping(value = "{parent}/child", method = RequestMethod.GET)
+    @PageableDefaults(value = Integer.MAX_VALUE, sort = "id=desc")
+    public String listChild(Model model, @PathVariable("parent") Long parentId, Searchable searchable) {
+
+        this.permissionList.assertHasViewPermission();
+
+        searchable.addSearchFilter("parent.id", SearchOperator.eq, parentId);
+
+        model.addAttribute("page", childService.findAll(searchable));
+
+        return "showcase/parentchild/child/list";
+    }
+
     @RequestMapping(value = "child/create", method = RequestMethod.GET)
     public String showChildCreateForm(Model model) {
 
@@ -193,17 +207,5 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         return ids;
     }
 
-    @RequestMapping(value = "{parent}/child", method = RequestMethod.GET)
-    @PageableDefaults(value = Integer.MAX_VALUE, sort = "id=desc")
-    public String listChild(Model model, @PathVariable("parent") Long parentId, Searchable searchable) {
-
-        this.permissionList.assertHasEditPermission();
-
-        searchable.addSearchFilter("parent.id", SearchOperator.eq, parentId);
-
-        model.addAttribute("page", childService.findAll(searchable));
-
-        return "showcase/parentchild/child/list";
-    }
 
 }

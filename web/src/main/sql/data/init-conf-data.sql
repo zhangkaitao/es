@@ -1,5 +1,6 @@
 #如果复制到mysql中执行时 加上
 #DELIMITER ;;
+
 delete from `conf_icon` where id >=1 and id<=2000;;
 
 insert into `conf_icon` (`id`, `identity`, `css_class`, `type`) values(1, 'icon-expand-alt', 'icon-expand-alt', 'css_class');;

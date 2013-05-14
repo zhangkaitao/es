@@ -7,14 +7,13 @@ package com.sishuok.es.common.web.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
+import com.sishuok.es.common.utils.LogUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -101,7 +100,7 @@ public class KindEditorController {
             return successResponse(request, file.getOriginalFilename(), url);
 
         } catch (IOException e) {
-            LogUtils.error("file upload error", e);
+            LogUtils.logError("file upload error", e);
             return errorResponse("upload.server.error");
         } catch (InvalidExtensionException.InvalidImageExtensionException e) {
             return errorResponse("upload.not.allow.image.extension");

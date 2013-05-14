@@ -123,7 +123,7 @@
     <bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
         <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
     </bean>
-    <bean class="com.sishuok.es.common.exception.web.DefaultExceptionHandler"/>
+    <bean class="com.sishuok.es.exception.web.DefaultExceptionHandler"/>
 
     <import resource="spring-shiro-mvc.xml"/>
 
