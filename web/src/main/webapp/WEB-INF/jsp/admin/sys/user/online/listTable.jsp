@@ -31,8 +31,8 @@
                 </td>
                 <td>${m.host}</td>
                 <td>${m.systemHost}</td>
-                <td><time:prettyTime date="${m.startTimestamp}"/></td>
-                <td><time:prettyTime date="${m.lastAccessTime}"/></td>
+                <td><time:PrettyTime date="${m.startTimestamp}"/></td>
+                <td><time:PrettyTime date="${m.lastAccessTime}"/></td>
                 <td>${m.status.info}</td>
                 <td>${m.userAgent}</td>
                 <td>${m.id}</td>
