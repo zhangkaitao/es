@@ -51,12 +51,15 @@
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
+    <!--错误日志-->
     <logger name="es-error" level="info">
         <appender-ref ref="ERROR"/>
     </logger>
+    <!--访问日志-->
     <logger name="es-access" level="info">
         <appender-ref ref="ACCESS"/>
     </logger>
+    <!--系统用户操作日志-->
     <logger name="es-sys-user" level="info">
         <appender-ref ref="SYS-USER"/>
     </logger>

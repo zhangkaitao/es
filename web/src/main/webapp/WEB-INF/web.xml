@@ -16,11 +16,14 @@
          </param-value>
      </context-param>
      <listener>
-         <listener-class>
-             org.springframework.web.context.ContextLoaderListener
-         </listener-class>
+         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
      </listener>
      <!-- Spring配置文件结束 -->
+
+    <!-- 可以使用RequestContextHolder.currentRequestAttributes() 获取到请求的attr -->
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
 
     <!-- 设置通用的数据 -->
     <filter>
@@ -51,6 +54,25 @@
     </filter-mapping>
     <!-- 设置servlet编码结束 -->
 
+    <!-- 记录访问日志，比如审计之类的可用 -->
+    <filter>
+        <filter-name>AccessLogFilter</filter-name>
+        <filter-class>com.sishuok.es.common.web.filter.AccessLogFilter</filter-class>
+        <init-param>
+            <param-name>blackListURL</param-name>
+            <param-value>/static/**,/**/*.js,/**/*.css,/**/*.jpg,/**/*.gif,/**/*.png</param-value>
+        </init-param>
+        <init-param>
+            <param-name>whiteListURL</param-name>
+            <param-value>/**</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>AccessLogFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
     <!-- 调试时web请求/响应时使用的Filter，请配置debugRequest logger -->
     <filter>
         <filter-name>DebugRequestAndResponseFilter</filter-name>
@@ -70,26 +92,6 @@
         <filter-name>openEntityManagerInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-
-    <!-- 同步会话数据到DB 一次请求最多同步一次 防止过多处理  需要放到Shiro过滤器之前-->
-    <filter>
-        <filter-name>syncOnlineSessionFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>syncOnlineSessionFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-
 
     <!-- shiro 安全过滤器 -->
     <!-- The filter-name matches name of a 'shiroFilter' bean inside applicationContext.xml -->

@@ -20,6 +20,7 @@ import com.sishuok.es.sys.user.exception.UserBlockedException;
 import com.sishuok.es.sys.user.exception.UserNotExistsException;
 import com.sishuok.es.sys.user.exception.UserPasswordNotMatchException;
 import com.sishuok.es.sys.user.repository.UserRepository;
+import com.sishuok.es.sys.user.utils.UserLogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
@@ -133,10 +134,20 @@ public class UserService extends BaseService<User, Long> {
     public User login(String username, String password) {
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            UserLogUtils.log(
+                    username,
+                    "loginError",
+                    "username is empty");
             throw new UserNotExistsException();
         }
         //密码如果不在指定范围内 肯定错误
         if(password.length() < User.PASSWORD_MIN_LENGTH || password.length() > User.PASSWORD_MAX_LENGTH) {
+            UserLogUtils.log(
+                    username,
+                    "loginError",
+                    "password length error! password is between {} and {}",
+                    User.PASSWORD_MIN_LENGTH, User.PASSWORD_MAX_LENGTH);
+
             throw new UserPasswordNotMatchException();
         }
 
@@ -156,14 +167,28 @@ public class UserService extends BaseService<User, Long> {
         }
 
         if(user == null || Boolean.TRUE.equals(user.getDeleted())) {
+            UserLogUtils.log(
+                    username,
+                    "loginError",
+                    "user is not exists!");
+
             throw new UserNotExistsException();
         }
 
         passwordService.validate(user, password);
 
         if(user.getStatus() == UserStatus.blocked) {
+            UserLogUtils.log(
+                    username,
+                    "loginError",
+                    "user is blocked!");
             throw new UserBlockedException(userStatusHistoryService.getLastReason(user));
         }
+
+        UserLogUtils.log(
+                username,
+                "loginSuccess",
+                "");
         return user;
     }
 
@@ -194,17 +219,28 @@ public class UserService extends BaseService<User, Long> {
         return true;
     }
 
-    public void changePassword(Long[] ids, String newPassword) {
+    public void changePassword(User opUser, Long[] ids, String newPassword) {
         UserService proxyUserService = (UserService) AopContext.currentProxy();
         for(Long id : ids) {
-            proxyUserService.changePassword(findOne(id), newPassword);
+            User user = findOne(id);
+            proxyUserService.changePassword(user, newPassword);
+            UserLogUtils.log(
+                    user.getUsername(),
+                    "changePassword",
+                    "admin user {} change password!", opUser.getUsername());
+
         }
     }
 
     public void changeStatus(User opUser, Long[] ids, UserStatus newStatus, String reason) {
         UserService proxyUserService = (UserService) AopContext.currentProxy();
         for(Long id : ids) {
-            proxyUserService.changeStatus(opUser, findOne(id), newStatus, reason);
+            User user = findOne(id);
+            proxyUserService.changeStatus(opUser, user, newStatus, reason);
+            UserLogUtils.log(
+                    user.getUsername(),
+                    "changeStatus",
+                    "admin user {} change status!", opUser.getUsername());
         }
     }
 

@@ -99,7 +99,7 @@ public class LogUtils {
 
 
 
-	protected static String getBlock(Object msg) {
+	public static String getBlock(Object msg) {
 		if(msg == null) {
 			msg = "";
 		}

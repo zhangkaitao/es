@@ -7,6 +7,7 @@ package com.sishuok.es.common.web.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -111,12 +112,10 @@ public abstract class BaseFilter implements Filter {
             return;
         }
 
-        if (isWhiteURL(currentURL)) {
-            doFilter(httpRequest, httpResponse, chain);
+        if (!isWhiteURL(currentURL)) {
+            chain.doFilter(request, response);
             return;
         }
-
-        logger.debug("url filter : no url list matches : [{}]  continue", currentURL);
         doFilter(httpRequest, httpResponse, chain);
         return;
     }
@@ -124,22 +123,24 @@ public abstract class BaseFilter implements Filter {
     private boolean isWhiteURL(String currentURL) {
         for (String whiteURL : whiteListURLs) {
             if (pathMatcher.match(whiteURL, currentURL)) {
-                logger.debug("url filter : white url list matches : [{}] match [{}] continue", whiteURL, currentURL);
+                logger.debug("url filter : white url list matches : [{}] match [{}] continue", currentURL, whiteURL);
                 return true;
             }
-            logger.debug("url filter : white url list not matches : [{}] match [{}]", whiteURL, currentURL);
         }
+        logger.debug("url filter : white url list not matches : [{}] not match [{}]",
+                currentURL, Arrays.toString(whiteListURLs));
         return false;
     }
 
     private boolean isBlackURL(String currentURL) {
         for (String blackURL : blackListURLs) {
             if (pathMatcher.match(blackURL, currentURL)) {
-                logger.debug("url filter : black url list matches : [{}] match [{}] break", blackURL, currentURL);
+                logger.debug("url filter : black url list matches : [{}] match [{}] break", currentURL, blackURL);
                 return true;
             }
-            logger.debug("url filter : black url list not matches : [{}] match [{}]", blackURL, currentURL);
         }
+        logger.debug("url filter : black url list not matches : [{}] not match [{}]",
+                currentURL, Arrays.toString(blackListURLs));
         return false;
     }
 

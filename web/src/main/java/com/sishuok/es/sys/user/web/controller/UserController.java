@@ -180,9 +180,10 @@ public class UserController extends BaseCRUDController<User, Long> {
     public String changePassword(
             HttpServletRequest request,
             @RequestParam("ids") Long[] ids, @RequestParam("newPassword") String newPassword,
+            @CurrentUser User opUser,
             RedirectAttributes redirectAttributes) {
 
-        userService.changePassword(ids, newPassword);
+        userService.changePassword(opUser, ids, newPassword);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "改密成功！");
 

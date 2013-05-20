@@ -9,6 +9,7 @@ import com.sishuok.es.common.utils.security.Md5Utils;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.exception.UserPasswordNotMatchException;
 import com.sishuok.es.sys.user.exception.UserPasswordRetryLimitExceedException;
+import com.sishuok.es.sys.user.utils.UserLogUtils;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -27,8 +28,6 @@ import javax.annotation.PostConstruct;
  */
 @Service
 public class PasswordService {
-
-    private static final Logger log = LoggerFactory.getLogger("es-sys-user");
 
     @Autowired
     private CacheManager ehcacheManager;
@@ -56,12 +55,22 @@ public class PasswordService {
         if(cacheElement != null) {
             retryCount = (Integer) cacheElement.getObjectValue();
             if(retryCount >= maxRetryCount) {
+                UserLogUtils.log(
+                        username,
+                        "passwordError",
+                        "password error, retry limit exceed! password: {},max retry count {}",
+                        password, maxRetryCount);
                 throw new UserPasswordRetryLimitExceedException(maxRetryCount);
             }
         }
 
         if(!matches(user, password)) {
             loginRecordCache.put(new Element(username, ++retryCount));
+            UserLogUtils.log(
+                    username,
+                    "passwordError",
+                    "password error! password: {} retry count: {}",
+                    password, retryCount);
             throw new UserPasswordNotMatchException();
         } else {
             clearLoginRecordCache(username);
