@@ -58,6 +58,7 @@
             <br/>
             <h4 class="hr">组织机构和工作职务</h4>
             <div class="span8">
+                <c:set var="onlyDisplayShow" value="true"/>
                 <%@include file="../organizations.jspf"%>
             </div>
         </c:if>

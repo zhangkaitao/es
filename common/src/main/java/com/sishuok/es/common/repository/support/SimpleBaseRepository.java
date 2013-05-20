@@ -232,4 +232,14 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         return RepositoryHelper.count(countAllQL, searchable, searchCallback);
     }
 
+
+    /**
+     * 重写默认的 这样可以走一级/二级缓存
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean exists(ID id) {
+        return findOne(id) != null;
+    }
 }

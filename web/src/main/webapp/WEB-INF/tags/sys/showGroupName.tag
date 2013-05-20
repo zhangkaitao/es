@@ -13,11 +13,12 @@
     Group group = groupService.findOne(id);
 
     if(group == null) {
+        out.write("<span class='label label-important'>删除的数据，请修改</span>");
         return;
     }
 
     StringBuilder s = new StringBuilder();
-    s.append(String.format("<a class='btn btn-link' href='%s/admin/sys/group/%d'>", request.getContextPath(), id));
+    s.append(String.format("<a class='btn btn-link no-padding' href='%s/admin/sys/group/%d'>", request.getContextPath(), id));
     s.append(group.getName());
     s.append("</a>");
     out.write(s.toString());

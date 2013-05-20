@@ -39,6 +39,9 @@ public class RoleResourcePermission extends BaseEntity<Long> {
     /**
      * 角色id
      */
+    /**
+     * 角色id
+     */
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     private Role role;
@@ -98,8 +101,8 @@ public class RoleResourcePermission extends BaseEntity<Long> {
 
     @Override
     public String toString() {
-        return "RoleResourcePermission{" +
-                "role=" + (role == null ? "null" : role.getId()) +
+        return "RoleResourcePermission{id=" + this.getId() +
+                ",roleId=" + (role != null ? role.getId() : "null") +
                 ", resourceId=" + resourceId +
                 ", permissionIds=" + permissionIds +
                 '}';

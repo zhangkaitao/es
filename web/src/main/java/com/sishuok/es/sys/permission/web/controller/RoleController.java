@@ -9,6 +9,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.AvailableEnum;
+import com.sishuok.es.common.entity.search.SearchOperator;
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.permission.entity.Permission;
@@ -53,7 +55,10 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     protected void setCommonData(Model model) {
         super.setCommonData(model);
         model.addAttribute("availableList", AvailableEnum.values());
-        model.addAttribute("permissions", permissionService.findAll());
+
+        Searchable searchable = Searchable.newSearchable();
+//        searchable.addSearchFilter("show", SearchOperator.eq, true);
+        model.addAttribute("permissions", permissionService.findAllWithNoPageNoSort(searchable));
     }
 
 

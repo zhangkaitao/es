@@ -72,6 +72,7 @@ $(function() {
         urlPrefix : "${ctx}/admin/sys/organization/organization",
         async : true,
         asyncLoadAll : true,
+        onlyDisplayShow: true,
         lazy : true,
         select : {
             btn : $("#selectOrganizationTree,#organizationName"),

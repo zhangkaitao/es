@@ -5,12 +5,11 @@
  */
 package com.sishuok.es.sys.user.service;
 
-import com.google.common.collect.Lists;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
-import com.sishuok.es.sys.user.aop.UserCacheAspect;
+import com.sishuok.es.extra.aop.UserCacheAspect;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import org.junit.Assert;
@@ -30,11 +29,8 @@ public class UserOrganizationJobIT extends BaseUserIT {
     @Autowired
     private JobService jobService;
 
-    @Autowired
-    private UserCacheAspect userCacheAspect;
-
     @Test
-    public void testCascadeSaveOrgnization() {
+    public void testCascadeSaveOrgnizationAndJob() {
         User user = createDefaultUser();
 
         Organization organization1 = new Organization();
@@ -51,25 +47,24 @@ public class UserOrganizationJobIT extends BaseUserIT {
         jobService.save(job1);
         jobService.save(job2);
 
-        user.addOrganizationJob(new UserOrganizationJob(organization1));
-        user.addOrganizationJob(new UserOrganizationJob(organization2, job1));
-        user.addOrganizationJob(new UserOrganizationJob(organization2, job2));
+        user.addOrganizationJob(new UserOrganizationJob(organization1.getId(), null));
+        user.addOrganizationJob(new UserOrganizationJob(organization2.getId(), job1.getId()));
+        user.addOrganizationJob(new UserOrganizationJob(organization2.getId(), job2.getId()));
+        userService.update(user);
 
-        //清除缓存
-        userCacheAspect.cacheEvictAdvice(user);
         clear();
 
         user = userService.findOne(user.getId());
 
         Assert.assertEquals(3, user.getOrganizationJobs().size());
-        Assert.assertEquals(organization1, user.getOrganizationJobs().get(0).getOrganization());
+        Assert.assertEquals(organization1.getId(), user.getOrganizationJobs().get(0).getOrganizationId());
 
-        Assert.assertEquals(organization2, user.getOrganizationJobs().get(1).getOrganization());
-        Assert.assertEquals(organization2, user.getOrganizationJobs().get(2).getOrganization());
+        Assert.assertEquals(organization2.getId(), user.getOrganizationJobs().get(1).getOrganizationId());
+        Assert.assertEquals(organization2.getId(), user.getOrganizationJobs().get(2).getOrganizationId());
     }
 
     @Test
-    public void testCascadeUpdateOrgnization() {
+    public void testCascadeUpdateOrgnizationAndJob() {
         User user = createDefaultUser();
 
         Organization organization1 = new Organization();
@@ -79,30 +74,22 @@ public class UserOrganizationJobIT extends BaseUserIT {
         organizationService.save(organization1);
         organizationService.save(organization2);
 
-
-        //清除缓存
-        userCacheAspect.cacheEvictAdvice(user);
-        clear();
-
-
-        user.addOrganizationJob(new UserOrganizationJob(organization1));
-        user.addOrganizationJob(new UserOrganizationJob(organization2));
-
+        user.addOrganizationJob(new UserOrganizationJob(organization1.getId(), null));
+        user.addOrganizationJob(new UserOrganizationJob(organization2.getId(), null));
         userService.update(user);
 
         //清除缓存
-        userCacheAspect.cacheEvictAdvice(user);
         clear();
 
         user = userService.findOne(user.getId());
         Assert.assertEquals(2, user.getOrganizationJobs().size());
-        Assert.assertEquals(organization1, user.getOrganizationJobs().get(0).getOrganization());
-        Assert.assertEquals(organization2, user.getOrganizationJobs().get(1).getOrganization());
+        Assert.assertEquals(organization1.getId(), user.getOrganizationJobs().get(0).getOrganizationId());
+        Assert.assertEquals(organization2.getId(), user.getOrganizationJobs().get(1).getOrganizationId());
     }
 
 
     @Test
-    public void testCascadeDeleteOrgnization() {
+    public void testCascadeDeleteOrgnizationAndJob() {
         User user = createDefaultUser();
 
         Organization organization1 = new Organization();
@@ -120,27 +107,24 @@ public class UserOrganizationJobIT extends BaseUserIT {
         jobService.save(job1);
         jobService.save(job2);
 
-        user.addOrganizationJob(new UserOrganizationJob(organization1));
-        user.addOrganizationJob(new UserOrganizationJob(organization2, job1));
-        user.addOrganizationJob(new UserOrganizationJob(organization2, job2));
+        user.addOrganizationJob(new UserOrganizationJob(organization1.getId(), null));
+        user.addOrganizationJob(new UserOrganizationJob(organization2.getId(), job1.getId()));
+        user.addOrganizationJob(new UserOrganizationJob(organization2.getId(), job2.getId()));
+        userService.update(user);
 
-        //清除缓存
-        userCacheAspect.cacheEvictAdvice(user);
         clear();
 
         user = userService.findOne(user.getId());
         user.getOrganizationJobs().remove(0);
+        userService.update(user);
 
-        //清除缓存
-        userCacheAspect.cacheEvictAdvice(user);
         clear();
-
 
         user = userService.findOne(user.getId());
 
         Assert.assertEquals(2, user.getOrganizationJobs().size());
 
-        Assert.assertEquals(organization2, user.getOrganizationJobs().get(0).getOrganization());
-        Assert.assertEquals(organization2, user.getOrganizationJobs().get(1).getOrganization());
+        Assert.assertEquals(organization2.getId(), user.getOrganizationJobs().get(0).getOrganizationId());
+        Assert.assertEquals(organization2.getId(), user.getOrganizationJobs().get(1).getOrganizationId());
     }
 }

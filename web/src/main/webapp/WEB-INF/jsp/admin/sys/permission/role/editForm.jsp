@@ -154,6 +154,7 @@
                     </thead>
                     <tbody>
                     <c:forEach items="${m.resourcePermissions}" var="o">
+                    <c:if test="${esfn:existsResource(o.resourceId, onlyDisplayShow)}">
                     <tr>
                         <td class="check"><input type="checkbox"></td>
                         <td>
@@ -163,10 +164,14 @@
                         <td>
                             <span style="line-height: 30px">
                             <c:set var="permissionIds" value=""/>
-                            <c:forEach items="${o.permissionIds}" var="permissionId" varStatus="status">
-                                <c:set var="permissionIds" value="${permissionIds}${status.count == 1 ? '' : ','}${permissionId}"/>
+                            <c:set var="count" value="0"/>
+                            <c:forEach items="${o.permissionIds}" var="permissionId">
+                            <c:if test="${esfn:existsPermission(permissionId, onlyDisplayShow)}">
+                                <c:set var="count" value="${count+1}"/>
+                                <c:set var="permissionIds" value="${permissionIds}${count == 1 ? '' : ','}${permissionId}"/>
                                 <c:if test="${status.count > 1}">|</c:if>
                                 <sys:showPermissionName id="${permissionId}"/>
+                            </c:if>
                             </c:forEach>
                             </span>
                             <input type='hidden' name='permissionIds' value='${permissionIds}'>
@@ -178,6 +183,7 @@
                             </a>
                         </td>
                     </tr>
+                    </c:if>
                     </c:forEach>
                     </tbody>
                 </table>
@@ -261,6 +267,7 @@
             urlPrefix : "${ctx}/admin/sys/resource",
             async : true,
             asyncLoadAll : true,
+            onlyDisplayShow: true,
             lazy : true,
             select : {
                 btn : $("#selectResourceTree,#resourceName"),

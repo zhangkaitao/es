@@ -46,7 +46,6 @@ public class Role extends BaseEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = RoleResourcePermission.class, mappedBy = "role", orphanRemoval = true)
     @Fetch(FetchMode.SELECT)
     @Basic(optional = true, fetch = FetchType.EAGER)
-    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     @OrderBy
     private List<RoleResourcePermission> resourcePermissions;
 

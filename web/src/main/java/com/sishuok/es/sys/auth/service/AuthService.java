@@ -21,6 +21,7 @@ import com.sishuok.es.sys.user.service.UserService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ import java.util.Set;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
+@DependsOn("authRepository")
 @Service
 public class AuthService extends BaseService<Auth, Long> {
 
@@ -44,7 +46,6 @@ public class AuthService extends BaseService<Auth, Long> {
     private GroupService groupService;
 
 
-    //why m is po??
     public void addUserAuth(Long[] userIds, Auth m) {
 
         if(ArrayUtils.isEmpty(userIds)) {
@@ -155,11 +156,11 @@ public class AuthService extends BaseService<Auth, Long> {
      *  1.3、工作职务 根据工作职务绝对匹配 此处需要注意 祖先需要自己获取
      *  1.4、组织机构和工作职务  根据组织机构和工作职务绝对匹配 此处不匹配祖先
      *  1.5、组  根据组绝对匹配
-     * @param userId
-     * @param groupIds
-     * @param organizationIds
-     * @param jobIds
-     * @param organizationJobIds
+     * @param userId 必须有
+     * @param groupIds  可选
+     * @param organizationIds 可选
+     * @param jobIds 可选
+     * @param organizationJobIds 可选
      * @return
      */
     public Set<Long> findRoleIds(Long userId, Set<Long> groupIds, Set<Long> organizationIds, Set<Long> jobIds, Set<Long[]> organizationJobIds) {

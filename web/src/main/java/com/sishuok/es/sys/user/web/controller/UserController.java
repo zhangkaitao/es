@@ -94,10 +94,10 @@ public class UserController extends BaseCRUDController<User, Long> {
         setCommonData(model);
 
         if(organization != null && !organization.isRoot()) {
-            searchable.addSearchParam("organization", organization);
+            searchable.addSearchParam("organizationId", organization.getId());
         }
         if(job != null && !job.isRoot()) {
-            searchable.addSearchParam("job", job);
+            searchable.addSearchParam("jobId", job.getId());
         }
 
         return super.list(searchable, model);
@@ -145,16 +145,16 @@ public class UserController extends BaseCRUDController<User, Long> {
             if (l == 1) {
                 for (int j = 0, l2 = jobIds.length; j < l2; j++) {
                     UserOrganizationJob userOrganizationJob = new UserOrganizationJob();
-                    userOrganizationJob.setOrganization(new Organization(organizationIds[i]));
-                    userOrganizationJob.setJob(new Job(jobIds[i][0]));
+                    userOrganizationJob.setOrganizationId(organizationIds[i]);
+                    userOrganizationJob.setJobId(jobIds[j][0]);
                     m.addOrganizationJob(userOrganizationJob);
                 }
             } else {
                 Long[] jobId = jobIds[i];
                 for (int j = 0, l2 = jobId.length; j < l2; j++) {
                     UserOrganizationJob userOrganizationJob = new UserOrganizationJob();
-                    userOrganizationJob.setOrganization(new Organization(organizationIds[i]));
-                    userOrganizationJob.setJob(new Job(jobId[j]));
+                    userOrganizationJob.setOrganizationId(organizationIds[i]);
+                    userOrganizationJob.setJobId(jobId[j]);
                     m.addOrganizationJob(userOrganizationJob);
                 }
             }

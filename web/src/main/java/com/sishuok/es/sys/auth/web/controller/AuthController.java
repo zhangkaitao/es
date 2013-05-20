@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.auth.web.controller;
 
 import com.sishuok.es.common.Constants;
+import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
@@ -51,7 +52,10 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
     protected void setCommonData(Model model) {
         super.setCommonData(model);
         model.addAttribute("types", AuthType.values());
-        model.addAttribute("roles", roleService.findAll());
+
+        Searchable searchable = Searchable.newSearchable();
+//        searchable.addSearchFilter("show", SearchOperator.eq, true);
+        model.addAttribute("roles", roleService.findAllWithNoPageNoSort(searchable));
     }
 
 
@@ -80,6 +84,9 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
 
     @RequestMapping(value = "{type}/create", method = RequestMethod.GET)
     public String showCreateFormWithType(@PathVariable("type") AuthType type, Model model) {
+        Auth auth = new Auth();
+        auth.setType(type);
+        model.addAttribute("m", auth);
         return super.showCreateForm(model);
     }
 
@@ -107,7 +114,6 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
         } else if(m.getType() == AuthType.organization_job) {
             authService.addOrganizationJobAuth(organizationIds, jobIds, m);
         }
-
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "新增成功");
         return redirectToUrl("/admin/sys/auth?search.type_eq=" + m.getType());
     }

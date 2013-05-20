@@ -3,9 +3,9 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.exception.web;
+package com.sishuok.es.extra.exception.web;
 
-import com.sishuok.es.exception.web.entity.ExceptionResponse;
+import com.sishuok.es.extra.exception.web.entity.ExceptionResponse;
 import com.sishuok.es.common.utils.LogUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;

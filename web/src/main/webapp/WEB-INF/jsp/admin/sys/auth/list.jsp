@@ -17,7 +17,7 @@
     <es:showMessage/>
 
     <div class="row-fluid tool ui-toolbar">
-        <div class="span4">
+        <div class="span3">
             <div class="btn-group">
                 <shiro:hasPermission name="sys:auth:create">
                 <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
@@ -51,7 +51,7 @@
                 </shiro:hasPermission>
             </div>
         </div>
-        <div class="span8">
+        <div class="span9">
             <%@include file="searchForm.jsp"%>
         </div>
     </div>

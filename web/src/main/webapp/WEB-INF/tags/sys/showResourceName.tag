@@ -9,6 +9,7 @@
 <%@ attribute name="includeRoot" type="java.lang.Boolean" required="false" description="是否包含根" %>
 <%!private ResourceService resourceService;%>
 <%
+
     if(showParents == null) {
         showParents = true;
     }
@@ -22,10 +23,10 @@
 
     Resource resource = resourceService.findOne(id);
 
-    if(resource == null) {
+    if(resource == null ) {
+        out.write("<span class='label label-important'>删除的数据，请修改</span>");
         return;
     }
-
 
     List<String> names = Lists.newArrayList();
 

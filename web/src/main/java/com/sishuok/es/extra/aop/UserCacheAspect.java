@@ -3,8 +3,9 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.user.aop;
+package com.sishuok.es.extra.aop;
 
+import com.sishuok.es.common.cache.BaseCacheAspect;
 import com.sishuok.es.sys.user.entity.User;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -26,40 +27,16 @@ import org.springframework.util.StringUtils;
  */
 @Component
 @Aspect
-public class UserCacheAspect implements InitializingBean {
+public class UserCacheAspect extends BaseCacheAspect {
 
-    @Autowired
-    private CacheManager cacheManager;
-    private String cacheName = "sys-userCache";
-    private Cache cache;
+    public UserCacheAspect() {
+        setCacheName("sys-userCache");
+    }
 
     private String idKeyPrefix = "id-";
     private String usernameKeyPrefix = "username-";
     private String emailKeyPrefix = "email-";
     private String mobilePhoneNumberKeyPrefix = "mobilePhoneNumber-";
-
-    /**
-     * 缓存池名称
-      * @param cacheName
-     */
-    public void setCacheName(String cacheName) {
-
-        this.cacheName = cacheName;
-    }
-
-    /**
-     * 缓存管理器
-     * @return
-     */
-    public void setCacheManager(CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
-    }
-
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        cache = cacheManager.getCache(cacheName);
-    }
 
     ////////////////////////////////////////////////////////////////////////////////
     ////切入点
@@ -68,7 +45,7 @@ public class UserCacheAspect implements InitializingBean {
     /**
      * 匹配用户Service
      */
-    @Pointcut(value = "within(com.sishuok.es.common.service.BaseService+) && target(com.sishuok.es.sys.user.service.UserService)")
+    @Pointcut(value = "target(com.sishuok.es.sys.user.service.UserService)")
     private void userServicePointcut() {}
 
     /**
@@ -204,43 +181,35 @@ public class UserCacheAspect implements InitializingBean {
     ////////////////////////////////////////////////////////////////////////////////
     ////cache 抽象实现
     ////////////////////////////////////////////////////////////////////////////////
-    private void put(User user) {
+    public void put(User user) {
         if(user == null) {
             return;
         }
         Long id = user.getId();
         //username email mobilePhoneNumber ---> id
-        cache.put(usernameKey(user.getUsername()), id);
-        cache.put(emailKey(user.getEmail()), id);
-        cache.put(mobilePhoneNumberKey(user.getMobilePhoneNumber()), id);
+        put(usernameKey(user.getUsername()), id);
+        put(emailKey(user.getEmail()), id);
+        put(mobilePhoneNumberKey(user.getMobilePhoneNumber()), id);
         // id ---> user
-        cache.put(idKey(String.valueOf(id)), user);
+        put(idKey(String.valueOf(id)), user);
     }
 
-    private void evict(User user) {
+
+    public void evictId(String id) {
+        evict(idKey(id));
+    }
+
+    public void evict(User user) {
         if(user == null) {
             return;
         }
         Long id = user.getId();
-        cache.evict(idKey(String.valueOf(id)));
-        cache.evict(usernameKey(user.getUsername()));
-        cache.evict(emailKey(user.getEmail()));
-        cache.evict(mobilePhoneNumberKey(user.getMobilePhoneNumber()));
+        evict(idKey(String.valueOf(id)));
+        evict(usernameKey(user.getUsername()));
+        evict(emailKey(user.getEmail()));
+        evict(mobilePhoneNumberKey(user.getMobilePhoneNumber()));
     }
 
-    private void evictId(String id) {
-        cache.evict(idKey(id));
-    }
 
-    public <T> T get(Object key) {
-        if(StringUtils.isEmpty(key)) {
-            return null;
-        }
-        Cache.ValueWrapper value = cache.get(key);
-        if(value == null) {
-            return null;
-        }
-        return (T) value.get();
-    }
 
 }

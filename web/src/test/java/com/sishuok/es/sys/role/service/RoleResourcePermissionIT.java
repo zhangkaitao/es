@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.role.service;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.entity.Role;
@@ -18,8 +17,6 @@ import com.sishuok.es.test.BaseIT;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -42,6 +39,7 @@ public class RoleResourcePermissionIT extends BaseIT {
 
         Resource resource1 = new Resource();
         resource1.setName("123");
+        resource1.setIdentity("123");
         resourceService.save(resource1);
 
         Permission permission1 = new Permission();
@@ -56,6 +54,7 @@ public class RoleResourcePermissionIT extends BaseIT {
 
         Role role = new Role();
         role.setName("abc");
+        role.setRole("abc");
         role.addResourcePermission(
                 new RoleResourcePermission(
                         resource1.getId(),
@@ -77,6 +76,7 @@ public class RoleResourcePermissionIT extends BaseIT {
 
         Resource resource1 = new Resource();
         resource1.setName("123");
+        resource1.setIdentity("123");
         resourceService.save(resource1);
 
         Permission permission1 = new Permission();
@@ -91,6 +91,7 @@ public class RoleResourcePermissionIT extends BaseIT {
 
         Role role = new Role();
         role.setName("abc");
+        role.setRole("abc");
 
         roleService.save(role);
 
@@ -108,7 +109,6 @@ public class RoleResourcePermissionIT extends BaseIT {
         RoleResourcePermission roleResourcePermission = dbRole.getResourcePermissions().get(0);
         roleResourcePermission.getPermissionIds().remove(roleResourcePermission.getPermissionIds().iterator().next());
         //此处必须复制一份
-        flush();
         clear();
 
         dbRole = roleService.findOne(role.getId());

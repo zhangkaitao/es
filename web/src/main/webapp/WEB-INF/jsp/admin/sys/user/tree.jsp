@@ -43,7 +43,7 @@
         $.zTree.initMovableTree({
             zNodes : null,
             urlPrefix : "${ctx}/admin/sys/organization/organization",
-            onlyShow : true,
+            onlyDisplayShow : true,
             async : true,
             asyncLoadAll : false,
             editable : false,
@@ -62,7 +62,7 @@
         $.zTree.initMovableTree({
             zNodes : null,
             urlPrefix : "${ctx}/admin/sys/organization/job",
-//            onlyShow : true,
+//            onlyDisplayShow : true,
             async : true,
             asyncLoadAll : true,
             editable : false,

@@ -9,6 +9,7 @@
 <%@ attribute name="includeRoot" type="java.lang.Boolean" required="false" description="是否包含根" %>
 <%!private JobService jobService;%>
 <%
+
     if(showParents == null) {
         showParents = true;
     }
@@ -23,6 +24,7 @@
     Job job = jobService.findOne(id);
 
     if(job == null) {
+        out.write("<span class='label label-important'>删除的数据，请修改</span>");
         return;
     }
 
@@ -42,7 +44,7 @@
 
 
     StringBuilder s = new StringBuilder();
-    s.append(String.format("<a class='btn btn-link' href='%s/admin/sys/organization/job/%d'>", request.getContextPath(), id));
+    s.append(String.format("<a class='btn btn-link no-padding' href='%s/admin/sys/organization/job/%d'>", request.getContextPath(), id));
 
     for(int l = names.size() - 1, i = l; i >= 0; i--) {
         if(i != l) {

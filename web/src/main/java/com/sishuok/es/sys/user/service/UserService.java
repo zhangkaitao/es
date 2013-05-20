@@ -26,6 +26,8 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -67,9 +69,8 @@ public class UserService extends BaseService<User, Long> {
         user.randomSalt();
         user.setPassword(passwordService.encryptPassword(user.getUsername(), user.getPassword(), user.getSalt()));
 
-
         return super.save(user);
-        }
+    }
 
 
     @Override
@@ -78,29 +79,26 @@ public class UserService extends BaseService<User, Long> {
         List<UserOrganizationJob> localUserOrganizationJobs = user.getOrganizationJobs();
         for(int i = 0, l = localUserOrganizationJobs.size(); i < l; i++) {
 
-            //设置关系 防止丢失 报 A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
-            localUserOrganizationJobs.get(i).setUser(user);
-
             UserOrganizationJob localUserOrganizationJob = localUserOrganizationJobs.get(i);
-            UserOrganizationJob dbUserOrganizationJob = findUserOrganizationJob(localUserOrganizationJob);
+            //设置关系 防止丢失 报 A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
+            localUserOrganizationJob.setUser(user);
 
+            UserOrganizationJob dbUserOrganizationJob = findUserOrganizationJob(localUserOrganizationJob);
             if(dbUserOrganizationJob != null) {//出现在先删除再添加的情况
-                dbUserOrganizationJob.setJob(localUserOrganizationJob.getJob());
-                dbUserOrganizationJob.setOrganization(localUserOrganizationJob.getOrganization());
+                dbUserOrganizationJob.setJobId(localUserOrganizationJob.getJobId());
+                dbUserOrganizationJob.setOrganizationId(localUserOrganizationJob.getOrganizationId());
                 dbUserOrganizationJob.setUser(localUserOrganizationJob.getUser());
                 localUserOrganizationJobs.set(i, dbUserOrganizationJob);
             }
         }
-
-
         return super.update(user);
     }
 
     public UserOrganizationJob findUserOrganizationJob(UserOrganizationJob userOrganizationJob) {
         return userRepository.findUserOrganization(
                 userOrganizationJob.getUser(),
-                userOrganizationJob.getOrganization(),
-                userOrganizationJob.getJob());
+                userOrganizationJob.getOrganizationId(),
+                userOrganizationJob.getJobId());
     }
 
     public User findByUsername(String username) {
@@ -228,5 +226,23 @@ public class UserService extends BaseService<User, Long> {
                         }
                 )
         );
+    }
+
+
+    /**
+     * 获取那些在用户-组织机构/工作职务中存在 但在组织机构/工作职务中不存在的
+     * @param pageable
+     * @return
+     */
+    public Page<UserOrganizationJob> findUserOrganizationJobOnNotExistsOrganizationOrJob(Pageable pageable) {
+        return userRepository.findUserOrganizationJobOnNotExistsOrganizationOrJob(pageable);
+    }
+
+    /**
+     * 删除用户不存在的情况的UserOrganizationJob（比如手工从数据库物理删除）。。
+     * @return
+     */
+    public void deleteUserOrganizationJobOnNotExistsUser() {
+        userRepository.deleteUserOrganizationJobOnNotExistsUser();
     }
 }

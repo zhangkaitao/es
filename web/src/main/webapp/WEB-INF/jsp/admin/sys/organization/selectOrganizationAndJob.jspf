@@ -57,17 +57,22 @@
             </thead>
             <tbody>
             <c:forEach items="${displayOrganizationJobs}" var="o">
+            <c:if test="${esfn:existsOrganization(o.key, onlyDisplayShow)}">
                 <tr>
                     <td class="check"><input type="checkbox"></td>
                     <td>
-                        <input type='hidden' id='organizationId_${o.key.id}' name='organizationId' value='${o.key.id}'>
-                        <sys:showOrganizationName id="${o.key.id}"/>
+                        <input type='hidden' id='organizationId_${o.key}' name='organizationId' value='${o.key}'>
+                        <sys:showOrganizationName id="${o.key}"/>
                     </td>
                     <td>
                         <c:set var="jobIds" value=""/>
+                        <c:set var="count" value="0"/>
                         <c:forEach items="${o.value}" var="oj" varStatus="status">
-                            <c:set var="jobIds" value="${jobIds}${status.count == 1 ? '' : ','}${oj.job.id}"/>
-                            <sys:showJobName id="${oj.job.id}"/><br/>
+                        <c:if test="${esfn:existsJob(oj.jobId, onlyDisplayShow)}">
+                            <c:set var="count" value="${count + 1}"/>
+                            <c:set var="jobIds" value="${jobIds}${count == 1 ? '' : ','}${oj.jobId}"/>
+                            <sys:showJobName id="${oj.jobId}"/><br/>
+                        </c:if>
                         </c:forEach>
                         <input type='hidden' name='jobId' value='${jobIds}'>
                     </td>
@@ -78,6 +83,7 @@
                         </a>
                     </td>
                 </tr>
+            </c:if>
             </c:forEach>
             </tbody>
         </table>

@@ -17,8 +17,7 @@ import java.util.List;
 
 @ContextConfiguration(locations = {
         "classpath:spring-common.xml",
-        "classpath:spring-config.xml",
-        "classpath:spring-cache.xml"
+        "classpath:spring-config.xml"
         })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {

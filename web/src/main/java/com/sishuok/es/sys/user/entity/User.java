@@ -128,9 +128,10 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     }
 
 
-    private transient Map<Organization, List<UserOrganizationJob>> organizationJobsMap;
+    private transient Map<Long, List<UserOrganizationJob>> organizationJobsMap;
+
     @Transient
-    public Map<Organization, List<UserOrganizationJob>> getDisplayOrganizationJobs() {
+    public Map<Long, List<UserOrganizationJob>> getDisplayOrganizationJobs() {
         if(organizationJobsMap != null) {
             return organizationJobsMap;
         }
@@ -138,11 +139,11 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
         organizationJobsMap = Maps.newHashMap();
 
         for(UserOrganizationJob userOrganizationJob : getOrganizationJobs()) {
-            Organization organization = userOrganizationJob.getOrganization();
-            List<UserOrganizationJob> userOrganizationJobList = organizationJobsMap.get(organization);
+            Long organizationId = userOrganizationJob.getOrganizationId();
+            List<UserOrganizationJob> userOrganizationJobList = organizationJobsMap.get(organizationId);
             if(userOrganizationJobList == null) {
                 userOrganizationJobList = Lists.newArrayList();
-                organizationJobsMap.put(organization, userOrganizationJobList);
+                organizationJobsMap.put(organizationId, userOrganizationJobList);
             }
             userOrganizationJobList.add(userOrganizationJob);
         }

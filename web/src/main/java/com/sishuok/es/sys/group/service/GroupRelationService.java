@@ -16,6 +16,7 @@ import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.service.UserService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -25,6 +26,7 @@ import java.util.Set;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
+@DependsOn("groupRelationRepository")
 @Service
 public class GroupRelationService extends BaseService<GroupRelation, Long> {
 

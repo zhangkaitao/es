@@ -49,9 +49,13 @@
 
             <td>
                 <span style="line-height: 30px">
-                <c:forEach items="${m.roleIds}" var="roleId" varStatus="status">
-                    <c:if test="${status.count > 1}">|</c:if>
+                <c:set var="count" value="0"/>
+                <c:forEach items="${m.roleIds}" var="roleId">
+                <c:if test="${esfn:existsRole(roleId, onlyDisplayShow)}">
+                    <c:set var="count" value="${count + 1}"/>
+                    <c:if test="${count > 1}">|</c:if>
                     <sys:showRoleName id="${roleId}"/>
+                </c:if>
                 </c:forEach>
                 </span>
             </td>

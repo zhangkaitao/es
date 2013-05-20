@@ -9,11 +9,11 @@ import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
 
@@ -29,16 +29,15 @@ import java.util.Set;
 public class UserOrganizationJob extends BaseEntity<Long> {
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @Basic(optional = true, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     private User user;
 
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SELECT) //后期 加二级缓存优化
-    private Organization organization;
+    @Column(name = "organization_id")
+    private Long organizationId;
 
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SELECT) //后期 加二级缓存优化
-    private Job job;
+    @Column(name = "job_id")
+    private Long jobId;
 
 
     public UserOrganizationJob() {
@@ -48,13 +47,9 @@ public class UserOrganizationJob extends BaseEntity<Long> {
         setId(id);
     }
 
-    public UserOrganizationJob(Organization organization) {
-        this.organization = organization;
-    }
-
-    public UserOrganizationJob(Organization organization, Job job) {
-        this.organization = organization;
-        this.job = job;
+    public UserOrganizationJob(Long organizationId, Long jobId) {
+        this.organizationId = organizationId;
+        this.jobId = jobId;
     }
 
     public User getUser() {
@@ -65,27 +60,28 @@ public class UserOrganizationJob extends BaseEntity<Long> {
         this.user = user;
     }
 
-    public Organization getOrganization() {
-        return organization;
+    public Long getOrganizationId() {
+        return organizationId;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
     }
 
-    public Job getJob() {
-        return job;
+    public Long getJobId() {
+        return jobId;
     }
 
-    public void setJob(Job job) {
-        this.job = job;
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
     }
 
     @Override
     public String toString() {
-        return "UserOrganizationJob{user=" + (user == null ? "null" : user.getId())  + ", " +
-                "organization=" + organization +
-                ", job=" + job +
+        return "UserOrganizationJob{id = " + this.getId() +
+                ",organizationId=" + organizationId +
+                ", jobId=" + jobId +
+                ", userId=" + (user != null ?user.getId() : "null") +
                 '}';
     }
 }

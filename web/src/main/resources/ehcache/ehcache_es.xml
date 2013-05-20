@@ -30,6 +30,26 @@
            timeToIdleSeconds="0"
            memoryStoreEvictionPolicy="LRU"/>
 
+    <!-- 系统用户授权缓存  没必要过期 -->
+    <cache name="sys-auth"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           diskPersistent="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           memoryStoreEvictionPolicy="LRU"/>
+
+    <!-- 菜单缓存  没必要过期 -->
+    <cache name="sys-menu"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           diskPersistent="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           memoryStoreEvictionPolicy="LRU"/>
+
 
     <!-- shiro 会话缓存 不需要序列化到磁盘 此处我们放到db中了 此处cache没必要过期 因为我们存放到db了 -->
     <cache name="shiro-activeSessionCache"

@@ -408,7 +408,7 @@ $.app = {
             minLength : 1,
             enterSearch : false,
             focus: function( event, ui ) {
-                config.input.val( ui.item.label );
+                $(config.input).val( ui.item.label );
                 return false;
             },
             renderItem : function( ul, item ) {
@@ -1974,11 +1974,12 @@ $(function () {
 //    }
 
     $(document).ajaxError(function(event, request, settings) {
+
+        $.app.waitingOver();
+
         if(request.status == 0) {// 中断的不处理
             return;
         }
-
-        $.app.waitingOver();
 
         top.$.app.alert({
             title : "网络故障/系统故障",

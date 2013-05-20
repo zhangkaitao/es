@@ -65,7 +65,7 @@
                     <label class="control-label">
                         用户
                     </label>
-                    <div class="controls">
+                    <div class="controls" style="padding-top: 3px;">
                         <sys:showUsername id="${m.userId}"/>
                         <form:hidden path="userId"/>
                     </div>
@@ -76,7 +76,7 @@
                     <label class="control-label">
                         用户分组
                     </label>
-                    <div class="controls">
+                    <div class="controls" style="padding-top: 3px;">
                         <sys:showGroupName id="${m.groupId}"/>
                         <form:hidden path="groupId"/>
                     </div>
@@ -87,7 +87,7 @@
                     <label class="control-label">
                         组织机构分组
                     </label>
-                    <div class="controls">
+                    <div class="controls" style="padding-top: 3px;">
                         <sys:showGroupName id="${m.groupId}"/>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                     <label class="control-label">
                         组织机构
                     </label>
-                    <div class="controls">
+                    <div class="controls" style="padding-top: 3px;">
                         <sys:showOrganizationName id="${m.organizationId}"/>
                         <form:hidden path="organizationId"/>
                     </div>
@@ -106,7 +106,7 @@
                     <label class="control-label">
                         工作职务
                     </label>
-                    <div class="controls">
+                    <div class="controls" style="padding-top: 3px;">
                         <sys:showJobName id="${m.jobId}"/>
                         <form:hidden path="jobId"/>
                     </div>

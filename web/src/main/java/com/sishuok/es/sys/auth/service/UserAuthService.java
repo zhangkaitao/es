@@ -22,7 +22,6 @@ import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
-import com.sishuok.es.sys.user.service.UserService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,9 +41,6 @@ import java.util.Set;
  */
 @Service
 public class UserAuthService {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private GroupService groupService;
@@ -69,6 +65,7 @@ public class UserAuthService {
 
 
     public Set<Role> findRoles(User user) {
+
         if(user == null) {
             return Sets.newHashSet();
         }
@@ -80,13 +77,10 @@ public class UserAuthService {
         Set<Long> jobIds = Sets.newHashSet();
 
         for(UserOrganizationJob o : user.getOrganizationJobs()) {
-            Organization organization = o.getOrganization();
-            Job job = o.getJob();
+            Long organizationId = o.getOrganizationId();
+            Long jobId = o.getJobId();
 
-            Long organizationId = organization == null ? 0L : organization.getId();
-            Long jobId = job == null ? 0L : job.getId();
-
-            if(organizationId != 0L && jobId != 0L) {
+            if(organizationId != null && jobId !=null && organizationId != 0L && jobId != 0L) {
                 organizationJobIds.add(new Long[]{organizationId, jobId});
             }
             organizationIds.add(organizationId);
@@ -166,33 +160,5 @@ public class UserAuthService {
 
         return permissions;
     }
-
-
-
-
-
-
-    public Set<Role> findRoles(String username) {
-        return findRoles(userService.findByUsername(username));
-    }
-
-
-    public Set<String> findStringRoles(String username) {
-        return findStringRoles(userService.findByUsername(username));
-    }
-
-    public Set<String> findStringPermissions(String username) {
-        return findStringPermissions(userService.findByUsername(username));
-    }
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -54,7 +54,7 @@ insert into `sys_group_relation` (`id`, `group_id`, `organization_id`)
 --授权
 --用户授权
 insert into sys_auth (`id`, `organization_id`, `job_id`, `user_id`, `group_id`, `role_ids`, `type`)
-    values(1, 0, 0, 1, 0, '1,2', 'user');
+    values(1, 0, 0, 1, 0, '1', 'user');
 
 --用户组授权
 insert into sys_auth (`id`, `organization_id`, `job_id`, `user_id`, `group_id`, `role_ids`, `type`)

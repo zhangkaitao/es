@@ -24,6 +24,7 @@
     Organization organization = organizationService.findOne(id);
 
     if(organization == null) {
+        out.write("<span class='label label-important'>删除的数据，请修改</span>");
         return;
     }
 
@@ -44,7 +45,7 @@
     }
 
     StringBuilder s = new StringBuilder();
-    s.append(String.format("<a class='btn btn-link' href='%s/admin/sys/organization/organization/%d'>", request.getContextPath(), id));
+    s.append(String.format("<a class='btn btn-link no-padding' href='%s/admin/sys/organization/organization/%d'>", request.getContextPath(), id));
 
     for(int l = names.size() - 1, i = l; i >= 0; i--) {
         if(i != l) {

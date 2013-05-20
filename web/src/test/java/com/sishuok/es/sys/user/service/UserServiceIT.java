@@ -83,7 +83,7 @@ public class UserServiceIT extends BaseUserIT {
             }
         }
         userService.login(username, password + "1");
-        passwordService.clearLoginRecordCache(username);;
+        passwordService.clearLoginRecordCache(username);
     }
 
 

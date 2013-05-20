@@ -52,6 +52,11 @@ public class RepositoryHelper {
         return entityManager;
     }
 
+    public static void clear() {
+        getEntityManager().flush();
+        getEntityManager().clear();
+    }
+
     /**
      * <p>ql条件查询<br/>
      * searchCallback默认实现请参考 {@see com.sishuok.es.common.repository.callback.DefaultSearchCallback}<br/>

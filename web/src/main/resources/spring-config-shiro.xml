@@ -63,7 +63,7 @@
             <bean class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
                 <property name="sessionValidationInterval" value="${shiro.session.validation.interval}"/>
                 <property name="sessionManager" ref="sessionManager"/>
-                <!-- see spring-quartz.xml-->
+                <!-- see spring-config-quartz.xml-->
                 <property name="scheduler" ref="scheduler"/>
             </bean>
         </property>

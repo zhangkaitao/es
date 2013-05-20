@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.exception.web.entity;
+package com.sishuok.es.extra.exception.web.entity;
 
 import org.apache.shiro.authz.UnauthorizedException;
 

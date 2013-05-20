@@ -13,8 +13,10 @@ import com.sishuok.es.sys.auth.service.UserAuthService;
 import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.repository.ResourceRepository;
+import com.sishuok.es.sys.user.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,6 +31,7 @@ import java.util.Set;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
+@DependsOn("resourceRepository")
 @Service
 public class ResourceService extends BaseTreeableService<Resource, Long> {
 
@@ -43,7 +46,7 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
      * TODO 加缓存
      * @return
      */
-    public List<Menu> findMenus() {
+    public List<Menu> findMenus(User user) {
         Searchable searchable =
                 Searchable.newSearchable()
                         .addSearchFilter("show", SearchOperator.eq, true)
@@ -51,8 +54,7 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
 
         List<Resource> resources = findAllWithSort(searchable);
 
-        String username = (String) SecurityUtils.getSubject().getPrincipal();
-        Set<String> userPermissions = userAuthService.findStringPermissions(username);
+        Set<String> userPermissions = userAuthService.findStringPermissions(user);
 
         Iterator<Resource> iter = resources.iterator();
         while(iter.hasNext()) {

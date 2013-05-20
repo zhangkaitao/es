@@ -8,6 +8,7 @@ $.sys = {
                 urlPrefix : ctx + "/admin/sys/organization/organization",
                 async : true,
                 asyncLoadAll : true,
+                onlyDisplayShow: false,
                 lazy : true,
                 select : {
                     btn : $("#selectOrganizationTree,#organizationName"),
@@ -25,6 +26,7 @@ $.sys = {
                 urlPrefix : ctx + "/admin/sys/organization/job",
                 async : true,
                 asyncLoadAll : true,
+                onlyDisplayShow: false,
                 lazy : true,
                 select : {
                     btn : $("#selectJobTree,#jobName"),

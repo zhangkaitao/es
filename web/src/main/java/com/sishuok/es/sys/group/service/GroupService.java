@@ -19,6 +19,7 @@ import com.sishuok.es.sys.group.entity.GroupType;
 import com.sishuok.es.sys.group.repository.GroupRepository;
 import com.sishuok.es.sys.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import java.util.Set;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
+@DependsOn("groupRepository")
 @Service
 public class GroupService extends BaseService<Group, Long> {
 

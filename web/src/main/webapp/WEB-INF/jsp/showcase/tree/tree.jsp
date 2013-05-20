@@ -37,7 +37,7 @@
             zNodes : zNodes,
             urlPrefix : "${ctx}/showcase/tree",
             async : async,
-            onlyShow:${param['search.show_eq'] eq true},
+            onlyDisplayShow:${param['search.show_eq'] eq true},
             permission: <es:treePermission resourceIdentity="sys:resource"/>,
             autocomplete : {
                 enable : true

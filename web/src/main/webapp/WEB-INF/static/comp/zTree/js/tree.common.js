@@ -28,7 +28,7 @@ $.zTree = {
                 "?async=" + config.async +
                 "&asyncLoadAll=" + config.asyncLoadAll +
                 (config.excludeId ? "&excludeId=" + config.excludeId : "") +
-                (config.onlyShow ? "&search.show_eq=true" : ""));
+                (config.onlyDisplayShow ? "&search.show_eq=true" : ""));
 
         if(config.editable != false) {
             config.editable = true;
@@ -245,7 +245,7 @@ $.zTree = {
             config.autocomplete.source = config.autocomplete.source
                 || config.urlPrefix + "/ajax/autocomplete" +
                   (config.excludeId ? "?excludeId=" + config.excludeId : "") +
-                  (config.onlyShow ? "&search.show_eq=true" : "");
+                  (config.onlyDisplayShow ? "&search.show_eq=true" : "");
 
             config.treeId = treeSelect;
             $.app.initAutocomplete(config.autocomplete);
@@ -269,7 +269,7 @@ $.zTree = {
                 "?async=" + config.async +
                 "&asyncLoadAll=" + config.asyncLoadAll +
                 (config.excludeId ? "&excludeId=" + config.excludeId : "") +
-                (config.onlyShow ? "&search.show_eq=true" : "") +
+                (config.onlyDisplayShow ? "&search.show_eq=true" : "") +
                 "&onlyCheckLeaf=" + ((config.setting && config.setting.check && config.setting.check.onlyCheckLeaf) ? true : false));
         var autocomplateEnable = config.autocomplete && config.autocomplete.enable;
 
@@ -410,7 +410,7 @@ $.zTree = {
                 config.autocomplete.source = config.autocomplete.source
                     || config.urlPrefix + "/ajax/autocomplete" +
                        (config.excludeId ? "?excludeId=" + config.excludeId : "") +
-                       (config.onlyShow ? "&search.show_eq=true" : "");
+                       (config.onlyDisplayShow ? "&search.show_eq=true" : "");
 
                 config.treeId = treeSelect;
                 $.app.initAutocomplete(config.autocomplete);

@@ -7,22 +7,28 @@
     </tr>
     </thead>
     <tbody>
-    <c:if test="${empty user.displayOrganizationJobs}">
+    <c:set var="count" value="0"/>
+    <c:forEach items="${user.displayOrganizationJobs}" var="o">
+    <c:if test="${esfn:existsOrganization(o.key, onlyDisplayShow)}">
+        <c:set var="count" value="${count+1}"/>
+        <tr>
+            <td>
+                <sys:showOrganizationName id="${o.key}"/>
+            </td>
+            <td>
+                <c:forEach items="${o.value}" var="oj">
+                <c:if test="${esfn:existsJob(oj.jobId, onlyDisplayShow)}">
+                    <sys:showJobName id="${oj.jobId}"/><br/>
+                </c:if>
+                </c:forEach>
+            </td>
+        </tr>
+    </c:if>
+    </c:forEach>
+    <c:if test="${count eq 0}">
         <tr>
             <td colspan="2">无</td>
         </tr>
     </c:if>
-    <c:forEach items="${user.displayOrganizationJobs}" var="o">
-        <tr>
-            <td>
-                <sys:showOrganizationName id="${o.key.id}"/>
-            </td>
-            <td>
-                <c:forEach items="${o.value}" var="oj">
-                    <sys:showJobName id="${oj.job.id}"/><br/>
-                </c:forEach>
-            </td>
-        </tr>
-    </c:forEach>
     </tbody>
 </table>

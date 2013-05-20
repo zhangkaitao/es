@@ -9,6 +9,8 @@ import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.service.ResourceService;
+import com.sishuok.es.sys.user.entity.User;
+import com.sishuok.es.sys.user.web.bind.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -31,9 +33,10 @@ public class IndexController {
 
 
     @RequestMapping(value = {"/{index:index;?.*}"})
-    public String index(Model model) {
+    public String index(@CurrentUser User user, Model model) {
 
-        List<Menu> menus = resourceService.findMenus();
+
+        List<Menu> menus = resourceService.findMenus(user);
 
         model.addAttribute("menus", menus);
 
