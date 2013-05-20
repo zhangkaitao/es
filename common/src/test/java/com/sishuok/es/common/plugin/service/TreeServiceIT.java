@@ -1,12 +1,11 @@
-package com.sishuok.es.showcase.tree.service; /**
+package com.sishuok.es.common.plugin.service; /**
  * Copyright (c) 2005-2012 https://github.com/zhangkaitao
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
 
-import com.sishuok.es.showcase.tree.entity.Tree;
-import com.sishuok.es.showcase.tree.repository.TreeRepository;
-import com.sishuok.es.test.BaseIT;
+import com.sishuok.es.common.plugin.entity.Tree;
+import com.sishuok.es.common.test.BaseIT;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,10 @@ import static org.junit.Assert.assertNull;
 public class TreeServiceIT extends BaseIT {
     @Autowired
     private TreeService treeService;
-    @Autowired
-    private TreeRepository treeRepository;
 
     private Tree root = null;
     @Before
     public void setUp() {
-        treeRepository.deleteAll();
         root = createTree(0, "0/");
     }
 
@@ -37,7 +33,7 @@ public class TreeServiceIT extends BaseIT {
     public void testMoveAsChildWithNoChild() {
         Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
         Tree target = createTree(root.getId(), root.makeSelfAsNewParentIds());
-        treeRepository.flush();
+        flush();
         treeService.move(source, target, "inner");
         clear();
         assertEquals(target.getId(), treeService.findOne(source.getId()).getParentId());

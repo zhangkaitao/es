@@ -1,15 +1,13 @@
-package com.sishuok.es.showcase.move.service; /**
+/**
  * Copyright (c) 2005-2012 https://github.com/zhangkaitao
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
+package com.sishuok.es.common.plugin.service;
 
-import com.sishuok.es.showcase.move.entity.Move;
-import com.sishuok.es.showcase.move.repository.MoveRepository;
-import com.sishuok.es.test.BaseIT;
-
-import static org.junit.Assert.*;
-
+import com.sishuok.es.common.plugin.entity.Move;
+import com.sishuok.es.common.test.BaseIT;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,21 +16,29 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * <p>User: Zhang Kaitao
- * <p>Date: 13-2-9 下午3:52
+ * <p>Date: 13-5-20 下午2:22
  * <p>Version: 1.0
  */
 public class MoveServiceIT extends BaseIT {
+
     @Autowired
     private MoveService moveService;
-    @Autowired
-    private MoveRepository moveRepository;
 
-    @Before
-    public void setUp() {
-        moveRepository.deleteAll();
+    @Test
+    public void testSave() {
+
+        Move m1 = new Move();
+        Move m2 = new Move();
+        moveService.save(m1);
+        moveService.save(m2);
+
+        Assert.assertEquals((Integer)(m1.getWeight() + moveService.getStepLength()), m2.getWeight());
     }
+
 
     //测试连续的且to是最后一个
     @Test
@@ -191,7 +197,7 @@ public class MoveServiceIT extends BaseIT {
         Move to = createMove(); //2000
 
         for(int i = 0; i < 25; i++) {
-           createMove();
+            createMove();
         }
         Move from = createMove();
         Integer fromWeight = from.getWeight();
@@ -213,7 +219,7 @@ public class MoveServiceIT extends BaseIT {
         Move first = createMove(); //1000
         Move to = createMove(); //2000
         for(int i = 0; i < 25; i++) {
-           createMove();
+            createMove();
         }
         Move from = createMove();
         Integer fromWeight = from.getWeight();
@@ -231,7 +237,7 @@ public class MoveServiceIT extends BaseIT {
     public void testDownWithMiddle25AndIsFirst() {
         Move to = createMove(); //1000
         for(int i = 0; i < 25; i++) {
-           createMove();
+            createMove();
         }
         Move from = createMove();
         Integer fromWeight = from.getWeight();
@@ -251,7 +257,7 @@ public class MoveServiceIT extends BaseIT {
 
         Move from = createMove(); //2000
         for(int i = 0; i < 25; i++) {
-           createMove();
+            createMove();
         }
         Move to = createMove();
         Move last = createMove();
@@ -270,7 +276,7 @@ public class MoveServiceIT extends BaseIT {
     public void testUpWithMiddle25AndIsLast() {
         Move from = createMove();
         for(int i = 0; i < 25; i++) {
-           createMove();
+            createMove();
         }
         Move to = createMove();
         Integer fromWeight = from.getWeight();
@@ -279,7 +285,7 @@ public class MoveServiceIT extends BaseIT {
 
         moveService.up(from.getId(), to.getId());
         from = moveService.findOne(from.getId());
-        assertEquals(Integer.valueOf(toWeight + moveService.stepLength), from.getWeight());
+        assertEquals(Integer.valueOf(toWeight + moveService.getStepLength()), from.getWeight());
     }
 
     //TODO requiresNew 测试
@@ -296,9 +302,9 @@ public class MoveServiceIT extends BaseIT {
 
         List<Move> moves = moveService.findAll(new Sort(Sort.Direction.ASC, "weight"));
 
-        assertEquals(moveService.stepLength, moves.get(0).getWeight());
-        assertEquals(Integer.valueOf(moveService.stepLength * 2), moves.get(1).getWeight());
-        assertEquals(Integer.valueOf(moveService.stepLength * moves.size()), moves.get(moves.size() - 1).getWeight());
+        assertEquals(moveService.getStepLength(), moves.get(0).getWeight());
+        assertEquals(Integer.valueOf(moveService.getStepLength() * 2), moves.get(1).getWeight());
+        assertEquals(Integer.valueOf(moveService.getStepLength() * moves.size()), moves.get(moves.size() - 1).getWeight());
 
     }
 
@@ -310,6 +316,8 @@ public class MoveServiceIT extends BaseIT {
         moveService.saveAndFlush(move);
         return move;
     }
+
+
 
 
 }

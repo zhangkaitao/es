@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.common.test;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -33,4 +34,10 @@ public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
     public void flush() {
         entityManager.flush();
     }
+
+
+    protected String nextRandom() {
+        return System.currentTimeMillis() + RandomStringUtils.randomNumeric(5);
+    }
+
 }

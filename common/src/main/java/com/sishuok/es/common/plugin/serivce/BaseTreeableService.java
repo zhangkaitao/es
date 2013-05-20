@@ -42,7 +42,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         DELETE_CHILDREN_QL = String.format("delete from %s where id=?1 or parentIds like concat(?2, %s)", entityName, "'%'");
 
         UPDATE_CHILDREN_PARENT_IDS_QL =
-                String.format("update %s set parentIds=(?1 || substr(parentIds, length(?2)+1)) where parentIds like concat(?2, %s)", entityName, "'%'");
+                String.format("update %s set parentIds=(?1 || substring(parentIds, length(?2)+1)) where parentIds like concat(?2, %s)", entityName, "'%'");
 
         FIND_SELF_AND_NEXT_SIBLINGS_QL =
                 String.format("from %s where parentIds = ?1 and weight>=?2 order by weight asc", entityName);

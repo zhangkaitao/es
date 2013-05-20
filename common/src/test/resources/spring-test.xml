@@ -11,7 +11,7 @@
 	  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-    <context:component-scan base-package="com.sishuok.es.common.service"></context:component-scan>
+    <context:component-scan base-package="com.sishuok.es.common"></context:component-scan>
 
     <!--类型转换服务 查询时转换数据使用-->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
@@ -45,7 +45,7 @@
     </bean>
 
     <jpa:repositories
-            base-package="com.sishuok.es.common.repository"
+            base-package="com.sishuok.es.common"
             repository-impl-postfix="Impl"
             factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
             entity-manager-factory-ref="entityManagerFactory"

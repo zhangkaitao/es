@@ -10,6 +10,7 @@ import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Movable;
 import com.sishuok.es.common.repository.BaseRepository;
+import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.service.BaseService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
 
     //权重的步长
-    public final Integer stepLength;
+    private final Integer stepLength;
 
     /**
      * 默认步长1000
@@ -44,6 +45,14 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
     protected BaseMovableService(Integer stepLength) {
         this.stepLength = stepLength;
+    }
+
+    /**
+     *  权重的步长 默认1000
+     * @return
+     */
+    public Integer getStepLength() {
+        return stepLength;
     }
 
     @Override
@@ -204,12 +213,16 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
             //doReweight需要requiresNew事务
             ((BaseMovableService) AopContext.currentProxy()).doReweight(page);
 
+            RepositoryHelper.clear();
+
             if(page.isLastPage()) {
                 break;
             }
 
             pageable = new PageRequest((pageable.getPageNumber() + 1) * batchSize, batchSize, sort);
+
             page = findAll(pageable);
+
         } while (true);
     }
 
@@ -239,10 +252,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         return page.getContent().get(0).getWeight() + stepLength;
     }
 
-
-
     public M findPreByWeight(Integer weight) {
-
         Pageable pageable = new PageRequest(0, 1);
         Map<String, Object> searchParams = Maps.newHashMap();
         searchParams.put("weight_lt", weight);
@@ -269,7 +279,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         return null;
     }
 
-    //@Query(value = "select count(m) from Move m where m.weight>=?1 and m.weight <= ?2")
     private Long countByBetween(Integer minWeight, Integer maxWeight) {
         Map<String, Object> searchParams = Maps.newHashMap();
         searchParams.put("weight_gte", minWeight);
@@ -287,7 +296,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
     }
 
 
-    //@Query(value = "from Move m where m.weight>=?1 and m.weight <= ?2 order by m.weight desc")
     List<M> findByBetweenAndDesc(Integer minWeight, Integer maxWeight) {
         Map<String, Object> searchParams = Maps.newHashMap();
         searchParams.put("weight_gte", minWeight);
@@ -296,6 +304,5 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         Sort sort = new Sort(Sort.Direction.DESC, "weight");
         return findAllWithSort(Searchable.newSearchable(searchParams).addSort(sort));
     }
-
 
 }
