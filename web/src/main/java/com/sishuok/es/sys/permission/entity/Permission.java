@@ -7,7 +7,9 @@ package com.sishuok.es.sys.permission.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Treeable;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
@@ -22,6 +24,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sys_permission")
+@EnableQueryCache
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Permission extends BaseEntity<Long> {
 
     /**

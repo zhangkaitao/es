@@ -9,7 +9,11 @@
 
     <!-- realm -->
     <!--depends-on="userRepository, userLastOnlineRepository, userStatusHistoryRepository, springUtils" -->
-    <bean id="userRealm" class="org.apache.shiro.realm.UserRealm"/>
+    <bean id="userRealm" class="org.apache.shiro.realm.UserRealm">
+        <!-- 用切面缓存代理了 此处就不缓存了 -->
+        <property name="authenticationCachingEnabled" value="false"/>
+        <property name="authorizationCachingEnabled" value="false"/>
+    </bean>
 
     <!---cookie-->
     <!-- uid(session id) 生成策略 -->
@@ -56,6 +60,7 @@
         <property name="sessionFactory" ref="onlineSessionFactory"/>
         <property name="sessionDAO" ref="onlineSessionDAO"/>
         <property name="deleteInvalidSessions" value="true"/>
+
 
         <property name="sessionValidationInterval" value="${shiro.session.globalSessionTimeout}"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>

@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.user.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "sys_user_last_online")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserLastOnline extends BaseEntity<Long> {
 
     /**

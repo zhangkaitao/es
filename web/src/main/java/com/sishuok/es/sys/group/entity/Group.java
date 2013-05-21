@@ -6,6 +6,8 @@
 package com.sishuok.es.sys.group.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -17,6 +19,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "sys_group")
+@EnableQueryCache
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Group extends BaseEntity<Long> {
     /**
      * 分组名称

@@ -35,7 +35,6 @@ public class JobController extends BaseTreeableController<Job, Long> {
     @BaseComponent
     private JobService jobService;
 
-
     public JobController() {
         setResourceIdentity("sys:job");
     }

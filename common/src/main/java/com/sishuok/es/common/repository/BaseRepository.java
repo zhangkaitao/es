@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import javax.persistence.QueryHint;
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,6 +37,27 @@ public interface BaseRepository<M, ID extends Serializable> extends JpaRepositor
      * @param ids
      */
     public void delete(ID[] ids);
+
+    /*
+   * (non-Javadoc)
+   * @see org.springframework.data.repository.CrudRepository#findAll()
+   */
+    List<M> findAll();
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.repository.PagingAndSortingRepository#findAll(org.springframework.data.domain.Sort)
+     */
+    List<M> findAll(Sort sort);
+
+
+    /**
+     * Returns a {@link Page} of entities meeting the paging restriction provided in the {@code Pageable} object.
+     *
+     * @param pageable
+     * @return a page of entities
+     */
+    Page<M> findAll(Pageable pageable);
 
     /**
      * 根据条件查询所有

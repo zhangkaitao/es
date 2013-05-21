@@ -25,9 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class DefaultExceptionHandler {
 
-    @Autowired
-    private ContentNegotiationManager contentNegotiationManager;
-
     /**
      * 没有权限 异常
      *
@@ -37,13 +34,7 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
         LogUtils.logError("用户权限验证失败", e);
-        return commonProcess(request, e);
-    }
 
-
-
-
-    private ModelAndView commonProcess(NativeWebRequest request, Throwable e) {
         ExceptionResponse exceptionResponse = ExceptionResponse.from(e);
 
         ModelAndView mv = new ModelAndView();
@@ -52,4 +43,6 @@ public class DefaultExceptionHandler {
 
         return mv;
     }
+
+
 }

@@ -8,6 +8,9 @@ package com.sishuok.es.common.repository;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.repository.callback.SearchCallback;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
+import com.sishuok.es.common.utils.SpringUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,17 +33,26 @@ import java.util.List;
 public class RepositoryHelper {
 
     private static EntityManager entityManager;
+    private Class<?> entityClass;
+    private boolean enableQueryCache = false;
 
     /**
-     * 设置EntityManagerFactory 然后自动创建需要的EntityManager
-     * 建议使用如下代码配置即可
-     * <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-     *   <property name="staticMethod"
-     *             value="com.sishuok.es.common.repository.RepositoryHelper.setEntityManagerFactory"/>
-     *   <property name="arguments" ref="entityManagerFactory"/>
-     * </bean>
-     * @param entityManagerFactory
+     *
+     * @param entityClass 是否开启查询缓存
      */
+    public RepositoryHelper(Class<?> entityClass) {
+        this.entityClass = entityClass;
+
+        EnableQueryCache enableQueryCacheAnnotation =
+                AnnotationUtils.findAnnotation(entityClass, EnableQueryCache.class);
+
+        boolean enableQueryCache = false;
+        if(enableQueryCacheAnnotation != null) {
+            enableQueryCache = enableQueryCacheAnnotation.value();
+        }
+        this.enableQueryCache = enableQueryCache;
+    }
+
     public static void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         entityManager = SharedEntityManagerCreator.createSharedEntityManager(entityManagerFactory);
     }
@@ -52,8 +64,12 @@ public class RepositoryHelper {
         return entityManager;
     }
 
-    public static void clear() {
+
+    public static void flush() {
         getEntityManager().flush();
+    }
+
+    public static void clear() {
         getEntityManager().clear();
     }
 
@@ -68,7 +84,7 @@ public class RepositoryHelper {
      * @param searchCallback 查询回调  自定义设置查询条件和赋值
      * @return
      */
-    public static <M> List<M> findAll(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+    public <M> List<M> findAll(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
 
         assertConverted(searchable);
 
@@ -76,6 +92,7 @@ public class RepositoryHelper {
         searchCallback.prepareQL(s, searchable);
         searchCallback.prepareOrder(s, searchable);
         Query query = getEntityManager().createQuery(s.toString());
+        applyEnableQueryCache(query);
         searchCallback.setValues(query, searchable);
         searchCallback.setPageable(query, searchable);
 
@@ -91,13 +108,14 @@ public class RepositoryHelper {
      * @param searchCallback
      * @return
      */
-    public static long count(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+    public long count(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
 
         assertConverted(searchable);
 
         StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, searchable);
         Query query = getEntityManager().createQuery(s.toString());
+        applyEnableQueryCache(query);
         searchCallback.setValues(query, searchable);
 
         return (Long) query.getSingleResult();
@@ -110,7 +128,7 @@ public class RepositoryHelper {
      * @param searchCallback
      * @return
      */
-    public static <M> M findOne(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
+    public <M> M findOne(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
 
         assertConverted(searchable);
 
@@ -118,6 +136,7 @@ public class RepositoryHelper {
         searchCallback.prepareQL(s, searchable);
         searchCallback.prepareOrder(s, searchable);
         Query query = getEntityManager().createQuery(s.toString());
+        applyEnableQueryCache(query);
         searchCallback.setValues(query, searchable);
         searchCallback.setPageable(query, searchable);
         query.setMaxResults(1);
@@ -137,7 +156,7 @@ public class RepositoryHelper {
      * @param <M>
      * @return
      */
-    public static <M> List<M> findAll(final String ql, final Object... params) {
+    public <M> List<M> findAll(final String ql, final Object... params) {
 
         //此处必须 (Pageable) null  否则默认有调用自己了 可变参列表
         return findAll(ql, (Pageable) null, params);
@@ -153,9 +172,10 @@ public class RepositoryHelper {
      * @param <M>
      * @return
      */
-    public static <M> List<M> findAll(final String ql, final Pageable pageable, final Object... params) {
+    public <M> List<M> findAll(final String ql, final Pageable pageable, final Object... params) {
 
         Query query = getEntityManager().createQuery(ql + prepareOrder(pageable != null ? pageable.getSort() : null));
+        applyEnableQueryCache(query);
         setParameters(query, params);
         if (pageable != null) {
             query.setFirstResult(pageable.getOffset());
@@ -174,9 +194,10 @@ public class RepositoryHelper {
      * @param <M>
      * @return
      */
-    public static <M> List<M> findAll(final String ql, final Sort sort, final Object... params) {
+    public <M> List<M> findAll(final String ql, final Sort sort, final Object... params) {
 
-        Query query = getEntityManager().createQuery(ql + RepositoryHelper.prepareOrder(sort));
+        Query query = getEntityManager().createQuery(ql + prepareOrder(sort));
+        applyEnableQueryCache(query);
         setParameters(query, params);
 
         return query.getResultList();
@@ -191,7 +212,7 @@ public class RepositoryHelper {
      * @param <M>
      * @return
      */
-    public static <M> M findOne(final String ql, final Object... params) {
+    public <M> M findOne(final String ql, final Object... params) {
 
         List<M> list = findAll(ql, new PageRequest(0, 1), params);
 
@@ -209,9 +230,10 @@ public class RepositoryHelper {
      * @param params
      * @return
      */
-    public static long count(final String ql, final Object... params) {
+    public long count(final String ql, final Object... params) {
 
         Query query = entityManager.createQuery(ql);
+        applyEnableQueryCache(query);
         setParameters(query, params);
 
         return (Long)query.getSingleResult();
@@ -224,7 +246,7 @@ public class RepositoryHelper {
      * @param params
      * @return
      */
-    public static int batchUpdate(final String ql, final Object... params) {
+    public int batchUpdate(final String ql, final Object... params) {
 
         Query query = getEntityManager().createQuery(ql);
         setParameters(query, params);
@@ -238,7 +260,7 @@ public class RepositoryHelper {
      * @param query
      * @param params
      */
-    public static void setParameters(Query query, Object[] params) {
+    public void setParameters(Query query, Object[] params) {
         if (params != null) {
             for (int i = 0; i < params.length; i++) {
                 query.setParameter(i + 1, params[i]);
@@ -251,7 +273,7 @@ public class RepositoryHelper {
      * @param sort
      * @return
      */
-    public static String prepareOrder(Sort sort) {
+    public String prepareOrder(Sort sort) {
         if(sort == null || !sort.iterator().hasNext()) {
             return "";
         }
@@ -262,20 +284,28 @@ public class RepositoryHelper {
     }
 
 
-    public static <T> JpaEntityInformation<T, ?> getMetadata(Class<T> entityClass) {
+    public <T> JpaEntityInformation<T, ?> getMetadata(Class<T> entityClass) {
         return JpaEntityInformationSupport.getMetadata(entityClass, entityManager);
     }
 
-    public static String getEntityName(Class<?> entityClass) {
+    public String getEntityName(Class<?> entityClass) {
         return getMetadata(entityClass).getEntityName();
     }
 
 
-    private static void assertConverted(Searchable searchable) {
+    private void assertConverted(Searchable searchable) {
         if(!searchable.isConverted()) {
             throw new SearchException("searchable property value not covert to entity value, " +
                     "user [com.sishuok.es.common.entity.search.Searchable#convert] to covert");
         }
     }
+
+
+    public void applyEnableQueryCache(Query query) {
+        if(enableQueryCache) {
+            query.setHint("org.hibernate.cacheable", true);//开启查询缓存
+        }
+    }
+
 
 }

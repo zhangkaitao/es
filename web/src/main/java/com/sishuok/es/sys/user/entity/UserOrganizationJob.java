@@ -7,6 +7,7 @@ package com.sishuok.es.sys.user.entity;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
 import org.hibernate.annotations.*;
@@ -26,6 +27,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "sys_user_organization_job")
+@EnableQueryCache
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserOrganizationJob extends BaseEntity<Long> {
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)

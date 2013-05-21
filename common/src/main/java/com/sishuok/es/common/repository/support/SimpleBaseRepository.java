@@ -11,18 +11,22 @@ import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.repository.callback.SearchCallback;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.data.jpa.repository.support.LockMetadataProvider;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.persistence.criteria.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.data.jpa.repository.query.QueryUtils.*;
 
@@ -43,9 +47,15 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     private final EntityManager em;
     private final JpaEntityInformation<M, ID> entityInformation;
 
+    private final RepositoryHelper repositoryHelper;
+
+    private LockMetadataProvider lockMetadataProvider;
+
     private Class<M> entityClass;
     private String entityName;
     private String idName;
+
+
 
     /**
      * 查询所有的QL
@@ -67,12 +77,24 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         this.idName = this.entityInformation.getIdAttributeNames().iterator().next();
         this.em = entityManager;
 
+        repositoryHelper = new RepositoryHelper(entityClass);
 
         findAllQL = String.format(FIND_QUERY_STRING, entityName);
+        countAllQL = String.format(COUNT_QUERY_STRING, entityName);
         countAllQL = String.format(COUNT_QUERY_STRING, entityName);
     }
 
 
+    /**
+     * Configures a custom {@link org.springframework.data.jpa.repository.support.LockMetadataProvider} to be used to detect {@link LockModeType}s to be applied to
+     * queries.
+     *
+     * @param lockMetadataProvider
+     */
+    public void setLockMetadataProvider(LockMetadataProvider lockMetadataProvider) {
+        super.setLockMetadataProvider(lockMetadataProvider);
+        this.lockMetadataProvider = lockMetadataProvider;
+    }
 
     /**
      * 设置searchCallback
@@ -174,10 +196,10 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
         if(logicDeleteableEntity) {
             String ql = String.format(LOGIC_DELETE_ALL_QUERY_STRING, entityName);
-            RepositoryHelper.batchUpdate(ql, models);
+            repositoryHelper.batchUpdate(ql, models);
         } else {
             String ql =  String.format(DELETE_ALL_QUERY_STRING, entityName);
-            RepositoryHelper.batchUpdate(ql, models);
+            repositoryHelper.batchUpdate(ql, models);
         }
     }
 
@@ -192,21 +214,221 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         if(id == null) {
             return null;
         }
+        if(id instanceof  Integer && ((Integer) id).intValue() == 0) {
+            return null;
+        }
+        if(id instanceof  Long && ((Long) id).longValue() == 0L) {
+            return null;
+        }
         return super.findOne(id);
+    }
+
+
+
+    ////////根据Specification查询 直接从SimpleJpaRepository复制过来的///////////////////////////////////
+    @Override
+    public M findOne(Specification<M> spec) {
+        try {
+            return getQuery(spec, (Sort) null).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.repository.CrudRepository#findAll(ID[])
+     */
+    public List<M> findAll(Iterable<ID> ids) {
+
+        return getQuery(new Specification<M>() {
+            public Predicate toPredicate(Root<M> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Path<?> path = root.get(entityInformation.getIdAttribute());
+                return path.in(cb.parameter(Iterable.class, "ids"));
+            }
+        }, (Sort) null).setParameter("ids", ids).getResultList();
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.jpa.repository.JpaSpecificationExecutor#findAll(org.springframework.data.jpa.domain.Specification)
+     */
+    public List<M> findAll(Specification<M> spec) {
+        return getQuery(spec, (Sort) null).getResultList();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.jpa.repository.JpaSpecificationExecutor#findAll(org.springframework.data.jpa.domain.Specification, org.springframework.data.domain.Pageable)
+     */
+    public Page<M> findAll(Specification<M> spec, Pageable pageable) {
+
+        TypedQuery<M> query = getQuery(spec, pageable);
+        return pageable == null ? new PageImpl<M>(query.getResultList()) : readPage(query, pageable, spec);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.jpa.repository.JpaSpecificationExecutor#findAll(org.springframework.data.jpa.domain.Specification, org.springframework.data.domain.Sort)
+     */
+    public List<M> findAll(Specification<M> spec, Sort sort) {
+
+        return getQuery(spec, sort).getResultList();
+    }
+
+    /*
+ * (non-Javadoc)
+ * @see org.springframework.data.jpa.repository.JpaSpecificationExecutor#count(org.springframework.data.jpa.domain.Specification)
+ */
+    public long count(Specification<M> spec) {
+
+        return getCountQuery(spec).getSingleResult();
+    }
+    ////////根据Specification查询 直接从SimpleJpaRepository复制过来的///////////////////////////////////
+
+
+
+    ///////直接从SimpleJpaRepository复制过来的///////////////////////////////
+    /**
+     * Reads the given {@link TypedQuery} into a {@link Page} applying the given {@link Pageable} and
+     * {@link Specification}.
+     *
+     * @param query must not be {@literal null}.
+     * @param spec can be {@literal null}.
+     * @param pageable can be {@literal null}.
+     * @return
+     */
+    private Page<M> readPage(TypedQuery<M> query, Pageable pageable, Specification<M> spec) {
+
+        query.setFirstResult(pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        Long total = QueryUtils.executeCountQuery(getCountQuery(spec));
+        List<M> content = total > pageable.getOffset() ? query.getResultList() : Collections.<M> emptyList();
+
+        return new PageImpl<M>(content, pageable, total);
+    }
+
+    /**
+     * Creates a new count query for the given {@link Specification}.
+     *
+     * @param spec can be {@literal null}.
+     * @return
+     */
+    private TypedQuery<Long> getCountQuery(Specification<M> spec) {
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+
+
+        Root<M> root = applySpecificationToCriteria(spec, query);
+
+        if (query.isDistinct()) {
+            query.select(builder.countDistinct(root));
+        } else {
+            query.select(builder.count(root));
+        }
+
+        TypedQuery<Long> q = em.createQuery(query);
+        repositoryHelper.applyEnableQueryCache(q);
+        return q;
+    }
+
+    /**
+     * Creates a new {@link TypedQuery} from the given {@link Specification}.
+     *
+     * @param spec can be {@literal null}.
+     * @param pageable can be {@literal null}.
+     * @return
+     */
+    private TypedQuery<M> getQuery(Specification<M> spec, Pageable pageable) {
+
+        Sort sort = pageable == null ? null : pageable.getSort();
+        return getQuery(spec, sort);
+    }
+    /**
+     * Creates a {@link TypedQuery} for the given {@link Specification} and {@link Sort}.
+     *
+     * @param spec can be {@literal null}.
+     * @param sort can be {@literal null}.
+     * @return
+     */
+    private TypedQuery<M> getQuery(Specification<M> spec, Sort sort) {
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<M> query = builder.createQuery(entityClass);
+
+        Root<M> root = applySpecificationToCriteria(spec, query);
+        query.select(root);
+
+        if (sort != null) {
+            query.orderBy(toOrders(sort, root, builder));
+        }
+
+        TypedQuery<M>  q = em.createQuery(query);
+        repositoryHelper.applyEnableQueryCache(q);
+        return applyLockMode(q);
+    }
+
+
+    /**
+     * Applies the given {@link Specification} to the given {@link CriteriaQuery}.
+     *
+     * @param spec can be {@literal null}.
+     * @param query must not be {@literal null}.
+     * @return
+     */
+    private <S> Root<M> applySpecificationToCriteria(Specification<M> spec, CriteriaQuery<S> query) {
+
+        Assert.notNull(query);
+        Root<M> root = query.from(entityClass);
+
+        if (spec == null) {
+            return root;
+        }
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        Predicate predicate = spec.toPredicate(root, query, builder);
+
+        if (predicate != null) {
+            query.where(predicate);
+        }
+
+        return root;
+    }
+
+    private TypedQuery<M> applyLockMode(TypedQuery<M> query) {
+        LockModeType type = lockMetadataProvider == null ? null : lockMetadataProvider.getLockModeType();
+        return type == null ? query : query.setLockMode(type);
+    }
+    ///////直接从SimpleJpaRepository复制过来的///////////////////////////////
+
+
+
+    @Override
+    public List<M> findAll() {
+        return repositoryHelper.findAll(findAllQL);
     }
 
     @Override
     public List<M> findAll(final Sort sort) {
-        return RepositoryHelper.findAll(findAllQL, sort);
+        return repositoryHelper.findAll(findAllQL, sort);
     }
 
     @Override
     public Page<M> findAll(final Pageable pageable) {
         return new PageImpl<M>(
-                RepositoryHelper.<M>findAll(findAllQL, pageable),
+                repositoryHelper.<M>findAll(findAllQL, pageable),
                 pageable,
-                RepositoryHelper.count(countAllQL)
+                repositoryHelper.count(countAllQL)
         );
+    }
+
+    @Override
+    public long count() {
+        return repositoryHelper.count(countAllQL);
     }
 
 
@@ -217,7 +439,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Override
     public Page<M> findAll(final Searchable searchable) {
         searchable.convert(entityClass);
-        List<M> list = RepositoryHelper.findAll(findAllQL, searchable, searchCallback);
+        List<M> list = repositoryHelper.findAll(findAllQL, searchable, searchCallback);
         long total = searchable.hasPageable() ? count(searchable) : list.size();
         return new PageImpl<M>(
                 list,
@@ -229,9 +451,8 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Override
     public long count(final Searchable searchable) {
         searchable.convert(entityClass);
-        return RepositoryHelper.count(countAllQL, searchable, searchCallback);
+        return repositoryHelper.count(countAllQL, searchable, searchCallback);
     }
-
 
     /**
      * 重写默认的 这样可以走一级/二级缓存
@@ -242,4 +463,5 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     public boolean exists(ID id) {
         return findOne(id) != null;
     }
+
 }

@@ -8,6 +8,7 @@ package com.sishuok.es.sys.permission.entity;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.repository.hibernate.type.CollectionToStringUserType;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
 
@@ -34,6 +35,8 @@ import java.util.Set;
 )
 @Entity
 @Table(name = "sys_role_resource_permission")
+@EnableQueryCache
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class RoleResourcePermission extends BaseEntity<Long> {
 
     /**

@@ -17,6 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-28 下午4:29
@@ -58,4 +61,5 @@ public class CategoryController extends BaseMovableController<Category, Long> {
         super.list(searchable, model);
         return "showcase/product/category/select";
     }
+
 }

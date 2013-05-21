@@ -6,7 +6,9 @@
 package com.sishuok.es.sys.group.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import com.sishuok.es.sys.user.entity.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
@@ -24,6 +26,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "sys_group_relation")
+@EnableQueryCache
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class GroupRelation extends BaseEntity<Long> {
 
     @Column(name = "group_id")

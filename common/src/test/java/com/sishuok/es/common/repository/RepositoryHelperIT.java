@@ -32,26 +32,29 @@ public class RepositoryHelperIT extends BaseUserIT {
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
 
+    private RepositoryHelper repositoryHelper;
+
     @Before
     public void setUp() {
         RepositoryHelper.setEntityManagerFactory(entityManagerFactory);
+        repositoryHelper = new RepositoryHelper(User.class);
     }
 
 
     @Test
     public void testGetEntityManager() {
-        Assert.assertNotNull(RepositoryHelper.getEntityManager());
+        Assert.assertNotNull(repositoryHelper.getEntityManager());
     }
 
     @Test
     public void testCount() {
         String ql = "select count(o) from User o";
-        long expectedCount = RepositoryHelper.count(ql) + 1;
+        long expectedCount = repositoryHelper.count(ql) + 1;
 
         User user = createUser();
-        RepositoryHelper.getEntityManager().persist(user);
+        repositoryHelper.getEntityManager().persist(user);
 
-        Assert.assertEquals(expectedCount, RepositoryHelper.count(ql));
+        Assert.assertEquals(expectedCount, repositoryHelper.count(ql));
 
     }
 
@@ -60,24 +63,24 @@ public class RepositoryHelperIT extends BaseUserIT {
     public void testCountWithCondition() {
 
         User user = createUser();
-        RepositoryHelper.getEntityManager().persist(user);
+        repositoryHelper.getEntityManager().persist(user);
 
         String ql = "select count(o) from User o where id >= ? and id <=?";
-        Assert.assertEquals(1, RepositoryHelper.count(ql, user.getId(), user.getId()));
-        Assert.assertEquals(0, RepositoryHelper.count(ql, user.getId(), 0L));
+        Assert.assertEquals(1, repositoryHelper.count(ql, user.getId(), user.getId()));
+        Assert.assertEquals(0, repositoryHelper.count(ql, user.getId(), 0L));
     }
 
     @Test
     public void testFindAll() {
         String ql = "select o from User o";
 
-        List<User> before = RepositoryHelper.findAll(ql);
+        List<User> before = repositoryHelper.findAll(ql);
         User user1 = createUser();
         User user2 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
 
-        List<User> after = RepositoryHelper.findAll(ql);
+        List<User> after = repositoryHelper.findAll(ql);
 
         Assert.assertEquals(before.size() + 2, after.size());
 
@@ -89,17 +92,17 @@ public class RepositoryHelperIT extends BaseUserIT {
     public void testFindAllWithCondition() {
         String ql = "select o from User o where id>=? and id<=?";
 
-        List<User> before = RepositoryHelper.findAll(ql, 0L, Long.MAX_VALUE);
+        List<User> before = repositoryHelper.findAll(ql, 0L, Long.MAX_VALUE);
         User user1 = createUser();
         User user2 = createUser();
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
-        List<User> after = RepositoryHelper.findAll(ql, 0L, user2.getId());
+        List<User> after = repositoryHelper.findAll(ql, 0L, user2.getId());
 
         Assert.assertEquals(before.size() + 2, after.size());
 
@@ -115,22 +118,22 @@ public class RepositoryHelperIT extends BaseUserIT {
     @Test
     public void testFindAllWithPage() {
 
-        RepositoryHelper.batchUpdate("delete from User");
+        repositoryHelper.batchUpdate("delete from User");
 
         User user1 = createUser();
         User user2 = createUser();
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         String ql = "select o from User o";
 
-        Assert.assertEquals(4, RepositoryHelper.findAll(ql, null).size());
+        Assert.assertEquals(4, repositoryHelper.findAll(ql, null).size());
 
-        List<User> list = RepositoryHelper.findAll(ql, new PageRequest(0, 2));
+        List<User> list = repositoryHelper.findAll(ql, new PageRequest(0, 2));
         Assert.assertEquals(2, list.size());
         Assert.assertTrue(list.contains(user1));
     }
@@ -139,21 +142,21 @@ public class RepositoryHelperIT extends BaseUserIT {
     @Test
     public void testFindAllWithSort() {
 
-        RepositoryHelper.batchUpdate("delete from User");
+        repositoryHelper.batchUpdate("delete from User");
 
         User user1 = createUser();
         User user2 = createUser();
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         String ql = "select o from User o";
 
 
-        List<User> list = RepositoryHelper.findAll(ql, new Sort(Sort.Direction.DESC, "id"));
+        List<User> list = repositoryHelper.findAll(ql, new Sort(Sort.Direction.DESC, "id"));
 
         Assert.assertEquals(4, list.size());
 
@@ -164,21 +167,21 @@ public class RepositoryHelperIT extends BaseUserIT {
     @Test
     public void testFindAllWithPageAndSort() {
 
-        RepositoryHelper.batchUpdate("delete from User");
+        repositoryHelper.batchUpdate("delete from User");
 
         User user1 = createUser();
         User user2 = createUser();
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         String ql = "select o from User o";
 
 
-        List<User> list = RepositoryHelper.findAll(ql, new PageRequest(0, 2, new Sort(Sort.Direction.DESC, "id")));
+        List<User> list = repositoryHelper.findAll(ql, new PageRequest(0, 2, new Sort(Sort.Direction.DESC, "id")));
 
         Assert.assertEquals(2, list.size());
 
@@ -193,12 +196,12 @@ public class RepositoryHelperIT extends BaseUserIT {
     public void testFindOne() {
         User user1 = createUser();
         User user2 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
 
         String ql = "select o from User o where id=? and baseInfo.sex=?";
-        Assert.assertNotNull(RepositoryHelper.findOne(ql, user1.getId(), Sex.male));
-        Assert.assertNull(RepositoryHelper.findOne(ql, user1.getId(), Sex.female));
+        Assert.assertNotNull(repositoryHelper.findOne(ql, user1.getId(), Sex.male));
+        Assert.assertNull(repositoryHelper.findOne(ql, user1.getId(), Sex.female));
     }
 
 
@@ -211,10 +214,10 @@ public class RepositoryHelperIT extends BaseUserIT {
         User user2 = createUser();
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         Searchable searchable = Searchable.newSearchable();
 
@@ -225,7 +228,7 @@ public class RepositoryHelperIT extends BaseUserIT {
         searchable.convert(User.class);
 
         String ql = "from User where 1=1";
-        List<User> list = RepositoryHelper.findAll(ql, searchable, SearchCallback.DEFAULT);
+        List<User> list = repositoryHelper.findAll(ql, searchable, SearchCallback.DEFAULT);
 
         Assert.assertEquals(2, list.size());
 
@@ -243,10 +246,10 @@ public class RepositoryHelperIT extends BaseUserIT {
         user2.getBaseInfo().setRealname("lisi");
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         Searchable searchable = Searchable.newSearchable();
 
@@ -281,7 +284,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
 
         String ql = "from User where 1=1";
-        List<User> list = RepositoryHelper.findAll(ql, searchable, customCallback);
+        List<User> list = repositoryHelper.findAll(ql, searchable, customCallback);
 
         Assert.assertEquals(2, list.size());
 
@@ -301,10 +304,10 @@ public class RepositoryHelperIT extends BaseUserIT {
         user2.getBaseInfo().setRealname("lisi");
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         Searchable searchable = Searchable.newSearchable();
 
@@ -343,7 +346,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
 
         String ql = "from User where 1=1";
-        List<User> list = RepositoryHelper.findAll(ql, searchable, customCallback);
+        List<User> list = repositoryHelper.findAll(ql, searchable, customCallback);
 
         Assert.assertEquals(2, list.size());
 
@@ -364,10 +367,10 @@ public class RepositoryHelperIT extends BaseUserIT {
         User user2 = createUser();
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         Searchable searchable = Searchable.newSearchable();
 
@@ -377,7 +380,7 @@ public class RepositoryHelperIT extends BaseUserIT {
         searchable.convert(User.class);
 
         String ql = "select count(*) from User where 1=1";
-        long total = RepositoryHelper.count(ql, searchable, SearchCallback.DEFAULT);
+        long total = repositoryHelper.count(ql, searchable, SearchCallback.DEFAULT);
 
         Assert.assertEquals(3L, total);
 
@@ -393,10 +396,10 @@ public class RepositoryHelperIT extends BaseUserIT {
         user2.getBaseInfo().setRealname("lisi");
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         Searchable searchable = Searchable.newSearchable();
 
@@ -431,7 +434,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
 
         String ql = "select count(*) from User where 1=1";
-        long total = RepositoryHelper.count(ql, searchable, customCallback);
+        long total = repositoryHelper.count(ql, searchable, customCallback);
 
         Assert.assertEquals(2, total);
 
@@ -448,10 +451,10 @@ public class RepositoryHelperIT extends BaseUserIT {
         user2.getBaseInfo().setRealname("lisi");
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         Searchable searchable = Searchable.newSearchable();
 
@@ -490,7 +493,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
 
         String ql = "select count(*) from User where 1=1";
-        long total = RepositoryHelper.count(ql, searchable, customCallback);
+        long total = repositoryHelper.count(ql, searchable, customCallback);
         Assert.assertEquals(2, total);
 
     }
@@ -503,19 +506,19 @@ public class RepositoryHelperIT extends BaseUserIT {
         user2.getBaseInfo().setRealname("lisi");
         User user3 = createUser();
         User user4 = createUser();
-        RepositoryHelper.getEntityManager().persist(user1);
-        RepositoryHelper.getEntityManager().persist(user2);
-        RepositoryHelper.getEntityManager().persist(user3);
-        RepositoryHelper.getEntityManager().persist(user4);
+        repositoryHelper.getEntityManager().persist(user1);
+        repositoryHelper.getEntityManager().persist(user2);
+        repositoryHelper.getEntityManager().persist(user3);
+        repositoryHelper.getEntityManager().persist(user4);
 
         String newPassword = "123321";
 
         String updateQL = "update User set password=? where id=?";
-        RepositoryHelper.batchUpdate(updateQL, newPassword, user1.getId());
+        repositoryHelper.batchUpdate(updateQL, newPassword, user1.getId());
 
         clear();
 
-        user1 = RepositoryHelper.findOne("from User where id=?", user1.getId());
+        user1 = repositoryHelper.findOne("from User where id=?", user1.getId());
 
         Assert.assertEquals(newPassword, user1.getPassword());
 

@@ -38,8 +38,7 @@ public class UserRepository2ImplIT extends BaseUserIT {
 
     private User user;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private RepositoryHelper repositoryHelper = new RepositoryHelper(User.class);
 
 
     @Before
@@ -89,7 +88,7 @@ public class UserRepository2ImplIT extends BaseUserIT {
         }
 
         String ql = "from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, RepositoryHelper.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
+        assertEquals(count, repositoryHelper.findAll(ql, ids, realnamePrefix + "%", birthdayList).size());
     }
 
     @Test
@@ -107,7 +106,7 @@ public class UserRepository2ImplIT extends BaseUserIT {
         }
 
         String ql = "select count(o) from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
-        assertEquals(count, RepositoryHelper.count(ql, ids, realnamePrefix + "%", birthdayList));
+        assertEquals(count, repositoryHelper.count(ql, ids, realnamePrefix + "%", birthdayList));
     }
 
     @Test
@@ -121,7 +120,7 @@ public class UserRepository2ImplIT extends BaseUserIT {
             lastUser = userRepository2.save(user);
         }
         String ql = "select u from User u where u=?1 and u.baseInfo.realname like ?2";
-        assertEquals(lastUser, RepositoryHelper.findOne(ql, lastUser, realnamePrefix + "%"));
+        assertEquals(lastUser, repositoryHelper.findOne(ql, lastUser, realnamePrefix + "%"));
     }
 
     @Test
@@ -136,10 +135,10 @@ public class UserRepository2ImplIT extends BaseUserIT {
         }
 
         String ql = "update BaseInfo set realname=?1";
-        assertEquals(count, RepositoryHelper.batchUpdate(ql, realname));
+        assertEquals(count, repositoryHelper.batchUpdate(ql, realname));
 
         String findOneQL = "select u from User u where u=?1";
-        User user = RepositoryHelper.findOne(findOneQL, lastUser);
+        User user = repositoryHelper.findOne(findOneQL, lastUser);
         assertEquals(realname, user.getBaseInfo().getRealname());
 
     }

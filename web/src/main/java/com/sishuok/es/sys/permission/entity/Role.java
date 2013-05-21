@@ -7,7 +7,9 @@ package com.sishuok.es.sys.permission.entity;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.BaseEntity;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -23,6 +25,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "sys_role")
+@EnableQueryCache
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role extends BaseEntity<Long> {
 
     /**
@@ -46,6 +50,7 @@ public class Role extends BaseEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = RoleResourcePermission.class, mappedBy = "role", orphanRemoval = true)
     @Fetch(FetchMode.SELECT)
     @Basic(optional = true, fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)//集合缓存
     @OrderBy
     private List<RoleResourcePermission> resourcePermissions;
 

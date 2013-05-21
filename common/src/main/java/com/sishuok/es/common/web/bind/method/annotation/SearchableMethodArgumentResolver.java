@@ -82,14 +82,21 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
         Map<String, String[]> searcheableMap = getPrefixParameterMap(searchPrefix, webRequest, true);
 
+        boolean hasCustomSearchCondition = searcheableMap.size() > 0;
+
         SearchableDefaults searchDefaults = getSearchableDefaults(parameter);
+
+        boolean needMergeDefault = searchDefaults != null && searchDefaults.merge();
 
         Searchable searchable = null;
         //自定义覆盖默认
-        if(searcheableMap.size() == 0) {
+        if(needMergeDefault || !hasCustomSearchCondition) {
             searchable = getDefaultFromAnnotation(searchDefaults);
-        } else {
-            searchable = Searchable.newSearchable();
+        }
+        if(hasCustomSearchCondition) {
+            if(searchable == null) {
+                searchable = Searchable.newSearchable();
+            }
             for(String name : searcheableMap.keySet()) {
                 String[] mapValues = filterSearchValues(searcheableMap.get(name));
 

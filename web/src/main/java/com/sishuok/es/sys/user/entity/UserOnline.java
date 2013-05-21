@@ -8,6 +8,7 @@ package com.sishuok.es.sys.user.entity;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.repository.hibernate.type.JsonMap;
 import org.apache.shiro.session.mgt.OnlineSession;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Lazy;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "sys_user_online")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserOnline extends AbstractEntity<String> {
 
     /**

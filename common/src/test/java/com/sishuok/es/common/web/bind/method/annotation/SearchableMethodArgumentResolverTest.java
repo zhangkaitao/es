@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class SearchableMethodArgumentResolverTest {
     Method searchable, searchableAndNoPageAndSort, searchableAndNoPageAndNoSort, methodDefaultSearchable,
-            parameterDefaultSearchable, customNamePrefixSearchableAndPageableAndSort;
+            parameterDefaultSearchable, customNamePrefixSearchableAndPageableAndSort, methodMergeDefaultSearchable;
 
     MockHttpServletRequest request;
 
@@ -48,6 +48,8 @@ public class SearchableMethodArgumentResolverTest {
         parameterDefaultSearchable = Controller.class.getDeclaredMethod("parameterDefaultSearchable", new Class[]{Searchable.class});
         customNamePrefixSearchableAndPageableAndSort = Controller.class.getDeclaredMethod("customNamePrefixSearchableAndPageableAndSort",
                 new Class[]{Searchable.class, Searchable.class});
+        methodMergeDefaultSearchable = Controller.class.getDeclaredMethod("methodMergeDefaultSearchable",
+                new Class[]{Searchable.class});
 
         request = new MockHttpServletRequest();
     }
@@ -63,8 +65,8 @@ public class SearchableMethodArgumentResolverTest {
         request.setParameter("sort1.baseInfo.realname", "asc");
         request.setParameter("sort2.id", "desc");
 
-        request.setParameter("search_baseInfo.realname_like", "zhang");
-        request.setParameter("search_username_eq", "zhang");
+        request.setParameter("search.baseInfo.realname_like", "zhang");
+        request.setParameter("search.username_eq", "zhang");
 
         MethodParameter parameter = new MethodParameter(searchable, 0);
         NativeWebRequest webRequest = new ServletWebRequest(request);
@@ -86,8 +88,8 @@ public class SearchableMethodArgumentResolverTest {
     @Test
     public void testSearchableWithDefaultPage() throws Exception {
 
-        request.setParameter("search_baseInfo.realname_like", "zhang");
-        request.setParameter("search_username_eq", "zhang");
+        request.setParameter("search.baseInfo.realname_like", "zhang");
+        request.setParameter("search.username_eq", "zhang");
 
         MethodParameter parameter = new MethodParameter(searchable, 0);
         NativeWebRequest webRequest = new ServletWebRequest(request);
@@ -116,8 +118,8 @@ public class SearchableMethodArgumentResolverTest {
         request.setParameter("sort1.baseInfo.realname", "asc");
         request.setParameter("sort2.id", "desc");
 
-        request.setParameter("search_baseInfo.realname_like", "zhang");
-        request.setParameter("search_username_eq", "zhang");
+        request.setParameter("search.baseInfo.realname_like", "zhang");
+        request.setParameter("search.username_eq", "zhang");
 
         MethodParameter parameter = new MethodParameter(searchableAndNoPageAndSort, 0);
         NativeWebRequest webRequest = new ServletWebRequest(request);
@@ -146,8 +148,8 @@ public class SearchableMethodArgumentResolverTest {
         request.setParameter("sort1.baseInfo.realname", "asc");
         request.setParameter("sort2.id", "desc");
 
-        request.setParameter("search_baseInfo.realname_like", "zhang");
-        request.setParameter("search_username_eq", "zhang");
+        request.setParameter("search.baseInfo.realname_like", "zhang");
+        request.setParameter("search.username_eq", "zhang");
 
         MethodParameter parameter = new MethodParameter(searchableAndNoPageAndNoSort, 0);
         NativeWebRequest webRequest = new ServletWebRequest(request);
@@ -220,9 +222,6 @@ public class SearchableMethodArgumentResolverTest {
     }
 
 
-
-
-
     @Test
     public void testParameterDefaultSearchableWithOverrideSearchParams() throws Exception {
         int pn = 1;
@@ -234,8 +233,8 @@ public class SearchableMethodArgumentResolverTest {
         request.setParameter("sort2.id", "desc");
 
 
-        request.setParameter("search_baseInfo.realname_like", "zhang");
-        request.setParameter("search_username_eq", "zhang");
+        request.setParameter("search.baseInfo.realname_like", "zhang");
+        request.setParameter("search.username_eq", "zhang");
 
 
         MethodParameter parameter = new MethodParameter(parameterDefaultSearchable, 0);
@@ -266,8 +265,8 @@ public class SearchableMethodArgumentResolverTest {
         request.setParameter("foo_sort2.id", "desc");
 
 
-        request.setParameter("foo_search_baseInfo.realname_like", "zhang");
-        request.setParameter("foo_search_username_eq", "zhang");
+        request.setParameter("foo_search.baseInfo.realname_like", "zhang");
+        request.setParameter("foo_search.username_eq", "zhang");
 
 
         MethodParameter parameter = new MethodParameter(customNamePrefixSearchableAndPageableAndSort, 0);
@@ -280,6 +279,20 @@ public class SearchableMethodArgumentResolverTest {
 
         Sort expectedSort = new Sort(Sort.Direction.ASC, "baseInfo.realname").and(new Sort(Sort.Direction.DESC, "id"));
         assertEquals(expectedSort, searchable.getSort());
+
+        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+    }
+
+
+    @Test
+    public void testMergeDefaultSearchableWithSearchParams() throws Exception {
+
+        request.setParameter("search.username_eq", "zhang");
+
+        MethodParameter parameter = new MethodParameter(methodMergeDefaultSearchable, 0);
+        NativeWebRequest webRequest = new ServletWebRequest(request);
+        Searchable searchable = (Searchable) new SearchableMethodArgumentResolver().resolveArgument(parameter, null, webRequest, null);
 
         assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
         assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
@@ -341,6 +354,10 @@ public class SearchableMethodArgumentResolverTest {
                 @Qualifier("foo") Searchable foo, @Qualifier("test") Searchable test) {
         }
 
+        @SearchableDefaults(value = {"baseInfo.realname_like=zhang"}, merge = true, needPage = true)
+        @PageableDefaults(value = DEFAULT_PAGESIZE, pageNumber = DEFAULT_PAGENUMBER, sort = {"id=desc", "name=asc"})
+        public void methodMergeDefaultSearchable(Searchable searchable) {
+        }
 
     }
 }

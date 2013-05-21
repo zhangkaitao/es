@@ -39,6 +39,12 @@ public @interface SearchableDefaults {
     String[] value() default {};
 
     /**
+     * 是否合并默认的与自定义的
+     * @return
+     */
+    boolean merge() default false;
+
+    /**
      * 是否需要分页
      * @return
      */
