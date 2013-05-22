@@ -40,7 +40,7 @@ public class LoginFormController {
     @Autowired
     private UserStatusHistoryService userStatusHistoryService;
 
-    @RequestMapping(value = {"/{login:login;?.*}"})
+    @RequestMapping(value = {"/login"})
     public String loginForm(HttpServletRequest request, ModelMap model) {
 
         //表示退出

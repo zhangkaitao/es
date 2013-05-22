@@ -61,5 +61,4 @@ public class CategoryController extends BaseMovableController<Category, Long> {
         super.list(searchable, model);
         return "showcase/product/category/select";
     }
-
 }

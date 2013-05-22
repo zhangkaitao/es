@@ -32,9 +32,8 @@ public class IndexController {
     private ResourceService resourceService;
 
 
-    @RequestMapping(value = {"/{index:index;?.*}"})
+    @RequestMapping(value = {"/index"})
     public String index(@CurrentUser User user, Model model) {
-
 
         List<Menu> menus = resourceService.findMenus(user);
 

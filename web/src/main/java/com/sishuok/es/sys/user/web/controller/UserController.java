@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>User: Zhang Kaitao
@@ -46,7 +45,7 @@ public class UserController extends BaseCRUDController<User, Long> {
     @Autowired
     @BaseComponent
     private UserService userService;
-    ConcurrentHashMap
+
     public UserController() {
         setResourceIdentity("sys:user");
     }

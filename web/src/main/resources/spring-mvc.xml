@@ -25,7 +25,8 @@
     <mvc:annotation-driven
             validator="validator"
             conversion-service="conversionService"
-            content-negotiation-manager="contentNegotiationManager">
+            content-negotiation-manager="contentNegotiationManager"
+            enableMatrixVariables="true">
 
         <mvc:message-converters register-defaults="true">
             <!-- StringHttpMessageConverter编码为UTF-8，防止乱码 -->
