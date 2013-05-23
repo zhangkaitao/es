@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.validate.ValidateResponse;
@@ -245,8 +246,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
             ServletContextResource resource = new ServletContextResource(sc, iconClassFile);
             FileUtils.writeLines(resource.getFile(), cssList);
         } catch (Exception e) {
-            //TODO 记日志
-            e.printStackTrace();
+            LogUtils.logError("gen icon error", e);
             return "生成失败：" + e.getMessage();
         }
 

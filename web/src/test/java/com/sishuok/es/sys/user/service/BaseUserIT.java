@@ -17,30 +17,46 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Date: 13-4-5 下午3:24
  * <p>Version: 1.0
  */
-public class BaseUserIT extends BaseIT {
+public abstract class BaseUserIT extends BaseIT {
 
 
     @Autowired
-    UserService userService;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    PasswordService passwordService;
+    protected UserService userService;
 
-    int maxtRetryCount = 10;
+    @Autowired
+    protected PasswordService passwordService;
 
-    String username = "__z__hang123";
-    String email = "zhang@163.com";
-    String mobilePhoneNumber = "15612345678";
-    String password = "12345";
+    protected int maxtRetryCount = 10;
+
+    protected String username = "__z__hang123";
+    protected String email = "zhang@163.com";
+    protected String mobilePhoneNumber = "15612345678";
+    protected String password = "12345";
 
     @Before
     public void setUp() {
         userService.setPasswordService(passwordService);
         passwordService.setMaxRetryCount(maxtRetryCount);
 
-        userRepository.deleteAll();
-        userService.findAll();
+        userService.setPasswordService(passwordService);
+        passwordService.setMaxRetryCount(maxtRetryCount);
+
+        User user = userService.findByUsername(username);
+        if(user != null) {
+            userService.delete(user);//因为用户是逻辑删除 此处的目的主要是清 缓存
+            delete(user);              //所以还需要物理删除
+        }
+        user = userService.findByEmail(email);
+        if(user != null) {
+            userService.delete(user);
+            delete(user);
+        }
+        user = userService.findByMobilePhoneNumber(mobilePhoneNumber);
+        if(user != null) {
+            userService.delete(user);
+            delete(user);
+        }
+        clear();
     }
 
     @After

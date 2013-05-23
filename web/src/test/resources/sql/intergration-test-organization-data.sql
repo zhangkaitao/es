@@ -11,8 +11,8 @@ insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, 
 insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (3, 1, '0/', 1, '组织机构3', false);
 
 --用户--组织机构--工作职务关系
-insert into `sys_user_organization_job` (`id`, `user_id`, `organization_id`, `job_id`) values(1, 1, 2, null);
-insert into `sys_user_organization_job` (`id`, `user_id`, `organization_id`, `job_id`) values(2, 1, 3, null);
+insert into `sys_user_organization_job` (`id`, `user_id`, `organization_id`, `job_id`) values(1, 1, 2, 0);
+insert into `sys_user_organization_job` (`id`, `user_id`, `organization_id`, `job_id`) values(2, 1, 3, 0);
 
 --组织机构单独授权
 insert into sys_auth (`id`, `organization_id`, `job_id`, `user_id`, `group_id`, `role_ids`, `type`)

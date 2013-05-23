@@ -5,12 +5,10 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.HexDump;
 import org.apache.shiro.session.mgt.OnlineSession;
-import org.apache.shiro.util.StringUtils;
 import org.junit.Test;
 
 import java.io.*;

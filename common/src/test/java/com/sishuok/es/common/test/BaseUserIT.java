@@ -17,7 +17,7 @@ import java.util.Date;
  * <p>Date: 13-1-14 下午5:09
  * <p>Version: 1.0
  */
-public class BaseUserIT extends BaseIT {
+public abstract class BaseUserIT extends BaseIT {
 
     public User createUser() {
         User user = new User();

@@ -9,6 +9,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.repository.RepositoryHelper;
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.sys.auth.entity.Auth;
 import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.service.GroupService;
@@ -75,10 +76,10 @@ public class AuthRelationClearService {
             authPage = authService.findAll(pageable);
             //开启新事物清除
             try {
-                doClear(authPage.getContent(), allRoleIds);
+                ((AuthRelationClearService)AopContext.currentProxy()).doClear(authPage.getContent(), allRoleIds);
             } catch (Exception e) {
                 //出异常也无所谓
-                //TODO 记录日志
+                LogUtils.logError("clear auth relation error", e);
             }
             //清空会话
             RepositoryHelper.clear();

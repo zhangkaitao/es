@@ -7,6 +7,7 @@ package org.apache.shiro.realm;
 
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatus;
+import com.sishuok.es.sys.user.service.BaseUserIT;
 import com.sishuok.es.sys.user.service.PasswordService;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.test.BaseIT;
@@ -24,49 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Date: 13-3-12 下午9:36
  * <p>Version: 1.0
  */
-public class UserRealmIT extends BaseIT {
-
-
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordService passwordService;
-    @Autowired
-    private UserRealm userRealm;
-
-    int maxtRetryCount = 10;
-
-
-    private String username = "__z__hang123";
-    private String email = "zhang@163.com";
-    private String mobilePhoneNumber = "13112345678";
-    String password = "12345";
-
-    @Before
-    public void setUp() {
-        userService.setPasswordService(passwordService);
-        passwordService.setMaxRetryCount(maxtRetryCount);
-
-        User user = userService.findByUsername(username);
-        if(user != null) {
-            userService.delete(user);
-        }
-        user = userService.findByEmail(email);
-        if(user != null) {
-            userService.delete(user);
-        }
-        user = userService.findByMobilePhoneNumber(mobilePhoneNumber);
-        if(user != null) {
-            userService.delete(user);
-        }
-    }
-
-
-    @After
-    public void tearDown() {
-        passwordService.clearLoginRecordCache(username);
-    }
-
+public class UserRealmIT extends BaseUserIT {
 
     @Test
     public void testLoginSuccess() {

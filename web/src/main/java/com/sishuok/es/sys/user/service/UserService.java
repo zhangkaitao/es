@@ -21,8 +21,6 @@ import com.sishuok.es.sys.user.exception.UserNotExistsException;
 import com.sishuok.es.sys.user.exception.UserPasswordNotMatchException;
 import com.sishuok.es.sys.user.repository.UserRepository;
 import com.sishuok.es.sys.user.utils.UserLogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
@@ -45,8 +43,6 @@ import java.util.Set;
 @Service
 @DependsOn(value = {"userRepository", "userOnlineRepository", "userLastOnlineRepository", "userStatusHistoryRepository"})
 public class UserService extends BaseService<User, Long> {
-
-    private static final Logger log = LoggerFactory.getLogger("es-sys-user");
 
     @Autowired
     @BaseComponent

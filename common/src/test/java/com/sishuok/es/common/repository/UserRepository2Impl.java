@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class UserRepository2Impl {
 
-    private String findAllQL = "from User where 1=1 ";
+    private String findAllQL = "from User o where 1=1 ";
     private String countAllQL = "select count(o) from User o where 1=1 ";
 
 
@@ -78,7 +78,6 @@ public class UserRepository2Impl {
      * @return
      */
     public long countAllByDefault(final Searchable searchable) {
-        searchable.convert(User.class);
         return repositoryHelper.count(countAllQL, searchable, SearchCallback.DEFAULT);
     }
 
@@ -86,13 +85,13 @@ public class UserRepository2Impl {
     private SearchCallback customSearchCallback = new DefaultSearchCallback() {
         @Override
         public void prepareQL(StringBuilder hql, Searchable search) {
-            if(search.containsSearchKey("realname_like")) {
+            if(search.containsSearchKey("realname")) {
                 hql.append(" and exists(select 1 from BaseInfo bi where o = bi.user and bi.realname like :realname )");
             }
         }
         @Override
         public void setValues(Query query, Searchable search) {
-            if(search.containsSearchKey("realname_like")) {
+            if(search.containsSearchKey("realname")) {
                 query.setParameter("realname", "%" + search.getValue("realname") + "%");
             }
         }

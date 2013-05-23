@@ -321,7 +321,6 @@ public class SearchableMethodArgumentResolverTest {
         fail(message);
     }
 
-
     static class Controller {
         static final int DEFAULT_PAGESIZE = 198;
         static final int DEFAULT_PAGENUMBER = 42;

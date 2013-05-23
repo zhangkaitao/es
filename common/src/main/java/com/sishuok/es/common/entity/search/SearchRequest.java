@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.common.entity.search;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
@@ -25,6 +26,10 @@ import java.util.*;
 public final class SearchRequest extends Searchable {
 
     private final Map<String, SearchFilter> searchFilterMap = Maps.newHashMap();
+    /**
+     * 使用这个的目的是保证拼sql的顺序是按照添加时的顺序
+     */
+    private final List<SearchFilter> searchFilters = Lists.newArrayList();
 
     private Pageable page;
 
@@ -147,6 +152,7 @@ public final class SearchRequest extends Searchable {
         }
         String key = searchFilter.getKey();
         searchFilterMap.put(key, searchFilter);
+        searchFilters.add(searchFilter);
         return this;
     }
 
@@ -162,6 +168,7 @@ public final class SearchRequest extends Searchable {
 
         SearchFilter searchFilter = searchFilterMap.remove(key);
 
+
         if(searchFilter == null) {
             searchFilter = searchFilterMap.remove(getCustomKey(key));
         }
@@ -169,6 +176,8 @@ public final class SearchRequest extends Searchable {
         if(searchFilter == null) {
             return this;
         }
+
+        searchFilters.remove(searchFilter);
 
         //如果移除的有or查询 则删除第一个 后续的跟上
         if(searchFilter != null && searchFilter.hasOrSearchFilters()) {
@@ -247,10 +256,8 @@ public final class SearchRequest extends Searchable {
 
 
 
-
-
     public Collection<SearchFilter> getSearchFilters() {
-        return Collections.unmodifiableCollection(searchFilterMap.values());
+        return Collections.unmodifiableCollection(searchFilters);
     }
 
     public Map<String, SearchFilter> getSearchFilterMap() {

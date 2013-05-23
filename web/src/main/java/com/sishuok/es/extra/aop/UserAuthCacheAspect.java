@@ -287,7 +287,10 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
     public Object findRolesCacheableAdvice(ProceedingJoinPoint pjp, User arg) throws Throwable {
         User user = arg;
 
-        String key = rolesKey(user.getId());
+        String key = null;
+        if(user != null) {
+            key = rolesKey(user.getId());
+        }
 
         Object retVal = get(key);
 
@@ -305,7 +308,10 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
     public Object findStringRolesCacheableAdvice(ProceedingJoinPoint pjp, User arg) throws Throwable {
         User user = arg;
 
-        String key = stringRolesKey(user.getId());
+        String key = null;
+        if(user != null) {
+            key = stringRolesKey(user.getId());
+        }
 
         Object retVal = get(key);
 

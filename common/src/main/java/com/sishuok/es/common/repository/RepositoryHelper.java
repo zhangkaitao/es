@@ -70,6 +70,7 @@ public class RepositoryHelper {
     }
 
     public static void clear() {
+        flush();
         getEntityManager().clear();
     }
 
@@ -295,8 +296,7 @@ public class RepositoryHelper {
 
     private void assertConverted(Searchable searchable) {
         if(!searchable.isConverted()) {
-            throw new SearchException("searchable property value not covert to entity value, " +
-                    "user [com.sishuok.es.common.entity.search.Searchable#convert] to covert");
+            searchable.convert(this.entityClass);
         }
     }
 

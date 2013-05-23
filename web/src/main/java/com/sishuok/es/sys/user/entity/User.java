@@ -102,6 +102,7 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     @Fetch(FetchMode.SELECT)
     @Basic(optional = true, fetch = FetchType.EAGER)
     @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    //集合缓存引起的
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)//集合缓存
     @OrderBy
     private List<UserOrganizationJob> organizationJobs;

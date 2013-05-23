@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
  * <p>Version: 1.0
  */
 
-public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
+public class UserRepository2ImplForCustomSearchIT extends BaseUserIT {
 
     @Autowired
     private UserRepository2 userRepository2;
@@ -38,7 +38,7 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
             user.getBaseInfo().setRealname("zhang" + i);
             userRepository2.save(user);
         }
-        Searchable search = Searchable.newSearchable().addSearchParam("realname_like", "zhang");
+        Searchable search = Searchable.newSearchable().addSearchParam("realname_custom", "zhang");
         assertEquals(count, userRepository2.findAllByCustom(search).getNumberOfElements());
     }
 
@@ -52,7 +52,7 @@ public class UserRepositoryImplForCustomSearchIT extends BaseUserIT {
             userRepository2.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("realname_like", "zhang");
+        searchParams.put("realname_custom", "zhang");
         Searchable search = Searchable.newSearchable(searchParams).setPage(0, 5);
         assertEquals(5, userRepository2.findAllByCustom(search).getSize());
     }

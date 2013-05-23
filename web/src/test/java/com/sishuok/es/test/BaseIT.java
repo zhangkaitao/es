@@ -1,5 +1,6 @@
 package com.sishuok.es.test;
 
+import com.sishuok.es.common.entity.AbstractEntity;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -17,10 +18,11 @@ import java.util.List;
 
 @ContextConfiguration(locations = {
         "classpath:spring-common.xml",
-        "classpath:spring-config.xml"
+        "classpath:spring-config.xml",
+        "classpath:spring-test-config.xml"
         })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
+public abstract class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -37,8 +39,14 @@ public class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
         entityManager.clear();
     }
 
-    protected void deleteAll(List<?> entityList) {
-        for(Object m : entityList) {
+    protected void deleteAll(List<? extends AbstractEntity> entityList) {
+        for(AbstractEntity m : entityList) {
+            delete(m);
+        }
+    }
+    protected void delete(AbstractEntity m) {
+        m = entityManager.find(m.getClass(), m.getId());
+        if(m != null) {
             entityManager.remove(m);
         }
     }

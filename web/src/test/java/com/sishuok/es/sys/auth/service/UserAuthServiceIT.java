@@ -5,14 +5,15 @@
  */
 package com.sishuok.es.sys.auth.service;
 
+import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.test.BaseIT;
+import org.hibernate.Cache;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -21,11 +22,9 @@ import java.util.Set;
  * <p>Date: 13-5-2 下午3:54
  * <p>Version: 1.0
  */
-@Transactional
 public class UserAuthServiceIT extends BaseIT {
     @Autowired
     private UserAuthService userAuthService;
-
     @Autowired
     private UserService userService;
 
@@ -34,11 +33,12 @@ public class UserAuthServiceIT extends BaseIT {
         setSqlScriptEncoding("utf-8");
         executeSqlScript("sql/intergration-test-clear-all-data.sql", false);
         executeSqlScript("sql/intergration-test-resource-permission-role-data.sql", false);
-
         //clear cache
         userService.delete(1L);
-    }
+        HibernateUtils.clearLevel1Cache(entityManager);
+        HibernateUtils.clearLevel2Cache(entityManager);
 
+    }
 
     ///////////////////////////用户相关
     @Test
@@ -118,8 +118,8 @@ public class UserAuthServiceIT extends BaseIT {
     @Test
     public void testUserGroupWithRangeUserAuth() {
         executeSqlScript("sql/intergration-test-user-group-range-data.sql", false);
-
         User user = userService.findOne(1L);
+
         Set<String> roles = userAuthService.findStringRoles(user);
 
         Assert.assertTrue(roles.contains("admin"));
@@ -273,14 +273,13 @@ public class UserAuthServiceIT extends BaseIT {
 
 
     /////////////////////////////组织机构和工作职务混合
-
     @Test
     public void testOrganizationAndJobAuth() {
         executeSqlScript("sql/intergration-test-organization-and-job-data.sql", false);
+
         User user = userService.findOne(1L);
 
         Set<String> roles = userAuthService.findStringRoles(user);
-
         Assert.assertTrue(roles.contains("admin"));
 
         Assert.assertFalse(roles.contains("test"));

@@ -42,10 +42,6 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
     @Autowired
     private UserAuthService userAuthService;
 
-    /**
-     * TODO 加缓存
-     * @return
-     */
     public List<Menu> findMenus(User user) {
         Searchable searchable =
                 Searchable.newSearchable()

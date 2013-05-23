@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public interface GroupRepository extends BaseRepository<Group, Long> {
 
-    @Query("select id from Group where defaultGroup=true")
+    @Query("select id from Group where defaultGroup=true and show=true")
     List<Long> findDefaultGroupIds();
 
 }

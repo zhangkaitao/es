@@ -32,7 +32,7 @@ public class UserRealm extends AuthorizingRealm {
     //不能注入 因为获取bean依赖顺序问题造成可能拿不到某些bean报错 使用lazy的方式延迟加载
     private UserAuthService userAuthService;
 
-    private static final Logger log = LoggerFactory.getLogger("ERROR");
+    private static final Logger log = LoggerFactory.getLogger("es-error");
 
     public UserService getUserService() {
         return userService;

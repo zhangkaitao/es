@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.repository.RepositoryHelper;
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
 import com.sishuok.es.sys.user.entity.User;
@@ -60,10 +61,11 @@ public class UserClearRelationService {
 
             //开启新事物清除
             try {
-                doClear(page.getContent());
+                ((UserClearRelationService)AopContext.currentProxy()).doClear(page.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
-                //TODO 记录日志
+                LogUtils.logError("clear user relation error", e);
+
             }
             //清空会话
             RepositoryHelper.clear();

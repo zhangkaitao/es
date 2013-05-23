@@ -3,19 +3,15 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.common.repository.search;
+package com.sishuok.es.common.repository;
 
-import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.search.SearchFilter;
-import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
 import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
-import com.sishuok.es.common.repository.UserRepository;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +32,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * <p>测试查询条件</p>
+ * <p>User Repository集成测试</p>
+ * <p>测试时使用内嵌的HSQL内存数据库完成</p>
  * <p>User: Zhang Kaitao
- * <p>Date: 13-1-15 下午12:21
+ * <p>Date: 13-1-14 下午2:36
  * <p>Version: 1.0
  */
-public class SearchUserRepositoryIT extends BaseUserIT {
+
+public class UserRepository2ImplForDefaultSearchIT extends BaseUserIT {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository2 userRepository2;
 
     @Test
     public void testEqForEnum() {
@@ -52,12 +50,10 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setSex(Sex.male);
-            userRepository.save(user);
+            userRepository2.save(user);
         }
-        Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("baseInfo.sex_eq", "male");
-        Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search));
+        Searchable search = Searchable.newSearchable().addSearchParam("baseInfo.sex_eq", "male");
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
     @Test
@@ -66,12 +62,10 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setSex(Sex.male);
-            userRepository.save(user);
+            userRepository2.save(user);
         }
-        Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("baseInfo.sex_ne", "male");
-        Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(0, userRepository.count(search));
+        Searchable search = Searchable.newSearchable().addSearchParam("baseInfo.sex_ne", "male");
+        assertEquals(0, userRepository2.countAllByDefault(search));
     }
 
     @Test
@@ -80,12 +74,12 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setAge(15);
-            userRepository.save(user);
+            userRepository2.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.age_eq", "15");
         SearchRequest search = new SearchRequest(searchParams);
-        assertEquals(count, userRepository.count(search));
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
 
@@ -97,12 +91,11 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.setRegisterDate(df.parse(dateStr));
-            userRepository.save(user);
+            userRepository2.save(user);
         }
-        Map<String, Object> searchParams = new HashMap<String, Object>();
-        searchParams.put("registerDate_eq", dateStr);
-        SearchRequest search = new SearchRequest(searchParams);
-        assertEquals(count, userRepository.count(search));
+        
+        Searchable search = Searchable.newSearchable().addSearchParam("registerDate_eq", dateStr);
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
 
@@ -116,13 +109,13 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setBirthday(new Timestamp(df.parse(dateStr).getTime()));
-            userRepository.save(user);
+            userRepository2.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.birthday_gt", dateStrFrom);
         searchParams.put("baseInfo.birthday_lt", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search));
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
 
@@ -136,13 +129,13 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         for (int i = 0; i < count; i++) {
             User user = createUser();
             user.getBaseInfo().setBirthday(new Timestamp(df.parse(dateStr).getTime()));
-            userRepository.save(user);
+            userRepository2.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("baseInfo.birthday_gte", dateStrFrom);
         searchParams.put("baseInfo.birthday_lte", dateStrEnd);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search));
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
 
@@ -151,12 +144,12 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         int count = 15;
         for (int i = 0; i < count; i++) {
             User user = createUser();
-            userRepository.save(user);
+            userRepository2.save(user);
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("username_isNotNull", null);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search));
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
     @Test
@@ -165,13 +158,13 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         int count = 15;
         for (int i = 0; i < count; i++) {
             User user = createUser();
-            userRepository.save(user);
+            userRepository2.save(user);
             uuids.add(user.getId());
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids);
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search));
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
 
@@ -181,13 +174,13 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         int count = 15;
         for (int i = 0; i < count; i++) {
             User user = createUser();
-            userRepository.save(user);
+            userRepository2.save(user);
             uuids.add(user.getId());
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids.toArray(new Long[count]));
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(count, userRepository.count(search));
+        assertEquals(count, userRepository2.countAllByDefault(search));
     }
 
     @Test
@@ -196,36 +189,14 @@ public class SearchUserRepositoryIT extends BaseUserIT {
         int count = 15;
         for (int i = 0; i < count; i++) {
             User user = createUser();
-            userRepository.save(user);
+            userRepository2.save(user);
             uuids.add(user.getId());
         }
         Map<String, Object> searchParams = new HashMap<String, Object>();
         searchParams.put("id_in", uuids.get(0));
         Searchable search = Searchable.newSearchable(searchParams);
-        assertEquals(1, userRepository.count(search));
+        assertEquals(1, userRepository2.countAllByDefault(search));
     }
-
-
-
-    @Test
-    public void testOr() {
-        int count = 15;
-        for (int i = 0; i < count; i++) {
-            User user = createUser();
-            user.getBaseInfo().setAge(i);
-            userRepository.save(user);
-        }
-        Searchable search = Searchable.newSearchable();
-        search.addOrSearchFilters(
-                SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.gt, 13),
-                Lists.newArrayList(
-                        SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.lt, 1)
-                )
-        );
-
-        assertEquals(2, userRepository.count(search));
-    }
-
 
 
 }

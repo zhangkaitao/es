@@ -55,8 +55,6 @@ public class ParentChildTest extends BaseIT {
 
         p = entityManager.find(Parent.class, "123");
 
-        System.out.println("==========" + p.getChilds().size());
-
     }
 
 }

@@ -105,7 +105,7 @@ public class UserRepository2ImplIT extends BaseUserIT {
             birthdayList.add(user.getBaseInfo().getBirthday());
         }
 
-        String ql = "select count(o) from User u where u.id in(?1) and u.baseInfo.realname like ?2 and u.baseInfo.birthday in (?3)";
+        String ql = "select count(o) from User o where o.id in(?1) and o.baseInfo.realname like ?2 and o.baseInfo.birthday in (?3)";
         assertEquals(count, repositoryHelper.count(ql, ids, realnamePrefix + "%", birthdayList));
     }
 

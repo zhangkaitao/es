@@ -225,7 +225,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        searchable.convert(User.class);
+        
 
         String ql = "from User where 1=1";
         List<User> list = repositoryHelper.findAll(ql, searchable, SearchCallback.DEFAULT);
@@ -258,7 +258,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        searchable.convert(User.class);
+        
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
@@ -316,7 +316,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        searchable.convert(User.class);
+        
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
@@ -377,7 +377,7 @@ public class RepositoryHelperIT extends BaseUserIT {
         searchable.addSearchParam("id_in", new Long[] {user1.getId(), user2.getId(), user3.getId()});
 
         searchable.addSort(Sort.Direction.DESC, "id");
-        searchable.convert(User.class);
+        
 
         String ql = "select count(*) from User where 1=1";
         long total = repositoryHelper.count(ql, searchable, SearchCallback.DEFAULT);
@@ -408,7 +408,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        searchable.convert(User.class);
+        
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
@@ -463,7 +463,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        searchable.convert(User.class);
+        
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override

@@ -26,8 +26,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "sys_group_relation")
-@EnableQueryCache
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@EnableQueryCache
+//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class GroupRelation extends BaseEntity<Long> {
 
     @Column(name = "group_id")

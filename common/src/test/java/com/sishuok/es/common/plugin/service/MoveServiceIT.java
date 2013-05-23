@@ -288,8 +288,6 @@ public class MoveServiceIT extends BaseIT {
         assertEquals(Integer.valueOf(toWeight + moveService.getStepLength()), from.getWeight());
     }
 
-    //TODO requiresNew 测试
-    @Ignore
     @Test
     public void testReweight() {
         for(int i = 0; i < 20; i++) {

@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.permission.service;
 
 import com.sishuok.es.common.repository.RepositoryHelper;
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
 import com.sishuok.es.sys.resource.service.ResourceService;
@@ -54,10 +55,11 @@ public class RoleClearRelationService {
             rolePage = roleService.findAll(pageable);
             //开启新事物清除
             try {
-                doClear(rolePage.getContent());
+                ((RoleClearRelationService)AopContext.currentProxy()).doClear(rolePage.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
-                //TODO 记录日志
+                LogUtils.logError("clear role relation error", e);
+
             }
             //清空会话
             RepositoryHelper.clear();

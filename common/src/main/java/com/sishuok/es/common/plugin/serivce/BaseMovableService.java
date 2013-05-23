@@ -70,7 +70,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
      * @param fromId
      * @param toId
      */
-    @Transactional
     public void down(ID fromId, ID toId) {
         M from = findOne(fromId);
         M to = findOne(toId);
@@ -137,7 +136,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
      * @param fromId
      * @param toId
      */
-    @Transactional
     public void up(ID fromId, ID toId) {
         M from = findOne(fromId);
         M to = findOne(toId);
@@ -203,7 +201,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         from.setWeight(newWeight);
     }
 
-    @Transactional
     public void reweight() {
         int batchSize = 100;
         Sort sort = new Sort(Sort.Direction.DESC, "weight");
@@ -226,7 +223,6 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         } while (true);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void doReweight(Page<M> page) {
         int totalElements = (int)page.getTotalElements();
         List<M> moves = page.getContent();

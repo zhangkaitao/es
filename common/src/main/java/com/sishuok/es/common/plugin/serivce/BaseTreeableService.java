@@ -72,14 +72,12 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         repositoryHelper.batchUpdate(DELETE_CHILDREN_QL, m.getId(), m.makeSelfAsNewParentIds());
     }
 
-    @Transactional
     public void deleteSelfAndChild(List<M> mList) {
         for(M m : mList) {
             deleteSelfAndChild(m);
         }
     }
 
-    @Transactional
     public void appendChild(M parent, M child) {
         child.setParentId(parent.getId());
         child.setParentIds(parent.makeSelfAsNewParentIds());
@@ -99,7 +97,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @param target 目标节点
      * @param moveType 位置
      */
-    @Transactional
     public void move(M source, M target, String moveType) {
         if(source == null || target == null || source.isRoot()) { //根节点不能移动
             return;
@@ -178,7 +175,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
      * @param source
      * @param newParentIds
      */
-    @Transactional
     private void updateSelftAndChild(M source, ID newParentId, String newParentIds, int newWeight) {
         String oldSourceChildrenParentIds = source.makeSelfAsNewParentIds();
         source.setParentId(newParentId);

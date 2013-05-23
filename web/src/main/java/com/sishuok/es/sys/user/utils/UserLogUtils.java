@@ -54,7 +54,13 @@ public class UserLogUtils {
     }
 
     public static Object getIp() {
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        RequestAttributes requestAttributes = null;
+
+        try {
+            RequestContextHolder.currentRequestAttributes();
+        } catch (Exception e) {
+            //ignore  如unit test
+        }
 
         if(requestAttributes != null && requestAttributes instanceof ServletRequestAttributes) {
             return IpUtils.getIpAddr(((ServletRequestAttributes)requestAttributes).getRequest());

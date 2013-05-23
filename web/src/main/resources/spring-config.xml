@@ -110,24 +110,13 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
-    <!-- 开启注解事务 只对当前配置文件有效 -->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
-
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="save*" propagation="REQUIRED" />
-            <tx:method name="add*" propagation="REQUIRED" />
-            <tx:method name="create*" propagation="REQUIRED" />
-            <tx:method name="insert*" propagation="REQUIRED" />
-            <tx:method name="update*" propagation="REQUIRED" />
-            <tx:method name="merge*" propagation="REQUIRED" />
-            <tx:method name="del*" propagation="REQUIRED" />
-            <tx:method name="remove*" propagation="REQUIRED" />
-            <tx:method name="put*" propagation="REQUIRED" />
-            <tx:method name="query*" propagation="REQUIRED" />
-            <tx:method name="use*" propagation="REQUIRED"/>
 
-            <tx:method name="doReweight*" propagation="REQUIRES_NEW"/>
+            <tx:method name="doReweight" propagation="REQUIRES_NEW"/>
+            <tx:method name="doClear" propagation="REQUIRES_NEW"/>
+            <tx:method name="doSendSystemMessage" propagation="REQUIRES_NEW"/>
+
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
             <tx:method name="get*" propagation="REQUIRED" read-only="true" />
             <tx:method name="count*" propagation="REQUIRED" read-only="true" />
@@ -139,7 +128,7 @@
 
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
-        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*.*(..))"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*+.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 

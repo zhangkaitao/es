@@ -438,7 +438,6 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     @Override
     public Page<M> findAll(final Searchable searchable) {
-        searchable.convert(entityClass);
         List<M> list = repositoryHelper.findAll(findAllQL, searchable, searchCallback);
         long total = searchable.hasPageable() ? count(searchable) : list.size();
         return new PageImpl<M>(
@@ -450,7 +449,6 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     @Override
     public long count(final Searchable searchable) {
-        searchable.convert(entityClass);
         return repositoryHelper.count(countAllQL, searchable, searchCallback);
     }
 

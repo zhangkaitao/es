@@ -8,10 +8,13 @@ package com.sishuok.es.common.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.inject.support.InjectBaseDependencyHelper;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.permission.PermissionList;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +29,22 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午1:20
  * <p>Version: 1.0
  */
-public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Serializable> extends BaseController<M, ID> {
+public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Serializable>
+        extends BaseController<M, ID> implements InitializingBean {
 
+    protected BaseService<M, ID> baseService;
 
     private boolean listAlsoSetCommonData = false;
 
-
     protected PermissionList permissionList = null;
 
+    /**
+     * 设置基础service
+     * @param baseService
+     */
+    public void setBaseService(BaseService<M, ID> baseService) {
+        this.baseService = baseService;
+    }
 
 
     /**
@@ -51,6 +62,13 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         if(!StringUtils.isEmpty(resourceIdentity)) {
             permissionList = PermissionList.newPermissionList(resourceIdentity);
         }
+    }
+
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
+        Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
     }
 
 

@@ -30,9 +30,11 @@ public class OnlineSessionFactory implements SessionFactory {
         if (initData != null && initData instanceof WebSessionContext) {
             WebSessionContext sessionContext = (WebSessionContext) initData;
             HttpServletRequest request = (HttpServletRequest) sessionContext.getServletRequest();
-            session.setHost(IpUtils.getIpAddr(request));
-            session.setUserAgent(request.getHeader("User-Agent"));
-            session.setSystemHost(request.getLocalAddr() + ":" + request.getLocalPort());
+            if(request != null) {
+                session.setHost(IpUtils.getIpAddr(request));
+                session.setUserAgent(request.getHeader("User-Agent"));
+                session.setSystemHost(request.getLocalAddr() + ":" + request.getLocalPort());
+            }
         }
         return session;
     }

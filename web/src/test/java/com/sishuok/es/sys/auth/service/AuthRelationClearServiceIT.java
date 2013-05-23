@@ -5,6 +5,8 @@
  */
 package com.sishuok.es.sys.auth.service;
 
+import com.sishuok.es.common.repository.hibernate.HibernateUtils;
+import com.sishuok.es.sys.group.service.GroupClearRelationService;
 import com.sishuok.es.sys.group.service.GroupService;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
@@ -16,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.Query;
 import java.util.Set;
 
 /**
@@ -29,10 +32,10 @@ public class AuthRelationClearServiceIT extends BaseIT {
     private AuthRelationClearService authRelationClearService;
 
     @Autowired
-    private UserService userService;
+    private UserAuthService userAuthService;
 
     @Autowired
-    private UserAuthService userAuthService;
+    private UserService userService;
 
     @Autowired
     private GroupService groupService;
@@ -50,6 +53,8 @@ public class AuthRelationClearServiceIT extends BaseIT {
         executeSqlScript("sql/intergration-test-resource-permission-role-data.sql", false);
         //clear cache
         userService.delete(1L);
+        HibernateUtils.clearLevel1Cache(entityManager);
+        HibernateUtils.clearLevel2Cache(entityManager);
     }
 
 
@@ -107,7 +112,6 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
     @Test
     public void testClearDeletedAuthRelationForOrganizationWithInherit() {
-
         executeSqlScript("sql/intergration-test-organization-with-inherit-data.sql", false);
         User user = userService.findOne(1L);
         Set<String> roles = userAuthService.findStringRoles(user);
@@ -213,4 +217,5 @@ public class AuthRelationClearServiceIT extends BaseIT {
         roles = userAuthService.findStringRoles(user);
         Assert.assertEquals(1, roles.size());
     }
+
 }
