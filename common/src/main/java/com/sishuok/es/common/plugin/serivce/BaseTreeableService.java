@@ -12,6 +12,8 @@ import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.service.BaseService;
@@ -230,10 +232,10 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             return Collections.EMPTY_LIST;
         }
 
-        Condition first = Condition.newCondition("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
-        Condition[] others = new Condition[parents.size() - 1];
+        SearchFilter first = SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
+        SearchFilter[] others = new SearchFilter[parents.size() - 1];
         for(int i = 1; i < parents.size(); i++) {
-            others[i - 1] = Condition.newCondition("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds());
+            others[i - 1] = SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds());
         }
         searchable.or(first, others);
 

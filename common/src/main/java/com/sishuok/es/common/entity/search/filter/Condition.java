@@ -35,7 +35,7 @@ public final class Condition implements SearchFilter {
      * @param value
      * @return
      */
-    public static Condition newCondition(final String key, final Object value) throws SearchException {
+    static Condition newCondition(final String key, final Object value) throws SearchException {
 
         Assert.notNull(key, "Condition key must not null");
 
@@ -67,7 +67,7 @@ public final class Condition implements SearchFilter {
             return null;
         }
 
-        Condition searchFilter = Condition.newCondition(searchProperty, operator, value);
+        Condition searchFilter = newCondition(searchProperty, operator, value);
 
         return searchFilter;
     }
@@ -80,7 +80,7 @@ public final class Condition implements SearchFilter {
      * @param value
      * @return
      */
-    public static Condition newCondition(final String searchProperty, final SearchOperator operator, final Object value) {
+    static Condition newCondition(final String searchProperty, final SearchOperator operator, final Object value) {
         return new Condition(searchProperty, operator, value);
     }
 

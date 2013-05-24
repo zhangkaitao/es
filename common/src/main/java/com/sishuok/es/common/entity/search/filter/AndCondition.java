@@ -21,16 +21,7 @@ public class AndCondition implements SearchFilter {
 
     private List<SearchFilter> andFilters = Lists.newArrayList();
 
-    private AndCondition() {
-    }
-
-    public static AndCondition and(SearchFilter first, SearchFilter... others) {
-        AndCondition andCondition = new AndCondition();
-        andCondition.andFilters.add(first);
-        if(ArrayUtils.isNotEmpty(others)) {
-            andCondition.andFilters.addAll(Arrays.asList(others));
-        }
-        return andCondition;
+    AndCondition() {
     }
 
     public AndCondition add(SearchFilter filter) {

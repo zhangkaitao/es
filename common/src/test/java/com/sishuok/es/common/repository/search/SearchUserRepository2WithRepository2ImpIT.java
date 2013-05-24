@@ -7,12 +7,10 @@ package com.sishuok.es.common.repository.search;
 
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.search.filter.AndCondition;
-import com.sishuok.es.common.entity.search.filter.Condition;
+import com.sishuok.es.common.entity.search.filter.*;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.filter.OrCondition;
 import com.sishuok.es.common.repository.UserRepository2;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
@@ -211,9 +209,10 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
             userRepository2.save(user);
         }
         Searchable search = Searchable.newSearchable();
+
         search.or(
-                Condition.newCondition("baseInfo.age", SearchOperator.gt, 13),
-                Condition.newCondition("baseInfo.age", SearchOperator.lt, 1)
+                SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.gt, 13),
+                SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.lt, 1)
         );
 
         assertEquals(2, userRepository2.count(search));
@@ -230,14 +229,14 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
             userRepository2.save(user);
         }
         Searchable search = Searchable.newSearchable();
-        Condition condition11 = Condition.newCondition("baseInfo.age", SearchOperator.gte, 0);
-        Condition condition12 = Condition.newCondition("baseInfo.age", SearchOperator.lte, 2);
-        AndCondition and1 = AndCondition.and(condition11, condition12);
+        SearchFilter condition11 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.gte, 0);
+        SearchFilter condition12 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.lte, 2);
+        SearchFilter and1 = SearchFilterHelper.and(condition11, condition12);
 
-        Condition condition21 = Condition.newCondition("baseInfo.age", SearchOperator.gte, 3);
-        Condition condition22 = Condition.newCondition("baseInfo.age", SearchOperator.lte, 5);
+        SearchFilter condition21 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.gte, 3);
+        SearchFilter condition22 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.lte, 5);
 
-        AndCondition and2 = AndCondition.and(condition21, condition22);
+        SearchFilter and2 = SearchFilterHelper.and(condition21, condition22);
 
         search.or(and1, and2);
 
@@ -256,14 +255,14 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
         }
         Searchable search = Searchable.newSearchable();
 
-        Condition condition11 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
-        Condition condition12 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 5);
-        OrCondition or1 = OrCondition.or(condition11, condition12);
+        SearchFilter condition11 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        SearchFilter condition12 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 5);
+        SearchFilter or1 = SearchFilterHelper.or(condition11, condition12);
 
-        Condition condition21 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
-        Condition condition22 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 4);
+        SearchFilter condition21 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        SearchFilter condition22 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 4);
 
-        OrCondition or2 = OrCondition.or(condition21, condition22);
+        SearchFilter or2 = SearchFilterHelper.or(condition21, condition22);
 
         //( =3 or =5) and (=3 or =4)
         search.and(or1, or2);
@@ -282,18 +281,18 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
         }
         Searchable search = Searchable.newSearchable();
 
-        Condition condition11 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        SearchFilter condition11 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 3);
 
-        Condition condition12 = Condition.newCondition("baseInfo.age", SearchOperator.lte, 4);
-        Condition condition13 = Condition.newCondition("baseInfo.age", SearchOperator.gte, 4);
+        SearchFilter condition12 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.lte, 4);
+        SearchFilter condition13 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.gte, 4);
 
-        OrCondition or11 = OrCondition.or(condition12, condition13);
-        OrCondition or1 = OrCondition.or(condition11, or11);
+        SearchFilter or11 = SearchFilterHelper.or(condition12, condition13);
+        SearchFilter or1 = SearchFilterHelper.or(condition11, or11);
 
-        Condition condition21 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
-        Condition condition22 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 4);
+        SearchFilter condition21 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        SearchFilter condition22 = SearchFilterHelper.newCondition("baseInfo.age", SearchOperator.eq, 4);
 
-        OrCondition or2 = OrCondition.or(condition21, condition22);
+        SearchFilter or2 = SearchFilterHelper.or(condition21, condition22);
 
         //( =3 or (>=4 and <=4)) and (=3 or =4)
         search.and(or1, or2);

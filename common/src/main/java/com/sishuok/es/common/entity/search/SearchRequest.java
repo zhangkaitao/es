@@ -8,10 +8,7 @@ package com.sishuok.es.common.entity.search;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.exception.SearchException;
-import com.sishuok.es.common.entity.search.filter.AndCondition;
-import com.sishuok.es.common.entity.search.filter.Condition;
-import com.sishuok.es.common.entity.search.filter.OrCondition;
-import com.sishuok.es.common.entity.search.filter.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.*;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.util.CollectionUtils;
@@ -100,14 +97,14 @@ public final class SearchRequest extends Searchable {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            addSearchFilter(Condition.newCondition(key, value));
+            addSearchFilter(SearchFilterHelper.newCondition(key, value));
         }
     }
 
 
     @Override
     public Searchable addSearchParam(final String key, final Object value) throws SearchException {
-        addSearchFilter(Condition.newCondition(key, value));
+        addSearchFilter(SearchFilterHelper.newCondition(key, value));
         return this;
     }
 
@@ -120,7 +117,7 @@ public final class SearchRequest extends Searchable {
 
     @Override
     public Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
-        Condition searchFilter = Condition.newCondition(searchProperty, operator, value);
+        SearchFilter searchFilter = SearchFilterHelper.newCondition(searchProperty, operator, value);
         return addSearchFilter(searchFilter);
     }
 
@@ -138,14 +135,14 @@ public final class SearchRequest extends Searchable {
 
     @Override
     public Searchable or(final SearchFilter first, final SearchFilter... others) {
-        addSearchFilter(OrCondition.or(first, others));
+        addSearchFilter(SearchFilterHelper.or(first, others));
         return this;
     }
 
     @Override
     public Searchable and(final SearchFilter first, final SearchFilter... others) {
 
-        addSearchFilter(AndCondition.and(first, others));
+        addSearchFilter(SearchFilterHelper.and(first, others));
         return this;
     }
 

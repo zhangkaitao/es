@@ -11,6 +11,7 @@ import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
 import com.sishuok.es.common.entity.search.filter.Condition;
+import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -118,12 +119,12 @@ public class SearchableTest {
         searchable.addSearchFilter("age", SearchOperator.like, "123");
         searchable.addSearchFilter("name", SearchOperator.custom, "234");
 
-        searchable.addSearchFilter(Condition.newCondition("sex_like", "male"));
-        searchable.addSearchFilter(Condition.newCondition("birthday_custom", "2012"));
-        searchable.addSearchFilter(Condition.newCondition("realname", "123"));
+        searchable.addSearchFilter(SearchFilterHelper.newCondition("sex_like", "male"));
+        searchable.addSearchFilter(SearchFilterHelper.newCondition("birthday_custom", "2012"));
+        searchable.addSearchFilter(SearchFilterHelper.newCondition("realname", "123"));
 
-        searchable.addSearchFilter(Condition.newCondition("a", SearchOperator.eq, "234"));
-        searchable.addSearchFilter(Condition.newCondition("b", SearchOperator.custom, "234"));
+        searchable.addSearchFilter(SearchFilterHelper.newCondition("a", SearchOperator.eq, "234"));
+        searchable.addSearchFilter(SearchFilterHelper.newCondition("b", SearchOperator.custom, "234"));
 
 
         Assert.assertTrue(searchable.containsSearchKey("age_like"));
@@ -148,9 +149,9 @@ public class SearchableTest {
         Searchable searchable = Searchable.newSearchable();
 
         searchable.addSearchFilters(Lists.newArrayList(
-                Condition.newCondition("sex_like", "male"),
-                Condition.newCondition("birthday_custom", "2012"),
-                Condition.newCondition("realname", "123")
+                SearchFilterHelper.newCondition("sex_like", "male"),
+                SearchFilterHelper.newCondition("birthday_custom", "2012"),
+                SearchFilterHelper.newCondition("realname", "123")
         ));
 
 
@@ -169,9 +170,9 @@ public class SearchableTest {
         Searchable searchable = Searchable.newSearchable();
 
         searchable.or(
-                Condition.newCondition("sex_like", "male"),
-                Condition.newCondition("birthday_custom", "2012"),
-                Condition.newCondition("realname", "123")
+                SearchFilterHelper.newCondition("sex_like", "male"),
+                SearchFilterHelper.newCondition("birthday_custom", "2012"),
+                SearchFilterHelper.newCondition("realname", "123")
         );
 
 
@@ -190,9 +191,9 @@ public class SearchableTest {
         Searchable searchable = Searchable.newSearchable();
 
         searchable.and(
-                Condition.newCondition("sex_like", "male"),
-                Condition.newCondition("birthday_custom", "2012"),
-                Condition.newCondition("realname", "123")
+                SearchFilterHelper.newCondition("sex_like", "male"),
+                SearchFilterHelper.newCondition("birthday_custom", "2012"),
+                SearchFilterHelper.newCondition("realname", "123")
         );
 
 
@@ -217,11 +218,11 @@ public class SearchableTest {
         searchable.addSearchParam("c", "123");
 
         searchable.or(
-                Condition.newCondition("sex_like", "male"),
-                Condition.newCondition("birthday_custom", "2012"),
-                Condition.newCondition("realname", "123"),
-                Condition.newCondition("name_custom", "123"),
-                Condition.newCondition("age_eq", 1)
+                SearchFilterHelper.newCondition("sex_like", "male"),
+                SearchFilterHelper.newCondition("birthday_custom", "2012"),
+                SearchFilterHelper.newCondition("realname", "123"),
+                SearchFilterHelper.newCondition("name_custom", "123"),
+                SearchFilterHelper.newCondition("age_eq", 1)
         );
 
 

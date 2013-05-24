@@ -21,16 +21,7 @@ public class OrCondition implements SearchFilter {
 
     private List<SearchFilter> orFilters = Lists.newArrayList();
 
-    private OrCondition() {
-    }
-
-    public static OrCondition or(SearchFilter first, SearchFilter... others) {
-        OrCondition orCondition = new OrCondition();
-        orCondition.orFilters.add(first);
-        if(ArrayUtils.isNotEmpty(others)) {
-            orCondition.orFilters.addAll(Arrays.asList(others));
-        }
-        return orCondition;
+    OrCondition() {
     }
 
     public OrCondition add(SearchFilter filter) {
