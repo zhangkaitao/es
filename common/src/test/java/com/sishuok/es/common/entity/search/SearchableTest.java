@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -117,12 +118,12 @@ public class SearchableTest {
         searchable.addSearchFilter("age", SearchOperator.like, "123");
         searchable.addSearchFilter("name", SearchOperator.custom, "234");
 
-        searchable.addSearchFilter(SearchFilter.newSearchFilter("sex_like", "male"));
-        searchable.addSearchFilter(SearchFilter.newSearchFilter("birthday_custom", "2012"));
-        searchable.addSearchFilter(SearchFilter.newSearchFilter("realname", "123"));
+        searchable.addSearchFilter(Condition.newCondition("sex_like", "male"));
+        searchable.addSearchFilter(Condition.newCondition("birthday_custom", "2012"));
+        searchable.addSearchFilter(Condition.newCondition("realname", "123"));
 
-        searchable.addSearchFilter(SearchFilter.newSearchFilter("a", SearchOperator.eq, "234"));
-        searchable.addSearchFilter(SearchFilter.newSearchFilter("b", SearchOperator.custom, "234"));
+        searchable.addSearchFilter(Condition.newCondition("a", SearchOperator.eq, "234"));
+        searchable.addSearchFilter(Condition.newCondition("b", SearchOperator.custom, "234"));
 
 
         Assert.assertTrue(searchable.containsSearchKey("age_like"));
@@ -147,9 +148,9 @@ public class SearchableTest {
         Searchable searchable = Searchable.newSearchable();
 
         searchable.addSearchFilters(Lists.newArrayList(
-                SearchFilter.newSearchFilter("sex_like", "male"),
-                SearchFilter.newSearchFilter("birthday_custom", "2012"),
-                SearchFilter.newSearchFilter("realname", "123")
+                Condition.newCondition("sex_like", "male"),
+                Condition.newCondition("birthday_custom", "2012"),
+                Condition.newCondition("realname", "123")
         ));
 
 
@@ -167,18 +168,37 @@ public class SearchableTest {
 
         Searchable searchable = Searchable.newSearchable();
 
-        searchable.addOrSearchFilters(
-                SearchFilter.newSearchFilter("sex_like", "male"),
-                Lists.newArrayList(
-                        SearchFilter.newSearchFilter("birthday_custom", "2012"),
-                        SearchFilter.newSearchFilter("realname", "123")
-                )
+        searchable.or(
+                Condition.newCondition("sex_like", "male"),
+                Condition.newCondition("birthday_custom", "2012"),
+                Condition.newCondition("realname", "123")
         );
 
 
         Assert.assertEquals(1, searchable.getSearchFilters().size());
 
-        Assert.assertTrue(searchable.containsSearchKey("sex_like"));
+        Assert.assertFalse(searchable.containsSearchKey("sex_like"));
+
+        Assert.assertFalse(searchable.containsSearchKey("realname"));
+
+
+    }
+
+    @Test
+    public void testAndSearchFilters() {
+
+        Searchable searchable = Searchable.newSearchable();
+
+        searchable.and(
+                Condition.newCondition("sex_like", "male"),
+                Condition.newCondition("birthday_custom", "2012"),
+                Condition.newCondition("realname", "123")
+        );
+
+
+        Assert.assertEquals(1, searchable.getSearchFilters().size());
+
+        Assert.assertFalse(searchable.containsSearchKey("sex_like"));
 
         Assert.assertFalse(searchable.containsSearchKey("realname"));
 
@@ -196,14 +216,12 @@ public class SearchableTest {
         searchable.addSearchParam("b", "123");
         searchable.addSearchParam("c", "123");
 
-        searchable.addOrSearchFilters(
-                SearchFilter.newSearchFilter("sex_like", "male"),
-                Lists.newArrayList(
-                    SearchFilter.newSearchFilter("birthday_custom", "2012"),
-                    SearchFilter.newSearchFilter("realname", "123"),
-                    SearchFilter.newSearchFilter("name_custom", "123"),
-                    SearchFilter.newSearchFilter("age_eq", 1)
-                )
+        searchable.or(
+                Condition.newCondition("sex_like", "male"),
+                Condition.newCondition("birthday_custom", "2012"),
+                Condition.newCondition("realname", "123"),
+                Condition.newCondition("name_custom", "123"),
+                Condition.newCondition("age_eq", 1)
         );
 
 

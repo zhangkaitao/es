@@ -3,13 +3,12 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.common.entity.search;
+package com.sishuok.es.common.entity.search.filter;
 
-import com.google.common.collect.Lists;
+import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.util.CollectionUtils;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
  * <p>Date: 13-1-15 上午7:12
  * <p>Version: 1.0
  */
-public final class SearchFilter {
+public final class Condition implements SearchFilter {
 
     //查询参数分隔符
     public static final String separator = "_";
@@ -30,22 +29,20 @@ public final class SearchFilter {
     private SearchOperator operator;
     private Object value;
 
-    private List<SearchFilter> orFilters;
-
     /**
-     * 根据查询key和值生成SearchFilter
+     * 根据查询key和值生成Condition
      * @param key 如 name_like
      * @param value
      * @return
      */
-    public static SearchFilter newSearchFilter(final String key, final Object value) throws SearchException {
+    public static Condition newCondition(final String key, final Object value) throws SearchException {
 
-        Assert.notNull(key, "SearchFilter key must not null");
+        Assert.notNull(key, "Condition key must not null");
 
         String[] searchs = StringUtils.split(key, separator);
 
         if (searchs.length == 0) {
-            throw new SearchException("SearchFilter key format must be : property or property_op");
+            throw new SearchException("Condition key format must be : property or property_op");
         }
 
         String searchProperty = searchs[0];
@@ -70,21 +67,21 @@ public final class SearchFilter {
             return null;
         }
 
-        SearchFilter searchFilter = SearchFilter.newSearchFilter(searchProperty, operator, value);
+        Condition searchFilter = Condition.newCondition(searchProperty, operator, value);
 
         return searchFilter;
     }
 
 
     /**
-     * 根据查询属性、操作符和值生成SearchFilter
+     * 根据查询属性、操作符和值生成Condition
      * @param searchProperty
      * @param operator
      * @param value
      * @return
      */
-    public static SearchFilter newSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
-        return new SearchFilter(searchProperty, operator, value);
+    public static Condition newCondition(final String searchProperty, final SearchOperator operator, final Object value) {
+        return new Condition(searchProperty, operator, value);
     }
 
     /**
@@ -92,32 +89,11 @@ public final class SearchFilter {
      * @param operator 操作
      * @param value    值
      */
-    private SearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
+    private Condition(final String searchProperty, final SearchOperator operator, final Object value) {
         this.searchProperty = searchProperty;
         this.operator = operator;
         this.value = value;
         this.key = this.searchProperty + separator + this.operator;
-    }
-
-    /**
-     * 目前仅支持一级或操作
-     * 或 条件运算
-     * @param orSearchFilter
-     * @return
-     */
-    public SearchFilter or(SearchFilter orSearchFilter) {
-        if(orFilters == null) {
-            orFilters = Lists.newArrayList();
-        }
-        orFilters.add(orSearchFilter);
-        return this;
-    }
-
-    public List<SearchFilter> getOrFilters() {
-        return orFilters;
-    }
-    public boolean  hasOrSearchFilters() {
-        return !CollectionUtils.isEmpty(getOrFilters());
     }
 
     public String getKey() {
@@ -140,8 +116,7 @@ public final class SearchFilter {
     /**
      * 获取自定义查询使用的操作符
      * 1、首先获取前台传的
-     * 2、获取SearchPropertyMappingInfo中定义的默认的
-     * 3、返回空
+     * 2、返回空
      * @return
      */
     public String getOperatorStr() {
@@ -192,7 +167,7 @@ public final class SearchFilter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SearchFilter that = (SearchFilter) o;
+        Condition that = (Condition) o;
 
         if (key != null ? !key.equals(that.key) : that.key != null) return false;
 
@@ -206,7 +181,7 @@ public final class SearchFilter {
 
     @Override
     public String toString() {
-        return "SearchFilter{" +
+        return "Condition{" +
                 "searchProperty='" + searchProperty + '\'' +
                 ", operator=" + operator +
                 ", value=" + value +

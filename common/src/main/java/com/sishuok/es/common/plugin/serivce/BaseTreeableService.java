@@ -9,18 +9,16 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.entity.search.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.*;
 
@@ -232,12 +230,12 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             return Collections.EMPTY_LIST;
         }
 
-        SearchFilter first = SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
-        List<SearchFilter> others = Lists.newArrayList();
+        Condition first = Condition.newCondition("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
+        Condition[] others = new Condition[parents.size() - 1];
         for(int i = 1; i < parents.size(); i++) {
-            others.add(SearchFilter.newSearchFilter("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds()));
+            others[i - 1] = Condition.newCondition("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds());
         }
-        searchable.addOrSearchFilters(first, others);
+        searchable.or(first, others);
 
         List<M> children = findAllWithSort(searchable);
         return children;

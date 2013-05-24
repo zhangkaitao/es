@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Treeable;
@@ -28,7 +27,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Set;
 

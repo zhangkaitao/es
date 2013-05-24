@@ -5,9 +5,10 @@
  */
 package com.sishuok.es.common.web.bind.method.annotation;
 
-import com.sishuok.es.common.entity.search.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import org.junit.Before;
@@ -20,11 +21,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -80,8 +78,8 @@ public class SearchableMethodArgumentResolverTest {
                 assertEquals(expectedSort, searchable.getSort());
 
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
     }
 
 
@@ -101,8 +99,8 @@ public class SearchableMethodArgumentResolverTest {
         assertEquals(null, searchable.getPage().getSort());
 
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
 
     }
 
@@ -131,8 +129,8 @@ public class SearchableMethodArgumentResolverTest {
         assertEquals(expectedSort, searchable.getSort());
 
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
     }
 
 
@@ -160,8 +158,8 @@ public class SearchableMethodArgumentResolverTest {
         assertEquals(null, searchable.getSort());
 
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
     }
 
 
@@ -189,8 +187,8 @@ public class SearchableMethodArgumentResolverTest {
         assertEquals(expectedSort, searchable.getSort());
 
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("id", SearchOperator.eq, "1"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("id", SearchOperator.eq, "1"), searchable);
     }
 
 
@@ -217,8 +215,8 @@ public class SearchableMethodArgumentResolverTest {
         assertEquals(expectedSort, searchable.getSort());
 
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("id", SearchOperator.eq, "1"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("id", SearchOperator.eq, "1"), searchable);
     }
 
 
@@ -248,8 +246,8 @@ public class SearchableMethodArgumentResolverTest {
         Sort expectedSort = new Sort(Sort.Direction.ASC, "baseInfo.realname").and(new Sort(Sort.Direction.DESC, "id"));
         assertEquals(expectedSort, searchable.getSort());
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
     }
 
 
@@ -280,8 +278,8 @@ public class SearchableMethodArgumentResolverTest {
         Sort expectedSort = new Sort(Sort.Direction.ASC, "baseInfo.realname").and(new Sort(Sort.Direction.DESC, "id"));
         assertEquals(expectedSort, searchable.getSort());
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
     }
 
 
@@ -294,20 +292,21 @@ public class SearchableMethodArgumentResolverTest {
         NativeWebRequest webRequest = new ServletWebRequest(request);
         Searchable searchable = (Searchable) new SearchableMethodArgumentResolver().resolveArgument(parameter, null, webRequest, null);
 
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
-        assertContainsSearchFilter(SearchFilter.newSearchFilter("username", SearchOperator.eq, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
+        assertContainsSearchFilter(Condition.newCondition("username", SearchOperator.eq, "zhang"), searchable);
     }
 
 
 
 
-    private void assertContainsSearchFilter(SearchFilter expected, Searchable searchable) {
+    private void assertContainsSearchFilter(Condition expected, Searchable searchable) {
         boolean success = false;
         for(SearchFilter acutal : searchable.getSearchFilters()) {
+            Condition condition = (Condition) acutal;
             success =
-                    acutal.getSearchProperty().equals(expected.getSearchProperty())
-                    && acutal.getOperatorStr().equals(expected.getOperatorStr())
-                    && acutal.getValue().equals(expected.getValue());
+                    condition.getSearchProperty().equals(expected.getSearchProperty())
+                    && condition.getOperatorStr().equals(expected.getOperatorStr())
+                    && condition.getValue().equals(expected.getValue());
             if(success) {
                 break;
             }

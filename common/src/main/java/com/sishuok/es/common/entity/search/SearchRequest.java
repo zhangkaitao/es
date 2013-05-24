@@ -8,7 +8,12 @@ package com.sishuok.es.common.entity.search;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.exception.SearchException;
+import com.sishuok.es.common.entity.search.filter.AndCondition;
+import com.sishuok.es.common.entity.search.filter.Condition;
+import com.sishuok.es.common.entity.search.filter.OrCondition;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -95,14 +100,14 @@ public final class SearchRequest extends Searchable {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            addSearchFilter(SearchFilter.newSearchFilter(key, value));
+            addSearchFilter(Condition.newCondition(key, value));
         }
     }
 
 
     @Override
     public Searchable addSearchParam(final String key, final Object value) throws SearchException {
-        addSearchFilter(SearchFilter.newSearchFilter(key, value));
+        addSearchFilter(Condition.newCondition(key, value));
         return this;
     }
 
@@ -115,13 +120,13 @@ public final class SearchRequest extends Searchable {
 
     @Override
     public Searchable addSearchFilter(final String searchProperty, final SearchOperator operator, final Object value) {
-        SearchFilter searchFilter = SearchFilter.newSearchFilter(searchProperty, operator, value);
+        Condition searchFilter = Condition.newCondition(searchProperty, operator, value);
         return addSearchFilter(searchFilter);
     }
 
 
     @Override
-    public Searchable addSearchFilters(Collection<SearchFilter> searchFilters) {
+    public Searchable addSearchFilters(Collection<? extends SearchFilter> searchFilters) {
         if(CollectionUtils.isEmpty(searchFilters)) {
             return this;
         }
@@ -132,16 +137,15 @@ public final class SearchRequest extends Searchable {
     }
 
     @Override
-    public Searchable addOrSearchFilters(SearchFilter first, Collection<SearchFilter> others) {
+    public Searchable or(final SearchFilter first, final SearchFilter... others) {
+        addSearchFilter(OrCondition.or(first, others));
+        return this;
+    }
 
-        Iterator<SearchFilter> iter = others.iterator();
+    @Override
+    public Searchable and(final SearchFilter first, final SearchFilter... others) {
 
-        while(iter.hasNext()) {
-            first.or(iter.next());
-        }
-
-        addSearchFilter(first);
-
+        addSearchFilter(AndCondition.and(first, others));
         return this;
     }
 
@@ -150,10 +154,14 @@ public final class SearchRequest extends Searchable {
         if(searchFilter == null) {
             return this;
         }
-        String key = searchFilter.getKey();
-        searchFilterMap.put(key, searchFilter);
+        if(searchFilter instanceof Condition) {
+            Condition condition = (Condition) searchFilter;
+            String key = condition.getKey();
+            searchFilterMap.put(key, condition);
+        }
         searchFilters.add(searchFilter);
         return this;
+
     }
 
     /**
@@ -168,7 +176,6 @@ public final class SearchRequest extends Searchable {
 
         SearchFilter searchFilter = searchFilterMap.remove(key);
 
-
         if(searchFilter == null) {
             searchFilter = searchFilterMap.remove(getCustomKey(key));
         }
@@ -179,38 +186,11 @@ public final class SearchRequest extends Searchable {
 
         searchFilters.remove(searchFilter);
 
-        //如果移除的有or查询 则删除第一个 后续的跟上
-        if(searchFilter != null && searchFilter.hasOrSearchFilters()) {
-            List<SearchFilter> orSearchFilters = searchFilter.getOrFilters();
-            SearchFilter first = orSearchFilters.remove(1);//变成新的根
-            orSearchFilters.remove(0);//第一个移除即可
-            for(SearchFilter orSearchFilter : orSearchFilters) {
-                first.or(orSearchFilter);
-            }
-            addSearchFilter(first);
-        }
-
-        //考虑or的情况
-        for(SearchFilter obj : getSearchFilters()) {
-            if(obj.hasOrSearchFilters()) {
-                Iterator<SearchFilter> orIter = obj.getOrFilters().iterator();
-
-                if(orIter.hasNext()) {
-                    SearchFilter orSearchFilter = orIter.next();
-                    String orKey = orSearchFilter.getKey();
-                    if(key.equals(orKey)
-                            || (getCustomKey(key)).equals(orKey)) {
-                        orIter.remove();
-                    }
-                }
-            }
-        }
-
         return this;
     }
 
     private String getCustomKey(String key) {
-        return key + SearchFilter.separator + SearchOperator.custom;
+        return key + Condition.separator + SearchOperator.custom;
     }
 
     @Override
@@ -256,22 +236,19 @@ public final class SearchRequest extends Searchable {
 
 
 
+    @Override
     public Collection<SearchFilter> getSearchFilters() {
         return Collections.unmodifiableCollection(searchFilters);
     }
 
-    public Map<String, SearchFilter> getSearchFilterMap() {
-        return searchFilterMap;
-    }
-
-
+    @Override
     public boolean isConverted() {
         return converted;
     }
 
     @Override
     public boolean hasSearchFilter() {
-        return searchFilterMap.size() > 0;
+        return searchFilters.size() > 0;
     }
 
     @Override
@@ -320,7 +297,13 @@ public final class SearchRequest extends Searchable {
         if(searchFilter == null) {
             return null;
         }
-        return searchFilter.getValue();
+
+        if(searchFilter instanceof Condition) {
+            Condition condition = (Condition) searchFilter;
+            return condition.getValue();
+        }
+
+        return null;
     }
 
 

@@ -5,12 +5,14 @@
  */
 package com.sishuok.es.common.repository.callback;
 
-import com.sishuok.es.common.entity.search.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.AndCondition;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.OrCondition;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Query;
@@ -56,50 +58,70 @@ public class DefaultSearchCallback implements SearchCallback {
         int paramIndex = 1;
         for(SearchFilter searchFilter : search.getSearchFilters()) {
 
-            if(searchFilter.getOperator() == SearchOperator.custom) {
-                continue;
+            if(searchFilter instanceof Condition) {
+                Condition condition = (Condition) searchFilter;
+                if(condition.getOperator() == SearchOperator.custom) {
+                    continue;
+                }
             }
 
             ql.append(" and ");
 
-            if(searchFilter.hasOrSearchFilters()) {
-                StringBuilder orCondition = new StringBuilder();
-                genCondition(orCondition, paramIndex++, searchFilter);
-                for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
-                    orCondition.append(" or ");
-                    genCondition(orCondition, paramIndex, orSearchFilter);
-                    paramIndex++;
-                }
-                ql.append("(");
-                ql.append(orCondition);
-                ql.append(")");
-            } else {
-                genCondition(ql, paramIndex, searchFilter);
-                paramIndex++;
-            }
+            paramIndex = genCondition(ql, paramIndex, searchFilter);
 
         }
     }
 
-    private void genCondition(StringBuilder condition, int paramIndex, SearchFilter searchFilter) {
+    private int genCondition(StringBuilder ql, int paramIndex, SearchFilter searchFilter) {
+        boolean needAppendBracket = searchFilter instanceof OrCondition || searchFilter instanceof AndCondition;
 
-        //自定义条件
-        String entityProperty = searchFilter.getEntityProperty();
-        String operatorStr = searchFilter.getOperatorStr();
-        //实体名称
-        condition.append(getAliasWithDot());
-        condition.append(entityProperty);
-        //操作符
-        //1、如果是自定义查询符号，则使用SearchPropertyMappings中定义的默认的操作符
-        condition.append(" ");
-        condition.append(operatorStr);
-
-        if (!searchFilter.isUnaryFilter()) {
-            condition.append(" :");
-            condition.append(paramPrefix);
-            condition.append(paramIndex);
+        if(needAppendBracket) {
+            ql.append("(");
         }
 
+        if(searchFilter instanceof Condition) {
+            Condition condition = (Condition) searchFilter;
+            //自定义条件
+            String entityProperty = condition.getEntityProperty();
+            String operatorStr = condition.getOperatorStr();
+            //实体名称
+            ql.append(getAliasWithDot());
+            ql.append(entityProperty);
+            //操作符
+            //1、如果是自定义查询符号，则使用SearchPropertyMappings中定义的默认的操作符
+            ql.append(" ");
+            ql.append(operatorStr);
+
+            if (!condition.isUnaryFilter()) {
+                ql.append(" :");
+                ql.append(paramPrefix);
+                ql.append(paramIndex++);
+                return paramIndex;
+            }
+        } else if(searchFilter instanceof OrCondition) {
+            boolean isFirst = true;
+            for(SearchFilter orSearchFilter : ((OrCondition)searchFilter).getOrFilters()) {
+                if(!isFirst) {
+                    ql.append(" or ");
+                }
+                paramIndex = genCondition(ql, paramIndex, orSearchFilter);
+                isFirst = false;
+            }
+        } else if(searchFilter instanceof AndCondition) {
+            boolean isFirst = true;
+            for(SearchFilter andSearchFilter : ((AndCondition)searchFilter).getAndFilters()) {
+                if(!isFirst) {
+                    ql.append(" and ");
+                }
+                paramIndex = genCondition(ql, paramIndex, andSearchFilter);
+                isFirst = false;
+            }
+        }
+
+        if(needAppendBracket) {
+            ql.append(")");
+        }
+        return paramIndex;
     }
 
 
@@ -109,28 +131,39 @@ public class DefaultSearchCallback implements SearchCallback {
         int paramIndex = 1;
 
         for(SearchFilter searchFilter : search.getSearchFilters()) {
-
-            if(searchFilter.getOperator() == SearchOperator.custom) {
-                continue;
-            }
-
-            if(searchFilter.isUnaryFilter()) {
-                continue;
-            }
-
-            query.setParameter(paramPrefix + paramIndex++, formtValue(searchFilter, searchFilter.getValue()));
-
-            if(searchFilter.hasOrSearchFilters()) {
-                for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
-                    query.setParameter(paramPrefix + paramIndex++, formtValue(orSearchFilter, orSearchFilter.getValue()));
-                }
-            }
+            paramIndex = setValues(query, searchFilter, paramIndex);
         }
 
     }
 
-    private Object formtValue(SearchFilter searchFilter, Object value) {
-        SearchOperator operator = searchFilter.getOperator();
+    private int setValues(Query query, SearchFilter searchFilter, int paramIndex) {
+        if(searchFilter instanceof Condition) {
+
+            Condition condition = (Condition) searchFilter;
+            if(condition.getOperator() == SearchOperator.custom) {
+                return paramIndex;
+            }
+            if(condition.isUnaryFilter()) {
+                return paramIndex;
+            }
+            query.setParameter(paramPrefix + paramIndex++, formtValue(condition, condition.getValue()));
+
+        } else if(searchFilter instanceof OrCondition) {
+
+            for(SearchFilter orSearchFilter : ((OrCondition)searchFilter).getOrFilters()) {
+                paramIndex = setValues(query, orSearchFilter, paramIndex);
+            }
+
+        } else if(searchFilter instanceof AndCondition) {
+            for(SearchFilter andSearchFilter : ((AndCondition)searchFilter).getAndFilters()) {
+                paramIndex = setValues(query, andSearchFilter, paramIndex);
+            }
+        }
+        return paramIndex;
+    }
+
+    private Object formtValue(Condition condition, Object value) {
+        SearchOperator operator = condition.getOperator();
         if(operator == SearchOperator.like || operator == SearchOperator.notLike) {
             return "%" + value + "%";
         }

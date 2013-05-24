@@ -8,12 +8,11 @@ package com.sishuok.es.common.entity.search;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,7 +99,7 @@ public abstract class Searchable {
      * @param searchFilters
      * @return
      */
-    public abstract Searchable addSearchFilters(Collection<SearchFilter> searchFilters);
+    public abstract Searchable addSearchFilters(final Collection<? extends SearchFilter> searchFilters);
 
     /**
      * 添加多个or连接的过滤条件
@@ -108,7 +107,15 @@ public abstract class Searchable {
      * @param others 其他
      * @return
      */
-    public abstract Searchable addOrSearchFilters(SearchFilter first, Collection<SearchFilter> others);
+    public abstract Searchable or(final SearchFilter first, final SearchFilter... others);
+
+    /**
+     * 添加多个and连接的过滤条件
+     * @param first
+     * @param others
+     * @return
+     */
+    public abstract Searchable and(final SearchFilter first, final SearchFilter... others);
 
     /**
      * 移除指定key的过滤条件

@@ -6,20 +6,21 @@
 package com.sishuok.es.common.entity.search.utils;
 
 import com.google.common.collect.Lists;
-import com.sishuok.es.common.entity.search.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.AndCondition;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
+import com.sishuok.es.common.entity.search.filter.OrCondition;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -83,32 +84,53 @@ public final class SearchableConvertUtils {
         beanWrapper.setConversionService(getConversionService());
 
         for (SearchFilter searchFilter : searchFilters) {
-            convert(beanWrapper, searchFilter);
-            if(searchFilter.hasOrSearchFilters()) {
-                for(SearchFilter orSearchFilter : searchFilter.getOrFilters()) {
-                    convert(beanWrapper, orSearchFilter);
-                }
-            }
+            convertSearchValueToEntityValue(beanWrapper, searchFilter);
+
+
         }
     }
 
-    private static void convert(BeanWrapperImpl beanWrapper, SearchFilter searchFilter) {
-        String searchProperty = searchFilter.getSearchProperty();
+    private static void convertSearchValueToEntityValue(BeanWrapperImpl beanWrapper, SearchFilter searchFilter) {
+        if(searchFilter instanceof Condition) {
+            Condition condition = (Condition) searchFilter;
+            convert(beanWrapper, condition);
+            return;
+        }
+
+        if(searchFilter instanceof OrCondition) {
+            for(SearchFilter orFilter : ((OrCondition)searchFilter).getOrFilters()) {
+                convertSearchValueToEntityValue(beanWrapper, orFilter);
+            }
+            return;
+        }
+
+        if(searchFilter instanceof AndCondition) {
+            for(SearchFilter andFilter : ((AndCondition)searchFilter).getAndFilters()) {
+                convertSearchValueToEntityValue(beanWrapper, andFilter);
+            }
+            return;
+        }
+
+
+    }
+
+    private static void convert(BeanWrapperImpl beanWrapper, Condition condition) {
+        String searchProperty = condition.getSearchProperty();
 
         //自定义的也不转换
-        if(searchFilter.getOperator() == SearchOperator.custom) {
+        if(condition.getOperator() == SearchOperator.custom) {
             return;
         }
 
         //一元运算符不需要计算
-        if(searchFilter.isUnaryFilter()) {
+        if(condition.isUnaryFilter()) {
             return;
         }
 
 
-        String entityProperty = searchFilter.getEntityProperty();
+        String entityProperty = condition.getEntityProperty();
 
-        Object value = searchFilter.getValue();
+        Object value = condition.getValue();
 
         Object newValue = null;
         boolean isCollection = value instanceof Collection;
@@ -128,7 +150,7 @@ public final class SearchableConvertUtils {
         } else {
             newValue = getConvertedValue(beanWrapper, searchProperty, entityProperty, value);
         }
-        searchFilter.setValue(newValue);
+        condition.setValue(newValue);
     }
 
     private static Object getConvertedValue(
@@ -152,8 +174,8 @@ public final class SearchableConvertUtils {
     }
 
 /*    public static <T> void convertSearchValueToEntityValue(SearchRequest search, Class<T> domainClass) {
-        List<SearchFilter> searchFilters = search.getSearchFilters();
-        for (SearchFilter searchFilter : searchFilters) {
+        List<Condition> searchFilters = search.getSearchFilters();
+        for (Condition searchFilter : searchFilters) {
             String property = searchFilter.getSearchProperty();
             Class<? extends Comparable> targetPropertyType = getPropertyType(domainClass, property);
             Object value = searchFilter.getValue();

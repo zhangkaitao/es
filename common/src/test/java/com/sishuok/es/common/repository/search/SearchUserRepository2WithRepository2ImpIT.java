@@ -5,13 +5,14 @@
  */
 package com.sishuok.es.common.repository.search;
 
-import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.search.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.AndCondition;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.OrCondition;
 import com.sishuok.es.common.repository.UserRepository2;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
@@ -210,12 +211,92 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
             userRepository2.save(user);
         }
         Searchable search = Searchable.newSearchable();
-        search.addOrSearchFilters(
-                SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.gt, 13),
-                Lists.newArrayList(
-                        SearchFilter.newSearchFilter("baseInfo.age", SearchOperator.lt, 1)
-                )
+        search.or(
+                Condition.newCondition("baseInfo.age", SearchOperator.gt, 13),
+                Condition.newCondition("baseInfo.age", SearchOperator.lt, 1)
         );
+
+        assertEquals(2, userRepository2.count(search));
+    }
+
+
+
+    @Test
+    public void testAndOr() {
+        int count = 15;
+        for (int i = 0; i < count; i++) {
+            User user = createUser();
+            user.getBaseInfo().setAge(i);
+            userRepository2.save(user);
+        }
+        Searchable search = Searchable.newSearchable();
+        Condition condition11 = Condition.newCondition("baseInfo.age", SearchOperator.gte, 0);
+        Condition condition12 = Condition.newCondition("baseInfo.age", SearchOperator.lte, 2);
+        AndCondition and1 = AndCondition.and(condition11, condition12);
+
+        Condition condition21 = Condition.newCondition("baseInfo.age", SearchOperator.gte, 3);
+        Condition condition22 = Condition.newCondition("baseInfo.age", SearchOperator.lte, 5);
+
+        AndCondition and2 = AndCondition.and(condition21, condition22);
+
+        search.or(and1, and2);
+
+        assertEquals(6, userRepository2.count(search));
+    }
+
+
+
+    @Test
+    public void testOrAnd() {
+        int count = 15;
+        for (int i = 0; i < count; i++) {
+            User user = createUser();
+            user.getBaseInfo().setAge(i);
+            userRepository2.save(user);
+        }
+        Searchable search = Searchable.newSearchable();
+
+        Condition condition11 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        Condition condition12 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 5);
+        OrCondition or1 = OrCondition.or(condition11, condition12);
+
+        Condition condition21 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        Condition condition22 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 4);
+
+        OrCondition or2 = OrCondition.or(condition21, condition22);
+
+        //( =3 or =5) and (=3 or =4)
+        search.and(or1, or2);
+
+        assertEquals(1, userRepository2.count(search));
+    }
+
+
+    @Test
+    public void testNestedOrAnd() {
+        int count = 15;
+        for (int i = 0; i < count; i++) {
+            User user = createUser();
+            user.getBaseInfo().setAge(i);
+            userRepository2.save(user);
+        }
+        Searchable search = Searchable.newSearchable();
+
+        Condition condition11 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
+
+        Condition condition12 = Condition.newCondition("baseInfo.age", SearchOperator.lte, 4);
+        Condition condition13 = Condition.newCondition("baseInfo.age", SearchOperator.gte, 4);
+
+        OrCondition or11 = OrCondition.or(condition12, condition13);
+        OrCondition or1 = OrCondition.or(condition11, or11);
+
+        Condition condition21 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 3);
+        Condition condition22 = Condition.newCondition("baseInfo.age", SearchOperator.eq, 4);
+
+        OrCondition or2 = OrCondition.or(condition21, condition22);
+
+        //( =3 or (>=4 and <=4)) and (=3 or =4)
+        search.and(or1, or2);
 
         assertEquals(2, userRepository2.count(search));
     }
