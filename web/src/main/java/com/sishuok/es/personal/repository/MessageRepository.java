@@ -7,6 +7,9 @@ package com.sishuok.es.personal.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.personal.entity.Message;
+import com.sishuok.es.personal.entity.MessageState;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * <p>User: Zhang Kaitao
@@ -15,4 +18,10 @@ import com.sishuok.es.personal.entity.Message;
  */
 public interface MessageRepository extends BaseRepository<Message, Long> {
 
+    @Modifying
+    @Query("delete from Message where (senderId=?1 and senderState=?2) or (receiverId=?1 and receiverState=?2)")
+    void clearBox(Long userId, MessageState state);
+
+    @Query("select count(o) from Message o where (receiverId=?1 and receiverState=?2 and read=false)")
+    Long countUnread(Long userId, MessageState receiverState);
 }

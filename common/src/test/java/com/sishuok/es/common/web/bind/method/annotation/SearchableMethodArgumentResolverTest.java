@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.common.web.bind.method.annotation;
 
-import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.filter.SearchFilter;

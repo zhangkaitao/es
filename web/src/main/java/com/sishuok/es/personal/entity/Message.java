@@ -223,4 +223,13 @@ public class Message extends BaseEntity<Long> {
         this.replied = Boolean.TRUE;
     }
 
+    public void changeSenderState(MessageState state) {
+        setSenderState(state);
+        setSenderStateChangeDate(new Date());
+    }
+
+    public void changeReceiverState(MessageState state) {
+        setReceiverState(state);
+        setReceiverStateChangeDate(new Date());
+    }
 }

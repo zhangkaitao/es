@@ -29,4 +29,11 @@ public class MessageService extends BaseService<Message, Long> {
     @BaseComponent
     private MessageRepository messageRepository;
 
+    public void clearBox(Long userId, MessageState state) {
+        messageRepository.clearBox(userId, state);
+    }
+
+    public Long countUnread(Long userId) {
+        return messageRepository.countUnread(userId, MessageState.in_box);
+    }
 }

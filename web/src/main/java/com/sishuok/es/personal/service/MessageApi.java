@@ -67,20 +67,6 @@ public interface MessageApi {
     public void recycle(Long userId, Long[] messageIds);
 
     /**
-     * 恢复删除的消息
-     * @param userId
-     * @param messageId
-     */
-    public void resume(Long userId, Long messageId);
-
-    /**
-     * 批量恢复删除的消息
-     * @param userId
-     * @param messageIds
-     */
-    public void resume(Long userId, Long[] messageIds);
-
-    /**
      * 将消息保存到收藏箱
      * @param userId
      * @param messageId
@@ -144,7 +130,7 @@ public interface MessageApi {
      * 未读消息总数
      * @param userId
      */
-    public void countUnread(Long userId);
+    public Long countUnread(Long userId);
 
 
 

@@ -22,7 +22,7 @@ create table `personal_message`(
 
   constraint `pk_personal_message` primary key(`id`),
   index `idx_personal_message_sender_id_sender_state` (`sender_id`, `sender_state`),
-  index `idx_personal_message_receiver_id_receiver_state` (`receiver_id`, `receiver_state`),
+  index `idx_personal_message_receiver_id_receiver_state` (`receiver_id`, `receiver_state`,`read`),
   index `idx_personal_message_type` (`type`)
 ) charset=utf8 ENGINE=InnoDB;;
 

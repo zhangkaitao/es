@@ -6,9 +6,10 @@
 package com.sishuok.es.personal.service;
 
 import com.google.common.collect.Lists;
-import com.sishuok.es.common.entity.search.SearchFilter;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.personal.entity.Message;
@@ -39,7 +40,7 @@ import java.util.List;
 public class MessageApiService implements MessageApi {
 
     @Autowired
-    MessageService messageService;
+    private MessageService messageService;
 
     @Autowired
     private UserService userService;
@@ -65,16 +66,17 @@ public class MessageApiService implements MessageApi {
             case store_box:
             case trash_box:
                 //sender
-                SearchFilter senderFilter = SearchFilter.newSearchFilter("senderId", SearchOperator.eq, userId);
-//                senderFilter.and(SearchFilter.newSearchFilter("senderState", SearchOperator.eq, state));
+
+                SearchFilter senderFilter = SearchFilterHelper.newCondition("senderId", SearchOperator.eq, userId);
+                SearchFilter senderStateFilter = SearchFilterHelper.newCondition("senderState", SearchOperator.eq, state);
+                SearchFilterHelper.and(senderFilter, senderStateFilter);
 
                 //receiver
-                SearchFilter receiverFilter = SearchFilter.newSearchFilter("receiverId", SearchOperator.eq, userId);
-//                receiverFilter.and(SearchFilter.newSearchFilter("senderState", SearchOperator.eq, state));
+                SearchFilter receiverFilter = SearchFilterHelper.newCondition("receiverId", SearchOperator.eq, userId);
+                SearchFilter receiverStateFilter = SearchFilterHelper.newCondition("receiverState", SearchOperator.eq, state);
+                SearchFilterHelper.and(receiverFilter, receiverStateFilter);
 
-                searchable.addOrSearchFilters(senderFilter, Lists.newArrayList(receiverFilter));
-
-
+                searchable.or(senderFilter, receiverFilter);
         }
 
 
@@ -137,7 +139,6 @@ public class MessageApiService implements MessageApi {
             } catch (Exception e) {
                 LogUtils.logError("send system message to all user error", e);
             }
-
             RepositoryHelper.clear();
         } while (page.hasNextPage());
 
@@ -160,71 +161,92 @@ public class MessageApiService implements MessageApi {
 
     @Override
     public void recycle(Long userId, Long messageId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        changeState(userId, messageId, MessageState.trash_box);
     }
-
     @Override
     public void recycle(Long userId, Long[] messageIds) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void resume(Long userId, Long messageId) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void resume(Long userId, Long[] messageIds) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        for(Long messageId : messageIds) {
+            recycle(userId, messageId);
+        }
     }
 
     @Override
     public void store(Long userId, Long messageId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        changeState(userId, messageId, MessageState.store_box);
     }
 
     @Override
     public void store(Long userId, Long[] messageIds) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        for(Long messageId : messageIds) {
+            store(userId, messageId);
+        }
     }
 
     @Override
     public void delete(Long userId, Long messageId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        changeState(userId, messageId, MessageState.delete_box);
     }
 
     @Override
     public void delete(Long userId, Long[] messageIds) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        for(Long messageId : messageIds) {
+            delete(userId, messageId);
+        }
     }
+
+
+    /**
+     * 变更状态
+     * 根据用户id是收件人/发件人 决定更改哪个状态
+     * @param userId
+     * @param messageId
+     * @param state
+     */
+    private void changeState(Long userId, Long messageId, MessageState state) {
+        Message message = messageService.findOne(messageId);
+        if(message == null) {
+            return;
+        }
+        if(userId.equals(message.getSenderId())) {
+            message.changeSenderState(state);
+        } else {
+            message.changeReceiverState(state);
+        }
+        messageService.update(message);
+    }
+
 
     @Override
     public void clearDraftBox(Long userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        clearBox(userId, MessageState.draft_box);
     }
 
     @Override
     public void clearInBox(Long userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        clearBox(userId, MessageState.in_box);
     }
 
     @Override
     public void clearOutBox(Long userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        clearBox(userId, MessageState.out_box);
     }
 
     @Override
     public void clearStoreBox(Long userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        clearBox(userId, MessageState.store_box);
     }
 
     @Override
     public void clearTrashBox(Long userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        clearBox(userId, MessageState.trash_box);
+    }
+
+    private void clearBox(Long userId, MessageState state) {
+        messageService.clearBox(userId, state);
     }
 
     @Override
-    public void countUnread(Long userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Long countUnread(Long userId) {
+        return messageService.countUnread(userId);
     }
 }
