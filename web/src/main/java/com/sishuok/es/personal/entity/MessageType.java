@@ -7,7 +7,10 @@ package com.sishuok.es.personal.entity;
  * <p>Version: 1.0
  */
 public enum MessageType {
-    user_message("普通消息"), system_message("系统消息");
+    user_message("普通消息"),
+    system_message("系统消息"),
+    //目的是保证发给所有人的系统消息只发一次
+    system_message_all("发给所有人的系统消息");
 
     private final String info;
     private MessageType(String info) {

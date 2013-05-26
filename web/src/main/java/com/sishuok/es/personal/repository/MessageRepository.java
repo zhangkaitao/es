@@ -11,6 +11,9 @@ import com.sishuok.es.personal.entity.MessageState;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-22 下午2:39
@@ -19,9 +22,28 @@ import org.springframework.data.jpa.repository.Query;
 public interface MessageRepository extends BaseRepository<Message, Long> {
 
     @Modifying
-    @Query("delete from Message where (senderId=?1 and senderState=?2) or (receiverId=?1 and receiverState=?2)")
-    void clearBox(Long userId, MessageState state);
+    @Query("update Message set senderState=?3,senderStateChangeDate=?4  where (senderId=?1 and senderState=?2)")
+    int changeSenderState(Long senderId, MessageState oldState, MessageState newState, Date changeDate);
+
+    @Modifying
+    @Query("update Message set receiverState=?3,receiverStateChangeDate=?4 where  (receiverId=?1 and receiverState=?2)")
+    int changeReceiverState(Long receiverId, MessageState oldState, MessageState newState, Date changeDate);
+
+
+    @Modifying
+    @Query("update Message set senderState=?2, senderStateChangeDate=?3 where senderState in (?1) and senderStateChangeDate<?4")
+    int changeSenderState(ArrayList<MessageState> states, MessageState oldStates, Date changeDate, Date expireDate);
+
+    @Modifying
+    @Query("update Message set receiverState=?2, receiverStateChangeDate=?3 where receiverState in (?1) and receiverStateChangeDate<?4")
+    int changeReceiverState(ArrayList<MessageState> oldStates, MessageState newState, Date changeDate, Date expireDate);
+
+    @Modifying
+    @Query("delete from Message where senderState=?1 and receiverState=?1")
+    int clearDeletedMessage(MessageState deletedState);
+
 
     @Query("select count(o) from Message o where (receiverId=?1 and receiverState=?2 and read=false)")
     Long countUnread(Long userId, MessageState receiverState);
+
 }

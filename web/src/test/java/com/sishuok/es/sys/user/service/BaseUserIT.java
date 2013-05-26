@@ -68,7 +68,7 @@ public abstract class BaseUserIT extends BaseIT {
 
 
 
-    User createUser(String username, String email, String mobilePhoneNumber, String password) {
+    protected User createUser(String username, String email, String mobilePhoneNumber, String password) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
@@ -78,7 +78,7 @@ public abstract class BaseUserIT extends BaseIT {
         return user;
     }
 
-    User createDefaultUser() {
+    protected User createDefaultUser() {
         return createUser(username, email, mobilePhoneNumber, password);
     }
 

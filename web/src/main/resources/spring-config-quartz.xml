@@ -9,6 +9,7 @@
         <property name="triggers">
             <list>
                 <ref bean="autoClearDeletedRelationTrigger" />
+                <ref bean="autoClearExpiredOrDeletedmMessageTrigger" />
             </list>
         </property>
     </bean>
@@ -25,6 +26,19 @@
         <property name="jobDetail" ref="autoClearDeletedRelationJob" />
         <!-- 每天2点0执行执行 -->
         <property name="cronExpression" value="0 0 2 * * ?" />
+    </bean>
+
+
+    <!--自动清理过期的消息-->
+    <bean id="autoClearExpiredOrDeletedmMessageJob"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="messageClearService" />
+        <property name="targetMethod" value="autoClearExpiredOrDeletedmMessage" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoClearExpiredOrDeletedmMessageTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="autoClearExpiredOrDeletedmMessageJob" />
+        <!-- 每天2点0执行执行 -->
+        <property name="cronExpression" value="0 30 2 * * ?" />
     </bean>
 
 

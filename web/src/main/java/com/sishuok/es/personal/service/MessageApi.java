@@ -12,6 +12,8 @@ import com.sishuok.es.sys.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-22 下午2:52
@@ -29,7 +31,6 @@ public interface MessageApi {
      * @return
      */
     public Page<Message> findUserMessage(Long userId, MessageState state, Pageable pageable);
-
 
     /**
      * 发送消息
@@ -127,11 +128,23 @@ public interface MessageApi {
     public void clearTrashBox(Long userId);
 
     /**
-     * 未读消息总数
+     * 未读收件箱消息总数
      * @param userId
      */
     public Long countUnread(Long userId);
 
+
+    /**
+     * 标识为已读
+     * @param message
+     */
+    public void markRead(Message message);
+
+    /**
+     * 标识为已回复
+     * @param message
+     */
+    public void markReplied(Message message);
 
 
 

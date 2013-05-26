@@ -76,6 +76,7 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
     /**

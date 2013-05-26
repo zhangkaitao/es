@@ -76,7 +76,8 @@ public class AuthRelationClearService {
             authPage = authService.findAll(pageable);
             //开启新事物清除
             try {
-                ((AuthRelationClearService)AopContext.currentProxy()).doClear(authPage.getContent(), allRoleIds);
+                AuthRelationClearService authRelationClearService = (AuthRelationClearService)AopContext.currentProxy();
+                authRelationClearService.doClear(authPage.getContent(), allRoleIds);
             } catch (Exception e) {
                 //出异常也无所谓
                 LogUtils.logError("clear auth relation error", e);

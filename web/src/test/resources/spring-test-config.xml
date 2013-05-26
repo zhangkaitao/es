@@ -18,8 +18,8 @@
 
             <!--测试时 使用REQUIRED-->
             <tx:method name="doReweight" propagation="REQUIRED"/>
-            <tx:method name="doClear" propagation="REQUIRED"/>
-            <tx:method name="doSendSystemMessage" propagation="REQUIRED"/>
+            <tx:method name="doClear*" propagation="REQUIRED"/>
+            <tx:method name="doSend*" propagation="REQUIRED"/>
 
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
             <tx:method name="get*" propagation="REQUIRED" read-only="true" />

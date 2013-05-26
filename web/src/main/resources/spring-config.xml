@@ -80,7 +80,7 @@
                 <entry key="hibernate.cache.use_structured_entries" value="${hibernate.cache.use_structured_entries}"/>
                 <!-- 使用自定义的validator进行jsr303验证 -->
                 <entry key="javax.persistence.validation.factory" value-ref="validator"/>
-                <!-- jsr303验证模式 测试时不需要 -->
+                <!-- jsr303验证模式 因为其要么验证 要么不验证 不能按照规则走 所以此处禁用 -->
                 <entry key="javax.persistence.validation.mode" value="${javax.persistence.validation.mode}"/>
             </map>
         </property>
@@ -114,8 +114,8 @@
         <tx:attributes>
 
             <tx:method name="doReweight" propagation="REQUIRES_NEW"/>
-            <tx:method name="doClear" propagation="REQUIRES_NEW"/>
-            <tx:method name="doSendSystemMessage" propagation="REQUIRES_NEW"/>
+            <tx:method name="doClear*" propagation="REQUIRES_NEW"/>
+            <tx:method name="doSenn*" propagation="REQUIRES_NEW"/>
 
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
             <tx:method name="get*" propagation="REQUIRED" read-only="true" />
@@ -147,7 +147,7 @@
                 <value>classpath:ValidationMessages</value>
             </list>
         </property>
-        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="useCodeAsDefaultMessage" value="false"/>
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="cacheSeconds" value="60"/>
     </bean>

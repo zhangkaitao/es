@@ -55,7 +55,8 @@ public class RoleClearRelationService {
             rolePage = roleService.findAll(pageable);
             //开启新事物清除
             try {
-                ((RoleClearRelationService)AopContext.currentProxy()).doClear(rolePage.getContent());
+                RoleClearRelationService roleClearRelationService = (RoleClearRelationService)AopContext.currentProxy();
+                roleClearRelationService.doClear(rolePage.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
                 LogUtils.logError("clear role relation error", e);

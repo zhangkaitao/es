@@ -74,12 +74,14 @@ public class UserOnline extends AbstractEntity<String> {
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "start_timestsamp")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startTimestamp;
     /**
      * session最后访问时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "last_access_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastAccessTime;
 
     /**

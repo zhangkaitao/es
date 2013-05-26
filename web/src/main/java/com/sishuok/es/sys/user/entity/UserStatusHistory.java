@@ -8,6 +8,7 @@ package com.sishuok.es.sys.user.entity;
 import com.sishuok.es.common.entity.BaseEntity;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -51,6 +52,7 @@ public class UserStatusHistory extends BaseEntity<Long> {
      * 操作时间
      */
     @Column(name = "op_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date opDate;
 
 

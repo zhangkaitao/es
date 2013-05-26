@@ -37,6 +37,7 @@ public class DeletedSample extends BaseEntity<Long> implements LogicDeleteable {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "birthday")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date birthday;
 
     @Column(name = "sex")

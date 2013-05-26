@@ -22,8 +22,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "personal_message_content")
-@EnableQueryCache
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MessageContent extends BaseEntity<Long> {
 
 
@@ -34,7 +32,7 @@ public class MessageContent extends BaseEntity<Long> {
     /**
      * 消息内容
      */
-    @Length(min = 5, max = 50000, message = "{message.content.ilegal.length}")
+    @Length(min = 5, max = 50000, message = "{message.content.length.not.valid}")
     private String content;
 
 

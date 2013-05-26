@@ -8,6 +8,9 @@ package com.sishuok.es.personal.entity;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -21,14 +24,16 @@ import java.util.Date;
  * 3、垃圾箱内的消息只有只有当收件人和发件人 把消息都从垃圾箱中删除后才能物理删除
  * 4、收藏箱的不能删除
  *
+ * 如果type==system_message_all表示是发给所有人的消息 策略如下：
+ * 1、首先在展示时（第一页），会会自动查所有的system_message_all
+ * 2、如果用户阅读了，直接复制一份 放入它的收件箱 状态改为system_message
+ *
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-22 下午1:51
  * <p>Version: 1.0
  */
 @Entity
 @Table(name = "personal_message")
-@EnableQueryCache
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Message extends BaseEntity<Long> {
 
     /**
@@ -47,17 +52,19 @@ public class Message extends BaseEntity<Long> {
      * 消息发送时间
      */
     @Column(name = "send_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date sendDate;
 
     /**
      * 标题
      */
-    @Length(min = 5, max = 200, message = "{message.title.ilegal.length}")
+    @Length(min = 5, max = 200, message = "{message.title.length.not.valid}")
     @Column(name = "title")
     private String title;
 
     @Valid
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="message")
+    @Basic(fetch = FetchType.LAZY)
     private MessageContent content;
 
     /**
@@ -70,6 +77,7 @@ public class Message extends BaseEntity<Long> {
      * 发件人状态改变时间 默认发送时间
      */
     @Column(name = "sender_state_change_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date senderStateChangeDate;
 
     //收件人状态
@@ -80,6 +88,7 @@ public class Message extends BaseEntity<Long> {
      * 收件人状态改变时间 默认发送时间
      */
     @Column(name = "receiver_state_change_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date receiverStateChangeDate;
 
     /**
@@ -90,19 +99,34 @@ public class Message extends BaseEntity<Long> {
     private MessageType type = MessageType.user_message;
 
     /**
+     * 此消息引用的消息Id（一般用于type=system_message_all） 这样的目的：
+     * 1、内容只需存一份
+     * 2、判断用户的消息是否读了系统消息
+     */
+    private Long refId;
+
+    /**
      * 是否已读
      */
+    @Column(name = "`read`")
     private Boolean read = Boolean.FALSE;
     /**
      * 是否已回复
      */
+    @Column(name = "`replied`")
     private Boolean replied = Boolean.FALSE;
+
+    /**
+     * 父编号
+     */
+    @Column(name = "parent_id")
+    private Long parentId;
 
     /**
      * 父消息编号列表 如1/2/3/4
      */
     @Column(name = "parent_ids")
-    private Long parentIds;
+    private String parentIds;
 
     public Long getSenderId() {
         return senderId;
@@ -184,6 +208,13 @@ public class Message extends BaseEntity<Long> {
         this.type = type;
     }
 
+    public Long getRefId() {
+        return refId;
+    }
+
+    public void setRefId(Long refId) {
+        this.refId = refId;
+    }
 
     public Boolean getRead() {
         return read;
@@ -201,35 +232,24 @@ public class Message extends BaseEntity<Long> {
         this.replied = replied;
     }
 
-    public Long getParentIds() {
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentIds() {
         return parentIds;
     }
 
-    public void setParentIds(Long parentIds) {
+    public void setParentIds(String parentIds) {
         this.parentIds = parentIds;
     }
 
-    public void markRead() {
-        if(Boolean.TRUE.equals(this.read)) {
-            return;
-        }
-        this.read = Boolean.TRUE;
+    public String makeSelfAsParentIds() {
+        return (getParentIds() != null ? getParentIds() : "") + getId() + "/";
     }
 
-    public void markReplied() {
-        if(Boolean.TRUE.equals(this.replied)) {
-            return;
-        }
-        this.replied = Boolean.TRUE;
-    }
-
-    public void changeSenderState(MessageState state) {
-        setSenderState(state);
-        setSenderStateChangeDate(new Date());
-    }
-
-    public void changeReceiverState(MessageState state) {
-        setReceiverState(state);
-        setReceiverStateChangeDate(new Date());
-    }
 }

@@ -24,7 +24,7 @@ create table `sys_user`(
   `mobile_phone_number`  varchar(20),
   `password`  varchar(100),
   `salt`       varchar(10),
-  `create_date` timestamp,
+  `create_date` timestamp default 0,
   `status`    varchar(50),
   `deleted`   bool,
   `admin`     bool,
@@ -42,7 +42,7 @@ create table `sys_user_status_history`(
   `status`    varchar(50),
   `reason`     varchar(200),
   `op_user_id`  bigint,
-  `op_date`    timestamp ,
+  `op_date`    timestamp default 0 ,
   constraint `pk_sys_user_block_history` primary key(`id`),
   index `idx_sys_user_block_history_user_id_block_date` (`user_id`,`op_date`),
   index `idx_sys_user_block_history_op_user_id_op_date` (`op_user_id`, `op_date`)
@@ -57,8 +57,8 @@ create table `sys_user_online`(
   `system_host`  varchar(100),
   `user_agent` varchar(200),
   `status`  varchar(50),
-  `start_timestsamp`    timestamp ,
-  `last_access_time`    timestamp ,
+  `start_timestsamp`    timestamp default 0 ,
+  `last_access_time`    timestamp default 0 ,
   `timeout`    bigint ,
   `session` mediumtext,
   constraint `pk_sys_user_online` primary key(`id`),
@@ -80,8 +80,8 @@ create table `sys_user_last_online`(
   `host`    varchar(100),
   `user_agent` varchar(200),
   `system_host`  varchar(100),
-  `last_login_timestamp`    timestamp ,
-  `last_stop_timestamp`    timestamp ,
+  `last_login_timestamp default 0`    timestamp default 0 ,
+  `last_stop_timestamp default 0`    timestamp default 0 ,
   `login_count`    bigint ,
   `total_online_time` bigint,
   constraint `pk_sys_user_last_online` primary key(`id`),
@@ -89,8 +89,8 @@ create table `sys_user_last_online`(
   index `idx_sys_user_last_online_username` (`username`),
   index `idx_sys_user_last_online_host` (`host`),
   index `idx_sys_user_last_online_system_host` (`system_host`),
-  index `idx_sys_user_last_online_last_login_timestamp` (`last_login_timestamp`),
-  index `idx_sys_user_last_online_last_stop_timestamp` (`last_stop_timestamp`),
+  index `idx_sys_user_last_online_last_login_timestamp default 0` (`last_login_timestamp default 0`),
+  index `idx_sys_user_last_online_last_stop_timestamp default 0` (`last_stop_timestamp default 0`),
   index `idx_sys_user_last_online_user_agent` (`user_agent`)
 ) charset=utf8 ENGINE=InnoDB;;
 
@@ -101,7 +101,7 @@ begin
       if not exists(select `user_id` from `sys_user_last_online` where `user_id` = OLD.`user_id`) then
         insert into `sys_user_last_online`
                   (`user_id`, `username`, `uid`, `host`, `user_agent`, `system_host`,
-                   `last_login_timestamp`, `last_stop_timestamp`, `login_count`, `total_online_time`)
+                   `last_login_timestamp default 0`, `last_stop_timestamp default 0`, `login_count`, `total_online_time`)
                 values
                    (OLD.`user_id`,OLD.`username`, OLD.`id`, OLD.`host`, OLD.`user_agent`, OLD.`system_host`,
                     OLD.`start_timestsamp`, OLD.`last_access_time`,
@@ -109,8 +109,8 @@ begin
       else
         update `sys_user_last_online`
           set `username` = OLD.`username`, `uid` = OLD.`id`, `host` = OLD.`host`, `user_agent` = OLD.`user_agent`,
-            `system_host` = OLD.`system_host`, `last_login_timestamp` = OLD.`start_timestsamp`,
-             `last_stop_timestamp` = OLD.`last_access_time`, `login_count` = `login_count` + 1,
+            `system_host` = OLD.`system_host`, `last_login_timestamp default 0` = OLD.`start_timestsamp`,
+             `last_stop_timestamp default 0` = OLD.`last_access_time`, `login_count` = `login_count` + 1,
              `total_online_time` = `total_online_time` + (OLD.`last_access_time` - OLD.`start_timestsamp`)
         where `user_id` = OLD.`user_id`;
       end if ;

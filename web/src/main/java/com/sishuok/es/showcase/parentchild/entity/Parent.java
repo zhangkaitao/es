@@ -6,6 +6,7 @@
 package com.sishuok.es.showcase.parentchild.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -32,10 +33,12 @@ public class Parent extends BaseEntity<Long> {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "beginDate")
+    @Temporal(TemporalType.DATE)
     private Date beginDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "endDate")
+    @Temporal(TemporalType.DATE)
     private Date endDate;
 
     @Column(name = "`show`")

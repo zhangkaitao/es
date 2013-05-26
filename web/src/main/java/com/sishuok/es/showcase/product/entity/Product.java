@@ -8,6 +8,7 @@ package com.sishuok.es.showcase.product.entity;
 import com.sishuok.es.common.entity.BaseEntity;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -47,10 +48,12 @@ public class Product extends BaseEntity<Long> {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "beginDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date beginDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "endDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
     @Column(name = "`show`")

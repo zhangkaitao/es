@@ -69,14 +69,14 @@ public class MessageApiService implements MessageApi {
 
                 SearchFilter senderFilter = SearchFilterHelper.newCondition("senderId", SearchOperator.eq, userId);
                 SearchFilter senderStateFilter = SearchFilterHelper.newCondition("senderState", SearchOperator.eq, state);
-                SearchFilterHelper.and(senderFilter, senderStateFilter);
+                SearchFilter and1 = SearchFilterHelper.and(senderFilter, senderStateFilter);
 
                 //receiver
                 SearchFilter receiverFilter = SearchFilterHelper.newCondition("receiverId", SearchOperator.eq, userId);
                 SearchFilter receiverStateFilter = SearchFilterHelper.newCondition("receiverState", SearchOperator.eq, state);
-                SearchFilterHelper.and(receiverFilter, receiverStateFilter);
+                SearchFilter and2 = SearchFilterHelper.and(receiverFilter, receiverStateFilter);
 
-                searchable.or(senderFilter, receiverFilter);
+                searchable.or(and1, and2);
         }
 
 
@@ -91,6 +91,13 @@ public class MessageApiService implements MessageApi {
         message.setReceiverStateChangeDate(now);
 
         message.getContent().setMessage(message);
+
+        if(message.getParentId() != null) {
+            Message parent = messageService.findOne(message.getParentId());
+            if(parent != null) {
+                message.setParentIds(parent.makeSelfAsParentIds());
+            }
+        }
 
         messageService.save(message);
     }
@@ -208,9 +215,9 @@ public class MessageApiService implements MessageApi {
             return;
         }
         if(userId.equals(message.getSenderId())) {
-            message.changeSenderState(state);
+            changeSenderState(message, state);
         } else {
-            message.changeReceiverState(state);
+            changeReceiverState(message, state);
         }
         messageService.update(message);
     }
@@ -218,35 +225,76 @@ public class MessageApiService implements MessageApi {
 
     @Override
     public void clearDraftBox(Long userId) {
-        clearBox(userId, MessageState.draft_box);
+        clearBox(userId, MessageState.draft_box, MessageState.trash_box);
     }
 
     @Override
     public void clearInBox(Long userId) {
-        clearBox(userId, MessageState.in_box);
+        clearBox(userId, MessageState.in_box, MessageState.trash_box);
     }
 
     @Override
     public void clearOutBox(Long userId) {
-        clearBox(userId, MessageState.out_box);
+        clearBox(userId, MessageState.out_box, MessageState.trash_box);
     }
 
     @Override
     public void clearStoreBox(Long userId) {
-        clearBox(userId, MessageState.store_box);
+        clearBox(userId, MessageState.store_box, MessageState.trash_box);
     }
 
     @Override
     public void clearTrashBox(Long userId) {
-        clearBox(userId, MessageState.trash_box);
+        clearBox(userId, MessageState.trash_box, MessageState.delete_box);
     }
 
-    private void clearBox(Long userId, MessageState state) {
-        messageService.clearBox(userId, state);
+    private void clearBox(Long userId, MessageState oldState, MessageState newState) {
+        if(oldState == MessageState.draft_box
+                || oldState == MessageState.out_box
+                || oldState == MessageState.store_box
+                || oldState == MessageState.trash_box) {
+
+            messageService.changeSenderState(userId, oldState, newState);
+        }
+
+        if(oldState == MessageState.in_box
+                || oldState == MessageState.store_box
+                || oldState == MessageState.trash_box) {
+            messageService.changeReceiverState(userId, oldState, newState);
+        }
+
     }
 
     @Override
     public Long countUnread(Long userId) {
         return messageService.countUnread(userId);
+    }
+
+    @Override
+    public void markRead(Message message) {
+        if (Boolean.TRUE.equals(message.getRead())) {
+            return;
+        }
+        message.setRead(Boolean.TRUE);
+        messageService.update(message);
+    }
+
+    @Override
+    public void markReplied(Message message) {
+        if (Boolean.TRUE.equals(message.getReplied())) {
+            return;
+        }
+        message.setReplied(Boolean.TRUE);
+        messageService.update(message);
+    }
+
+    private void changeSenderState(Message message, MessageState state) {
+        message.setSenderState(state);
+        message.setSenderStateChangeDate(new Date());
+    }
+
+    private void changeReceiverState(Message message, MessageState state) {
+        message.setReceiverState(state);
+        message.setReceiverStateChangeDate(new Date());
     }
 }

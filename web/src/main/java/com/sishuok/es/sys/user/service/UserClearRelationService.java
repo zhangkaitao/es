@@ -61,7 +61,8 @@ public class UserClearRelationService {
 
             //开启新事物清除
             try {
-                ((UserClearRelationService)AopContext.currentProxy()).doClear(page.getContent());
+                UserClearRelationService userClearRelationService = (UserClearRelationService)AopContext.currentProxy();
+                userClearRelationService.doClear(page.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
                 LogUtils.logError("clear user relation error", e);
