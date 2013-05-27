@@ -17,6 +17,7 @@
     <name>common</name>
     <url>https://github.com/zhangkaitao/es/common</url>
 
+
     <properties>
         <support.basedir>${project.parent.parent.basedir}/src/support</support.basedir>
         <site.basedir>${project.parent.parent.basedir}</site.basedir>

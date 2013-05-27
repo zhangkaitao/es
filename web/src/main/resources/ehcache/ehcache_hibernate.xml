@@ -11,7 +11,7 @@
             overflowToDisk="false">
     </defaultCache>
 
-    <cache name="cn.javass.demo.model.UserModel"
+    <cache name="com.javass.demo.model.UserModel"
            maxElementsInMemory="2000"
            eternal="false"
            timeToIdleSeconds="3600"

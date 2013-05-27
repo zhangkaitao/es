@@ -649,6 +649,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- html处理jar包 -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <properties>
@@ -705,6 +714,8 @@
         <joda-time.version>2.1</joda-time.version>
         <prettytime.version>2.1.2.Final</prettytime.version>
         <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
+
+        <jsoup.version>1.7.2</jsoup.version>
     </properties>
 
 </project>

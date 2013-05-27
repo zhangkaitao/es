@@ -112,6 +112,7 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
+                    <include>**/*.text</include>
                     <include>**/*.xml</include>
                     <include>**/*.tld</include>
                 </includes>
