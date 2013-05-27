@@ -39,7 +39,7 @@ public class ForbiddenWordUtils {
             System.getProperty("sishuok.forbidden.words.fetch.url");
 
     /**
-     * 屏蔽关键词抓取时间间隔
+     * 屏蔽关键词抓取时间间隔 毫秒
      */
     private static final int RELOAD_INTERVAL =
             Integer.valueOf(System.getProperty("sishuok.forbidden.words.reload.interval", "600000")).intValue();
@@ -138,9 +138,5 @@ public class ForbiddenWordUtils {
             IOUtils.closeQuietly(reader);
         }
     }
-
-
-
-
 
 }

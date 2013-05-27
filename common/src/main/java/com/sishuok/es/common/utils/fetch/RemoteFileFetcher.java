@@ -73,7 +73,7 @@ public class RemoteFileFetcher {
             URL target = new URL(this.url);
             this.fileConent = IOUtils.toByteArray(target);
             this.lastModified = System.currentTimeMillis();
-            if(this.listener != null) {
+            if(this.listener != null && this.fileConent != null) {
                 this.listener.fileReloaded(this.fileConent);
             }
         } catch (Exception e) {

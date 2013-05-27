@@ -230,7 +230,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>1.6</version>
+                                    <version>${jdk.version}</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -265,6 +265,19 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javax.servlet</artifactId>
+                    <groupId>org.eclipse.jetty.orbit</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- cglib asm 相关jar包-->
@@ -680,6 +693,7 @@
         <mockito.version>1.9.5</mockito.version>
         <powermock.version>1.5</powermock.version>
         <h2.version>1.3.170</h2.version>
+        <jetty.version>8.1.8.v20121106</jetty.version>
 
         <servlet.version>3.0.1</servlet.version>
         <jsp.version>2.2</jsp.version>
