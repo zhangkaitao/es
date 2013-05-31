@@ -32,6 +32,7 @@ public class JobService extends BaseTreeableService<Job, Long> {
 
     /**
      * 过滤仅获取可显示的数据
+     *
      * @param jobIds
      * @param organizationJobIds
      */
@@ -49,7 +50,7 @@ public class JobService extends BaseTreeableService<Job, Long> {
 
         Iterator<Long[]> iter2 = organizationJobIds.iterator();
 
-        while(iter2.hasNext()) {
+        while (iter2.hasNext()) {
             Long id = iter2.next()[1];
             Job o = findOne(id);
             if (o == null || Boolean.FALSE.equals(o.getShow())) {

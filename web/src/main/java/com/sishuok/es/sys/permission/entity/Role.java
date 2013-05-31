@@ -84,7 +84,7 @@ public class Role extends BaseEntity<Long> {
     }
 
     public List<RoleResourcePermission> getResourcePermissions() {
-        if(resourcePermissions == null) {
+        if (resourcePermissions == null) {
             resourcePermissions = Lists.newArrayList();
         }
         return resourcePermissions;

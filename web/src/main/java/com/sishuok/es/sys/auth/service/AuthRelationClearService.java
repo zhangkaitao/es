@@ -31,7 +31,7 @@ import java.util.Set;
  * 1、Auth-Role
  * 2、Auth-Organization/Job
  * 3、Auth-Group
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-18 下午1:44
  * <p>Version: 1.0
@@ -72,7 +72,7 @@ public class AuthRelationClearService {
             authPage = authService.findAll(pageable);
             //开启新事物清除
             try {
-                AuthRelationClearService authRelationClearService = (AuthRelationClearService)AopContext.currentProxy();
+                AuthRelationClearService authRelationClearService = (AuthRelationClearService) AopContext.currentProxy();
                 authRelationClearService.doClear(authPage.getContent(), allRoleIds);
             } catch (Exception e) {
                 //出异常也无所谓
@@ -84,26 +84,26 @@ public class AuthRelationClearService {
     }
 
     public void doClear(Collection<Auth> authColl, Set<Long> allRoleIds) {
-        for(Auth auth : authColl) {
+        for (Auth auth : authColl) {
             switch (auth.getType()) {
                 case user:
                     break;//因为用户是逻辑删除不用管
                 case user_group:
                 case organization_group:
-                    if(!groupService.exists(auth.getGroupId())) {
+                    if (!groupService.exists(auth.getGroupId())) {
                         authService.delete(auth);
                         continue;
                     }
                     break;
                 case organization_job:
-                    if(!organizationService.exists(auth.getOrganizationId())) {
+                    if (!organizationService.exists(auth.getOrganizationId())) {
                         auth.setOrganizationId(0L);
                     }
-                    if(!jobService.exists(auth.getOrganizationId())) {
+                    if (!jobService.exists(auth.getOrganizationId())) {
                         auth.setJobId(0L);
                     }
                     //如果组织机构/工作职务都为0L 那么可以删除
-                    if(auth.getOrganizationId() == 0L && auth.getJobId() == 0L) {
+                    if (auth.getOrganizationId() == 0L && auth.getJobId() == 0L) {
                         authService.delete(auth);
                         continue;
                     }
@@ -111,7 +111,7 @@ public class AuthRelationClearService {
             }
 
             boolean hasRemovedAny = auth.getRoleIds().retainAll(allRoleIds);
-            if(hasRemovedAny) {
+            if (hasRemovedAny) {
                 authService.update(auth);
             }
         }

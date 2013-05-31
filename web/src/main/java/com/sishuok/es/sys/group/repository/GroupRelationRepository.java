@@ -24,6 +24,7 @@ public interface GroupRelationRepository extends BaseRepository<GroupRelation, L
 
     /**
      * 范围查 如果在指定范围内 就没必要再新增一个 如当前是[10,20] 如果数据库有[9,21] 10<=9 and 21>=20
+     *
      * @param groupId
      * @param startUserId
      * @param endUserId
@@ -33,6 +34,7 @@ public interface GroupRelationRepository extends BaseRepository<GroupRelation, L
 
     /**
      * 删除区间内的数据 因为之前已经有一个区间包含它们了
+     *
      * @param startUserId
      * @param endUserId
      */

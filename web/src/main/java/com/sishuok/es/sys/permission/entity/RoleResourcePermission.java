@@ -28,9 +28,9 @@ import java.util.Set;
         name = "SetToStringUserType",
         typeClass = CollectionToStringUserType.class,
         parameters = {
-                 @Parameter(name = "separator", value = ","),
-                 @Parameter(name = "collectionType", value = "java.util.HashSet"),
-                 @Parameter(name = "elementType", value = "java.lang.Long")
+                @Parameter(name = "separator", value = ","),
+                @Parameter(name = "collectionType", value = "java.util.HashSet"),
+                @Parameter(name = "elementType", value = "java.lang.Long")
         }
 )
 @Entity
@@ -52,14 +52,14 @@ public class RoleResourcePermission extends BaseEntity<Long> {
     /**
      * 资源id
      */
-    @Column(name ="resource_id")
+    @Column(name = "resource_id")
     private Long resourceId;
 
     /**
      * 权限id列表
      * 数据库通过字符串存储 逗号分隔
      */
-    @Column(name ="permission_ids")
+    @Column(name = "permission_ids")
     @Type(type = "SetToStringUserType")
     private Set<Long> permissionIds;
 
@@ -92,7 +92,7 @@ public class RoleResourcePermission extends BaseEntity<Long> {
     }
 
     public Set<Long> getPermissionIds() {
-        if(permissionIds == null) {
+        if (permissionIds == null) {
             permissionIds = Sets.newHashSet();
         }
         return permissionIds;

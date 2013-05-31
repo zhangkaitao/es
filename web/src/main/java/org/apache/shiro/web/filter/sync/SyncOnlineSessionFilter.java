@@ -15,7 +15,7 @@ import javax.servlet.ServletResponse;
 
 /**
  * 同步当前会话数据到数据库
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-3-21 下午5:53
  * <p>Version: 1.0
@@ -31,6 +31,7 @@ public class SyncOnlineSessionFilter extends PathMatchingFilter {
 
     /**
      * 同步会话数据到DB 一次请求最多同步一次 防止过多处理  需要放到Shiro过滤器之前
+     *
      * @param request
      * @param response
      * @return

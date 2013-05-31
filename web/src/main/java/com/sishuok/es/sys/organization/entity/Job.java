@@ -111,13 +111,13 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
     }
 
     public String getIcon() {
-        if(!StringUtils.isEmpty(icon)) {
+        if (!StringUtils.isEmpty(icon)) {
             return icon;
         }
-        if(isRoot()) {
+        if (isRoot()) {
             return getRootDefaultIcon();
         }
-        if(isLeaf()) {
+        if (isLeaf()) {
             return getLeafDefaultIcon();
         }
         return getBranchDefaultIcon();
@@ -130,7 +130,7 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
 
     @Override
     public boolean isRoot() {
-        if(getParentId() != null && getParentId() == 0) {
+        if (getParentId() != null && getParentId() == 0) {
             return true;
         }
         return false;
@@ -139,10 +139,10 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
 
     @Override
     public boolean isLeaf() {
-        if(isRoot()) {
+        if (isRoot()) {
             return false;
         }
-        if(isHasChildren()) {
+        if (isHasChildren()) {
             return false;
         }
 
@@ -166,9 +166,9 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
     }
 
 
-
     /**
      * 根节点默认图标 如果没有默认 空即可
+     *
      * @return
      */
     @Override
@@ -178,6 +178,7 @@ public class Job extends BaseEntity<Long> implements Treeable<Long> {
 
     /**
      * 树枝节点默认图标 如果没有默认 空即可
+     *
      * @return
      */
     @Override

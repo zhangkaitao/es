@@ -50,9 +50,9 @@ public class PasswordService {
         int retryCount = 0;
 
         Element cacheElement = loginRecordCache.get(username);
-        if(cacheElement != null) {
+        if (cacheElement != null) {
             retryCount = (Integer) cacheElement.getObjectValue();
-            if(retryCount >= maxRetryCount) {
+            if (retryCount >= maxRetryCount) {
                 UserLogUtils.log(
                         username,
                         "passwordError",
@@ -62,7 +62,7 @@ public class PasswordService {
             }
         }
 
-        if(!matches(user, password)) {
+        if (!matches(user, password)) {
             loginRecordCache.put(new Element(username, ++retryCount));
             UserLogUtils.log(
                     username,
@@ -87,10 +87,6 @@ public class PasswordService {
     public String encryptPassword(String username, String password, String salt) {
         return Md5Utils.hash(username + password + salt);
     }
-
-
-
-
 
 
 }

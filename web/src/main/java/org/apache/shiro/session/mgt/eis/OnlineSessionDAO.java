@@ -17,9 +17,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- *
  * 对于db的操作 考虑使用 异步+队列机制
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-3-19 下午4:49
  * <p>Version: 1.0
@@ -49,7 +48,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
     @Override
     protected Session doReadSession(Serializable sessionId) {
         UserOnline userOnline = userOnlineService.findOne(String.valueOf(sessionId));
-        if(userOnline == null) {
+        if (userOnline == null) {
             return null;
         }
         return onlineSessionFactory.createSession(userOnline);
@@ -57,6 +56,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
 
     /**
      * 将会话同步到DB
+     *
      * @param session
      */
     public void syncToDb(OnlineSession session) {
@@ -65,20 +65,20 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
 
         //当会话中的属性改变时-->强制同步
         //如果对于属性丢失影响不大 可以考虑把这块功能去掉
-        if(lastSyncTimestamp != null) {
+        if (lastSyncTimestamp != null) {
             boolean needSync = true;
             long deltaTime = session.getLastAccessTime().getTime() - lastSyncTimestamp.getTime();
-            if(deltaTime < dbSyncPeriod) { //时间差不足  无需同步
+            if (deltaTime < dbSyncPeriod) { //时间差不足  无需同步
                 needSync = false;
             }
             boolean isGuest = session.getUserId() == null || session.getUserId() == 0L;
 
             //如果不是游客 且session 数据变更了 同步
-            if(isGuest == false && session.isAttributeChanged()) {
+            if (isGuest == false && session.isAttributeChanged()) {
                 needSync = true;
             }
 
-            if(needSync == false) {
+            if (needSync == false) {
                 return;
             }
         }
@@ -86,7 +86,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
         session.setAttribute(LAST_SYNC_DB_TIMESTAMP, session.getLastAccessTime());
 
         //更新完后 重置标识
-        if(session.isAttributeChanged()) {
+        if (session.isAttributeChanged()) {
             session.resetAttributeChanged();
         }
 
@@ -96,13 +96,14 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO {
 
     /**
      * 会话过期时 离线处理
+     *
      * @param session
      */
     @Override
     protected void doDelete(Session session) {
-        OnlineSession onlineSession = (OnlineSession)session;
+        OnlineSession onlineSession = (OnlineSession) session;
         //定时任务删除的此时就不删除了
-        if(onlineSession.getAttribute(ShiroConstants.ONLY_CLEAR_CACHE) == null) {
+        if (onlineSession.getAttribute(ShiroConstants.ONLY_CLEAR_CACHE) == null) {
             try {
                 userOnlineService.offline(String.valueOf(onlineSession.getId()));
             } catch (Exception e) {

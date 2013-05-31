@@ -47,7 +47,7 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Tree tree = treeService.findOne(id);
             tree.setShow(newStatus);
             treeService.update(tree);
@@ -56,7 +56,6 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
-
 
 
 }

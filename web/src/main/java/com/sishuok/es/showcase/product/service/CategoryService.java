@@ -25,5 +25,4 @@ public class CategoryService extends BaseMovableService<Category, Long> {
     private CategoryRepository categoryRepository;
 
 
-
 }

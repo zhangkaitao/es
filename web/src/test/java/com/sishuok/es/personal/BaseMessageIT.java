@@ -33,7 +33,6 @@ public abstract class BaseMessageIT extends BaseUserIT {
     Long receiverId = 2L;
 
 
-
     Message sendDefaultMessage() {
         Message message = new Message();
         message.setSenderId(senderId);

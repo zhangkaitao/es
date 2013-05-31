@@ -56,7 +56,7 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
             @Valid @ModelAttribute("m") Upload upload, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
-        if(!file.isEmpty()) {
+        if (!file.isEmpty()) {
             upload.setSrc(FileUploadUtils.upload(request, file, result));
         }
         return super.create(model, upload, result, redirectAttributes);
@@ -77,7 +77,7 @@ public class UploadController extends BaseCRUDController<Upload, Long> {
             @RequestParam(value = "BackURL") String backURL,
             RedirectAttributes redirectAttributes) {
 
-        if(!file.isEmpty()) {
+        if (!file.isEmpty()) {
             upload.setSrc(FileUploadUtils.upload(request, file, result));
         }
         return super.update(model, upload, result, backURL, redirectAttributes);

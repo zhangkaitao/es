@@ -26,9 +26,11 @@ public class OnlineSession extends SimpleSession {
     public static enum OnlineStatus {
         on_line("在线"), hidden("隐身"), force_logout("强制退出");
         private final String info;
+
         private OnlineStatus(String info) {
             this.info = info;
         }
+
         public String getInfo() {
             return info;
         }
@@ -93,6 +95,7 @@ public class OnlineSession extends SimpleSession {
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
+
     public OnlineStatus getStatus() {
         return status;
     }
@@ -117,9 +120,11 @@ public class OnlineSession extends SimpleSession {
     public void markAttributeChanged() {
         this.attributeChanged = true;
     }
+
     public void resetAttributeChanged() {
         this.attributeChanged = false;
     }
+
     public boolean isAttributeChanged() {
         return attributeChanged;
     }

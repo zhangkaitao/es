@@ -57,7 +57,6 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     }
 
 
-
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)
     @Override
     public String create(
@@ -70,12 +69,11 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     @Override
     public String update(
             Model model, @Valid @ModelAttribute("m") Role m, BindingResult result,
-            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
         throw new RuntimeException("discarded method");
     }
-
 
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -106,14 +104,14 @@ public class RoleController extends BaseCRUDController<Role, Long> {
     }
 
     private void fillResourcePermission(Role role, Long[] resourceIds, Long[][] permissionIds) {
-         int resourceLength = resourceIds.length;
-        if(resourceIds.length == 0) {
+        int resourceLength = resourceIds.length;
+        if (resourceIds.length == 0) {
             return;
         }
 
-        if(resourceLength == 1) { //如果长度为1  那么permissionIds就变成如[[0],[1],[2]]这种
+        if (resourceLength == 1) { //如果长度为1  那么permissionIds就变成如[[0],[1],[2]]这种
             Set<Long> permissionIdSet = Sets.newHashSet();
-            for(Long[] permissionId : permissionIds) {
+            for (Long[] permissionId : permissionIds) {
                 permissionIdSet.add(permissionId[0]);
             }
             role.addResourcePermission(
@@ -121,7 +119,7 @@ public class RoleController extends BaseCRUDController<Role, Long> {
             );
 
         } else {
-            for(int i = 0; i < resourceLength; i++) {
+            for (int i = 0; i < resourceLength; i++) {
                 role.addResourcePermission(
                         new RoleResourcePermission(resourceIds[i], Sets.newHashSet(permissionIds[i]))
                 );
@@ -140,7 +138,7 @@ public class RoleController extends BaseCRUDController<Role, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Role role = roleService.findOne(id);
             role.setShow(newStatus);
             roleService.update(role);

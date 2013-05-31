@@ -93,13 +93,13 @@ public class MessageApiService implements MessageApi {
 
         SearchFilter filter = null;
         //祖先 不为空 从祖先查起
-        if(!StringUtils.isEmpty(message.getParentIds())) {
+        if (!StringUtils.isEmpty(message.getParentIds())) {
             String ancestorsId = message.getParentIds().split("/")[0];
             filter = SearchFilterHelper.or(
                     SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, ancestorsId + "/"),
                     SearchFilterHelper.newCondition("id", SearchOperator.eq, ancestorsId)
             );
-        } else  {
+        } else {
             //祖先为空 查自己的后代
             String descendantsParentIds = message.makeSelfAsParentIds();
             filter = SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, descendantsParentIds);
@@ -111,15 +111,15 @@ public class MessageApiService implements MessageApi {
         result.remove(message);
 
         //删除 不可见的消息 如垃圾箱/已删除
-        for(int i = result.size() - 1; i >= 0; i--) {
+        for (int i = result.size() - 1; i >= 0; i--) {
             Message m = result.get(i);
 
-            if(m.getSenderId() == message.getSenderId() &&
+            if (m.getSenderId() == message.getSenderId() &&
                     (m.getSenderState() == MessageState.trash_box || m.getSenderState() == MessageState.delete_box)) {
                 result.remove(i);
             }
 
-            if(m.getReceiverId() == message.getSenderId() &&
+            if (m.getReceiverId() == message.getSenderId() &&
                     (m.getSenderState() == MessageState.trash_box || m.getSenderState() == MessageState.delete_box)) {
                 result.remove(i);
             }
@@ -132,7 +132,7 @@ public class MessageApiService implements MessageApi {
     public void saveDraft(Message message) {
         message.setSenderState(MessageState.draft_box);
         message.setReceiverState(null);
-        if(message.getContent() != null) {
+        if (message.getContent() != null) {
             message.getContent().setMessage(message);
         }
         messageService.save(message);
@@ -149,9 +149,9 @@ public class MessageApiService implements MessageApi {
 
         message.getContent().setMessage(message);
 
-        if(message.getParentId() != null) {
+        if (message.getParentId() != null) {
             Message parent = messageService.findOne(message.getParentId());
-            if(parent != null) {
+            if (parent != null) {
                 message.setParentIds(parent.makeSelfAsParentIds());
             }
         }
@@ -163,8 +163,8 @@ public class MessageApiService implements MessageApi {
     public void sendSystemMessage(Long[] receiverIds, Message message) {
         message.setType(MessageType.system_message);
 
-        for(Long receiverId : receiverIds) {
-            if(receiverId == null) {
+        for (Long receiverId : receiverIds) {
+            if (receiverId == null) {
                 continue;
             }
             Message copyMessage = new Message();
@@ -199,7 +199,7 @@ public class MessageApiService implements MessageApi {
             page = userService.findAll(pageable);
 
             try {
-                ((MessageApiService)AopContext.currentProxy()).doSendSystemMessage(page.getContent(), message);
+                ((MessageApiService) AopContext.currentProxy()).doSendSystemMessage(page.getContent(), message);
             } catch (Exception e) {
                 LogUtils.logError("send system message to all user error", e);
             }
@@ -212,8 +212,8 @@ public class MessageApiService implements MessageApi {
     public void doSendSystemMessage(List<User> receivers, Message message) {
         List<Long> receiverIds = Lists.newArrayList();
 
-        for(User receiver : receivers) {
-            if(Boolean.TRUE.equals(receiver.getDeleted()) || receiver.getStatus() != UserStatus.normal) {
+        for (User receiver : receivers) {
+            if (Boolean.TRUE.equals(receiver.getDeleted()) || receiver.getStatus() != UserStatus.normal) {
                 continue;
             }
 
@@ -227,9 +227,10 @@ public class MessageApiService implements MessageApi {
     public void recycle(Long userId, Long messageId) {
         changeState(userId, messageId, MessageState.trash_box);
     }
+
     @Override
     public void recycle(Long userId, Long[] messageIds) {
-        for(Long messageId : messageIds) {
+        for (Long messageId : messageIds) {
             recycle(userId, messageId);
         }
     }
@@ -241,7 +242,7 @@ public class MessageApiService implements MessageApi {
 
     @Override
     public void store(Long userId, Long[] messageIds) {
-        for(Long messageId : messageIds) {
+        for (Long messageId : messageIds) {
             store(userId, messageId);
         }
     }
@@ -253,7 +254,7 @@ public class MessageApiService implements MessageApi {
 
     @Override
     public void delete(Long userId, Long[] messageIds) {
-        for(Long messageId : messageIds) {
+        for (Long messageId : messageIds) {
             delete(userId, messageId);
         }
     }
@@ -262,16 +263,17 @@ public class MessageApiService implements MessageApi {
     /**
      * 变更状态
      * 根据用户id是收件人/发件人 决定更改哪个状态
+     *
      * @param userId
      * @param messageId
      * @param state
      */
     private void changeState(Long userId, Long messageId, MessageState state) {
         Message message = messageService.findOne(messageId);
-        if(message == null) {
+        if (message == null) {
             return;
         }
-        if(userId.equals(message.getSenderId())) {
+        if (userId.equals(message.getSenderId())) {
             changeSenderState(message, state);
         } else {
             changeReceiverState(message, state);
@@ -329,7 +331,7 @@ public class MessageApiService implements MessageApi {
     }
 
     private void clearBox(Long userId, MessageState oldState, MessageState newState) {
-        if(oldState == MessageState.draft_box
+        if (oldState == MessageState.draft_box
                 || oldState == MessageState.out_box
                 || oldState == MessageState.store_box
                 || oldState == MessageState.trash_box) {
@@ -337,7 +339,7 @@ public class MessageApiService implements MessageApi {
             messageService.changeSenderState(userId, oldState, newState);
         }
 
-        if(oldState == MessageState.in_box
+        if (oldState == MessageState.in_box
                 || oldState == MessageState.store_box
                 || oldState == MessageState.trash_box) {
             messageService.changeReceiverState(userId, oldState, newState);

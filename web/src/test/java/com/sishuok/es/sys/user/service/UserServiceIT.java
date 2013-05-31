@@ -64,8 +64,6 @@ public class UserServiceIT extends BaseUserIT {
     }
 
 
-
-
     @Test(expected = UserBlockedException.class)
     public void testLoginFailWithStatusBlocked() {
         User user = createUser(username, email, mobilePhoneNumber, password);
@@ -76,7 +74,7 @@ public class UserServiceIT extends BaseUserIT {
     @Test(expected = UserPasswordRetryLimitExceedException.class)
     public void testLoginFailWithRetryLimitExceed() {
         User user = createUser(username, email, mobilePhoneNumber, password);
-        for(int i = 0; i < maxtRetryCount; i++) {
+        for (int i = 0; i < maxtRetryCount; i++) {
             try {
                 userService.login(username, password + "1");
             } catch (UserPasswordNotMatchException e) {
@@ -85,8 +83,6 @@ public class UserServiceIT extends BaseUserIT {
         userService.login(username, password + "1");
         passwordService.clearLoginRecordCache(username);
     }
-
-
 
 
 }

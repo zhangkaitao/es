@@ -85,7 +85,7 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     /**
      * 是否是管理员
      */
-    private Boolean admin =false;
+    private Boolean admin = false;
 
     /**
      * 逻辑删除flag
@@ -113,9 +113,8 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     }
 
 
-
     public List<UserOrganizationJob> getOrganizationJobs() {
-        if(organizationJobs == null) {
+        if (organizationJobs == null) {
             organizationJobs = Lists.newArrayList();
         }
         return organizationJobs;
@@ -135,16 +134,16 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
 
     @Transient
     public Map<Long, List<UserOrganizationJob>> getDisplayOrganizationJobs() {
-        if(organizationJobsMap != null) {
+        if (organizationJobsMap != null) {
             return organizationJobsMap;
         }
 
         organizationJobsMap = Maps.newHashMap();
 
-        for(UserOrganizationJob userOrganizationJob : getOrganizationJobs()) {
+        for (UserOrganizationJob userOrganizationJob : getOrganizationJobs()) {
             Long organizationId = userOrganizationJob.getOrganizationId();
             List<UserOrganizationJob> userOrganizationJobList = organizationJobsMap.get(organizationId);
-            if(userOrganizationJobList == null) {
+            if (userOrganizationJobList == null) {
                 userOrganizationJobList = Lists.newArrayList();
                 organizationJobsMap.put(organizationId, userOrganizationJobList);
             }

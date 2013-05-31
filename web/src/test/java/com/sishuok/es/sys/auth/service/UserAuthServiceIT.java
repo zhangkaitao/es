@@ -139,8 +139,6 @@ public class UserAuthServiceIT extends BaseIT {
     }
 
 
-
-
     /////////////////////////////组织机构相关
     @Test
     public void testOrganizationAuth() {
@@ -217,7 +215,6 @@ public class UserAuthServiceIT extends BaseIT {
         Assert.assertFalse(permissions.contains("example:deleted:all"));
         Assert.assertFalse(permissions.contains("example:example:none"));
     }
-
 
 
     /////////////////////////////工作职务相关

@@ -27,5 +27,4 @@ public class PermissionService extends BaseService<Permission, Long> {
     private PermissionRepository permissionRepository;
 
 
-
 }

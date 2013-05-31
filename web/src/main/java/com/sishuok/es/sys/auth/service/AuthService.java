@@ -41,19 +41,19 @@ public class AuthService extends BaseService<Auth, Long> {
 
     public void addUserAuth(Long[] userIds, Auth m) {
 
-        if(ArrayUtils.isEmpty(userIds)) {
+        if (ArrayUtils.isEmpty(userIds)) {
             return;
         }
 
-        for(Long userId : userIds) {
+        for (Long userId : userIds) {
 
             User user = userService.findOne(userId);
-            if(user == null) {
+            if (user == null) {
                 continue;
             }
 
             Auth auth = authRepository.findByUserId(userId);
-            if(auth != null) {
+            if (auth != null) {
                 auth.addRoleIds(m.getRoleIds());
                 continue;
             }
@@ -66,18 +66,18 @@ public class AuthService extends BaseService<Auth, Long> {
     }
 
     public void addGroupAuth(Long[] groupIds, Auth m) {
-        if(ArrayUtils.isEmpty(groupIds)) {
+        if (ArrayUtils.isEmpty(groupIds)) {
             return;
         }
 
-        for(Long groupId : groupIds) {
+        for (Long groupId : groupIds) {
             Group group = groupService.findOne(groupId);
-            if(group == null) {
+            if (group == null) {
                 continue;
             }
 
             Auth auth = authRepository.findByGroupId(groupId);
-            if(auth != null) {
+            if (auth != null) {
                 auth.addRoleIds(m.getRoleIds());
                 continue;
             }
@@ -91,12 +91,12 @@ public class AuthService extends BaseService<Auth, Long> {
 
     public void addOrganizationJobAuth(Long[] organizationIds, Long[][] jobIds, Auth m) {
 
-        if(ArrayUtils.isEmpty(organizationIds)) {
+        if (ArrayUtils.isEmpty(organizationIds)) {
             return;
         }
         for (int i = 0, l = organizationIds.length; i < l; i++) {
             Long organizationId = organizationIds[i];
-            if(jobIds[i].length == 0) {
+            if (jobIds[i].length == 0) {
                 addOrganizationJobAuth(organizationId, null, m);
                 continue;
             }
@@ -118,16 +118,16 @@ public class AuthService extends BaseService<Auth, Long> {
     }
 
     private void addOrganizationJobAuth(Long organizationId, Long jobId, Auth m) {
-        if(organizationId == null) {
+        if (organizationId == null) {
             organizationId = 0L;
         }
-        if(jobId == null) {
+        if (jobId == null) {
             jobId = 0L;
         }
 
 
         Auth auth = authRepository.findByOrganizationIdAndJobId(organizationId, jobId);
-        if(auth != null) {
+        if (auth != null) {
             auth.addRoleIds(m.getRoleIds());
             return;
         }
@@ -144,15 +144,16 @@ public class AuthService extends BaseService<Auth, Long> {
 
     /**
      * 根据用户信息获取 角色
-     *  1.1、用户  根据用户绝对匹配
-     *  1.2、组织机构 根据组织机构绝对匹配 此处需要注意 祖先需要自己获取
-     *  1.3、工作职务 根据工作职务绝对匹配 此处需要注意 祖先需要自己获取
-     *  1.4、组织机构和工作职务  根据组织机构和工作职务绝对匹配 此处不匹配祖先
-     *  1.5、组  根据组绝对匹配
-     * @param userId 必须有
-     * @param groupIds  可选
-     * @param organizationIds 可选
-     * @param jobIds 可选
+     * 1.1、用户  根据用户绝对匹配
+     * 1.2、组织机构 根据组织机构绝对匹配 此处需要注意 祖先需要自己获取
+     * 1.3、工作职务 根据工作职务绝对匹配 此处需要注意 祖先需要自己获取
+     * 1.4、组织机构和工作职务  根据组织机构和工作职务绝对匹配 此处不匹配祖先
+     * 1.5、组  根据组绝对匹配
+     *
+     * @param userId             必须有
+     * @param groupIds           可选
+     * @param organizationIds    可选
+     * @param jobIds             可选
      * @param organizationJobIds 可选
      * @return
      */

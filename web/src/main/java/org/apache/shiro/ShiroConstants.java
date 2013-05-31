@@ -12,7 +12,7 @@ package org.apache.shiro;
  */
 public interface ShiroConstants {
     /**
-     *  当前在线会话
+     * 当前在线会话
      */
     String ONLINE_SESSION = "online_session";
 

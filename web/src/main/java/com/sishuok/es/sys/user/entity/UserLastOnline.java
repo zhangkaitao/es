@@ -86,7 +86,6 @@ public class UserLastOnline extends BaseEntity<Long> {
     private Long totalOnlineTime = 0L;
 
 
-
     public String getUid() {
         return uid;
     }

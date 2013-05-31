@@ -41,7 +41,8 @@ public class UserCacheAspect extends BaseCacheAspect {
      * 匹配用户Service
      */
     @Pointcut(value = "target(com.sishuok.es.sys.user.service.UserService)")
-    private void userServicePointcut() {}
+    private void userServicePointcut() {
+    }
 
     /**
      * only put
@@ -49,19 +50,21 @@ public class UserCacheAspect extends BaseCacheAspect {
      */
     @Pointcut(value =
             "execution(* save(..)) " +
-            "|| execution(* saveAndFlush(..)) " +
-            "|| execution(* update(..)) " +
-            "|| execution(* login(..)) " +
-            "|| execution(* changePassword(..)) " +
-            "|| execution(* changeStatus(..))" )
-    private void cachePutPointcut() {}
+                    "|| execution(* saveAndFlush(..)) " +
+                    "|| execution(* update(..)) " +
+                    "|| execution(* login(..)) " +
+                    "|| execution(* changePassword(..)) " +
+                    "|| execution(* changeStatus(..))")
+    private void cachePutPointcut() {
+    }
 
 
     /**
      * evict 比如删除
      */
     @Pointcut(value = "(execution(* delete(*))) && args(arg)", argNames = "arg")
-    private void cacheEvictPointcut(Object arg) {}
+    private void cacheEvictPointcut(Object arg) {
+    }
 
     /**
      * put 或 get
@@ -69,10 +72,11 @@ public class UserCacheAspect extends BaseCacheAspect {
      */
     @Pointcut(value =
             "(execution(* findByUsername(*)) " +
-            "|| execution(* findByEmail(*)) " +
-            "|| execution(* findByMobilePhoneNumber(*)) " +
-            "|| execution(* findOne(*)))")
-    private void cacheablePointcut() {}
+                    "|| execution(* findByEmail(*)) " +
+                    "|| execution(* findByMobilePhoneNumber(*)) " +
+                    "|| execution(* findOne(*)))")
+    private void cacheablePointcut() {
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -81,36 +85,36 @@ public class UserCacheAspect extends BaseCacheAspect {
     @AfterReturning(value = "userServicePointcut() && cachePutPointcut()", returning = "user")
     public void cachePutAdvice(Object user) {
         //put cache
-        put((User)user);
+        put((User) user);
     }
 
     @After(value = "userServicePointcut() && cacheEvictPointcut(arg)", argNames = "arg")
     public void cacheEvictAdvice(Object arg) {
-        if(arg == null) {
+        if (arg == null) {
             return;
         }
-        if(arg instanceof Long) {
+        if (arg instanceof Long) {
             //only evict id
             evictId(String.valueOf(arg));
         }
-        if(arg instanceof Long[]) {
-            for(Long id : (Long[]) arg) {
+        if (arg instanceof Long[]) {
+            for (Long id : (Long[]) arg) {
                 //only evict id
                 evictId(String.valueOf(id));
             }
         }
 
-        if(arg instanceof String) {
+        if (arg instanceof String) {
             //only evict id
             evictId((String) arg);
         }
-        if(arg instanceof String[]) {
-            for(String id : (String[]) arg) {
+        if (arg instanceof String[]) {
+            for (String id : (String[]) arg) {
                 //only evict id
                 evictId(String.valueOf(id));
             }
         }
-        if(arg instanceof  User) {
+        if (arg instanceof User) {
             //evict user
             evict((User) arg);
         }
@@ -124,28 +128,28 @@ public class UserCacheAspect extends BaseCacheAspect {
 
         String key = "";
         boolean isIdKey = false;
-        if("findOne".equals(methodName)) {
+        if ("findOne".equals(methodName)) {
             key = idKey(String.valueOf(arg));
             isIdKey = true;
-        } else if("findByUsername".equals(methodName)) {
+        } else if ("findByUsername".equals(methodName)) {
             key = usernameKey((String) arg);
-        } else if("findByEmail".equals(methodName)) {
+        } else if ("findByEmail".equals(methodName)) {
             key = emailKey((String) arg);
-        } else if("findByMobilePhoneNumber".equals(methodName)) {
+        } else if ("findByMobilePhoneNumber".equals(methodName)) {
             key = mobilePhoneNumberKey((String) arg);
         }
 
         User user = null;
-        if(isIdKey == true) {
+        if (isIdKey == true) {
             user = get(key);
         } else {
             Long id = get(key);
-            if(id != null) {
+            if (id != null) {
                 user = get(idKey(String.valueOf(id)));
             }
         }
         //cache hit
-        if(user != null) {
+        if (user != null) {
             return user;
         }
 
@@ -162,12 +166,15 @@ public class UserCacheAspect extends BaseCacheAspect {
     private String idKey(String id) {
         return idKeyPrefix + id;
     }
+
     private String usernameKey(String username) {
         return usernameKeyPrefix + username;
     }
+
     private String emailKey(String email) {
         return emailKeyPrefix + email;
     }
+
     private String mobilePhoneNumberKey(String mobilePhoneNumber) {
         return mobilePhoneNumberKeyPrefix + mobilePhoneNumber;
     }
@@ -177,7 +184,7 @@ public class UserCacheAspect extends BaseCacheAspect {
     ////cache 抽象实现
     ////////////////////////////////////////////////////////////////////////////////
     public void put(User user) {
-        if(user == null) {
+        if (user == null) {
             return;
         }
         Long id = user.getId();
@@ -195,7 +202,7 @@ public class UserCacheAspect extends BaseCacheAspect {
     }
 
     public void evict(User user) {
-        if(user == null) {
+        if (user == null) {
             return;
         }
         Long id = user.getId();
@@ -204,7 +211,6 @@ public class UserCacheAspect extends BaseCacheAspect {
         evict(emailKey(user.getEmail()));
         evict(mobilePhoneNumberKey(user.getMobilePhoneNumber()));
     }
-
 
 
 }

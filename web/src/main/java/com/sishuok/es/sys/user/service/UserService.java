@@ -59,7 +59,7 @@ public class UserService extends BaseService<User, Long> {
 
     @Override
     public User save(User user) {
-        if(user.getCreateDate() == null) {
+        if (user.getCreateDate() == null) {
             user.setCreateDate(new Date());
         }
         user.randomSalt();
@@ -73,14 +73,14 @@ public class UserService extends BaseService<User, Long> {
     public User update(User user) {
 
         List<UserOrganizationJob> localUserOrganizationJobs = user.getOrganizationJobs();
-        for(int i = 0, l = localUserOrganizationJobs.size(); i < l; i++) {
+        for (int i = 0, l = localUserOrganizationJobs.size(); i < l; i++) {
 
             UserOrganizationJob localUserOrganizationJob = localUserOrganizationJobs.get(i);
             //设置关系 防止丢失 报 A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
             localUserOrganizationJob.setUser(user);
 
             UserOrganizationJob dbUserOrganizationJob = findUserOrganizationJob(localUserOrganizationJob);
-            if(dbUserOrganizationJob != null) {//出现在先删除再添加的情况
+            if (dbUserOrganizationJob != null) {//出现在先删除再添加的情况
                 dbUserOrganizationJob.setJobId(localUserOrganizationJob.getJobId());
                 dbUserOrganizationJob.setOrganizationId(localUserOrganizationJob.getOrganizationId());
                 dbUserOrganizationJob.setUser(localUserOrganizationJob.getUser());
@@ -111,7 +111,6 @@ public class UserService extends BaseService<User, Long> {
     }
 
 
-
     public User changePassword(User user, String newPassword) {
         user.randomSalt();
         user.setPassword(passwordService.encryptPassword(user.getUsername(), newPassword, user.getSalt()));
@@ -128,7 +127,7 @@ public class UserService extends BaseService<User, Long> {
 
     public User login(String username, String password) {
 
-        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             UserLogUtils.log(
                     username,
                     "loginError",
@@ -136,7 +135,7 @@ public class UserService extends BaseService<User, Long> {
             throw new UserNotExistsException();
         }
         //密码如果不在指定范围内 肯定错误
-        if(password.length() < User.PASSWORD_MIN_LENGTH || password.length() > User.PASSWORD_MAX_LENGTH) {
+        if (password.length() < User.PASSWORD_MIN_LENGTH || password.length() > User.PASSWORD_MAX_LENGTH) {
             UserLogUtils.log(
                     username,
                     "loginError",
@@ -149,19 +148,19 @@ public class UserService extends BaseService<User, Long> {
         User user = null;
 
         UserService proxyUserService = (UserService) AopContext.currentProxy();
-        if(maybeUsername(username)) {
+        if (maybeUsername(username)) {
             user = proxyUserService.findByUsername(username);
         }
 
-        if(user == null && maybeEmail(username)) {
+        if (user == null && maybeEmail(username)) {
             user = proxyUserService.findByEmail(username);
         }
 
-        if(user == null && maybeMobilePhoneNumber(username)) {
+        if (user == null && maybeMobilePhoneNumber(username)) {
             user = proxyUserService.findByMobilePhoneNumber(username);
         }
 
-        if(user == null || Boolean.TRUE.equals(user.getDeleted())) {
+        if (user == null || Boolean.TRUE.equals(user.getDeleted())) {
             UserLogUtils.log(
                     username,
                     "loginError",
@@ -172,7 +171,7 @@ public class UserService extends BaseService<User, Long> {
 
         passwordService.validate(user, password);
 
-        if(user.getStatus() == UserStatus.blocked) {
+        if (user.getStatus() == UserStatus.blocked) {
             UserLogUtils.log(
                     username,
                     "loginError",
@@ -189,11 +188,11 @@ public class UserService extends BaseService<User, Long> {
 
 
     private boolean maybeUsername(String username) {
-        if(!username.matches(User.USERNAME_PATTERN)) {
+        if (!username.matches(User.USERNAME_PATTERN)) {
             return false;
         }
         //如果用户名不在指定范围内也是错误的
-        if(username.length() < User.USERNAME_MIN_LENGTH || username.length() > User.USERNAME_MAX_LENGTH) {
+        if (username.length() < User.USERNAME_MIN_LENGTH || username.length() > User.USERNAME_MAX_LENGTH) {
             return false;
         }
 
@@ -201,14 +200,14 @@ public class UserService extends BaseService<User, Long> {
     }
 
     private boolean maybeEmail(String username) {
-        if(!username.matches(User.EMAIL_PATTERN)) {
+        if (!username.matches(User.EMAIL_PATTERN)) {
             return false;
         }
         return true;
     }
 
     private boolean maybeMobilePhoneNumber(String username) {
-        if(!username.matches(User.MOBILE_PHONE_NUMBER_PATTERN)) {
+        if (!username.matches(User.MOBILE_PHONE_NUMBER_PATTERN)) {
             return false;
         }
         return true;
@@ -216,7 +215,7 @@ public class UserService extends BaseService<User, Long> {
 
     public void changePassword(User opUser, Long[] ids, String newPassword) {
         UserService proxyUserService = (UserService) AopContext.currentProxy();
-        for(Long id : ids) {
+        for (Long id : ids) {
             User user = findOne(id);
             proxyUserService.changePassword(user, newPassword);
             UserLogUtils.log(
@@ -229,7 +228,7 @@ public class UserService extends BaseService<User, Long> {
 
     public void changeStatus(User opUser, Long[] ids, UserStatus newStatus, String reason) {
         UserService proxyUserService = (UserService) AopContext.currentProxy();
-        for(Long id : ids) {
+        for (Long id : ids) {
             User user = findOne(id);
             proxyUserService.changeStatus(opUser, user, newStatus, reason);
             UserLogUtils.log(
@@ -263,6 +262,7 @@ public class UserService extends BaseService<User, Long> {
 
     /**
      * 获取那些在用户-组织机构/工作职务中存在 但在组织机构/工作职务中不存在的
+     *
      * @param pageable
      * @return
      */
@@ -272,6 +272,7 @@ public class UserService extends BaseService<User, Long> {
 
     /**
      * 删除用户不存在的情况的UserOrganizationJob（比如手工从数据库物理删除）。。
+     *
      * @return
      */
     public void deleteUserOrganizationJobOnNotExistsUser() {

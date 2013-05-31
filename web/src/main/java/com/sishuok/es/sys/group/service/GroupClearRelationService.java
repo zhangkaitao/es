@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * 2、GroupRelation-User
  * 3、GroupRelation-Organization
  * 4、GroupRelation-Job
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-13 下午5:35
  * <p>Version: 1.0

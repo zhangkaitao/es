@@ -12,6 +12,6 @@ package com.sishuok.es.sys.user.exception;
  */
 public class UserPasswordRetryLimitExceedException extends UserException {
     public UserPasswordRetryLimitExceedException(int retryLimitCount) {
-        super("user.password.retry.limit.exceed", new Object[] {retryLimitCount});
+        super("user.password.retry.limit.exceed", new Object[]{retryLimitCount});
     }
 }

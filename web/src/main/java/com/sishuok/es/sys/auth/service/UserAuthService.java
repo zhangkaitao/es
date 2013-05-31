@@ -28,9 +28,8 @@ import org.springframework.util.StringUtils;
 import java.util.Set;
 
 /**
- *
  * 分组、组织机构、用户、新增、修改、删除时evict缓存
- *
+ * <p/>
  * 获取用户授权的角色及组装好的权限
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-1 下午2:38
@@ -63,7 +62,7 @@ public class UserAuthService {
 
     public Set<Role> findRoles(User user) {
 
-        if(user == null) {
+        if (user == null) {
             return Sets.newHashSet();
         }
 
@@ -73,11 +72,11 @@ public class UserAuthService {
         Set<Long> organizationIds = Sets.newHashSet();
         Set<Long> jobIds = Sets.newHashSet();
 
-        for(UserOrganizationJob o : user.getOrganizationJobs()) {
+        for (UserOrganizationJob o : user.getOrganizationJobs()) {
             Long organizationId = o.getOrganizationId();
             Long jobId = o.getJobId();
 
-            if(organizationId != null && jobId !=null && organizationId != 0L && jobId != 0L) {
+            if (organizationId != null && jobId != null && organizationId != 0L && jobId != 0L) {
                 organizationJobIds.add(new Long[]{organizationId, jobId});
             }
             organizationIds.add(organizationId);
@@ -87,7 +86,7 @@ public class UserAuthService {
         //TODO 目前默认子会继承父 后续实现添加flag控制是否继承
 
         //找组织机构祖先
-       organizationIds.addAll(organizationService.findAncestorIds(organizationIds));
+        organizationIds.addAll(organizationService.findAncestorIds(organizationIds));
         //找工作职务的祖先
         jobIds.addAll(jobService.findAncestorIds(jobIds));
 
@@ -115,7 +114,7 @@ public class UserAuthService {
     }
 
     public Set<String> findStringRoles(User user) {
-        Set<Role> roles = ((UserAuthService)AopContext.currentProxy()).findRoles(user);
+        Set<Role> roles = ((UserAuthService) AopContext.currentProxy()).findRoles(user);
         return Sets.newHashSet(Collections2.transform(roles, new Function<Role, String>() {
             @Override
             public String apply(Role input) {
@@ -126,6 +125,7 @@ public class UserAuthService {
 
     /**
      * 根据角色获取 权限字符串 如sys:admin
+     *
      * @param user
      * @return
      */
@@ -138,15 +138,15 @@ public class UserAuthService {
                 Resource resource = resourceService.findOne(rrp.getResourceId());
 
                 //不可用 即没查到 或者标识字符串不存在
-                if(resource == null || StringUtils.isEmpty(resource.getIdentity()) || Boolean.FALSE.equals(resource.getShow())) {
+                if (resource == null || StringUtils.isEmpty(resource.getIdentity()) || Boolean.FALSE.equals(resource.getShow())) {
                     continue;
                 }
 
-                for(Long permissionId : rrp.getPermissionIds()) {
+                for (Long permissionId : rrp.getPermissionIds()) {
                     Permission permission = permissionService.findOne(permissionId);
 
                     //不可用
-                    if(permission == null || Boolean.FALSE.equals(permission.getShow())) {
+                    if (permission == null || Boolean.FALSE.equals(permission.getShow())) {
                         continue;
                     }
 

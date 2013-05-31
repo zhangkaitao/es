@@ -45,7 +45,6 @@ public class OrganizationController extends BaseTreeableController<Organization,
     }
 
 
-
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeStatus(
             HttpServletRequest request,
@@ -56,7 +55,7 @@ public class OrganizationController extends BaseTreeableController<Organization,
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Organization organization = organizationService.findOne(id);
             organization.setShow(newStatus);
             organizationService.update(organization);

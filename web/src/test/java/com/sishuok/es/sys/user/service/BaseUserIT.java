@@ -41,17 +41,17 @@ public abstract class BaseUserIT extends BaseIT {
         passwordService.setMaxRetryCount(maxtRetryCount);
 
         User user = userService.findByUsername(username);
-        if(user != null) {
+        if (user != null) {
             userService.delete(user);//因为用户是逻辑删除 此处的目的主要是清 缓存
             delete(user);              //所以还需要物理删除
         }
         user = userService.findByEmail(email);
-        if(user != null) {
+        if (user != null) {
             userService.delete(user);
             delete(user);
         }
         user = userService.findByMobilePhoneNumber(mobilePhoneNumber);
-        if(user != null) {
+        if (user != null) {
             userService.delete(user);
             delete(user);
         }
@@ -64,7 +64,6 @@ public abstract class BaseUserIT extends BaseIT {
         passwordService.clearLoginRecordCache(email);
         passwordService.clearLoginRecordCache(mobilePhoneNumber);
     }
-
 
 
     protected User createUser(String username, String email, String mobilePhoneNumber, String password) {

@@ -64,7 +64,7 @@ public class Menu implements Serializable {
     }
 
     public List<Menu> getChildren() {
-        if(children == null) {
+        if (children == null) {
             children = Lists.newArrayList();
         }
         return children;
@@ -75,7 +75,6 @@ public class Menu implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public boolean isHasChildren() {

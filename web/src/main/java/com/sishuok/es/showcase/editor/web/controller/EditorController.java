@@ -34,6 +34,7 @@ public class EditorController extends BaseCRUDController<Editor, Long> {
 
     /**
      * 验证失败返回true
+     *
      * @param m
      * @param result
      * @return

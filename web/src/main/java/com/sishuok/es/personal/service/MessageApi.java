@@ -24,6 +24,7 @@ public interface MessageApi {
 
     /**
      * 得到用户 指定状态的消息
+     *
      * @param userId
      * @param state
      * @param pageable
@@ -33,6 +34,7 @@ public interface MessageApi {
 
     /**
      * 查询消息的祖先 和 后代
+     *
      * @param message
      * @return
      */
@@ -40,18 +42,21 @@ public interface MessageApi {
 
     /**
      * 保存草稿
+     *
      * @param message
      */
     void saveDraft(Message message);
 
     /**
      * 发送消息
+     *
      * @param message
      */
     public void send(Message message);
 
     /**
      * 发送系统消息给多个人
+     *
      * @param receiverIds
      * @param message
      */
@@ -59,12 +64,14 @@ public interface MessageApi {
 
     /**
      * 发送系统消息给所有人
+     *
      * @param message
      */
     public void sendSystemMessageToAllUser(Message message);
 
     /**
      * 将消息移动到垃圾箱
+     *
      * @param userId
      * @param messageId
      * @return
@@ -73,6 +80,7 @@ public interface MessageApi {
 
     /**
      * 批量将消息移动到垃圾箱
+     *
      * @param userId
      * @param messageIds
      * @return
@@ -81,6 +89,7 @@ public interface MessageApi {
 
     /**
      * 将消息保存到收藏箱
+     *
      * @param userId
      * @param messageId
      * @return
@@ -89,6 +98,7 @@ public interface MessageApi {
 
     /**
      * 批量将消息保存到收藏箱
+     *
      * @param userId
      * @param messageIds
      * @return
@@ -97,6 +107,7 @@ public interface MessageApi {
 
     /**
      * 从垃圾箱删除消息
+     *
      * @param userId
      * @param messageId
      */
@@ -104,6 +115,7 @@ public interface MessageApi {
 
     /**
      * 从垃圾箱删除消息
+     *
      * @param userId
      * @param messageIds
      */
@@ -111,6 +123,7 @@ public interface MessageApi {
 
     /**
      * 清空指定状态的消息
+     *
      * @param userId
      * @param state
      */
@@ -118,36 +131,42 @@ public interface MessageApi {
 
     /**
      * 清空草稿箱
+     *
      * @param userId
      */
     public void clearDraftBox(Long userId);
 
     /**
      * 清空收件箱
+     *
      * @param userId
      */
     public void clearInBox(Long userId);
 
     /**
      * 清空收件箱
+     *
      * @param userId
      */
     public void clearOutBox(Long userId);
 
     /**
      * 清空收藏箱
+     *
      * @param userId
      */
     public void clearStoreBox(Long userId);
 
     /**
      * 清空垃圾箱
+     *
      * @param userId
      */
     public void clearTrashBox(Long userId);
 
     /**
      * 未读收件箱消息总数
+     *
      * @param userId
      */
     public Long countUnread(Long userId);
@@ -155,16 +174,17 @@ public interface MessageApi {
 
     /**
      * 标识为已读
+     *
      * @param message
      */
     public void markRead(Message message);
 
     /**
      * 标识为已回复
+     *
      * @param message
      */
     public void markReplied(Message message);
-
 
 
 }

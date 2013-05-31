@@ -29,22 +29,22 @@ public class UserSearchCallback extends DefaultSearchCallback {
 
         boolean hasOrganization = search.containsSearchKey("organization");
         boolean hasJob = search.containsSearchKey("job");
-        if(hasOrganization || hasJob) {
+        if (hasOrganization || hasJob) {
             ql.append(" and exists(select 1 from UserOrganizationJob oj");
-            if(hasOrganization) {
+            if (hasOrganization) {
                 ql.append(" left join oj.organization o ");
 
             }
-            if(hasJob) {
+            if (hasJob) {
                 ql.append(" left join oj.job j ");
 
             }
 
             ql.append(" where oj.user=x ");
-            if(hasOrganization) {
+            if (hasOrganization) {
                 ql.append(" and (o.id=:organizationId or o.parentIds like :organizationParentIds)");
             }
-            if(hasJob) {
+            if (hasJob) {
                 ql.append(" and (j.id=:jobId or j.parentIds like :jobParentIds)");
             }
 
@@ -57,13 +57,13 @@ public class UserSearchCallback extends DefaultSearchCallback {
     public void setValues(Query query, Searchable search) {
         super.setValues(query, search);
 
-        if(search.containsSearchKey("organization")) {
+        if (search.containsSearchKey("organization")) {
             Organization organization = (Organization) search.getValue("organization");
             query.setParameter("organizationId", organization.getId());
             query.setParameter("organizationParentIds", organization.makeSelfAsNewParentIds() + "%");
         }
 
-        if(search.containsSearchKey("job")) {
+        if (search.containsSearchKey("job")) {
             Job job = (Job) search.getValue("job");
             query.setParameter("jobId", job.getId());
             query.setParameter("jobParentIds", job.makeSelfAsNewParentIds() + "%");

@@ -40,13 +40,14 @@ public class ParentService extends BaseService<Parent, Long> {
         update(parent);
         saveOrUpdateChild(parent, childList);
     }
+
     private void saveOrUpdateChild(Parent parent, List<Child> childList) {
-        for(Child child : childList) {
-            if(child == null) {//防止中间有跳过的
+        for (Child child : childList) {
+            if (child == null) {//防止中间有跳过的
                 continue;
             }
             child.setParent(parent);
-            if(child.getId() == null) {//新的
+            if (child.getId() == null) {//新的
                 childService.save(child);
             } else {
                 childService.update(child);

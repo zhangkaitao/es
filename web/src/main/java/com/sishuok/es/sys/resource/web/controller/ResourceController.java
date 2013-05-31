@@ -46,7 +46,7 @@ public class ResourceController extends BaseTreeableController<Resource, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Resource resource = resourceService.findOne(id);
             resource.setShow(newStatus);
             resourceService.update(resource);

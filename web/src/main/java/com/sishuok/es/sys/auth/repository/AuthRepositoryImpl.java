@@ -34,23 +34,23 @@ public class AuthRepositoryImpl {
         StringBuilder hql = new StringBuilder("select roleIds from Auth where ");
         hql.append(" (userId=:userId) ");
 
-        if(hasGroupIds) {
+        if (hasGroupIds) {
             hql.append(" or ");
             hql.append(" (groupId in (:groupIds)) ");
         }
 
-        if(hasOrganizationIds) {
+        if (hasOrganizationIds) {
             hql.append(" or ");
             hql.append(" (( organizationId in (:organizationIds) and jobId=0 )) ");
         }
 
-        if(hasJobIds) {
+        if (hasJobIds) {
             hql.append(" or ");
             hql.append(" (( organizationId=0 and jobId in (:jobIds) )) ");
         }
-        if(hasOrganizationJobIds) {
+        if (hasOrganizationJobIds) {
             int i = 0, l = organizationJobIds.size();
-            while(i < l) {
+            while (i < l) {
                 hql.append(" or ");
                 hql.append(" ( organizationId=:organizationId_" + i + " and jobId=:jobId_" + i + " ) ");
                 i++;
@@ -61,20 +61,20 @@ public class AuthRepositoryImpl {
 
         q.setParameter("userId", userId);
 
-        if(hasGroupIds) {
+        if (hasGroupIds) {
             q.setParameter("groupIds", groupIds);
         }
 
-        if(hasOrganizationIds) {
+        if (hasOrganizationIds) {
             q.setParameter("organizationIds", organizationIds);
         }
 
-        if(hasJobIds) {
+        if (hasJobIds) {
             q.setParameter("jobIds", jobIds);
         }
-        if(hasOrganizationJobIds) {
+        if (hasOrganizationJobIds) {
             int i = 0;
-            for(Long[] organizationJobId : organizationJobIds) {
+            for (Long[] organizationJobId : organizationJobIds) {
                 q.setParameter("organizationId_" + i, organizationJobId[0]);
                 q.setParameter("jobId_" + i, organizationJobId[1]);
                 i++;
@@ -84,7 +84,7 @@ public class AuthRepositoryImpl {
         List<Set<Long>> roleIdSets = (List<Set<Long>>) q.getResultList();
 
         Set<Long> roleIds = Sets.newHashSet();
-        for(Set<Long> set : roleIdSets) {
+        for (Set<Long> set : roleIdSets) {
             roleIds.addAll(set);
         }
 

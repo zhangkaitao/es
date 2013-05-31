@@ -23,6 +23,7 @@ public class GenCssSql {
 
     /**
      * 转换图标为sql的
+     *
      * @param args
      * @throws Exception
      */
@@ -40,8 +41,8 @@ public class GenCssSql {
         FileWriter writer = new FileWriter(toFile);
 
         int count = 300;
-        for(int i = 0, l = list.size(); i < l; i+=2) {
-            writer.write(String.format(template, count++, list.get(i), list.get(i+1), 16, 16));
+        for (int i = 0, l = list.size(); i < l; i += 2) {
+            writer.write(String.format(template, count++, list.get(i), list.get(i + 1), 16, 16));
             writer.write("\r\n");
         }
 
@@ -57,8 +58,8 @@ public class GenCssSql {
         List<String> hasReadList = Lists.newArrayList();
         FileWriter writer = new FileWriter(toFile);
 
-        for(int i = 0, l = cssClassList.size(); i < l; i++) {
-            if(!hasReadList.contains(cssClassList.get(i))) {
+        for (int i = 0, l = cssClassList.size(); i < l; i++) {
+            if (!hasReadList.contains(cssClassList.get(i))) {
                 writer.write(String.format(template, i + 1, cssClassList.get(i).trim()));
                 writer.write("\r\n");
                 hasReadList.add(cssClassList.get(i));

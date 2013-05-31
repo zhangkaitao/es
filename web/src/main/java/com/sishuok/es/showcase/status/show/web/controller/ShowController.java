@@ -53,11 +53,11 @@ public class ShowController extends BaseCRUDController<Show, Long> {
             @RequestParam("ids") Long[] ids,
             @PathVariable("status") Stateable.ShowStatus status,
             RedirectAttributes redirectAttributes
-        ) {
+    ) {
 
         this.permissionList.assertHasPermission("audit");
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Show show = showService.findOne(id);
             show.setStatus(status);
             showService.update(show);
@@ -70,6 +70,7 @@ public class ShowController extends BaseCRUDController<Show, Long> {
 
     /**
      * 验证失败返回true
+     *
      * @param m
      * @param result
      * @return

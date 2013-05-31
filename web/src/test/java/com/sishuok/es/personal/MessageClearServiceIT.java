@@ -139,7 +139,6 @@ public class MessageClearServiceIT extends BaseMessageIT {
     }
 
 
-
     @Test
     public void testClearDeletedMessage() {
 
@@ -176,15 +175,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
 
 
-
-
-
-
     }
-
-
-
-
 
 
 }

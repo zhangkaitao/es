@@ -34,11 +34,11 @@ public class RoleService extends BaseService<Role, Long> {
     @Override
     public Role update(Role role) {
         List<RoleResourcePermission> localResourcePermissions = role.getResourcePermissions();
-        for(int i = 0, l =  localResourcePermissions.size(); i < l; i++) {
+        for (int i = 0, l = localResourcePermissions.size(); i < l; i++) {
             RoleResourcePermission localResourcePermission = localResourcePermissions.get(i);
             localResourcePermission.setRole(role);
             RoleResourcePermission dbResourcePermission = findRoleResourcePermission(localResourcePermission);
-            if(dbResourcePermission != null) {//出现在先删除再添加的情况
+            if (dbResourcePermission != null) {//出现在先删除再添加的情况
                 dbResourcePermission.setRole(localResourcePermission.getRole());
                 dbResourcePermission.setResourceId(localResourcePermission.getResourceId());
                 dbResourcePermission.setPermissionIds(localResourcePermission.getPermissionIds());
@@ -55,6 +55,7 @@ public class RoleService extends BaseService<Role, Long> {
 
     /**
      * 获取可用的角色列表
+     *
      * @param roleIds
      * @return
      */
@@ -63,8 +64,8 @@ public class RoleService extends BaseService<Role, Long> {
         Set<Role> roles = Sets.newHashSet();
 
         //TODO 如果角色很多 此处应该写查询
-        for(Role role : findAll()) {
-            if(Boolean.TRUE.equals(role.getShow()) && roleIds.contains(role.getId())) {
+        for (Role role : findAll()) {
+            if (Boolean.TRUE.equals(role.getShow()) && roleIds.contains(role.getId())) {
                 roles.add(role);
             }
         }

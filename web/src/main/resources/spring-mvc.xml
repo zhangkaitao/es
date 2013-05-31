@@ -1,16 +1,16 @@
-<beans xmlns="http://www.springframework.org/schema/beans" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p" 
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd"
-    default-lazy-init="true">
+       default-lazy-init="true">
 
     <context:property-placeholder location="classpath:resources.properties"/>
 
@@ -18,7 +18,8 @@
     <!-- 注意事项请参考：http://jinnianshilongnian.iteye.com/blog/1762632 -->
     <context:component-scan base-package="com.sishuok.es" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!-- 会自动注册了validator  ConversionService  -->
@@ -58,20 +59,19 @@
         </bean>
         <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor"/>
         <!--<mvc:interceptor>-->
-              <!--<mvc:mapping path="/**"/>-->
-              <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
-          <!--</mvc:interceptor>-->
+        <!--<mvc:mapping path="/**"/>-->
+        <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
+        <!--</mvc:interceptor>-->
     </mvc:interceptors>
-
 
 
     <!-- 内容协商管理器  -->
     <!--1、首先检查路径扩展名（如my.pdf）；2、其次检查Parameter（如my?format=pdf）；3、检查Accept Header-->
     <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
         <!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
-        <property name="favorPathExtension" value="true" />
+        <property name="favorPathExtension" value="true"/>
         <!-- 用于开启 /userinfo/123?format=json 的支持 -->
-        <property name="favorParameter" value="true" />
+        <property name="favorParameter" value="true"/>
         <property name="parameterName" value="format"/>
         <!-- 是否忽略Accept Header -->
         <property name="ignoreAcceptHeader" value="false"/>
@@ -84,7 +84,7 @@
             </value>
         </property>
         <!-- 默认的content type -->
-        <property name="defaultContentType" value="text/html" />
+        <property name="defaultContentType" value="text/html"/>
     </bean>
 
 
@@ -106,7 +106,8 @@
     <!-- bean name view resolver-->
     <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="1"/>
     <!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
-    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:order="2">
+    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:order="2">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="contentType" value="text/html"/>
         <property name="prefix" value="/WEB-INF/jsp/"/>

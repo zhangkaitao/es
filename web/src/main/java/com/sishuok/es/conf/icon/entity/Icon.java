@@ -53,7 +53,7 @@ public class Icon extends BaseEntity<Long> {
     private Integer left;
 
     /**
-     *  距离sprite图片上边多少
+     * 距离sprite图片上边多少
      */
     @Column(name = "`top`")
     private Integer top;

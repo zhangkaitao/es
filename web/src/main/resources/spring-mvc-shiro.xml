@@ -5,7 +5,6 @@
        default-lazy-init="true">
 
 
-
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
     <!-- Enable Shiro Annotations for Spring-configured beans.  Only run after -->

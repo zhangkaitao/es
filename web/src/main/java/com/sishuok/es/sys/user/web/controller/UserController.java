@@ -57,7 +57,6 @@ public class UserController extends BaseCRUDController<User, Long> {
     }
 
 
-
     @RequestMapping(value = "main", method = RequestMethod.GET)
     public String main(Model model) {
         return viewName("main");
@@ -93,10 +92,10 @@ public class UserController extends BaseCRUDController<User, Long> {
 
         setCommonData(model);
 
-        if(organization != null && !organization.isRoot()) {
+        if (organization != null && !organization.isRoot()) {
             searchable.addSearchParam("organizationId", organization.getId());
         }
-        if(job != null && !job.isRoot()) {
+        if (job != null && !job.isRoot()) {
             searchable.addSearchParam("jobId", job.getId());
         }
 
@@ -116,7 +115,7 @@ public class UserController extends BaseCRUDController<User, Long> {
     @Override
     public String update(
             Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
-            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
         throw new RuntimeException("discarded method");
     }
@@ -136,7 +135,7 @@ public class UserController extends BaseCRUDController<User, Long> {
     }
 
     private void fillUserOrganization(User m, Long[] organizationIds, Long[][] jobIds) {
-        if(ArrayUtils.isEmpty(organizationIds)) {
+        if (ArrayUtils.isEmpty(organizationIds)) {
             return;
         }
         for (int i = 0, l = organizationIds.length; i < l; i++) {
@@ -167,7 +166,7 @@ public class UserController extends BaseCRUDController<User, Long> {
             Model model, @Valid @ModelAttribute("m") User m, BindingResult result,
             @RequestParam(value = "organizationId", required = false) Long[] organizationIds,
             @RequestParam(value = "jobId", required = false) Long[][] jobIds,
-            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
         fillUserOrganization(m, organizationIds, jobIds);
@@ -187,7 +186,7 @@ public class UserController extends BaseCRUDController<User, Long> {
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "改密成功！");
 
-        return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
+        return redirectToUrl((String) request.getAttribute(Constants.BACK_URL));
     }
 
     @RequestMapping(value = "changeStatus/{newStatus}")
@@ -201,13 +200,13 @@ public class UserController extends BaseCRUDController<User, Long> {
 
         userService.changeStatus(opUser, ids, newStatus, reason);
 
-        if(newStatus == UserStatus.normal) {
+        if (newStatus == UserStatus.normal) {
             redirectAttributes.addFlashAttribute(Constants.MESSAGE, "解封成功！");
-        } else if(newStatus == UserStatus.blocked) {
+        } else if (newStatus == UserStatus.blocked) {
             redirectAttributes.addFlashAttribute(Constants.MESSAGE, "封禁成功！");
         }
 
-        return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
+        return redirectToUrl((String) request.getAttribute(Constants.BACK_URL));
     }
 
     @RequestMapping(value = "recycle")
@@ -218,16 +217,14 @@ public class UserController extends BaseCRUDController<User, Long> {
             userService.update(user);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "还原成功！");
-        return redirectToUrl((String)request.getAttribute(Constants.BACK_URL));
+        return redirectToUrl((String) request.getAttribute(Constants.BACK_URL));
     }
-
 
 
     @RequestMapping("{user}/organizations")
     public String permissions(@PathVariable("user") User user) {
         return viewName("organizationsTable");
     }
-
 
 
     @RequestMapping("ajax/autocomplete")

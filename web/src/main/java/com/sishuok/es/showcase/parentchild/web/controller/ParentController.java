@@ -58,8 +58,6 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
     }
 
 
-
-
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)
     @Override
     public String create(Model model, @Valid @ModelAttribute("m") Parent parent, BindingResult result, RedirectAttributes redirectAttributes) {
@@ -119,6 +117,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
 
     /**
      * 验证失败返回true
+     *
      * @param parent
      * @param result
      * @return
@@ -127,14 +126,12 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         Assert.notNull(parent);
 
         //全局错误 前台使用<es:showGlobalError commandName="showcase/parent"/> 显示
-        if(parent.getName().contains("admin")) {
+        if (parent.getName().contains("admin")) {
             result.reject("name.must.not.admin");
         }
 
         return result.hasErrors();
     }
-
-
 
 
     //////////////////////////////////child////////////////////////////////////
@@ -159,11 +156,12 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
 
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "新增");
-        if(!model.containsAttribute("child")) {
+        if (!model.containsAttribute("child")) {
             model.addAttribute("child", new Child());
         }
         return "showcase/parentchild/child/editForm";
     }
+
     @RequestMapping(value = "child/{id}/update", method = RequestMethod.GET)
     public String showChildUpdateForm(
             Model model,
@@ -174,11 +172,11 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
 
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, isCopy ? "复制" : "修改");
-        if(!model.containsAttribute("child")) {
-            if(child == null) {
+        if (!model.containsAttribute("child")) {
+            if (child == null) {
                 child = new Child();
             }
-            if(isCopy) {
+            if (isCopy) {
                 child.setId(null);
             }
             model.addAttribute("child", child);

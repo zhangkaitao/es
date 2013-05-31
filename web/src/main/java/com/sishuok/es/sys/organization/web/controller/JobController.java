@@ -46,7 +46,7 @@ public class JobController extends BaseTreeableController<Job, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Job job = jobService.findOne(id);
             job.setShow(newStatus);
             jobService.update(job);

@@ -50,7 +50,6 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
     }
 
 
-
     @RequestMapping(value = "status/{status}", method = RequestMethod.GET)
     public String audit(
             HttpServletRequest request,
@@ -58,20 +57,20 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
             @PathVariable("status") Stateable.AuditStatus status,
             @RequestParam(value = "comment", required = false) String comment,
             RedirectAttributes redirectAttributes
-        ) {
+    ) {
 
         this.permissionList.assertHasPermission("audit");
 
         List<Audit> auditList = new ArrayList<Audit>();
-        for(Long id : ids) {
+        for (Long id : ids) {
             Audit audit = auditService.findOne(id);
-            if(audit.getStatus() != Stateable.AuditStatus.waiting) {
+            if (audit.getStatus() != Stateable.AuditStatus.waiting) {
                 redirectAttributes.addFlashAttribute(Constants.ERROR, "数据中有已通过审核的，不能重复审核！");
                 return "redirect:" + request.getAttribute(Constants.BACK_URL);
             }
             auditList.add(audit);
         }
-        for(Audit audit : auditList) {
+        for (Audit audit : auditList) {
             audit.setStatus(status);
             audit.setComment(comment);
             auditService.update(audit);
@@ -84,6 +83,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
 
     /**
      * 验证失败返回true
+     *
      * @param m
      * @param result
      * @return

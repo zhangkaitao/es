@@ -13,7 +13,7 @@ package com.sishuok.es.sys.auth.entity;
  */
 public enum AuthType {
 
-    user("用户"), user_group("用户组"),organization_job("组织机构和工作职务"), organization_group("组织机构组");
+    user("用户"), user_group("用户组"), organization_job("组织机构和工作职务"), organization_group("组织机构组");
 
     private final String info;
 

@@ -32,7 +32,7 @@ public class UserLastOnlineService extends BaseService<UserLastOnline, Long> {
     public void lastOnline(UserLastOnline lastOnline) {
         UserLastOnline dbLastOnline = findByUserId(lastOnline.getUserId());
 
-        if(dbLastOnline == null) {
+        if (dbLastOnline == null) {
             dbLastOnline = lastOnline;
         } else {
             UserLastOnline.merge(lastOnline, dbLastOnline);

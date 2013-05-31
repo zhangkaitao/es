@@ -19,13 +19,13 @@ import java.util.Date;
  * 2、垃圾箱内的消息30天后自动物理删除
  * 3、垃圾箱内的消息只有只有当收件人和发件人 把消息都从垃圾箱中删除后才能物理删除
  * 4、收藏箱的不能删除
- *
+ * <p/>
  * 如果type==system_message_all表示是发给所有人的消息 策略如下：
  * 1、首先在展示时（第一页），会会自动查所有的system_message_all
  * 2、如果用户阅读了，直接复制一份 放入它的收件箱 状态改为system_message
- *
+ * <p/>
  * 如果消息是草稿 那么收件人状态是null
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-22 下午1:51
  * <p>Version: 1.0
@@ -41,7 +41,7 @@ public class Message extends BaseEntity<Long> {
     private Long senderId;
 
     /**
-     *  消息接收者id
+     * 消息接收者id
      */
     @Column(name = "receiver_id")
     private Long receiverId;
@@ -62,7 +62,7 @@ public class Message extends BaseEntity<Long> {
     private String title;
 
     @Valid
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="message")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "message")
     @Basic(fetch = FetchType.LAZY)
     private MessageContent content;
 

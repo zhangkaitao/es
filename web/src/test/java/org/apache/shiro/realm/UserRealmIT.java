@@ -64,7 +64,7 @@ public class UserRealmIT extends BaseUserIT {
     @Test(expected = ExcessiveAttemptsException.class)
     public void testLoginFailWithRetryLimitExceed() {
         createUser(username, password);
-        for(int i = 0; i < maxtRetryCount; i++) {
+        for (int i = 0; i < maxtRetryCount; i++) {
             try {
                 UsernamePasswordToken upToken = new UsernamePasswordToken(username, password + "1");
                 Subject subject = SecurityUtils.getSubject();

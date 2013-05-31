@@ -23,14 +23,13 @@ public class UserLogUtils {
     private static final Logger SYS_USER_LOGGER = LoggerFactory.getLogger("es-sys-user");
 
 
-
     private Logger getSysUserLog() {
         return SYS_USER_LOGGER;
     }
 
     /**
      * 记录格式 [ip][用户名][操作][错误消息]
-     *
+     * <p/>
      * 注意操作如下：
      * loginError 登录失败
      * loginSuccess 登录成功
@@ -43,7 +42,7 @@ public class UserLogUtils {
      * @param msg
      * @param args
      */
-    public static void log(String username, String op, String msg, Object ...args) {
+    public static void log(String username, String op, String msg, Object... args) {
         StringBuilder s = new StringBuilder();
         s.append(LogUtils.getBlock(getIp()));
         s.append(LogUtils.getBlock(username));
@@ -62,8 +61,8 @@ public class UserLogUtils {
             //ignore  如unit test
         }
 
-        if(requestAttributes != null && requestAttributes instanceof ServletRequestAttributes) {
-            return IpUtils.getIpAddr(((ServletRequestAttributes)requestAttributes).getRequest());
+        if (requestAttributes != null && requestAttributes instanceof ServletRequestAttributes) {
+            return IpUtils.getIpAddr(((ServletRequestAttributes) requestAttributes).getRequest());
         }
 
         return "unknown";

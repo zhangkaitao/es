@@ -61,6 +61,7 @@ public class GroupService extends BaseService<Group, Long> {
 
     /**
      * 获取可用的的分组编号列表
+     *
      * @param userId
      * @param organizationIds
      * @return
@@ -72,8 +73,8 @@ public class GroupService extends BaseService<Group, Long> {
 
 
         //TODO 如果分组数量很多 建议此处查询时直接带着是否可用的标识去查
-        for(Group group : findAll()) {
-            if(Boolean.FALSE.equals(group.getShow())) {
+        for (Group group : findAll()) {
+            if (Boolean.FALSE.equals(group.getShow())) {
                 groupIds.remove(group.getId());
             }
         }

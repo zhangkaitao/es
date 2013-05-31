@@ -11,6 +11,7 @@ public enum MessageType {
     system_message("系统消息");
 
     private final String info;
+
     private MessageType(String info) {
         this.info = info;
     }

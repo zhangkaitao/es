@@ -72,6 +72,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
         roles = userAuthService.findStringRoles(user);
         Assert.assertEquals(0, roles.size());
     }
+
     @Test
     public void testClearDeletedAuthRelationForUserGroup() {
         executeSqlScript("sql/intergration-test-user-group-unique-data.sql", false);
@@ -205,9 +206,9 @@ public class AuthRelationClearServiceIT extends BaseIT {
         Set<String> roles = userAuthService.findStringRoles(user);
         Assert.assertEquals(2, roles.size());
 
-        organizationService.delete(new Long[] {1L, 2L, 3L});
-        jobService.delete(new Long[] {1L, 2L, 3L});
-        groupService.delete(new Long[] {1L, 2L, 3L, 4L});
+        organizationService.delete(new Long[]{1L, 2L, 3L});
+        jobService.delete(new Long[]{1L, 2L, 3L});
+        groupService.delete(new Long[]{1L, 2L, 3L, 4L});
         clear();
         authRelationClearService.clearDeletedAuthRelation();
         clear();

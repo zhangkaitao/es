@@ -121,7 +121,6 @@ public class UserOnline extends AbstractEntity<String> {
     }
 
 
-
     public Long getTimeout() {
         return timeout;
     }
@@ -202,7 +201,6 @@ public class UserOnline extends AbstractEntity<String> {
 
         return online;
     }
-
 
 
 }

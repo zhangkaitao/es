@@ -32,13 +32,16 @@ public class ResourceMenuCacheAspect extends BaseCacheAspect {
 
 
     @Pointcut(value = "target(com.sishuok.es.sys.resource.service.ResourceService)")
-    private void resourceServicePointcut() {}
+    private void resourceServicePointcut() {
+    }
 
     @Pointcut(value = "execution(* save(..)) || execution(* update(..)) || execution(* delete(..))")
-    private void resourceCacheEvictAllPointcut() {}
+    private void resourceCacheEvictAllPointcut() {
+    }
 
     @Pointcut(value = "execution(* findMenus(*)) && args(arg)", argNames = "arg")
-    private void resourceCacheablePointcut(User arg) {}
+    private void resourceCacheablePointcut(User arg) {
+    }
 
     @Before(value = "resourceServicePointcut() && resourceCacheEvictAllPointcut()")
     public void findRolesCacheableAdvice() throws Throwable {
@@ -52,7 +55,7 @@ public class ResourceMenuCacheAspect extends BaseCacheAspect {
         String key = menusKey(user.getId());
         Object retVal = get(key);
 
-        if(retVal != null) {
+        if (retVal != null) {
             return retVal;
         }
 

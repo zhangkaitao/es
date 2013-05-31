@@ -50,7 +50,7 @@ public class UserStatusHistoryService extends BaseService<UserStatusHistory, Lon
 
         Page<UserStatusHistory> page = userStatusHistoryRepository.findAll(searchable);
 
-        if(page.hasContent()) {
+        if (page.hasContent()) {
             return page.getContent().get(0);
         }
         return null;
@@ -58,7 +58,7 @@ public class UserStatusHistoryService extends BaseService<UserStatusHistory, Lon
 
     public String getLastReason(User user) {
         UserStatusHistory history = findLastHistory(user);
-        if(history == null) {
+        if (history == null) {
             return "";
         }
         return history.getReason();

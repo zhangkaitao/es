@@ -11,7 +11,7 @@
           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
-      default-lazy-init="true">
+       default-lazy-init="true">
 
     <context:property-placeholder location="classpath:resources.properties"/>
 
@@ -21,9 +21,6 @@
     </context:component-scan>
     <!-- 开启AOP监听 只对当前配置文件有效 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
-
-
-
 
 
     <!-- 数据源 -->
@@ -72,11 +69,13 @@
                 <entry key="hibernate.default_batch_fetch_size" value="${hibernate.default_batch_fetch_size}"/>
                 <entry key="hibernate.max_fetch_depth" value="${hibernate.max_fetch_depth}"/>
                 <entry key="hibernate.generate_statistics" value="${hibernate.generate_statistics}"/>
-                <entry key="hibernate.bytecode.use_reflection_optimizer" value="${hibernate.bytecode.use_reflection_optimizer}"/>
+                <entry key="hibernate.bytecode.use_reflection_optimizer"
+                       value="${hibernate.bytecode.use_reflection_optimizer}"/>
                 <entry key="hibernate.cache.use_second_level_cache" value="${hibernate.cache.use_second_level_cache}"/>
                 <entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}"/>
                 <entry key="hibernate.cache.region.factory_class" value="${hibernate.cache.region.factory_class}"/>
-                <entry key="net.sf.ehcache.configurationResourceName" value="${net.sf.ehcache.configurationResourceName}"/>
+                <entry key="net.sf.ehcache.configurationResourceName"
+                       value="${net.sf.ehcache.configurationResourceName}"/>
                 <entry key="hibernate.cache.use_structured_entries" value="${hibernate.cache.use_structured_entries}"/>
                 <!-- 使用自定义的validator进行jsr303验证 -->
                 <entry key="javax.persistence.validation.factory" value-ref="validator"/>
@@ -85,7 +84,6 @@
             </map>
         </property>
     </bean>
-
 
 
     <!--
@@ -104,7 +102,6 @@
     </jpa:repositories>
 
 
-
     <!--事务管理器配置-->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
@@ -118,11 +115,11 @@
             <tx:method name="doSenn*" propagation="REQUIRES_NEW"/>
 
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
-            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="count*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="list*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="count*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="list*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
 
@@ -131,11 +128,6 @@
         <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*+.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
-
-
-
-
-
 
 
     <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
@@ -169,7 +161,8 @@
 
     <!--设置查询字符串转换器的conversion service-->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="com.sishuok.es.common.entity.search.utils.SearchableConvertUtils.setConversionService"/>
+        <property name="staticMethod"
+                  value="com.sishuok.es.common.entity.search.utils.SearchableConvertUtils.setConversionService"/>
         <property name="arguments" ref="conversionService"/>
     </bean>
 

@@ -69,26 +69,27 @@ public class MessageController extends BaseController<Message, Long> {
 
     /**
      * 仅返回表格数据
+     *
      * @return
      */
     @RequestMapping(value = "{state}/list", method = RequestMethod.GET, headers = "table=true")
     @PageableDefaults(sort = "id=desc")
     public String listTable(@CurrentUser User user,
-                             @PathVariable("state") MessageState state,
-                             Pageable pageable,
-                             Model model) {
+                            @PathVariable("state") MessageState state,
+                            Pageable pageable,
+                            Model model) {
         list(user, state, pageable, model);
         return viewName("listTable");
     }
 
     @RequestMapping("{m}")
     public String view(@CurrentUser User user, @PathVariable("m") Message m, Model model, RedirectAttributes redirectAttributes) {
-        if(m == null) {
+        if (m == null) {
             redirectAttributes.addFlashAttribute(Constants.ERROR, "您查看的消息不存在");
             return redirectToUrl("list");
         }
 
-        if(user.getId().equals(m.getReceiverId())) {
+        if (user.getId().equals(m.getReceiverId())) {
             messageApi.markRead(m);
         }
 
@@ -102,7 +103,7 @@ public class MessageController extends BaseController<Message, Long> {
     @RequestMapping("{m}/content")
     public String viewContent(@CurrentUser User user, @PathVariable("m") Message m, Model model, RedirectAttributes redirectAttributes) {
 
-        if(user.getId().equals(m.getReceiverId())) {
+        if (user.getId().equals(m.getReceiverId())) {
             messageApi.markRead(m);
         }
 
@@ -111,7 +112,7 @@ public class MessageController extends BaseController<Message, Long> {
 
     @RequestMapping(value = "/send", method = RequestMethod.GET)
     public String showSendForm(Model model) {
-        if(!model.containsAttribute("m")) {
+        if (!model.containsAttribute("m")) {
             model.addAttribute("m", newModel());
         }
         model.addAttribute(Constants.OP_NAME, "发送新消息");
@@ -128,14 +129,14 @@ public class MessageController extends BaseController<Message, Long> {
             RedirectAttributes redirectAttributes) {
 
         User receiver = userService.findByUsername(username);
-        if(receiver == null) {
+        if (receiver == null) {
             result.rejectValue("receiverId", "receiver.not.exists");
         }
-        if(receiver.equals(user)) {
+        if (receiver.equals(user)) {
             result.rejectValue("receiverId", "receiver.not.self");
         }
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return showSendForm(model);
         }
         message.setReceiverId(receiver.getId());
@@ -148,7 +149,7 @@ public class MessageController extends BaseController<Message, Long> {
 
     @RequestMapping(value = "/{parent}/reply", method = RequestMethod.GET)
     public String showReplyForm(@PathVariable("parent") Message parent, Model model) {
-        if(!model.containsAttribute("m")) {
+        if (!model.containsAttribute("m")) {
             Message m = newModel();
             m.setParentId(parent.getId());
             m.setParentIds(parent.getParentIds());
@@ -168,7 +169,7 @@ public class MessageController extends BaseController<Message, Long> {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return showReplyForm(parent, model);
         }
         m.setSenderId(user.getId());
@@ -179,14 +180,13 @@ public class MessageController extends BaseController<Message, Long> {
     }
 
 
-
     @RequestMapping(value = "/{parent}/forward", method = RequestMethod.GET)
     public String showForwardForm(@PathVariable("parent") Message parent, Model model) {
 
         String receiverUsername = userService.findOne(parent.getReceiverId()).getUsername();
         String senderUsername = userService.findOne(parent.getSenderId()).getUsername();
 
-        if(!model.containsAttribute("m")) {
+        if (!model.containsAttribute("m")) {
             Message m = newModel();
             m.setTitle(MessageApi.FOWRARD_PREFIX + parent.getTitle());
             m.setContent(new MessageContent());
@@ -197,7 +197,7 @@ public class MessageController extends BaseController<Message, Long> {
                             receiverUsername,
                             parent.getTitle(),
                             parent.getContent().getContent()
-                            ));
+                    ));
             model.addAttribute("m", m);
         }
         model.addAttribute(Constants.OP_NAME, "转发消息");
@@ -215,15 +215,15 @@ public class MessageController extends BaseController<Message, Long> {
 
 
         User receiver = userService.findByUsername(username);
-        if(receiver == null) {
+        if (receiver == null) {
             result.rejectValue("receiverId", "receiver.not.exists");
         }
 
-        if(receiver.equals(user)) {
+        if (receiver.equals(user)) {
             result.rejectValue("receiverId", "receiver.not.self");
         }
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return showForwardForm(parent, model);
         }
         m.setReceiverId(receiver.getId());
@@ -243,7 +243,7 @@ public class MessageController extends BaseController<Message, Long> {
             RedirectAttributes redirectAttributes) {
 
         User receiver = userService.findByUsername(username);
-        if(receiver != null) {
+        if (receiver != null) {
             m.setReceiverId(receiver.getId());
         }
         m.setSenderId(user.getId());
@@ -257,9 +257,9 @@ public class MessageController extends BaseController<Message, Long> {
 
     @RequestMapping(value = "draft/{m}/send", method = RequestMethod.GET)
     public String showResendDraftForm(@PathVariable("m") Message m, Model model) {
-        if(m.getReceiverId() != null) {
+        if (m.getReceiverId() != null) {
             User user = userService.findOne(m.getReceiverId());
-            if(user != null) {
+            if (user != null) {
                 model.addAttribute("username", user.getUsername());
             }
         }

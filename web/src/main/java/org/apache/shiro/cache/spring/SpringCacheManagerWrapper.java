@@ -25,6 +25,7 @@ public class SpringCacheManagerWrapper implements CacheManager {
 
     /**
      * 设置spring cache manager
+     *
      * @param cacheManager
      */
     public void setCacheManager(org.springframework.cache.CacheManager cacheManager) {
@@ -47,7 +48,7 @@ public class SpringCacheManagerWrapper implements CacheManager {
         @Override
         public Object get(Object key) throws CacheException {
             Object value = springCache.get(key);
-            if(value instanceof SimpleValueWrapper) {
+            if (value instanceof SimpleValueWrapper) {
                 return ((SimpleValueWrapper) value).get();
             }
             return value;

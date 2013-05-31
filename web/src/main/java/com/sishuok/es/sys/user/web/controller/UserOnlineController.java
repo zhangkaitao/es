@@ -41,13 +41,13 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
 
         this.permissionList.assertHasEditPermission();
 
-        for(String id : ids) {
+        for (String id : ids) {
             UserOnline online = userOnlineService.findOne(id);
-            if(online == null) {
+            if (online == null) {
                 continue;
             }
             OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getId());
-            if(onlineSession == null) {
+            if (onlineSession == null) {
                 continue;
             }
             onlineSession.setStatus(OnlineSession.OnlineStatus.force_logout);

@@ -24,7 +24,7 @@ import java.util.Iterator;
  * 清理无关联的Role-Resource/Permission关系
  * 1、Role-Resource
  * 2、Role-Permission
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-13 下午5:09
  * <p>Version: 1.0
@@ -55,7 +55,7 @@ public class RoleClearRelationService {
             rolePage = roleService.findAll(pageable);
             //开启新事物清除
             try {
-                RoleClearRelationService roleClearRelationService = (RoleClearRelationService)AopContext.currentProxy();
+                RoleClearRelationService roleClearRelationService = (RoleClearRelationService) AopContext.currentProxy();
                 roleClearRelationService.doClear(rolePage.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
@@ -69,26 +69,26 @@ public class RoleClearRelationService {
 
     public void doClear(Collection<Role> roleColl) {
 
-        for(Role role : roleColl) {
+        for (Role role : roleColl) {
 
             boolean needUpdate = false;
             Iterator<RoleResourcePermission> iter = role.getResourcePermissions().iterator();
 
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 RoleResourcePermission roleResourcePermission = iter.next();
 
                 //如果资源不存在了 就删除
                 Long resourceId = roleResourcePermission.getResourceId();
-                if(!resourceService.exists(resourceId)) {
+                if (!resourceService.exists(resourceId)) {
                     iter.remove();
                     needUpdate = true;
                 }
 
                 Iterator<Long> permissionIdIter = roleResourcePermission.getPermissionIds().iterator();
-                while(permissionIdIter.hasNext()) {
+                while (permissionIdIter.hasNext()) {
                     Long permissionId = permissionIdIter.next();
 
-                    if(!permissionService.exists(permissionId)) {
+                    if (!permissionService.exists(permissionId)) {
                         permissionIdIter.remove();
                         needUpdate = true;
                     }
@@ -96,7 +96,7 @@ public class RoleClearRelationService {
 
             }
 
-            if(needUpdate) {
+            if (needUpdate) {
                 roleService.update(role);
             }
 

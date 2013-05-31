@@ -44,7 +44,6 @@ public class IndexController {
     }
 
 
-
     @RequestMapping(value = "/welcome")
     public String welcome() {
         return "admin/index/welcome";

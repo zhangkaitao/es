@@ -52,7 +52,7 @@ public class PermissionController extends BaseCRUDController<Permission, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Permission permission = permissionService.findOne(id);
             permission.setShow(newStatus);
             permissionService.update(permission);
@@ -61,8 +61,6 @@ public class PermissionController extends BaseCRUDController<Permission, Long> {
 
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
-
-
 
 
 }

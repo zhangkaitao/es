@@ -75,10 +75,9 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     }
 
 
-
     @RequestMapping(value = "{type}/create", method = RequestMethod.GET)
     public String showCreateFormWithType(@PathVariable("type") GroupType type, Model model) {
-        if(!model.containsAttribute("m")) {
+        if (!model.containsAttribute("m")) {
             Group group = new Group();
             group.setType(type);
             model.addAttribute("m", group);
@@ -95,7 +94,6 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     }
 
 
-
     @RequestMapping(value = "/changeStatus/{newStatus}")
     public String changeShowStatus(
             HttpServletRequest request,
@@ -105,7 +103,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Group group = groupService.findOne(id);
             group.setShow(newStatus);
             groupService.update(group);
@@ -123,9 +121,9 @@ public class GroupController extends BaseCRUDController<Group, Long> {
 
         this.permissionList.assertHasUpdatePermission();
 
-        for(Long id : ids) {
+        for (Long id : ids) {
             Group group = groupService.findOne(id);
-            if(group.getType() != GroupType.user) {//只有用户组 可设置为默认 其他无效
+            if (group.getType() != GroupType.user) {//只有用户组 可设置为默认 其他无效
                 continue;
             }
             group.setDefaultGroup(newStatus);
@@ -133,7 +131,6 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         }
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
-
 
 
     @RequestMapping("ajax/autocomplete")
@@ -157,11 +154,11 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         searchable.addSearchParam("groupId_eq", group.getId());
 
         Page page = null;
-        if(group.getType() == GroupType.user) {
+        if (group.getType() == GroupType.user) {
             page = groupRelationService.findAll(searchable);
         }
 
-        if(group.getType() == GroupType.organization) {
+        if (group.getType() == GroupType.organization) {
             page = groupRelationService.findAll(searchable);
         }
 
@@ -208,13 +205,13 @@ public class GroupController extends BaseCRUDController<Group, Long> {
     public String showBatchAppendGroupRelationForm(@PathVariable("group") Group group) {
 
         this.permissionList.assertHasAnyPermission(
-                new String[] {PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
+                new String[]{PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
 
-        if(group.getType() == GroupType.user) {
+        if (group.getType() == GroupType.user) {
             return viewName("relation/appendUserGroupRelation");
         }
 
-        if(group.getType() == GroupType.organization) {
+        if (group.getType() == GroupType.organization) {
             return viewName("relation/appendOrganizationGroupRelation");
         }
 
@@ -232,25 +229,21 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             RedirectAttributes redirectAttributes) {
 
         this.permissionList.assertHasAnyPermission(
-                new String[] {PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
+                new String[]{PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
 
-        if(group.getType() == GroupType.organization) {
+        if (group.getType() == GroupType.organization) {
             groupRelationService.appendRelation(group.getId(), ids);
         }
 
-        if(group.getType() == GroupType.user) {
+        if (group.getType() == GroupType.user) {
             groupRelationService.appendRelation(group.getId(), ids, startIds, endIds);
         }
-
 
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "批量添加成功");
 
         return redirectToUrl(backURL);
     }
-
-
-
 
 
 }

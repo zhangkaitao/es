@@ -21,10 +21,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 /**
- *
  * 清理无关联的User-Organization/Job关系
  * 1、User-Organization/Job
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-13 下午5:09
  * <p>Version: 1.0
@@ -55,13 +54,13 @@ public class UserClearRelationService {
         int pn = 0;
         final int PAGE_SIZE = 100;
         Pageable pageable = null;
-        do{
+        do {
             pageable = new PageRequest(pn++, PAGE_SIZE);
             page = userService.findUserOrganizationJobOnNotExistsOrganizationOrJob(pageable);
 
             //开启新事物清除
             try {
-                UserClearRelationService userClearRelationService = (UserClearRelationService)AopContext.currentProxy();
+                UserClearRelationService userClearRelationService = (UserClearRelationService) AopContext.currentProxy();
                 userClearRelationService.doClear(page.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
@@ -76,13 +75,13 @@ public class UserClearRelationService {
     }
 
     public void doClear(Collection<UserOrganizationJob> userOrganizationJobColl) {
-        for(UserOrganizationJob userOrganizationJob : userOrganizationJobColl) {
+        for (UserOrganizationJob userOrganizationJob : userOrganizationJobColl) {
 
             User user = userOrganizationJob.getUser();
 
-            if(!organizationService.exists(userOrganizationJob.getOrganizationId())) {
+            if (!organizationService.exists(userOrganizationJob.getOrganizationId())) {
                 user.getOrganizationJobs().remove(userOrganizationJob);//如果是组织机构删除了 直接移除
-            } else if(!jobService.exists(userOrganizationJob.getJobId())) {
+            } else if (!jobService.exists(userOrganizationJob.getJobId())) {
                 user.getOrganizationJobs().remove(userOrganizationJob);
                 userOrganizationJob.setJobId(null);
                 user.getOrganizationJobs().add(userOrganizationJob);

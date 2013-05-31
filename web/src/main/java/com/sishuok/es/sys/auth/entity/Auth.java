@@ -25,17 +25,17 @@ import java.util.Set;
  * 给组织机构和工作职务都授权 (orgnizationId=? and jobId=?)
  * 给用户授权  (userId=?)
  * 给组授权 (groupId=?)
- *
+ * <p/>
  * 因此查询用户有没有权限 就是
  * where (orgnizationId=? and jobId=0) or (organizationId = 0 and jobId=?) or (orgnizationId=? and jobId=?) or (userId=?) or (groupId=?)
- *
- *
+ * <p/>
+ * <p/>
  * 2、为了提高性能
- *    放到一张表
- *    此处不做关系映射（这样需要配合缓存）
- *
+ * 放到一张表
+ * 此处不做关系映射（这样需要配合缓存）
+ * <p/>
  * 3、如果另一方是可选的（如只选组织机构 或 只选工作职务） 那么默认0 使用0的目的是为了也让走索引
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-4-24 下午2:14
  * <p>Version: 1.0
@@ -113,7 +113,7 @@ public class Auth extends BaseEntity<Long> {
     }
 
     public Set<Long> getRoleIds() {
-        if(roleIds == null) {
+        if (roleIds == null) {
             roleIds = Sets.newHashSet();
         }
         return roleIds;

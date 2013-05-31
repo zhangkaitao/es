@@ -50,7 +50,7 @@ public class CategoryController extends BaseMovableController<Category, Long> {
             Searchable searchable, Model model,
             @PathVariable(value = "selectType") String selectType,
             @MatrixVariable(value = "domId", pathVar = "selectType") String domId,
-                @MatrixVariable(value = "domName", pathVar = "selectType", required = false) String domName) {
+            @MatrixVariable(value = "domName", pathVar = "selectType", required = false) String domName) {
 
         this.permissionList.assertHasViewPermission();
 

@@ -13,9 +13,9 @@ import javax.persistence.Table;
 
 /**
  * 分组与 用户/组织机构关系表
- *
+ * <p/>
  * 将用户/组织机构放一张表目的是提高查询性能
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-4-19 下午3:44
  * <p>Version: 1.0

@@ -104,17 +104,16 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
             return showCreateForm(model);
         }
 
-        if(m.getType() == AuthType.user) {
+        if (m.getType() == AuthType.user) {
             authService.addUserAuth(userIds, m);
-        } else if(m.getType() == AuthType.user_group || m.getType() == AuthType.organization_group) {
+        } else if (m.getType() == AuthType.user_group || m.getType() == AuthType.organization_group) {
             authService.addGroupAuth(groupIds, m);
-        } else if(m.getType() == AuthType.organization_job) {
+        } else if (m.getType() == AuthType.organization_job) {
             authService.addOrganizationJobAuth(organizationIds, jobIds, m);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "新增成功");
         return redirectToUrl("/admin/sys/auth?search.type_eq=" + m.getType());
     }
-
 
 
 }

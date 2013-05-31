@@ -68,6 +68,7 @@ public class LoginUserController extends BaseController<User, Long> {
         model.addAttribute("user", user);
         return viewName("editForm");
     }
+
     @RequestMapping(value = "/updateInfo", method = RequestMethod.POST)
     public String updateInfo(
             @CurrentUser User user,
@@ -76,24 +77,24 @@ public class LoginUserController extends BaseController<User, Long> {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        if(email == null || !email.matches(User.EMAIL_PATTERN)) {
+        if (email == null || !email.matches(User.EMAIL_PATTERN)) {
             model.addAttribute(Constants.ERROR, "请输入正确的邮箱地址");
             return updateInfoForm(user, model);
         }
 
-        if(mobilePhoneNumber == null || !mobilePhoneNumber.matches(User.MOBILE_PHONE_NUMBER_PATTERN)) {
+        if (mobilePhoneNumber == null || !mobilePhoneNumber.matches(User.MOBILE_PHONE_NUMBER_PATTERN)) {
             model.addAttribute(Constants.ERROR, "请输入正确的手机号");
             return updateInfoForm(user, model);
         }
 
         User emailDbUser = userService.findByEmail(email);
-        if(emailDbUser != null && !emailDbUser.equals(user)) {
+        if (emailDbUser != null && !emailDbUser.equals(user)) {
             model.addAttribute(Constants.ERROR, "邮箱地址已经被其他人使用，请换一个");
             return updateInfoForm(user, model);
         }
 
         User mobilePhoneNumberDbUser = userService.findByMobilePhoneNumber(mobilePhoneNumber);
-        if(mobilePhoneNumberDbUser != null && !mobilePhoneNumberDbUser.equals(user)) {
+        if (mobilePhoneNumberDbUser != null && !mobilePhoneNumberDbUser.equals(user)) {
             model.addAttribute(Constants.ERROR, "手机号已经被其他人使用，请换一个");
             return updateInfoForm(user, model);
         }
@@ -107,7 +108,6 @@ public class LoginUserController extends BaseController<User, Long> {
         return redirectToUrl(viewName("updateInfo"));
 
     }
-
 
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
@@ -127,17 +127,17 @@ public class LoginUserController extends BaseController<User, Long> {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        if(!passwordService.matches(user, oldPassword)) {
+        if (!passwordService.matches(user, oldPassword)) {
             model.addAttribute(Constants.ERROR, "旧密码不正确");
             return changePasswordForm(user, model);
         }
 
-        if(StringUtils.isEmpty(newPassword1) || StringUtils.isEmpty(newPassword2)) {
+        if (StringUtils.isEmpty(newPassword1) || StringUtils.isEmpty(newPassword2)) {
             model.addAttribute(Constants.ERROR, "必须输入新密码");
             return changePasswordForm(user, model);
         }
 
-        if(!newPassword1.equals(newPassword2)) {
+        if (!newPassword1.equals(newPassword2)) {
             model.addAttribute(Constants.ERROR, "两次输入的密码不一致");
             return changePasswordForm(user, model);
         }

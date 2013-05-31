@@ -48,7 +48,7 @@ public class ProductController extends BaseCRUDController<Product, Long> {
     @RequestMapping(value = "/category-{categoryId}", method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
     public String listByCategory(Searchable searchable, @PathVariable("categoryId") Category category, Model model) {
-        if(category != null) {
+        if (category != null) {
             model.addAttribute("category", category);
             searchable.addSearchFilter("category.id", SearchOperator.eq, category.getId());
         }
@@ -62,7 +62,7 @@ public class ProductController extends BaseCRUDController<Product, Long> {
     public String showCreateForm(Model model, @PathVariable("categoryId") Category category) {
         String result = super.showCreateForm(model);
 
-        if(category != null) {
+        if (category != null) {
             Product m = (Product) model.asMap().get("m");
             m.setCategory(category);
         }

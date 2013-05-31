@@ -20,7 +20,7 @@ import java.util.List;
         "classpath:spring-common.xml",
         "classpath:spring-config.xml",
         "classpath:spring-test-config.xml"
-        })
+})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public abstract class BaseIT extends AbstractTransactionalJUnit4SpringContextTests {
 
@@ -34,19 +34,21 @@ public abstract class BaseIT extends AbstractTransactionalJUnit4SpringContextTes
     protected void flush() {
         entityManager.flush();
     }
+
     protected void clear() {
         entityManager.flush();
         entityManager.clear();
     }
 
     protected void deleteAll(List<? extends AbstractEntity> entityList) {
-        for(AbstractEntity m : entityList) {
+        for (AbstractEntity m : entityList) {
             delete(m);
         }
     }
+
     protected void delete(AbstractEntity m) {
         m = entityManager.find(m.getClass(), m.getId());
-        if(m != null) {
+        if (m != null) {
             entityManager.remove(m);
         }
     }

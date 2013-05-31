@@ -27,10 +27,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
  * 为OnlineSession定制的Web Session Manager
  * 主要是在此如果会话的属性修改了 就标识下其修改了 然后方便 OnlineSessionDao同步
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-3-21 下午2:28
  * <p>Version: 1.0
@@ -49,7 +48,7 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
     @Override
     public void setAttribute(SessionKey sessionKey, Object attributeKey, Object value) throws InvalidSessionException {
         super.setAttribute(sessionKey, attributeKey, value);
-        if(value != null && needMarkAttributeChanged(attributeKey)) {
+        if (value != null && needMarkAttributeChanged(attributeKey)) {
             OnlineSession s = (OnlineSession) doGetSession(sessionKey);
             s.markAttributeChanged();
         }
@@ -57,7 +56,7 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
 
     private boolean needMarkAttributeChanged(Object attributeKey) {
         //优化 flash属性没必要持久化
-        if("org.springframework.web.servlet.support.SessionFlashMapManager.FLASH_MAPS".equals(attributeKey)) {
+        if ("org.springframework.web.servlet.support.SessionFlashMapManager.FLASH_MAPS".equals(attributeKey)) {
             return false;
         }
         return true;
@@ -66,7 +65,7 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
     @Override
     public Object removeAttribute(SessionKey sessionKey, Object attributeKey) throws InvalidSessionException {
         Object removed = super.removeAttribute(sessionKey, attributeKey);
-        if(removed != null) {
+        if (removed != null) {
             OnlineSession s = (OnlineSession) doGetSession(sessionKey);
             s.markAttributeChanged();
         }
@@ -85,7 +84,7 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
 
         int invalidCount = 0;
 
-        int timeout = (int)getGlobalSessionTimeout();
+        int timeout = (int) getGlobalSessionTimeout();
         Date expiredDate = DateUtils.addMilliseconds(new Date(), 0 - timeout);
         PageRequest pageRequest = new PageRequest(0, 100);
         Page<UserOnline> page = userOnlineService.findExpiredUserOnlineList(expiredDate, pageRequest);
@@ -93,12 +92,12 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
         List<String> needOfflineIdList = Lists.newArrayList();
         //改成批量过期删除
         while (page.hasContent()) {
-            for(UserOnline userOnline : page.getContent()) {
+            for (UserOnline userOnline : page.getContent()) {
                 try {
                     SessionKey key = new DefaultSessionKey(userOnline.getId());
                     Session session = retrieveSession(key);
                     //仅从cache中删除 db的删除
-                    if(session != null) {
+                    if (session != null) {
                         session.setAttribute(ShiroConstants.ONLY_CLEAR_CACHE, true);
                     }
                     validate(session, key);
@@ -109,11 +108,11 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
                                 (expired ? " (expired)" : " (stopped)");
                         log.debug(msg);
                     }
-                    invalidCount ++;
+                    invalidCount++;
                     needOfflineIdList.add(userOnline.getId());
                 }
 
-                if(needOfflineIdList.size() > 0) {
+                if (needOfflineIdList.size() > 0) {
                     try {
                         userOnlineService.batchOffline(needOfflineIdList);
                     } catch (Exception e) {

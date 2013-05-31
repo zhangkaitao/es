@@ -60,11 +60,11 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-
     @RequestMapping(value = "create/discard", method = RequestMethod.GET)
     public String showCreateForm(Model model) {
         throw new RuntimeException("discard method");
     }
+
     //不再是默认的create，因为下边的create具有多个参数，因此无法覆盖默认的create，因此为了使用该url 我们把父类的url改掉
     @RequestMapping(value = "create/discard", method = RequestMethod.POST)
     @Override
@@ -76,7 +76,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     public String showCreateForm(@PathVariable(value = "type") IconType type, Model model) {
         Icon icon = new Icon();
         icon.setType(type);
-        if(type == IconType.css_sprite || type == IconType.upload_file) {
+        if (type == IconType.css_sprite || type == IconType.upload_file) {
             icon.setWidth(13);
             icon.setHeight(13);
         }
@@ -93,7 +93,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
             @Valid @ModelAttribute("m") Icon icon, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
-        if(file != null && !file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             icon.setImgSrc(FileUploadUtils.upload(request, file, result));
         }
         String view = super.create(model, icon, result, redirectAttributes);
@@ -116,7 +116,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
             @Valid @ModelAttribute("m") Icon icon, BindingResult result,
             @RequestParam(value = "BackURL") String backURL,
             RedirectAttributes redirectAttributes) {
-        if(file != null && !file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             icon.setImgSrc(FileUploadUtils.upload(request, file, result));
         }
         String view = super.update(model, icon, result, backURL, redirectAttributes);
@@ -152,7 +152,6 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-
     @RequestMapping(value = "batch/delete/discard")
     public String deleteInBatch(
             @RequestParam(value = "ids", required = false) Long[] ids,
@@ -179,8 +178,6 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-
-
     @RequestMapping(value = "/select")
     public String select(Model model) {
         setCommonData(model);
@@ -189,9 +186,9 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-
     /**
      * 如果量大 建议 在页面设置按钮 然后点击生成
+     *
      * @param request
      * @return
      */
@@ -216,9 +213,9 @@ public class IconController extends BaseCRUDController<Icon, Long> {
 
         List<Icon> iconList = iconService.findAllWithNoPageNoSort(searchable);
 
-        for(Icon icon : iconList) {
+        for (Icon icon : iconList) {
 
-            if(icon.getType() == IconType.upload_file) {
+            if (icon.getType() == IconType.upload_file) {
                 cssList.add(String.format(
                         uploadFileTemplate,
                         icon.getIdentity(),
@@ -228,7 +225,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
                 continue;
             }
 
-            if(icon.getType() == IconType.css_sprite) {
+            if (icon.getType() == IconType.css_sprite) {
                 cssList.add(String.format(
                         cssSpriteTemplate,
                         icon.getIdentity(),
@@ -253,8 +250,6 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     }
 
 
-
-
     @RequestMapping(value = "validate", method = RequestMethod.GET)
     @ResponseBody
     public Object validate(
@@ -273,7 +268,6 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         }
         return response.result();
     }
-
 
 
 }

@@ -31,6 +31,7 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
 
     /**
      * 上线
+     *
      * @param userOnline
      */
     public void online(UserOnline userOnline) {
@@ -39,6 +40,7 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
 
     /**
      * 下线
+     *
      * @param sid
      */
     public void offline(String sid) {
@@ -55,6 +57,7 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
 
     /**
      * 批量下线
+     *
      * @param needOfflineIdList
      */
     public void batchOffline(List<String> needOfflineIdList) {
@@ -63,6 +66,7 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
 
     /**
      * 无效的UserOnline
+     *
      * @return
      */
     public Page<UserOnline> findExpiredUserOnlineList(Date expiredDate, Pageable pageable) {

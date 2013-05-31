@@ -46,7 +46,8 @@
     <!-- Remembered vs Authenticated http://www.ituring.com.cn/article/287 -->
     <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
         <!-- rememberme cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位）-->
-        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('${shiro.uid.rememeberMe.cookie.base64.cipherKey}')}"/>
+        <property name="cipherKey"
+                  value="#{T(org.apache.shiro.codec.Base64).decode('${shiro.uid.rememeberMe.cookie.base64.cipherKey}')}"/>
         <property name="cookie" ref="rememberMeCookie"/>
     </bean>
 
@@ -77,14 +78,13 @@
         <property name="sessionIdCookieEnabled" value="true"/>
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
     </bean>
-    
+
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
         <property name="realm" ref="userRealm"/>
         <property name="sessionManager" ref="sessionManager"/>
         <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
-
 
 
     <!-- filter -->
@@ -111,7 +111,7 @@
     <!-- 验证会话是否是强制退出等的filter -->
     <bean id="onlineSessionFilter" class="org.apache.shiro.web.filter.online.OnlineSessionFilter">
         <property name="forceLogoutUrl" value="${shiro.user.force.logout.url}"/>
-        <property name="onlineSessionDAO"  ref="onlineSessionDAO"/>
+        <property name="onlineSessionDAO" ref="onlineSessionDAO"/>
     </bean>
 
     <bean id="jCaptchaValidateFilter" class="org.apache.shiro.web.filter.jcaptcha.JCaptchaValidateFilter">
@@ -154,8 +154,6 @@
             </value>
         </property>
     </bean>
-
-
 
 
     <!-- aop and other-->

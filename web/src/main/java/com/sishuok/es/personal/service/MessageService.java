@@ -33,6 +33,7 @@ public class MessageService extends BaseService<Message, Long> {
 
     /**
      * 改变发件人 消息的原状态为目标状态
+     *
      * @param senderId
      * @param oldState
      * @param newState
@@ -44,6 +45,7 @@ public class MessageService extends BaseService<Message, Long> {
 
     /**
      * 改变收件人人 消息的原状态为目标状态
+     *
      * @param receiverId
      * @param oldState
      * @param newState
@@ -55,6 +57,7 @@ public class MessageService extends BaseService<Message, Long> {
 
     /**
      * 物理删除那些已删除的（即收件人和发件人 同时都删除了的）
+     *
      * @param deletedState
      */
     public Integer clearDeletedMessage(MessageState deletedState) {
@@ -63,6 +66,7 @@ public class MessageService extends BaseService<Message, Long> {
 
     /**
      * 更改状态
+     *
      * @param oldStates
      * @param newState
      * @param expireDays 当前时间-过期天数 时间之前的消息将改变状态
@@ -76,13 +80,13 @@ public class MessageService extends BaseService<Message, Long> {
 
     /**
      * 统计用户收件箱未读消息
+     *
      * @param userId
      * @return
      */
     public Long countUnread(Long userId) {
         return messageRepository.countUnread(userId, MessageState.in_box);
     }
-
 
 
 }

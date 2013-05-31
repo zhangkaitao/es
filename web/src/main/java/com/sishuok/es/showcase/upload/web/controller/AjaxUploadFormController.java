@@ -35,7 +35,7 @@ public class AjaxUploadFormController {
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String showCreateForm(Model model) {
         model.addAttribute(Constants.OP_NAME, "新增");
-        if(!model.containsAttribute("upload")) {
+        if (!model.containsAttribute("upload")) {
             model.addAttribute("upload", new Upload());
         }
         return "showcase/upload/ajax/editForm";

@@ -52,8 +52,8 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
         Set<String> userPermissions = userAuthService.findStringPermissions(user);
 
         Iterator<Resource> iter = resources.iterator();
-        while(iter.hasNext()) {
-            if(!hasPermission(iter.next(), userPermissions)) {
+        while (iter.hasNext()) {
+            if (!hasPermission(iter.next(), userPermissions)) {
                 iter.remove();
             }
         }
@@ -63,12 +63,12 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
 
     private boolean hasPermission(Resource resource, Set<String> userPermissions) {
         String resourceIdentity = resource.getIdentity();
-        if(StringUtils.isEmpty(resourceIdentity)) {
+        if (StringUtils.isEmpty(resourceIdentity)) {
             return true;
         }
 
-        for(String permission : userPermissions) {
-            if(permission.startsWith(resourceIdentity)) {
+        for (String permission : userPermissions) {
+            if (permission.startsWith(resourceIdentity)) {
                 return true;
             }
         }
@@ -79,7 +79,7 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
     @SuppressWarnings("unchecked")
     public static List<Menu> convertToMenus(List<Resource> resources) {
 
-        if(resources.size() == 0) {
+        if (resources.size() == 0) {
             return Collections.EMPTY_LIST;
         }
 
@@ -93,28 +93,28 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
     }
 
     private static void removeNoLeafMenu(List<Menu> menus) {
-        if(menus.size() == 0) {
+        if (menus.size() == 0) {
             return;
         }
-        for(int i = menus.size() - 1; i >= 0; i--) {
+        for (int i = menus.size() - 1; i >= 0; i--) {
             Menu m = menus.get(i);
             removeNoLeafMenu(m.getChildren());
-            if(!m.isHasChildren() && StringUtils.isEmpty(m.getUrl())) {
+            if (!m.isHasChildren() && StringUtils.isEmpty(m.getUrl())) {
                 menus.remove(i);
             }
         }
     }
 
     private static void recursiveMenu(Menu menu, List<Resource> resources) {
-        for(int i = resources.size() - 1; i >= 0; i--) {
+        for (int i = resources.size() - 1; i >= 0; i--) {
             Resource resource = resources.get(i);
-            if(resource.getParentId().equals(menu.getId())) {
+            if (resource.getParentId().equals(menu.getId())) {
                 menu.getChildren().add(convertToMenu(resource));
                 resources.remove(i);
             }
         }
 
-        for(Menu subMenu : menu.getChildren()) {
+        for (Menu subMenu : menu.getChildren()) {
             recursiveMenu(subMenu, resources);
         }
     }

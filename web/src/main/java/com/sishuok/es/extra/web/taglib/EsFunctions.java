@@ -27,16 +27,17 @@ public class EsFunctions {
 
     /**
      * 判断是否存储指定id的组织机构
+     *
      * @param id
      * @param onlyDisplayShow 是否仅显示可见的
      * @return
      */
     public static boolean existsOrganization(Long id, Boolean onlyDisplayShow) {
         Organization organization = SpringUtils.getBean(OrganizationService.class).findOne(id);
-        if(organization == null) {
+        if (organization == null) {
             return false;
         }
-        if(Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(organization.getShow())) {
+        if (Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(organization.getShow())) {
             return false;
         }
         return true;
@@ -44,16 +45,17 @@ public class EsFunctions {
 
     /**
      * 判断是否存储指定id的工作职务
+     *
      * @param id
      * @param onlyDisplayShow 是否仅显示可见的
      * @return
      */
     public static boolean existsJob(Long id, Boolean onlyDisplayShow) {
         Job job = SpringUtils.getBean(JobService.class).findOne(id);
-        if(job == null) {
+        if (job == null) {
             return false;
         }
-        if(Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(job.getShow())) {
+        if (Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(job.getShow())) {
             return false;
         }
         return true;
@@ -61,16 +63,17 @@ public class EsFunctions {
 
     /**
      * 判断是否存储指定id的资源
+     *
      * @param id
      * @param onlyDisplayShow 是否仅显示可见的
      * @return
      */
     public static boolean existsResource(Long id, Boolean onlyDisplayShow) {
         Resource resource = SpringUtils.getBean(ResourceService.class).findOne(id);
-        if(resource == null) {
+        if (resource == null) {
             return false;
         }
-        if(Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(resource.getShow())) {
+        if (Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(resource.getShow())) {
             return false;
         }
         return true;
@@ -78,16 +81,17 @@ public class EsFunctions {
 
     /**
      * 判断是否存储指定id的权限
+     *
      * @param id
      * @param onlyDisplayShow 是否仅显示可见的
      * @return
      */
     public static boolean existsPermission(Long id, Boolean onlyDisplayShow) {
         Permission permission = SpringUtils.getBean(PermissionService.class).findOne(id);
-        if(permission == null) {
+        if (permission == null) {
             return false;
         }
-        if(Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(permission.getShow())) {
+        if (Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(permission.getShow())) {
             return false;
         }
         return true;
@@ -96,16 +100,17 @@ public class EsFunctions {
 
     /**
      * 判断是否存储指定id的角色
+     *
      * @param id
      * @param onlyDisplayShow 是否仅显示可见的
      * @return
      */
     public static boolean existsRole(Long id, Boolean onlyDisplayShow) {
         Role role = SpringUtils.getBean(RoleService.class).findOne(id);
-        if(role == null) {
+        if (role == null) {
             return false;
         }
-        if(Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(role.getShow())) {
+        if (Boolean.TRUE.equals(onlyDisplayShow) && Boolean.FALSE.equals(role.getShow())) {
             return false;
         }
         return true;

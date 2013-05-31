@@ -79,7 +79,7 @@ public class UserOrganizationJob extends BaseEntity<Long> {
         return "UserOrganizationJob{id = " + this.getId() +
                 ",organizationId=" + organizationId +
                 ", jobId=" + jobId +
-                ", userId=" + (user != null ?user.getId() : "null") +
+                ", userId=" + (user != null ? user.getId() : "null") +
                 '}';
     }
 }

@@ -49,6 +49,7 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
 
     /**
      * 验证失败返回true
+     *
      * @param m
      * @param result
      * @return
@@ -60,11 +61,11 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
         //字段错误 前台使用<es:showFieldError commandName="showcase/sample"/> 显示
         if (m.getBirthday() != null && m.getBirthday().after(new Date())) {
             //前台字段名（前台使用[name=字段名]取得dom对象） 错误消息键。。
-                result.rejectValue("m.birthday", "birthday.past");
+            result.rejectValue("m.birthday", "birthday.past");
         }
 
         //全局错误 前台使用<es:showGlobalError commandName="showcase/sample"/> 显示
-        if(m.getName().contains("admin")) {
+        if (m.getName().contains("admin")) {
             result.reject("name.must.not.admin");
         }
 

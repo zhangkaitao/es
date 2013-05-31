@@ -71,7 +71,7 @@ public class SysUserFilter extends AccessControlFilter {
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         Subject subject = getSubject(request, response);
-        if(subject == null) {
+        if (subject == null) {
             return true;
         }
 
@@ -88,7 +88,7 @@ public class SysUserFilter extends AccessControlFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
         User user = (User) request.getAttribute(Constants.CURRENT_USER);
-        if(user == null) {
+        if (user == null) {
             return true;
         }
 
@@ -110,9 +110,9 @@ public class SysUserFilter extends AccessControlFilter {
     protected void redirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
         User user = (User) request.getAttribute(Constants.CURRENT_USER);
         String url = null;
-        if(Boolean.TRUE.equals(user.getDeleted())) {
+        if (Boolean.TRUE.equals(user.getDeleted())) {
             url = getUserNotfoundUrl();
-        } else if(user.getStatus() == UserStatus.blocked) {
+        } else if (user.getStatus() == UserStatus.blocked) {
             url = getUserBlockedUrl();
         } else {
             url = getUserUnknownErrorUrl();

@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- *
  * 产品类别
  * <p>User: Zhang Kaitao
  * <p>Date: 13-2-19 上午8:59

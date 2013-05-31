@@ -46,10 +46,10 @@ public class MessageApiServiceIT extends BaseMessageIT {
         messageApi.saveDraft(message);
 
 
-        Page<Message> page =  messageApi.findUserMessage(senderId, MessageState.draft_box, null);
+        Page<Message> page = messageApi.findUserMessage(senderId, MessageState.draft_box, null);
         Assert.assertTrue(page.getTotalElements() == 1);
 
-        page =  messageApi.findUserMessage(receiverId, MessageState.draft_box, null);
+        page = messageApi.findUserMessage(receiverId, MessageState.draft_box, null);
         Assert.assertTrue(page.getTotalElements() == 0);
     }
 
@@ -70,7 +70,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Long actualCount = messageService.count();
         Assert.assertEquals(expectedCount, actualCount);
 
-        Page<Message> page =  messageApi.findUserMessage(receiverId, MessageState.in_box, null);
+        Page<Message> page = messageApi.findUserMessage(receiverId, MessageState.in_box, null);
         Assert.assertTrue(page.getTotalElements() >= 1);
         Assert.assertTrue(messageApi.countUnread(receiverId) >= 1);
     }
@@ -119,11 +119,10 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(message1.getId() + "/" + message2.getId() + "/", message3.getParentIds());
 
 
-        Page<Message> page =  messageApi.findUserMessage(receiverId, MessageState.in_box, null);
+        Page<Message> page = messageApi.findUserMessage(receiverId, MessageState.in_box, null);
         Assert.assertTrue(page.getTotalElements() >= 1);
         Assert.assertTrue(messageApi.countUnread(receiverId) >= 1);
     }
-
 
 
     @Test
@@ -150,7 +149,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(userIds.length, list.size());
         Assert.assertEquals(MessageType.system_message, list.get(0).getType());
 
-        Page<Message> page =  messageApi.findUserMessage(receiverId, MessageState.in_box, null);
+        Page<Message> page = messageApi.findUserMessage(receiverId, MessageState.in_box, null);
         Assert.assertTrue(page.getTotalElements() >= 1);
         Assert.assertTrue(messageApi.countUnread(receiverId) >= 1);
     }
@@ -175,14 +174,13 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Long actualCount = messageService.count();
         Assert.assertEquals(expectedCount, actualCount);
 
-        Long[] userIds = new Long[] {user1.getId()};
+        Long[] userIds = new Long[]{user1.getId()};
         Searchable searchable = Searchable.newSearchable();
         searchable.addSearchFilter("receiverId", SearchOperator.in, userIds);
         List<Message> list = messageService.findAllWithNoPageNoSort(searchable);
         Assert.assertEquals(userIds.length, list.size());
         Assert.assertEquals(MessageType.system_message, list.get(0).getType());
     }
-
 
 
     @Test
@@ -197,7 +195,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.trash_box, message.getSenderState());
         Assert.assertEquals(MessageState.in_box, message.getReceiverState());
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
@@ -216,7 +214,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.out_box, message.getSenderState());
         Assert.assertEquals(MessageState.trash_box, message.getReceiverState());
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
 
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
@@ -232,7 +230,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Message message1 = sendDefaultMessage();
         Message message2 = sendDefaultMessage();
         Message message3 = sendDefaultMessage();
-        Long[] messageIds = new Long[] {message1.getId(), message2.getId(), message3.getId()};
+        Long[] messageIds = new Long[]{message1.getId(), message2.getId(), message3.getId()};
 
         messageApi.recycle(senderId, messageIds);
 
@@ -240,7 +238,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.trash_box, message1.getSenderState());
         Assert.assertEquals(MessageState.in_box, message1.getReceiverState());
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
@@ -255,7 +253,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Message message1 = sendDefaultMessage();
         Message message2 = sendDefaultMessage();
         Message message3 = sendDefaultMessage();
-        Long[] messageIds = new Long[] {message1.getId(), message2.getId(), message3.getId()};
+        Long[] messageIds = new Long[]{message1.getId(), message2.getId(), message3.getId()};
 
         messageApi.recycle(receiverId, messageIds);
 
@@ -263,7 +261,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.out_box, message1.getSenderState());
         Assert.assertEquals(MessageState.trash_box, message1.getReceiverState());
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
 
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
@@ -283,7 +281,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.store_box, message.getSenderState());
         Assert.assertEquals(MessageState.in_box, message.getReceiverState());
 
-        Long actualStoreBoxCount =  messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
+        Long actualStoreBoxCount = messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
         Assert.assertEquals(expectedStoreBoxCount, actualStoreBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
@@ -302,7 +300,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.out_box, message.getSenderState());
         Assert.assertEquals(MessageState.store_box, message.getReceiverState());
 
-        Long actualStoreBoxCount =  messageApi.findUserMessage(receiverId, MessageState.store_box, null).getTotalElements();
+        Long actualStoreBoxCount = messageApi.findUserMessage(receiverId, MessageState.store_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
 
         Assert.assertEquals(expectedStoreBoxCount, actualStoreBoxCount);
@@ -318,7 +316,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Message message1 = sendDefaultMessage();
         Message message2 = sendDefaultMessage();
         Message message3 = sendDefaultMessage();
-        Long[] messageIds = new Long[] {message1.getId(), message2.getId(), message3.getId()};
+        Long[] messageIds = new Long[]{message1.getId(), message2.getId(), message3.getId()};
 
         messageApi.store(senderId, messageIds);
 
@@ -326,7 +324,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.store_box, message1.getSenderState());
         Assert.assertEquals(MessageState.in_box, message1.getReceiverState());
 
-        Long actualStoreBoxCount =  messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
+        Long actualStoreBoxCount = messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
         Assert.assertEquals(expectedStoreBoxCount, actualStoreBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
@@ -341,7 +339,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Message message1 = sendDefaultMessage();
         Message message2 = sendDefaultMessage();
         Message message3 = sendDefaultMessage();
-        Long[] messageIds = new Long[] {message1.getId(), message2.getId(), message3.getId()};
+        Long[] messageIds = new Long[]{message1.getId(), message2.getId(), message3.getId()};
 
         messageApi.store(receiverId, messageIds);
 
@@ -349,14 +347,12 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.out_box, message1.getSenderState());
         Assert.assertEquals(MessageState.store_box, message1.getReceiverState());
 
-        Long actualStoreBoxCount =  messageApi.findUserMessage(receiverId, MessageState.store_box, null).getTotalElements();
+        Long actualStoreBoxCount = messageApi.findUserMessage(receiverId, MessageState.store_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
 
         Assert.assertEquals(expectedStoreBoxCount, actualStoreBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
     }
-
-
 
 
     @Test
@@ -371,7 +367,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.delete_box, message.getSenderState());
         Assert.assertEquals(MessageState.in_box, message.getReceiverState());
 
-        Long actualDeleteBoxCount =  messageApi.findUserMessage(senderId, MessageState.delete_box, null).getTotalElements();
+        Long actualDeleteBoxCount = messageApi.findUserMessage(senderId, MessageState.delete_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
@@ -390,7 +386,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.out_box, message.getSenderState());
         Assert.assertEquals(MessageState.delete_box, message.getReceiverState());
 
-        Long actualDeleteBoxCount =  messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
+        Long actualDeleteBoxCount = messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
 
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
@@ -406,7 +402,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Message message1 = sendDefaultMessage();
         Message message2 = sendDefaultMessage();
         Message message3 = sendDefaultMessage();
-        Long[] messageIds = new Long[] {message1.getId(), message2.getId(), message3.getId()};
+        Long[] messageIds = new Long[]{message1.getId(), message2.getId(), message3.getId()};
 
         messageApi.delete(senderId, messageIds);
 
@@ -414,7 +410,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.delete_box, message1.getSenderState());
         Assert.assertEquals(MessageState.in_box, message1.getReceiverState());
 
-        Long actualDeleteBoxCount =  messageApi.findUserMessage(senderId, MessageState.delete_box, null).getTotalElements();
+        Long actualDeleteBoxCount = messageApi.findUserMessage(senderId, MessageState.delete_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
         Assert.assertEquals(expectedUnreadCount, actualUnreadCount);
@@ -429,7 +425,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Message message1 = sendDefaultMessage();
         Message message2 = sendDefaultMessage();
         Message message3 = sendDefaultMessage();
-        Long[] messageIds = new Long[] {message1.getId(), message2.getId(), message3.getId()};
+        Long[] messageIds = new Long[]{message1.getId(), message2.getId(), message3.getId()};
 
         messageApi.delete(receiverId, messageIds);
 
@@ -437,7 +433,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertEquals(MessageState.out_box, message1.getSenderState());
         Assert.assertEquals(MessageState.delete_box, message1.getReceiverState());
 
-        Long actualDeleteBoxCount =  messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
+        Long actualDeleteBoxCount = messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
         Long actualUnreadCount = messageApi.countUnread(receiverId);
 
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
@@ -462,15 +458,15 @@ public class MessageApiServiceIT extends BaseMessageIT {
 
         messageService.save(message);
 
-        Long actualDraftBoxCount =  messageApi.findUserMessage(senderId, MessageState.draft_box, null).getTotalElements();
+        Long actualDraftBoxCount = messageApi.findUserMessage(senderId, MessageState.draft_box, null).getTotalElements();
         Assert.assertEquals(expectedDraftBoxCount, actualDraftBoxCount);
 
         messageApi.clearDraftBox(senderId);
 
-        actualDraftBoxCount =  messageApi.findUserMessage(senderId, MessageState.draft_box, null).getTotalElements();
+        actualDraftBoxCount = messageApi.findUserMessage(senderId, MessageState.draft_box, null).getTotalElements();
         Assert.assertEquals(Long.valueOf(0L), actualDraftBoxCount);
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
 
     }
@@ -491,15 +487,15 @@ public class MessageApiServiceIT extends BaseMessageIT {
         message.setContent(content);
         messageApi.send(message);
 
-        Long actualInBoxCount =  messageApi.findUserMessage(receiverId, MessageState.in_box, null).getTotalElements();
+        Long actualInBoxCount = messageApi.findUserMessage(receiverId, MessageState.in_box, null).getTotalElements();
         Assert.assertEquals(expectedInBoxCount, actualInBoxCount);
 
         messageApi.clearInBox(receiverId);
 
-        actualInBoxCount =  messageApi.findUserMessage(receiverId, MessageState.in_box, null).getTotalElements();
+        actualInBoxCount = messageApi.findUserMessage(receiverId, MessageState.in_box, null).getTotalElements();
         Assert.assertEquals(Long.valueOf(0L), actualInBoxCount);
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
 
     }
@@ -521,19 +517,18 @@ public class MessageApiServiceIT extends BaseMessageIT {
         message.setContent(content);
         messageApi.send(message);
 
-        Long actualOutBoxCount =  messageApi.findUserMessage(senderId, MessageState.out_box, null).getTotalElements();
+        Long actualOutBoxCount = messageApi.findUserMessage(senderId, MessageState.out_box, null).getTotalElements();
         Assert.assertEquals(expectedOutBoxCount, actualOutBoxCount);
 
         messageApi.clearOutBox(senderId);
 
-        actualOutBoxCount =  messageApi.findUserMessage(senderId, MessageState.out_box, null).getTotalElements();
+        actualOutBoxCount = messageApi.findUserMessage(senderId, MessageState.out_box, null).getTotalElements();
         Assert.assertEquals(Long.valueOf(0L), actualOutBoxCount);
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
 
     }
-
 
 
     @Test
@@ -554,15 +549,15 @@ public class MessageApiServiceIT extends BaseMessageIT {
 
         messageApi.store(senderId, message.getId());
 
-        Long actualStoreBoxCount =  messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
+        Long actualStoreBoxCount = messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
         Assert.assertEquals(expectedStoreBoxCount, actualStoreBoxCount);
 
         messageApi.clearStoreBox(senderId);
 
-        actualStoreBoxCount =  messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
+        actualStoreBoxCount = messageApi.findUserMessage(senderId, MessageState.store_box, null).getTotalElements();
         Assert.assertEquals(Long.valueOf(0L), actualStoreBoxCount);
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
 
     }
@@ -606,7 +601,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
 
         lastDate = message.getSenderStateChangeDate();
 
-        Long actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
 
         Thread.sleep(1500L);
@@ -618,14 +613,13 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertFalse(message.getSendDate().getTime() == message.getSenderStateChangeDate().getTime());
         Assert.assertTrue(message.getSenderStateChangeDate().getTime() > lastDate.getTime());
 
-        actualTrashBoxCount =  messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
+        actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(Long.valueOf(0L), actualTrashBoxCount);
 
-        Long actuaDeleteBoxCount =  messageApi.findUserMessage(senderId, MessageState.delete_box, null).getTotalElements();
+        Long actuaDeleteBoxCount = messageApi.findUserMessage(senderId, MessageState.delete_box, null).getTotalElements();
         Assert.assertEquals(expectedDeleteBoxCount, actuaDeleteBoxCount);
 
     }
-
 
 
     @Test
@@ -741,7 +735,6 @@ public class MessageApiServiceIT extends BaseMessageIT {
         Assert.assertFalse(messages.contains(m1));
 
     }
-
 
 
     @Test
