@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.plugin.entity.Movable;
-import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.service.BaseService;
 import org.springframework.aop.framework.AopContext;
@@ -17,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;

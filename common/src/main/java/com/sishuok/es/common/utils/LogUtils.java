@@ -1,17 +1,15 @@
 package com.sishuok.es.common.utils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Map;
 
 public class LogUtils {
 	

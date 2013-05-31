@@ -18,11 +18,7 @@ package com.sishuok.es.sys.user.web.bind.annotation;
 
 import com.sishuok.es.common.Constants;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * <p>绑定当前登录的用户</p>

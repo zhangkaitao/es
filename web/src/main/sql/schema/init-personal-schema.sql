@@ -10,7 +10,6 @@ create table `personal_message`(
   `receiver_id`      bigint,
   `send_date`        timestamp default 0,
   `title`            varchar(500),
-  `content_id`       bigint,
   `sender_state`     varchar(20),
   `sender_state_change_date`    timestamp  default 0,
   `receiver_state`   varchar(20),

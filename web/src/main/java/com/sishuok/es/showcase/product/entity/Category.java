@@ -8,7 +8,9 @@ package com.sishuok.es.showcase.product.entity;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Movable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  *

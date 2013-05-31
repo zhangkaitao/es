@@ -9,19 +9,16 @@ import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableArgumentResolver;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.lang.reflect.Method;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * <p>User: Zhang Kaitao

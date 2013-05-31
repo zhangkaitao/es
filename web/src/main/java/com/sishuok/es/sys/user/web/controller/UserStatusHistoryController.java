@@ -5,9 +5,7 @@
  */
 package com.sishuok.es.sys.user.web.controller;
 
-import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
-import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.entity.UserStatusHistory;
@@ -15,7 +13,7 @@ import com.sishuok.es.sys.user.service.UserStatusHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <p>User: Zhang Kaitao

@@ -87,7 +87,7 @@
 			form.off("submit", methods.onAjaxFormComplete);
 
 			// unbind form.submit
-			form.die("submit", methods.onAjaxFormComplete);
+			form.off("submit", methods.onAjaxFormComplete);
 			form.removeData('jqv');
             
 			form.off("click", "a[data-validation-engine-skip], a[class*='validate-skip'], button[data-validation-engine-skip], button[class*='validate-skip'], input[data-validation-engine-skip], input[class*='validate-skip']", methods._submitButtonClick);
@@ -177,16 +177,23 @@
 		* @param {String} possible values topLeft, topRight, bottomLeft, centerRight, bottomRight
 		*/
 		showPrompt: function(promptText, type, promptPosition, showArrow) {
-			var form = this.closest('form, .validationEngineContainer');
-			var options = form.data('jqv');
+            var form = this.closest('form, .validationEngineContainer');
+            var options = form.data('jqv');
+
+            var field = $(this);
+            if (options.prettySelect && field.is(":hidden")) {
+                field = form.find("#" + options.usePrefix + field.attr('id') + options.useSuffix);
+            }
+
+
 			// No option, take default one
 			if(!options)
-				options = methods._saveOptions(this, options);
+				options = methods._saveOptions(field, options);
 			if(promptPosition)
 				options.promptPosition=promptPosition;
 			options.showArrow = showArrow==true;
 
-			methods._showPrompt(this, promptText, type, false, options);
+			methods._showPrompt(field, promptText, type, false, options);
 			return this;
 		},
 		/**
@@ -1558,7 +1565,7 @@
 			var promptContent = $('<div>').addClass("formErrorContent").html(promptText).appendTo(prompt);
 
 			// determine position type
-			var positionType=field.data("promptPosition") || options.promptPosition;
+			var positionType= $(field).attr("data-promptPosition") || options.promptPosition;
 
 			// create the css arrow pointing at the field
 			// note that there is no triangle on max-checkbox and radio
@@ -1775,7 +1782,7 @@
 			//   bottomLeft:+20 means bottomLeft position shifted by 20 pixels right horizontally
 			//   topRight:20, -15 means topRight position shifted by 20 pixels to right and 15 pixels to top
 			//You can use +pixels, - pixels. If no sign is provided than + is default.
-			var positionType=field.data("promptPosition") || options.promptPosition;
+			var positionType=field.attr("data-promptPosition") || options.promptPosition;
 			var shift1="";
 			var shift2="";
 			var shiftX=0;

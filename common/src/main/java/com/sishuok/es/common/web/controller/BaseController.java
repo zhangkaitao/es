@@ -90,6 +90,17 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
     }
 
     /**
+     * 获取视图名称：即prefixViewName + "/" + suffixName
+     * @return
+     */
+    public String viewName(String suffixName) {
+        if(!suffixName.startsWith("/")) {
+            suffixName = "/" + suffixName;
+        }
+        return getViewPrefix() + suffixName;
+    }
+
+    /**
      * 共享的验证规则
      * 验证失败返回true
      * @param m

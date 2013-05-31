@@ -9,7 +9,6 @@ import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.test.BaseIT;
-import org.hibernate.Cache;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -5,14 +5,6 @@
  */
 package com.sishuok.es.common.web.bind.method.annotation;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +16,13 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
+
+import javax.servlet.ServletException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

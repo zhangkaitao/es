@@ -6,12 +6,8 @@
 package com.sishuok.es.personal.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -27,6 +23,8 @@ import java.util.Date;
  * 如果type==system_message_all表示是发给所有人的消息 策略如下：
  * 1、首先在展示时（第一页），会会自动查所有的system_message_all
  * 2、如果用户阅读了，直接复制一份 放入它的收件箱 状态改为system_message
+ *
+ * 如果消息是草稿 那么收件人状态是null
  *
  * <p>User: Zhang Kaitao
  * <p>Date: 13-5-22 下午1:51
@@ -51,6 +49,7 @@ public class Message extends BaseEntity<Long> {
     /**
      * 消息发送时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "send_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date sendDate;
@@ -97,13 +96,6 @@ public class Message extends BaseEntity<Long> {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private MessageType type = MessageType.user_message;
-
-    /**
-     * 此消息引用的消息Id（一般用于type=system_message_all） 这样的目的：
-     * 1、内容只需存一份
-     * 2、判断用户的消息是否读了系统消息
-     */
-    private Long refId;
 
     /**
      * 是否已读
@@ -206,14 +198,6 @@ public class Message extends BaseEntity<Long> {
 
     public void setType(MessageType type) {
         this.type = type;
-    }
-
-    public Long getRefId() {
-        return refId;
-    }
-
-    public void setRefId(Long refId) {
-        this.refId = refId;
     }
 
     public Boolean getRead() {

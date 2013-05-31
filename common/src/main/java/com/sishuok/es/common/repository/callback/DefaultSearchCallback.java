@@ -5,10 +5,10 @@
  */
 package com.sishuok.es.common.repository.callback;
 
-import com.sishuok.es.common.entity.search.filter.AndCondition;
-import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.AndCondition;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.filter.OrCondition;
 import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import org.springframework.data.domain.Pageable;

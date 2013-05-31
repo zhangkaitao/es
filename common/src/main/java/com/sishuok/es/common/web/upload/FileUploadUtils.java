@@ -5,10 +5,10 @@
  */
 package com.sishuok.es.common.web.upload;
 
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.security.Coder;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
-import com.sishuok.es.common.utils.LogUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;

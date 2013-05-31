@@ -11,7 +11,6 @@ import com.sishuok.es.personal.service.MessageApi;
 import com.sishuok.es.personal.service.MessageService;
 import com.sishuok.es.sys.user.service.BaseUserIT;
 import com.sishuok.es.sys.user.service.UserService;
-import com.sishuok.es.test.BaseIT;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -19,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Date: 13-5-26 上午9:59
  * <p>Version: 1.0
  */
-public class BaseMessageIT extends BaseUserIT {
+public abstract class BaseMessageIT extends BaseUserIT {
 
     @Autowired
     MessageApi messageApi;

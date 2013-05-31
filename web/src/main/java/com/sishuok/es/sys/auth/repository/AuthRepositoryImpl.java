@@ -6,6 +6,7 @@
 package com.sishuok.es.sys.auth.repository;
 
 import com.google.common.collect.Sets;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;

@@ -1,8 +1,8 @@
 <%@ tag pageEncoding="UTF-8"%>
-<%@ tag import="com.sishuok.es.sys.organization.service.OrganizationService" %>
+<%@ tag import="com.google.common.collect.Lists" %>
 <%@ tag import="com.sishuok.es.common.utils.SpringUtils" %>
 <%@ tag import="com.sishuok.es.sys.organization.entity.Organization" %>
-<%@ tag import="com.google.common.collect.Lists" %>
+<%@ tag import="com.sishuok.es.sys.organization.service.OrganizationService" %>
 <%@ tag import="java.util.List" %>
 <%@ attribute name="id" type="java.lang.Long" required="true" description="当前要展示的组织机构的名字" %>
 <%@ attribute name="showParents" type="java.lang.Boolean" required="false" description="是否显示父亲 默认包含" %>

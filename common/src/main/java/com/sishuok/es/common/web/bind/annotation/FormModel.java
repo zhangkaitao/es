@@ -16,11 +16,7 @@
 
 package com.sishuok.es.common.web.bind.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * <p>绑定请求参数到模型，并且暴露到模型中供页面使用</p>

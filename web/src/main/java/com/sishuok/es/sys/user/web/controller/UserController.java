@@ -60,12 +60,12 @@ public class UserController extends BaseCRUDController<User, Long> {
 
     @RequestMapping(value = "main", method = RequestMethod.GET)
     public String main(Model model) {
-        return getViewPrefix() + "/main";
+        return viewName("main");
     }
 
     @RequestMapping(value = "tree", method = RequestMethod.GET)
     public String tree(Model model) {
-        return getViewPrefix() + "/tree";
+        return viewName("tree");
     }
 
 
@@ -225,7 +225,7 @@ public class UserController extends BaseCRUDController<User, Long> {
 
     @RequestMapping("{user}/organizations")
     public String permissions(@PathVariable("user") User user) {
-        return getViewPrefix() + "/organizationsTable";
+        return viewName("organizationsTable");
     }
 
 

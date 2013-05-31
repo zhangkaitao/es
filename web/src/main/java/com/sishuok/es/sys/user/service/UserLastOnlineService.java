@@ -7,7 +7,6 @@ package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
-import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserLastOnline;
 import com.sishuok.es.sys.user.repository.UserLastOnlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;

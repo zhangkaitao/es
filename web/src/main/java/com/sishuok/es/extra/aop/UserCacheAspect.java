@@ -9,12 +9,7 @@ import com.sishuok.es.common.cache.BaseCacheAspect;
 import com.sishuok.es.sys.user.entity.User;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
  * 用户缓存切面

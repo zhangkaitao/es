@@ -30,7 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.*;
 import java.util.List;
 
 /**
@@ -186,7 +185,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     public String select(Model model) {
         setCommonData(model);
         model.addAttribute("icons", iconService.findAll());
-        return getViewPrefix() + "/select";
+        return viewName("select");
     }
 
 

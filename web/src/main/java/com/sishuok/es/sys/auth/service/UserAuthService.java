@@ -9,8 +9,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 import com.sishuok.es.sys.group.service.GroupService;
-import com.sishuok.es.sys.organization.entity.Job;
-import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
 import com.sishuok.es.sys.permission.entity.Permission;
@@ -27,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.awt.*;
 import java.util.Set;
 
 /**

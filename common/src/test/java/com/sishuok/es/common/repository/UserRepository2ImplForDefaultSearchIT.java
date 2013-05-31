@@ -9,15 +9,9 @@ import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
-import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
-import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -29,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * <p>User Repository集成测试</p>

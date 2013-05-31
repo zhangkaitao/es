@@ -10,7 +10,6 @@ import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
-import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.junit.Assert;

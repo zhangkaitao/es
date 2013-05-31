@@ -1,5 +1,4 @@
 <%@ tag import="com.sishuok.es.common.Constants" %>
-<%@ tag import="java.net.URLEncoder" %>
 <%@ tag import="org.springframework.util.StringUtils" %>
 <%@ tag pageEncoding="UTF-8"%>
 <%@ attribute name="hiddenInput" type="java.lang.Boolean" required="false" description="是否是隐藏展示" %>

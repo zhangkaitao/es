@@ -6,10 +6,8 @@
 package com.sishuok.es.common.repository;
 
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.entity.search.exception.SearchException;
 import com.sishuok.es.common.repository.callback.SearchCallback;
 import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import com.sishuok.es.common.utils.SpringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

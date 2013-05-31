@@ -6,30 +6,11 @@
 package com.sishuok.es.common.web.interceptor;
 
 import com.sishuok.es.common.Constants;
-import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.multipart.MultipartException;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
-import org.springframework.web.multipart.support.RequestPartServletServerHttpRequest;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriTemplate;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * 设置通用数据的Interceptor

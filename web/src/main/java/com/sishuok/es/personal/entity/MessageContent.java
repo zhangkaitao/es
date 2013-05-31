@@ -6,13 +6,14 @@
 package com.sishuok.es.personal.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * 消息内容

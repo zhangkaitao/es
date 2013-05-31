@@ -68,7 +68,7 @@
                 <div class="controls">
                     <c:choose>
                     <c:when test="${op ne '查看'}">
-                        <form:textarea path="content" cssClass="validate[required]" cssStyle="width: 600px;height: 300px;"/>
+                        <form:textarea path="content" cssClass="validate[required]" cssStyle="width: 550px;height: 300px;"/>
                     </c:when>
                     <c:otherwise>
                         ${m.content}
@@ -128,17 +128,7 @@
             uploadJson: '${ctx}/kindeditor/upload',
             fileManagerJson: '${ctx}/kindeditor/filemanager',
             allowFileManager: true,
-            afterCreate: function () {
-                var self = this;
-                KindEditor.ctrl(document, 13, function () {
-                    self.sync();
-                    $("#editForm").submit();
-                });
-                KindEditor.ctrl(self.edit.doc, 13, function () {
-                    self.sync();
-                    $("#editForm").submit();
-                });
-            }
+            afterBlur: function(){this.sync();}
         });
     });
 </script>

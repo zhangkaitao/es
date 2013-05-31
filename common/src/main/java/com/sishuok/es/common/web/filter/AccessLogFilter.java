@@ -5,13 +5,13 @@
  */
 package com.sishuok.es.common.web.filter;
 
-import java.io.IOException;
+import com.sishuok.es.common.utils.LogUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.sishuok.es.common.utils.LogUtils;
+import java.io.IOException;
 
 /**
  * 记录访问日志

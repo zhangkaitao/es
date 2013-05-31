@@ -7,26 +7,17 @@ package com.sishuok.es.personal;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageContent;
 import com.sishuok.es.personal.entity.MessageState;
 import com.sishuok.es.personal.entity.MessageType;
-import com.sishuok.es.personal.service.MessageApi;
-import com.sishuok.es.personal.service.MessageService;
 import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.service.BaseUserIT;
-import com.sishuok.es.sys.user.service.UserService;
-import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-import java.sql.Timestamp;
 import java.util.Date;
-
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 /**
@@ -36,6 +27,31 @@ import java.util.List;
  */
 public class MessageApiServiceIT extends BaseMessageIT {
 
+    @Before
+    public void setUp() {
+        deleteAll(messageService.findAll());
+        clear();
+    }
+
+    @Test
+    public void testSaveDraft() {
+
+        Message message = new Message();
+        message.setSenderId(senderId);
+        message.setReceiverId(receiverId);
+        message.setTitle("abcded");
+        MessageContent content = new MessageContent();
+        content.setContent("abcde");
+        message.setContent(content);
+        messageApi.saveDraft(message);
+
+
+        Page<Message> page =  messageApi.findUserMessage(senderId, MessageState.draft_box, null);
+        Assert.assertTrue(page.getTotalElements() == 1);
+
+        page =  messageApi.findUserMessage(receiverId, MessageState.draft_box, null);
+        Assert.assertTrue(page.getTotalElements() == 0);
+    }
 
     @Test
     public void testSend() {
@@ -112,6 +128,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
 
     @Test
     public void testSendSystemMessageSuccess() {
+
 
         Long expectedCount = 3 + messageService.count();
 
@@ -642,6 +659,131 @@ public class MessageApiServiceIT extends BaseMessageIT {
     }
 
 
+    @Test
+    public void testFindAncestorsAndDescendants1() {
+        Message m1 = new Message();
+        m1.setSenderId(senderId);
+        m1.setReceiverId(receiverId);
+        m1.setTitle("ded");
+        MessageContent content1 = new MessageContent();
+        content1.setContent("abcde");
+        m1.setContent(content1);
+        messageApi.send(m1);
+
+        Message m2 = new Message();
+        m2.setSenderId(senderId);
+        m2.setReceiverId(receiverId);
+        m2.setTitle("ded");
+        MessageContent content2 = new MessageContent();
+        content2.setContent("abcde");
+        m2.setContent(content2);
+        m2.setParentId(m1.getId());
+        m2.setParentIds(m1.makeSelfAsParentIds());
+        messageApi.send(m2);
+
+        Message m3 = new Message();
+        m3.setSenderId(senderId);
+        m3.setReceiverId(receiverId);
+        m3.setTitle("ded");
+        MessageContent content3 = new MessageContent();
+        content3.setContent("abcde");
+        m3.setContent(content3);
+        m3.setParentId(m2.getId());
+        m3.setParentIds(m2.makeSelfAsParentIds());
+        messageApi.send(m3);
+
+        List<Message> messages = messageApi.findAncestorsAndDescendants(m2);
+
+        Assert.assertTrue(messages.contains(m1));
+        Assert.assertTrue(messages.contains(m3));
+        Assert.assertFalse(messages.contains(m2));
+
+    }
+
+
+    @Test
+    public void testFindAncestorsAndDescendants2() {
+        Message m1 = new Message();
+        m1.setSenderId(senderId);
+        m1.setReceiverId(receiverId);
+        m1.setTitle("ded");
+        MessageContent content1 = new MessageContent();
+        content1.setContent("abcde");
+        m1.setContent(content1);
+        messageApi.send(m1);
+
+        Message m2 = new Message();
+        m2.setSenderId(senderId);
+        m2.setReceiverId(receiverId);
+        m2.setTitle("ded");
+        MessageContent content2 = new MessageContent();
+        content2.setContent("abcde");
+        m2.setContent(content2);
+        m2.setParentId(m1.getId());
+        m2.setParentIds(m1.makeSelfAsParentIds());
+        messageApi.send(m2);
+
+        Message m3 = new Message();
+        m3.setSenderId(senderId);
+        m3.setReceiverId(receiverId);
+        m3.setTitle("ded");
+        MessageContent content3 = new MessageContent();
+        content3.setContent("abcde");
+        m3.setContent(content3);
+        m3.setParentId(m2.getId());
+        m3.setParentIds(m2.makeSelfAsParentIds());
+        messageApi.send(m3);
+
+        List<Message> messages = messageApi.findAncestorsAndDescendants(m1);
+
+        Assert.assertTrue(messages.contains(m2));
+        Assert.assertTrue(messages.contains(m3));
+        Assert.assertFalse(messages.contains(m1));
+
+    }
+
+
+
+    @Test
+    public void testFindAncestorsAndDescendants3() {
+        Message m1 = new Message();
+        m1.setSenderId(senderId);
+        m1.setReceiverId(receiverId);
+        m1.setTitle("ded");
+        MessageContent content1 = new MessageContent();
+        content1.setContent("abcde");
+        m1.setContent(content1);
+        messageApi.send(m1);
+
+        Message m2 = new Message();
+        m2.setSenderId(senderId);
+        m2.setReceiverId(receiverId);
+        m2.setTitle("ded");
+        MessageContent content2 = new MessageContent();
+        content2.setContent("abcde");
+        m2.setContent(content2);
+        m2.setParentId(m1.getId());
+        m2.setParentIds(m1.makeSelfAsParentIds());
+        messageApi.send(m2);
+
+        Message m3 = new Message();
+        m3.setSenderId(senderId);
+        m3.setReceiverId(receiverId);
+        m3.setTitle("ded");
+        MessageContent content3 = new MessageContent();
+        content3.setContent("abcde");
+        m3.setContent(content3);
+        m3.setParentId(m2.getId());
+        m3.setParentIds(m2.makeSelfAsParentIds());
+        messageApi.send(m3);
+
+        List<Message> messages = messageApi.findAncestorsAndDescendants(m3);
+
+        Assert.assertTrue(messages.contains(m1));
+        Assert.assertTrue(messages.contains(m2));
+        Assert.assertFalse(messages.contains(m3));
+
+    }
 
 
 }

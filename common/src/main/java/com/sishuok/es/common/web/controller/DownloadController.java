@@ -8,12 +8,15 @@ package com.sishuok.es.common.web.controller;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.lang.String;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 

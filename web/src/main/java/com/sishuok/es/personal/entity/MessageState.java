@@ -7,10 +7,7 @@ package com.sishuok.es.personal.entity;
  * <p>Version: 1.0
  */
 public enum MessageState {
-    /**
-     * 在草稿箱,365天后状态改成垃圾箱
-     */
-    draft_box("收件箱"),
+
     /**
      * 在收件箱,365天后状态改成垃圾箱
      */
@@ -27,6 +24,10 @@ public enum MessageState {
      * 在垃圾箱,30天后状态改成已删除
      */
     trash_box("垃圾箱"),
+    /**
+     * 在草稿箱,永久不删除
+     */
+    draft_box("草稿箱"),
     /**
      * 邮件删除了，只有收件人和发件人都删除了，才能真正删除
      */

@@ -6,12 +6,11 @@
 package org.apache.shiro.web.filter.online;
 
 import com.sishuok.es.common.Constants;
-import org.apache.shiro.ShiroConstants;
-import org.apache.shiro.session.mgt.OnlineSession;
 import com.sishuok.es.sys.user.entity.User;
+import org.apache.shiro.ShiroConstants;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.OnlineSession;
 import org.apache.shiro.session.mgt.eis.OnlineSessionDAO;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;

@@ -12,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 /**
@@ -35,20 +32,25 @@ public class ForbiddenWordUtils {
     /**
      * 屏蔽关键词抓取的url
      */
-    private static final String FORBIDDEN_WORD_FETCH_URL =
-            System.getProperty("sishuok.forbidden.words.fetch.url");
+    private static String forbiddenWordFetchURL;
 
     /**
      * 屏蔽关键词抓取时间间隔 毫秒
      */
-    private static final int RELOAD_INTERVAL =
-            Integer.valueOf(System.getProperty("sishuok.forbidden.words.reload.interval", "600000")).intValue();
+    private static int reloadInterval = 60000; //10分钟
 
     /**
      * 屏蔽关键词
      */
     private static List<Pattern> forbiddenWords;
 
+    public static void setForbiddenWordFetchURL(String forbiddenWordFetchURL) {
+        ForbiddenWordUtils.forbiddenWordFetchURL = forbiddenWordFetchURL;
+    }
+
+    public static void setReloadInterval(int reloadInterval) {
+        ForbiddenWordUtils.reloadInterval = reloadInterval;
+    }
 
     /**
      * 替换input中的屏蔽关键词为默认的掩码
@@ -107,10 +109,13 @@ public class ForbiddenWordUtils {
 
     }
 
-    static {
+    /**
+     * 初始化远程抓取配置
+     */
+    public static void initRemoteFetch() {
         RemoteFileFetcher.createPeriodFetcher(
-                FORBIDDEN_WORD_FETCH_URL,
-                RELOAD_INTERVAL,
+                forbiddenWordFetchURL,
+                reloadInterval,
                 new RemoteFileFetcher.FileChangeListener() {
                     public void fileReloaded(byte[] fileConent) throws IOException {
                         ForbiddenWordUtils.loadForbiddenWords(fileConent);

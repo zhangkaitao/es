@@ -9,13 +9,10 @@ import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.entity.MessageType;
 import com.sishuok.es.personal.repository.MessageRepository;
-import com.sishuok.es.sys.user.entity.User;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ import java.util.Date;
  * <p>Date: 13-5-22 下午2:40
  * <p>Version: 1.0
  */
+@DependsOn("messageRepository")
 @Service
 public class MessageService extends BaseService<Message, Long> {
 

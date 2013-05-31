@@ -16,8 +16,6 @@
 
 package com.sishuok.es.common.repository.support.annotation;
 
-import com.sishuok.es.common.repository.callback.SearchCallback;
-
 import java.lang.annotation.*;
 
 /**

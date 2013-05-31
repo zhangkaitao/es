@@ -5,27 +5,24 @@
  */
 package com.sishuok.es.showcase.sample.web.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.sample.entity.Sample;
 import com.sishuok.es.showcase.sample.entity.Sex;
 import com.sishuok.es.showcase.sample.service.SampleService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>User: Zhang Kaitao

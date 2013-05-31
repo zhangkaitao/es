@@ -8,13 +8,9 @@ package com.sishuok.es.sys.organization.entity;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.plugin.entity.Treeable;
 import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import com.sishuok.es.common.utils.SpringUtils;
-import com.sishuok.es.sys.organization.service.JobService;
-import com.sishuok.es.sys.organization.service.OrganizationService;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Formula;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 

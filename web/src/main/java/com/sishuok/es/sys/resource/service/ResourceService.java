@@ -14,7 +14,6 @@ import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.repository.ResourceRepository;
 import com.sishuok.es.sys.user.entity.User;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Sort;

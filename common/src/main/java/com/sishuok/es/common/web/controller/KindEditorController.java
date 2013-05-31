@@ -7,10 +7,10 @@ package com.sishuok.es.common.web.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
-import com.sishuok.es.common.utils.LogUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;

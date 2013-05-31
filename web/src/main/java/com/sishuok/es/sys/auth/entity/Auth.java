@@ -9,12 +9,12 @@ import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.repository.hibernate.type.CollectionToStringUserType;
 import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.Set;
 
 /**

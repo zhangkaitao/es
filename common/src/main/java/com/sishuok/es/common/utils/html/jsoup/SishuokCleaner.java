@@ -1,15 +1,10 @@
 package com.sishuok.es.common.utils.html.jsoup;
 
-import java.util.List;
-
 import org.jsoup.helper.Validate;
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Attributes;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
+import org.jsoup.nodes.*;
 import org.jsoup.parser.Tag;
+
+import java.util.List;
 
 /**
  The whitelist based HTML cleaner. Use to ensure that end-user provided HTML contains only the elements and attributes

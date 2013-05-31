@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.common.web.jcaptcha;
 
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.imageio.ImageIO;

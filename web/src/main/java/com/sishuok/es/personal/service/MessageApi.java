@@ -7,12 +7,10 @@ package com.sishuok.es.personal.service;
 
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.entity.MessageType;
-import com.sishuok.es.sys.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -20,8 +18,9 @@ import java.util.Date;
  * <p>Version: 1.0
  */
 public interface MessageApi {
-    public static final String REPLY_PREFIX = "回复:";
-    public static final String FOWRARD_PREFIX = "转发:";
+    public static final String REPLY_PREFIX = "回复：";
+    public static final String FOWRARD_PREFIX = "转发：";
+    public static final String FOWRARD_TEMPLATE = "<br/><br/>-----------转发消息------------<br/>发件人:%s<br/>收件人：%s<br/>标题：%s<br/><br/>%s";
 
     /**
      * 得到用户 指定状态的消息
@@ -31,6 +30,19 @@ public interface MessageApi {
      * @return
      */
     public Page<Message> findUserMessage(Long userId, MessageState state, Pageable pageable);
+
+    /**
+     * 查询消息的祖先 和 后代
+     * @param message
+     * @return
+     */
+    List<Message> findAncestorsAndDescendants(Message message);
+
+    /**
+     * 保存草稿
+     * @param message
+     */
+    void saveDraft(Message message);
 
     /**
      * 发送消息
@@ -96,6 +108,13 @@ public interface MessageApi {
      * @param messageIds
      */
     public void delete(Long userId, Long[] messageIds);
+
+    /**
+     * 清空指定状态的消息
+     * @param userId
+     * @param state
+     */
+    public void clearBox(Long userId, MessageState state);
 
     /**
      * 清空草稿箱

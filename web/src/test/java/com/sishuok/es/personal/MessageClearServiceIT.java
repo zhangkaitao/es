@@ -7,9 +7,7 @@ package com.sishuok.es.personal;
 
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.service.MessageApiService;
 import com.sishuok.es.personal.service.MessageClearService;
-import com.sishuok.es.sys.user.service.BaseUserIT;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;

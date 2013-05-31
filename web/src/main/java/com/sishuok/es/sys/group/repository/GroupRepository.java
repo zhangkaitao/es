@@ -7,11 +7,9 @@ package com.sishuok.es.sys.group.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.sys.group.entity.Group;
-import com.sishuok.es.sys.organization.entity.Job;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * <p>User: Zhang Kaitao

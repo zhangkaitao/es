@@ -6,9 +6,7 @@
 package com.sishuok.es.common.entity.search.filter;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

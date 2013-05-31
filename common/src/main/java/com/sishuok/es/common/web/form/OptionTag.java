@@ -5,11 +5,6 @@
  */
 package com.sishuok.es.common.web.form;
 
-import com.sishuok.es.common.web.form.bind.SearchBindStatus;
-import org.springframework.web.servlet.support.BindStatus;
-
-import javax.servlet.jsp.JspException;
-
 /**
  * 取值时
  * 1、先取parameter

@@ -6,13 +6,13 @@
 package com.sishuok.es.common.entity.search.utils;
 
 import com.google.common.collect.Lists;
-import com.sishuok.es.common.entity.search.filter.AndCondition;
-import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchPropertyException;
 import com.sishuok.es.common.entity.search.exception.InvalidSearchValueException;
 import com.sishuok.es.common.entity.search.exception.SearchException;
+import com.sishuok.es.common.entity.search.filter.AndCondition;
+import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.filter.OrCondition;
 import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.utils.SpringUtils;

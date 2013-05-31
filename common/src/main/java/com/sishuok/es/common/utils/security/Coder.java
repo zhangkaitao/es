@@ -1,10 +1,9 @@
 package com.sishuok.es.common.utils.security;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+
+import java.security.MessageDigest;
 
 /**
  * 基础加密组件

@@ -16,8 +16,6 @@
 
 package com.sishuok.es.common.web.bind.annotation;
 
-import org.springframework.data.domain.Sort;
-
 import java.lang.annotation.*;
 
 /**

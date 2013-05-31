@@ -7,7 +7,9 @@ package com.sishuok.es.showcase.upload.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <p>User: Zhang Kaitao

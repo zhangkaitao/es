@@ -5,14 +5,11 @@
  */
 package com.sishuok.es.common.utils.forbidden;
 
-import com.sishuok.es.common.utils.fetch.RemoteFileFetcher;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * <p>User: Zhang Kaitao
@@ -80,16 +77,14 @@ public class ForbiddenWordUtilsTest {
         Assert.assertTrue(ForbiddenWordUtils.containsForbiddenWord(input));
     }
 
-    static {
-        System.setProperty("sishuok.forbidden.words.fetch.url", "http://localhost:10090/forbidden-test.txt");
-        System.setProperty("sishuok.forbidden.words.reload.interval", "500");
-    }
-
     @Test
     public void testFetch() throws Exception {
         String input = "12test32";
         Assert.assertFalse(ForbiddenWordUtils.containsForbiddenWord(input));
 
+        ForbiddenWordUtils.setForbiddenWordFetchURL("http://localhost:10090/forbidden-test.txt");
+        ForbiddenWordUtils.setReloadInterval(500);
+        ForbiddenWordUtils.initRemoteFetch();
 
         Server server = new Server(10090);
         ResourceHandler resourceHandler = new ResourceHandler();

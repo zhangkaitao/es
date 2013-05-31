@@ -18,6 +18,17 @@ $.app = {
             }
             $.tabs.activeTab($.tabs.nextCustomTabIndex(), "个人资料", url, true)
         });
+        var btnMessage = $(".btn-message");
+        var btnMessageInterval = null;
+        if(btnMessage.data("unread") > 0) {
+            btnMessageInterval = setInterval(function() {btnMessage.find("i").toggleClass("icon-envelope-alt").toggleClass("icon-envelope");}, 650);
+        }
+        btnMessage.click(function() {
+            clearInterval(btnMessageInterval);
+            var url = ctx + "/admin/personal/message";
+            $($.find("#menu a:contains(我的消息)")).click();
+            btnMessage.find("i").removeClass("icon-envelope").addClass("icon-envelope-alt");
+        });
 
 //        $("#menu").niceScroll({styler:"fb",cursorcolor:"#777", zindex:1});
     },
@@ -1629,10 +1640,12 @@ $.table = {
 
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         //支持双击编辑
-        $table.children("tbody").children("tr").off("dblclick").on("dblclick", function() {
-            var id = $(this).find(":checkbox[name=ids]").val();
-            window.location.href = urlPrefix + "/" + id + "/update?BackURL=" + $.table.encodeTableURL($table);
-        });
+        if($table.hasClass("table-dblclick-edit")) {
+            $table.children("tbody").children("tr").off("dblclick").on("dblclick", function() {
+                var id = $(this).find(":checkbox[name=ids]").val();
+                window.location.href = urlPrefix + "/" + id + "/update?BackURL=" + $.table.encodeTableURL($table);
+            });
+        }
 
     },
     getFirstSelectedCheckbox :function($table) {

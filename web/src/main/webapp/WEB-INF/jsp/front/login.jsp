@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf" %>
-<es:contentHeader title="管理员登录 Easy-Scaffold脚手架" index="true"/>
+<es:contentHeader title="用户登录 Easy-Scaffold脚手架" index="true"/>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <a class="brand" href="#">&nbsp;&nbsp;es脚手架</a>
@@ -50,7 +50,8 @@
                         <input type="text" id="jcaptchaCode" name="jcaptchaCode"
                                 class="input-medium validate[required,ajax[ajaxJcaptchaCall]]" placeholder="请输入验证码">
                     </div>
-                     <img class="jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
+                     <img class="jcaptcha-btn jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
+                     <a class="jcaptcha-btn btn btn-link">换一张</a>
                 </div>
             </c:if>
 
@@ -81,13 +82,14 @@
 <script type="text/javascript">
     $(function() {
         $("#username").focus();
-        $(".jcaptcha-img").click(function() {
-            var imageSrc = $(this).attr("src");
+        $(".jcaptcha-btn").click(function() {
+            var img = $(".jcaptcha-img");
+            var imageSrc = img.attr("src");
             if(imageSrc.indexOf("?") > 0) {
                 imageSrc = imageSrc.substr(0, imageSrc.indexOf("?"));
             }
             imageSrc = imageSrc + "?" + new Date().getTime();
-            $(this).attr("src", imageSrc);
+            img.attr("src", imageSrc);
         });
         $.validationEngineLanguage.allRules.ajaxJcaptchaCall={
             "url": "${ctx}/jcaptcha-validate",

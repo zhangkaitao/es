@@ -5,14 +5,11 @@
  */
 package com.sishuok.es.common.repository;
 
-import com.sishuok.es.common.entity.*;
+import com.sishuok.es.common.entity.BaseInfo;
+import com.sishuok.es.common.entity.SchoolInfo;
+import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.Searchable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

@@ -8,15 +8,19 @@ package com.sishuok.es.common.entity.search;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.exception.SearchException;
-import com.sishuok.es.common.entity.search.filter.*;
+import com.sishuok.es.common.entity.search.filter.Condition;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>查询条件（包括分页和排序）</p>

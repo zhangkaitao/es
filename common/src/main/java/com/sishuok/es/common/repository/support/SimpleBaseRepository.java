@@ -11,11 +11,12 @@ import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.repository.callback.SearchCallback;
-import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
@@ -23,12 +24,15 @@ import org.springframework.data.jpa.repository.support.LockMetadataProvider;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.*;
 
-import static org.springframework.data.jpa.repository.query.QueryUtils.*;
+import static org.springframework.data.jpa.repository.query.QueryUtils.toOrders;
 
 /**
  * <p>抽象基础Custom Repository 实现</p>

@@ -5,10 +5,7 @@
  */
 package com.sishuok.es.common.web.interceptor;
 
-import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.web.filter.BaseFilter;
-import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

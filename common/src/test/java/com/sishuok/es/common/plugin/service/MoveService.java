@@ -9,7 +9,6 @@ import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Move;
 import com.sishuok.es.common.plugin.repository.MoveRepository;
 import com.sishuok.es.common.plugin.serivce.BaseMovableService;
-import com.sishuok.es.common.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

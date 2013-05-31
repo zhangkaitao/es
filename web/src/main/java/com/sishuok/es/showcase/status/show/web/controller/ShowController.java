@@ -6,7 +6,6 @@
 package com.sishuok.es.showcase.status.show.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Stateable;
 import com.sishuok.es.common.web.controller.BaseCRUDController;

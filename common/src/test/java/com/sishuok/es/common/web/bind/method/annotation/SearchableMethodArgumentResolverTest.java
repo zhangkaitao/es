@@ -23,8 +23,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * <p>User: Zhang Kaitao

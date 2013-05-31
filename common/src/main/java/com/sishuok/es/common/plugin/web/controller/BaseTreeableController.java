@@ -77,7 +77,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             permissionList.assertHasViewPermission();
         }
 
-        return getViewPrefix() + "/main";
+        return viewName("main");
     }
 
     @RequestMapping(value = "tree", method = RequestMethod.GET)
@@ -121,7 +121,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
                         async,
                         true));
 
-        return getViewPrefix() + "/tree";
+        return viewName("tree");
     }
 
 
@@ -134,7 +134,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "查看");
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
     @RequestMapping(value = "{id}/update", method = RequestMethod.GET)
@@ -147,14 +147,14 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         if(m == null) {
             redirectAttributes.addFlashAttribute(Constants.ERROR, "您修改的数据不存在！");
-            return redirectToUrl(getViewPrefix() + "/success");
+            return redirectToUrl(viewName("success"));
         }
 
 
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "修改");
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
     @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
@@ -173,7 +173,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         treeableService.update(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
-        return redirectToUrl(getViewPrefix() + "/success");
+        return redirectToUrl(viewName("success"));
     }
 
     @RequestMapping(value = "{id}/delete", method = RequestMethod.GET)
@@ -187,7 +187,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "删除");
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
     @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)
@@ -208,7 +208,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         treeableService.deleteSelfAndChild(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
-        return redirectToUrl(getViewPrefix() + "/success");
+        return redirectToUrl(viewName("success"));
     }
 
 
@@ -254,7 +254,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         model.addAttribute(Constants.OP_NAME, "添加子节点");
 
-        return getViewPrefix() + "/appendChildForm";
+        return viewName("appendChildForm");
     }
 
     @RequestMapping(value = "{parent}/appendChild", method = RequestMethod.POST)
@@ -278,7 +278,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         treeableService.appendChild(parent, child);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "添加子节点成功");
-        return redirectToUrl(getViewPrefix() + "/success");
+        return redirectToUrl(viewName("success"));
     }
 
     @RequestMapping(value = "{source}/move", method = RequestMethod.GET)
@@ -317,7 +317,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         model.addAttribute(Constants.OP_NAME, "移动节点");
 
-        return getViewPrefix() + "/moveForm";
+        return viewName("moveForm");
     }
 
     @RequestMapping(value = "{source}/move", method = RequestMethod.POST)
@@ -344,7 +344,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         treeableService.move(source, target, moveType);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动节点成功");
-        return redirectToUrl(getViewPrefix() + "/success");
+        return redirectToUrl(viewName("success"));
     }
 
     @RequestMapping(value = "{parent}/children", method = RequestMethod.GET)
@@ -364,7 +364,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         model.addAttribute("page", treeableService.findAll(searchable));
 
-        return getViewPrefix() + "/listChildren";
+        return viewName("listChildren");
     }
 
 
@@ -382,7 +382,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             Searchable searchable, Model model) throws UnsupportedEncodingException {
 
         list(request, parent, searchable, model);
-        return getViewPrefix() + "/listChildrenTable";
+        return viewName("listChildrenTable");
 
     }
 
@@ -524,7 +524,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
     @RequestMapping(value = "success")
     public String success() {
-        return getViewPrefix() + "/success";
+        return viewName("success");
     }
 
     @Override
@@ -532,7 +532,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         if(!StringUtils.isEmpty(backURL)) {
             return super.redirectToUrl(backURL);
         }
-        return super.redirectToUrl("/" + getViewPrefix() + "/success");
+        return super.redirectToUrl(viewName("success"));
     }
 
     private List<ZTree<ID>> convertToZtreeList(String contextPath, List<M> models, boolean async, boolean onlySelectLeaf) {

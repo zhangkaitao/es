@@ -8,16 +8,10 @@ package org.apache.shiro.web.filter.sync;
 import org.apache.shiro.ShiroConstants;
 import org.apache.shiro.session.mgt.OnlineSession;
 import org.apache.shiro.session.mgt.eis.OnlineSessionDAO;
-import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.PathMatchingFilter;
-import org.apache.shiro.web.servlet.OncePerRequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.IOException;
 
 /**
  * 同步当前会话数据到数据库

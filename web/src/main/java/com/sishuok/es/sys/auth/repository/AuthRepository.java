@@ -7,8 +7,6 @@ package com.sishuok.es.sys.auth.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.sys.auth.entity.Auth;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.Set;
 

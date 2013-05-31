@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.common.web.form.bind;
 
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.support.BindStatus;
 import org.springframework.web.servlet.support.RequestContext;

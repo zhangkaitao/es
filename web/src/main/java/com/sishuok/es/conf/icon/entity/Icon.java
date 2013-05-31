@@ -6,7 +6,6 @@
 package com.sishuok.es.conf.icon.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.sys.group.entity.GroupType;
 
 import javax.persistence.*;
 

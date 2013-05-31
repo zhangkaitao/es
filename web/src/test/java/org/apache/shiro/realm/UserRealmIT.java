@@ -8,17 +8,11 @@ package org.apache.shiro.realm;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.service.BaseUserIT;
-import com.sishuok.es.sys.user.service.PasswordService;
-import com.sishuok.es.sys.user.service.UserService;
-import com.sishuok.es.test.BaseIT;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>User: Zhang Kaitao

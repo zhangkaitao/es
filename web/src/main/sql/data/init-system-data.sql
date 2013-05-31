@@ -126,6 +126,10 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
         values (31, 1, '0/1/', 3, '配置管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (32, 31, '0/1/31/', 1, '图标管理', 'conf:icon', '/admin/conf/icon', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (33, 1, '0/1/', 4, '个人中心', '', '', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (34, 33, '0/1/33/', 1, '我的消息', '', '/admin/personal/message', true);;
 
 
 delete from `sys_permission` where id>=1 and id<=1000;;
@@ -137,7 +141,7 @@ insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`)
 insert into `sys_permission` (`id`, `name`, `permission`, `description`, `show`) values (6,  '审核', 'audit', '审核数据操作的权限', 1);;
 
 delete from `sys_role` where id>=1 and id<=1000;;
-insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (1,  '管理员', 'admin', '拥有所有权限', 1);;
+insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (1,  '超级管理员', 'admin', '拥有所有权限', 1);;
 insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (2,  '示例管理员', 'example_admin', '拥有示例管理的所有权限', 1);;
 insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (3,  '系统管理员', 'sys_admin', '拥有系统管理的所有权限', 1);;
 insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (4,  '配置管理员', 'conf_admin', '拥有配置管理的所有权限', 1);;

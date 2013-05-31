@@ -11,7 +11,6 @@ import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
 import com.sishuok.es.sys.permission.repository.RoleRepository;
-import com.sishuok.es.sys.resource.entity.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;

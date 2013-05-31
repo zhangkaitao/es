@@ -6,12 +6,12 @@
 package com.sishuok.es.common.web.controller;
 
 import com.sishuok.es.common.utils.ImagesUtils;
+import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.entity.AjaxUploadResponse;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
-import com.sishuok.es.common.utils.LogUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

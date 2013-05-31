@@ -7,10 +7,11 @@ package com.sishuok.es.common.repository.search;
 
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.entity.search.filter.*;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.SearchRequest;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.entity.search.filter.SearchFilter;
+import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.repository.UserRepository;
 import com.sishuok.es.common.test.BaseUserIT;
 import org.junit.Test;
@@ -26,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * <p>测试查询条件</p>

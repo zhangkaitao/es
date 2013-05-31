@@ -8,8 +8,6 @@ package com.sishuok.es.common.plugin.service;
 import com.sishuok.es.common.plugin.entity.Move;
 import com.sishuok.es.common.test.BaseIT;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

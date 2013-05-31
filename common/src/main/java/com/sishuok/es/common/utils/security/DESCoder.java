@@ -1,13 +1,9 @@
 package com.sishuok.es.common.utils.security;
 
-import java.security.AlgorithmParameterGenerator;
-import java.security.Key;
-import java.security.SecureRandom;
-
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 
 
 /**

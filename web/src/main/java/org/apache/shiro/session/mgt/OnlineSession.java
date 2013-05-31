@@ -5,17 +5,9 @@
  */
 package org.apache.shiro.session.mgt;
 
-import org.apache.shiro.ShiroException;
-import org.apache.shiro.session.SessionException;
-import org.apache.shiro.session.mgt.SimpleSession;
-import org.apache.shiro.util.CollectionUtils;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Map;
 
 /**
  * <p>User: Zhang Kaitao

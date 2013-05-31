@@ -11,8 +11,9 @@
     <c:forEach items="${errors.fieldErrors}" var="error">
         <spring:message var="message" code="${error.code}" arguments="${error.arguments}" text="${error.defaultMessage}"/>
         <c:if test="${not empty message}">
-            $("[name=${error.field}]")
-                    .validationEngine("showPrompt", "${message}", "error", "${errorPosition}", true);
+            $("[name='${error.field}']")
+                    .validationEngine("showPrompt", "${message}", "error", "${errorPosition}", true)
+                    .validationEngine("updatePromptsPosition");
         </c:if>
     </c:forEach>
     </c:if>

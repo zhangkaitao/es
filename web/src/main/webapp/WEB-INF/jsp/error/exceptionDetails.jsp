@@ -3,7 +3,7 @@
     <a class="btn btn-link btn-detail">
         点击显示详细错误信息
     </a>
-    <a href="#" class="btn btn-link">&gt;&gt;报告给系统管理员</a>
+    <%--<a href="#" class="btn btn-link">&gt;&gt;报告给系统管理员</a>--%>
     <div class="prettyprint detail" style="display: none;">
         ${stackTrace}
     </div>

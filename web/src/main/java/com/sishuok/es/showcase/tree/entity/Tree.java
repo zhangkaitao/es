@@ -10,7 +10,9 @@ import com.sishuok.es.common.plugin.entity.Treeable;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <p>User: Zhang Kaitao

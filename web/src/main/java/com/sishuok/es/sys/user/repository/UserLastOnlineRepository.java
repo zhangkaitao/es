@@ -6,10 +6,7 @@
 package com.sishuok.es.sys.user.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserLastOnline;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 /**
  * <p>User: Zhang Kaitao

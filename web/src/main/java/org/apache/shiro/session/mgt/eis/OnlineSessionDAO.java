@@ -5,14 +5,14 @@
  */
 package org.apache.shiro.session.mgt.eis;
 
-import org.apache.shiro.ShiroConstants;
-import org.apache.shiro.session.mgt.OnlineSession;
-import org.apache.shiro.session.mgt.OnlineSessionFactory;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.service.UserOnlineService;
+import org.apache.shiro.ShiroConstants;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.session.mgt.OnlineSession;
+import org.apache.shiro.session.mgt.OnlineSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.Serializable;
 import java.util.Date;
 

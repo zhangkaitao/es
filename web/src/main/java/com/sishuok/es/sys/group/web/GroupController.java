@@ -167,7 +167,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
 
         model.addAttribute("page", page);
 
-        return getViewPrefix() + "/relation/relationList";
+        return viewName("relation/relationList");
     }
 
 
@@ -178,7 +178,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         this.permissionList.assertHasViewPermission();
 
         this.listGroupRelation(group, searchable, model);
-        return getViewPrefix() + "/relation/relationListTable";
+        return viewName("relation/relationListTable");
 
     }
 
@@ -211,11 +211,11 @@ public class GroupController extends BaseCRUDController<Group, Long> {
                 new String[] {PermissionList.CREATE_PERMISSION, PermissionList.UPDATE_PERMISSION});
 
         if(group.getType() == GroupType.user) {
-            return getViewPrefix() + "/relation/appendUserGroupRelation";
+            return viewName("relation/appendUserGroupRelation");
         }
 
         if(group.getType() == GroupType.organization) {
-            return getViewPrefix() + "/relation/appendOrganizationGroupRelation";
+            return viewName("relation/appendOrganizationGroupRelation");
         }
 
         throw new RuntimeException("group type error");

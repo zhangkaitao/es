@@ -1,22 +1,5 @@
 package com.sishuok.es.common.web.bind.method.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-
 import com.sishuok.es.common.web.bind.annotation.FormModel;
 import com.sishuok.es.common.web.bind.util.MapWapper;
 import org.springframework.beans.BeanUtils;
@@ -35,12 +18,17 @@ import org.springframework.web.bind.ServletRequestParameterPropertyValues;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.MultipartRequest;
-import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.util.WebUtils;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * <p>用于绑定@FormModel的方法参数解析器

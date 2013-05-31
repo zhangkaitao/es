@@ -8,8 +8,6 @@ package com.sishuok.es.common.plugin.repository;
 import com.sishuok.es.common.plugin.entity.Tree;
 import com.sishuok.es.common.repository.BaseRepository;
 
-import java.util.List;
-
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-2-4 下午3:00

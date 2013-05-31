@@ -5,21 +5,16 @@
  */
 package com.sishuok.es.sys.permission.web.controller;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.AvailableEnum;
-import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
 import com.sishuok.es.sys.permission.service.PermissionService;
 import com.sishuok.es.sys.permission.service.RoleService;
-import com.sishuok.es.sys.resource.service.ResourceService;
-import com.sishuok.es.sys.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -159,7 +154,7 @@ public class RoleController extends BaseCRUDController<Role, Long> {
 
     @RequestMapping("{role}/permissions")
     public String permissions(@PathVariable("role") Role role) {
-        return getViewPrefix() + "/permissionsTable";
+        return viewName("permissionsTable");
     }
 
 }

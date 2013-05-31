@@ -23,7 +23,6 @@ import com.sishuok.es.sys.user.repository.UserRepository;
 import com.sishuok.es.sys.user.utils.UserLogUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -243,6 +242,7 @@ public class UserService extends BaseService<User, Long> {
     public Set<Map<String, Object>> findIdAndNames(Searchable searchable, String usernme) {
 
         searchable.addSearchFilter("username", SearchOperator.like, usernme);
+        searchable.addSearchFilter("deleted", SearchOperator.eq, false);
 
         return Sets.newHashSet(
                 Lists.transform(

@@ -906,6 +906,26 @@ iframe[tabs="true"] {
     padding: 3px 0 3px 0;
 }
 
+.bold {
+    font-weight: bold;
+}
+.no-underline {
+    text-decoration: none;
+}
+.no-underline:hover {
+    text-decoration: none;
+}
+
+.message {
+    margin: 0 20px;
+}
+.message .accordion-inner {
+    border-top : 0px;
+}
+.message .accordion-heading > .accordion-toggle {
+    color: #333;
+}
+
 /**系统管理 css start*/
 .sys-icon-list .nav {
     margin: 0 0 5px 3px;

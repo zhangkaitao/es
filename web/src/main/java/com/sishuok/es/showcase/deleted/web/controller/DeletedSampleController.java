@@ -6,10 +6,7 @@
 package com.sishuok.es.showcase.deleted.web.controller;
 
 import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
-import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
-import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.deleted.entity.DeletedSample;

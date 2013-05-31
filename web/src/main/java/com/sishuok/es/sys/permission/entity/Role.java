@@ -8,14 +8,11 @@ package com.sishuok.es.sys.permission.entity;
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.BaseEntity;
 import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import com.sishuok.es.sys.user.entity.UserOrganizationJob;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import java.util.List;
 
 /**

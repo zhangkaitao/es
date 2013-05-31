@@ -5,12 +5,10 @@
  */
 package com.sishuok.es.extra.exception.web;
 
-import com.sishuok.es.extra.exception.web.entity.ExceptionResponse;
 import com.sishuok.es.common.utils.LogUtils;
+import com.sishuok.es.extra.exception.web.entity.ExceptionResponse;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

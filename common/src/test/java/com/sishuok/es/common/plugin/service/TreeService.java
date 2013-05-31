@@ -12,9 +12,6 @@ import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-2-4 下午3:01

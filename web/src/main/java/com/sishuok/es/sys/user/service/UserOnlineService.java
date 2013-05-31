@@ -7,14 +7,11 @@ package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
-import com.sishuok.es.sys.user.entity.UserLastOnline;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.repository.UserOnlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.orm.hibernate4.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

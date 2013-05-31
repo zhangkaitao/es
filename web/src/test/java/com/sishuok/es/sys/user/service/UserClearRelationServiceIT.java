@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.user.service;
 
-import com.sishuok.es.extra.aop.UserCacheAspect;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.service.JobService;
@@ -15,8 +14,6 @@ import com.sishuok.es.sys.user.entity.UserOrganizationJob;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>User: Zhang Kaitao

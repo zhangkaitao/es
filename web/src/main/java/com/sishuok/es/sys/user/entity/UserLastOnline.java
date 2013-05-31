@@ -7,7 +7,6 @@ package com.sishuok.es.sys.user.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

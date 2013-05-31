@@ -6,7 +6,6 @@
 package com.sishuok.es.common.test;
 
 import com.sishuok.es.common.entity.*;
-import com.sishuok.es.common.test.BaseIT;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.sql.Timestamp;

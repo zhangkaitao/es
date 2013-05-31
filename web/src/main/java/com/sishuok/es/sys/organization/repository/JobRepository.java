@@ -7,7 +7,6 @@ package com.sishuok.es.sys.organization.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.sys.organization.entity.Job;
-import com.sishuok.es.sys.organization.entity.Organization;
 
 /**
  * <p>User: Zhang Kaitao

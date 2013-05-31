@@ -8,8 +8,6 @@ package com.sishuok.es.common.exception;
 import com.sishuok.es.common.utils.MessageUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-
 /**
  * 基础异常
  * <p>User: Zhang Kaitao

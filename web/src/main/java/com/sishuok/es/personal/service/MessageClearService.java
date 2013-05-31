@@ -7,12 +7,9 @@ package com.sishuok.es.personal.service;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.personal.entity.MessageState;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * 清理 过期的/删除的消息

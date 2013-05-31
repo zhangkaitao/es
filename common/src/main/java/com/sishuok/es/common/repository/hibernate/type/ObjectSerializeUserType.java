@@ -5,11 +5,7 @@
  */
 package com.sishuok.es.common.repository.hibernate.type;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Maps;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.shiro.web.util.SavedRequest;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
@@ -19,8 +15,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Object序列化/反序列化

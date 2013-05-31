@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.repository.UserRepository;
 import com.sishuok.es.test.BaseIT;
 import org.junit.After;
 import org.junit.Before;

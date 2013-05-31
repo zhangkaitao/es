@@ -9,21 +9,14 @@ import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.entity.UserStatusHistory;
 import com.sishuok.es.sys.user.entity.UserStatus;
+import com.sishuok.es.sys.user.entity.UserStatusHistory;
 import com.sishuok.es.sys.user.repository.UserStatusHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Date;
 
 /**

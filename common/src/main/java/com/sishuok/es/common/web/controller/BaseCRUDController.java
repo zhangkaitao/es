@@ -84,7 +84,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         if(listAlsoSetCommonData) {
             setCommonData(model);
         }
-        return getViewPrefix() + "/list";
+        return viewName("list");
     }
 
     /**
@@ -97,7 +97,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @PageableDefaults(sort = "id=desc")
     public String listTable(Searchable searchable, Model model) {
         list(searchable, model);
-        return getViewPrefix() + "/listTable";
+        return viewName("listTable");
     }
 
 
@@ -112,7 +112,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         setCommonData(model);
         model.addAttribute("m", m);
         model.addAttribute(Constants.OP_NAME, "查看");
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
@@ -127,7 +127,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         if(!model.containsAttribute("m")) {
             model.addAttribute("m", newModel());
         }
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
 
@@ -159,7 +159,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "修改");
         model.addAttribute("m", m);
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
     @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
@@ -190,7 +190,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "删除");
         model.addAttribute("m", m);
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
     @RequestMapping(value = "{id}/delete", method = RequestMethod.POST)

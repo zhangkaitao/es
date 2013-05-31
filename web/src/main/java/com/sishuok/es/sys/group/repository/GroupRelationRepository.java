@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.group.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.entity.GroupRelation;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

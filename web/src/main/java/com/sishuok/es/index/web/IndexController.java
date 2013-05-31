@@ -5,14 +5,12 @@
  */
 package com.sishuok.es.index.web;
 
-import com.sishuok.es.common.entity.search.SearchOperator;
-import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.personal.service.MessageApi;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.web.bind.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +28,8 @@ public class IndexController {
 
     @Autowired
     private ResourceService resourceService;
+    @Autowired
+    private MessageApi messageApi;
 
 
     @RequestMapping(value = {"/index"})
@@ -38,6 +38,7 @@ public class IndexController {
         List<Menu> menus = resourceService.findMenus(user);
 
         model.addAttribute("menus", menus);
+        model.addAttribute("unreadMessageCount", messageApi.countUnread(user.getId()));
 
         return "admin/index/index";
     }

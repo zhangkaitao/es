@@ -5,16 +5,15 @@ package com.sishuok.es.common.utils.html.jsoup;
     this whitelist configuration, and the initial defaults.
  */
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Selector;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

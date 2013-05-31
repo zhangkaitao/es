@@ -25,8 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -84,10 +86,65 @@ public class MessageApiService implements MessageApi {
     }
 
     @Override
+    public List<Message> findAncestorsAndDescendants(Message message) {
+        Searchable searchable = Searchable.newSearchable();
+
+        searchable.addSort(Sort.Direction.ASC, "id");
+
+        SearchFilter filter = null;
+        //祖先 不为空 从祖先查起
+        if(!StringUtils.isEmpty(message.getParentIds())) {
+            String ancestorsId = message.getParentIds().split("/")[0];
+            filter = SearchFilterHelper.or(
+                    SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, ancestorsId + "/"),
+                    SearchFilterHelper.newCondition("id", SearchOperator.eq, ancestorsId)
+            );
+        } else  {
+            //祖先为空 查自己的后代
+            String descendantsParentIds = message.makeSelfAsParentIds();
+            filter = SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, descendantsParentIds);
+        }
+
+        searchable.addSearchFilter(filter);
+        List<Message> result = messageService.findAllWithSort(searchable);
+        //把自己排除
+        result.remove(message);
+
+        //删除 不可见的消息 如垃圾箱/已删除
+        for(int i = result.size() - 1; i >= 0; i--) {
+            Message m = result.get(i);
+
+            if(m.getSenderId() == message.getSenderId() &&
+                    (m.getSenderState() == MessageState.trash_box || m.getSenderState() == MessageState.delete_box)) {
+                result.remove(i);
+            }
+
+            if(m.getReceiverId() == message.getSenderId() &&
+                    (m.getSenderState() == MessageState.trash_box || m.getSenderState() == MessageState.delete_box)) {
+                result.remove(i);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public void saveDraft(Message message) {
+        message.setSenderState(MessageState.draft_box);
+        message.setReceiverState(null);
+        if(message.getContent() != null) {
+            message.getContent().setMessage(message);
+        }
+        messageService.save(message);
+    }
+
+    @Override
     public void send(Message message) {
         Date now = new Date();
         message.setSendDate(now);
+        message.setSenderState(MessageState.out_box);
         message.setSenderStateChangeDate(now);
+        message.setReceiverState(MessageState.in_box);
         message.setReceiverStateChangeDate(now);
 
         message.getContent().setMessage(message);
@@ -222,30 +279,53 @@ public class MessageApiService implements MessageApi {
         messageService.update(message);
     }
 
+    @Override
+    public void clearBox(Long userId, MessageState state) {
+        switch (state) {
+            case draft_box:
+                clearBox(userId, MessageState.draft_box, MessageState.trash_box);
+                break;
+            case in_box:
+                clearBox(userId, MessageState.in_box, MessageState.trash_box);
+                break;
+            case out_box:
+                clearBox(userId, MessageState.out_box, MessageState.trash_box);
+                break;
+            case store_box:
+                clearBox(userId, MessageState.store_box, MessageState.trash_box);
+                break;
+            case trash_box:
+                clearBox(userId, MessageState.trash_box, MessageState.delete_box);
+                break;
+            default:
+                //none;
+                break;
+        }
+    }
 
     @Override
     public void clearDraftBox(Long userId) {
-        clearBox(userId, MessageState.draft_box, MessageState.trash_box);
+        clearBox(userId, MessageState.draft_box);
     }
 
     @Override
     public void clearInBox(Long userId) {
-        clearBox(userId, MessageState.in_box, MessageState.trash_box);
+        clearBox(userId, MessageState.in_box);
     }
 
     @Override
     public void clearOutBox(Long userId) {
-        clearBox(userId, MessageState.out_box, MessageState.trash_box);
+        clearBox(userId, MessageState.out_box);
     }
 
     @Override
     public void clearStoreBox(Long userId) {
-        clearBox(userId, MessageState.store_box, MessageState.trash_box);
+        clearBox(userId, MessageState.store_box);
     }
 
     @Override
     public void clearTrashBox(Long userId) {
-        clearBox(userId, MessageState.trash_box, MessageState.delete_box);
+        clearBox(userId, MessageState.trash_box);
     }
 
     private void clearBox(Long userId, MessageState oldState, MessageState newState) {

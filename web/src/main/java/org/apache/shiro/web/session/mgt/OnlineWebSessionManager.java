@@ -14,7 +14,6 @@ import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.OnlineSession;
 import org.apache.shiro.session.mgt.SessionKey;
 import org.slf4j.Logger;

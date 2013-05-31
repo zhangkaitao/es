@@ -6,14 +6,10 @@
 package com.sishuok.es.sys.group.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
-import com.sishuok.es.sys.user.entity.User;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 分组与 用户/组织机构关系表

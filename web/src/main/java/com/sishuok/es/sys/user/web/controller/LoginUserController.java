@@ -16,10 +16,10 @@ import com.sishuok.es.sys.user.service.UserLastOnlineService;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.sys.user.web.bind.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -58,7 +58,7 @@ public class LoginUserController extends BaseController<User, Long> {
         user = userService.findOne(user.getId());
         model.addAttribute("user", user);
         model.addAttribute("lastOnline", userLastOnlineService.findByUserId(user.getId()));
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
 
     @RequestMapping(value = "/updateInfo", method = RequestMethod.GET)
@@ -66,7 +66,7 @@ public class LoginUserController extends BaseController<User, Long> {
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "修改个人资料");
         model.addAttribute("user", user);
-        return getViewPrefix() + "/editForm";
+        return viewName("editForm");
     }
     @RequestMapping(value = "/updateInfo", method = RequestMethod.POST)
     public String updateInfo(
@@ -104,7 +104,7 @@ public class LoginUserController extends BaseController<User, Long> {
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改个人资料成功");
 
-        return redirectToUrl(getViewPrefix() + "/updateInfo");
+        return redirectToUrl(viewName("updateInfo"));
 
     }
 
@@ -115,7 +115,7 @@ public class LoginUserController extends BaseController<User, Long> {
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "修改密码");
         model.addAttribute("user", user);
-        return getViewPrefix() + "/changePasswordForm";
+        return viewName("changePasswordForm");
     }
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
@@ -145,7 +145,7 @@ public class LoginUserController extends BaseController<User, Long> {
         userService.changePassword(user, newPassword1);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改密码成功");
-        return redirectToUrl(getViewPrefix() + "/changePassword");
+        return redirectToUrl(viewName("changePassword"));
     }
 
 

@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.auth.service;
 
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
-import com.sishuok.es.sys.group.service.GroupClearRelationService;
 import com.sishuok.es.sys.group.service.GroupService;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
@@ -18,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Query;
 import java.util.Set;
 
 /**
