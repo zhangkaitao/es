@@ -51,12 +51,12 @@
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <a class="accordion-toggle bold no-underline" data-toggle="collapse" href="#collapse${message.id}">
-                            ${message.title}
-                    <span class="muted" style="float: right;padding-right: 20px;">
-                        <sys:showUsername id="${message.senderId}" needLink="false"/>
-                        &nbsp;&nbsp;&nbsp;
-                        <spring:eval expression="message.sendDate"/>
-                    </span>
+                        ${message.title}
+                        <span class="muted" style="float: right;padding-right: 20px;">
+                            <sys:showUsername id="${message.senderId}" needLink="false"/>
+                            &nbsp;&nbsp;&nbsp;
+                            <spring:eval expression="message.sendDate"/>
+                        </span>
                     </a>
 
                 </div>
