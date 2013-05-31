@@ -51,7 +51,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
     /**
      * 保存单个实体
      *
-     * @param m   实体
+     * @param m 实体
      * @return 返回保存的实体
      */
     public M save(M m) {
@@ -66,7 +66,8 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
 
     /**
      * 更新单个实体
-     * @param m   实体
+     *
+     * @param m 实体
      * @return 返回更新的实体
      */
     public M update(M m) {
@@ -99,8 +100,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
     public void delete(ID[] ids) {
         baseRepository.delete(ids);
     }
-
-
 
 
     /**
@@ -203,7 +202,6 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
     public Long count(Searchable searchable) {
         return baseRepository.count(searchable);
     }
-
 
 
 }

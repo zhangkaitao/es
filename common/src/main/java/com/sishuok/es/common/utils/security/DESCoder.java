@@ -58,10 +58,10 @@ public abstract class DESCoder extends Coder {
 //        DESKeySpec dks = new DESKeySpec(key);
 //        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
 //        SecretKey secretKey = keyFactory.generateSecret(dks);
-        
+
 
         // 当使用其他对称加密算法时，如AES、Blowfish等算法时，用下述代码替换上述三行代码
-         SecretKey secretKey = new SecretKeySpec(key, ALGORITHM);
+        SecretKey secretKey = new SecretKeySpec(key, ALGORITHM);
 
         return secretKey;
     }
@@ -123,7 +123,7 @@ public abstract class DESCoder extends Coder {
         byte[] bytes = seed.getBytes();
         byte[] result = new byte[24];
 
-        for(int i = 0; i < 24; i++) {
+        for (int i = 0; i < 24; i++) {
             result[i] = bytes[i];
         }
 

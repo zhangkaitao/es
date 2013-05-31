@@ -50,23 +50,24 @@ class SimpleBaseRepositoryFactory<M, ID extends Serializable> extends JpaReposit
         Class<?> repositoryInterface = metadata.getRepositoryInterface();
 
 
-        if(isBaseRepository(repositoryInterface)) {
+        if (isBaseRepository(repositoryInterface)) {
 
-            JpaEntityInformation<M, ID> entityInformation = getEntityInformation( (Class<M>)metadata.getDomainType() );
-            SimpleBaseRepository repository = new SimpleBaseRepository<M, ID>(entityInformation, entityManager) {};
+            JpaEntityInformation<M, ID> entityInformation = getEntityInformation((Class<M>) metadata.getDomainType());
+            SimpleBaseRepository repository = new SimpleBaseRepository<M, ID>(entityInformation, entityManager) {
+            };
 
             SearchableQuery searchableQuery = AnnotationUtils.findAnnotation(repositoryInterface, SearchableQuery.class);
-            if(searchableQuery != null) {
+            if (searchableQuery != null) {
                 String countAllQL = searchableQuery.countAllQuery();
-                if(!StringUtils.isEmpty(countAllQL)) {
+                if (!StringUtils.isEmpty(countAllQL)) {
                     repository.setCountAllQL(countAllQL);
                 }
                 String findAllQL = searchableQuery.countAllQuery();
-                if(!StringUtils.isEmpty(findAllQL)) {
+                if (!StringUtils.isEmpty(findAllQL)) {
                     repository.setFindAllQL(findAllQL);
                 }
                 Class<? extends SearchCallback> callbackClass = searchableQuery.callbackClass();
-                if(callbackClass != null && callbackClass != SearchCallback.class) {
+                if (callbackClass != null && callbackClass != SearchCallback.class) {
                     repository.setSearchCallback(BeanUtils.instantiate(callbackClass));
                 }
             }
@@ -77,7 +78,7 @@ class SimpleBaseRepositoryFactory<M, ID extends Serializable> extends JpaReposit
     }
 
     protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
-        if(isBaseRepository(metadata.getRepositoryInterface())) {
+        if (isBaseRepository(metadata.getRepositoryInterface())) {
             return SimpleBaseRepository.class;
         }
         return super.getRepositoryBaseClass(metadata);

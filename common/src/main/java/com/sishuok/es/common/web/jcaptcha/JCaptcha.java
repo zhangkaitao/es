@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class JCaptcha {
     public static final EsManageableImageCaptchaService captchaService
-            = new EsManageableImageCaptchaService(new FastHashMapCaptchaStore(), new GMailEngine(), 180, 100000 , 75000);
+            = new EsManageableImageCaptchaService(new FastHashMapCaptchaStore(), new GMailEngine(), 180, 100000, 75000);
 
 
     public static boolean validateResponse(HttpServletRequest request, String userCaptchaResponse) {

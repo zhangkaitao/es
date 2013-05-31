@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import java.security.MessageDigest;
 
 public class Md5Utils {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Md5Utils.class);
 
-    
+
     private static byte[] md5(String s) {
         MessageDigest algorithm;
         try {
@@ -18,15 +18,14 @@ public class Md5Utils {
             algorithm.update(s.getBytes("UTF-8"));
             byte[] messageDigest = algorithm.digest();
             return messageDigest;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("MD5 Error...", e);
         }
         return null;
     }
-    
+
     private static final String toHex(byte hash[]) {
-        if(hash == null) {
+        if (hash == null) {
             return null;
         }
         StringBuffer buf = new StringBuffer(hash.length * 2);
@@ -40,7 +39,7 @@ public class Md5Utils {
         }
         return buf.toString();
     }
-    
+
     public static String hash(String s) {
         try {
             return new String(toHex(md5(s)).getBytes("UTF-8"), "UTF-8");

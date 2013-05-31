@@ -27,7 +27,7 @@ public class JsonMap implements Serializable {
     }
 
     public Map<Object, Object> getMap() {
-        if(map == null) {
+        if (map == null) {
             map = Maps.newHashMap();
         }
         return map;

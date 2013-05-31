@@ -22,6 +22,7 @@ public class InputTag extends org.springframework.web.servlet.tags.form.InputTag
 
 
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {
@@ -29,7 +30,6 @@ public class InputTag extends org.springframework.web.servlet.tags.form.InputTag
         }
         return this.bindStatus;
     }
-
 
 
     @Override

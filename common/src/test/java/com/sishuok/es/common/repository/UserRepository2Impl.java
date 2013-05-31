@@ -62,6 +62,7 @@ public class UserRepository2Impl {
 
     /**
      * 按条件分页/排序查询，
+     *
      * @param searchable
      * @return
      */
@@ -85,13 +86,14 @@ public class UserRepository2Impl {
     private SearchCallback customSearchCallback = new DefaultSearchCallback() {
         @Override
         public void prepareQL(StringBuilder hql, Searchable search) {
-            if(search.containsSearchKey("realname")) {
+            if (search.containsSearchKey("realname")) {
                 hql.append(" and exists(select 1 from BaseInfo bi where o = bi.user and bi.realname like :realname )");
             }
         }
+
         @Override
         public void setValues(Query query, Searchable search) {
-            if(search.containsSearchKey("realname")) {
+            if (search.containsSearchKey("realname")) {
                 query.setParameter("realname", "%" + search.getValue("realname") + "%");
             }
         }

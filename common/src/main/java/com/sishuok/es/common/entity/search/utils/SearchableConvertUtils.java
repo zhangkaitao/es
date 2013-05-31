@@ -37,10 +37,11 @@ public final class SearchableConvertUtils {
      * 设置用于类型转换的conversionService
      * 把如下代码放入spring配置文件即可
      * <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-     *     <property name="staticMethod"
-     *               value="com.sishuok.es.common.entity.search.utils.SearchableConvertUtils.setConversionService"/>
-     *     <property name="arguments" ref="conversionService"/>
+     * <property name="staticMethod"
+     * value="com.sishuok.es.common.entity.search.utils.SearchableConvertUtils.setConversionService"/>
+     * <property name="arguments" ref="conversionService"/>
      * </bean>
+     *
      * @param conversionService
      */
     public static void setConversionService(ConversionService conversionService) {
@@ -67,14 +68,13 @@ public final class SearchableConvertUtils {
     }
 
     /**
-     *
-     * @param search 查询条件
+     * @param search      查询条件
      * @param entityClass 实体类型
      * @param <T>
      */
     public static <T> void convertSearchValueToEntityValue(final Searchable search, final Class<T> entityClass) {
 
-        if(search.isConverted()) {
+        if (search.isConverted()) {
             return;
         }
 
@@ -91,21 +91,21 @@ public final class SearchableConvertUtils {
     }
 
     private static void convertSearchValueToEntityValue(BeanWrapperImpl beanWrapper, SearchFilter searchFilter) {
-        if(searchFilter instanceof Condition) {
+        if (searchFilter instanceof Condition) {
             Condition condition = (Condition) searchFilter;
             convert(beanWrapper, condition);
             return;
         }
 
-        if(searchFilter instanceof OrCondition) {
-            for(SearchFilter orFilter : ((OrCondition)searchFilter).getOrFilters()) {
+        if (searchFilter instanceof OrCondition) {
+            for (SearchFilter orFilter : ((OrCondition) searchFilter).getOrFilters()) {
                 convertSearchValueToEntityValue(beanWrapper, orFilter);
             }
             return;
         }
 
-        if(searchFilter instanceof AndCondition) {
-            for(SearchFilter andFilter : ((AndCondition)searchFilter).getAndFilters()) {
+        if (searchFilter instanceof AndCondition) {
+            for (SearchFilter andFilter : ((AndCondition) searchFilter).getAndFilters()) {
                 convertSearchValueToEntityValue(beanWrapper, andFilter);
             }
             return;
@@ -118,12 +118,12 @@ public final class SearchableConvertUtils {
         String searchProperty = condition.getSearchProperty();
 
         //自定义的也不转换
-        if(condition.getOperator() == SearchOperator.custom) {
+        if (condition.getOperator() == SearchOperator.custom) {
             return;
         }
 
         //一元运算符不需要计算
-        if(condition.isUnaryFilter()) {
+        if (condition.isUnaryFilter()) {
             return;
         }
 
@@ -135,10 +135,10 @@ public final class SearchableConvertUtils {
         Object newValue = null;
         boolean isCollection = value instanceof Collection;
         boolean isArray = value != null && value.getClass().isArray();
-        if(isCollection || isArray) {
+        if (isCollection || isArray) {
             List<Object> list = Lists.newArrayList();
-            if(isCollection) {
-                list.addAll((Collection)value);
+            if (isCollection) {
+                list.addAll((Collection) value);
             } else {
                 list = Lists.newArrayList(CollectionUtils.arrayToList(value));
             }

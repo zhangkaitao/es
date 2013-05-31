@@ -42,8 +42,6 @@ public class RemoteFileFetcher {
                     });
 
 
-
-
     private RemoteFileFetcher(String url, int reloadInterval, FileChangeListener listener) {
         this.connectTimeout = 1000;
         this.readTimeout = 1000;
@@ -55,14 +53,15 @@ public class RemoteFileFetcher {
                     new Runnable() {
                         public void run() {
                             RemoteFileFetcher.this.doFetch();
-                        }},
+                        }
+                    },
                     reloadInterval, reloadInterval, TimeUnit.MILLISECONDS);
         }
         doFetch();
     }
 
     private void doFetch() {
-        if(url == null) {
+        if (url == null) {
             return;
         }
         LOGGER.info("Begin fetch remote file... url = {}", this.url);
@@ -70,7 +69,7 @@ public class RemoteFileFetcher {
             URL target = new URL(this.url);
             this.fileConent = IOUtils.toByteArray(target);
             this.lastModified = System.currentTimeMillis();
-            if(this.listener != null && this.fileConent != null) {
+            if (this.listener != null && this.fileConent != null) {
                 this.listener.fileReloaded(this.fileConent);
             }
         } catch (Exception e) {

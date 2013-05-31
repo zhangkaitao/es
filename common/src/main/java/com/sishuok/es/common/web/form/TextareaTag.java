@@ -22,6 +22,7 @@ public class TextareaTag extends org.springframework.web.servlet.tags.form.Texta
 
 
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {
@@ -29,7 +30,6 @@ public class TextareaTag extends org.springframework.web.servlet.tags.form.Texta
         }
         return this.bindStatus;
     }
-
 
 
     @Override

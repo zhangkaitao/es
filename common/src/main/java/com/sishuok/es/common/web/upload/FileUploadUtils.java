@@ -59,12 +59,11 @@ public class FileUploadUtils {
             //word excel powerpoint
             "doc", "docx", "xls", "xlsx", "ppt", "pptx",
             "html", "htm", "txt",
-             //压缩文件
+            //压缩文件
             "rar", "zip", "gz", "bz2",
             //pdf
             "pdf"
     };
-
 
 
     private static int counter = 0;
@@ -80,9 +79,10 @@ public class FileUploadUtils {
 
     /**
      * 以默认配置进行文件上传
+     *
      * @param request 当前请求
-     * @param file 上传的文件
-     * @param result 添加出错信息
+     * @param file    上传的文件
+     * @param result  添加出错信息
      * @return
      */
     public static final String upload(HttpServletRequest request, MultipartFile file, BindingResult result) {
@@ -92,9 +92,10 @@ public class FileUploadUtils {
 
     /**
      * 以默认配置进行文件上传
-     * @param request 当前请求
-     * @param file 上传的文件
-     * @param result 添加出错信息
+     *
+     * @param request          当前请求
+     * @param file             上传的文件
+     * @param result           添加出错信息
      * @param allowedExtension 允许上传的文件类型
      * @return
      */
@@ -123,23 +124,25 @@ public class FileUploadUtils {
 
     /**
      * 文件上传
-     * @param request 当前请求 从请求中提取 应用上下文根
-     * @param baseDir 相对应用的基目录
-     * @param file  上传的文件
+     *
+     * @param request          当前请求 从请求中提取 应用上下文根
+     * @param baseDir          相对应用的基目录
+     * @param file             上传的文件
      * @param allowedExtension 允许的文件类型 null 表示允许所有
-     * @param maxSize  最大上传的大小 -1 表示不限制
-     * @return  返回上传成功的文件名
-     * @throws InvalidExtensionException 如果MIME类型不允许
-     * @throws FileSizeLimitExceededException  如果超出最大大小
-     * @throws FileNameLengthLimitExceededException 文件名太长
-     * @throws IOException 比如读写文件出错时
+     * @param maxSize          最大上传的大小 -1 表示不限制
+     * @return 返回上传成功的文件名
+     * @throws InvalidExtensionException      如果MIME类型不允许
+     * @throws FileSizeLimitExceededException 如果超出最大大小
+     * @throws FileNameLengthLimitExceededException
+     *                                        文件名太长
+     * @throws IOException                    比如读写文件出错时
      */
     public static final String upload(
             HttpServletRequest request, String baseDir, MultipartFile file, String[] allowedExtension, long maxSize)
             throws InvalidExtensionException, FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
 
         int fileNamelength = file.getOriginalFilename().length();
-        if(fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
+        if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
             throw new FileNameLengthLimitExceededException(file.getOriginalFilename(), fileNamelength, FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
         }
 
@@ -154,19 +157,19 @@ public class FileUploadUtils {
 
     private static final File getAbsoluteFile(String uploadDir, String filename) throws IOException {
 
-        if(uploadDir.endsWith("/")) {
+        if (uploadDir.endsWith("/")) {
             uploadDir = uploadDir.substring(0, uploadDir.length() - 1);
         }
-        if(filename.startsWith("/")) {
+        if (filename.startsWith("/")) {
             filename = filename.substring(0, uploadDir.length() - 1);
         }
 
         File desc = new File(uploadDir + "/" + filename);
 
-        if(!desc.getParentFile().exists()) {
+        if (!desc.getParentFile().exists()) {
             desc.getParentFile().mkdirs();
         }
-        if(!desc.exists()) {
+        if (!desc.exists()) {
             desc.createNewFile();
         }
         return desc;
@@ -179,7 +182,7 @@ public class FileUploadUtils {
         if (slashIndex >= 0) {
             filename = filename.substring(slashIndex + 1);
         }
-        filename = baseDir + "/" + datePath()  + "/" + encodingFilename(filename);
+        filename = baseDir + "/" + datePath() + "/" + encodingFilename(filename);
 
         return filename;
     }
@@ -189,6 +192,7 @@ public class FileUploadUtils {
      * 1、'_'替换为 ' '
      * 2、hex(md5(filename + now nano time + counter++))
      * 3、[2]_原始文件名
+     *
      * @param filename
      * @return
      */
@@ -200,6 +204,7 @@ public class FileUploadUtils {
 
     /**
      * 日期路径 即年/月/日  如2013/01/03
+     *
      * @return
      */
     private static final String datePath() {
@@ -211,12 +216,12 @@ public class FileUploadUtils {
     /**
      * 是否允许文件上传
      *
-     * @param file               上传的文件
+     * @param file             上传的文件
      * @param allowedExtension 文件类型  null 表示允许所有
-     * @param maxSize            最大大小 字节为单位 -1表示不限制
+     * @param maxSize          最大大小 字节为单位 -1表示不限制
      * @return
-     * @throws InvalidExtensionException 如果MIME类型不允许
-     * @throws FileSizeLimitExceededException  如果超出最大大小
+     * @throws InvalidExtensionException      如果MIME类型不允许
+     * @throws FileSizeLimitExceededException 如果超出最大大小
      */
     public static final void assertAllowed(MultipartFile file, String[] allowedExtension, long maxSize)
             throws InvalidExtensionException, FileSizeLimitExceededException {
@@ -225,11 +230,11 @@ public class FileUploadUtils {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
         if (allowedExtension != null && !isAllowedExtension(extension, allowedExtension)) {
-            if(allowedExtension == IMAGE_EXTENSION) {
+            if (allowedExtension == IMAGE_EXTENSION) {
                 throw new InvalidExtensionException.InvalidImageExtensionException(allowedExtension, extension, filename);
-            } else if(allowedExtension == FLASH_EXTENSION) {
+            } else if (allowedExtension == FLASH_EXTENSION) {
                 throw new InvalidExtensionException.InvalidFlashExtensionException(allowedExtension, extension, filename);
-            } else if(allowedExtension == MEDIA_EXTENSION) {
+            } else if (allowedExtension == MEDIA_EXTENSION) {
                 throw new InvalidExtensionException.InvalidMediaExtensionException(allowedExtension, extension, filename);
             } else {
                 throw new InvalidExtensionException(allowedExtension, extension, filename);
@@ -244,6 +249,7 @@ public class FileUploadUtils {
 
     /**
      * 判断MIME类型是否是允许的MIME类型
+     *
      * @param extension
      * @param allowedExtension
      * @return
@@ -259,6 +265,7 @@ public class FileUploadUtils {
 
     /**
      * 提取上传的根目录 默认是应用的根
+     *
      * @param request
      * @return
      */
@@ -268,11 +275,11 @@ public class FileUploadUtils {
 
 
     public static final void delete(HttpServletRequest request, String filename) throws IOException {
-        if(StringUtils.isEmpty(filename)) {
+        if (StringUtils.isEmpty(filename)) {
             return;
         }
         File desc = getAbsoluteFile(extractUploadDir(request), filename);
-        if(desc.exists()) {
+        if (desc.exists()) {
             desc.delete();
         }
     }

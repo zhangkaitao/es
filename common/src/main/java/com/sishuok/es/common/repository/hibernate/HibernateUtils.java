@@ -23,6 +23,7 @@ public class HibernateUtils {
 
     /**
      * 根据jpa EntityManager 获取 hibernate Session API
+     *
      * @param em
      * @return
      */
@@ -32,9 +33,10 @@ public class HibernateUtils {
 
     /**
      * 根据jpa EntityManager 获取 hibernate SessionFactory API
-     * @see #getSessionFactory(javax.persistence.EntityManagerFactory)
+     *
      * @param em
      * @return
+     * @see #getSessionFactory(javax.persistence.EntityManagerFactory)
      */
     public static SessionFactory getSessionFactory(EntityManager em) {
         return getSessionFactory(em.getEntityManagerFactory());
@@ -42,18 +44,20 @@ public class HibernateUtils {
 
     /**
      * 根据jpa EntityManagerFactory 获取 hibernate SessionFactory API
+     *
      * @param emf
      * @return
      */
     public static SessionFactory getSessionFactory(EntityManagerFactory emf) {
-        return ((HibernateEntityManagerFactory)emf).getSessionFactory();
+        return ((HibernateEntityManagerFactory) emf).getSessionFactory();
     }
 
     /**
      * 根据 jpa EntityManager 获取hibernate Cache API
-     * @see #getCache(javax.persistence.EntityManagerFactory)
+     *
      * @param em
      * @return
+     * @see #getCache(javax.persistence.EntityManagerFactory)
      */
     public static Cache getCache(EntityManager em) {
         return getCache(em.getEntityManagerFactory());
@@ -61,6 +65,7 @@ public class HibernateUtils {
 
     /**
      * 根据jpa EntityManagerFactory 获取 hibernate Cache API
+     *
      * @param emf
      * @return
      */
@@ -70,6 +75,7 @@ public class HibernateUtils {
 
     /**
      * 清空一级缓存
+     *
      * @param em
      */
     public static void clearLevel1Cache(EntityManager em) {
@@ -78,8 +84,9 @@ public class HibernateUtils {
 
     /**
      * 根据jpa EntityManager 清空二级缓存
-     * @see #clearLevel2Cache(javax.persistence.EntityManagerFactory)
+     *
      * @param em
+     * @see #clearLevel2Cache(javax.persistence.EntityManagerFactory)
      */
     public static void clearLevel2Cache(EntityManager em) {
         clearLevel2Cache(em.getEntityManagerFactory());
@@ -91,10 +98,10 @@ public class HibernateUtils {
      * 2、集合缓存
      * 3、查询缓存
      * 注意：
-     *  jpa Cache api 只能evict 实体缓存，其他缓存是删不掉的。。。
-     *  @see org.hibernate.ejb.EntityManagerFactoryImpl.JPACache#evictAll()
+     * jpa Cache api 只能evict 实体缓存，其他缓存是删不掉的。。。
      *
      * @param emf
+     * @see org.hibernate.ejb.EntityManagerFactoryImpl.JPACache#evictAll()
      */
     public static void clearLevel2Cache(EntityManagerFactory emf) {
         Cache cache = HibernateUtils.getCache(emf);

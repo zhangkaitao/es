@@ -34,12 +34,12 @@ public class PageableMethodArgumentResolverTest {
 
     @Before
     public void setUp() throws NoSuchMethodException {
-        pageable = Controller.class.getDeclaredMethod("pageable", new Class[] {Pageable.class});
-        pageableAndSort = Controller.class.getDeclaredMethod("pageable", new Class[] {Pageable.class});
-        methodDefaultPageable = Controller.class.getDeclaredMethod("methodDefaultPageable", new Class[] {Pageable.class});
+        pageable = Controller.class.getDeclaredMethod("pageable", new Class[]{Pageable.class});
+        pageableAndSort = Controller.class.getDeclaredMethod("pageable", new Class[]{Pageable.class});
+        methodDefaultPageable = Controller.class.getDeclaredMethod("methodDefaultPageable", new Class[]{Pageable.class});
         parameterDefaultPageable = Controller.class.getDeclaredMethod("parameterDefaultPageable", new Class[]{Pageable.class});
         customNamePrefixPageableAndSort = Controller.class.getDeclaredMethod("customNamePrefixPageableAndSort",
-                                                        new Class[]{Pageable.class, Pageable.class});
+                new Class[]{Pageable.class, Pageable.class});
 
         request = new MockHttpServletRequest();
     }
@@ -61,7 +61,6 @@ public class PageableMethodArgumentResolverTest {
         assertEquals(pageSize, pageable.getPageSize());
         assertEquals(null, pageable.getSort());
     }
-
 
 
     @Test
@@ -106,7 +105,6 @@ public class PageableMethodArgumentResolverTest {
         Sort expectedSort = new Sort(Sort.Direction.ASC, "baseInfo.realname").and(new Sort(Sort.Direction.DESC, "id"));
         assertEquals(expectedSort, pageable.getSort());
     }
-
 
 
     @Test
@@ -154,7 +152,6 @@ public class PageableMethodArgumentResolverTest {
     }
 
 
-
     @Test
     public void testCustomNamePrefixPageableAndSort() throws Exception {
         int pn = 1;
@@ -176,21 +173,20 @@ public class PageableMethodArgumentResolverTest {
     }
 
 
-
     @Test(expected = IllegalStateException.class)
-     public void testErrorSortProperty() throws Exception {
-         int pn = 1;
-         int pageSize = 10;
-         request.setParameter("foo_page.pn", String.valueOf(pn));
-         request.setParameter("foo_page.size", String.valueOf(pageSize));
-         request.setParameter("foo_sort2.id$", "desc");
-         request.setParameter("foo_sort1.baseInfo.realname", "asc");
+    public void testErrorSortProperty() throws Exception {
+        int pn = 1;
+        int pageSize = 10;
+        request.setParameter("foo_page.pn", String.valueOf(pn));
+        request.setParameter("foo_page.size", String.valueOf(pageSize));
+        request.setParameter("foo_sort2.id$", "desc");
+        request.setParameter("foo_sort1.baseInfo.realname", "asc");
 
-         MethodParameter parameter = new MethodParameter(customNamePrefixPageableAndSort, 0);
-         NativeWebRequest webRequest = new ServletWebRequest(request);
-         Pageable pageable = (Pageable) new PageableMethodArgumentResolver().resolveArgument(parameter, null, webRequest, null);
+        MethodParameter parameter = new MethodParameter(customNamePrefixPageableAndSort, 0);
+        NativeWebRequest webRequest = new ServletWebRequest(request);
+        Pageable pageable = (Pageable) new PageableMethodArgumentResolver().resolveArgument(parameter, null, webRequest, null);
 
-     }
+    }
 
 
     static class Controller {

@@ -36,6 +36,7 @@ public class ValidateResponse {
 
     /**
      * 验证成功（使用前台alertTextOk定义的消息）
+     *
      * @param fieldId 验证成功的字段名
      */
     public void validateFail(String fieldId) {
@@ -54,6 +55,7 @@ public class ValidateResponse {
 
     /**
      * 验证成功（使用前台alertTextOk定义的消息）
+     *
      * @param fieldId 验证成功的字段名
      */
     public void validateSuccess(String fieldId) {
@@ -72,10 +74,11 @@ public class ValidateResponse {
 
     /**
      * 返回验证结果
+     *
      * @return
      */
     public Object result() {
-        if(results.size() == 1) {
+        if (results.size() == 1) {
             return results.get(0);
         }
         return results;

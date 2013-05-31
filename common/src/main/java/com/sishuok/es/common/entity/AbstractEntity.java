@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 /**
  * 抽象实体基类，如果主键是数据库端自动生成 请使用{@link BaseEntity}，如果是Oracle 请使用{@link BaseOracleEntity}
- *
+ * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-3-20 下午8:38
  * <p>Version: 1.0

@@ -31,7 +31,6 @@ public class HtmlUtilsTest {
     }
 
 
-
     @Test
     public void testRemoveUnSafeTag() {
         String html = "<a onclick='alert(1)' onBlur='alert(1)'>你好</a><script>alert(1)</script><Script>alert(1)</SCRIPT>";

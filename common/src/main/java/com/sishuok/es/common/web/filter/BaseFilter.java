@@ -17,38 +17,39 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 /**
  * Ant语法
  * 请参考 http://jinnianshilongnian.iteye.com/blog/1416322
+ * <p/>
+ * 配置方式
+ * <filter>
+ * <filter-name>TestFilter</filter-name>
+ * <filter-class>com.sishuok.web.filter.TestFilter</filter-class>
+ * <!-- url分隔符可以是 换行 空格 分号  逗号  白名单和黑名单都是可选-->
+ * <init-param>
+ * <param-name>blackListURL</param-name> <!-- 配置黑名单url 表示不走过滤器的url order：1 -->
+ * <param-value>
+ * /aa
+ * /bb/**
+ * /cc/*
+ * </param-value>
+ * </init-param>
+ * <init-param>
+ * <param-name>whiteListURL</param-name> <!-- 配置白名单url 表示走过滤器的url order：2-->
+ * <param-value>
+ * /dd;/ee,/ff /list
+ * </param-value>
+ * </init-param>
+ * </filter>
+ * <filter-mapping>
+ * <filter-name>TestFilter</filter-name>
+ * <url-pattern>/*</url-pattern>
+ * </filter-mapping>
+ * <p/>
+ * 过滤器介绍：
  *
- *  配置方式
-	<filter>
-        <filter-name>TestFilter</filter-name>
-        <filter-class>com.sishuok.web.filter.TestFilter</filter-class>
-        <!-- url分隔符可以是 换行 空格 分号  逗号  白名单和黑名单都是可选-->
-        <init-param>
-            <param-name>blackListURL</param-name> <!-- 配置黑名单url 表示不走过滤器的url order：1 -->
-            <param-value>
-                /aa
-                /bb/**
-                /cc/*
-            </param-value>
-        </init-param>
-        <init-param>
-            <param-name>whiteListURL</param-name> <!-- 配置白名单url 表示走过滤器的url order：2-->
-            <param-value>
-                /dd;/ee,/ff /list
-            </param-value>
-        </init-param>
-            </filter>
-            <filter-mapping>
-        <filter-name>TestFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-	</filter-mapping>
- *
- *  过滤器介绍：
  * @author Zhang Kaitao
- *
  */
 public abstract class BaseFilter implements Filter {
 

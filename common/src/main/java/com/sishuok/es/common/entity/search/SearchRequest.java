@@ -67,7 +67,7 @@ public final class SearchRequest extends Searchable {
      * @param searchParams
      * @see SearchRequest#SearchRequest(java.util.Map<java.lang.String,java.lang.Object>)
      */
-    public SearchRequest(final Map<String, Object> searchParams, final Sort sort) throws SearchException{
+    public SearchRequest(final Map<String, Object> searchParams, final Sort sort) throws SearchException {
         this(searchParams, null, sort);
     }
 
@@ -94,7 +94,7 @@ public final class SearchRequest extends Searchable {
 
 
     private void toSearchFilters(final Map<String, Object> searchParams) throws SearchException {
-        if(searchParams == null || searchParams.size() == 0) {
+        if (searchParams == null || searchParams.size() == 0) {
             return;
         }
         for (Map.Entry<String, Object> entry : searchParams.entrySet()) {
@@ -113,7 +113,7 @@ public final class SearchRequest extends Searchable {
     }
 
     @Override
-    public Searchable addSearchParams(Map<String, Object> searchParams) throws SearchException  {
+    public Searchable addSearchParams(Map<String, Object> searchParams) throws SearchException {
         toSearchFilters(searchParams);
         return this;
     }
@@ -128,10 +128,10 @@ public final class SearchRequest extends Searchable {
 
     @Override
     public Searchable addSearchFilters(Collection<? extends SearchFilter> searchFilters) {
-        if(CollectionUtils.isEmpty(searchFilters)) {
+        if (CollectionUtils.isEmpty(searchFilters)) {
             return this;
         }
-        for(SearchFilter searchFilter : searchFilters) {
+        for (SearchFilter searchFilter : searchFilters) {
             addSearchFilter(searchFilter);
         }
         return this;
@@ -152,10 +152,10 @@ public final class SearchRequest extends Searchable {
 
     @Override
     public Searchable addSearchFilter(SearchFilter searchFilter) {
-        if(searchFilter == null) {
+        if (searchFilter == null) {
             return this;
         }
-        if(searchFilter instanceof Condition) {
+        if (searchFilter instanceof Condition) {
             Condition condition = (Condition) searchFilter;
             String key = condition.getKey();
             searchFilterMap.put(key, condition);
@@ -171,17 +171,17 @@ public final class SearchRequest extends Searchable {
      */
     @Override
     public Searchable removeSearchFilter(final String key) {
-        if(key == null) {
+        if (key == null) {
             return this;
         }
 
         SearchFilter searchFilter = searchFilterMap.remove(key);
 
-        if(searchFilter == null) {
+        if (searchFilter == null) {
             searchFilter = searchFilterMap.remove(getCustomKey(key));
         }
 
-        if(searchFilter == null) {
+        if (searchFilter == null) {
             return this;
         }
 
@@ -219,8 +219,6 @@ public final class SearchRequest extends Searchable {
     }
 
 
-
-
     @Override
     public <T> Searchable convert(final Class<T> entityClass) {
         SearchableConvertUtils.convertSearchValueToEntityValue(this, entityClass);
@@ -234,7 +232,6 @@ public final class SearchRequest extends Searchable {
         this.converted = true;
         return this;
     }
-
 
 
     @Override
@@ -261,10 +258,11 @@ public final class SearchRequest extends Searchable {
     public boolean hasPageable() {
         return this.page != null && this.page.getPageSize() > 0;
     }
+
     @Override
     public void removeSort() {
         this.sort = null;
-        if(this.page != null) {
+        if (this.page != null) {
             this.page = new PageRequest(page.getPageNumber(), page.getPageSize(), null);
         }
     }
@@ -286,20 +284,20 @@ public final class SearchRequest extends Searchable {
     public boolean containsSearchKey(String key) {
         return
                 searchFilterMap.containsKey(key) ||
-                searchFilterMap.containsKey(getCustomKey(key));
+                        searchFilterMap.containsKey(getCustomKey(key));
     }
 
     @Override
     public Object getValue(String key) {
         SearchFilter searchFilter = searchFilterMap.get(key);
-        if(searchFilter == null) {
+        if (searchFilter == null) {
             searchFilter = searchFilterMap.get(getCustomKey(key));
         }
-        if(searchFilter == null) {
+        if (searchFilter == null) {
             return null;
         }
 
-        if(searchFilter instanceof Condition) {
+        if (searchFilter instanceof Condition) {
             Condition condition = (Condition) searchFilter;
             return condition.getValue();
         }
@@ -308,30 +306,27 @@ public final class SearchRequest extends Searchable {
     }
 
 
-
-
     private void merge(Sort sort, Pageable page) {
-        if(sort == null) {
+        if (sort == null) {
             sort = this.sort;
         }
-        if(page == null) {
+        if (page == null) {
             page = this.page;
         }
 
         //合并排序
-        if(sort == null) {
+        if (sort == null) {
             this.sort = page != null ? page.getSort() : null;
         } else {
             this.sort = (page != null ? sort.and(page.getSort()) : sort);
         }
         //把排序合并到page中
-        if(page != null) {
+        if (page != null) {
             this.page = new PageRequest(page.getPageNumber(), page.getPageSize(), this.sort);
         } else {
             this.page = null;
         }
     }
-
 
 
     @Override

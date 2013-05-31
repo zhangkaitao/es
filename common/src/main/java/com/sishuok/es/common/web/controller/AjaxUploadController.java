@@ -62,18 +62,18 @@ public class AjaxUploadController {
 
         AjaxUploadResponse ajaxUploadResponse = new AjaxUploadResponse();
 
-        if(ArrayUtils.isEmpty(files)) {
+        if (ArrayUtils.isEmpty(files)) {
             return ajaxUploadResponse;
         }
 
-        for(MultipartFile file : files) {
+        for (MultipartFile file : files) {
             String filename = file.getOriginalFilename();
             long size = file.getSize();
 
             try {
                 String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize);
                 String deleteURL = request.getContextPath() + "/ajaxUpload/delete?filename=" + URLEncoder.encode(url, "UTF-8");
-                if(ImagesUtils.isImage(filename)) {
+                if (ImagesUtils.isImage(filename)) {
                     ajaxUploadResponse.add(filename, size, url, url, deleteURL);
                 } else {
                     ajaxUploadResponse.add(filename, size, url, deleteURL);

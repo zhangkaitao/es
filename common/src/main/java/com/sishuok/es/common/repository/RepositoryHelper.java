@@ -23,7 +23,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- *  仓库辅助类
+ * 仓库辅助类
  * <p>User: Zhang Kaitao
  * <p>Date: 13-4-14 下午5:28
  * <p>Version: 1.0
@@ -35,7 +35,6 @@ public class RepositoryHelper {
     private boolean enableQueryCache = false;
 
     /**
-     *
      * @param entityClass 是否开启查询缓存
      */
     public RepositoryHelper(Class<?> entityClass) {
@@ -45,7 +44,7 @@ public class RepositoryHelper {
                 AnnotationUtils.findAnnotation(entityClass, EnableQueryCache.class);
 
         boolean enableQueryCache = false;
-        if(enableQueryCacheAnnotation != null) {
+        if (enableQueryCacheAnnotation != null) {
             enableQueryCache = enableQueryCacheAnnotation.value();
         }
         this.enableQueryCache = enableQueryCache;
@@ -75,11 +74,12 @@ public class RepositoryHelper {
     /**
      * <p>ql条件查询<br/>
      * searchCallback默认实现请参考 {@see com.sishuok.es.common.repository.callback.DefaultSearchCallback}<br/>
-     *
+     * <p/>
      * 测试用例请参考：{@see com.sishuok.es.common.repository.UserRepositoryImplForCustomSearchIT}
      * 和{@see com.sishuok.es.common.repository.UserRepositoryImplForDefaultSearchIT}
+     *
      * @param ql
-     * @param searchable 查询条件、分页 排序
+     * @param searchable     查询条件、分页 排序
      * @param searchCallback 查询回调  自定义设置查询条件和赋值
      * @return
      */
@@ -102,6 +102,7 @@ public class RepositoryHelper {
      * <p>按条件统计<br/>
      * 测试用例请参考：{@see com.sishuok.es.common.repository.UserRepositoryImplForCustomSearchIT}
      * 和{@see com.sishuok.es.common.repository.UserRepositoryImplForDefaultSearchIT}
+     *
      * @param ql
      * @param searchable
      * @param searchCallback
@@ -122,6 +123,7 @@ public class RepositoryHelper {
 
     /**
      * 按条件查询一个实体
+     *
      * @param ql
      * @param searchable
      * @param searchCallback
@@ -141,7 +143,7 @@ public class RepositoryHelper {
         query.setMaxResults(1);
         List<M> result = query.getResultList();
 
-        if(result.size() > 0) {
+        if (result.size() > 0) {
             return result.get(0);
         }
         return null;
@@ -149,11 +151,11 @@ public class RepositoryHelper {
 
 
     /**
-     * @see RepositoryHelper#findAll(String, org.springframework.data.domain.Pageable, Object...)
      * @param ql
      * @param params
      * @param <M>
      * @return
+     * @see RepositoryHelper#findAll(String, org.springframework.data.domain.Pageable, Object...)
      */
     public <M> List<M> findAll(final String ql, final Object... params) {
 
@@ -165,6 +167,7 @@ public class RepositoryHelper {
     /**
      * <p>根据ql和按照索引顺序的params执行ql，pageable存储分页信息 null表示不分页<br/>
      * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testFindAll()}
+     *
      * @param ql
      * @param pageable null表示不分页
      * @param params
@@ -187,8 +190,9 @@ public class RepositoryHelper {
     /**
      * <p>根据ql和按照索引顺序的params执行ql，sort存储排序信息 null表示不排序<br/>
      * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testFindAll()}
+     *
      * @param ql
-     * @param sort null表示不排序
+     * @param sort   null表示不排序
      * @param params
      * @param <M>
      * @return
@@ -206,6 +210,7 @@ public class RepositoryHelper {
     /**
      * <p>根据ql和按照索引顺序的params查询一个实体<br/>
      * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testFindOne()}
+     *
      * @param ql
      * @param params
      * @param <M>
@@ -225,6 +230,7 @@ public class RepositoryHelper {
     /**
      * <p>根据ql和按照索引顺序的params执行ql统计<br/>
      * 具体使用请参考测试用例：com.sishuok.es.common.repository.UserRepository2ImplIT#testCountAll()
+     *
      * @param ql
      * @param params
      * @return
@@ -235,12 +241,13 @@ public class RepositoryHelper {
         applyEnableQueryCache(query);
         setParameters(query, params);
 
-        return (Long)query.getSingleResult();
+        return (Long) query.getSingleResult();
     }
 
     /**
      * <p>执行批处理语句.如 之间insert, update, delete 等.<br/>
      * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository2ImplIT#testBatchUpdate()}
+     *
      * @param ql
      * @param params
      * @return
@@ -256,6 +263,7 @@ public class RepositoryHelper {
 
     /**
      * 按顺序设置Query参数
+     *
      * @param query
      * @param params
      */
@@ -269,11 +277,12 @@ public class RepositoryHelper {
 
     /**
      * 拼排序
+     *
      * @param sort
      * @return
      */
     public String prepareOrder(Sort sort) {
-        if(sort == null || !sort.iterator().hasNext()) {
+        if (sort == null || !sort.iterator().hasNext()) {
             return "";
         }
         StringBuilder orderBy = new StringBuilder("");
@@ -293,14 +302,14 @@ public class RepositoryHelper {
 
 
     private void assertConverted(Searchable searchable) {
-        if(!searchable.isConverted()) {
+        if (!searchable.isConverted()) {
             searchable.convert(this.entityClass);
         }
     }
 
 
     public void applyEnableQueryCache(Query query) {
-        if(enableQueryCache) {
+        if (enableQueryCache) {
             query.setHint("org.hibernate.cacheable", true);//开启查询缓存
         }
     }

@@ -199,7 +199,6 @@ public class SearchUserRepositoryIT extends BaseUserIT {
     }
 
 
-
     @Test
     public void testOr() {
         int count = 15;
@@ -256,7 +255,6 @@ public class SearchUserRepositoryIT extends BaseUserIT {
 
         assertEquals(6, userRepository.count(search));
     }
-
 
 
     @Test

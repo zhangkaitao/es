@@ -42,22 +42,22 @@ public class GMailEngine extends ListImageCaptchaEngine {
 
         // word2image components
         TextPaster randomPaster = new DecoratedRandomTextPaster(minWordLength,
-                maxWordLength, new RandomListColorGenerator(new Color[] {
+                maxWordLength, new RandomListColorGenerator(new Color[]{
                 new Color(23, 170, 27), new Color(220, 34, 11),
-                new Color(23, 67, 172) }), new TextDecorator[] {});
+                new Color(23, 67, 172)}), new TextDecorator[]{});
         BackgroundGenerator background = new UniColorBackgroundGenerator(
                 imageWidth, imageHeight, Color.white);
         FontGenerator font = new RandomFontGenerator(fontSize, fontSize,
-                new Font[] { new Font("nyala", Font.BOLD, fontSize),
+                new Font[]{new Font("nyala", Font.BOLD, fontSize),
                         new Font("Bell MT", Font.PLAIN, fontSize),
-                        new Font("Credit valley", Font.BOLD, fontSize) });
+                        new Font("Credit valley", Font.BOLD, fontSize)});
 
         ImageDeformation postDef = new ImageDeformationByFilters(
-                new ImageFilter[] {});
+                new ImageFilter[]{});
         ImageDeformation backDef = new ImageDeformationByFilters(
-                new ImageFilter[] {});
+                new ImageFilter[]{});
         ImageDeformation textDef = new ImageDeformationByFilters(
-                new ImageFilter[] {});
+                new ImageFilter[]{});
 
         WordToImage word2image = new DeformedComposedWordToImage(font,
                 background, randomPaster, backDef, textDef, postDef);

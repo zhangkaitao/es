@@ -60,7 +60,6 @@ public class ForbiddenWordUtilsTest {
     }
 
 
-
     @Test
     public void testReplaceWithCustomMask() {
         String input = "12职称英语买答案32";
@@ -68,7 +67,6 @@ public class ForbiddenWordUtilsTest {
         String actual = ForbiddenWordUtils.replace(input, "###");
         Assert.assertEquals(expected, actual);
     }
-
 
 
     @Test
@@ -99,11 +97,6 @@ public class ForbiddenWordUtilsTest {
 
         server.stop();
     }
-
-
-
-
-
 
 
 }

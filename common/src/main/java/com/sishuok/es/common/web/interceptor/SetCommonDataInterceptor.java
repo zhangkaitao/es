@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 设置通用数据的Interceptor
- *
+ * <p/>
  * 使用Filter时 文件上传时 getParameter时为null 所以改成Interceptor
- *
+ * <p/>
  * 1、ctx---->request.contextPath
  * 2、currentURL---->当前地址
  * <p>User: Zhang Kaitao
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
 
-    private static final String[] DEFAULT_EXCLUDE_PARAMETER_PATTERN = new String[] {
+    private static final String[] DEFAULT_EXCLUDE_PARAMETER_PATTERN = new String[]{
             "\\&\\w*page.pn=\\d+",
             "\\?\\w*page.pn=\\d+",
             "\\&\\w*page.size=\\d+"
@@ -40,16 +40,16 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if(request.getAttribute(Constants.CONTEXT_PATH) == null) {
+        if (request.getAttribute(Constants.CONTEXT_PATH) == null) {
             request.setAttribute(Constants.CONTEXT_PATH, request.getContextPath());
         }
-        if(request.getAttribute(Constants.CURRENT_URL) == null) {
+        if (request.getAttribute(Constants.CURRENT_URL) == null) {
             request.setAttribute(Constants.CURRENT_URL, extractCurrentURL(request, true));
         }
-        if(request.getAttribute(Constants.NO_QUERYSTRING_CURRENT_URL) == null) {
+        if (request.getAttribute(Constants.NO_QUERYSTRING_CURRENT_URL) == null) {
             request.setAttribute(Constants.NO_QUERYSTRING_CURRENT_URL, extractCurrentURL(request, false));
         }
-        if(request.getAttribute(Constants.BACK_URL) == null) {
+        if (request.getAttribute(Constants.BACK_URL) == null) {
             request.setAttribute(Constants.BACK_URL, extractBackURL(request));
         }
 
@@ -62,14 +62,14 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
         String queryString = request.getQueryString();
         if (!StringUtils.isEmpty(queryString)) {
             queryString = "?" + queryString;
-            for(String pattern : excludeParameterPattern) {
+            for (String pattern : excludeParameterPattern) {
                 queryString = queryString.replaceAll(pattern, "");
             }
-            if(queryString.startsWith("&")) {
+            if (queryString.startsWith("&")) {
                 queryString = "?" + queryString.substring(1);
             }
         }
-        if(!StringUtils.isEmpty(queryString) && needQueryString) {
+        if (!StringUtils.isEmpty(queryString) && needQueryString) {
             url = url + queryString;
         }
         return getBasePath(request) + url;
@@ -79,6 +79,7 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
      * 上一次请求的地址
      * 1、先从request.parameter中查找BackURL
      * 2、获取header中的 referer
+     *
      * @param request
      * @return
      */
@@ -87,10 +88,10 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
 
         //使用Filter时 文件上传时 getParameter时为null 所以改成Interceptor
 
-        if(StringUtils.isEmpty(url)) {
+        if (StringUtils.isEmpty(url)) {
             url = request.getHeader("Referer");
         }
-        if(!StringUtils.isEmpty(url) && url.startsWith(request.getContextPath())) {
+        if (!StringUtils.isEmpty(url) && url.startsWith(request.getContextPath())) {
             url = getBasePath(request) + url;
         }
         return url;

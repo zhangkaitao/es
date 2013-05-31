@@ -75,7 +75,7 @@ public class SearchableMethodArgumentResolverTest {
         assertEquals(pageSize, searchable.getPage().getPageSize());
 
         Sort expectedSort = new Sort(Sort.Direction.ASC, "baseInfo.realname").and(new Sort(Sort.Direction.DESC, "id"));
-                assertEquals(expectedSort, searchable.getSort());
+        assertEquals(expectedSort, searchable.getSort());
 
 
         assertContainsSearchFilter(SearchFilterHelper.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
@@ -134,7 +134,6 @@ public class SearchableMethodArgumentResolverTest {
     }
 
 
-
     @Test
     public void testSearchableAndNoPageAndNoSort() throws Exception {
 
@@ -163,8 +162,6 @@ public class SearchableMethodArgumentResolverTest {
     }
 
 
-
-
     @Test
     public void testMethodDefaultSearchable() throws Exception {
         int pn = 1;
@@ -190,7 +187,6 @@ public class SearchableMethodArgumentResolverTest {
         assertContainsSearchFilter(SearchFilterHelper.newCondition("baseInfo.realname", SearchOperator.like, "zhang"), searchable);
         assertContainsSearchFilter(SearchFilterHelper.newCondition("id", SearchOperator.eq, "1"), searchable);
     }
-
 
 
     @Test
@@ -251,7 +247,6 @@ public class SearchableMethodArgumentResolverTest {
     }
 
 
-
     @Test
     public void testCustomNamePrefixSearchableAndPageableAndSort() throws Exception {
         int pn = 1;
@@ -297,17 +292,16 @@ public class SearchableMethodArgumentResolverTest {
     }
 
 
-
-
     private void assertContainsSearchFilter(SearchFilter expected, Searchable searchable) {
-        for(SearchFilter acutal : searchable.getSearchFilters()) {
-            if(acutal.equals(expected)) {
+        for (SearchFilter acutal : searchable.getSearchFilters()) {
+            if (acutal.equals(expected)) {
                 return;
             }
         }
 
         failSearchable(expected, searchable.getSearchFilters());
     }
+
     private void failSearchable(SearchFilter expected, Collection<SearchFilter> acutal) {
         String message = "search filter not contains " + "\r\n" + "Expected :" + expected + "\r\n" + "Actual :" + acutal;
         fail(message);

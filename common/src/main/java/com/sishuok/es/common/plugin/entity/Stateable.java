@@ -28,7 +28,7 @@ public interface Stateable<T extends Enum<? extends Stateable.Status>> {
      * 审核状态
      */
     public static enum AuditStatus implements Status {
-        waiting("等待审核"),fail("审核失败"), success("审核成功");
+        waiting("等待审核"), fail("审核失败"), success("审核成功");
         private final String info;
 
         private AuditStatus(String info) {

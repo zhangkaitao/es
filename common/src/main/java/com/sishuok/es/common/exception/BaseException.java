@@ -61,10 +61,10 @@ public class BaseException extends RuntimeException {
     @Override
     public String getMessage() {
         String message = null;
-        if(!StringUtils.isEmpty(code)) {
+        if (!StringUtils.isEmpty(code)) {
             message = MessageUtils.message(code, args);
         }
-        if(message == null) {
+        if (message == null) {
             message = defaultMessage;
         }
         return message;

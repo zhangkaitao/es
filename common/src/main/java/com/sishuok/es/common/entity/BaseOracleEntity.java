@@ -14,9 +14,9 @@ import java.io.Serializable;
 /**
  * <p> 抽象实体基类，提供统一的ID，和相关的基本功能方法
  * <p> 如果是如mysql这种自动生成主键的，请参考{@link BaseEntity}
- *
+ * <p/>
  * 子类只需要在类头上加 @SequenceGenerator(name="seq", sequenceName="你的sequence名字")
- *
+ * <p/>
  * <p/>
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-12 下午4:05

@@ -63,20 +63,21 @@ public class KindEditorController {
     /**
      * 传入的数据
      * dir 表示类型  file image flash media
-     *
+     * <p/>
      * 返回的数据格式
      * 出错时
      * {
-     *     error : 1
-     *     message : 出错时的消息
+     * error : 1
+     * message : 出错时的消息
      * }
-     *
+     * <p/>
      * 正确时
      * {
-     *     error:0
-     *     url:上传后的地址
-     *     title:标题
+     * error:0
+     * url:上传后的地址
+     * title:标题
      * }
+     *
      * @param response
      * @param request
      * @param dir
@@ -123,22 +124,23 @@ public class KindEditorController {
      * path 当前访问的目录（相对路径） 【..】需要排除掉
      * order 排序  NAME SIZE TYPE
      * dir 文件类型 file image flash media
-     *
-     *
+     * <p/>
+     * <p/>
      * 返回的数据格式
      * 出错时（前台无错误提示，todo 可以自己改造下 显示错误信息，并停留在当前页面）
      * "字符串"
-     *
+     * <p/>
      * 正确时
      * {"current_url":当前地址（绝对）,
-     *  "current_dir_path":当前目录（相对）,
-     *  "moveup_dir_path":上级目录（可以根据当前目录算出来）,
-     *  "file_list":[//文件列表
-     *                       文件名                  文件大小     文件类型      是否包含文件    是否是目录   是否是照片        时间
-     *          {"filename":"My Pictures","filesize":0,"filetype":"","has_file":true,"is_dir":true,"is_photo":false,"datetime":"2013-03-09 11:41:17"}
-     *      ],
-     *  "total_count":文件及目录总数
-     *  }
+     * "current_dir_path":当前目录（相对）,
+     * "moveup_dir_path":上级目录（可以根据当前目录算出来）,
+     * "file_list":[//文件列表
+     * 文件名                  文件大小     文件类型      是否包含文件    是否是目录   是否是照片        时间
+     * {"filename":"My Pictures","filesize":0,"filetype":"","has_file":true,"is_dir":true,"is_photo":false,"datetime":"2013-03-09 11:41:17"}
+     * ],
+     * "total_count":文件及目录总数
+     * }
+     *
      * @return
      */
     @RequestMapping(value = "filemanager", method = RequestMethod.GET)
@@ -152,7 +154,7 @@ public class KindEditorController {
 
         //根目录路径
         String rootPath = FileUploadUtils.extractUploadDir(request) + "/" + baseDir;
-        String rootUrl  = request.getContextPath() + "/" + baseDir;
+        String rootUrl = request.getContextPath() + "/" + baseDir;
 
 
         //上一级目录
@@ -172,7 +174,7 @@ public class KindEditorController {
         }
         //目录不存在或不是目录
         File currentPathFile = new File(rootPath + "/" + currentDirPath);
-        if(!currentPathFile.exists() || !currentPathFile.isDirectory()){
+        if (!currentPathFile.exists() || !currentPathFile.isDirectory()) {
             return "目录不存在";
         }
 
@@ -182,7 +184,7 @@ public class KindEditorController {
         List<String> allowedExtension = Arrays.asList(extractAllowedExtension(dir));
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(currentPathFile.listFiles() != null) {
+        if (currentPathFile.listFiles() != null) {
             for (File file : currentPathFile.listFiles()) {
 
                 Map<String, Object> fileMetaInfo = Maps.newHashMap();
@@ -197,7 +199,7 @@ public class KindEditorController {
                 } else if (file.isFile()) {
                     String fileExt = FilenameUtils.getExtension(fileName);
                     if (!allowedExtension.contains(FilenameUtils.getExtension(fileName))) {
-                         continue;
+                        continue;
                     }
                     fileMetaInfo.put("is_dir", false);
                     fileMetaInfo.put("has_file", false);
@@ -233,20 +235,21 @@ public class KindEditorController {
     private String successResponse(HttpServletRequest request, String filename, String url) {
         return "{\"error\":0, \"url\":\"" + request.getContextPath() + "/" + url + "\", \"title\":\"" + filename + "    \"}";
     }
+
     private String errorResponse(String errorCode) {
         String message = messageSource.getMessage(errorCode, null, null);
-        if(message.contains("<br/>")) {
+        if (message.contains("<br/>")) {
             message = message.replace("<br/>", "\\n");
         }
         return "{\"error\":1, \"message\":\"" + message + "\"}";
     }
 
     private String[] extractAllowedExtension(String dir) {
-        if("image".equals(dir)) {
+        if ("image".equals(dir)) {
             return IMAGE_EXTENSION;
-        } else if("flash".equals(dir)) {
+        } else if ("flash".equals(dir)) {
             return FLASH_EXTENSION;
-        } else if("media".equals(dir)) {
+        } else if ("media".equals(dir)) {
             return MEDIA_EXTENSION;
         } else {
             return ATTACHMENT_EXTENSION;

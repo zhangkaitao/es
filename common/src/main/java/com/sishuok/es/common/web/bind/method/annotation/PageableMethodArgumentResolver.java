@@ -164,7 +164,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
             int order = 0;
             String orderStr = name.substring(sortNamePrefix.length(), propertyIndex - 1);
             try {
-                if(!StringUtils.isEmpty(orderStr)) {
+                if (!StringUtils.isEmpty(orderStr)) {
                     order = Integer.valueOf(orderStr);
                 }
             } catch (Exception e) {
@@ -178,7 +178,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
         }
 
         Collections.sort(orderedSortList);
-        for(OrderedSort orderedSort : orderedSortList) {
+        for (OrderedSort orderedSort : orderedSortList) {
             Sort newSort = new Sort(orderedSort.direction, orderedSort.property);
             if (sort == null) {
                 sort = newSort;
@@ -187,7 +187,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
             }
         }
 
-        if(sort == null) {
+        if (sort == null) {
             return defaultPageRequest.getSort();
         }
 
@@ -268,7 +268,6 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
     }
 
 
-
     private String getSortPrefix(MethodParameter parameter) {
 
         Qualifier qualifier = parameter.getParameterAnnotation(Qualifier.class);
@@ -281,11 +280,10 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
     }
 
 
-
     private Pageable getDefaultFromAnnotationOrFallback(PageableDefaults pageableDefaults) {
 
         Pageable defaultPageable = defaultPageable(pageableDefaults);
-        if(defaultPageable != null) {
+        if (defaultPageable != null) {
             return defaultPageable;
         }
 
@@ -293,7 +291,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
     }
 
     private PageableDefaults getPageableDefaults(MethodParameter parameter) {
-         //首先从参数上找
+        //首先从参数上找
         PageableDefaults pageableDefaults = parameter.getParameterAnnotation(PageableDefaults.class);
         //找不到从方法上找
         if (pageableDefaults == null) {
@@ -304,7 +302,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
 
     private Pageable defaultPageable(PageableDefaults pageableDefaults) {
 
-        if(pageableDefaults == null) {
+        if (pageableDefaults == null) {
             return null;
         }
 
@@ -429,12 +427,12 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
 
         @Override
         public int compareTo(OrderedSort o) {
-            if(o == null) {
+            if (o == null) {
                 return -1;
             }
-            if(this.order > o.order) {
+            if (this.order > o.order) {
                 return 1;
-            } else if(this.order < o.order) {
+            } else if (this.order < o.order) {
                 return -1;
             } else {
                 return 0;

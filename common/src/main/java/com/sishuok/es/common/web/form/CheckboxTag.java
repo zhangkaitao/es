@@ -22,6 +22,7 @@ public class CheckboxTag extends org.springframework.web.servlet.tags.form.Check
 
 
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {
@@ -34,7 +35,6 @@ public class CheckboxTag extends org.springframework.web.servlet.tags.form.Check
     protected String getPropertyPath() throws JspException {
         return getPath();
     }
-
 
 
     @Override

@@ -28,7 +28,7 @@ public class ObjectSerializeUserType implements UserType, Serializable {
 
     @Override
     public int[] sqlTypes() {
-        return new int[] {Types.VARCHAR};
+        return new int[]{Types.VARCHAR};
     }
 
     @Override
@@ -58,6 +58,7 @@ public class ObjectSerializeUserType implements UserType, Serializable {
      * 从JDBC ResultSet读取数据,将其转换为自定义类型后返回
      * (此方法要求对克能出现null值进行处理)
      * names中包含了当前自定义类型的映射字段名称
+     *
      * @param names
      * @param owner
      * @return
@@ -88,7 +89,7 @@ public class ObjectSerializeUserType implements UserType, Serializable {
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         ObjectOutputStream oos = null;
-        if(value == null) {
+        if (value == null) {
             st.setNull(index, Types.VARCHAR);
         } else {
             try {
@@ -113,7 +114,6 @@ public class ObjectSerializeUserType implements UserType, Serializable {
     }
 
 
-
     /**
      * 提供自定义类型的完全复制方法
      * 本方法将用构造返回对象
@@ -130,12 +130,13 @@ public class ObjectSerializeUserType implements UserType, Serializable {
      */
     @Override
     public Object deepCopy(Object o) throws HibernateException {
-        if(o == null) return null;
+        if (o == null) return null;
         return o;
     }
 
     /**
      * 本类型实例是否可变
+     *
      * @return
      */
     @Override
@@ -146,7 +147,7 @@ public class ObjectSerializeUserType implements UserType, Serializable {
     /* 序列化 */
     @Override
     public Serializable disassemble(Object value) throws HibernateException {
-        return ((Serializable)value);
+        return ((Serializable) value);
     }
 
     /* 反序列化 */

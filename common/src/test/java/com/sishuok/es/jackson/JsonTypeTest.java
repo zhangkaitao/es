@@ -73,7 +73,6 @@ public class JsonTypeTest {
         Assert.assertEquals(value1.getBaseInfo().getSex(), actualValue1.getBaseInfo().getSex());
 
 
-
     }
 
 }

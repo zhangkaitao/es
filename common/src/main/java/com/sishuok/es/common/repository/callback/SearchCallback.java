@@ -22,6 +22,7 @@ public interface SearchCallback {
 
     /**
      * 动态拼HQL where、group by having
+     *
      * @param ql
      * @param search
      */
@@ -31,6 +32,7 @@ public interface SearchCallback {
 
     /**
      * 根据search给query赋值及设置分页信息
+     *
      * @param query
      * @param search
      */

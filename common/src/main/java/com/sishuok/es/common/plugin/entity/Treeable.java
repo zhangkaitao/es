@@ -22,6 +22,7 @@ public interface Treeable<ID extends Serializable> {
 
     /**
      * 显示的图标 大小为16×16
+     *
      * @return
      */
     public String getIcon();
@@ -30,6 +31,7 @@ public interface Treeable<ID extends Serializable> {
 
     /**
      * 父路径
+     *
      * @return
      */
     public ID getParentId();
@@ -38,6 +40,7 @@ public interface Treeable<ID extends Serializable> {
 
     /**
      * 所有父路径 如1,2,3,
+     *
      * @return
      */
     public String getParentIds();
@@ -46,37 +49,44 @@ public interface Treeable<ID extends Serializable> {
 
     /**
      * 获取 parentIds 之间的分隔符
+     *
      * @return
      */
     public String getSeparator();
 
     /**
      * 把自己构造出新的父节点路径
+     *
      * @return
      */
     public String makeSelfAsNewParentIds();
 
     /**
      * 权重 用于排序 越小越排在前边
+     *
      * @return
      */
     public Integer getWeight();
+
     public void setWeight(Integer weight);
 
     /**
      * 是否是根节点
+     *
      * @return
      */
     public boolean isRoot();
 
     /**
      * 是否是叶子节点
+     *
      * @return
      */
     public boolean isLeaf();
 
     /**
      * 是否有孩子节点
+     *
      * @return
      */
     public boolean isHasChildren();

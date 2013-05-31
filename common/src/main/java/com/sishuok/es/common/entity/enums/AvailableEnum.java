@@ -15,6 +15,7 @@ public enum AvailableEnum {
 
     private final Boolean value;
     private final String info;
+
     private AvailableEnum(Boolean value, String info) {
         this.value = value;
         this.info = info;

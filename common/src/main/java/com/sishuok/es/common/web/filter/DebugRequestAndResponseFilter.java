@@ -30,12 +30,12 @@ public final class DebugRequestAndResponseFilter extends BaseFilter {
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             debugRequest(request);
         }
         chain.doFilter(request, response);
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             debugResponse(response);
         }
     }
@@ -44,7 +44,7 @@ public final class DebugRequestAndResponseFilter extends BaseFilter {
         log.debug("=====================request begin==========================");
         String uri = request.getRequestURI();
         String queryString = request.getQueryString();
-        if(StringUtils.isNotBlank(queryString)) {
+        if (StringUtils.isNotBlank(queryString)) {
             uri = uri + "?" + queryString;
         }
         log.debug("{}:{}", request.getMethod(), uri);
@@ -72,7 +72,7 @@ public final class DebugRequestAndResponseFilter extends BaseFilter {
         StringBuilder s = new StringBuilder();
         int index = 0;
         while (headers.hasMoreElements()) {
-            if(index > 0) {
+            if (index > 0) {
                 s.append("||");
             }
             s.append(headers.nextElement());

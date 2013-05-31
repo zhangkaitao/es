@@ -37,12 +37,12 @@ public class SearchBindStatus extends BindStatus {
     }
 
     public static Object getValue(PageContext pageContext, String name) {
-        if(StringUtils.isEmpty(name)) {
+        if (StringUtils.isEmpty(name)) {
             return null;
         }
         Object value = null;
         String[] parameters = pageContext.getRequest().getParameterValues(name);
-        if(parameters != null && parameters.length == 1) {
+        if (parameters != null && parameters.length == 1) {
             value = parameters[0];
         } else {
             value = parameters;
@@ -78,7 +78,7 @@ public class SearchBindStatus extends BindStatus {
         return "";
     }
 
-    private static class SearchModel  {
+    private static class SearchModel {
         public static final SearchModel EMPTY = new SearchModel();
     }
 

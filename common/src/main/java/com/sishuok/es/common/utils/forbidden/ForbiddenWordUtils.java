@@ -54,6 +54,7 @@ public class ForbiddenWordUtils {
 
     /**
      * 替换input中的屏蔽关键词为默认的掩码
+     *
      * @param input
      * @return
      */
@@ -63,12 +64,13 @@ public class ForbiddenWordUtils {
 
     /**
      * 将屏蔽关键词 替换为 mask
+     *
      * @param input
      * @param mask
      * @return
      */
     public static String replace(String input, String mask) {
-        for(int i = 0, l = forbiddenWords.size(); i < l; i++) {
+        for (int i = 0, l = forbiddenWords.size(); i < l; i++) {
             Pattern forbiddenWordPattern = forbiddenWords.get(i);
             input = forbiddenWordPattern.matcher(input).replaceAll(mask);
         }
@@ -78,19 +80,19 @@ public class ForbiddenWordUtils {
 
     /**
      * 是否包含屏蔽关键词
+     *
      * @param input
      * @return
      */
     public static boolean containsForbiddenWord(String input) {
-        for(int i = 0, l = forbiddenWords.size(); i < l; i++) {
+        for (int i = 0, l = forbiddenWords.size(); i < l; i++) {
             Pattern forbiddenWordPattern = forbiddenWords.get(i);
-            if(forbiddenWordPattern.matcher(input).find()) {
+            if (forbiddenWordPattern.matcher(input).find()) {
                 return true;
             }
         }
         return false;
     }
-
 
 
     static {
@@ -129,9 +131,9 @@ public class ForbiddenWordUtils {
             reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileCBytes), "UTF-8"));
             List<String> forbiddenWordsStrList = IOUtils.readLines(reader);
             forbiddenWords = Lists.newArrayList();
-            for(int i = forbiddenWordsStrList.size() - 1; i >= 0; i--) {
+            for (int i = forbiddenWordsStrList.size() - 1; i >= 0; i--) {
                 String forbiddenWord = forbiddenWordsStrList.get(i).trim();
-                if(forbiddenWord.length() == 0 || forbiddenWord.startsWith("#")) {
+                if (forbiddenWord.length() == 0 || forbiddenWord.startsWith("#")) {
                     continue;
                 } else {
                     forbiddenWords.add(Pattern.compile(forbiddenWord));

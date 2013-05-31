@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
  * <p>Date: 13-5-20 下午2:06
  * <p>Version: 1.0
  */
-public class BaseCacheAspect  implements InitializingBean {
+public class BaseCacheAspect implements InitializingBean {
     @Autowired
     private CacheManager cacheManager;
     private Cache cache;
@@ -25,6 +25,7 @@ public class BaseCacheAspect  implements InitializingBean {
 
     /**
      * 缓存池名称
+     *
      * @param cacheName
      */
     public void setCacheName(String cacheName) {
@@ -34,6 +35,7 @@ public class BaseCacheAspect  implements InitializingBean {
 
     /**
      * 缓存管理器
+     *
      * @return
      */
     public void setCacheManager(CacheManager cacheManager) {
@@ -55,11 +57,11 @@ public class BaseCacheAspect  implements InitializingBean {
     }
 
     public <T> T get(Object key) {
-        if(StringUtils.isEmpty(key)) {
+        if (StringUtils.isEmpty(key)) {
             return null;
         }
         Cache.ValueWrapper value = cache.get(key);
-        if(value == null) {
+        if (value == null) {
             return null;
         }
         return (T) value.get();

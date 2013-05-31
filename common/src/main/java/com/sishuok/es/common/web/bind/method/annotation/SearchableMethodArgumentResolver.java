@@ -30,7 +30,7 @@ import java.util.Map;
  *         排序及分页请参考 {@link PageableMethodArgumentResolver}
  *     1.2、控制器处理方法写法
  *        public void test(Searchable searchable);
-
+ *
  *     2.1、自定义查询字符串
  *         foo_search.baseInfo.realname_like=zhang
  *         foo_search.age_lt=12
@@ -45,6 +45,7 @@ import java.util.Map;
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-22 下午8:48
  * <p>Version: 1.0
+ *
  * @since 3.1
  */
 public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver {
@@ -56,6 +57,7 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
     /**
      * 设置查询参数前缀
+     *
      * @param prefix
      */
     public void setPrefix(String prefix) {
@@ -91,18 +93,18 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
         Searchable searchable = null;
         //自定义覆盖默认
-        if(needMergeDefault || !hasCustomSearchFilter) {
+        if (needMergeDefault || !hasCustomSearchFilter) {
             searchable = getDefaultFromAnnotation(searchDefaults);
         }
-        if(hasCustomSearchFilter) {
-            if(searchable == null) {
+        if (hasCustomSearchFilter) {
+            if (searchable == null) {
                 searchable = Searchable.newSearchable();
             }
-            for(String name : searcheableMap.keySet()) {
+            for (String name : searcheableMap.keySet()) {
                 String[] mapValues = filterSearchValues(searcheableMap.get(name));
 
-                if(mapValues.length == 1) {
-                    if(name.endsWith("in")) {
+                if (mapValues.length == 1) {
+                    if (name.endsWith("in")) {
                         searchable.addSearchParam(name, StringUtils.split(mapValues[0], ",; "));
                     } else {
                         searchable.addSearchParam(name, mapValues[0]);
@@ -115,11 +117,11 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
         Pageable pageable = (Pageable) pageableMethodArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
         //默认分页及排序
-        if(searchDefaults == null) {
+        if (searchDefaults == null) {
             searchable.setPage(pageable);
         }
         //needPage=true 分页及排序
-        if(searchDefaults != null && searchDefaults.needPage()) {
+        if (searchDefaults != null && searchDefaults.needPage()) {
             searchable.setPage(pageable);
         }
         //needPage=false needSort=true  不要分页，但排序
@@ -132,8 +134,8 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
     private String[] filterSearchValues(String[] values) {
         List<String> result = Lists.newArrayList(CollectionUtils.arrayToList(values));
-        for(int i = 0; i < result.size(); i++) {
-            if(StringUtils.isBlank(result.get(i))) {
+        for (int i = 0; i < result.size(); i++) {
+            if (StringUtils.isBlank(result.get(i))) {
                 result.remove(i);
             }
         }
@@ -162,11 +164,10 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
     }
 
 
-
     private Searchable getDefaultFromAnnotation(SearchableDefaults searchableDefaults) {
 
         Searchable searchable = defaultSearchable(searchableDefaults);
-        if(searchable != null) {
+        if (searchable != null) {
             return searchable;
         }
 
@@ -175,16 +176,16 @@ public class SearchableMethodArgumentResolver extends BaseMethodArgumentResolver
 
     private Searchable defaultSearchable(SearchableDefaults searchableDefaults) {
 
-        if(searchableDefaults == null) {
+        if (searchableDefaults == null) {
             return null;
         }
 
         Searchable searchable = Searchable.newSearchable();
-        for(String searchParam : searchableDefaults.value()) {
+        for (String searchParam : searchableDefaults.value()) {
             String[] searchPair = searchParam.split("=");
             String paramName = searchPair[0];
             String paramValue = searchPair[1];
-            if(paramName.endsWith("in")) {
+            if (paramName.endsWith("in")) {
                 searchable.addSearchParam(paramName, StringUtils.split(paramValue, ",; "));
             } else {
                 searchable.addSearchParam(paramName, paramValue);

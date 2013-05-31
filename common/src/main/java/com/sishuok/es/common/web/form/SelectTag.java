@@ -21,6 +21,7 @@ import javax.servlet.jsp.JspException;
 public class SelectTag extends org.springframework.web.servlet.tags.form.SelectTag {
 
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {
@@ -28,7 +29,6 @@ public class SelectTag extends org.springframework.web.servlet.tags.form.SelectT
         }
         return this.bindStatus;
     }
-
 
 
     @Override

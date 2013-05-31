@@ -28,8 +28,8 @@ public abstract class BaseMethodArgumentResolver implements HandlerMethodArgumen
      *
      * @param namePrefix
      * @param request
-     * @subPrefix 是否截取掉namePrefix的前缀
      * @return
+     * @subPrefix 是否截取掉namePrefix的前缀
      */
     protected Map<String, String[]> getPrefixParameterMap(String namePrefix, NativeWebRequest request, boolean subPrefix) {
         Map<String, String[]> result = new HashMap<String, String[]>();
@@ -41,15 +41,15 @@ public abstract class BaseMethodArgumentResolver implements HandlerMethodArgumen
             if (name.startsWith(namePrefix)) {
 
                 //page.pn  则截取 pn
-                if(subPrefix) {
+                if (subPrefix) {
                     char ch = name.charAt(namePrefix.length());
                     //如果下一个字符不是 数字 . _  则不可能是查询 只是前缀类似
-                    if(illegalChar(ch)) {
+                    if (illegalChar(ch)) {
                         continue;
                     }
-                    result.put(name.substring(namePrefixLength + 1), new String[] {variables.get(name)});
+                    result.put(name.substring(namePrefixLength + 1), new String[]{variables.get(name)});
                 } else {
-                    result.put(name, new String[] {variables.get(name)});
+                    result.put(name, new String[]{variables.get(name)});
                 }
             }
         }
@@ -59,10 +59,10 @@ public abstract class BaseMethodArgumentResolver implements HandlerMethodArgumen
             String name = parameterNames.next();
             if (name.startsWith(namePrefix)) {
                 //page.pn  则截取 pn
-                if(subPrefix) {
+                if (subPrefix) {
                     char ch = name.charAt(namePrefix.length());
                     //如果下一个字符不是 数字 . _  则不可能是查询 只是前缀类似
-                    if(illegalChar(ch)) {
+                    if (illegalChar(ch)) {
                         continue;
                     }
                     result.put(name.substring(namePrefixLength + 1), request.getParameterValues(name));

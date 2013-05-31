@@ -187,7 +187,6 @@ public class UserServiceTest extends BaseUserIT {
     }
 
 
-
     @Test
     public void testFindAllBySearchAndSort() {
         int count = 15;
@@ -229,8 +228,6 @@ public class UserServiceTest extends BaseUserIT {
         assertFalse(userPage.getContent().contains(lastUser));
         assertTrue(userPage.getContent().get(0).getId() < userPage.getContent().get(1).getId());
     }
-
-
 
 
 }

@@ -21,6 +21,7 @@ import javax.servlet.jsp.JspException;
 public class HiddenInputTag extends org.springframework.web.servlet.tags.form.HiddenInputTag {
 
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {
@@ -28,7 +29,6 @@ public class HiddenInputTag extends org.springframework.web.servlet.tags.form.Hi
         }
         return this.bindStatus;
     }
-
 
 
     @Override

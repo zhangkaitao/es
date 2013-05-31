@@ -60,7 +60,6 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     private String idName;
 
 
-
     /**
      * 查询所有的QL
      */
@@ -102,6 +101,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     /**
      * 设置searchCallback
+     *
      * @param searchCallback
      */
     public void setSearchCallback(SearchCallback searchCallback) {
@@ -110,6 +110,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     /**
      * 设置查询所有的ql
+     *
      * @param findAllQL
      */
     public void setFindAllQL(String findAllQL) {
@@ -118,12 +119,12 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     /**
      * 设置统计的ql
+     *
      * @param countAllQL
      */
     public void setCountAllQL(String countAllQL) {
         this.countAllQL = countAllQL;
     }
-
 
 
     /////////////////////////////////////////////////
@@ -148,10 +149,10 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      */
     @Override
     public void delete(final M m) {
-        if(m == null) {
+        if (m == null) {
             return;
         }
-        if(m instanceof LogicDeleteable) {
+        if (m instanceof LogicDeleteable) {
             ((LogicDeleteable) m).markDeleted();
             save(m);
         } else {
@@ -166,15 +167,15 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      * @param ids 实体
      */
     public void delete(final ID[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
+        if (ArrayUtils.isEmpty(ids)) {
             return;
         }
         List<M> models = new ArrayList<M>();
-        for(ID id : ids) {
+        for (ID id : ids) {
             M model = null;
             try {
                 model = entityClass.newInstance();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException("batch delete " + entityClass + " error", e);
             }
             try {
@@ -190,7 +191,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Override
     public void deleteInBatch(final Iterable<M> entities) {
         Iterator<M> iter = entities.iterator();
-        if(entities == null || !iter.hasNext()) {
+        if (entities == null || !iter.hasNext()) {
             return;
         }
 
@@ -198,11 +199,11 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
         boolean logicDeleteableEntity = LogicDeleteable.class.isAssignableFrom(this.entityClass);
 
-        if(logicDeleteableEntity) {
+        if (logicDeleteableEntity) {
             String ql = String.format(LOGIC_DELETE_ALL_QUERY_STRING, entityName);
             repositoryHelper.batchUpdate(ql, models);
         } else {
-            String ql =  String.format(DELETE_ALL_QUERY_STRING, entityName);
+            String ql = String.format(DELETE_ALL_QUERY_STRING, entityName);
             repositoryHelper.batchUpdate(ql, models);
         }
     }
@@ -215,18 +216,17 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      */
     @Override
     public M findOne(ID id) {
-        if(id == null) {
+        if (id == null) {
             return null;
         }
-        if(id instanceof  Integer && ((Integer) id).intValue() == 0) {
+        if (id instanceof Integer && ((Integer) id).intValue() == 0) {
             return null;
         }
-        if(id instanceof  Long && ((Long) id).longValue() == 0L) {
+        if (id instanceof Long && ((Long) id).longValue() == 0L) {
             return null;
         }
         return super.findOne(id);
     }
-
 
 
     ////////根据Specification查询 直接从SimpleJpaRepository复制过来的///////////////////////////////////
@@ -293,14 +293,14 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     ////////根据Specification查询 直接从SimpleJpaRepository复制过来的///////////////////////////////////
 
 
-
     ///////直接从SimpleJpaRepository复制过来的///////////////////////////////
+
     /**
      * Reads the given {@link TypedQuery} into a {@link Page} applying the given {@link Pageable} and
      * {@link Specification}.
      *
-     * @param query must not be {@literal null}.
-     * @param spec can be {@literal null}.
+     * @param query    must not be {@literal null}.
+     * @param spec     can be {@literal null}.
      * @param pageable can be {@literal null}.
      * @return
      */
@@ -310,7 +310,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         query.setMaxResults(pageable.getPageSize());
 
         Long total = QueryUtils.executeCountQuery(getCountQuery(spec));
-        List<M> content = total > pageable.getOffset() ? query.getResultList() : Collections.<M> emptyList();
+        List<M> content = total > pageable.getOffset() ? query.getResultList() : Collections.<M>emptyList();
 
         return new PageImpl<M>(content, pageable, total);
     }
@@ -343,7 +343,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     /**
      * Creates a new {@link TypedQuery} from the given {@link Specification}.
      *
-     * @param spec can be {@literal null}.
+     * @param spec     can be {@literal null}.
      * @param pageable can be {@literal null}.
      * @return
      */
@@ -352,6 +352,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         Sort sort = pageable == null ? null : pageable.getSort();
         return getQuery(spec, sort);
     }
+
     /**
      * Creates a {@link TypedQuery} for the given {@link Specification} and {@link Sort}.
      *
@@ -371,7 +372,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
             query.orderBy(toOrders(sort, root, builder));
         }
 
-        TypedQuery<M>  q = em.createQuery(query);
+        TypedQuery<M> q = em.createQuery(query);
         repositoryHelper.applyEnableQueryCache(q);
         return applyLockMode(q);
     }
@@ -380,7 +381,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     /**
      * Applies the given {@link Specification} to the given {@link CriteriaQuery}.
      *
-     * @param spec can be {@literal null}.
+     * @param spec  can be {@literal null}.
      * @param query must not be {@literal null}.
      * @return
      */
@@ -408,7 +409,6 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         return type == null ? query : query.setLockMode(type);
     }
     ///////直接从SimpleJpaRepository复制过来的///////////////////////////////
-
 
 
     @Override
@@ -458,6 +458,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
     /**
      * 重写默认的 这样可以走一级/二级缓存
+     *
      * @param id
      * @return
      */

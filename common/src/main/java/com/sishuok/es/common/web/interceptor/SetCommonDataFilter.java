@@ -15,9 +15,9 @@ import java.io.IOException;
 
 /**
  * 设置通用数据的Filter
- *
+ * <p/>
  * 使用Filter时 文件上传时 getParameter时为null 所以改成Interceptor
- *
+ * <p/>
  * 1、ctx---->request.contextPath
  * 2、currentURL---->当前地址
  * <p>User: Zhang Kaitao

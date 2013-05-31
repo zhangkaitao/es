@@ -219,7 +219,6 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
     }
 
 
-
     @Test
     public void testAndOr() {
         int count = 15;
@@ -242,7 +241,6 @@ public class SearchUserRepository2WithRepository2ImpIT extends BaseUserIT {
 
         assertEquals(6, userRepository2.count(search));
     }
-
 
 
     @Test

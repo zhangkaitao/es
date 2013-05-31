@@ -21,8 +21,8 @@ import javax.servlet.jsp.JspException;
 public class LabelTag extends org.springframework.web.servlet.tags.form.LabelTag {
 
 
-
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {

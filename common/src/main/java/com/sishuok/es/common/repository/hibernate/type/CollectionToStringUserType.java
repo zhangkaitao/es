@@ -42,18 +42,17 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
     private Class collectionType;
 
 
-
     @Override
     public void setParameterValues(Properties parameters) {
-        String separator = (String)parameters.get("separator");
-        if(!StringUtils.isEmpty(separator)) {
+        String separator = (String) parameters.get("separator");
+        if (!StringUtils.isEmpty(separator)) {
             this.separator = separator;
         } else {
             this.separator = ",";
         }
 
-        String collectionType = (String)parameters.get("collectionType");
-        if(!StringUtils.isEmpty(collectionType)) {
+        String collectionType = (String) parameters.get("collectionType");
+        if (!StringUtils.isEmpty(collectionType)) {
             try {
                 this.collectionType = Class.forName(collectionType);
             } catch (ClassNotFoundException e) {
@@ -63,8 +62,8 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
             this.collectionType = java.util.ArrayList.class;
         }
 
-        String elementType = (String)parameters.get("elementType");
-        if(!StringUtils.isEmpty(elementType)) {
+        String elementType = (String) parameters.get("elementType");
+        if (!StringUtils.isEmpty(elementType)) {
             try {
                 this.elementType = Class.forName(elementType);
             } catch (ClassNotFoundException e) {
@@ -77,7 +76,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
 
     @Override
     public int[] sqlTypes() {
-        return new int[] {Types.VARCHAR};
+        return new int[]{Types.VARCHAR};
     }
 
     @Override
@@ -107,6 +106,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
      * 从JDBC ResultSet读取数据,将其转换为自定义类型后返回
      * (此方法要求对克能出现null值进行处理)
      * names中包含了当前自定义类型的映射字段名称
+     *
      * @param names
      * @param owner
      * @return
@@ -116,7 +116,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String valueStr = rs.getString(names[0]);
-        if(StringUtils.isEmpty(valueStr)) {
+        if (StringUtils.isEmpty(valueStr)) {
             return null;
         }
 
@@ -124,7 +124,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
 
         Collection result = newCollection();
 
-        for(String value : values) {
+        for (String value : values) {
             result.add(ConvertUtils.convert(value, elementType));
         }
         return result;
@@ -133,7 +133,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
 
     private Collection newCollection() {
         try {
-            return (Collection)collectionType.newInstance();
+            return (Collection) collectionType.newInstance();
         } catch (Exception e) {
             throw new HibernateException(e);
         }
@@ -146,14 +146,13 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         String valueStr;
-        if(value == null) {
+        if (value == null) {
             valueStr = "";
         } else {
-            valueStr = StringUtils.join((Collection)value, separator);
+            valueStr = StringUtils.join((Collection) value, separator);
         }
         st.setString(index, valueStr);
     }
-
 
 
     /**
@@ -172,14 +171,15 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
      */
     @Override
     public Object deepCopy(Object o) throws HibernateException {
-        if(o == null) return null;
+        if (o == null) return null;
         Collection copyCollection = newCollection();
-        copyCollection.addAll((Collection)o);
+        copyCollection.addAll((Collection) o);
         return copyCollection;
     }
 
     /**
      * 本类型实例是否可变
+     *
      * @return
      */
     @Override
@@ -190,7 +190,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
     /* 序列化 */
     @Override
     public Serializable disassemble(Object value) throws HibernateException {
-        return ((Serializable)value);
+        return ((Serializable) value);
     }
 
     /* 反序列化 */

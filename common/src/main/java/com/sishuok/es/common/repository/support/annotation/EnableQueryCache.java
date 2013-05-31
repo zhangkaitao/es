@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 
 /**
  * 开启查询缓存
- * @author Zhang Kaitao
  *
+ * @author Zhang Kaitao
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

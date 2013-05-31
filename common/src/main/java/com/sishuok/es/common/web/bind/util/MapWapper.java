@@ -22,28 +22,27 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *绑定JSON/自定义 数据到 Map
+ * 绑定JSON/自定义 数据到 Map
  * <p>默认自定义的MethodArgumentResolver是放在预定义之后，而且如果我们使用Map接收时，会自动绑定到Model上。
  * 请参考<a href="http://jinnianshilongnian.iteye.com/blog/1698916">
  * SpringMVC强大的数据绑定（1）——第六章 注解式控制器详解——跟着开涛学SpringMVC</a>
  * 第六部分：Model、Map、ModelMap
- *   
+ * <p/>
  * <p>期待springmvc未来版本可以自定义参数解析器顺序
  * </p>
- * 
- * @author Zhang Kaitao
  *
  * @param <K>
  * @param <V>
+ * @author Zhang Kaitao
  */
 public class MapWapper<K, V> {
-    
+
     private Map<K, V> innerMap = new HashMap<K, V>();
-    
+
     public void setInnerMap(Map<K, V> innerMap) {
         this.innerMap = innerMap;
     }
-    
+
     public Map<K, V> getInnerMap() {
         return innerMap;
     }
@@ -107,7 +106,7 @@ public class MapWapper<K, V> {
     public Map<K, V> toMap() {
         return innerMap;
     }
-    
+
     @Override
     public String toString() {
         return innerMap.toString();

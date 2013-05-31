@@ -33,8 +33,6 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     private BaseMovableService movableService;
 
 
-
-
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
@@ -59,7 +57,7 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     @ResponseBody
     public AjaxResponse up(@PathVariable("fromId") Long fromId, @PathVariable("toId") Long toId) {
 
-        if(this.permissionList != null) {
+        if (this.permissionList != null) {
             this.permissionList.assertHasEditPermission();
         }
 
@@ -78,7 +76,7 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     public AjaxResponse down(@PathVariable("fromId") Long fromId, @PathVariable("toId") Long toId) {
 
 
-        if(this.permissionList != null) {
+        if (this.permissionList != null) {
             this.permissionList.assertHasEditPermission();
         }
 
@@ -96,7 +94,7 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
     @ResponseBody
     public AjaxResponse reweight() {
 
-        if(this.permissionList != null) {
+        if (this.permissionList != null) {
             this.permissionList.assertHasEditPermission();
         }
 

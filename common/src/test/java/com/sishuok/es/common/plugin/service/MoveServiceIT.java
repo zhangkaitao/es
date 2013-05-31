@@ -34,7 +34,7 @@ public class MoveServiceIT extends BaseIT {
         moveService.save(m1);
         moveService.save(m2);
 
-        Assert.assertEquals((Integer)(m1.getWeight() + moveService.getStepLength()), m2.getWeight());
+        Assert.assertEquals((Integer) (m1.getWeight() + moveService.getStepLength()), m2.getWeight());
     }
 
 
@@ -194,7 +194,7 @@ public class MoveServiceIT extends BaseIT {
         Move first = createMove(); //1000
         Move to = createMove(); //2000
 
-        for(int i = 0; i < 25; i++) {
+        for (int i = 0; i < 25; i++) {
             createMove();
         }
         Move from = createMove();
@@ -211,12 +211,11 @@ public class MoveServiceIT extends BaseIT {
     }
 
 
-
     @Test
     public void testDownWithMiddle25AndNotFirst() {
         Move first = createMove(); //1000
         Move to = createMove(); //2000
-        for(int i = 0; i < 25; i++) {
+        for (int i = 0; i < 25; i++) {
             createMove();
         }
         Move from = createMove();
@@ -227,14 +226,14 @@ public class MoveServiceIT extends BaseIT {
 
         moveService.down(from.getId(), to.getId());
         from = moveService.findOne(from.getId());
-        assertEquals(Integer.valueOf(toWeight - (toWeight - firstWeight)/2), from.getWeight());
+        assertEquals(Integer.valueOf(toWeight - (toWeight - firstWeight) / 2), from.getWeight());
     }
 
 
     @Test
     public void testDownWithMiddle25AndIsFirst() {
         Move to = createMove(); //1000
-        for(int i = 0; i < 25; i++) {
+        for (int i = 0; i < 25; i++) {
             createMove();
         }
         Move from = createMove();
@@ -248,13 +247,11 @@ public class MoveServiceIT extends BaseIT {
     }
 
 
-
-
     @Test
     public void testUpWithMiddle25AndNotLast() {
 
         Move from = createMove(); //2000
-        for(int i = 0; i < 25; i++) {
+        for (int i = 0; i < 25; i++) {
             createMove();
         }
         Move to = createMove();
@@ -266,14 +263,14 @@ public class MoveServiceIT extends BaseIT {
 
         moveService.up(from.getId(), to.getId());
         from = moveService.findOne(from.getId());
-        assertEquals(Integer.valueOf(toWeight + (lastWeight - toWeight)/2), from.getWeight());
+        assertEquals(Integer.valueOf(toWeight + (lastWeight - toWeight) / 2), from.getWeight());
     }
 
 
     @Test
     public void testUpWithMiddle25AndIsLast() {
         Move from = createMove();
-        for(int i = 0; i < 25; i++) {
+        for (int i = 0; i < 25; i++) {
             createMove();
         }
         Move to = createMove();
@@ -288,7 +285,7 @@ public class MoveServiceIT extends BaseIT {
 
     @Test
     public void testReweight() {
-        for(int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             Move move = createMove();
             move.setWeight(i);
         }
@@ -305,15 +302,12 @@ public class MoveServiceIT extends BaseIT {
     }
 
 
-
     private Move createMove() {
         Move move = new Move();
         move.setName("zhang" + nextRandom());
         moveService.saveAndFlush(move);
         return move;
     }
-
-
 
 
 }

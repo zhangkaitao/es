@@ -73,7 +73,6 @@ public class SearchableTest {
     }
 
 
-
     @Test
     public void testAddParam() {
         Searchable searchable = Searchable.newSearchable();
@@ -206,7 +205,6 @@ public class SearchableTest {
     }
 
 
-
     @Test
     public void testRemoveSearchFilter() {
 
@@ -262,7 +260,7 @@ public class SearchableTest {
         Searchable searchable = Searchable.newSearchable();
         searchable.addSearchParam("username_like", "zhang");
         searchable.addSearchParam("baseInfo.sex_eq", "male");
-        searchable.addSearchParam("id_in", new String[] {"1", "2", "3"});
+        searchable.addSearchParam("id_in", new String[]{"1", "2", "3"});
 
         searchable.convert(User.class);
 

@@ -45,7 +45,8 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
     }
 
     /**
-     *  权重的步长 默认1000
+     * 权重的步长 默认1000
+     *
      * @return
      */
     public Integer getStepLength() {
@@ -54,7 +55,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
     @Override
     public M save(M m) {
-        if(m.getWeight() == null) {
+        if (m.getWeight() == null) {
             m.setWeight(findNextWeight());
         }
         return super.save(m);
@@ -64,6 +65,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
      * 按照降序进行移动
      * 把{fromId}移动到{}toId}之后
      * 如 fromWeight 2000 toWeight 1000   则新的为 500
+     *
      * @param fromId
      * @param toId
      */
@@ -90,9 +92,9 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         int maxWeight = Math.max(fromWeight, toWeight);
         //作为一个优化，减少不连续的weight
         int count = countByBetween(minWeight, maxWeight).intValue();
-        if(count > 0 && count < 20) {
+        if (count > 0 && count < 20) {
             List<M> moves = findByBetweenAndAsc(minWeight, maxWeight);
-            if(fromWeight < toWeight) {
+            if (fromWeight < toWeight) {
                 Integer swapInteger = moves.get(count - 2).getWeight();
                 for (int i = count - 2; i >= 1; i--) {
                     //最后一个的weight = toWeight;
@@ -119,7 +121,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
         }
 
-        if(Math.abs(newWeight - toWeight) <= 1) {
+        if (Math.abs(newWeight - toWeight) <= 1) {
             throw new IllegalStateException(String.format("up error, no enough weight :fromId:%d, toId:%d", fromId, toId));
         }
         from.setWeight(newWeight);
@@ -130,6 +132,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
      * 按照降序进行移动
      * 把{fromId}移动到toId之下
      * 如 fromWeight 1000 toWeight 2000  3000 则新的为 2500
+     *
      * @param fromId
      * @param toId
      */
@@ -145,7 +148,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
         M preTo = findPreByWeight(toWeight);
         //如果toId的下一个是fromId 则直接交换顺序即可
-        if(from.equals(preTo)) {
+        if (from.equals(preTo)) {
             from.setWeight(toWeight);
             to.setWeight(fromWeight);
             return;
@@ -155,7 +158,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         int maxWeight = Math.max(fromWeight, toWeight);
         //作为一个优化，减少不连续的weight
         int count = countByBetween(minWeight, maxWeight).intValue();
-        if(count > 0 && count < 20) {
+        if (count > 0 && count < 20) {
             List<M> moves = findByBetweenAndDesc(minWeight, maxWeight);
             //123/124
             //5000 4000 3000
@@ -186,13 +189,13 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
         //计算新的权重
         int newWeight = 0;
-        if(nextTo == null) {
+        if (nextTo == null) {
             newWeight = toWeight + stepLength;
         } else {
-            newWeight = toWeight + (nextTo.getWeight() - toWeight)/2;
+            newWeight = toWeight + (nextTo.getWeight() - toWeight) / 2;
         }
 
-        if(Math.abs(newWeight - toWeight) <= 1) {
+        if (Math.abs(newWeight - toWeight) <= 1) {
             throw new IllegalStateException(String.format("down error, no enough weight :fromId:%d, toId:%d", fromId, toId));
         }
         from.setWeight(newWeight);
@@ -209,7 +212,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
 
             RepositoryHelper.clear();
 
-            if(page.isLastPage()) {
+            if (page.isLastPage()) {
                 break;
             }
 
@@ -221,12 +224,12 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
     }
 
     public void doReweight(Page<M> page) {
-        int totalElements = (int)page.getTotalElements();
+        int totalElements = (int) page.getTotalElements();
         List<M> moves = page.getContent();
 
         int firstElement = page.getNumber() * page.getSize();
 
-        for(int i = 0; i < moves.size(); i++) {
+        for (int i = 0; i < moves.size(); i++) {
             M move = moves.get(i);
             move.setWeight((totalElements - firstElement - i) * stepLength);
             update(move);
@@ -238,7 +241,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         Searchable searchable = Searchable.newSearchable().setPage(0, 1).addSort(Sort.Direction.DESC, "weight");
         Page<M> page = findAll(searchable);
 
-        if(!page.hasContent()) {
+        if (!page.hasContent()) {
             return stepLength;
         }
 
@@ -252,7 +255,7 @@ public abstract class BaseMovableService<M extends BaseEntity & Movable, ID exte
         Sort sort = new Sort(Sort.Direction.DESC, "weight");
         Page<M> page = findAll(Searchable.newSearchable(searchParams).addSort(sort).setPage(pageable));
 
-        if(page.hasContent()) {
+        if (page.hasContent()) {
             return page.getContent().get(0);
         }
         return null;

@@ -23,11 +23,10 @@ import java.lang.annotation.*;
  * 即
  * 1、查找对象中的注解了@BaseComponent的对象
  * 2、
- *  调用BaseCRUDController.setBaseService 设置BaseService
- *  调用BaseService.setBaseRepository 设置BaseRepository
+ * 调用BaseCRUDController.setBaseService 设置BaseService
+ * 调用BaseService.setBaseRepository 设置BaseRepository
  *
  * @author Zhang Kaitao
- *
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

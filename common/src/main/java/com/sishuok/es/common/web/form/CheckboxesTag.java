@@ -21,6 +21,7 @@ import javax.servlet.jsp.JspException;
 public class CheckboxesTag extends org.springframework.web.servlet.tags.form.CheckboxesTag {
 
     private BindStatus bindStatus = null;
+
     @Override
     protected BindStatus getBindStatus() throws JspException {
         if (this.bindStatus == null) {

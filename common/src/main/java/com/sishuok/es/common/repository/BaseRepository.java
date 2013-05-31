@@ -18,10 +18,10 @@ import java.util.List;
 /**
  * <p>抽象DAO层基类 提供一些简便方法<br/>
  * 具体使用请参考测试用例：{@see com.sishuok.es.common.repository.UserRepository}
- *
+ * <p/>
  * 想要使用该接口需要在spring配置文件的jpa:repositories中添加
- *   factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
- *
+ * factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
+ * <p/>
  * <p>泛型 ： M 表示实体类型；ID表示主键类型
  * <p>User: Zhang Kaitao
  * <p>Date: 13-1-12 下午4:46
@@ -32,6 +32,7 @@ public interface BaseRepository<M, ID extends Serializable> extends JpaRepositor
 
     /**
      * 根据主键删除
+     *
      * @param ids
      */
     public void delete(ID[] ids);
@@ -60,6 +61,7 @@ public interface BaseRepository<M, ID extends Serializable> extends JpaRepositor
     /**
      * 根据条件查询所有
      * 条件 + 分页 + 排序
+     *
      * @param searchable
      * @return
      */
@@ -68,6 +70,7 @@ public interface BaseRepository<M, ID extends Serializable> extends JpaRepositor
 
     /**
      * 根据条件统计所有记录数
+     *
      * @param searchable
      * @return
      */

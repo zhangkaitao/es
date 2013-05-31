@@ -22,6 +22,7 @@ public class TreeServiceIT extends BaseIT {
     private TreeService treeService;
 
     private Tree root = null;
+
     @Before
     public void setUp() {
         root = createTree(0, "0/");
@@ -38,6 +39,7 @@ public class TreeServiceIT extends BaseIT {
         assertEquals(target.makeSelfAsNewParentIds(), treeService.findOne(source.getId()).getParentIds());
         assertEquals(Integer.valueOf(1), treeService.findOne(source.getId()).getWeight());
     }
+
     @Test
     public void testMoveAsChildWithChild() {
         Tree source = createTree(root.getId(), root.makeSelfAsNewParentIds());
@@ -188,8 +190,6 @@ public class TreeServiceIT extends BaseIT {
 
 
     }
-
-
 
 
     private Tree createTree(long parentId, String parentIds) {

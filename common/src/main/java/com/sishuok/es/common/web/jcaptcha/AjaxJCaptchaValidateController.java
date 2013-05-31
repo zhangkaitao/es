@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/jcaptcha-validate")
-public class AjaxJCaptchaValidateController  {
+public class AjaxJCaptchaValidateController {
 
     @Autowired
     private MessageSource messageSource;
@@ -38,7 +38,7 @@ public class AjaxJCaptchaValidateController  {
 
         ValidateResponse response = ValidateResponse.newInstance();
 
-        if(JCaptcha.hasCaptcha(request, fieldValue) == false) {
+        if (JCaptcha.hasCaptcha(request, fieldValue) == false) {
             response.validateFail(fieldId, messageSource.getMessage("jcaptcha.validate.error", null, null));
         } else {
             response.validateSuccess(fieldId, messageSource.getMessage("jcaptcha.validate.success", null, null));

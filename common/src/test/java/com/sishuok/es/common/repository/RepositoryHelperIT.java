@@ -114,7 +114,6 @@ public class RepositoryHelperIT extends BaseUserIT {
     }
 
 
-
     @Test
     public void testFindAllWithPage() {
 
@@ -205,7 +204,6 @@ public class RepositoryHelperIT extends BaseUserIT {
     }
 
 
-
     @Test
     public void testFindAllWithSearchableAndDefaultSearchCallbck() {
 
@@ -221,11 +219,11 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         Searchable searchable = Searchable.newSearchable();
 
-        searchable.addSearchParam("id_in", new Long[] {user1.getId(), user2.getId(), user3.getId()});
+        searchable.addSearchParam("id_in", new Long[]{user1.getId(), user2.getId(), user3.getId()});
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        
+
 
         String ql = "from User where 1=1";
         List<User> list = repositoryHelper.findAll(ql, searchable, SearchCallback.DEFAULT);
@@ -258,7 +256,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        
+
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
@@ -266,7 +264,7 @@ public class RepositoryHelperIT extends BaseUserIT {
                 //默认的
                 super.prepareQL(ql, search);
                 //自定义的
-                if(search.containsSearchKey("realname")) {//此处也可以使用realname_custom
+                if (search.containsSearchKey("realname")) {//此处也可以使用realname_custom
                     ql.append(" and baseInfo.realname like :realname");
                 }
             }
@@ -276,7 +274,7 @@ public class RepositoryHelperIT extends BaseUserIT {
                 //默认的
                 super.setValues(query, search);
                 //自定义的
-                if(search.containsSearchKey("realname")) {
+                if (search.containsSearchKey("realname")) {
                     query.setParameter("realname", "%" + search.getValue("realname") + "%");
                 }
             }
@@ -292,7 +290,6 @@ public class RepositoryHelperIT extends BaseUserIT {
         Assert.assertEquals(user1, list.get(1));
 
     }
-
 
 
     @Test
@@ -316,17 +313,17 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        
+
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
             public void prepareQL(StringBuilder ql, Searchable search) {
                 //不调用默认的
-                if(search.containsSearchKey("id_lt")) {
+                if (search.containsSearchKey("id_lt")) {
                     ql.append(" and id < :id");
                 }
                 //自定义的
-                if(search.containsSearchKey("realname_custom")) {//此处也可以使用realname_custom
+                if (search.containsSearchKey("realname_custom")) {//此处也可以使用realname_custom
                     ql.append(" and baseInfo.realname like :realname");
                 }
             }
@@ -334,11 +331,11 @@ public class RepositoryHelperIT extends BaseUserIT {
             @Override
             public void setValues(Query query, Searchable search) {
                 //不调用默认的
-                if(search.containsSearchKey("id_lt")) {
+                if (search.containsSearchKey("id_lt")) {
                     query.setParameter("id", search.getValue("id_lt"));
                 }
                 //自定义的
-                if(search.containsSearchKey("realname")) {
+                if (search.containsSearchKey("realname")) {
                     query.setParameter("realname", "%" + search.getValue("realname") + "%");
                 }
             }
@@ -356,9 +353,6 @@ public class RepositoryHelperIT extends BaseUserIT {
     }
 
 
-
-
-
     @Test
     public void testCountWithSearchableAndDefaultSearchCallbck() {
 
@@ -374,10 +368,10 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         Searchable searchable = Searchable.newSearchable();
 
-        searchable.addSearchParam("id_in", new Long[] {user1.getId(), user2.getId(), user3.getId()});
+        searchable.addSearchParam("id_in", new Long[]{user1.getId(), user2.getId(), user3.getId()});
 
         searchable.addSort(Sort.Direction.DESC, "id");
-        
+
 
         String ql = "select count(*) from User where 1=1";
         long total = repositoryHelper.count(ql, searchable, SearchCallback.DEFAULT);
@@ -408,7 +402,7 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        
+
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
@@ -416,7 +410,7 @@ public class RepositoryHelperIT extends BaseUserIT {
                 //默认的
                 super.prepareQL(ql, search);
                 //自定义的
-                if(search.containsSearchKey("realname")) {//此处也可以使用realname_custom
+                if (search.containsSearchKey("realname")) {//此处也可以使用realname_custom
                     ql.append(" and baseInfo.realname like :realname");
                 }
             }
@@ -426,7 +420,7 @@ public class RepositoryHelperIT extends BaseUserIT {
                 //默认的
                 super.setValues(query, search);
                 //自定义的
-                if(search.containsSearchKey("realname")) {
+                if (search.containsSearchKey("realname")) {
                     query.setParameter("realname", "%" + search.getValue("realname") + "%");
                 }
             }
@@ -440,7 +434,6 @@ public class RepositoryHelperIT extends BaseUserIT {
 
 
     }
-
 
 
     @Test
@@ -463,17 +456,17 @@ public class RepositoryHelperIT extends BaseUserIT {
 
         searchable.setPage(0, 2);
         searchable.addSort(Sort.Direction.DESC, "id");
-        
+
 
         SearchCallback customCallback = new DefaultSearchCallback() {
             @Override
             public void prepareQL(StringBuilder ql, Searchable search) {
                 //不调用默认的
-                if(search.containsSearchKey("id_lt")) {
+                if (search.containsSearchKey("id_lt")) {
                     ql.append(" and id < :id");
                 }
                 //自定义的
-                if(search.containsSearchKey("realname_custom")) {//此处也可以使用realname_custom
+                if (search.containsSearchKey("realname_custom")) {//此处也可以使用realname_custom
                     ql.append(" and baseInfo.realname like :realname");
                 }
             }
@@ -481,11 +474,11 @@ public class RepositoryHelperIT extends BaseUserIT {
             @Override
             public void setValues(Query query, Searchable search) {
                 //不调用默认的
-                if(search.containsSearchKey("id_lt")) {
+                if (search.containsSearchKey("id_lt")) {
                     query.setParameter("id", search.getValue("id_lt"));
                 }
                 //自定义的
-                if(search.containsSearchKey("realname")) {
+                if (search.containsSearchKey("realname")) {
                     query.setParameter("realname", "%" + search.getValue("realname") + "%");
                 }
             }
@@ -523,7 +516,6 @@ public class RepositoryHelperIT extends BaseUserIT {
         Assert.assertEquals(newPassword, user1.getPassword());
 
     }
-
 
 
 }

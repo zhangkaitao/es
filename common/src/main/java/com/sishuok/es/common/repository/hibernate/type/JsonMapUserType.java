@@ -26,13 +26,14 @@ import java.util.Map;
 public class JsonMapUserType implements UserType, Serializable {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         objectMapper.enableDefaultTyping();
     }
 
     @Override
     public int[] sqlTypes() {
-        return new int[] {Types.VARCHAR};
+        return new int[]{Types.VARCHAR};
     }
 
     @Override
@@ -59,15 +60,16 @@ public class JsonMapUserType implements UserType, Serializable {
 
 
     /**
-  * 从JDBC ResultSet读取数据,将其转换为自定义类型后返回
-  * (此方法要求对克能出现null值进行处理)
-  * names中包含了当前自定义类型的映射字段名称
-  * @param names
-  * @param owner
-  * @return
-  * @throws HibernateException
-  * @throws SQLException
-  */
+     * 从JDBC ResultSet读取数据,将其转换为自定义类型后返回
+     * (此方法要求对克能出现null值进行处理)
+     * names中包含了当前自定义类型的映射字段名称
+     *
+     * @param names
+     * @param owner
+     * @return
+     * @throws HibernateException
+     * @throws SQLException
+     */
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String json = rs.getString(names[0]);
@@ -79,23 +81,22 @@ public class JsonMapUserType implements UserType, Serializable {
         }
     }
 
-   /**
-  * 本方法将在Hibernate进行数据保存时被调用
-  * 我们可以通过PreparedStateme将自定义数据写入到对应的数据库表字段
-  */
+    /**
+     * 本方法将在Hibernate进行数据保存时被调用
+     * 我们可以通过PreparedStateme将自定义数据写入到对应的数据库表字段
+     */
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-        if(value == null) {
+        if (value == null) {
             st.setNull(index, Types.VARCHAR);
         } else {
             try {
-                st.setString(index, objectMapper.writeValueAsString((((JsonMap)value).getMap())));
+                st.setString(index, objectMapper.writeValueAsString((((JsonMap) value).getMap())));
             } catch (JsonProcessingException e) {
                 throw new HibernateException(e);
             }
         }
     }
-
 
 
     /**
@@ -114,16 +115,17 @@ public class JsonMapUserType implements UserType, Serializable {
      */
     @Override
     public Object deepCopy(Object o) throws HibernateException {
-        if(o == null) return null;
+        if (o == null) return null;
         JsonMap map = new JsonMap();
-        map.setMap(((JsonMap)o).getMap());
+        map.setMap(((JsonMap) o).getMap());
         return map;
     }
 
     /**
      * 本类型实例是否可变
+     *
      * @return
-    */
+     */
     @Override
     public boolean isMutable() {
         return true;
@@ -132,7 +134,7 @@ public class JsonMapUserType implements UserType, Serializable {
     /* 序列化 */
     @Override
     public Serializable disassemble(Object value) throws HibernateException {
-        return ((Serializable)value);
+        return ((Serializable) value);
     }
 
     /* 反序列化 */

@@ -32,10 +32,10 @@ public class InjectBaseDependencyHelper {
         final Set<Object> candidates =
                 findDependencies(baseService, BaseComponent.class);
 
-        if(candidates.size() == 0 || candidates.size() > 1) {
+        if (candidates.size() == 0 || candidates.size() > 1) {
             throw new IllegalStateException(
                     "expect 1 @BaseComponent anntation BaseRepository subclass bean, but found " + candidates.size() +
-                   ", please check class [" + baseService.getClass() + "] @BaseComponent annotation.");
+                            ", please check class [" + baseService.getClass() + "] @BaseComponent annotation.");
         }
 
         Object baseRepository = candidates.iterator().next();
@@ -44,19 +44,18 @@ public class InjectBaseDependencyHelper {
             throw new IllegalStateException("[" + baseService.getClass() + "] @BaseComponent annotation bean " +
                     "must be BaseRepository subclass");
         }
-        baseService.setBaseRepository( (BaseRepository)baseRepository );
+        baseService.setBaseRepository((BaseRepository) baseRepository);
     }
-
 
 
     public static void findAndInjectBaseServiceDependency(BaseController<?, ?> baseController) {
         final Set<Object> candidates =
                 findDependencies(baseController, BaseComponent.class);
 
-        if(candidates.size() > 1) {
+        if (candidates.size() > 1) {
             throw new IllegalStateException(
                     "expect 1 @BaseComponent anntation BaseService subclass bean, but found " + candidates.size() +
-                    ", please check class [" + baseController.getClass() + "] @BaseComponent annotation.");
+                            ", please check class [" + baseController.getClass() + "] @BaseComponent annotation.");
         }
 
         Object baseService = candidates.iterator().next();
@@ -66,13 +65,13 @@ public class InjectBaseDependencyHelper {
                     "must be BaseService subclass");
         }
 
-        baseController.setBaseService( (BaseService)baseService );
+        baseController.setBaseService((BaseService) baseService);
     }
-
 
 
     /**
      * 根据注解在目标对象上的字段上查找依赖
+     *
      * @param target
      * @param annotation
      */
@@ -113,7 +112,7 @@ public class InjectBaseDependencyHelper {
                     public boolean matches(Method method) {
                         boolean hasAnnotation = false;
                         hasAnnotation = method.isAnnotationPresent(annotation);
-                        if(!hasAnnotation) {
+                        if (!hasAnnotation) {
                             return false;
                         }
 
@@ -121,7 +120,7 @@ public class InjectBaseDependencyHelper {
                         PropertyDescriptor descriptor = BeanUtils.findPropertyForMethod(method);
                         hasReadMethod = descriptor != null && descriptor.getReadMethod() != null;
 
-                        if(!hasReadMethod) {
+                        if (!hasReadMethod) {
                             return false;
                         }
 

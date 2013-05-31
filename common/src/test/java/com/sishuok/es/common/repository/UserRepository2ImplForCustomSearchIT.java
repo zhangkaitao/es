@@ -70,17 +70,16 @@ public class UserRepository2ImplForCustomSearchIT extends BaseUserIT {
     }
 
     @Test
-     public void testCountAllByCustomSearch2() {
-         int count = 15;
-         for (int i = 0; i < count; i++) {
-             User user = createUser();
-             user.getBaseInfo().setRealname("zhang" + i);
-             userRepository2.save(user);
-         }
-         Searchable search = Searchable.newSearchable().addSearchParam("realname", "zhanga");
-         assertEquals(0, userRepository2.countAllByCustom(search));
-     }
-
+    public void testCountAllByCustomSearch2() {
+        int count = 15;
+        for (int i = 0; i < count; i++) {
+            User user = createUser();
+            user.getBaseInfo().setRealname("zhang" + i);
+            userRepository2.save(user);
+        }
+        Searchable search = Searchable.newSearchable().addSearchParam("realname", "zhanga");
+        assertEquals(0, userRepository2.countAllByCustom(search));
+    }
 
 
 }

@@ -86,7 +86,7 @@ public class UserRepository2ImplForDefaultSearchIT extends BaseUserIT {
             user.setRegisterDate(df.parse(dateStr));
             userRepository2.save(user);
         }
-        
+
         Searchable search = Searchable.newSearchable().addSearchParam("registerDate_eq", dateStr);
         assertEquals(count, userRepository2.countAllByDefault(search));
     }

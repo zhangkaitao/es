@@ -17,6 +17,7 @@ public class ReflectUtils {
 
     /**
      * 得到指定类型的指定位置的泛型实参
+     *
      * @param clazz
      * @param index
      * @param <T>
@@ -25,7 +26,7 @@ public class ReflectUtils {
     public static <T> Class<T> findParameterizedType(Class<?> clazz, int index) {
         Type parameterizedType = clazz.getGenericSuperclass();
         //CGLUB subclass target object(泛型在父类上)
-        if(!(parameterizedType instanceof ParameterizedType)) {
+        if (!(parameterizedType instanceof ParameterizedType)) {
             parameterizedType = clazz.getSuperclass().getGenericSuperclass();
         }
         return (Class<T>) ((ParameterizedType) parameterizedType).getActualTypeArguments()[0];

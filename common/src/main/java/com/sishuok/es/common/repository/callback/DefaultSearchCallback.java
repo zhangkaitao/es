@@ -28,13 +28,14 @@ public class DefaultSearchCallback implements SearchCallback {
 
     private String alias;
     private String aliasWithDot;
+
     public DefaultSearchCallback() {
         this("");
     }
 
     public DefaultSearchCallback(String alias) {
         this.alias = alias;
-        if(!StringUtils.isEmpty(alias)) {
+        if (!StringUtils.isEmpty(alias)) {
             this.aliasWithDot = alias + ".";
         } else {
             this.aliasWithDot = "";
@@ -51,16 +52,16 @@ public class DefaultSearchCallback implements SearchCallback {
 
     @Override
     public void prepareQL(StringBuilder ql, Searchable search) {
-        if(!search.hasSearchFilter()) {
+        if (!search.hasSearchFilter()) {
             return;
         }
 
         int paramIndex = 1;
-        for(SearchFilter searchFilter : search.getSearchFilters()) {
+        for (SearchFilter searchFilter : search.getSearchFilters()) {
 
-            if(searchFilter instanceof Condition) {
+            if (searchFilter instanceof Condition) {
                 Condition condition = (Condition) searchFilter;
-                if(condition.getOperator() == SearchOperator.custom) {
+                if (condition.getOperator() == SearchOperator.custom) {
                     continue;
                 }
             }
@@ -75,11 +76,11 @@ public class DefaultSearchCallback implements SearchCallback {
     private int genCondition(StringBuilder ql, int paramIndex, SearchFilter searchFilter) {
         boolean needAppendBracket = searchFilter instanceof OrCondition || searchFilter instanceof AndCondition;
 
-        if(needAppendBracket) {
+        if (needAppendBracket) {
             ql.append("(");
         }
 
-        if(searchFilter instanceof Condition) {
+        if (searchFilter instanceof Condition) {
             Condition condition = (Condition) searchFilter;
             //自定义条件
             String entityProperty = condition.getEntityProperty();
@@ -98,19 +99,19 @@ public class DefaultSearchCallback implements SearchCallback {
                 ql.append(paramIndex++);
                 return paramIndex;
             }
-        } else if(searchFilter instanceof OrCondition) {
+        } else if (searchFilter instanceof OrCondition) {
             boolean isFirst = true;
-            for(SearchFilter orSearchFilter : ((OrCondition)searchFilter).getOrFilters()) {
-                if(!isFirst) {
+            for (SearchFilter orSearchFilter : ((OrCondition) searchFilter).getOrFilters()) {
+                if (!isFirst) {
                     ql.append(" or ");
                 }
                 paramIndex = genCondition(ql, paramIndex, orSearchFilter);
                 isFirst = false;
             }
-        } else if(searchFilter instanceof AndCondition) {
+        } else if (searchFilter instanceof AndCondition) {
             boolean isFirst = true;
-            for(SearchFilter andSearchFilter : ((AndCondition)searchFilter).getAndFilters()) {
-                if(!isFirst) {
+            for (SearchFilter andSearchFilter : ((AndCondition) searchFilter).getAndFilters()) {
+                if (!isFirst) {
                     ql.append(" and ");
                 }
                 paramIndex = genCondition(ql, paramIndex, andSearchFilter);
@@ -118,7 +119,7 @@ public class DefaultSearchCallback implements SearchCallback {
             }
         }
 
-        if(needAppendBracket) {
+        if (needAppendBracket) {
             ql.append(")");
         }
         return paramIndex;
@@ -130,32 +131,32 @@ public class DefaultSearchCallback implements SearchCallback {
 
         int paramIndex = 1;
 
-        for(SearchFilter searchFilter : search.getSearchFilters()) {
+        for (SearchFilter searchFilter : search.getSearchFilters()) {
             paramIndex = setValues(query, searchFilter, paramIndex);
         }
 
     }
 
     private int setValues(Query query, SearchFilter searchFilter, int paramIndex) {
-        if(searchFilter instanceof Condition) {
+        if (searchFilter instanceof Condition) {
 
             Condition condition = (Condition) searchFilter;
-            if(condition.getOperator() == SearchOperator.custom) {
+            if (condition.getOperator() == SearchOperator.custom) {
                 return paramIndex;
             }
-            if(condition.isUnaryFilter()) {
+            if (condition.isUnaryFilter()) {
                 return paramIndex;
             }
             query.setParameter(paramPrefix + paramIndex++, formtValue(condition, condition.getValue()));
 
-        } else if(searchFilter instanceof OrCondition) {
+        } else if (searchFilter instanceof OrCondition) {
 
-            for(SearchFilter orSearchFilter : ((OrCondition)searchFilter).getOrFilters()) {
+            for (SearchFilter orSearchFilter : ((OrCondition) searchFilter).getOrFilters()) {
                 paramIndex = setValues(query, orSearchFilter, paramIndex);
             }
 
-        } else if(searchFilter instanceof AndCondition) {
-            for(SearchFilter andSearchFilter : ((AndCondition)searchFilter).getAndFilters()) {
+        } else if (searchFilter instanceof AndCondition) {
+            for (SearchFilter andSearchFilter : ((AndCondition) searchFilter).getAndFilters()) {
                 paramIndex = setValues(query, andSearchFilter, paramIndex);
             }
         }
@@ -164,14 +165,14 @@ public class DefaultSearchCallback implements SearchCallback {
 
     private Object formtValue(Condition condition, Object value) {
         SearchOperator operator = condition.getOperator();
-        if(operator == SearchOperator.like || operator == SearchOperator.notLike) {
+        if (operator == SearchOperator.like || operator == SearchOperator.notLike) {
             return "%" + value + "%";
         }
-        if(operator == SearchOperator.prefixLike || operator == SearchOperator.prefixNotLike) {
+        if (operator == SearchOperator.prefixLike || operator == SearchOperator.prefixNotLike) {
             return value + "%";
         }
 
-        if(operator == SearchOperator.suffixLike || operator == SearchOperator.suffixNotLike) {
+        if (operator == SearchOperator.suffixLike || operator == SearchOperator.suffixNotLike) {
             return "%" + value;
         }
         return value;
@@ -186,7 +187,7 @@ public class DefaultSearchCallback implements SearchCallback {
     }
 
     public void prepareOrder(StringBuilder ql, Searchable search) {
-        if(search.hashSort()) {
+        if (search.hashSort()) {
             ql.append(" order by ");
             for (Sort.Order order : search.getSort()) {
                 ql.append(String.format("%s%s %s, ", getAliasWithDot(), order.getProperty(), order.getDirection().name().toLowerCase()));

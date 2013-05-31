@@ -40,6 +40,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     /**
      * 设置基础service
+     *
      * @param baseService
      */
     public void setBaseService(BaseService<M, ID> baseService) {
@@ -59,7 +60,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
      * 则生成的新增权限为 sys:user:create
      */
     public void setResourceIdentity(String resourceIdentity) {
-        if(!StringUtils.isEmpty(resourceIdentity)) {
+        if (!StringUtils.isEmpty(resourceIdentity)) {
             permissionList = PermissionList.newPermissionList(resourceIdentity);
         }
     }
@@ -76,12 +77,12 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @PageableDefaults(sort = "id=desc")
     public String list(Searchable searchable, Model model) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasViewPermission();
         }
 
         model.addAttribute("page", baseService.findAll(searchable));
-        if(listAlsoSetCommonData) {
+        if (listAlsoSetCommonData) {
             setCommonData(model);
         }
         return viewName("list");
@@ -89,6 +90,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
     /**
      * 仅返回表格数据
+     *
      * @param searchable
      * @param model
      * @return
@@ -101,11 +103,10 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     }
 
 
-
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String view(Model model, @PathVariable("id") M m) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasViewPermission();
         }
 
@@ -118,13 +119,13 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String showCreateForm(Model model) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
 
         setCommonData(model);
         model.addAttribute(Constants.OP_NAME, "新增");
-        if(!model.containsAttribute("m")) {
+        if (!model.containsAttribute("m")) {
             model.addAttribute("m", newModel());
         }
         return viewName("editForm");
@@ -136,7 +137,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             Model model, @Valid @ModelAttribute("m") M m, BindingResult result,
             RedirectAttributes redirectAttributes) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
 
@@ -152,7 +153,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @RequestMapping(value = "{id}/update", method = RequestMethod.GET)
     public String showUpdateForm(@PathVariable("id") M m, Model model) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasUpdatePermission();
         }
 
@@ -165,10 +166,10 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
     public String update(
             Model model, @Valid @ModelAttribute("m") M m, BindingResult result,
-            @RequestParam(value = Constants.BACK_URL, required =false) String backURL,
+            @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
             RedirectAttributes redirectAttributes) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasUpdatePermission();
         }
 
@@ -183,7 +184,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @RequestMapping(value = "{id}/delete", method = RequestMethod.GET)
     public String showDeleteForm(@PathVariable("id") M m, Model model) {
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasDeletePermission();
         }
 
@@ -200,7 +201,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             RedirectAttributes redirectAttributes) {
 
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasDeletePermission();
         }
 
@@ -215,7 +216,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             RedirectAttributes redirectAttributes) {
 
 
-        if(permissionList != null) {
+        if (permissionList != null) {
             this.permissionList.assertHasDeletePermission();
         }
 

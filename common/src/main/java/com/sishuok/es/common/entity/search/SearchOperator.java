@@ -55,8 +55,8 @@ public enum SearchOperator {
 
     public static SearchOperator valueBySymbol(String symbol) throws SearchException {
         symbol = formatSymbol(symbol);
-        for(SearchOperator operator : values()) {
-            if(operator.getSymbol().equals(symbol)) {
+        for (SearchOperator operator : values()) {
+            if (operator.getSymbol().equals(symbol)) {
                 return operator;
             }
         }
@@ -65,7 +65,7 @@ public enum SearchOperator {
     }
 
     private static String formatSymbol(String symbol) {
-        if(StringUtils.isBlank(symbol)) {
+        if (StringUtils.isBlank(symbol)) {
             return symbol;
         }
         return symbol.trim().toLowerCase().replace("  ", " ");

@@ -19,15 +19,18 @@ import java.util.Arrays;
 public final class SearchFilterHelper {
     /**
      * 根据查询key和值生成Condition
-     * @param key 如 name_like
+     *
+     * @param key   如 name_like
      * @param value
      * @return
      */
     public static SearchFilter newCondition(final String key, final Object value) throws SearchException {
         return Condition.newCondition(key, value);
     }
+
     /**
      * 根据查询属性、操作符和值生成Condition
+     *
      * @param searchProperty
      * @param operator
      * @param value
@@ -36,7 +39,6 @@ public final class SearchFilterHelper {
     public static SearchFilter newCondition(final String searchProperty, final SearchOperator operator, final Object value) {
         return Condition.newCondition(searchProperty, operator, value);
     }
-
 
 
     /**

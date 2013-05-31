@@ -44,6 +44,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 
     /**
      * 设置基础service
+     *
      * @param baseService
      */
     public void setBaseService(BaseService<M, ID> baseService) {
@@ -58,6 +59,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 
     /**
      * 设置通用数据
+     *
      * @param model
      */
     protected void setCommonData(Model model) {
@@ -71,7 +73,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
      * 2、如果没有就使用当前模型小写的简单类名
      */
     public void setViewPrefix(String viewPrefix) {
-        if(viewPrefix.startsWith("/")) {
+        if (viewPrefix.startsWith("/")) {
             viewPrefix = viewPrefix.substring(1);
         }
         this.viewPrefix = viewPrefix;
@@ -91,10 +93,11 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 
     /**
      * 获取视图名称：即prefixViewName + "/" + suffixName
+     *
      * @return
      */
     public String viewName(String suffixName) {
-        if(!suffixName.startsWith("/")) {
+        if (!suffixName.startsWith("/")) {
             suffixName = "/" + suffixName;
         }
         return getViewPrefix() + suffixName;
@@ -103,6 +106,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
     /**
      * 共享的验证规则
      * 验证失败返回true
+     *
      * @param m
      * @param result
      * @return
@@ -117,11 +121,11 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
      * @return
      */
     protected String redirectToUrl(String backURL) {
-        if(StringUtils.isEmpty(backURL)) {
+        if (StringUtils.isEmpty(backURL)) {
             backURL = getViewPrefix();
         }
-        if(!backURL.startsWith("/") && !backURL.startsWith("http")) {
-            backURL =  "/" + backURL;
+        if (!backURL.startsWith("/") && !backURL.startsWith("http")) {
+            backURL = "/" + backURL;
         }
         return "redirect:" + backURL;
     }
@@ -129,11 +133,11 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
     protected String defaultViewPrefix() {
         String currentViewPrefix = "";
         RequestMapping requestMapping = AnnotationUtils.findAnnotation(getClass(), RequestMapping.class);
-        if(requestMapping != null && requestMapping.value().length > 0) {
+        if (requestMapping != null && requestMapping.value().length > 0) {
             currentViewPrefix = requestMapping.value()[0];
         }
 
-        if(StringUtils.isEmpty(currentViewPrefix)) {
+        if (StringUtils.isEmpty(currentViewPrefix)) {
             currentViewPrefix = this.entityClass.getSimpleName();
         }
 

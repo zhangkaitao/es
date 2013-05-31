@@ -40,7 +40,7 @@ public class Parent {
     }
 
     public Set<Child> getChilds() {
-        if(childs == null) {
+        if (childs == null) {
             childs = Sets.newHashSet();
         }
         return childs;

@@ -31,7 +31,8 @@ public final class Condition implements SearchFilter {
 
     /**
      * 根据查询key和值生成Condition
-     * @param key 如 name_like
+     *
+     * @param key   如 name_like
      * @param value
      * @return
      */
@@ -61,7 +62,7 @@ public final class Condition implements SearchFilter {
         boolean allowBlankValue = SearchOperator.isAllowBlankValue(operator);
         boolean isValueBlank = value == null;
         isValueBlank = isValueBlank || (value instanceof String && StringUtils.isBlank((String) value));
-        isValueBlank = isValueBlank || (value instanceof List && ((List)value).size() == 0);
+        isValueBlank = isValueBlank || (value instanceof List && ((List) value).size() == 0);
         //过滤掉空值，即不参与查询
         if (!allowBlankValue && isValueBlank) {
             return null;
@@ -75,6 +76,7 @@ public final class Condition implements SearchFilter {
 
     /**
      * 根据查询属性、操作符和值生成Condition
+     *
      * @param searchProperty
      * @param operator
      * @param value
@@ -86,8 +88,8 @@ public final class Condition implements SearchFilter {
 
     /**
      * @param searchProperty 属性名
-     * @param operator 操作
-     * @param value    值
+     * @param operator       操作
+     * @param value          值
      */
     private Condition(final String searchProperty, final SearchOperator operator, final Object value) {
         this.searchProperty = searchProperty;
@@ -107,6 +109,7 @@ public final class Condition implements SearchFilter {
 
     /**
      * 获取 操作符
+     *
      * @return
      */
     public SearchOperator getOperator() throws InvlidSearchOperatorException {
@@ -117,10 +120,11 @@ public final class Condition implements SearchFilter {
      * 获取自定义查询使用的操作符
      * 1、首先获取前台传的
      * 2、返回空
+     *
      * @return
      */
     public String getOperatorStr() {
-        if(operator != null) {
+        if (operator != null) {
             return operator.getSymbol();
         }
         return "";
@@ -146,6 +150,7 @@ public final class Condition implements SearchFilter {
 
     /**
      * 得到实体属性名
+     *
      * @return
      */
     public String getEntityProperty() {
@@ -154,6 +159,7 @@ public final class Condition implements SearchFilter {
 
     /**
      * 是否是一元过滤 如is null is not null
+     *
      * @return
      */
     public boolean isUnaryFilter() {

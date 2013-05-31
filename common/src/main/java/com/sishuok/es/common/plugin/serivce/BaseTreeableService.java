@@ -62,7 +62,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     @Override
     public M save(M m) {
-        if(m.getWeight() == null) {
+        if (m.getWeight() == null) {
             m.setWeight(nextWeight(m.getParentId()));
         }
         return super.save(m);
@@ -74,7 +74,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     }
 
     public void deleteSelfAndChild(List<M> mList) {
-        for(M m : mList) {
+        for (M m : mList) {
             deleteSelfAndChild(m);
         }
     }
@@ -86,33 +86,34 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         save(child);
     }
 
-   public int nextWeight(ID id) {
+    public int nextWeight(ID id) {
         return repositoryHelper.<Integer>findOne(FIND_NEXT_WEIGHT_QL, id);
-   }
-    
+    }
+
 
     /**
      * 移动节点
      * 根节点不能移动
-     * @param source 源节点
-     * @param target 目标节点
+     *
+     * @param source   源节点
+     * @param target   目标节点
      * @param moveType 位置
      */
     public void move(M source, M target, String moveType) {
-        if(source == null || target == null || source.isRoot()) { //根节点不能移动
+        if (source == null || target == null || source.isRoot()) { //根节点不能移动
             return;
         }
 
         //如果是相邻的兄弟 直接交换weight即可
         boolean isSibling = source.getParentId().equals(target.getParentId());
         boolean isNextOrPrevMoveType = "next".equals(moveType) || "prev".equals(moveType);
-        if(isSibling && isNextOrPrevMoveType && Math.abs(source.getWeight() - target.getWeight()) == 1) {
+        if (isSibling && isNextOrPrevMoveType && Math.abs(source.getWeight() - target.getWeight()) == 1) {
 
             //无需移动
-            if("next".equals(moveType) && source.getWeight() > target.getWeight()) {
+            if ("next".equals(moveType) && source.getWeight() > target.getWeight()) {
                 return;
             }
-            if("prev".equals(moveType) && source.getWeight() < target.getWeight()) {
+            if ("prev".equals(moveType) && source.getWeight() < target.getWeight()) {
                 return;
             }
 
@@ -128,7 +129,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
             List<M> siblings = findSelfAndNextSiblings(target.getParentIds(), target.getWeight());
             siblings.remove(0);//把自己移除
 
-            if(siblings.size() == 0) { //如果没有兄弟了 则直接把源的设置为目标即可
+            if (siblings.size() == 0) { //如果没有兄弟了 则直接把源的设置为目标即可
                 int nextWeight = nextWeight(target.getParentId());
                 updateSelftAndChild(source, target.getParentId(), target.getParentIds(), nextWeight);
                 return;
@@ -139,15 +140,15 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         }
 
         //移动到目标节点之前
-        if("prev".equals(moveType)) {
+        if ("prev".equals(moveType)) {
 
             List<M> siblings = findSelfAndNextSiblings(target.getParentIds(), target.getWeight());
             //兄弟节点中包含源节点
-            if(siblings.contains(source)) {
+            if (siblings.contains(source)) {
                 // 1 2 [3 source] 4
                 siblings = siblings.subList(0, siblings.indexOf(source) + 1);
                 int firstWeight = siblings.get(0).getWeight();
-                for(int i = 0; i < siblings.size() - 1; i++) {
+                for (int i = 0; i < siblings.size() - 1; i++) {
                     siblings.get(i).setWeight(siblings.get(i + 1).getWeight());
                 }
                 siblings.get(siblings.size() - 1).setWeight(firstWeight);
@@ -155,7 +156,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
                 // 1 2 3 4  [5 new]
                 int nextWeight = nextWeight(target.getParentId());
                 int firstWeight = siblings.get(0).getWeight();
-                for(int i = 0; i < siblings.size() - 1; i++) {
+                for (int i = 0; i < siblings.size() - 1; i++) {
                     siblings.get(i).setWeight(siblings.get(i + 1).getWeight());
                 }
                 siblings.get(siblings.size() - 1).setWeight(nextWeight);
@@ -173,6 +174,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     /**
      * 把源节点全部变更为目标节点
+     *
      * @param source
      * @param newParentIds
      */
@@ -188,6 +190,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     /**
      * 查找目标节点及之后的兄弟  注意：值与越小 越排在前边
+     *
      * @param parentIds
      * @param currentWeight
      * @return
@@ -199,6 +202,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     /**
      * 查看与name模糊匹配的名称
+     *
      * @param name
      * @return
      */
@@ -225,17 +229,18 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     /**
      * 查询子子孙孙
+     *
      * @return
      */
     public List<M> findChildren(List<M> parents, Searchable searchable) {
 
-        if(parents.isEmpty()) {
+        if (parents.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
 
         SearchFilter first = SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, parents.get(0).makeSelfAsNewParentIds());
         SearchFilter[] others = new SearchFilter[parents.size() - 1];
-        for(int i = 1; i < parents.size(); i++) {
+        for (int i = 1; i < parents.size(); i++) {
             others[i - 1] = SearchFilterHelper.newCondition("parentIds", SearchOperator.prefixLike, parents.get(i).makeSelfAsNewParentIds());
         }
         searchable.or(first, others);
@@ -251,6 +256,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     /**
      * 查找根和一级节点
+     *
      * @param searchable
      * @return
      */
@@ -258,10 +264,10 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
         searchable.addSearchParam("parentId_eq", 0);
         List<M> models = findAllWithSort(searchable);
 
-        if(models.size() == 0) {
+        if (models.size() == 0) {
             return models;
         }
-            List<ID> ids = Lists.newArrayList();
+        List<ID> ids = Lists.newArrayList();
         for (int i = 0; i < models.size(); i++) {
             ids.add(models.get(i).getId());
         }
@@ -275,7 +281,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     public Set<ID> findAncestorIds(Iterable<ID> currentIds) {
         Set<ID> parents = Sets.newHashSet();
-        for(ID currentId : currentIds) {
+        for (ID currentId : currentIds) {
             parents.addAll(findAncestorIds(currentId));
         }
         return parents;
@@ -284,11 +290,11 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
     public Set<ID> findAncestorIds(ID currentId) {
         Set ids = Sets.newHashSet();
         M m = findOne(currentId);
-        if(m == null) {
+        if (m == null) {
             return ids;
         }
-        for(String idStr : StringUtils.tokenizeToStringArray(m.getParentIds(), "/")) {
-            if(!StringUtils.isEmpty(idStr)) {
+        for (String idStr : StringUtils.tokenizeToStringArray(m.getParentIds(), "/")) {
+            if (!StringUtils.isEmpty(idStr)) {
                 ids.add(Long.valueOf(idStr));
             }
         }
@@ -297,11 +303,12 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     /**
      * 递归查询祖先
+     *
      * @param parentIds
      * @return
      */
     public List<M> findAncestor(String parentIds) {
-        if(StringUtils.isEmpty(parentIds)) {
+        if (StringUtils.isEmpty(parentIds)) {
             return Collections.EMPTY_LIST;
         }
         String[] ids = StringUtils.tokenizeToStringArray(parentIds, "/");
@@ -311,7 +318,7 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
 
     public void addExcludeSearchFilter(Searchable searchable, M excludeM) {
-        if(excludeM == null) {
+        if (excludeM == null) {
             return;
         }
         searchable.addSearchFilter("id", SearchOperator.ne, excludeM.getId());
