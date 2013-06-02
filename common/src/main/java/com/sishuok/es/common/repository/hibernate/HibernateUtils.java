@@ -78,7 +78,7 @@ public class HibernateUtils {
      *
      * @param em
      */
-    public static void clearLevel1Cache(EntityManager em) {
+    public static void evictLevel1Cache(EntityManager em) {
         em.clear();
     }
 
@@ -86,10 +86,10 @@ public class HibernateUtils {
      * 根据jpa EntityManager 清空二级缓存
      *
      * @param em
-     * @see #clearLevel2Cache(javax.persistence.EntityManagerFactory)
+     * @see #evictLevel2Cache(javax.persistence.EntityManagerFactory)
      */
-    public static void clearLevel2Cache(EntityManager em) {
-        clearLevel2Cache(em.getEntityManagerFactory());
+    public static void evictLevel2Cache(EntityManager em) {
+        evictLevel2Cache(em.getEntityManagerFactory());
     }
 
     /**
@@ -103,7 +103,7 @@ public class HibernateUtils {
      * @param emf
      * @see org.hibernate.ejb.EntityManagerFactoryImpl.JPACache#evictAll()
      */
-    public static void clearLevel2Cache(EntityManagerFactory emf) {
+    public static void evictLevel2Cache(EntityManagerFactory emf) {
         Cache cache = HibernateUtils.getCache(emf);
         cache.evictEntityRegions();
         cache.evictCollectionRegions();

@@ -130,6 +130,15 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
          values (33, 1, '0/1/', 4, '个人中心', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
          values (34, 33, '0/1/33/', 1, '我的消息', '', '/admin/personal/message', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (35, 1, '0/1/', 5, '系统监控', '', '', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (36, 35, '0/1/35/', 1, '数据库监控', 'sys:monitor', '/admin/monitor/druid/index.html', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (37, 35, '0/1/35/', 2, 'hibernate监控', 'sys:monitor', '/admin/monitor/hibernate', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (38, 35, '0/1/35/', 3, 'jmv监控', 'sys:monitor', '/admin/monitor/jvm', true);;
+
 
 
 delete from `sys_permission` where id>=1 and id<=1000;;
@@ -204,9 +213,12 @@ insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `per
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(46, 1, 29, '1');;
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(47, 1, 30, '1');;
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(149, 1, 32, '1');;
+insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(150, 1, 35, '1');;
+insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(151, 1, 36, '1');;
+insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(152, 1, 37, '1');;
+insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(153, 1, 38, '1');;
 
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(48, 4, 32, '1');;
-
 
 
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(49, 5, 2, '2,5');;

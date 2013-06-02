@@ -29,6 +29,13 @@ public class ReflectUtils {
         if (!(parameterizedType instanceof ParameterizedType)) {
             parameterizedType = clazz.getSuperclass().getGenericSuperclass();
         }
-        return (Class<T>) ((ParameterizedType) parameterizedType).getActualTypeArguments()[0];
+        if (!(parameterizedType instanceof  ParameterizedType)) {
+            return null;
+        }
+        Type[] actualTypeArguments = ((ParameterizedType) parameterizedType).getActualTypeArguments();
+        if (actualTypeArguments == null || actualTypeArguments.length == 0) {
+            return null;
+        }
+        return (Class<T>) actualTypeArguments[0];
     }
 }

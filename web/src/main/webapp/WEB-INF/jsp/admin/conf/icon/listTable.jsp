@@ -13,6 +13,7 @@
         <th>图标</th>
         <th>描述</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

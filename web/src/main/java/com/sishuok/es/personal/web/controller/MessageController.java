@@ -330,4 +330,10 @@ public class MessageController extends BaseController<Message, Long> {
         return redirectToUrl(viewName(MessageState.trash_box + "/list"));
     }
 
+    @RequestMapping(value = "/unreadCount")
+    @ResponseBody
+    public String unreadCount(@CurrentUser User user) {
+        return String.valueOf(messageApi.countUnread(user.getId()));
+    }
+
 }

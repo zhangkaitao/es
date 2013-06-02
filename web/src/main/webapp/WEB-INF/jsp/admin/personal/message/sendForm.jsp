@@ -46,7 +46,7 @@
 
     <c:if test="${op eq '回复消息'}">
         <div class="control-group">
-            <span class="bold span2"><time:prettyTime date="${parent.sendDate}"/></span>
+            <span class="bold span2"><pretty:prettyTime date="${parent.sendDate}"/></span>
             <c:choose>
                 <c:when test="${user.id eq parent.senderId}">
                     我

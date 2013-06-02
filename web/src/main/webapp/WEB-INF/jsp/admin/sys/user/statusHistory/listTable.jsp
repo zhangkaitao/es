@@ -10,6 +10,7 @@
         <th sort="opUser.username">管理员</th>
         <th sort="opDate">操作时间</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

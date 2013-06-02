@@ -14,6 +14,7 @@
         <th>详细描述</th>
         <th>状态</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

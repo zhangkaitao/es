@@ -18,19 +18,40 @@ $.app = {
             }
             $.tabs.activeTab($.tabs.nextCustomTabIndex(), "个人资料", url, true)
         });
-        var btnMessage = $(".btn-message");
-        var btnMessageInterval = null;
-        if(btnMessage.data("unread") > 0) {
-            btnMessageInterval = setInterval(function() {btnMessage.find("i").toggleClass("icon-envelope-alt").toggleClass("icon-envelope");}, 650);
-        }
-        btnMessage.click(function() {
-            clearInterval(btnMessageInterval);
-            var url = ctx + "/admin/personal/message";
-            $($.find("#menu a:contains(我的消息)")).click();
-            btnMessage.find("i").removeClass("icon-envelope").addClass("icon-envelope-alt");
-        });
 
-//        $("#menu").niceScroll({styler:"fb",cursorcolor:"#777", zindex:1});
+        var initMessageBtn = function() {
+            var messageBtn = $(".btn-message");
+            var icon = messageBtn.find("i");
+            var messageBtnInterval = null;
+
+            var activeUnreadIcon = function(count) {
+                if(count > 0) {
+                    messageBtn.addClass("unread");
+                    messageBtnInterval = setInterval(function() {icon.toggleClass("icon-envelope-alt").toggleClass("icon-envelope");}, 650);
+                }
+            };
+
+            activeUnreadIcon(messageBtn.data("unread"));
+
+            messageBtn.click(function() {
+                clearInterval(messageBtnInterval);
+                $($.find("#menu a:contains(我的消息)")).click();
+                messageBtn.removeClass("unread");
+                icon.removeClass("icon-envelope").addClass("icon-envelope-alt");
+
+            });
+
+            var fiveMinute = 5 * 60 * 1000;
+            var url = ctx + "/admin/personal/message/unreadCount";
+            setInterval(function() {
+                $.get(url, function(data) {
+                    clearInterval(messageBtnInterval);
+                    activeUnreadIcon(data);
+                });
+            }, fiveMinute);
+        };
+
+        initMessageBtn();
     },
     /**
      * 异步加载url内容到tab
@@ -331,18 +352,6 @@ $.app = {
         if(removeButton) {
             inputs.remove(":button,:submit");
         }
-    }
-    ,
-    /**
-     * 心跳检测 防止用户打开了浏览器 但没有操作造成 会话过期
-     * 默认5分钟检测一次
-     */
-    heartbeat : function(period) {
-        if(!period) {
-            period = 5 * 60 * 1000;
-        }
-        setInterval(function() {$.get(ctx + "/session/heartbeat");}, period);
-
     }
     ,
 

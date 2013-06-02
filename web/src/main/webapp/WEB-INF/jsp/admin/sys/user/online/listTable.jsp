@@ -19,6 +19,7 @@
             <th>User-Agent</th>
             <th>用户会话ID</th>
         </tr>
+        </thead>
         <tbody>
         <c:forEach items="${page.content}" var="m">
             <tr>
@@ -31,8 +32,8 @@
                 </td>
                 <td>${m.host}</td>
                 <td>${m.systemHost}</td>
-                <td><time:prettyTime date="${m.startTimestamp}"/></td>
-                <td><time:prettyTime date="${m.lastAccessTime}"/></td>
+                <td><pretty:prettyTime date="${m.startTimestamp}"/></td>
+                <td><pretty:prettyTime date="${m.lastAccessTime}"/></td>
                 <td>${m.status.info}</td>
                 <td>${m.userAgent}</td>
                 <td>${m.id}</td>

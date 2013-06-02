@@ -51,8 +51,8 @@ public class AuthRelationClearServiceIT extends BaseIT {
         executeSqlScript("sql/intergration-test-resource-permission-role-data.sql", false);
         //clear cache
         userService.delete(1L);
-        HibernateUtils.clearLevel1Cache(entityManager);
-        HibernateUtils.clearLevel2Cache(entityManager);
+        HibernateUtils.evictLevel1Cache(entityManager);
+        HibernateUtils.evictLevel2Cache(entityManager);
     }
 
 

@@ -49,12 +49,10 @@ class SimpleBaseRepositoryFactory<M, ID extends Serializable> extends JpaReposit
     protected Object getTargetRepository(RepositoryMetadata metadata) {
         Class<?> repositoryInterface = metadata.getRepositoryInterface();
 
-
         if (isBaseRepository(repositoryInterface)) {
 
             JpaEntityInformation<M, ID> entityInformation = getEntityInformation((Class<M>) metadata.getDomainType());
-            SimpleBaseRepository repository = new SimpleBaseRepository<M, ID>(entityInformation, entityManager) {
-            };
+            SimpleBaseRepository repository = new SimpleBaseRepository<M, ID>(entityInformation, entityManager);
 
             SearchableQuery searchableQuery = AnnotationUtils.findAnnotation(repositoryInterface, SearchableQuery.class);
             if (searchableQuery != null) {

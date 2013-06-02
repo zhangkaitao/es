@@ -37,6 +37,7 @@
         <th>性别</th>
         <th>是否显示</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

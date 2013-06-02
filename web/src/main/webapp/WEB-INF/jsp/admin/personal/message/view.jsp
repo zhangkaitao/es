@@ -21,7 +21,7 @@
     <es:showMessage/>
 
     <div class="control-group">
-        <span class="bold span2"><time:prettyTime date="${m.sendDate}"/></span>
+        <span class="bold span2"><pretty:prettyTime date="${m.sendDate}"/></span>
         <c:choose>
             <c:when test="${user.id eq m.senderId}">
                 我

@@ -21,6 +21,7 @@
 
         <th style="width: 150px">发送时间</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

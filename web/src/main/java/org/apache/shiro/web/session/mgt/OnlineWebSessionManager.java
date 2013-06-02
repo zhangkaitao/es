@@ -55,8 +55,15 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
     }
 
     private boolean needMarkAttributeChanged(Object attributeKey) {
+        if(attributeKey == null) {
+            return false;
+        }
+        String attributeKeyStr = attributeKey.toString();
         //优化 flash属性没必要持久化
-        if ("org.springframework.web.servlet.support.SessionFlashMapManager.FLASH_MAPS".equals(attributeKey)) {
+        if (attributeKeyStr.startsWith("org.springframework")) {
+            return false;
+        }
+        if(attributeKeyStr.startsWith("javax.servlet")) {
             return false;
         }
         return true;

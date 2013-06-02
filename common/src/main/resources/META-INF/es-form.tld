@@ -1481,7 +1481,7 @@
     <tag>
         <description>Renders an HTML 'textarea'.</description>
         <name>textarea</name>
-        <tag-class>org.springframework.web.servlet.tags.form.TextareaTag</tag-class>
+        <tag-class>com.sishuok.es.common.web.form.TextareaTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <description>Path to property for data binding</description>

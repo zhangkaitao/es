@@ -13,6 +13,7 @@
         <th style="width: 60px">登录次数</th>
         <th style="width: 80px">总在线时长</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>
@@ -21,10 +22,10 @@
             <td>${m.host}</td>
             <td>${m.systemHost}</td>
             <td>${m.userAgent}</td>
-            <td><time:prettyTime date="${m.lastLoginTimestamp}"/></td>
-            <td><time:prettyTime date="${m.lastStopTimestamp}"/></td>
+            <td><pretty:prettyTime date="${m.lastLoginTimestamp}"/></td>
+            <td><pretty:prettyTime date="${m.lastStopTimestamp}"/></td>
             <td>${m.loginCount}</td>
-            <td><time:prettySecond seconds="${m.totalOnlineTime}"/></td>
+            <td><pretty:prettySecond seconds="${m.totalOnlineTime}"/></td>
         </tr>
     </c:forEach>
     </tbody>

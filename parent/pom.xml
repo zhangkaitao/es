@@ -337,9 +337,9 @@
 
         <!-- data source 相关jar包-->
         <dependency>
-            <groupId>proxool</groupId>
-            <artifactId>proxool</artifactId>
-            <version>${proxool.version}</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
         </dependency>
         <!-- 日志相关jar包 -->
         <dependency>
@@ -719,7 +719,7 @@
         <slf4j.version>1.7.3</slf4j.version>
         <logback.version>1.0.10</logback.version>
 
-        <proxool.version>0.9.1</proxool.version>
+        <druid.version>0.2.20</druid.version>
         <jackson.version>2.1.2</jackson.version>
 
         <httpclient.version>4.2.2</httpclient.version>

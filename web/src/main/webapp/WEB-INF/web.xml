@@ -25,6 +25,9 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
+
+
+
     <!-- 设置通用的数据 -->
     <filter>
         <filter-name>SetCommonDataFilter</filter-name>
@@ -127,6 +130,15 @@
         <url-pattern>/jcaptcha.jpg</url-pattern>
     </filter-mapping>
 
+    <!-- druid监控 -->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/admin/monitor/druid/*</url-pattern>
+    </servlet-mapping>
 
 
     <!-- 浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http delete方法 -->

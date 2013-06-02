@@ -15,6 +15,7 @@
         <th style="width: 70px">是否有效</th>
         <th style="width: 60px">操作</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

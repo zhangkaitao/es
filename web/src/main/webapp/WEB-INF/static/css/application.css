@@ -326,12 +326,13 @@ html, body {
 
 .userinfo, .userinfo a, .userinfo .btn {
     font-size: 14px;
-    color: #cd0c0c;
+    color: #0099ff;
     font-weight: bold;
 }
 
-
-
+.userinfo .btn-message.unread {
+    color:#cd0c0c;
+}
 
 .userinfo .dropdown-menu {
     min-width: 80px;

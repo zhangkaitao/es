@@ -53,8 +53,10 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
-        Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
+        if(this.entityClass != null) {
+            InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
+            Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
+        }
     }
 
     /**

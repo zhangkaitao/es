@@ -25,6 +25,7 @@
 
         <th>角色列表</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>

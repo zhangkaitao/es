@@ -12,6 +12,7 @@
         <th sort="title">标题</th>
         <th>内容</th>
     </tr>
+    </thead>
     <tbody>
     <c:forEach items="${page.content}" var="m">
         <tr>
