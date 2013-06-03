@@ -25,9 +25,6 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
-
-
-
     <!-- 设置通用的数据 -->
     <filter>
         <filter-name>SetCommonDataFilter</filter-name>
@@ -63,7 +60,7 @@
         <filter-class>com.sishuok.es.common.web.filter.AccessLogFilter</filter-class>
         <init-param>
             <param-name>blackListURL</param-name>
-            <param-value>/static/**,/**/*.js,/**/*.css,/**/*.jpg,/**/*.gif,/**/*.png</param-value>
+            <param-value>/static/**,*.js,*.css,*.jpg,*.gif,*.png,*.ico,/admin/monitor/druid/**</param-value>
         </init-param>
         <init-param>
             <param-name>whiteListURL</param-name>
@@ -83,16 +80,6 @@
     </filter>
     <filter-mapping>
         <filter-name>DebugRequestAndResponseFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-
-    <filter>
-        <filter-name>openEntityManagerInViewFilter</filter-name>
-        <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>openEntityManagerInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
@@ -129,6 +116,43 @@
         <filter-name>JCaptchaFilter</filter-name>
         <url-pattern>/jcaptcha.jpg</url-pattern>
     </filter-mapping>
+
+    <!--druid 监控-->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>/static/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>principalSessionName</param-name>
+            <param-value>username</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--open session in view -->
+    <filter>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <filter-class>com.sishuok.es.common.web.filter.OpenEntityManagerInViewFilter</filter-class>
+        <init-param>
+            <param-name>blackListURL</param-name>
+            <param-value>/static/**,*.js,*.css,*.jpg,*.gif,*.png,*.ico,/admin/monitor/druid/**</param-value>
+        </init-param>
+        <init-param>
+            <param-name>whiteListURL</param-name>
+            <param-value>/**</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
     <!-- druid监控 -->
     <servlet>

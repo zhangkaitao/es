@@ -50,5 +50,6 @@ public interface Constants {
      * 当前登录的用户
      */
     String CURRENT_USER = "user";
+    String CURRENT_USERNAME = "username";
 
 }

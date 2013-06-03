@@ -196,5 +196,6 @@
     <import resource="spring-config-cache.xml"/>
     <import resource="spring-config-shiro.xml"/>
     <import resource="spring-config-quartz.xml"/>
+    <import resource="spring-config-monitor.xml"/>
 
 </beans>

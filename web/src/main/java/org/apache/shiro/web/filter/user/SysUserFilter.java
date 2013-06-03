@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -80,6 +81,8 @@ public class SysUserFilter extends AccessControlFilter {
         User user = userService.findByUsername(username);
         //把当前用户放到session中
         request.setAttribute(Constants.CURRENT_USER, user);
+        //druid监控需要
+        ((HttpServletRequest)request).getSession().setAttribute(Constants.CURRENT_USERNAME, username);
 
         return true;
     }

@@ -6,6 +6,7 @@
 package org.apache.shiro.web.session.mgt;
 
 import com.google.common.collect.Lists;
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.service.UserOnlineService;
 import org.apache.commons.lang3.time.DateUtils;
@@ -64,6 +65,9 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
             return false;
         }
         if(attributeKeyStr.startsWith("javax.servlet")) {
+            return false;
+        }
+        if(attributeKeyStr.equals(Constants.CURRENT_USERNAME)) {
             return false;
         }
         return true;
