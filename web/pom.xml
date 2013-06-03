@@ -69,7 +69,7 @@
             <plugin>
                 <groupId>com.googlecode</groupId>
                 <artifactId>maven-db-plugin</artifactId>
-                <version>1.3</version>
+                <version>1.4</version>
                 <configuration>
                     <adminDbConnectionSettings>
                         <jdbcDriver>${connection.driver_class}</jdbcDriver>
@@ -97,6 +97,7 @@
                     </dbCreateStatements>
                     <dbDropStatements>drop database ${db.name}; </dbDropStatements>
                     <sqlDelimiter>;;</sqlDelimiter>
+                    <scriptEncoding>UTF-8</scriptEncoding>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -163,7 +164,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <proxool.trace>true</proxool.trace>
                 <db.name>es</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
@@ -174,7 +174,7 @@
                 </connection.url>
                 <connection.username>root</connection.username>
                 <connection.password/>
-                <jpa.showSql>true</jpa.showSql>
+                <jpa.showSql>false</jpa.showSql>
                 <jpa.generateDdl>false</jpa.generateDdl>
                 <jpa.database>MYSQL</jpa.database>
                 <jpa.databasePlatform>org.hibernate.dialect.MySQL5InnoDBDialect</jpa.databasePlatform>
@@ -188,7 +188,6 @@
         <profile>
             <id>test</id>
             <properties>
-                <proxool.trace>true</proxool.trace>
                 <connection.driver_class>org.h2.Driver</connection.driver_class>
                 <connection.url><![CDATA[ jdbc:h2:mem:es;DB_CLOSE_DELAY=-1 ]]></connection.url>
                 <connection.username>sa</connection.username>
@@ -208,7 +207,6 @@
             <!--正式环境-->
             <id>production</id>
             <properties>
-                <proxool.trace>true</proxool.trace>
                 <db.name>es</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>

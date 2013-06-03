@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<configuration debug="true">
+<configuration debug="false">
 
     <!-- 控制台 -->
     <appender name="STDOUT"
@@ -48,7 +48,7 @@
         </encoder>
     </appender>
 
-    <root level="info">
+    <root level="error">
         <appender-ref ref="STDOUT"/>
     </root>
     <!--错误日志-->
