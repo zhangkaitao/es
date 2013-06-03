@@ -174,7 +174,7 @@
                 </connection.url>
                 <connection.username>root</connection.username>
                 <connection.password/>
-                <jpa.showSql>false</jpa.showSql>
+                <jpa.showSql>true</jpa.showSql>
                 <jpa.generateDdl>false</jpa.generateDdl>
                 <jpa.database>MYSQL</jpa.database>
                 <jpa.databasePlatform>org.hibernate.dialect.MySQL5InnoDBDialect</jpa.databasePlatform>
