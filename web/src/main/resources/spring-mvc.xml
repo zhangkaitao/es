@@ -9,8 +9,11 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd"
-       default-lazy-init="true">
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <bean class="com.sishuok.LazyInitAllBeanFactoryPostProcessor"/>
+
 
     <context:property-placeholder location="classpath:resources.properties"/>
 

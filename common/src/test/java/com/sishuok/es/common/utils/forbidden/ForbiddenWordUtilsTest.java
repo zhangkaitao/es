@@ -9,6 +9,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -75,6 +76,7 @@ public class ForbiddenWordUtilsTest {
         Assert.assertTrue(ForbiddenWordUtils.containsForbiddenWord(input));
     }
 
+    @Ignore
     @Test
     public void testFetch() throws Exception {
         String input = "12test32";
