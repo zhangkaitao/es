@@ -587,26 +587,11 @@
         </dependency>
 
         <!-- json 相关jar包 -->
+
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jackson-annotations</artifactId>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
 
         <!-- 安全相关jar包 -->
@@ -726,7 +711,7 @@
         <logback.version>1.0.13</logback.version>
 
         <druid.version>0.2.20</druid.version>
-        <jackson.version>2.1.2</jackson.version>
+        <fastjson.version>1.1.31</fastjson.version>
 
         <httpclient.version>4.2.2</httpclient.version>
 

@@ -1,12 +1,10 @@
 package com.sishuok.es.common.repository.hibernate.type;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,10 +23,10 @@ import java.util.Map;
  */
 public class JsonMapUserType implements UserType, Serializable {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+//    private static ObjectMapper objectMapper = new ObjectMapper();
 
     static {
-        objectMapper.enableDefaultTyping();
+//        objectMapper.enableDefaultTyping();
     }
 
     @Override
@@ -73,12 +71,14 @@ public class JsonMapUserType implements UserType, Serializable {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String json = rs.getString(names[0]);
-        try {
-            Map<Object, Object> map = objectMapper.readValue(json, HashMap.class);
-            return new JsonMap(map);
-        } catch (IOException e) {
-            throw new HibernateException(e);
-        }
+//        try {
+//            Map<Object, Object> map = objectMapper.readValue(json, HashMap.class);
+//            return new JsonMap(map);
+//        } catch (IOException e) {
+//            throw new HibernateException(e);
+//        }
+        Map<Object, Object> map = JSON.parseObject(json, HashMap.class);
+        return new JsonMap(map);
     }
 
     /**
@@ -90,11 +90,12 @@ public class JsonMapUserType implements UserType, Serializable {
         if (value == null) {
             st.setNull(index, Types.VARCHAR);
         } else {
-            try {
-                st.setString(index, objectMapper.writeValueAsString((((JsonMap) value).getMap())));
-            } catch (JsonProcessingException e) {
-                throw new HibernateException(e);
-            }
+//            try {
+//                st.setString(index, objectMapper.writeValueAsString((((JsonMap) value).getMap())));
+//            } catch (JsonProcessingException e) {
+//                throw new HibernateException(e);
+//            }
+            st.setString(index, JSON.toJSONString((((JsonMap) value).getMap())));
         }
     }
 

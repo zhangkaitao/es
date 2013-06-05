@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -21,7 +20,6 @@ import java.util.Date;
 @Table(name = "user_baseinfo")
 public class BaseInfo extends BaseEntity<Long> {
 
-    @JsonIgnore
     @OneToOne()
     @JoinColumn(name = "user_id", unique = true, nullable = false, updatable = false)
     private User user;

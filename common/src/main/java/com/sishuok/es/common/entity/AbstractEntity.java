@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.domain.Persistable;
 
@@ -35,7 +34,6 @@ public abstract class AbstractEntity<ID extends Serializable> implements Persist
      * @see org.springframework.data.domain.Persistable#isNew()
 
      */
-    @JsonIgnore
     public boolean isNew() {
 
         return null == getId();

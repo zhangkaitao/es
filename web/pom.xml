@@ -33,7 +33,13 @@
                             <!--<maxIdleTime>60000</maxIdleTime>-->
                         </connector>
                     </connectors>
-
+                    <!-- spring profile  -->
+                    <systemProperties>
+                        <systemProperty>
+                            <name>spring.profiles.active</name>
+                            <value>development</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
 
             </plugin>

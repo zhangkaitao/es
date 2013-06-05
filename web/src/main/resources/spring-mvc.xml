@@ -21,6 +21,7 @@
                                 expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
+
     <!-- 会自动注册了validator  ConversionService  -->
     <mvc:annotation-driven
             validator="validator"
@@ -47,12 +48,24 @@
                     </list>
                 </property>
             </bean>
+
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+                <!--<property name="serializerFeature">-->
+                <!--这个地方加上这个功能吧，能自己配置一些东西，比如时间的格式化，null输出""等等-->
+                <!--</property>-->
+            </bean>
         </mvc:message-converters>
 
         <mvc:argument-resolvers>
             <bean class="com.sishuok.es.common.web.bind.method.annotation.PageableMethodArgumentResolver"/>
             <bean class="com.sishuok.es.common.web.bind.method.annotation.SearchableMethodArgumentResolver"/>
-            <bean class="com.sishuok.es.common.web.bind.method.annotation.FormModelMethodArgumentResolver"/>
+            <!--<bean class="com.sishuok.es.common.web.bind.method.annotation.FormModelMethodArgumentResolver"/>-->
             <bean class="com.sishuok.es.sys.user.web.bind.method.CurrentUserMethodArgumentResolver"/>
         </mvc:argument-resolvers>
 
@@ -112,7 +125,8 @@
         <!-- 默认视图 放在解析链最后 -->
         <property name="defaultViews">
             <list>
-                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+                <!--<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>-->
+                <bean class="com.alibaba.fastjson.support.spring.FastJsonJsonView" />
                 <!--<bean class="org.springframework.web.servlet.view.xml.MarshallingView"/>-->
             </list>
         </property>

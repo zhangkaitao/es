@@ -85,11 +85,16 @@
         </property>
         <property name="jpaPropertyMap">
             <map>
+                <!-- 使用自定义的validator进行jsr303验证 -->
+                <entry key="javax.persistence.validation.factory" value-ref="validator"/>
+                <!-- jsr303验证模式 因为其要么验证 要么不验证 不能按照规则走 所以此处禁用 -->
+                <!-- #http://docs.jboss.org/hibernate/entitymanager/3.6/reference/en/html/configuration.html -->
+                <entry key="javax.persistence.validation.mode" value="NONE"/>
+
                 <!-- 只扫描class文件，不扫描hbm，默认两个都搜索 -->
                 <entry key="hibernate.archive.autodetection" value="class"/>
                 <!-- 不检查@NamedQuery -->
                 <entry key="hibernate.query.startup_check" value="false"/>
-
 
                 <entry key="hibernate.query.substitutions" value="${hibernate.query.substitutions}"/>
                 <entry key="hibernate.default_batch_fetch_size" value="${hibernate.default_batch_fetch_size}"/>

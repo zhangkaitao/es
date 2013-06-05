@@ -1,7 +1,6 @@
 package com.sishuok.es.common.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,15 +106,10 @@ public class LogUtils {
     }
 
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
 
     protected static String getParams(HttpServletRequest request) {
         Map<String, String[]> params = request.getParameterMap();
-        try {
-            return objectMapper.writeValueAsString(params);
-        } catch (JsonProcessingException e) {
-            return params.toString();
-        }
+        return JSON.toJSONString(params);
     }
 
     protected static String getUsername() {
