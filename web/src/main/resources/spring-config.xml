@@ -16,7 +16,7 @@
     <context:property-placeholder location="classpath:resources.properties"/>
 
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.sishuok.es.**.repository,com.sishuok.es.**.service,com.sishuok.es.**.extra">
+    <context:component-scan base-package="com.sishuok.es.**.service,com.sishuok.es.**.extra">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!-- 开启AOP监听 只对当前配置文件有效 -->
