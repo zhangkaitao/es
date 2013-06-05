@@ -10,7 +10,6 @@ import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
@@ -21,7 +20,6 @@ import java.util.Set;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
-@DependsOn("jobRepository")
 @Service
 public class JobService extends BaseTreeableService<Job, Long> {
 

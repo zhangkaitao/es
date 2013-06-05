@@ -12,12 +12,11 @@
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-    <bean class="com.sishuok.LazyInitAllBeanFactoryPostProcessor"/>
 
     <context:property-placeholder location="classpath:resources.properties"/>
 
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.sishuok.es">
+    <context:component-scan base-package="com.sishuok.es.**.repository,com.sishuok.es.**.service,com.sishuok.es.**.extra">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!-- 开启AOP监听 只对当前配置文件有效 -->
@@ -67,7 +66,7 @@
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.sishuok.es"/>
+        <property name="packagesToScan" value="com.sishuok.es.**.entity"/>
 
         <property name="persistenceUnitName" value="${jpa.persistenceUnitName}"/>
         <property name="persistenceProvider">
@@ -86,26 +85,26 @@
         </property>
         <property name="jpaPropertyMap">
             <map>
+                <!-- 只扫描class文件，不扫描hbm，默认两个都搜索 -->
+                <entry key="hibernate.archive.autodetection" value="class"/>
+                <!-- 不检查@NamedQuery -->
+                <entry key="hibernate.query.startup_check" value="false"/>
+
+
                 <entry key="hibernate.query.substitutions" value="${hibernate.query.substitutions}"/>
                 <entry key="hibernate.default_batch_fetch_size" value="${hibernate.default_batch_fetch_size}"/>
                 <entry key="hibernate.max_fetch_depth" value="${hibernate.max_fetch_depth}"/>
                 <entry key="hibernate.generate_statistics" value="${hibernate.generate_statistics}"/>
-                <entry key="hibernate.bytecode.use_reflection_optimizer"
-                       value="${hibernate.bytecode.use_reflection_optimizer}"/>
+                <entry key="hibernate.bytecode.use_reflection_optimizer" value="${hibernate.bytecode.use_reflection_optimizer}"/>
                 <entry key="hibernate.cache.use_second_level_cache" value="${hibernate.cache.use_second_level_cache}"/>
                 <entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}"/>
                 <entry key="hibernate.cache.region.factory_class" value="${hibernate.cache.region.factory_class}"/>
-                <entry key="net.sf.ehcache.configurationResourceName"
-                       value="${net.sf.ehcache.configurationResourceName}"/>
+                <entry key="net.sf.ehcache.configurationResourceName" value="${net.sf.ehcache.configurationResourceName}"/>
                 <entry key="hibernate.cache.use_structured_entries" value="${hibernate.cache.use_structured_entries}"/>
-                <!-- 使用自定义的validator进行jsr303验证 -->
-                <entry key="javax.persistence.validation.factory" value-ref="validator"/>
-                <!-- jsr303验证模式 因为其要么验证 要么不验证 不能按照规则走 所以此处禁用 -->
-                <entry key="javax.persistence.validation.mode" value="${javax.persistence.validation.mode}"/>
+
             </map>
         </property>
     </bean>
-
 
     <!--
         spring data jpa repository
@@ -115,7 +114,7 @@
 
     -->
     <jpa:repositories
-            base-package="com.sishuok.es"
+            base-package="com.sishuok.es.**.repository"
             repository-impl-postfix="Impl"
             factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
             entity-manager-factory-ref="entityManagerFactory"
@@ -130,7 +129,6 @@
 
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-
             <tx:method name="doReweight" propagation="REQUIRES_NEW"/>
             <tx:method name="doClear*" propagation="REQUIRES_NEW"/>
             <tx:method name="doSenn*" propagation="REQUIRES_NEW"/>
@@ -146,8 +144,8 @@
 
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
-        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok..service..*+.*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok.es..service..*+.*(..))"/>
+        <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
 
@@ -176,7 +174,7 @@
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
 
     <!-- 直接把id转换为entity 必须非lazy否则无法注册-->
-    <bean class="org.springframework.data.repository.support.DomainClassConverter" lazy-init="false">
+    <bean id="domainClassConverter" class="org.springframework.data.repository.support.DomainClassConverter">
         <constructor-arg ref="conversionService"/>
     </bean>
 
@@ -197,7 +195,7 @@
     <import resource="spring-config-cache.xml"/>
     <import resource="spring-config-quartz.xml"/>
     <import resource="spring-config-shiro.xml"/>
-
     <import resource="spring-config-monitor.xml"/>
+    <import resource="spring-speed-up.xml"/>
 
 </beans>

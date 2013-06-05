@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.index.web;
+package com.sishuok.es.index.web.controller;
 
 import com.sishuok.es.personal.service.MessageApi;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;

@@ -15,7 +15,6 @@ import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.repository.ResourceRepository;
 import com.sishuok.es.sys.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,7 +29,6 @@ import java.util.Set;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
-@DependsOn("resourceRepository")
 @Service
 public class ResourceService extends BaseTreeableService<Resource, Long> {
 

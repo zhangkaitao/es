@@ -7,7 +7,6 @@ package com.sishuok.es.sys.group.service;
 
 import com.sishuok.es.sys.group.repository.GroupRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
  * <p>Date: 13-5-13 下午5:35
  * <p>Version: 1.0
  */
-@DependsOn("groupRelationRepository")
 @Service
 public class GroupClearRelationService {
 

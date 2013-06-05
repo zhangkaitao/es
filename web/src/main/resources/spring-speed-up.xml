@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 优化spring启动 通过移除bean定义 和 lazy init 实现 -->
+    <bean class="com.sishuok.SpeedUpSpringProcessor">
+        <!-- 是否启用 此处可以通过如maven进行profile 根据不同的环境取不同的值 -->
+        <property name="enabled" value="true"/>
+        <!-- 需要从bean定义中移除的bean的名字 -->
+        <property name="removedBeanNames">
+            <list>
+                <!-- spring-config-quartz.xml -->
+                <value>scheduler</value>
+                <value>autoClearDeletedRelationTrigger</value>
+                <value>autoClearExpiredOrDeletedmMessageTrigger</value>
+                <value>autoClearDeletedRelationJob</value>
+                <value>autoClearExpiredOrDeletedmMessageJob</value>
+
+                <!-- spring-config-shiro.xml -->
+                <value>rememberMeCookie</value>
+                <value>rememberMeManager</value>
+                <value>shiroCacheManager</value>
+                <value>sessionValidationScheduler</value>
+                <value>sessionValidationScheduler</value>
+                <!-- spring-mvc.xml -->
+                <value>multipartResolver</value>
+
+                <!-- spring-config-monitor.xml -->
+                <value>druidStatInterceptor</value>
+                <value>druidAdvisor</value>
+
+
+
+            </list>
+        </property>
+        <!-- 需要从bean定义中移除的bean的属性 -->
+        <!--替换掉的属性值 see removedBeanProperties 只支持简单属性-->
+        <property name="removeOrReplaceBeanProperties">
+            <list>
+                <!-- spring-config-shiro.xml -->
+                <value>sessionManager#cacheManager</value>
+                <value>sessionManager#cacheManager</value>
+                <value>sessionManager#sessionValidationScheduler</value>
+                <value>securityManager#rememberMeManager</value>
+
+                <!-- spring-config.xml -->
+                <value>druidDataSource#initialSize</value>
+                <value>druidDataSource#minIdle</value>
+                <value>druidDataSource#maxActive</value>
+                <value>druidDataSource#maxWait</value>
+                <value>druidDataSource#timeBetweenEvictionRunsMillis</value>
+                <value>druidDataSource#minEvictableIdleTimeMillis</value>
+                <value>druidDataSource#validationQuery</value>
+                <value>druidDataSource#testWhileIdle</value>
+                <value>druidDataSource#testOnBorrow</value>
+                <value>druidDataSource#testOnReturn</value>
+                <value>druidDataSource#poolPreparedStatements=false</value>
+                <value>druidDataSource#maxPoolPreparedStatementPerConnectionSize</value>
+                <value>druidDataSource#filters</value>
+
+                <!-- spring-config.xml -->
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.default_batch_fetch_size"</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.max_fetch_depth"</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.generate_statistics</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.bytecode.use_reflection_optimizer</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_second_level_cache=false</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_query_cache</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.region.factory_class</value>
+                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_structured_entries</value>
+                <value>entityManagerFactory#jpaPropertyMap#net.sf.ehcache.configurationResourceName</value>
+            </list>
+        </property>
+
+        <!-- 需要从bean定义中移除指定的类类型 正则表达式-->
+        <property name="removedClassPatterns">
+            <list>
+                 <value>com\.sishuok\.es\.showcase.*</value>
+                 <value>com\.sishuok\.es\.monitor.*</value>
+                 <value>com\.sishuok\.es\.extra\.aop.*</value>
+                 <value>com\.sishuok\.es\.extra\.quartz.*</value>
+                 <value>com\.sishuok\.es\.conf.*</value>
+                 <value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>
+                 <!--<value>com\.sishuok\.es\.sys.*\.web\.controller.*</value>-->
+            </list>
+        </property>
+
+        <!-- 指定非延迟加载的bean-->
+        <property name="noneLazyBeanNames">
+            <list>
+                <value>domainClassConverter</value>
+            </list>
+        </property>
+    </bean>
+</beans>

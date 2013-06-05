@@ -32,6 +32,9 @@ import java.io.Serializable;
 public class SimpleBaseRepositoryFactoryBean<R extends JpaRepository<M, ID>, M, ID extends Serializable>
         extends JpaRepositoryFactoryBean<R, M, ID> {
 
+    public SimpleBaseRepositoryFactoryBean() {
+    }
+
     protected RepositoryFactorySupport createRepositoryFactory(EntityManager entityManager) {
         return new SimpleBaseRepositoryFactory(entityManager);
     }

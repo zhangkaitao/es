@@ -11,15 +11,11 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-
-    <bean class="com.sishuok.LazyInitAllBeanFactoryPostProcessor"/>
-
-
     <context:property-placeholder location="classpath:resources.properties"/>
 
     <!-- 开启controller注解支持 -->
     <!-- 注意事项请参考：http://jinnianshilongnian.iteye.com/blog/1762632 -->
-    <context:component-scan base-package="com.sishuok.es" use-default-filters="false">
+    <context:component-scan base-package="com.sishuok.es.**.web.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:include-filter type="annotation"
                                 expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
@@ -65,6 +61,7 @@
     <mvc:view-controller path="/" view-name="redirect:/admin/index"/>
     <!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
     <mvc:default-servlet-handler/>
+
     <!-- 静态资源映射 -->
     <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
 
@@ -75,6 +72,7 @@
             <constructor-arg ref="conversionService"/>
         </bean>
         <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor"/>
+        <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor"/>
         <!--<mvc:interceptor>-->
         <!--<mvc:mapping path="/**"/>-->
         <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
@@ -120,11 +118,9 @@
         </property>
     </bean>
 
-    <!-- bean name view resolver-->
-    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="1"/>
     <!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
     <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:order="2">
+          p:order="1">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="contentType" value="text/html"/>
         <property name="prefix" value="/WEB-INF/jsp/"/>
@@ -139,11 +135,11 @@
     </bean>
 
     <!-- 控制器异常处理 -->
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+    <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
         <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
     </bean>
-    <bean class="com.sishuok.es.extra.exception.web.DefaultExceptionHandler"/>
 
     <import resource="spring-mvc-shiro.xml"/>
+    <import resource="spring-speed-up.xml"/>
 
 </beans>

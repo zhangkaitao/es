@@ -5,7 +5,7 @@
  */
 package org.apache.shiro.realm;
 
-import com.sishuok.es.common.utils.SpringUtils;
+import com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean;
 import com.sishuok.es.sys.auth.service.UserAuthService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.exception.*;
@@ -17,6 +17,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 /**
  * <p>User: Zhang Kaitao
@@ -27,20 +28,20 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
-    //不能注入 因为获取bean依赖顺序问题造成可能拿不到某些bean报错 使用lazy的方式延迟加载
+    @Autowired
     private UserAuthService userAuthService;
 
     private static final Logger log = LoggerFactory.getLogger("es-error");
 
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public UserAuthService getUserAuthService() {
-        if (userAuthService == null) {
-            userAuthService = SpringUtils.getBean(UserAuthService.class);
-        }
-        return userAuthService;
+    @Autowired
+    public UserRealm(ApplicationContext ctx) {
+        super();
+        //不能注入 因为获取bean依赖顺序问题造成可能拿不到某些bean报错
+        //why？
+        //因为spring在查找findAutowireCandidates时对FactoryBean做了优化，即只获取Bean，但不会autowire属性，
+        //所以如果我们的bean在依赖它的bean之前初始化，那么就得不到ObjectType（永远是Repository）
+        //所以此处我们先getBean一下 就没有问题了
+        ctx.getBeansOfType(SimpleBaseRepositoryFactoryBean.class);
     }
 
     @Override
@@ -49,8 +50,8 @@ public class UserRealm extends AuthorizingRealm {
         User user = userService.findByUsername(username);
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(getUserAuthService().findStringRoles(user));
-        authorizationInfo.setStringPermissions(getUserAuthService().findStringPermissions(user));
+        authorizationInfo.setRoles(userAuthService.findStringRoles(user));
+        authorizationInfo.setStringPermissions(userAuthService.findStringPermissions(user));
 
         return authorizationInfo;
     }
@@ -108,7 +109,7 @@ public class UserRealm extends AuthorizingRealm {
 
         User user = null;
         try {
-            user = getUserService().login(username, password);
+            user = userService.login(username, password);
         } catch (UserNotExistsException e) {
             throw new UnknownAccountException(e.getMessage(), e);
         } catch (UserPasswordNotMatchException e) {

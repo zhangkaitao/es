@@ -11,7 +11,99 @@
             overflowToDisk="false">
     </defaultCache>
 
-    <cache name="com.javass.demo.model.UserModel"
+    <cache name="com.sishuok.es.sys.user.entity.User"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.user.entity.User.organizationJobs"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.user.entity.UserOrganizationJob"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.organization.entity.Job"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.organization.entity.Organization"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.permission.entity.Permission"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.permission.entity.Role"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.group.entity.Group"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.resource.entity.Resource"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.permission.entity.RoleResourcePermission"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.permission.entity.Role.resourcePermissions"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.auth.entity.Auth"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+
+    <cache name="com.sishuok.es.sys.user.entity.UserOnline"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           overflowToDisk="false">
+    </cache>
+    <cache name="com.sishuok.es.sys.user.entity.UserLastOnline"
            maxElementsInMemory="2000"
            eternal="false"
            timeToIdleSeconds="3600"
@@ -21,17 +113,18 @@
 
 
     <cache
-            name="org.hibernate.cache.StandardQueryCache"
+            name="org.hibernate.cache.internal.StandardQueryCache"
             maxElementsInMemory="5000"
             eternal="false"
             timeToLiveSeconds="3600"
             overflowToDisk="false"/>
 
     <cache
-            name="org.hibernate.cache.UpdateTimestampsCache"
+            name="org.hibernate.cache.spi.UpdateTimestampsCache"
             maxElementsInMemory="5000"
             eternal="true"
             overflowToDisk="true"/>
+
 
 
 </ehcache>

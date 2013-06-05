@@ -20,5 +20,5 @@
 * install.bat 安装jar包到本地仓库
 * create-db.bat 创建数据库
 * refresh-db.bat 创建schema和初始化data
-* jetty启动web应用 默认端口9080 可以到es/web/pom.xml下修改
+* jetty.bat 启动web应用 默认端口9080 可以到es/web/pom.xml下修改
 

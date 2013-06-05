@@ -10,7 +10,6 @@ import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.repository.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
  * <p>Date: 13-2-4 下午3:01
  * <p>Version: 1.0
  */
-@DependsOn("permissionRepository")
 @Service
 public class PermissionService extends BaseService<Permission, Long> {
 

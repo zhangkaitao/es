@@ -12,7 +12,6 @@ import com.sishuok.es.personal.entity.MessageState;
 import com.sishuok.es.personal.repository.MessageRepository;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import java.util.Date;
  * <p>Date: 13-5-22 下午2:40
  * <p>Version: 1.0
  */
-@DependsOn("messageRepository")
 @Service
 public class MessageService extends BaseService<Message, Long> {
 

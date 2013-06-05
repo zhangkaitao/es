@@ -54,6 +54,13 @@
         <property name="cacheManager" ref="springCacheManager"/>
     </bean>
 
+    <!-- 会话验证调度 -->
+    <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+        <property name="sessionValidationInterval" value="${shiro.session.validation.interval}"/>
+        <property name="sessionManager" ref="sessionManager"/>
+        <!-- see spring-config-quartz.xml-->
+        <property name="scheduler" ref="scheduler"/>
+    </bean>
     <!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.OnlineWebSessionManager">
         <property name="globalSessionTimeout" value="${shiro.session.globalSessionTimeout}"></property>
@@ -64,14 +71,7 @@
 
         <property name="sessionValidationInterval" value="${shiro.session.globalSessionTimeout}"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
-        <property name="sessionValidationScheduler"><!-- 会话验证调度 -->
-            <bean class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
-                <property name="sessionValidationInterval" value="${shiro.session.validation.interval}"/>
-                <property name="sessionManager" ref="sessionManager"/>
-                <!-- see spring-config-quartz.xml-->
-                <property name="scheduler" ref="scheduler"/>
-            </bean>
-        </property>
+        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
 
         <property name="cacheManager" ref="shiroCacheManager"/>
         <property name="sessionIdCookieEnabled" value="true"/>

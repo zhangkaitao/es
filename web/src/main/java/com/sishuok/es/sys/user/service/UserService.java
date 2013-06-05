@@ -23,7 +23,6 @@ import com.sishuok.es.sys.user.repository.UserRepository;
 import com.sishuok.es.sys.user.utils.UserLogUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,6 @@ import java.util.Set;
  * <p>Version: 1.0
  */
 @Service
-@DependsOn(value = {"userRepository", "userOnlineRepository", "userLastOnlineRepository", "userStatusHistoryRepository"})
 public class UserService extends BaseService<User, Long> {
 
     @Autowired
