@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok;
+package com.sishuok.es.common.spring;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -30,8 +30,6 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
 
     private final Logger log = LoggerFactory.getLogger(SpeedUpSpringProcessor.class);
 
-    private boolean enabled;
-
     private String[] removedClassPatterns;
     private String[] includeClassPatterns;
 
@@ -41,15 +39,6 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
     private Map<String, String> replaceBeanProperties;
 
     private String[] noneLazyBeanNames;
-
-
-    /**
-     * 设置是否启用
-     * @param enabled
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 
     /**
      * 设置需要排除的bean的类的正则表达式
@@ -124,9 +113,7 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        if(!enabled) {
-            return;
-        }
+
         if(!(beanFactory instanceof DefaultListableBeanFactory)) {
             log.error("if speed up spring, bean factory must be type of DefaultListableBeanFactory");
             return;

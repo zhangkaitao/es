@@ -25,7 +25,7 @@
 
     <!-- 数据源 -->
     <!--see https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_DruidDataSource%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE-->
-    <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!-- 基本属性 url、user、password -->
         <property name="url" value="${connection.url}"/>
         <property name="username" value="${connection.username}"/>
@@ -58,14 +58,14 @@
 
     </bean>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
-        <property name="targetDataSource" ref="druidDataSource"/>
+    <bean id="dataSourceProxy" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
+        <property name="targetDataSource" ref="dataSource"/>
     </bean>
 
     <!-- jpa Entity Factory 配置 -->
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="dataSourceProxy"/>
         <property name="packagesToScan" value="com.sishuok.es.**.entity"/>
 
         <property name="persistenceUnitName" value="${jpa.persistenceUnitName}"/>

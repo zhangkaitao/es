@@ -7,10 +7,14 @@
 
     <!-- 启动时加 spring.profiles.active=development -->
 
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="${connection.url}"/>
+        <property name="username" value="${connection.username}"/>
+        <property name="password" value="${connection.password}"/>
+    </bean>
+
     <!-- 优化spring启动 通过移除bean定义 和 lazy init 实现 -->
-    <bean class="com.sishuok.SpeedUpSpringProcessor">
-        <!-- 是否启用 此处可以通过如maven进行profile 根据不同的环境取不同的值 -->
-        <property name="enabled" value="true"/>
+    <bean class="com.sishuok.es.common.spring.SpeedUpSpringProcessor">
         <!-- 需要从bean定义中移除的bean的名字 -->
         <property name="removedBeanNames">
             <list>
@@ -47,21 +51,6 @@
                 <value>sessionManager#cacheManager</value>
                 <value>sessionManager#sessionValidationScheduler</value>
                 <value>securityManager#rememberMeManager</value>
-
-                <!-- spring-config.xml -->
-                <value>druidDataSource#initialSize</value>
-                <value>druidDataSource#minIdle</value>
-                <value>druidDataSource#maxActive</value>
-                <value>druidDataSource#maxWait</value>
-                <value>druidDataSource#timeBetweenEvictionRunsMillis</value>
-                <value>druidDataSource#minEvictableIdleTimeMillis</value>
-                <value>druidDataSource#validationQuery</value>
-                <value>druidDataSource#testWhileIdle</value>
-                <value>druidDataSource#testOnBorrow</value>
-                <value>druidDataSource#testOnReturn</value>
-                <value>druidDataSource#poolPreparedStatements=false</value>
-                <value>druidDataSource#maxPoolPreparedStatementPerConnectionSize</value>
-                <value>druidDataSource#filters</value>
 
                 <!-- spring-config.xml -->
                 <value>entityManagerFactory#jpaPropertyMap#hibernate.default_batch_fetch_size"</value>
