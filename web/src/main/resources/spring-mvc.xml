@@ -65,7 +65,7 @@
         <mvc:argument-resolvers>
             <bean class="com.sishuok.es.common.web.bind.method.annotation.PageableMethodArgumentResolver"/>
             <bean class="com.sishuok.es.common.web.bind.method.annotation.SearchableMethodArgumentResolver"/>
-            <!--<bean class="com.sishuok.es.common.web.bind.method.annotation.FormModelMethodArgumentResolver"/>-->
+            <bean class="com.sishuok.es.common.web.bind.method.annotation.FormModelMethodArgumentResolver"/>
             <bean class="com.sishuok.es.sys.user.web.bind.method.CurrentUserMethodArgumentResolver"/>
         </mvc:argument-resolvers>
 

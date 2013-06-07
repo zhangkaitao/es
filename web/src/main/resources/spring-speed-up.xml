@@ -53,10 +53,6 @@
                 <value>securityManager#rememberMeManager</value>
 
                 <!-- spring-config.xml -->
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.default_batch_fetch_size"</value>
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.max_fetch_depth"</value>
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.generate_statistics</value>
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.bytecode.use_reflection_optimizer</value>
                 <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_second_level_cache=false</value>
                 <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_query_cache</value>
                 <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.region.factory_class</value>
@@ -69,12 +65,12 @@
         <property name="removedClassPatterns">
             <list>
                  <value>com\.sishuok\.es\.showcase.*</value>
-                 <value>com\.sishuok\.es\.monitor.*</value>
+                 <!--<value>com\.sishuok\.es\.monitor.*</value>-->
                  <value>com\.sishuok\.es\.extra\.aop.*</value>
                  <value>com\.sishuok\.es\.extra\.quartz.*</value>
                  <value>com\.sishuok\.es\.conf.*</value>
-                 <!--<value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>-->
-                 <!--<value>com\.sishuok\.es\.sys.*\.web\.controller.*</value>-->
+                 <value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>
+                 <value>com\.sishuok\.es\.sys.*\.web\.controller.*</value>
             </list>
         </property>
 

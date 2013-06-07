@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.monitor.web;
+package com.sishuok.es.monitor.web.controller;
 
 import com.sishuok.es.common.web.controller.BaseController;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class JvmMonitorController extends BaseController {
     @RequestMapping("")
     public String index() {
         return viewName("index");
-
     }
+
 
 }

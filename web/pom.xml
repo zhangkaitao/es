@@ -22,7 +22,8 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
-                    <scanIntervalSeconds>2</scanIntervalSeconds>
+                    <reload>manual</reload>
+                    <!--<scanIntervalSeconds>2</scanIntervalSeconds>-->
                     <stopPort>9999</stopPort>
                     <webAppConfig>
                         <contextPath>/${project.build.finalName}</contextPath>
@@ -41,7 +42,6 @@
                         </systemProperty>
                     </systemProperties>
                 </configuration>
-
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.monitor.web;
+package com.sishuok.es.monitor.web.controller;
 
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
