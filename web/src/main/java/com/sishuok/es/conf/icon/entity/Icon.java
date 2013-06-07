@@ -6,7 +6,6 @@
 package com.sishuok.es.conf.icon.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 import javax.persistence.*;
 
@@ -100,7 +99,6 @@ public class Icon extends BaseEntity<Long> {
     }
 
     public String getImgSrc() {
-        DefaultListableBeanFactory.
         return imgSrc;
     }
 
