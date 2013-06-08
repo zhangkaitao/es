@@ -10,7 +10,7 @@
         <div class="control-group">
             <label class="control-label">父节点名称</label>
             <div class="controls">
-                <conf:showIcon iconIdentity="${parent.icon}"/>
+                <maintain:showIcon iconIdentity="${parent.icon}"/>
                 ${parent.name}
             </div>
         </div>
@@ -47,7 +47,7 @@
 </form:form>
 </div>
 <es:contentFooter/>
-<%@include file="/WEB-INF/jsp/common/admin/import-conf-js.jspf"%>
+<%@include file="/WEB-INF/jsp/common/admin/import-maintain-js.jspf"%>
 <script type="text/javascript">
 $(function () {
     $.validationEngineLanguage.allRules.name = {
@@ -57,7 +57,7 @@ $(function () {
     var validationEngine = $("#appendChildForm").validationEngine();
     <es:showFieldError commandName="child"/>
 
-    $.conf.icon.initIconList($("#icon"));
+    $.maintain.icon.initIconList($("#icon"));
 
 });
 </script>

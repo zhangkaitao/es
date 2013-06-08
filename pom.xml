@@ -60,6 +60,11 @@
             <url>http://repo.springsource.org/release/</url>
         </repository>
         <repository>
+            <id>springsource-repo-snapshot</id>
+            <name>SpringSource Repository</name>
+            <url>http://repo.springsource.org/snapshot/</url>
+        </repository>
+        <repository>
             <id>cloudhopper</id>
             <name>Repository for Cloudhopper</name>
             <url>http://maven.cloudhopper.com/repos/third-party/</url>

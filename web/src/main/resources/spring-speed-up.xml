@@ -64,13 +64,13 @@
         <!-- 需要从bean定义中移除指定的类类型 正则表达式-->
         <property name="removedClassPatterns">
             <list>
-                 <value>com\.sishuok\.es\.showcase.*</value>
+                 <!--<value>com\.sishuok\.es\.showcase.*</value>-->
                  <!--<value>com\.sishuok\.es\.monitor.*</value>-->
                  <value>com\.sishuok\.es\.extra\.aop.*</value>
                  <value>com\.sishuok\.es\.extra\.quartz.*</value>
-                 <value>com\.sishuok\.es\.conf.*</value>
-                 <value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>
-                 <value>com\.sishuok\.es\.sys.*\.web\.controller.*</value>
+                 <!--<value>com\.sishuok\.es\.maintain.*</value>-->
+                 <!--<value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>-->
+                 <!--<value>com\.sishuok\.es\.sys.*\.web\.controller.*</value>-->
             </list>
         </property>
 

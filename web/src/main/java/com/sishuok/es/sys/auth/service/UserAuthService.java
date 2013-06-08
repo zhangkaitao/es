@@ -137,8 +137,10 @@ public class UserAuthService {
             for (RoleResourcePermission rrp : role.getResourcePermissions()) {
                 Resource resource = resourceService.findOne(rrp.getResourceId());
 
+                String actualResourceIdentity = resourceService.findActualResourceIdentity(resource);
+
                 //不可用 即没查到 或者标识字符串不存在
-                if (resource == null || StringUtils.isEmpty(resource.getIdentity()) || Boolean.FALSE.equals(resource.getShow())) {
+                if (resource == null || StringUtils.isEmpty(actualResourceIdentity) || Boolean.FALSE.equals(resource.getShow())) {
                     continue;
                 }
 
@@ -149,10 +151,11 @@ public class UserAuthService {
                     if (permission == null || Boolean.FALSE.equals(permission.getShow())) {
                         continue;
                     }
+                    permissions.add(actualResourceIdentity + ":" + permission.getPermission());
 
-                    permissions.add(resource.getIdentity() + ":" + permission.getPermission());
                 }
             }
+
         }
 
         return permissions;

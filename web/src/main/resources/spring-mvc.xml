@@ -27,7 +27,8 @@
             validator="validator"
             conversion-service="conversionService"
             content-negotiation-manager="contentNegotiationManager"
-            enableMatrixVariables="true">
+            >
+        <!--enableMatrixVariables="true">-->
 
         <mvc:message-converters register-defaults="true">
             <!-- StringHttpMessageConverter编码为UTF-8，防止乱码 -->
@@ -53,7 +54,7 @@
             <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
-                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
                     </list>
                 </property>
                 <!--<property name="serializerFeature">-->

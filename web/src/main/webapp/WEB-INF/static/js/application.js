@@ -44,9 +44,20 @@ $.app = {
             var fiveMinute = 5 * 60 * 1000;
             var url = ctx + "/admin/personal/message/unreadCount";
             setInterval(function() {
-                $.get(url, function(data) {
-                    clearInterval(messageBtnInterval);
-                    activeUnreadIcon(data);
+
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "html",
+                    global : false,
+                    cache : false,
+                    success: function (data) {
+                        clearInterval(messageBtnInterval);
+                        activeUnreadIcon(data);
+                    },
+                    error: function (xmlHR, textStatus, errorThrown) {
+                        //ignore
+                    }
                 });
             }, fiveMinute);
         };
@@ -268,14 +279,34 @@ $.app = {
                 .replace("{okTitle}", options.okTitle));
 
 
+        var hasBtnClick = false;
         if(options.alert) {
             modalDom.find(".modal-footer > .btn-cancel").remove();
         } else {
-            modalDom.find(".modal-footer > .btn-cancel").click(options.cancel);
+            modalDom.find(".modal-footer > .btn-cancel").click(function() {
+                hasBtnClick = true;
+                options.cancel();
+            });
         }
-        modalDom.find(".modal-footer > .btn-ok").click(options.ok);
+        modalDom.find(".modal-footer > .btn-ok").click(function() {
+            hasBtnClick = true;
+            options.ok();
+        });
 
-        return modalDom.modal();
+        var modal = modalDom.modal();
+
+        modal.on("hidden", function() {
+            if(hasBtnClick) {
+                return;
+            }
+            if(options.alert) {
+                options.ok();
+            } else {
+                options.cancel();
+            }
+        });
+
+        return modal;
     }
     ,
     isImage : function(filename) {
@@ -1607,7 +1638,6 @@ $.table = {
             return;
         }
         var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-update");
-
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getFirstSelectedCheckbox($table);

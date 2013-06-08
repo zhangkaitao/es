@@ -89,4 +89,7 @@ public class PasswordService {
     }
 
 
+    public static void main(String[] args) {
+        System.out.println(new PasswordService().encryptPassword("maintain", "123456", "iY71e4dtoa"));
+    }
 }

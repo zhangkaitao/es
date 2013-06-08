@@ -25,7 +25,7 @@
         <div class="control-group">
             <form:label path="icon" cssClass="control-label">图标</form:label>
             <div class="controls">
-                <form:input path="icon" cssClass="input-medium"/><conf:showIcon iconIdentity="${m.icon}"/>
+                <form:input path="icon" cssClass="input-medium"/><maintain:showIcon iconIdentity="${m.icon}"/>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
     </form:form>
 </div>
 <es:contentFooter/>
-<%@include file="/WEB-INF/jsp/common/admin/import-conf-js.jspf"%>
+<%@include file="/WEB-INF/jsp/common/admin/import-maintain-js.jspf"%>
 <script type="text/javascript">
     $(function () {
         <c:choose>
@@ -82,7 +82,7 @@
             </c:otherwise>
         </c:choose>
 
-        $.conf.icon.initIconList($("#icon"));
+        $.maintain.icon.initIconList($("#icon"));
 
     });
 </script>

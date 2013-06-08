@@ -16,7 +16,7 @@
             <label class="control-label">源节点</label>
             <div class="controls">
                 <span class="help-inline" style="padding: 4px;">
-                    <conf:showIcon iconIdentity="${source.icon}"/>
+                    <maintain:showIcon iconIdentity="${source.icon}"/>
                     ${source.name}
                 </span>
             </div>

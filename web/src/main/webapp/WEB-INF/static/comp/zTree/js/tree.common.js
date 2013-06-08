@@ -44,8 +44,6 @@ $.zTree = {
             move : false
         }, config.permission);
 
-        console.info(config.permission);
-
 
         var setting = {
             noSwitchIcon:true,
