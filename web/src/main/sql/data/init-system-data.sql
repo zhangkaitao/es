@@ -49,6 +49,11 @@ insert into `sys_user`
   values
   (9, 'audit', 'audit@sishuok.com', '13412345679', '15d8f7b8da8045d24c71a92a142ffad7', 'BI2XbXMUr7', sysdate(), 'normal', 1, 0);;
 
+insert into `sys_user`
+(`id`, `username`, `email`, `mobile_phone_number`, `password`, `salt`, `create_date`, `status`, `admin`, `deleted`)
+  values
+  (10, 'monitor', 'monitor@sishuok.com', '1341234580', 'e1549e68ad21fe888ae36ec4965116cd', 'iY71e4d123', sysdate(), 'normal', 1, 0);;
+
 
 delete from `sys_organization` where id>=1 and id<=1000;;
 insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '组织机构', true);;
@@ -143,11 +148,14 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
          values (39, 1, '0/1/', 6, '系统监控', 'monitor', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (40, 39, '0/1/39/', 1, '数据库监控', '', '/admin/monitor/druid/index.html', true);;
+         values (40, 39, '0/1/39/', 1, '在线用户列表', '', '/admin/sys/user/online', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (41, 39, '0/1/39/', 2, 'hibernate监控', '', '/admin/monitor/hibernate', true);;
+         values (41, 39, '0/1/39/', 2, '数据库监控', '', '/admin/monitor/druid/index.html', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (42, 39, '0/1/39/', 3, 'jmv监控', '', '/admin/monitor/jvm', true);;
+         values (42, 39, '0/1/39/', 3, 'hibernate监控', '', '/admin/monitor/hibernate', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+         values (43, 39, '0/1/39/', 4, 'jmv监控', '', '/admin/monitor/jvm', true);;
+
 
 
 
@@ -169,6 +177,7 @@ insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (6, 
 insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (7,  '删除管理员', 'delete_admin', '拥有删除/查看管理的所有权限', 1);;
 insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (8,  '查看管理员', 'view_admin', '拥有查看管理的所有权限', 1);;
 insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (9,  '审核管理员', 'audit_admin', '拥有审核管理的所有权限', 1);;
+insert into `sys_role` (`id`, `name`, `role`, `description`, `show`) values (10,  '监控管理员', 'audit_admin', '拥有审核管理的所有权限', 1);;
 
 delete from `sys_role_resource_permission` where id>=1 and id<=1000;;
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(1, 1, 2, '1');;
@@ -204,6 +213,8 @@ insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `per
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(25, 9, 14, '5,6');;
 insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(26, 9, 15, '5,6');;
 
+insert into `sys_role_resource_permission` (`id`, `role_id`, `resource_id`, `permission_ids`) values(27, 10, 39, '1');;
+
 
 
 delete from `sys_auth` where id>=1 and id<=1000;;
@@ -225,3 +236,5 @@ insert into sys_auth (`id`, `organization_id`, `job_id`, `user_id`, `group_id`, 
   values(8, 0, 0, 8, 0, '8', 'user');;
 insert into sys_auth (`id`, `organization_id`, `job_id`, `user_id`, `group_id`, `role_ids`, `type`)
   values(9, 0, 0, 9, 0, '9', 'user');;
+insert into sys_auth (`id`, `organization_id`, `job_id`, `user_id`, `group_id`, `role_ids`, `type`)
+  values(10, 0, 0, 10, 0, '10', 'user');;

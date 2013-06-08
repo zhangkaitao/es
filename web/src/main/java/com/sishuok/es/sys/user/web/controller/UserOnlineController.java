@@ -5,14 +5,19 @@
  */
 package com.sishuok.es.sys.user.web.controller;
 
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
+import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.service.UserOnlineService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.session.mgt.OnlineSession;
 import org.apache.shiro.session.mgt.eis.OnlineSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -33,13 +38,23 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
     private OnlineSessionDAO onlineSessionDAO;
 
     public UserOnlineController() {
-        setResourceIdentity("sys:userOnline");
+    }
+
+
+    @Override
+    public String list(Searchable searchable, Model model) {
+        if (!SecurityUtils.getSubject().isPermitted("sys:userOnline or monitor")) {
+            throw new UnauthorizedException(MessageUtils.message("no.view.permission", "sys:userOnline或monitor"));
+        }
+        return super.list(searchable, model);
     }
 
     @RequestMapping("/forceLogout")
     public String forceLogout(@RequestParam(value = "ids") String[] ids) {
 
-        this.permissionList.assertHasEditPermission();
+        if (!SecurityUtils.getSubject().isPermitted("sys:userOnline or monitor")) {
+            throw new UnauthorizedException(MessageUtils.message("no.view.permission", "sys:userOnline或monitor"));
+        }
 
         for (String id : ids) {
             UserOnline online = userOnlineService.findOne(id);

@@ -154,6 +154,8 @@
         <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
     </bean>
 
+    <bean class="com.sishuok.es.extra.exception.web.DefaultExceptionHandler"/>
+
     <import resource="spring-mvc-shiro.xml"/>
     <import resource="spring-speed-up.xml"/>
 
