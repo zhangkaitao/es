@@ -3,10 +3,9 @@
 <configuration debug="false">
 
     <!-- 控制台 -->
-    <appender name="STDOUT"
-              class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
     <!-- 出错日志 appender  -->
@@ -19,7 +18,7 @@
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
     <!-- 访问日志 appender  -->
@@ -31,7 +30,7 @@
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -44,13 +43,12 @@
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <root level="info"/>
+
     <!--错误日志-->
     <logger name="es-error" level="info">
         <appender-ref ref="ERROR"/>
@@ -62,6 +60,11 @@
     <!--系统用户操作日志-->
     <logger name="es-sys-user" level="info">
         <appender-ref ref="SYS-USER"/>
+    </logger>
+
+    <!-- cache -->
+    <logger name="com.sishuok.es.extra.aop" level="debug">
+            <appender-ref ref="STDOUT"/>
     </logger>
 
 </configuration>

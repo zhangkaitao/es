@@ -145,13 +145,16 @@ public class UserCacheAspect extends BaseCacheAspect {
         } else {
             Long id = get(key);
             if (id != null) {
-                user = get(idKey(String.valueOf(id)));
+                key = idKey(String.valueOf(id));
+                user = get(key);
             }
         }
         //cache hit
         if (user != null) {
+            log.debug("cacheName:{}, hit key:{}", cacheName, key);
             return user;
         }
+        log.debug("cacheName:{}, miss key:{}", cacheName, key);
 
         //cache miss
         user = (User) pjp.proceed();

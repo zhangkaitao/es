@@ -14,8 +14,8 @@
     <table class="table table-bordered">
         <tbody>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">二级缓存统计（实体&集合缓存，不包括查询）</td>
+        <tr class="bold info">
+            <td colspan="2">二级缓存统计（实体&集合缓存，不包括查询）</td>
         </tr>
         <c:set var="secondLevelCacheCount"
                value="${statistics.secondLevelCacheHitCount + statistics.secondLevelCacheMissCount}"/>
@@ -46,8 +46,8 @@
             <td>${statistics.secondLevelCachePutCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">内存情况</td>
+        <tr class="bold info">
+            <td colspan="2">内存情况</td>
         </tr>
         <tr>
             <td style="width: 30%">当前系统使用内存:</td>
@@ -113,8 +113,8 @@
         <c:set var="totalCount" value="${totalCount > 0 ? totalCount : 1}"/>
         <c:set var="cacheHitPercent" value="${secondLevelCacheStatistics.hitCount * 1.0 / (totalCount)}"/>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">${secondLevelCacheRegionName}</td>
+        <tr class="bold info">
+            <td colspan="2">${secondLevelCacheRegionName}</td>
         </tr>
         <tr>
             <td style="width: 30%">总命中率:</td>

@@ -6,8 +6,8 @@
 
     <table class="table table-bordered">
         <tbody>
-        <tr>
-            <td colspan="2" class="bold prettyprint">事务统计</td>
+        <tr class="bold info">
+            <td colspan="2">事务统计</td>
         </tr>
         <tr>
             <td style="width: 30%">执行的事务次数:</td>
@@ -18,8 +18,8 @@
             <td>${statistics.successfulTransactionCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">连接统计</td>
+        <tr class="bold info">
+            <td colspan="2">连接统计</td>
         </tr>
 
         <tr>
@@ -42,8 +42,8 @@
             <td>${statistics.optimisticFailureCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">Session统计</td>
+        <tr class="bold info">
+            <td colspan="2">Session统计</td>
         </tr>
         <tr>
             <td>Session打开的次数:</td>
@@ -65,8 +65,8 @@
             <td>${statistics.flushCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">二级缓存统计（实体&集合缓存，不包括查询）</td>
+        <tr class="bold info">
+            <td colspan="2">二级缓存统计（实体&集合缓存，不包括查询）</td>
         </tr>
         <c:set var="secondLevelCacheCount"
                value="${statistics.secondLevelCacheHitCount + statistics.secondLevelCacheMissCount}"/>
@@ -97,8 +97,8 @@
             <td>${statistics.secondLevelCachePutCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">内存情况</td>
+        <tr class="bold info">
+            <td colspan="2">内存情况</td>
         </tr>
         <tr>
             <td style="width: 30%">当前系统使用内存:</td>
@@ -132,8 +132,8 @@
         </tr>
 
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">实体CRUD统计</td>
+        <tr class="bold info">
+            <td colspan="2">实体CRUD统计</td>
         </tr>
         <tr>
             <td>实体delete次数:</td>
@@ -156,8 +156,8 @@
             <td>${statistics.entityFetchCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">集合CRUD统计</td>
+        <tr class="bold info">
+            <td colspan="2">集合CRUD统计</td>
         </tr>
         <tr>
             <td>集合remove次数:</td>
@@ -185,8 +185,8 @@
         </tr>
 
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">查询缓存统计</td>
+        <tr class="bold info">
+            <td colspan="2">查询缓存统计</td>
         </tr>
         <tr>
             <td>查询总执行次数:</td>
@@ -230,8 +230,8 @@
             </td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">UpdateTimestamp缓存统计</td>
+        <tr class="bold info">
+            <td colspan="2">UpdateTimestamp缓存统计</td>
         </tr>
         <c:set var="updateTimestampsCacheCount"
                value="${statistics.updateTimestampsCacheHitCount + statistics.updateTimestampsCacheMissCount}"/>
@@ -259,8 +259,8 @@
             </td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">jpa配置</td>
+        <tr class="bold info">
+            <td colspan="2">jpa配置</td>
         </tr>
         <c:forEach items="${properties}" var="entry">
             <c:if test="${fn:startsWith(entry.key, 'hibernate') or fn:startsWith(entry.key, 'javax') or fn:startsWith(entry.key, 'net')}">
@@ -273,8 +273,8 @@
             </c:if>
         </c:forEach>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">加载的实体</td>
+        <tr class="bold info">
+            <td colspan="2">加载的实体</td>
         </tr>
         <c:forEach items="${sessionFactory.allClassMetadata}" var="entry">
 

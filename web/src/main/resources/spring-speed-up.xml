@@ -66,7 +66,7 @@
             <list>
                  <!--<value>com\.sishuok\.es\.showcase.*</value>-->
                  <!--<value>com\.sishuok\.es\.monitor.*</value>-->
-                 <value>com\.sishuok\.es\.extra\.aop.*</value>
+                 <!--<value>com\.sishuok\.es\.extra\.aop.*</value>-->
                  <value>com\.sishuok\.es\.extra\.quartz.*</value>
                  <!--<value>com\.sishuok\.es\.maintain.*</value>-->
                  <!--<value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>-->

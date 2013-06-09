@@ -11,8 +11,8 @@
     <h3>总体</h3>
     <table class="table table-bordered">
         <tbody>
-        <tr>
-            <td colspan="2" class="bold prettyprint">实体缓存统计</td>
+        <tr class="bold info">
+            <td colspan="2">实体缓存统计</td>
         </tr>
         <tr>
             <td style="width: 30%">实体delete次数:</td>
@@ -35,8 +35,8 @@
             <td>${statistics.entityFetchCount}</td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">集合缓存统计</td>
+        <tr class="bold info">
+            <td colspan="2">集合缓存统计</td>
         </tr>
         <tr>
             <td>集合remove次数:</td>
@@ -81,8 +81,8 @@
                 pageContext.setAttribute("entityStatistics", entityStatistics);
         %>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">${entityName}</td>
+        <tr class="bold info">
+            <td colspan="2">${entityName}</td>
         </tr>
         <tr>
             <td style="width: 30%">实体delete次数:</td>
@@ -128,8 +128,8 @@
 
         %>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">${collectionRoleName}</td>
+        <tr class="bold info">
+            <td colspan="2">${collectionRoleName}</td>
         </tr>
         <tr>
             <td style="width: 30%">集合remove次数:</td>

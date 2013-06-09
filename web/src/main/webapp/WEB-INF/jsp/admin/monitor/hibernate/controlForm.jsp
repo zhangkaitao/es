@@ -132,17 +132,11 @@
                 return;
             }
             var form = $("#entityNames").closest("form");
-            $.app.confirm({
-                title: "失效指定的实体缓存",
-                message: "确认失效指定的实体缓存吗？",
-                ok: function () {
-                    var url = "${ctx}/admin/monitor/hibernate/evictEntity?" + form.serialize();
-                    $.app.waiting("正在执行..");
-                    $.get(url, function(data) {
-                        $.app.waitingOver();
-                        $.app.alert({message : data});
-                    });
-                }
+            var url = "${ctx}/admin/monitor/hibernate/evictEntity?" + form.serialize();
+            $.app.waiting("正在执行..");
+            $.get(url, function(data) {
+                $.app.waitingOver();
+                $.app.alert({message : data});
             });
         });
 
@@ -166,17 +160,11 @@
                 return;
             }
             var form = $("#collectionRoleNames").closest("form");
-            $.app.confirm({
-                title: "失效指定实体的集合缓存",
-                message: "确认失效指定实体的集合缓存吗？",
-                ok: function () {
-                    var url = "${ctx}/admin/monitor/hibernate/evictCollection?" + form.serialize();
-                    $.app.waiting("正在执行..");
-                    $.get(url, function(data) {
-                        $.app.waitingOver();
-                        $.app.alert({message : data});
-                    });
-                }
+            var url = "${ctx}/admin/monitor/hibernate/evictCollection?" + form.serialize();
+            $.app.waiting("正在执行..");
+            $.get(url, function(data) {
+                $.app.waitingOver();
+                $.app.alert({message : data});
             });
         });
 
@@ -200,17 +188,11 @@
                 return
             }
             var form = $("#quries").closest("form");
-            $.app.confirm({
-                title: "失效指定的查询集合缓存",
-                message: "确认失效指定的查询缓存吗？",
-                ok: function () {
-                    var url = "${ctx}/admin/monitor/hibernate/evictQuery?" + form.serialize();
-                    $.app.waiting("正在执行..");
-                    $.get(url, function(data) {
-                        $.app.waitingOver();
-                        $.app.alert({message : data});
-                    });
-                }
+            var url = "${ctx}/admin/monitor/hibernate/evictQuery?" + form.serialize();
+            $.app.waiting("正在执行..");
+            $.get(url, function(data) {
+                $.app.waitingOver();
+                $.app.alert({message : data});
             });
         });
     });

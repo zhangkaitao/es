@@ -29,9 +29,9 @@
         </a>
     </li>
     <li ${type eq 'invalidate' ? 'class="active"' : ''}>
-        <a href="${ctx}/admin/monitor/hibernate/evict">
+        <a href="${ctx}/admin/monitor/hibernate/control">
             <i class="icon-table"></i>
-            失效二级缓存
+            缓存控制
         </a>
     </li>
     <li ${type eq 'ql' ? 'class="active"' : ''}>

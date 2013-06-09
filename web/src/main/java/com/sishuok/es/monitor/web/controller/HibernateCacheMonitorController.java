@@ -111,9 +111,9 @@ public class HibernateCacheMonitorController extends BaseController {
      * 实体和集合 增删改查 次数 统计
      * @return
      */
-    @RequestMapping(value = "/evict", method = RequestMethod.GET)
-    public String showEvictForm() {
-        return viewName("evictForm");
+    @RequestMapping(value = "/control", method = RequestMethod.GET)
+    public String showControlForm() {
+        return viewName("controlForm");
     }
 
     @RequestMapping(value = "/evictEntity")

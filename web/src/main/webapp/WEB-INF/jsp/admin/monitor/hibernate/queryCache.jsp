@@ -12,8 +12,8 @@
     <h3>总体</h3>
     <table class="table table-bordered">
         <tbody>
-        <tr>
-            <td colspan="2" class="bold prettyprint">查询缓存统计</td>
+        <tr class="bold info">
+            <td colspan="2">查询缓存统计</td>
         </tr>
         <tr>
             <td style="width: 30%">查询总执行次数:</td>
@@ -57,8 +57,8 @@
             </td>
         </tr>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">UpdateTimestamp缓存统计</td>
+        <tr class="bold info">
+            <td colspan="2">UpdateTimestamp缓存统计</td>
         </tr>
         <c:set var="updateTimestampsCacheCount"
                value="${statistics.updateTimestampsCacheHitCount + statistics.updateTimestampsCacheMissCount}"/>
@@ -121,8 +121,8 @@
         <c:set var="queryCacheCount" value="${queryCacheCount > 0 ? queryCacheCount : 1}"/>
         <c:set var="queryCacheHitPercent" value="${queryStatistics.cacheHitCount * 1.0 / (queryCacheCount)}"/>
 
-        <tr>
-            <td colspan="2" class="bold prettyprint">${query}</td>
+        <tr class="bold info">
+            <td colspan="2">${query}</td>
         </tr>
         <tr>
             <td style="width: 30%">总命中率:</td>

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class ResourceMenuCacheAspect extends BaseCacheAspect {
 
     public ResourceMenuCacheAspect() {
-        setCacheName("sys-menu");
+        setCacheName("sys-menuCache");
     }
 
     private String menusKeyPrefix = "menus-";
@@ -50,14 +50,17 @@ public class ResourceMenuCacheAspect extends BaseCacheAspect {
 
     @Around(value = "resourceServicePointcut() && resourceCacheablePointcut(arg)", argNames = "pjp,arg")
     public Object findRolesCacheableAdvice(ProceedingJoinPoint pjp, User arg) throws Throwable {
+
         User user = arg;
 
         String key = menusKey(user.getId());
         Object retVal = get(key);
 
         if (retVal != null) {
+            log.debug("cacheName:{}, method:findRolesCacheableAdvice, hit key:{}", cacheName, key);
             return retVal;
         }
+        log.debug("cacheName:{}, method:findRolesCacheableAdvice, miss key:{}", cacheName, key);
 
         retVal = pjp.proceed();
 

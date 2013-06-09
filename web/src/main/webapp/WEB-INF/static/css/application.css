@@ -714,7 +714,7 @@ iframe[tabs="true"] {
     border: 1px solid #e1e1e8;
 }
 .no-margin{
-    margin-bottom: 0px;
+    margin-bottom: 0px!important;
     border: 0px;
 }
 .margin-1{

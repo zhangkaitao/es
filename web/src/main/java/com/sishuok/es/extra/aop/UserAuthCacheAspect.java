@@ -33,6 +33,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 /**
  * 用户权限的切面
  * <p/>
@@ -92,7 +94,7 @@ import org.springframework.stereotype.Component;
 public class UserAuthCacheAspect extends BaseCacheAspect {
 
     public UserAuthCacheAspect() {
-        setCacheName("sys-auth");
+        setCacheName("sys-authCache");
     }
 
     private String rolesKeyPrefix = "roles-";
@@ -323,8 +325,12 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         Object retVal = get(key);
 
         if (retVal != null) {
+            log.debug("cacheName:{}, method:findRolesCacheableAdvice, hit key:{}", cacheName, key);
             return retVal;
         }
+
+        log.debug("cacheName:{}, method:findRolesCacheableAdvice, miss key:{}", cacheName, key);
+
         retVal = pjp.proceed();
 
         this.put(key, retVal);
@@ -344,8 +350,10 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         Object retVal = get(key);
 
         if (retVal != null) {
+            log.debug("cacheName:{}, method:findStringRolesCacheableAdvice, hit key:{}", cacheName, key);
             return retVal;
         }
+        log.debug("cacheName:{}, method:findStringRolesCacheableAdvice, miss key:{}", cacheName, key);
 
         retVal = pjp.proceed();
 
@@ -364,8 +372,10 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         Object retVal = get(key);
 
         if (retVal != null) {
+            log.debug("cacheName:{}, method:findStringPermissionsCacheableAdvice, hit key:{}", cacheName, key);
             return retVal;
         }
+        log.debug("cacheName:{}, method:findStringPermissionsCacheableAdvice, miss key:{}", cacheName, key);
 
         retVal = pjp.proceed();
 
@@ -388,6 +398,7 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
                     "|| (groupRelationServicePointcut() && groupRelationCacheEvictAllPointcut())"
     )
     public void cacheClearAllAdvice() {
+        log.debug("cacheName:{}, method:cacheClearAllAdvice, cache clear", cacheName);
         clear();
     }
 
@@ -402,9 +413,12 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
     private boolean evictWithAuth(Auth auth) {
         boolean needEvictSpecail = auth != null && auth.getUserId() != null && auth.getGroupId() == null && auth.getOrganizationId() == null;
         if (needEvictSpecail) {
-            evict(auth.getUserId());
+            Long userId = auth.getUserId();
+            log.debug("cacheName:{}, method:evictWithAuth, evict userId:{}", cacheName, userId);
+            evict(userId);
             return false;
         } else {
+            log.debug("cacheName:{}, method:evictWithAuth, cache clear", cacheName);
             clear();
             return true;
         }
@@ -412,24 +426,34 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
 
     @Before(value = "authServicePointcut() && authCacheEvictAllOrSpecialPointcut(arg)", argNames = "jp,arg")
     public void authCacheClearSpecialOrAllAdvice(JoinPoint jp, Object arg) {
+        log.debug("cacheName:{}, method:authCacheClearSpecialOrAllAdvice begin", cacheName);
         String methodName = jp.getSignature().getName();
         if (arg instanceof Auth) {//只清除某个用户的即可
             Auth auth = (Auth) arg;
+
+            log.debug("cacheName:{}, method:authCacheClearSpecialOrAllAdvice delegate to evictWithAuth", cacheName);
             evictWithAuth(auth);
         } else if ("delete".equals(methodName)) { //删除方法
             if (arg instanceof Long) { //删除单个
                 Long authId = (Long) arg;
                 Auth auth = authService.findOne(authId);
+
+                log.debug("cacheName:{}, method:authCacheClearSpecialOrAllAdvice delegate to evictWithAuth", cacheName);
                 evictWithAuth(auth);
             } else if (arg instanceof Long[]) { //批量删除
                 for (Long authId : ((Long[]) arg)) {
                     Auth auth = authService.findOne(authId);
+
+                    log.debug("cacheName:{}, method:authCacheClearSpecialOrAllAdvice delegate to evictWithAuth", cacheName);
                     if (evictWithAuth(auth)) {//如果清空的是所有 直接返回
                         return;
                     }
                 }
             } else if ("addUserAuth".equals(methodName)) {
                 Long[] userIds = (Long[]) arg;
+
+                log.debug("cacheName:{}, method:authCacheClearSpecialOrAllAdvice, evict user ids:{}",
+                        cacheName, Arrays.toString(userIds));
                 evict(userIds);
             }
         }
@@ -450,12 +474,15 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         //只有当show/identity发生改变时才清理缓存
         if (!dbResource.getShow().equals(resource.getShow())
                 || !dbResource.getIdentity().equals(resource.getIdentity())) {
+
+            log.debug("cacheName:{}, method:resourceMaybeCacheClearAllAdvice, cache clear", cacheName);
             clear();
         }
     }
 
     @Before(value = "permissionServicePointcut() && permissionMaybeCacheEvictAllPointcut(arg)", argNames = "arg")
     public void permissionMaybeCacheClearAllAdvice(Permission arg) {
+
         Permission permission = arg;
         if (permission == null) {
             return;
@@ -468,6 +495,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         //只有当show/permission发生改变时才清理缓存
         if (!dbPermission.getShow().equals(permission.getShow())
                 || !dbPermission.getPermission().equals(permission.getPermission())) {
+
+            log.debug("cacheName:{}, method:permissionMaybeCacheClearAllAdvice, cache clear", cacheName);
             clear();
         }
     }
@@ -488,6 +517,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
                 || !dbRole.getRole().equals(role.getRole())
                 || !(dbRole.getResourcePermissions().size() == role.getResourcePermissions().size()
                 && dbRole.getResourcePermissions().containsAll(role.getResourcePermissions()))) {
+
+            log.debug("cacheName:{}, method:roleMaybeCacheClearAllAdvice, cache clear", cacheName);
             clear();
         }
     }
@@ -495,6 +526,7 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
 
     @Before(value = "organizationServicePointcut() && organizationMaybeCacheEvictAllPointcut(arg)", argNames = "arg")
     public void organizationMaybeCacheClearAllAdvice(Organization arg) {
+
         Organization organization = arg;
         if (organization == null) {
             return;
@@ -507,6 +539,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         //只有当show/parentId发生改变时才清理缓存
         if (!dbOrganization.getShow().equals(organization.getShow())
                 || !dbOrganization.getParentId().equals(organization.getParentId())) {
+
+            log.debug("cacheName:{}, method:organizationMaybeCacheClearAllAdvice, cache clear", cacheName);
             clear();
         }
     }
@@ -526,6 +560,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         //只有当show/parentId发生改变时才清理缓存
         if (!dbJob.getShow().equals(job.getShow())
                 || !dbJob.getParentId().equals(job.getParentId())) {
+
+            log.debug("cacheName:{}, method:jobMaybeCacheClearAllAdvice, cache clear", cacheName);
             clear();
         }
     }
@@ -544,6 +580,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         //只有当修改组的默认组/show时才清理缓存
         if (!dbGroup.getShow().equals(group.getShow())
                 || !dbGroup.getDefaultGroup().equals(group.getDefaultGroup())) {
+
+            log.debug("cacheName:{}, method:groupMaybeCacheClearAllAdvice, cache clear", cacheName);
             clear();
         }
     }
@@ -555,6 +593,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
     private boolean evictForGroupRelation(GroupRelation r) {
         //如果是非某个用户，清理所有缓存
         if (r.getStartUserId() != null || r.getEndUserId() != null || r.getOrganizationId() != null) {
+
+            log.debug("cacheName:{}, method:evictForGroupRelation, cache clear", cacheName);
             clear();
             return true;
         }
@@ -562,6 +602,8 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
             evict(r.getUserId());
             GroupRelation dbR = groupRelationService.findOne(r.getId());
             if (dbR != null && !dbR.getUserId().equals(r.getUserId())) { //如果a用户替换为b用户时清理两个用户的缓存
+
+                log.debug("cacheName:{}, method:evictForGroupRelation, evict userId:{}", cacheName, dbR.getUserId());
                 evict(dbR.getUserId());
             }
         }
@@ -574,6 +616,7 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         if (arg instanceof GroupRelation) {
             GroupRelation r = (GroupRelation) arg;
 
+            log.debug("cacheName:{}, method:groupRelationMaybeCacheClearAllOrSpecialAdvice delagate to evictForGroupRelation", cacheName);
             if (evictForGroupRelation(r)) {
                 return;
             }
@@ -582,12 +625,16 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
             if (arg instanceof Long) {
                 Long rId = (Long) arg;
                 GroupRelation r = groupRelationService.findOne(rId);
+
+                log.debug("cacheName:{}, method:groupRelationMaybeCacheClearAllOrSpecialAdvice delagate to evictForGroupRelation", cacheName);
                 if (evictForGroupRelation(r)) {
                     return;
                 }
             } else if (arg instanceof Long[]) {
                 for (Long rId : (Long[]) arg) {
                     GroupRelation r = groupRelationService.findOne(rId);
+
+                    log.debug("cacheName:{}, method:groupRelationMaybeCacheClearAllOrSpecialAdvice delagate to evictForGroupRelation", cacheName);
                     if (evictForGroupRelation(r)) {
                         return;
                     }
@@ -596,6 +643,9 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
             }
         } else if ("appendRelation".equals(methodName)) {//添加的情况
             Long[] userIds = (Long[]) arg;
+
+            log.debug("cacheName:{}, method:groupRelationMaybeCacheClearAllOrSpecialAdvice, evict user ids:{}",
+                    cacheName, Arrays.toString(userIds));
             evict(userIds);
         }
     }
@@ -610,6 +660,9 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
 
             if (!(user.getOrganizationJobs().size() == dbUser.getOrganizationJobs().size()
                     && dbUser.getOrganizationJobs().containsAll(user.getOrganizationJobs()))) {
+
+                log.debug("cacheName:{}, method:userMaybeCacheClearSpecialAdvice, evict user id:{}",
+                        cacheName, user.getId());
                 evict(user.getId());
             }
 
@@ -617,9 +670,18 @@ public class UserAuthCacheAspect extends BaseCacheAspect {
         } else if ("delete".equals(methodName)) {//删除情况
             if (arg instanceof Long) {
                 Long userId = (Long) arg;
+
+                log.debug("cacheName:{}, method:userMaybeCacheClearSpecialAdvice, evict user id:{}",
+                        cacheName, userId);
                 evict(userId);
             } else if (arg instanceof Long[]) {
-                evict((Long[]) arg);
+
+                Long[] userIds = (Long[]) arg;
+
+                log.debug("cacheName:{}, method:userMaybeCacheClearSpecialAdvice, evict user ids:{}",
+                        cacheName, Arrays.toString(userIds));
+
+                evict(userIds);
             }
         }
     }
