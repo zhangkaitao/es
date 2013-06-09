@@ -38,7 +38,7 @@ public class LoginFormController {
     @Autowired
     private UserStatusHistoryService userStatusHistoryService;
 
-    @RequestMapping(value = {"/login"})
+    @RequestMapping(value = {"/{login:login;?.*}"}) //spring3.2.2 bug see  http://jinnianshilongnian.iteye.com/blog/1831408
     public String loginForm(HttpServletRequest request, ModelMap model) {
 
         //表示退出

@@ -32,7 +32,7 @@ public class IndexController {
     private MessageApi messageApi;
 
 
-    @RequestMapping(value = {"/index"})
+    @RequestMapping(value = {"/{index:index;?.*}"}) //spring3.2.2 bug see  http://jinnianshilongnian.iteye.com/blog/1831408
     public String index(@CurrentUser User user, Model model) {
 
         List<Menu> menus = resourceService.findMenus(user);
