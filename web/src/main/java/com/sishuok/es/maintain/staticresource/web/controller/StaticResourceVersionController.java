@@ -8,6 +8,7 @@ package com.sishuok.es.maintain.staticresource.web.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.web.controller.BaseController;
+import com.sishuok.es.maintain.staticresource.web.controller.utils.YuiCompressorUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -76,7 +77,7 @@ public class StaticResourceVersionController extends BaseController {
         ServletContext sc = request.getServletContext();
         String realPath = sc.getRealPath(versionedResourcePath);
 
-        return replaceStaticResourceContent(realPath + fileName, content, newVersion);
+        return versionedStaticResourceContent(realPath + fileName, content, newVersion);
 
     }
 
@@ -94,7 +95,7 @@ public class StaticResourceVersionController extends BaseController {
         String realPath = sc.getRealPath(versionedResourcePath);
 
         for(int i = 0, l = fileNames.length; i < l; i++) {
-            replaceStaticResourceContent(realPath + fileNames[i], contents[i], newVersions[i]);
+            versionedStaticResourceContent(realPath + fileNames[i], contents[i], newVersions[i]);
         }
 
         return "操作成功";
@@ -113,7 +114,7 @@ public class StaticResourceVersionController extends BaseController {
         String realPath = sc.getRealPath(versionedResourcePath);
 
         for(int i = 0, l = fileNames.length; i < l; i++) {
-            replaceStaticResourceContent(realPath + fileNames[i], contents[i], null);
+            versionedStaticResourceContent(realPath + fileNames[i], contents[i], null);
         }
 
         return "操作成功";
@@ -121,7 +122,215 @@ public class StaticResourceVersionController extends BaseController {
     }
 
 
-    private String replaceStaticResourceContent(String fileRealPath, String content, String newVersion) throws IOException {
+    @RequestMapping("compress")
+    @ResponseBody
+    public String compress(
+            HttpServletRequest request,
+            @RequestParam("fileName") String fileName,
+            @RequestParam("content") String content
+    ) {
+
+        ServletContext sc = request.getServletContext();
+        String rootRealPath = sc.getRealPath("/WEB-INF");
+        String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
+
+        try {
+            String minFilePath = compressStaticResource(rootRealPath, versionedResourceRealPath + fileName, content);
+            return "压缩成功，压缩好的文件为：" + minFilePath;
+        } catch (Exception e) {
+            return "压缩失败：" + e.getMessage();
+        }
+    }
+
+
+
+    @RequestMapping("batchCompress")
+    @ResponseBody
+    public String batchCompress(
+            HttpServletRequest request,
+            @RequestParam("fileNames[]") String[] fileNames,
+            @RequestParam("contents[]") String[] contents
+    ) throws IOException {
+
+
+        ServletContext sc = request.getServletContext();
+        String rootRealPath = sc.getRealPath("/WEB-INF");
+        String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
+
+        StringBuilder success = new StringBuilder();
+        StringBuilder error = new StringBuilder();
+
+
+        for (int i = 0, l = fileNames.length; i < l; i++) {
+            try {
+                String fileName = fileNames[i];
+                String content = contents[i];
+                String minFilePath = compressStaticResource(rootRealPath, versionedResourceRealPath + fileName, content);
+                success.append("压缩成功，压缩好的文件为：" + minFilePath + "<br/>");
+            } catch (Exception e) {
+                error.append("压缩失败：" + e.getMessage() + "<br/>");
+            }
+        }
+
+        return success.insert(0, "成功的压缩：<br/>").append("<br/>失败的压缩：<br/>").append(error).toString();
+    }
+
+
+    /**
+     * 切换版本
+     * @param request
+     * @param fileName
+     * @param content
+     * @return
+     */
+    @RequestMapping("switch")
+    @ResponseBody
+    public Object switchStaticResource(
+            HttpServletRequest request,
+            @RequestParam("fileName") String fileName,
+            @RequestParam("content") String content,
+            @RequestParam(value = "min", required = false, defaultValue = "false") boolean isMin
+
+    ) {
+
+        Map<String, Object> data = Maps.newHashMap();
+        data.put("msg", "切换成功");
+        data.put("success", true);
+
+        ServletContext sc = request.getServletContext();
+        String rootRealPath = sc.getRealPath("/WEB-INF");
+        String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
+
+        try {
+            StaticResource resource = switchStaticResourceContent(rootRealPath, versionedResourceRealPath, fileName, content, isMin);
+            data.put("content", resource.getContent());
+            data.put("url", resource.getUrl());
+            return data;
+        } catch (Exception e) {
+            data.put("msg", "切换失败：" + e.getMessage());
+            data.put("success", false);
+            return data;
+        }
+    }
+
+
+    /**
+     * 批量切换版本
+     * @param request
+     * @param fileNames
+     * @param contents
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("batchSwitch")
+    @ResponseBody
+    public String batchSwitchStaticResource(
+            HttpServletRequest request,
+            @RequestParam("fileNames[]") String[] fileNames,
+            @RequestParam("contents[]") String[] contents,
+            @RequestParam(value = "min", required = false, defaultValue = "false") boolean isMin
+
+    ) throws IOException {
+
+        ServletContext sc = request.getServletContext();
+        String rootRealPath = sc.getRealPath("/WEB-INF");
+        String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
+
+        StringBuilder success = new StringBuilder();
+        StringBuilder error = new StringBuilder();
+
+
+        for (int i = 0, l = fileNames.length; i < l; i++) {
+            try {
+                String fileName = fileNames[i];
+                String content = contents[i];
+                StaticResource resource =
+                        switchStaticResourceContent(rootRealPath, versionedResourceRealPath, fileName, content, isMin);
+                success.append("切换成功，切换到的文件为：" + resource.getUrl() + "<br/>");
+            } catch (Exception e) {
+                error.append("切换失败：" + e.getMessage() + "<br/>");
+            }
+        }
+
+        return success.insert(0, "成功的切换：<br/>").append("<br/>失败的切换：<br/>").append(error).toString();
+    }
+
+
+    private StaticResource switchStaticResourceContent(String rootRealPath, String versionedResourceRealPath, String fileName, String content, boolean isMin) throws IOException {
+
+        StaticResource resource = extractResource(fileName, content);
+        String filePath = resource.getUrl();
+        filePath = filePath.replace("${ctx}", rootRealPath);
+
+        if(isMin) {
+            File file = new File(YuiCompressorUtils.getCompressFileName(filePath));
+            if(!file.exists()) {
+                throw new RuntimeException("请先压缩文件：" + resource.getUrl());
+            }
+        } else {
+            File file = new File(YuiCompressorUtils.getNoneCompressFileName(filePath));
+            if(!file.exists()) {
+                throw new RuntimeException("没有压缩文件对应的非压缩版：" + resource.getUrl());
+            }
+        }
+
+        content = StringEscapeUtils.unescapeXml(content);
+
+        File file = new File(versionedResourceRealPath + fileName);
+
+        List<String> contents = FileUtils.readLines(file);
+
+        for(int i = 0, l = contents.size(); i < l; i++) {
+            String fileContent = contents.get(i);
+            if(content.equals(fileContent)) {
+                Matcher matcher = scriptPattern.matcher(content);
+                if(!matcher.matches()) {
+                    matcher = linkPattern.matcher(content);
+                }
+                String newUrl = isMin ?
+                        YuiCompressorUtils.getCompressFileName(resource.getUrl())
+                        :
+                        YuiCompressorUtils.getNoneCompressFileName(resource.getUrl());
+
+
+                content = matcher.replaceAll("$1" + Matcher.quoteReplacement(newUrl) + "$3$4$5");
+                contents.set(i, content);
+
+                resource.setContent(content);
+                resource.setUrl(newUrl);
+
+                break;
+            }
+        }
+        FileUtils.writeLines(file, contents);
+
+        return resource;
+    }
+
+
+
+    private String compressStaticResource(String rootRealPath, String includeFilePath, String content) {
+        StaticResource resource = extractResource(includeFilePath, content);
+        String filePath = resource.getUrl();
+        filePath = filePath.replace("${ctx}", rootRealPath);
+
+        if(YuiCompressorUtils.hasCompress(filePath)) {
+            throw new RuntimeException("[" + filePath + "]文件已经是压缩过的了，不需要再压缩了");
+        }
+
+        if(filePath.startsWith("http://")) {
+            throw new RuntimeException("[" + filePath + "]文件是互联网上的，无法压缩");
+        }
+
+        String minFilePath = YuiCompressorUtils.compress(filePath);
+
+        return minFilePath.replace(rootRealPath, "${ctx}");
+
+    }
+
+
+
+    private String versionedStaticResourceContent(String fileRealPath, String content, String newVersion) throws IOException {
 
         content = StringEscapeUtils.unescapeXml(content);
         if(newVersion != null && newVersion.equals("1")) {

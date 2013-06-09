@@ -227,7 +227,7 @@ $.app = {
         }
         var defaults = {
             title : "警告",
-            message   : "非法的操作",
+            message : "非法的操作",
             okTitle : "关闭",
             ok : $.noop
         };

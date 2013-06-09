@@ -137,6 +137,12 @@
             <version>${mysql.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.yahoo.platform.yui</groupId>
+            <artifactId>yuicompressor</artifactId>
+            <version>${yui.compressor.version}</version>
+        </dependency>
+
 
         <!-- x-gen user -->
         <!--<dependency>-->
@@ -161,6 +167,7 @@
         <support.basedir>${project.parent.parent.basedir}/src/support</support.basedir>
         <site.basedir>${project.parent.parent.basedir}</site.basedir>
         <mysql.version>5.1.9</mysql.version>
+        <yui.compressor.version>2.4.2</yui.compressor.version>
     </properties>
 
     <profiles>
