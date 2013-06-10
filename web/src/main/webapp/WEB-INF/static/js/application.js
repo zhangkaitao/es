@@ -2004,7 +2004,7 @@ $.array = {
 
 $(function () {
     //global disable ajax cache
-    $.ajaxSetup({ cache: false });
+    $.ajaxSetup({ cache: true });
 
     $(".table").each(function() {
         $.table.initTable($(this));

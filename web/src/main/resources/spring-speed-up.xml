@@ -64,7 +64,7 @@
         <!-- 需要从bean定义中移除指定的类类型 正则表达式-->
         <property name="removedClassPatterns">
             <list>
-                 <!--<value>com\.sishuok\.es\.showcase.*</value>-->
+                 <value>com\.sishuok\.es\.showcase.*</value>
                  <value>com\.sishuok\.es\.monitor.*</value>
                  <value>com\.sishuok\.es\.extra\.aop.*</value>
                  <value>com\.sishuok\.es\.extra\.quartz.*</value>
