@@ -6,22 +6,30 @@
 package com.sishuok.es.maintain.editor.web.controller;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.web.controller.BaseController;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.io.FileUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+
+import static com.sishuok.es.maintain.editor.web.controller.utils.OnlineEditorUtils.*;
 
 /**
  * <p>User: Zhang Kaitao
@@ -32,15 +40,9 @@ import java.util.Map;
 @RequestMapping("/admin/maintain/editor")
 public class OnlineEditorController extends BaseController {
 
-    private final String CSS_DIRECTORY = "ztree_folder";
-    private final String CSS_FILE = "ztree_file";
+
     private final String ROOT_DIR = "/";
-    private final FileFilter DIRECTORY_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            return file.isDirectory();
-        }
-    };
+
 
     @RequestMapping(value = {"", "main"}, method = RequestMethod.GET)
     public String main() {
@@ -49,7 +51,7 @@ public class OnlineEditorController extends BaseController {
 
     @RequestMapping(value = "tree", method = RequestMethod.GET)
     public String tree(
-            HttpServletRequest request, Model model) {
+            HttpServletRequest request, Model model) throws UnsupportedEncodingException {
 
         ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
@@ -57,15 +59,7 @@ public class OnlineEditorController extends BaseController {
         long id = 0L;
         File rootDirectory = new File(rootPath);
 
-        Map<Object, Object> root = Maps.newHashMap();
-        root.put("id", id);
-        root.put("pId", -1L);
-        root.put("name", rootDirectory.getName());
-        root.put("path", "");
-        root.put("isParent", true);
-        root.put("root", true);
-        root.put("open", true);
-        root.put("iconSkin", CSS_DIRECTORY);
+        Map<Object, Object> root= extractFileInfoMap(rootDirectory, rootPath, id, -1);
 
         List<Map> trees = Lists.newArrayList();
         trees.add(root);
@@ -75,16 +69,7 @@ public class OnlineEditorController extends BaseController {
                 continue;
             }
             id++;
-            Map<Object, Object> sub = Maps.newHashMap();
-            sub.put("id", id);
-            sub.put("pId", root.get("id"));
-            sub.put("name", subFile.getName());
-            sub.put("path", StringEscapeUtils.escapeJava(subFile.getAbsolutePath().replace(rootPath, "")));
-            sub.put("isParent", subFile.listFiles(DIRECTORY_FILTER).length > 0);
-            sub.put("root", false);
-            sub.put("open", false);
-            sub.put("iconSkin", subFile.isDirectory() ? CSS_DIRECTORY : CSS_FILE);
-            trees.add(sub);
+            trees.add(extractFileInfoMap(subFile, rootPath, id, (Long)root.get("id")));
         }
 
          model.addAttribute("trees", trees);
@@ -98,7 +83,9 @@ public class OnlineEditorController extends BaseController {
     public Object ajaxLoad(
             HttpServletRequest request,
             @RequestParam("id") long parentId,
-            @RequestParam("path") String parentPath) {
+            @RequestParam("path") String parentPath) throws UnsupportedEncodingException {
+
+        parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
 
         ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
@@ -114,16 +101,7 @@ public class OnlineEditorController extends BaseController {
                 continue;
             }
             id++;
-            Map<Object, Object> sub = Maps.newHashMap();
-            sub.put("id", id);
-            sub.put("pId", parentId);
-            sub.put("name", subFile.getName());
-            sub.put("path", StringEscapeUtils.escapeJava(subFile.getAbsolutePath().replace(rootPath, "")));
-            sub.put("isParent", subFile.listFiles(DIRECTORY_FILTER).length > 0);
-            sub.put("root", false);
-            sub.put("open", false);
-            sub.put("iconSkin", subFile.isDirectory() ? CSS_DIRECTORY : CSS_FILE);
-            trees.add(sub);
+            trees.add(extractFileInfoMap(subFile, rootPath, id, parentId));
         }
         return trees;
     }
@@ -133,22 +111,114 @@ public class OnlineEditorController extends BaseController {
     public String listFile(
             HttpServletRequest request,
             @RequestParam(value = "path", required = false, defaultValue = "") String path,
-            Model model) {
+            Pageable pageable,
+            Model model) throws UnsupportedEncodingException {
+
+        path = URLDecoder.decode(path, Constants.ENCODING);
+
+        Sort sort = pageable.getSort();
 
         ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
 
-        File directory = new File(rootPath + "/" + path);
+        File currentDirectory = new File(rootPath + "/" + path);
 
-        List<File> files = Lists.newArrayList();
+        Map<Object, Object> current = extractFileInfoMap(currentDirectory, rootPath);
+        current.put("name", "当前目录");
 
-        for(File subFile : directory.listFiles()) {
-            files.add(subFile);
+        Map<Object, Object> parent = null;
+        if(hasParent(currentDirectory, rootPath)) {
+            File parentDirectory = currentDirectory.getParentFile();
+            parent = extractFileInfoMap(parentDirectory, rootPath);
+            parent.put("name", "返回父目录");
         }
 
+
+        List<Map<Object, Object>> files = Lists.newArrayList();
+        for(File subFile : currentDirectory.listFiles()) {
+            files.add(extractFileInfoMap(subFile, rootPath));
+        }
+
+        sort(files, sort);
+
+        model.addAttribute("current", current);
+        model.addAttribute("parent", parent);
         model.addAttribute("files", files);
 
         return viewName("list");
+    }
+
+    @RequestMapping(value = "edit", method = RequestMethod.GET)
+    public String showEditForm(
+            HttpServletRequest request,
+            @RequestParam(value = "path", required = false, defaultValue = "") String path,
+            Model model,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+
+        ServletContext sc = request.getServletContext();
+        String rootPath = sc.getRealPath(ROOT_DIR);
+
+
+        path = URLDecoder.decode(path, Constants.ENCODING);
+        File file = new File(rootPath + "/" + path);
+        String parentPath = file.getParentFile().getAbsolutePath().replace(rootPath, "");
+
+        boolean hasError = false;
+        if(file.isDirectory()) {
+            hasError = true;
+            redirectAttributes.addFlashAttribute(Constants.ERROR, path + "是目录，不能编辑！");
+        }
+
+        if(!file.exists()) {
+            hasError = true;
+            redirectAttributes.addFlashAttribute(Constants.ERROR, path + "文件不存在，不能编辑！");
+        }
+
+        if(!file.canWrite()) {
+            hasError = true;
+            redirectAttributes.addFlashAttribute(Constants.ERROR, path + "文件是只读的，不能编辑，请修改文件权限！");
+        }
+        if(!file.canRead()) {
+            hasError = true;
+            redirectAttributes.addFlashAttribute(Constants.ERROR, path + "文件不能读取，不能编辑，请修改文件权限！");
+        }
+
+
+        if(hasError) {
+            redirectAttributes.addAttribute("path", parentPath);
+            return redirectToUrl(viewName("list"));
+        }
+
+        String content = FileUtils.readFileToString(file);
+        model.addAttribute("content", content);
+        model.addAttribute("path", URLEncoder.encode(path, Constants.ENCODING));
+        model.addAttribute("parentPath", URLEncoder.encode(parentPath, Constants.ENCODING));
+
+        return viewName("editForm");
+    }
+
+
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    public String edit(
+            HttpServletRequest request,
+            @RequestParam(value = "path") String path,
+            @RequestParam(value = "content") String content,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+        ServletContext sc = request.getServletContext();
+        String rootPath = sc.getRealPath(ROOT_DIR);
+
+        path = URLDecoder.decode(path, Constants.ENCODING);
+        File file = new File(rootPath + "/" + path);
+        String parentPath = file.getParentFile().getAbsolutePath().replace(rootPath, "");
+
+        FileUtils.write(file, content);
+
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "编辑成功！");
+        redirectAttributes.addAttribute("path", parentPath);
+        return redirectToUrl(viewName("list"));
     }
 
 

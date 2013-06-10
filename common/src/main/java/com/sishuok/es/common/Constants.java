@@ -52,4 +52,6 @@ public interface Constants {
     String CURRENT_USER = "user";
     String CURRENT_USERNAME = "username";
 
+    String ENCODING = "UTF-8";
+
 }

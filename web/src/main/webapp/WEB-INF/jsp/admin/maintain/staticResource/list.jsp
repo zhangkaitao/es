@@ -3,7 +3,6 @@
 <es:contentHeader/>
 <div data-table="table" class="panel">
 
-    <br/>
     <div class="alert alert-info">
         <strong>注意：</strong>你应该把需要版本化的css/js放到webapp/WEB-INF/jsp/common下，且已jspf为后缀，系统自动扫描这些文件<br/>
         <strong>yui 压缩命令：</strong>java -jar D:\yuicompressor-2.4.2.jar  application.js   --charset utf-8  -o min.js

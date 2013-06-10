@@ -273,7 +273,7 @@ public class PageableMethodArgumentResolver extends BaseMethodArgumentResolver {
         Qualifier qualifier = parameter.getParameterAnnotation(Qualifier.class);
 
         if (qualifier != null) {
-            return new StringBuilder(((Qualifier) qualifier).value()).append("_").append(sortPrefix).toString();
+            return new StringBuilder(qualifier.value()).append("_").append(sortPrefix).toString();
         }
 
         return sortPrefix;

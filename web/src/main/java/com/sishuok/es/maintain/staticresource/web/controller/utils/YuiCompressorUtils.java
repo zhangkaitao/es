@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.maintain.staticresource.web.controller.utils;
 
+import com.sishuok.es.common.Constants;
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import org.apache.commons.io.FileUtils;
@@ -21,7 +22,7 @@ import java.io.*;
  */
 public class YuiCompressorUtils {
 
-    private static final String CHARSET = "utf-8";
+
 
     /**
      * 压缩js/css  自动生成的压缩文件在当前目录下并以.min.js/css结尾
@@ -41,8 +42,8 @@ public class YuiCompressorUtils {
         Reader in = null;
         Writer out = null;
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), CHARSET));
-            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(minFileName), CHARSET));
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), Constants.ENCODING));
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(minFileName), Constants.ENCODING));
 
             if("js".equals(extension)) {
 
