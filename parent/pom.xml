@@ -287,7 +287,7 @@
             <version>${cglib.version}</version>
         </dependency>
         <dependency>
-            <groupId>asm</groupId>
+            <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
             <version>${asm.version}</version>
         </dependency>
@@ -670,8 +670,8 @@
         <support.basedir>${project.parent.basedir}/src/support</support.basedir>
         <site.basedir>${project.parent.basedir}</site.basedir>
 
-        <asm.version>3.2</asm.version>
-        <cglib.version>2.2</cglib.version>
+        <asm.version>4.0</asm.version>
+        <cglib.version>3.0</cglib.version>
 
         <commons-lang3.version>3.1</commons-lang3.version>
         <common-collections.version>3.2.1</common-collections.version>
@@ -691,7 +691,7 @@
         <jstl.version>1.2</jstl.version>
         <standard.version>1.1.2</standard.version>
 
-        <aspectj.version>1.7.1</aspectj.version>
+        <aspectj.version>1.7.2</aspectj.version>
         <spring.version>3.2.2.RELEASE</spring.version>
         <spring.data.jpa.version>1.3.1.RELEASE</spring.data.jpa.version>
 
