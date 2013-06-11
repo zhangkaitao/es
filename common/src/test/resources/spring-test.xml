@@ -37,7 +37,7 @@
                 <property name="generateDdl" value="true"/>
                 <property name="database" value="H2"/>
                 <property name="databasePlatform" value="org.hibernate.dialect.H2Dialect"/>
-                <property name="showSql" value="true"/>
+                <property name="showSql" value="false"/>
             </bean>
         </property>
 
