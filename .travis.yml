@@ -2,9 +2,30 @@ language: java
 
 env:
   - DB=mysql
+  - DB=h2
 
 jdk:
   - openjdk7
+
+mysql:
+  adapter: mysql2
+  database: es
+  port : 3306
+  username: root
+  password :
+  encoding: utf8
+
+install:
+  - mvn clean install -pl . -Dmaven.test.skip=true
+  - mvn clean install -pl parent -Dmaven.test.skip=true
+  - mvn clean install -pl common -Dmaven.test.skip=true
+
+before_script:
+  - cd web
+  - mvn db:create
+  - mvn db:schema
+  - mvn db:data
+  - cd ..
 
 script:
   - mvn test
