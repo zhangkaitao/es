@@ -1,4 +1,16 @@
 language: java
+
+env:
+  - DB=mysql
+
+jdk:
+  - openjdk7
+
+before_script:
+  - mvn db:create
+  - mvn db:schema
+  - mvn db:data
+
 install:
   - mvn clean install -pl . -Dmaven.test.skip=true
   - mvn clean install -pl parent -Dmaven.test.skip=true
@@ -7,8 +19,6 @@ install:
 script:
   - mvn test
 
-jdk:
-  - openjdk7
 notifications:
   email:
     - zhangkaitao0503@gmail.com
