@@ -6,17 +6,17 @@ env:
 jdk:
   - openjdk7
 
+install:
+  - mvn clean install -pl . -Dmaven.test.skip=true
+  - mvn clean install -pl parent -Dmaven.test.skip=true
+  - mvn clean install -pl common -Dmaven.test.skip=true
+
 before_script:
   - cd ./web
   - mvn db:create
   - mvn db:schema
   - mvn db:data
   - cd ..
-
-install:
-  - mvn clean install -pl . -Dmaven.test.skip=true
-  - mvn clean install -pl parent -Dmaven.test.skip=true
-  - mvn clean install -pl common -Dmaven.test.skip=true
 
 script:
   - mvn test
