@@ -1,11 +1,11 @@
 language: java
 before_script:
   - mvn clean install -pl . -Dmaven.test.skip=true
-  - mvn clean install -pl parent -Dmaven.test.skip=true
-  - mvn clean install -pl common -Dmaven.test.skip=true
+  - mvn -o clean install -pl parent -Dmaven.test.skip=true
+  - mvn -o clean install -pl common -Dmaven.test.skip=true
 
 script:
-  - mvn test
+  - mvn -o test
 
 jdk:
   - openjdk7
