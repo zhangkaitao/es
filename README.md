@@ -4,7 +4,7 @@
 3. ……
 
 ###CI status : 
-<img src="https://travis-ci.org/zhangkaitao/es.png"/>
+<a href="https://travis-ci.org/zhangkaitao/es"><img src="https://travis-ci.org/zhangkaitao/es.png"/></a>
 
 
 ##如何运行
