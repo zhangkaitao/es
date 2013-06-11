@@ -1,5 +1,12 @@
 language: java
-script: mvn clean test
+before_script:
+  - mvn clean install -pl . -Dmaven.test.skip=true
+  - mvn clean install -pl . -Dmaven.test.skip=true
+  - mvn clean install -pl .  -Dmaven.test.skip=true
+
+script:
+  - mvn test
+
 jdk:
   - openjdk7
 notifications:
