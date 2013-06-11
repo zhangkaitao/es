@@ -1,5 +1,5 @@
 language: java
-before_script:
+install:
   - mvn clean install -pl . -Dmaven.test.skip=true
   - mvn clean install -pl parent -Dmaven.test.skip=true
   - mvn clean install -pl common -Dmaven.test.skip=true
