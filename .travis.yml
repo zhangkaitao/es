@@ -7,9 +7,11 @@ jdk:
   - openjdk7
 
 before_script:
+  - cd ./web
   - mvn db:create
   - mvn db:schema
   - mvn db:data
+  - cd ..
 
 install:
   - mvn clean install -pl . -Dmaven.test.skip=true
