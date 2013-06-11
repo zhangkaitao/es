@@ -1,5 +1,5 @@
 language: java
-script: mvn clean
+script: mvn clean test
 jdk:
   - openjdk7
 notifications:
