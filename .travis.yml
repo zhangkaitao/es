@@ -23,12 +23,13 @@ before_script:
   - cd ..
 
 script:
-
-  - cd web
-  - mvn test
-  - cd ..
   - cd common
   - mvn test
+  - cd ..
+  - cd web
+  - mvn test
+
+
 
 
 notifications:
