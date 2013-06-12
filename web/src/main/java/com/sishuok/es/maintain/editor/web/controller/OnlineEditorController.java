@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.web.controller.BaseController;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -43,6 +43,9 @@ public class OnlineEditorController extends BaseController {
 
     private final String ROOT_DIR = "/";
 
+    @Autowired
+    private ServletContext sc;
+    
 
     @RequestMapping(value = {"", "main"}, method = RequestMethod.GET)
     public String main() {
@@ -50,10 +53,8 @@ public class OnlineEditorController extends BaseController {
     }
 
     @RequestMapping(value = "tree", method = RequestMethod.GET)
-    public String tree(
-            HttpServletRequest request, Model model) throws UnsupportedEncodingException {
+    public String tree(Model model) throws UnsupportedEncodingException {
 
-        ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
 
         long id = 0L;
@@ -81,13 +82,11 @@ public class OnlineEditorController extends BaseController {
     @RequestMapping(value = "ajax/load", method = RequestMethod.GET)
     @ResponseBody
     public Object ajaxLoad(
-            HttpServletRequest request,
             @RequestParam("id") long parentId,
             @RequestParam("path") String parentPath) throws UnsupportedEncodingException {
 
         parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
 
-        ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
 
         File parentPathDirectory = new File(rootPath + "/" + parentPath);
@@ -109,7 +108,6 @@ public class OnlineEditorController extends BaseController {
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public String listFile(
-            HttpServletRequest request,
             @RequestParam(value = "path", required = false, defaultValue = "") String path,
             Pageable pageable,
             Model model) throws UnsupportedEncodingException {
@@ -118,7 +116,6 @@ public class OnlineEditorController extends BaseController {
 
         Sort sort = pageable.getSort();
 
-        ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
 
         File currentDirectory = new File(rootPath + "/" + path);
@@ -150,13 +147,10 @@ public class OnlineEditorController extends BaseController {
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
     public String showEditForm(
-            HttpServletRequest request,
             @RequestParam(value = "path", required = false, defaultValue = "") String path,
             Model model,
             RedirectAttributes redirectAttributes) throws IOException {
 
-
-        ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
 
 
@@ -202,12 +196,10 @@ public class OnlineEditorController extends BaseController {
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public String edit(
-            HttpServletRequest request,
             @RequestParam(value = "path") String path,
             @RequestParam(value = "content") String content,
             RedirectAttributes redirectAttributes) throws IOException {
 
-        ServletContext sc = request.getServletContext();
         String rootPath = sc.getRealPath(ROOT_DIR);
 
         path = URLDecoder.decode(path, Constants.ENCODING);

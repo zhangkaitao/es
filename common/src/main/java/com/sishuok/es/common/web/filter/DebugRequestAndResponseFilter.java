@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Enumeration;
 
 /**
@@ -81,16 +80,17 @@ public final class DebugRequestAndResponseFilter extends BaseFilter {
     }
 
     private void debugResponse(HttpServletResponse response) {
-        log.debug("=====================response begin==========================");
-        log.debug("status:{}", response.getStatus(), response.getContentType());
-        log.debug("contentType:{}, characterEncoding:{}", response.getContentType(), response.getCharacterEncoding());
-        log.debug("===header begin============================================");
-        Collection<String> headerNames = response.getHeaderNames();
-        for (String name : headerNames) {
-            String value = StringUtils.join(response.getHeaders(name), "||");
-            log.debug("{}={}", name, value);
-        }
-        log.debug("===header   end============================================");
-        log.debug("=====================response   end==========================");
+        //need servlet3
+//        log.debug("=====================response begin==========================");
+//        log.debug("status:{}", response.getStatus(), response.getContentType());
+//        log.debug("contentType:{}, characterEncoding:{}", response.getContentType(), response.getCharacterEncoding());
+//        log.debug("===header begin============================================");
+//        Collection<String> headerNames = response.getHeaderNames();
+//        for (String name : headerNames) {
+//            String value = StringUtils.join(response.getHeaders(name), "||");
+//            log.debug("{}={}", name, value);
+//        }
+//        log.debug("===header   end============================================");
+//        log.debug("=====================response   end==========================");
     }
 }

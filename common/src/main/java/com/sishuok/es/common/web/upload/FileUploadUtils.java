@@ -270,7 +270,7 @@ public class FileUploadUtils {
      * @return
      */
     public static final String extractUploadDir(HttpServletRequest request) {
-        return request.getServletContext().getRealPath(".");
+        return request.getSession().getServletContext().getRealPath(".");
     }
 
 

@@ -12,6 +12,7 @@ import com.sishuok.es.maintain.staticresource.web.controller.utils.YuiCompressor
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -52,11 +51,12 @@ public class StaticResourceVersionController extends BaseController {
     private final Pattern linkPattern =
             Pattern.compile("(.*<link.* href=[\'\"])(.*?)(\\??)(\\d*)([\'\"].*>.*)", Pattern.CASE_INSENSITIVE);
 
+    @Autowired
+    private ServletContext sc;
 
     @RequestMapping()
-    public String list(HttpServletRequest request, Model model) throws IOException {
+    public String list(Model model) throws IOException {
 
-        ServletContext sc = request.getServletContext();
         String realPath = sc.getRealPath(versionedResourcePath);
 
         model.addAttribute("resources", findStaticResources(realPath));
@@ -67,14 +67,11 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping(value = "incVersion", method = RequestMethod.POST)
     @ResponseBody
     public String incVersion(
-            HttpServletRequest request,
             @RequestParam("fileName") String fileName,
             @RequestParam("content") String content,
             @RequestParam("newVersion") String newVersion
     ) throws IOException {
 
-
-        ServletContext sc = request.getServletContext();
         String realPath = sc.getRealPath(versionedResourcePath);
 
         return versionedStaticResourceContent(realPath + fileName, content, newVersion);
@@ -84,14 +81,11 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping(value = "batchIncVersion", method = RequestMethod.POST)
     @ResponseBody
     public String batchIncVersion(
-            HttpServletRequest request,
             @RequestParam("fileNames[]") String[] fileNames,
             @RequestParam("contents[]") String[] contents,
-            @RequestParam("newVersions[]") String[] newVersions,
-            RedirectAttributes redirectAttributes
+            @RequestParam("newVersions[]") String[] newVersions
     ) throws IOException {
 
-        ServletContext sc = request.getServletContext();
         String realPath = sc.getRealPath(versionedResourcePath);
 
         for(int i = 0, l = fileNames.length; i < l; i++) {
@@ -105,12 +99,10 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping(value = "clearVersion", method = RequestMethod.POST)
     @ResponseBody
     public String clearVersion(
-            HttpServletRequest request,
             @RequestParam("fileNames[]") String[] fileNames,
             @RequestParam("contents[]") String[] contents
     ) throws IOException {
 
-        ServletContext sc = request.getServletContext();
         String realPath = sc.getRealPath(versionedResourcePath);
 
         for(int i = 0, l = fileNames.length; i < l; i++) {
@@ -125,12 +117,10 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping("compress")
     @ResponseBody
     public String compress(
-            HttpServletRequest request,
             @RequestParam("fileName") String fileName,
             @RequestParam("content") String content
     ) {
 
-        ServletContext sc = request.getServletContext();
         String rootRealPath = sc.getRealPath("/WEB-INF");
         String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
 
@@ -147,13 +137,11 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping("batchCompress")
     @ResponseBody
     public String batchCompress(
-            HttpServletRequest request,
             @RequestParam("fileNames[]") String[] fileNames,
             @RequestParam("contents[]") String[] contents
     ) throws IOException {
 
 
-        ServletContext sc = request.getServletContext();
         String rootRealPath = sc.getRealPath("/WEB-INF");
         String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
 
@@ -178,7 +166,6 @@ public class StaticResourceVersionController extends BaseController {
 
     /**
      * 切换版本
-     * @param request
      * @param fileName
      * @param content
      * @return
@@ -186,7 +173,6 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping("switch")
     @ResponseBody
     public Object switchStaticResource(
-            HttpServletRequest request,
             @RequestParam("fileName") String fileName,
             @RequestParam("content") String content,
             @RequestParam(value = "min", required = false, defaultValue = "false") boolean isMin
@@ -197,7 +183,7 @@ public class StaticResourceVersionController extends BaseController {
         data.put("msg", "切换成功");
         data.put("success", true);
 
-        ServletContext sc = request.getServletContext();
+        
         String rootRealPath = sc.getRealPath("/WEB-INF");
         String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
 
@@ -216,7 +202,6 @@ public class StaticResourceVersionController extends BaseController {
 
     /**
      * 批量切换版本
-     * @param request
      * @param fileNames
      * @param contents
      * @return
@@ -225,14 +210,12 @@ public class StaticResourceVersionController extends BaseController {
     @RequestMapping("batchSwitch")
     @ResponseBody
     public String batchSwitchStaticResource(
-            HttpServletRequest request,
             @RequestParam("fileNames[]") String[] fileNames,
             @RequestParam("contents[]") String[] contents,
             @RequestParam(value = "min", required = false, defaultValue = "false") boolean isMin
 
     ) throws IOException {
 
-        ServletContext sc = request.getServletContext();
         String rootRealPath = sc.getRealPath("/WEB-INF");
         String versionedResourceRealPath = sc.getRealPath(versionedResourcePath);
 
