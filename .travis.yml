@@ -27,7 +27,7 @@ script:
 
   - cd web
   - mvn test
-  - cd..
+  - cd ..
   - cd common
   - mvn test
 
