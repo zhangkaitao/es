@@ -15,9 +15,7 @@ mysql:
   encoding: utf8
 
 install:
-  - mvn clean install -pl . -Dmaven.test.skip=true
-  - mvn clean install -pl parent -Dmaven.test.skip=true
-  - mvn clean install -pl common -Dmaven.test.skip=true
+  - mvn install -Dmaven.test.skip=true
 
 before_script:
   - cd web
