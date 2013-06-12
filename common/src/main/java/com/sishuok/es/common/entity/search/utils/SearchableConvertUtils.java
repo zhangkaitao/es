@@ -167,8 +167,8 @@ public final class SearchableConvertUtils {
             final String entityProperty,
             final Object value) {
 
-        logger.error("-=-----------" + System.identityHashCode(conversionService));
-        logger.error("-=-----------" + conversionService.canConvert(String.class, Date.class));
+        logger.error("--------------" + System.identityHashCode(conversionService));
+        logger.error("--------------" + conversionService.canConvert(String.class, Date.class));
 
         Object newValue;
         try {
