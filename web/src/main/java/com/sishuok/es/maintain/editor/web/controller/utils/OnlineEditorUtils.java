@@ -7,7 +7,6 @@ package com.sishuok.es.maintain.editor.web.controller.utils;
 
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.Constants;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.data.domain.Sort;
 
@@ -48,7 +47,6 @@ public class OnlineEditorUtils {
         Map<Object, Object> info = Maps.newHashMap();
         info.put("name", currentFile.getName());
         info.put("path", URLEncoder.encode(currentFile.getAbsolutePath().replace(rootPath, ""), Constants.ENCODING));
-        System.out.println(StringEscapeUtils.escapeJava(currentFile.getAbsolutePath().replace(rootPath, "")));
         info.put("hasParent", !currentFile.getPath().equals(rootPath));
         info.put("isParent", hasSubFiles(currentFile));
         info.put("isDirectory", currentFile.isDirectory());

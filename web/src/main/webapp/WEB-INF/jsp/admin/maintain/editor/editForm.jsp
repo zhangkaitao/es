@@ -24,7 +24,10 @@
 
 <div data-table="table" class="panel">
     <c:if test="${param['editorType'] eq 'html'}">
-         注意：当前编辑器是html编辑器，可能会添加额外的标签造成页面出错，如果是jsp等动态页面，请考虑使用纯文本编辑器。
+        <div class="alert alert-info">
+            <strong>注意：</strong>注意：当前编辑器是html编辑器，可能会添加额外的标签造成页面出错，如果是jsp等动态页面，请考虑使用纯文本编辑器。<br/>
+        </div>
+
     </c:if>
 
     <form action="" method="post">
