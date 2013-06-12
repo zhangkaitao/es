@@ -4,11 +4,10 @@ env:
   - DB=mysql
 
 jdk:
-  - openjdk7
+  - oraclejdk7
 
 mysql:
   database: es
-  port : 3308
   username: root
   password :
   encoding: utf8
