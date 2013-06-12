@@ -25,11 +25,12 @@ before_script:
 # must be sequence  web common, maybe travis bug
 
 script:
-  - cd web
-  - mvn test
-  - cd ..
   - cd common
   - mvn test
+  - cd ..
+  - cd web
+  - mvn test
+
 
 
 notifications:
