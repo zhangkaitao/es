@@ -12,8 +12,11 @@ import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.exception.InvlidSearchOperatorException;
 import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.support.DefaultFormattingConversionService;
@@ -27,6 +30,23 @@ import java.util.Map;
  * <p>Version: 1.0
  */
 public class SearchableTest {
+
+
+    private ConversionService oldConversionService;
+    @Before
+    public void setUp() {
+        try {
+            oldConversionService = SearchableConvertUtils.getConversionService();
+        } catch (Exception e) {
+            //ignore null case
+        }
+        SearchableConvertUtils.setConversionService(new DefaultFormattingConversionService());
+    }
+
+    @After
+    public void tearDown() {
+        SearchableConvertUtils.setConversionService(oldConversionService);
+    }
 
 
     @Test
@@ -254,8 +274,6 @@ public class SearchableTest {
 
     @Test
     public void testConvert() {
-
-        SearchableConvertUtils.setConversionService(new DefaultFormattingConversionService());
 
         Searchable searchable = Searchable.newSearchable();
         searchable.addSearchParam("username_like", "zhang");
