@@ -4,7 +4,7 @@ env:
   - DB=mysql
 
 jdk:
-  - oraclejdk7
+  - openjdk7
 
 mysql:
   database: es
@@ -24,8 +24,6 @@ before_script:
 
 script:
   - mvn test
-
-
 
 notifications:
   email:
