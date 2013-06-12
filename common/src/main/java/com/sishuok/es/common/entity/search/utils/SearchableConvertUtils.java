@@ -60,7 +60,7 @@ public final class SearchableConvertUtils {
                 if (conversionService == null) {
                     try {
                         conversionService = SpringUtils.getBean(ConversionService.class);
-                        logger.error("============" + conversionService);
+                        logger.error("===========================" + System.identityHashCode(conversionService));
                     } catch (Exception e) {
                         throw new SearchException("conversionService is null, " +
                                 "search param convert must use conversionService. " +
