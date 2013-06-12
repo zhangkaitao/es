@@ -7,9 +7,8 @@ jdk:
   - openjdk7
 
 mysql:
-  adapter: mysql2
   database: es
-  port : 3306
+  port : 3308
   username: root
   password :
   encoding: utf8
@@ -25,11 +24,13 @@ before_script:
   - cd ..
 
 script:
-  - cd common
-  - mvn test
-  - cd..
+
   - cd web
   - mvn test
+  - cd..
+  - cd common
+  - mvn test
+
 
 notifications:
   email:
