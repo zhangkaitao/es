@@ -80,9 +80,7 @@ public final class SearchableConvertUtils {
         Collection<SearchFilter> searchFilters = search.getSearchFilters();
         BeanWrapperImpl beanWrapper = new BeanWrapperImpl(entityClass);
         beanWrapper.setAutoGrowNestedPaths(true);
-        beanWrapper.setConversionService(SpringUtils.getBean(ConversionService.class));
-
-
+        beanWrapper.setConversionService(getConversionService());
 
         for (SearchFilter searchFilter : searchFilters) {
             convertSearchValueToEntityValue(beanWrapper, searchFilter);
