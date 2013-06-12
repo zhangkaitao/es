@@ -23,7 +23,13 @@ before_script:
   - cd ..
 
 script:
+  - cd common
   - mvn test
+  - cd ..
+  - cd web
+  - mvn test -Pit
+
+
 
 notifications:
   email:
