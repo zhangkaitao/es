@@ -16,8 +16,6 @@ import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.filter.OrCondition;
 import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.utils.SpringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.core.convert.ConversionService;
@@ -32,8 +30,6 @@ import java.util.List;
  * <p>Version: 1.0
  */
 public final class SearchableConvertUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(SearchableConvertUtils.class);
 
     private static volatile ConversionService conversionService;
 
@@ -59,7 +55,6 @@ public final class SearchableConvertUtils {
                 if (conversionService == null) {
                     try {
                         conversionService = SpringUtils.getBean(ConversionService.class);
-                        logger.info("============" + conversionService);
                     } catch (Exception e) {
                         throw new SearchException("conversionService is null, " +
                                 "search param convert must use conversionService. " +
