@@ -53,22 +53,24 @@ public final class SearchableConvertUtils {
         SearchableConvertUtils.conversionService = conversionService;
     }
 
-
     public static ConversionService getConversionService() {
         if (conversionService == null) {
             synchronized (SearchableConvertUtils.class) {
                 if (conversionService == null) {
                     try {
                         conversionService = SpringUtils.getBean(ConversionService.class);
-                        logger.error("===========================" + System.identityHashCode(conversionService));
+                        logger.error("=================1=====" + System.identityHashCode(conversionService));
                     } catch (Exception e) {
+                        logger.error("=================4=====" + System.identityHashCode(conversionService));
                         throw new SearchException("conversionService is null, " +
                                 "search param convert must use conversionService. " +
                                 "please see [com.sishuok.es.common.entity.search.utils." +
                                 "SearchableConvertUtils#setConversionService]");
                     }
                 }
+                logger.error("=================2=====" + System.identityHashCode(conversionService));
             }
+            logger.error("=================3=====" + System.identityHashCode(conversionService));
         }
         return conversionService;
     }
