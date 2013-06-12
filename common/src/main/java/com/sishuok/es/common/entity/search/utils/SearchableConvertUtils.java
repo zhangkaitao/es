@@ -23,8 +23,8 @@ import org.springframework.beans.InvalidPropertyException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.Date;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +60,7 @@ public final class SearchableConvertUtils {
                 if (conversionService == null) {
                     try {
                         conversionService = SpringUtils.getBean(ConversionService.class);
+                        logger.error("============" + conversionService);
                     } catch (Exception e) {
                         throw new SearchException("conversionService is null, " +
                                 "search param convert must use conversionService. " +
@@ -164,7 +165,7 @@ public final class SearchableConvertUtils {
             final String entityProperty,
             final Object value) {
 
-        logger.error("-=-----------" + conversionService);
+        logger.error("-=-----------" + System.identityHashCode(conversionService));
         logger.error("-=-----------" + conversionService.canConvert(String.class, Date.class));
 
         Object newValue;
