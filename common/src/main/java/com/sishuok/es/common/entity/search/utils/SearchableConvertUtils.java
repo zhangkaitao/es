@@ -164,6 +164,8 @@ public final class SearchableConvertUtils {
             final String entityProperty,
             final Object value) {
 
+        logger.error("-=-----------" + conversionService);
+
         Object newValue;
         try {
 
