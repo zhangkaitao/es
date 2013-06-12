@@ -16,14 +16,11 @@ import com.sishuok.es.common.entity.search.filter.Condition;
 import com.sishuok.es.common.entity.search.filter.OrCondition;
 import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.utils.SpringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,8 +30,6 @@ import java.util.List;
  * <p>Version: 1.0
  */
 public final class SearchableConvertUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(SearchableConvertUtils.class);
 
     private static volatile ConversionService conversionService;
 
@@ -85,7 +80,7 @@ public final class SearchableConvertUtils {
         Collection<SearchFilter> searchFilters = search.getSearchFilters();
         BeanWrapperImpl beanWrapper = new BeanWrapperImpl(entityClass);
         beanWrapper.setAutoGrowNestedPaths(true);
-        beanWrapper.setConversionService(SpringUtils.getBean(ConversionService.class));
+        beanWrapper.setConversionService(getConversionService());
 
         for (SearchFilter searchFilter : searchFilters) {
             convertSearchValueToEntityValue(beanWrapper, searchFilter);
@@ -162,9 +157,6 @@ public final class SearchableConvertUtils {
             final String searchProperty,
             final String entityProperty,
             final Object value) {
-
-        logger.error("--------------" + System.identityHashCode(conversionService));
-        logger.error("--------------" + conversionService.canConvert(String.class, Date.class));
 
         Object newValue;
         try {
