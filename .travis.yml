@@ -22,13 +22,7 @@ before_script:
   - mvn db:data
   - cd ..
 
-# must be sequence  web common, maybe travis bug
-
 script:
-  - cd common
-  - mvn test
-  - cd ..
-  - cd web
   - mvn test
 
 
