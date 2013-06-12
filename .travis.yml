@@ -4,7 +4,7 @@ env:
   - DB=mysql
 
 jdk:
-  - openjdk7
+  - openjdk
 
 mysql:
   database: es
@@ -23,7 +23,13 @@ before_script:
   - cd ..
 
 script:
+  - cd common
   - mvn test
+  - cd ..
+  - cd web
+  - mvn test -Ptest
+
+
 
 notifications:
   email:
