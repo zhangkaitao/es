@@ -21,7 +21,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <a class="btn" href="${ctx}/admin/personal/message/send">
+                <a class="btn no-disabled" href="${ctx}/admin/personal/message/send">
                     <i class="icon-file"></i>
                     发送新消息
                 </a>
@@ -47,7 +47,7 @@
                 </a>
                 </c:if>
 
-                <a class="btn btn-clear">
+                <a class="btn no-disabled btn-clear">
                     <i class="icon-eraser"></i>
                     清空${state.info}
                 </a>

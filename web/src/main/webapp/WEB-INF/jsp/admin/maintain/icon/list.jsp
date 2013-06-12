@@ -27,7 +27,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="maintain:create">
                 <div class="btn-group first">
-                    <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
+                    <a class="btn btn-custom dropdown-toggle no-disabled" data-toggle="dropdown">
                         <i class="icon-file"></i>
                         新&nbsp;增
                         <i class="caret"></i>
@@ -35,7 +35,7 @@
                     <ul class="dropdown-menu">
                         <c:forEach items="${types}" var="t">
                             <li>
-                                <a class="btn" href="${ctx}/admin/maintain/icon/${t}/create">
+                                <a class="btn no-disabled" href="${ctx}/admin/maintain/icon/${t}/create">
                                     <i class="icon-file"></i>
                                     ${t.info}
                                 </a>
@@ -58,7 +58,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="maintain:create or maintain:update or maintain:delete">
-                <a class="btn btn-gen-css-file"
+                <a class="btn no-disabled btn-gen-css-file"
                    data-toggle="tooltip" data-placement="bottom" data-html="true"
                    title="生成相应的样式表文件(icon.css)<br/>标识符作为css class使用">
                     <i class="icon-asterisk"></i>

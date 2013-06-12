@@ -51,7 +51,7 @@
                 </a>
                 </shiro:hasPermission>
                 <div class="btn-group last">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <a class="btn no-disabled dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-wrench"></i>
                         更多操作
                         <span class="caret"></span>
@@ -59,7 +59,7 @@
                     <ul class="dropdown-menu">
                         <shiro:hasPermission name="showcase:productCategory:create or showcase:productCategory:update or showcase:productCategory:delete">
                         <li>
-                            <a class="btn btn-link reweight">
+                            <a class="btn no-disabled btn-link reweight">
                                 <i class="icon-cog"></i>
                                 优化权重
                             </a>
@@ -67,6 +67,12 @@
                         </shiro:hasPermission>
                         <shiro:hasPermission name="showcase:product:create">
                         <li class="divider"></li>
+                        <li>
+                            <a class="btn no-disabled btn-link list-all-product">
+                                <i class="icon-table"></i>
+                                查看所有产品
+                            </a>
+                        </li>
                         <li>
                             <a class="btn btn-link create-product">
                                 <i class="icon-file"></i>
@@ -81,12 +87,7 @@
                                 查看选中类别的产品
                             </a>
                         </li>
-                        <li>
-                            <a class="btn btn-link list-all-product">
-                                <i class="icon-table"></i>
-                                查看所有产品
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

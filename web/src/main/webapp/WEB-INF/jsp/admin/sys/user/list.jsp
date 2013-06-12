@@ -35,7 +35,7 @@
         <div class="span3">
             <div class="btn-group">
                 <shiro:hasPermission name="sys:user:create">
-                <a class="btn btn-create">
+                <a class="btn no-disabled btn-create">
                     <span class="icon-file"></span>
                     新增
                 </a>

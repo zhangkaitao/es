@@ -1245,7 +1245,6 @@ $.table = {
         }
 
         table.attr("initialized", "true");
-        $.table.initCheckbox(table);
 
         $.table.initSort(table);
         $.table.initSearchForm(table);
@@ -1260,6 +1259,12 @@ $.table = {
         $.table.initUpdateSelected(table);
         $.table.initCreate(table);
 
+        //初始化checkbox
+        $.table.initCheckbox(table);
+        //初始化 按钮的状态
+        $.table.changeBtnState(table);
+
+
     },
     initCheckbox: function(table) {
         var activeClass = "active";
@@ -1267,23 +1272,24 @@ $.table = {
         table.find("td.check").each(function () {
             var checkbox = $(this).find(":checkbox,:radio");
             checkbox.off("click").on("click", function (event) {
-                var checked = !checkbox.is(":checked");
+                var checked = checkbox.is(":checked");
                 if(checked) {
-                    checkbox.closest("tr").removeClass("active");
+                    checkbox.closest("tr").removeClass(activeClass);
                 } else {
-                    checkbox.closest("tr").addClass("active");
+                    checkbox.closest("tr").addClass(activeClass);
                 }
+                $.table.changeBtnState(table);
                 event.stopPropagation();
             });
             $(this).closest("tr").off("click").on("click", function (event) {
                 var checked = checkbox.is(":checked");
                 if(checked) {
-                    checkbox.closest("tr").removeClass("active");
+                    checkbox.closest("tr").removeClass(activeClass);
                 } else {
-                    checkbox.closest("tr").addClass("active");
+                    checkbox.closest("tr").addClass(activeClass);
                 }
                 checkbox.prop("checked", !checked);
-
+                $.table.changeBtnState(table);
             });
         });
         //初始化全选反选
@@ -1291,25 +1297,50 @@ $.table = {
             var checkAll = $(this);
             if(checkAll.text() == '全选') {
                 checkAll.text("取消");
-                table.find("td.check :checkbox").prop("checked", true).closest("tr").addClass("active");
-
+                table.find("td.check :checkbox").prop("checked", true).closest("tr").addClass(activeClass);
             } else {
                 checkAll.text("全选");
-                table.find("td.check :checkbox").prop("checked", false).closest("tr").removeClass("active");
+                table.find("td.check :checkbox").prop("checked", false).closest("tr").removeClass(activeClass);
             }
+            $.table.changeBtnState(table);
         });
         table.find(".reverse-all").off("click").on("click", function () {
             table.find("td.check :checkbox").each(function () {
                 var checkbox = $(this);
                 var checked = checkbox.is(":checked");
                 if(checked) {
-                    checkbox.closest("tr").removeClass("active");
+                    checkbox.closest("tr").removeClass(activeClass);
                 } else {
-                    checkbox.closest("tr").addClass("active");
+                    checkbox.closest("tr").addClass(activeClass);
                 }
                 checkbox.prop("checked", !checked);
+                $.table.changeBtnState(table);
             });
         });
+    },
+    changeBtnState : function(table) {
+        var hasChecked = table.find("td.check :checkbox:checked").length;
+        var btns = table.closest(".panel").find(".tool .btn").not(".no-disabled");
+        if(hasChecked) {
+            btns.removeClass("disabled");
+            btns.each(function() {
+                var btn = $(this);
+                var href = btn.data("btn-state-href");
+                if(href) {
+                    btn.attr("href", href);
+                }
+            });
+        } else {
+            btns.addClass("disabled");
+            btns.each(function() {
+                var btn = $(this);
+                var href = btn.attr("href");
+                if(href) {
+                    btn.data("btn-state-href", href);
+                    btn.removeAttr("href");
+                }
+            });
+        }
     },
     /**
      * 初始化对应的查询表单
@@ -1323,6 +1354,7 @@ $.table = {
             return;
         }
 
+        searchForm.find(".btn").addClass("no-disabled");
 
         searchForm.find(".btn-clear-search").click(function() {
 
@@ -1652,6 +1684,8 @@ $.table = {
         }
         var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-create");
 
+        $btn.addClass("no-disabled");
+
         $btn.off("click").on("click", function() {
             var url =  $.table.formatUrlPrefix(urlPrefix, $table) + "/create";
             if($btn.attr("href")) {
@@ -1690,6 +1724,12 @@ $.table = {
     getFirstSelectedCheckbox :function($table) {
         var checkbox = $("#table :checkbox:checked:first");
         if(!checkbox.length) {
+
+            //表示不选中 不可以用，此时没必要弹窗
+            if($(this).hasClass(".no-disable") == false) {
+                return checkbox;
+            }
+
             $.app.alert({
                 message : "请先选择要操作的数据！"
             });
@@ -1699,6 +1739,12 @@ $.table = {
     getAllSelectedCheckbox :function($table) {
         var checkbox = $table.find(":checkbox:checked");
         if(!checkbox.length) {
+
+            //表示不选中 不可以用，此时没必要弹窗
+            if($(this).hasClass(".no-disable") == false) {
+                return checkbox;
+            }
+
             $.app.alert({
                 message : "请先选择要操作的数据！"
             });

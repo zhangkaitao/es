@@ -19,26 +19,26 @@
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:upload:create">
                 <div class="btn-group first">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <a class="btn no-disabled dropdown-toggle" data-toggle="dropdown">
                         <span class="icon-file"></span>
                         新&nbsp;增
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="btn btn-create">
+                            <a class="btn no-disabled btn-create">
                                 <span class="icon-file"></span>
                                 普通新增
                             </a>
                         </li>
                         <li>
-                            <a id="ajaxCreate" class="btn" href="${ctx}/showcase/upload/ajax/create">
+                            <a id="ajaxCreate" class="btn no-disabled" href="${ctx}/showcase/upload/ajax/create">
                                 <span class="icon-file"></span>
                                 ajax新增
                             </a>
                         </li>
                         <li>
-                            <a id="ajaxBatchCreate"  class="btn" href="${ctx}/ajaxUpload">
+                            <a id="ajaxBatchCreate"  class="btn no-disabled" href="${ctx}/ajaxUpload">
                                 <span class="icon-file"></span>
                                 ajax批量上传
                             </a>

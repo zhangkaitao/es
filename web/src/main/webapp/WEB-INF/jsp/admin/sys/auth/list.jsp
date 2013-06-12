@@ -20,21 +20,23 @@
         <div class="span3">
             <div class="btn-group">
                 <shiro:hasPermission name="sys:auth:create">
-                <a class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-file"></i>
-                    批量新增
-                    <i class="caret"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <c:forEach items="${types}" var="t">
-                        <li>
-                            <a class="btn" href="${ctx}/admin/sys/auth/${t}/create">
-                                <i class="icon-file"></i>
-                                新增${t.info}授权
-                            </a>
-                        </li>
-                    </c:forEach>
-                </ul>
+                <div class="btn-group first">
+                    <a class="btn no-disabled btn-custom dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-file"></i>
+                        批量新增
+                        <i class="caret"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <c:forEach items="${types}" var="t">
+                            <li>
+                                <a class="btn no-disabled" href="${ctx}/admin/sys/auth/${t}/create">
+                                    <i class="icon-file"></i>
+                                    新增${t.info}授权
+                                </a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
                 </shiro:hasPermission>
 
                 <shiro:hasPermission name="sys:auth:update">
