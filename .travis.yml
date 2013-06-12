@@ -22,9 +22,7 @@ before_script:
   - mvn db:data
   - cd ..
 
-##
-#顺序只能是web 然后common 好像是travis环境的问题
-##
+# must be sequence  web common, maybe travis bug
 
 script:
   - cd web
