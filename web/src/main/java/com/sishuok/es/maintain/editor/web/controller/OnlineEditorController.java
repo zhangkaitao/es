@@ -327,6 +327,26 @@ public class OnlineEditorController extends BaseController {
     }
 
 
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public String showUploadForm(
+            @RequestParam("parentPath") String parentPath,
+            Model model,
+            RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
+        File parent = new File(rootPath + "/" + parentPath);
+        if(!parent.exists()) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, parentPath + "目录不存在！");
+            redirectAttributes.addAttribute("path", "");
+            return redirectToUrl(viewName("list"));
+        }
+
+        model.addAttribute("parentPath", parentPath);
+        return viewName("uploadForm");
+    }
+
+
     //允许\ 即多级目录创建
     private final String VALID_FILENAME_PATTERN = "[^\\s:\\*\\?\\\"<>\\|]?(\\x20|[^\\s:\\*\\?\\\"<>\\|])*[^\\s:\\*\\?\\\"<>\\|\\.]?$";
     private boolean isValidFileName(String fileName) {

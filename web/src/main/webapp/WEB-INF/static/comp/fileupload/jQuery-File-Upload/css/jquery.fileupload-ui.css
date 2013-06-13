@@ -50,18 +50,3 @@
   max-width: 300px;
 }
 
-@media (max-width: 767px) {
-  .fileupload-buttonbar .toggle,
-  .files .toggle,
-  .files .btn span {
-    display: none;
-  }
-  .files .name {
-    width: 80px;
-    word-wrap: break-word;
-  }
-  .files audio,
-  .files video {
-    max-width: 80px;
-  }
-}

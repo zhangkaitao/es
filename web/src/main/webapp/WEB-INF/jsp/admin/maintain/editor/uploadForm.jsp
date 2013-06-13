@@ -2,25 +2,32 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
 <%@include file="/WEB-INF/jsp/common/import-upload-css.jspf"%>
-<div class="panel">
 
+<div class="panel">
 
     <ul class="nav nav-tabs">
         <li class="active">
-            <a>
-                <i class="icon-file-alt"></i>
-                ${op}
+            <a href="${ctx}/admin/maintain/editor/upload?parentPath=${parentPath}">
+                <i class="icon-upload"></i>
+                上传
             </a>
         </li>
         <li>
-            <a href="<es:BackURL/>" class="btn btn-link">
+            <a href="${ctx}/admin/maintain/editor/list?path=${parentPath}">
                 <i class="icon-reply"></i>
                 返回
             </a>
         </li>
     </ul>
 
+    <div class="alert alert-block">
+        <strong>注意：</strong>可以上传的文件类型包括：图片：bmp,gif,jpg,png、文档：pdf,doc,xls,ppt、压缩文件：zip,rar、web相关：jsp,jspx,tag,tld,xml,html,css,js,class！
+    </div>
+
+
     <form:form id="fileupload" method="post" cssClass="form-horizontal" enctype="multipart/form-data">
+
+        <div class="label label-info">当前目录：${empty parentPath ? '根' : parentPath}</div><br/><br/>
 
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
@@ -28,21 +35,21 @@
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <label for="files" class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
-                    <span>添加文件...</span>
+                    添加文件...
                     <input type="file" id="files" name="files[]" multiple>
                 </label>
 
                 <button type="submit" class="btn btn-primary start">
                     <i class="icon-upload icon-white"></i>
-                    <span>开始上传</span>
+                    开始上传
                 </button>
                 <button type="reset" class="btn btn-warning cancel">
                     <i class="icon-ban-circle icon-white"></i>
-                    <span>取消上传</span>
+                    取消上传
                 </button>
                 <button type="button" class="btn btn-danger delete">
                     <i class="icon-trash icon-white"></i>
-                    <span>删除</span>
+                    删除
                 </button>
                 <input type="checkbox" class="toggle">
             </div>
@@ -64,15 +71,6 @@
         <table role="presentation" class="table">
             <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
         </table>
-
-        <div class="control-group">
-            <div class="controls">
-                <button type="button" class="btn show-upload">
-                    <i class="icon-eye-open"></i>
-                    显示上传的文件名
-                </button>
-            </div>
-        </div>
 
     </form:form>
 </div>
@@ -108,13 +106,13 @@
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td class="preview" style="width:120px"><span class="fade"></span></td>
-        <td class="name" style="width:35%"><span>{%=file.name%}</span></td>
+        <td class="preview" style="width:85px"><span class="fade"></span></td>
+        <td class="name" width="30%"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% if (file.error) { %}
         <td class="error" colspan="2"><span class="label label-important">错误</span> {%=file.error%}</td>
         {% } else if (!o.files.error && !i) { %}
-        <td style="width:15%">
+        <td style="width:14%">
             <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
         </td>
         <td style="width:60px">{% if (!o.options.autoUpload) { %}
@@ -141,14 +139,14 @@
     <tr class="template-download fade">
         {% if (file.error) { %}
         <td> </td>
-        <td class="name" style="width:35%"><span>{%=file.name%}</span></td>
+        <td class="name" style="width:30%"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         <td class="error" colspan="2"><span class="label label-important">错误</span> {%=file.error%}</td>
         {% } else { %}
-        <td class="preview" style="width:120px">{% if (file.thumbnail_url) { %}
-            <a href="${ctx}/{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="${ctx}/{%=file.thumbnail_url%}" style="width:120px"></a>
+        <td class="preview" style="width:80px">{% if (file.thumbnail_url) { %}
+            <a href="${ctx}/{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="${ctx}/{%=file.thumbnail_url%}" style="width:85px"></a>
             {% } %}</td>
-        <td class="name" style="width:35%">
+        <td class="name" style="width:30%">
             <a href="${ctx}/{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
         </td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
@@ -193,16 +191,8 @@
             // which actually support image resizing, but fail to
             // send Blob objects via XHR requests:
             disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
-            acceptFileTypes: /(\.|\/)(bmp|gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar)$/i
+            acceptFileTypes: /(\.|\/)(bmp|gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar|jsp|jspx|tag|tld|xml|java|html|css|js)$/i
         });
 
-        $(".show-upload").click(function() {
-            var urls = new Array();
-            $("#fileupload .files .name a").each(function() {
-                urls.push($(this).prop("href"));
-            });
-
-            alert(urls.join("\r\n"));
-        });
     });
 </script>

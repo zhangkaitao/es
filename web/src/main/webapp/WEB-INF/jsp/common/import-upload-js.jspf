@@ -21,7 +21,7 @@
 <!-- The File Upload video preview plugin -->
 <script src="${ctx}/static/comp/fileupload/jQuery-File-Upload/js/jquery.fileupload-video.js?1"></script>
 <!-- The File Upload validation plugin -->
-<script src="${ctx}/static/comp/fileupload/jQuery-File-Upload/js/jquery.fileupload-validate.js?1"></script>
+<script src="${ctx}/static/comp/fileupload/jQuery-File-Upload/js/jquery.fileupload-validate.js?2"></script>
 <!-- The File Upload user interface plugin -->
 <script src="${ctx}/static/comp/fileupload/jQuery-File-Upload/js/jquery.fileupload-ui.js?1"></script>
 

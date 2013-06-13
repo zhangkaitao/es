@@ -163,5 +163,9 @@
                 }
             });
         });
+
+        $(".btn-upload").click(function() {
+            location.href = ctx + '/admin/maintain/editor/upload?parentPath=${current.path}';
+        });
     });
 </script>
