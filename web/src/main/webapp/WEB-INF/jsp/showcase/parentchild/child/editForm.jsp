@@ -2,7 +2,6 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <div class="panel">
 
-
     <ul class="nav nav-tabs">
         <c:if test="${op eq '新增'}">
             <li ${op eq '新增' ? 'class="active"' : ''}>

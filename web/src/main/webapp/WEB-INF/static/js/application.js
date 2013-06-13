@@ -1207,6 +1207,7 @@ $.parentchild = {
 
                     $.post(options.batchDeleteUrl, ids, function() {
                         $trs.remove();
+                        $.table.changeBtnState($childTable);
                     });
 
                 }

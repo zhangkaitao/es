@@ -101,11 +101,11 @@
                 <div class="clearfix"></div>
             </div>
             <br/>
-            <div >
-                <h4 class="hr">
+            <div class="panel">
+                <h4 class="hr tool">
                     子数据&nbsp;&nbsp;&nbsp;&nbsp;
                     <div class="btn-group" style="font-weight: normal;">
-                        <a class="btn btn-create-child">
+                        <a class="btn btn-create-child no-disabled">
                             <i class="icon-edit"></i>
                             新增
                         </a>

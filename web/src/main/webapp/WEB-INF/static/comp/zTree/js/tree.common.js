@@ -182,7 +182,10 @@ $.zTree = {
             $.getJSON(url, function(newNode) {
                 var node = { id:newNode.id, pId:newNode.pId, name:newNode.name, iconSkin:newNode.iconSkin, open: true,
                     click : newNode.click, root :newNode.root,isParent:newNode.isParent};
-                zTree.addNodes(treeNode, node);
+                var newNode = zTree.addNodes(treeNode, node)[0];
+//                zTree.selectNode(newNode);
+                $("#" + newNode.tId + "_a").click();
+
                 $.app.waitingOver();
             });
         }
