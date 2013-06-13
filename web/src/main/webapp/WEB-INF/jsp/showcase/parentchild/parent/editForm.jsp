@@ -9,7 +9,7 @@
         <c:if test="${op eq '新增'}">
             <li ${op eq '新增' ? 'class="active"' : ''}>
                 <a href="${ctx}/showcase/parentchild/parent/create?BackURL=<es:BackURL/>">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     新增
                 </a>
             </li>
@@ -159,7 +159,7 @@
             <br/><br/>
 
             <c:if test="${op eq '新增'}">
-                <c:set var="icon" value="icon-file"/>
+                <c:set var="icon" value="icon-file-alt"/>
             </c:if>
             <c:if test="${op eq '修改'}">
                 <c:set var="icon" value="icon-edit"/>

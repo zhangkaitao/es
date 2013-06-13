@@ -22,7 +22,7 @@
                 <shiro:hasPermission name="sys:auth:create">
                 <div class="btn-group first">
                     <a class="btn no-disabled btn-custom dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         批量新增
                         <i class="caret"></i>
                     </a>
@@ -30,7 +30,7 @@
                         <c:forEach items="${types}" var="t">
                             <li>
                                 <a class="btn no-disabled" href="${ctx}/admin/sys/auth/${t}/create">
-                                    <i class="icon-file"></i>
+                                    <i class="icon-file-alt"></i>
                                     新增${t.info}授权
                                 </a>
                             </li>

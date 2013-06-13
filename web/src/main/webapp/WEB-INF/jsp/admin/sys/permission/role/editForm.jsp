@@ -15,7 +15,7 @@
         <c:if test="${op eq '新增'}">
             <li ${op eq '新增' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/sys/permission/role/create?BackURL=<es:BackURL/>">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     新增
                 </a>
             </li>
@@ -124,7 +124,7 @@
                 <div id="appendResourcePermissionBtn" class="control-group span2">
                     &nbsp;
                     <a class="btn btn-warning btn-add-resource-permission">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         添加
                     </a>
                 </div>
@@ -193,7 +193,7 @@
             <div class="clearfix"></div>
 
             <c:if test="${op eq '新增'}">
-                <c:set var="icon" value="icon-file"/>
+                <c:set var="icon" value="icon-file-alt"/>
             </c:if>
             <c:if test="${op eq '修改'}">
                 <c:set var="icon" value="icon-edit"/>

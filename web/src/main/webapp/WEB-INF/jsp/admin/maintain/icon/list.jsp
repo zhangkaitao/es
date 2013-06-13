@@ -28,7 +28,7 @@
                 <shiro:hasPermission name="maintain:create">
                 <div class="btn-group first">
                     <a class="btn btn-custom dropdown-toggle no-disabled" data-toggle="dropdown">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         新&nbsp;增
                         <i class="caret"></i>
                     </a>
@@ -36,7 +36,7 @@
                         <c:forEach items="${types}" var="t">
                             <li>
                                 <a class="btn no-disabled" href="${ctx}/admin/maintain/icon/${t}/create">
-                                    <i class="icon-file"></i>
+                                    <i class="icon-file-alt"></i>
                                     ${t.info}
                                 </a>
                             </li>

@@ -8,7 +8,7 @@
     <ul class="nav nav-tabs">
         <li class="active">
             <a>
-                <i class="icon-file"></i>
+                <i class="icon-file-alt"></i>
                 ${op}
             </a>
         </li>

@@ -39,7 +39,7 @@
         <div class="control-group">
             <div class="controls">
                 <button type="submit" class="btn btn-primary">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     添加子节点
                 </button>
             </div>

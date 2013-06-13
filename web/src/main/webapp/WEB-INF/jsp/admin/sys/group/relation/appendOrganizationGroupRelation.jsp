@@ -7,7 +7,7 @@
     <ul class="nav nav-tabs">
         <li class="active">
             <a href="${ctx}/admin/sys/group/${group.id}/batch/append?BackURL=<es:BackURL/>">
-                <i class="icon-file"></i>
+                <i class="icon-file-alt"></i>
                 ${group.type.info}-批量新增
             </a>
         </li>
@@ -47,7 +47,7 @@
             <label class="control-label"></label>
             <div class="controls">
                 <button type="submit" class="btn btn-primary">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     批量新增
                 </button>
                 <a href="<es:BackURL/>" class="btn">

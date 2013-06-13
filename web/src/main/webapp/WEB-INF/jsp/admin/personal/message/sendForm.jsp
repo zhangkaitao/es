@@ -7,7 +7,7 @@
             <c:if test="${op eq '发送草稿'}">
                 <li class="active">
                     <a href="${ctx}/admin/personal/message/draft/${m.id}/send?BackURL=<es:BackURL/>">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                             ${op}
                     </a>
                 </li>
@@ -15,7 +15,7 @@
             <c:if test="${op eq '发送新消息'}">
                 <li class="active">
                     <a href="${ctx}/admin/personal/message/send?BackURL=<es:BackURL/>">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         ${op}
                     </a>
                 </li>
@@ -23,7 +23,7 @@
             <c:if test="${op eq '回复消息'}">
                 <li class="active">
                     <a href="${ctx}/admin/personal/message/${parent.id}/reply?BackURL=<es:BackURL/>">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         ${op}
                     </a>
                 </li>
@@ -31,7 +31,7 @@
             <c:if test="${op eq '转发消息'}">
                 <li class="active">
                     <a href="${ctx}/admin/personal/message/${parent.id}/forward?BackURL=<es:BackURL/>">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                             ${op}
                     </a>
                 </li>

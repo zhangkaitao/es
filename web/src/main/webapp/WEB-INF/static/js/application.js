@@ -296,8 +296,9 @@ $.app = {
         var modal = modalDom.modal();
 
         modal.on("hidden", function() {
+            modal.remove();//移除掉 要不然 只是hidden
             if(hasBtnClick) {
-                return;
+                return true;
             }
             if(options.alert) {
                 options.ok();
@@ -1650,7 +1651,7 @@ $.table = {
             return;
         }
 
-        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-delete");
+        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-delete:not(.btn-custom)");
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getAllSelectedCheckbox($table);
@@ -1670,7 +1671,7 @@ $.table = {
         if(!$table || !$table.length) {
             return;
         }
-        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-update");
+        var $btn = $table.closest("[data-table='" + $table.attr("id") + "']").find(".btn-update:not(.btn-custom)");
         urlPrefix = $.table.formatUrlPrefix(urlPrefix, $table);
         $btn.off("click").on("click", function() {
             var checkbox = $.table.getFirstSelectedCheckbox($table);

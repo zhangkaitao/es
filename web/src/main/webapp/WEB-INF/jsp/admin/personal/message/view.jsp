@@ -6,7 +6,7 @@
     <ul class="nav nav-tabs">
             <li class="active">
                 <a href="${ctx}/admin/personal/message/${m.id}?BackURL=<es:BackURL/>">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     查看消息
                 </a>
             </li>

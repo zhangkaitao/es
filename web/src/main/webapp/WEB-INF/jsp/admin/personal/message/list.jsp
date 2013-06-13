@@ -22,7 +22,7 @@
         <div class="span4">
             <div class="btn-group">
                 <a class="btn no-disabled" href="${ctx}/admin/personal/message/send">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     发送新消息
                 </a>
 

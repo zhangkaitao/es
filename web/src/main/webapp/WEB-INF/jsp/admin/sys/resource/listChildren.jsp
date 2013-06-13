@@ -39,7 +39,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="sys:resource:create">
                 <a id="appendChild" class="btn btn-custom">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     添加子节点
                 </a>
                 </shiro:hasPermission>

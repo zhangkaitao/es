@@ -7,7 +7,7 @@
     <ul class="nav nav-tabs">
         <li class="active">
             <a>
-                <i class="icon-file"></i>
+                <i class="icon-file-alt"></i>
                 ${op}
             </a>
         </li>
@@ -56,7 +56,7 @@
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         ${op}
                     </button>
                     <a href="<es:BackURL/>" class="btn">

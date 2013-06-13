@@ -31,7 +31,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="sys:role:create">
                 <a class="btn btn-create">
-                    <i class="icon-file"></i>
+                    <i class="icon-file-alt"></i>
                     新增
                 </a>
                 </shiro:hasPermission>

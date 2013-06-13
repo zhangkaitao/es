@@ -30,7 +30,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:move:create">
                 <a id="create" class="btn " href="${ctx}/showcase/move/create">
-                    <span class="icon-file"></span>
+                    <span class="icon-file-alt"></span>
                     新增
                 </a>
                 </shiro:hasPermission>

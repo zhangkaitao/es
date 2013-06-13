@@ -33,7 +33,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:statusShow:create">
                 <a class="btn btn-create">
-                    <span class="icon-file"></span>
+                    <span class="icon-file-alt"></span>
                     新增
                 </a>
                 </shiro:hasPermission>

@@ -33,7 +33,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:productCategory:create">
                 <a class="btn btn-create">
-                    <span class="icon-file"></span>
+                    <span class="icon-file-alt"></span>
                     新&nbsp;增
                 </a>
                 </shiro:hasPermission>
@@ -75,7 +75,7 @@
                         </li>
                         <li>
                             <a class="btn btn-link create-product">
-                                <i class="icon-file"></i>
+                                <i class="icon-file-alt"></i>
                                 新增选中类别的产品
                             </a>
                         </li>

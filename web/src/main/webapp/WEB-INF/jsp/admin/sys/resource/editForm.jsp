@@ -54,7 +54,7 @@
 
 
         <c:if test="${op eq '新增'}">
-                <c:set var="icon" value="icon-file"/>
+                <c:set var="icon" value="icon-file-alt"/>
             </c:if>
             <c:if test="${op eq '修改'}">
                 <c:set var="icon" value="icon-edit"/>

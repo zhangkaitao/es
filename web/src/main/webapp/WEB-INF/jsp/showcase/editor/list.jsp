@@ -22,7 +22,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:editor:create">
                 <a class="btn btn-create" href="${ctx}/showcase/editor/create">
-                    <span class="icon-file"></span>
+                    <span class="icon-file-alt"></span>
                     新增
                 </a>
                 </shiro:hasPermission>

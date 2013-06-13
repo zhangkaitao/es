@@ -25,7 +25,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="sys:group:create or sys:group:update">
                 <a class="btn btn-custom" href="${ctx}/admin/sys/group/${group.id}/batch/append">
-                    <span class="icon-file"></span>
+                    <span class="icon-file-alt"></span>
                     批量新增
                 </a>
                 </shiro:hasPermission>

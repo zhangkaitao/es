@@ -9,7 +9,7 @@
             <c:forEach items="${types}" var="t">
                 <li ${t eq type ? 'class="active"' : ''}>
                     <a href="${ctx}/admin/sys/auth/${t}/create?BackURL=<es:BackURL/>">
-                        <i class="icon-file"></i>
+                        <i class="icon-file-alt"></i>
                         新增${t.info}授权
                     </a>
                 </li>
@@ -219,7 +219,7 @@
         </div>
 
         <c:if test="${op eq '新增'}">
-            <c:set var="icon" value="icon-file"/>
+            <c:set var="icon" value="icon-file-alt"/>
         </c:if>
         <c:if test="${op eq '修改'}">
             <c:set var="icon" value="icon-edit"/>
