@@ -157,12 +157,7 @@ public class FileUploadUtils {
 
     private static final File getAbsoluteFile(String uploadDir, String filename) throws IOException {
 
-        if (uploadDir.endsWith("/")) {
-            uploadDir = uploadDir.substring(0, uploadDir.length() - 1);
-        }
-        if (filename.startsWith("/")) {
-            filename = filename.substring(0, uploadDir.length() - 1);
-        }
+        uploadDir = FilenameUtils.normalizeNoEndSeparator(uploadDir);
 
         File desc = new File(uploadDir + "/" + filename);
 

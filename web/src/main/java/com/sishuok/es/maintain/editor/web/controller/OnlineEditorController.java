@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.web.controller.BaseController;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -275,9 +276,7 @@ public class OnlineEditorController extends BaseController {
             RedirectAttributes redirectAttributes) throws IOException {
 
         //删除最后的/
-        if(name.endsWith("/") || name.endsWith("\\")) {
-            name = name.substring(0, name.length() - 1);
-        }
+        name = FilenameUtils.normalizeNoEndSeparator(name);
 
         if(isValidFileName(name)) {
             String rootPath = sc.getRealPath(ROOT_DIR);
