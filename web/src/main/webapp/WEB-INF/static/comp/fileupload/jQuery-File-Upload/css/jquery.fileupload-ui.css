@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*
- * jQuery File Upload UI Plugin CSS 6.10
+ * jQuery File Upload UI Plugin CSS 8.1
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
@@ -13,61 +13,55 @@
 .fileinput-button {
   position: relative;
   overflow: hidden;
-  float: left;
-  margin-right: 4px;
 }
 .fileinput-button input {
-    position: absolute;
-    right: 0;
-    top: 0;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    z-index: 1;
-    width: 0px;
-    margin: 0px;
-    height: 0px;
-    line-height: 0px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  font-size: 23px;
+  direction: ltr;
+  cursor: pointer;
 }
 .fileupload-buttonbar .btn,
 .fileupload-buttonbar .toggle {
   margin-bottom: 5px;
-}
-.files .progress {
-  width: 200px;
 }
 .progress-animated .bar {
   background: url(../img/progressbar.gif) !important;
   filter: none;
 }
 .fileupload-loading {
-  position: absolute;
-  left: 50%;
-  width: 128px;
-  height: 128px;
+  float: right;
+  width: 32px;
+  height: 32px;
   background: url(../img/loading.gif) center no-repeat;
+  background-size: contain;
   display: none;
 }
 .fileupload-processing .fileupload-loading {
   display: block;
 }
-
+.files audio,
+.files video {
+  max-width: 300px;
+}
 
 @media (max-width: 767px) {
+  .fileupload-buttonbar .toggle,
+  .files .toggle,
   .files .btn span {
     display: none;
   }
-  .files .preview * {
-    width: 40px;
-  }
-  .files .name * {
+  .files .name {
     width: 80px;
-    display: inline-block;
     word-wrap: break-word;
   }
-  .files .progress {
-    width: 20px;
-  }
-  .files .delete {
-    width: 60px;
+  .files audio,
+  .files video {
+    max-width: 80px;
   }
 }

@@ -31,8 +31,6 @@
                 <value>shiroCacheManager</value>
                 <value>sessionValidationScheduler</value>
                 <value>sessionValidationScheduler</value>
-                <!-- spring-mvc.xml -->
-                <value>multipartResolver</value>
 
                 <!-- spring-config-monitor.xml -->
                 <value>druidStatInterceptor</value>

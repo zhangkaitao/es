@@ -109,60 +109,64 @@
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
         <td class="preview" style="width:120px"><span class="fade"></span></td>
-        <td class="name" width="35%"><span>{%=file.name%}</span></td>
-        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-        {% if (file.error) { %}
-            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-        {% } else if (o.files.valid && !i) { %}
-            <td>
-                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
-            </td>
-            <td class="start">{% if (!o.options.autoUpload) { %}
-                <button class="btn btn-primary">
-                    <i class="icon-upload icon-white"></i>
-                    <span>开始</span>
-                </button>
-            {% } %}</td>
-        {% } else { %}
-            <td colspan="2"></td>
-        {% } %}
-        <td class="cancel">{% if (!i) { %}
-            <button class="btn btn-warning">
+            <p class="name" width="35%">{%=file.name%}</p>
+            {% if (file.error) { %}
+            <div><span class="label label-important">错误</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <p class="size">{%=o.formatFileSize(file.size)%}</p>
+            {% if (!o.files.error) { %}
+            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+            {% } %}
+        <td>
+            {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+            <button class="btn btn-primary start">
+                <i class="icon-upload icon-white"></i>
+                <span>上传</span>
+            </button>
+            {% } %}
+            {% if (!i) { %}
+            <button class="btn btn-warning cancel">
                 <i class="icon-ban-circle icon-white"></i>
                 <span>取消</span>
             </button>
-        {% } %}</td>
+            {% } %}
+        </td>
     </tr>
 {% } %}
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
-        {% if (file.error) { %}
-            <td></td>
-            <td class="name"><span>{%=file.name%}</span></td>
-            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-        {% } else { %}
-            <td class="preview">{% if (file.thumbnail_url) { %}
-                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}" style="width:120px"></a>
-            {% } %}</td>
-            <td class="name">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnail_url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}" style="width:120px"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
-            </td>
-            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-            <td colspan="2"></td>
-        {% } %}
-        <td class="delete" width="10%">
-            <button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+            </p>
+            {% if (file.error) { %}
+            <div><span class="label label-important">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td width="12%">
+            <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                 <i class="icon-trash icon-white"></i>
                 <span>删除</span>
             </button>
-            <input type="checkbox" name="delete" value="1">
+            <input type="checkbox" name="delete" value="1" class="toggle">
         </td>
     </tr>
-{% } %}
+    {% } %}
 </script>
 
 <script type="text/javascript">
@@ -186,9 +190,13 @@
         );
 
 
-        $('#fileupload').fileupload('option', {
+        $('#fileupload').fileupload( 'option', {
             url: '${ctx}/ajaxUpload',
-            maxFileSize: 5000000,
+            maxFileSize: 20000000, //20MB
+            // Enable image resizing, except for Android and Opera,
+            // which actually support image resizing, but fail to
+            // send Blob objects via XHR requests:
+            disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
             acceptFileTypes: /(\.|\/)(bmp|gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar)$/i,
             process: [
                 {
@@ -198,8 +206,8 @@
                 },
                 {
                     action: 'resize',
-                    maxWidth: 1440,
-                    maxHeight: 900
+                    maxWidth: 1280,
+                    maxHeight: 768
                 },
                 {
                     action: 'save'
