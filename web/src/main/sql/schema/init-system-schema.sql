@@ -80,8 +80,8 @@ create table `sys_user_last_online`(
   `host`    varchar(100),
   `user_agent` varchar(200),
   `system_host`  varchar(100),
-  `last_login_timestamp default 0`    timestamp default 0 ,
-  `last_stop_timestamp default 0`    timestamp default 0 ,
+  `last_login_timestamp`    timestamp default 0 ,
+  `last_stop_timestamp`    timestamp default 0 ,
   `login_count`    bigint ,
   `total_online_time` bigint,
   constraint `pk_sys_user_last_online` primary key(`id`),
@@ -89,8 +89,8 @@ create table `sys_user_last_online`(
   index `idx_sys_user_last_online_username` (`username`),
   index `idx_sys_user_last_online_host` (`host`),
   index `idx_sys_user_last_online_system_host` (`system_host`),
-  index `idx_sys_user_last_online_last_login_timestamp default 0` (`last_login_timestamp default 0`),
-  index `idx_sys_user_last_online_last_stop_timestamp default 0` (`last_stop_timestamp default 0`),
+  index `idx_sys_user_last_online_last_login_timestamp` (`last_login_timestamp`),
+  index `idx_sys_user_last_online_last_stop_timestamp` (`last_stop_timestamp`),
   index `idx_sys_user_last_online_user_agent` (`user_agent`)
 ) charset=utf8 ENGINE=InnoDB;;
 
