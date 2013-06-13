@@ -6,6 +6,7 @@
 package com.sishuok.es.common.utils.forbidden;
 
 import com.google.common.collect.Lists;
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.utils.fetch.RemoteFileFetcher;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -128,7 +129,7 @@ public class ForbiddenWordUtils {
     private static void loadForbiddenWords(byte[] fileCBytes) throws IOException {
         Reader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileCBytes), "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileCBytes), Constants.ENCODING));
             List<String> forbiddenWordsStrList = IOUtils.readLines(reader);
             forbiddenWords = Lists.newArrayList();
             for (int i = forbiddenWordsStrList.size() - 1; i >= 0; i--) {

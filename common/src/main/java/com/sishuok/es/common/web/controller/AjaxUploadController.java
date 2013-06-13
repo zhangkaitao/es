@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.common.web.controller;
 
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.utils.ImagesUtils;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.MessageUtils;
@@ -72,7 +73,7 @@ public class AjaxUploadController {
 
             try {
                 String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize);
-                String deleteURL = request.getContextPath() + "/ajaxUpload/delete?filename=" + URLEncoder.encode(url, "UTF-8");
+                String deleteURL = request.getContextPath() + "/ajaxUpload/delete?filename=" + URLEncoder.encode(url, Constants.ENCODING);
                 if (ImagesUtils.isImage(filename)) {
                     ajaxUploadResponse.add(filename, size, url, url, deleteURL);
                 } else {
@@ -106,7 +107,7 @@ public class AjaxUploadController {
         if (StringUtils.isEmpty(filename) || filename.contains("\\.\\.")) {
             return;
         }
-        filename = URLDecoder.decode(filename, "UTF-8");
+        filename = URLDecoder.decode(filename, Constants.ENCODING);
 
         String filePath = FileUploadUtils.extractUploadDir(request) + "/" + filename;
 

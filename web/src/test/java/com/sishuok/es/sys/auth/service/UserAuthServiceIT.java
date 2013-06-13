@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.sys.auth.service;
 
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.service.UserService;
@@ -29,7 +30,7 @@ public class UserAuthServiceIT extends BaseIT {
 
     @Before
     public void setUp() {
-        setSqlScriptEncoding("utf-8");
+        setSqlScriptEncoding(Constants.ENCODING);
         executeSqlScript("sql/intergration-test-clear-all-data.sql", false);
         executeSqlScript("sql/intergration-test-resource-permission-role-data.sql", false);
         //clear cache
