@@ -100,12 +100,13 @@ public class AjaxUploadController {
 
 
     @RequestMapping(value = "ajaxUpload/delete", method = RequestMethod.POST)
-    public void ajaxUploadDelete(
+    @ResponseBody
+    public String ajaxUploadDelete(
             HttpServletRequest request,
             @RequestParam(value = "filename") String filename) throws Exception {
 
         if (StringUtils.isEmpty(filename) || filename.contains("\\.\\.")) {
-            return;
+            return "";
         }
         filename = URLDecoder.decode(filename, Constants.ENCODING);
 
@@ -114,5 +115,6 @@ public class AjaxUploadController {
         File file = new File(filePath);
         file.deleteOnExit();
 
+        return "";
     }
 }
