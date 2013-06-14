@@ -101,7 +101,7 @@ public class FileUploadUtils {
      */
     public static final String upload(HttpServletRequest request, MultipartFile file, BindingResult result, String[] allowedExtension) {
         try {
-            return upload(request, getDefaultBaseDir(), file, allowedExtension, DEFAULT_MAX_SIZE);
+            return upload(request, getDefaultBaseDir(), file, allowedExtension, DEFAULT_MAX_SIZE, true);
         } catch (IOException e) {
             LogUtils.logError("file upload error", e);
             result.reject("upload.server.error");
@@ -130,6 +130,7 @@ public class FileUploadUtils {
      * @param file             上传的文件
      * @param allowedExtension 允许的文件类型 null 表示允许所有
      * @param maxSize          最大上传的大小 -1 表示不限制
+     *@param needDatePathAndRandomName 是否需要日期目录和随机文件名前缀
      * @return 返回上传成功的文件名
      * @throws InvalidExtensionException      如果MIME类型不允许
      * @throws FileSizeLimitExceededException 如果超出最大大小
@@ -138,7 +139,8 @@ public class FileUploadUtils {
      * @throws IOException                    比如读写文件出错时
      */
     public static final String upload(
-            HttpServletRequest request, String baseDir, MultipartFile file, String[] allowedExtension, long maxSize)
+            HttpServletRequest request, String baseDir, MultipartFile file,
+            String[] allowedExtension, long maxSize, boolean needDatePathAndRandomName)
             throws InvalidExtensionException, FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
 
         int fileNamelength = file.getOriginalFilename().length();
@@ -147,7 +149,7 @@ public class FileUploadUtils {
         }
 
         assertAllowed(file, allowedExtension, maxSize);
-        String filename = extractFilename(file, baseDir);
+        String filename = extractFilename(file, baseDir, needDatePathAndRandomName);
 
         File desc = getAbsoluteFile(extractUploadDir(request), filename);
 
@@ -171,13 +173,18 @@ public class FileUploadUtils {
     }
 
 
-    public static final String extractFilename(MultipartFile file, String baseDir) throws UnsupportedEncodingException {
+    public static final String extractFilename(MultipartFile file, String baseDir, boolean needDatePathAndRandomName)
+            throws UnsupportedEncodingException {
         String filename = file.getOriginalFilename();
         int slashIndex = filename.indexOf("/");
         if (slashIndex >= 0) {
             filename = filename.substring(slashIndex + 1);
         }
-        filename = baseDir + "/" + datePath() + "/" + encodingFilename(filename);
+        if(needDatePathAndRandomName) {
+            filename = baseDir + "/" + datePath() + "/" + encodingFilename(filename);
+        } else {
+            filename = baseDir + "/" + filename;
+        }
 
         return filename;
     }
@@ -265,7 +272,7 @@ public class FileUploadUtils {
      * @return
      */
     public static final String extractUploadDir(HttpServletRequest request) {
-        return request.getSession().getServletContext().getRealPath(".");
+        return request.getSession().getServletContext().getRealPath("/");
     }
 
 

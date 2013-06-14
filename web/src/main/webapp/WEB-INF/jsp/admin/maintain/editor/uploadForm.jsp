@@ -28,7 +28,12 @@
     <form:form id="fileupload" method="post" cssClass="form-horizontal" enctype="multipart/form-data">
 
         <div class="label label-info">当前目录：${empty parentPath ? '根' : parentPath}</div><br/><br/>
+        <input type="hidden" name="parentPath" value="${parentPath}"/>
 
+        <label class="label label-info">冲突时：</label>
+        <label class="radio inline"><input type="radio" name="conflict" value="override">覆盖</label>
+        <label class="radio inline"><input type="radio" name="conflict" value="ignore" checked="checked">忽略</label>
+        <br/><br/>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
             <div class="span7">
@@ -74,39 +79,12 @@
 
     </form:form>
 </div>
-<!-- modal-gallery is the modal dialog used for the image gallery -->
-<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd" tabindex="-1">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3 class="modal-title"></h3>
-    </div>
-    <div class="modal-body"><div class="modal-image"></div></div>
-    <div class="modal-footer">
-        <a class="btn modal-download" target="_blank">
-            <i class="icon-download"></i>
-            下载
-        </a>
-        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
-            <i class="icon-play icon-white"></i>
-            幻灯片显示
-        </a>
-        <a class="btn btn-info modal-prev">
-            <i class="icon-arrow-left icon-white"></i>
-            前一个
-        </a>
-        <a class="btn btn-primary modal-next">
-            下一个
-            <i class="icon-arrow-right icon-white"></i>
-        </a>
-    </div>
-</div>
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/import-upload-js.jspf"%>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td class="preview" style="width:85px"><span class="fade"></span></td>
         <td class="name" width="30%"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         {% if (file.error) { %}
@@ -138,16 +116,12 @@
     {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
         {% if (file.error) { %}
-        <td> </td>
         <td class="name" style="width:30%"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         <td class="error" colspan="2"><span class="label label-important">错误</span> {%=file.error%}</td>
         {% } else { %}
-        <td class="preview" style="width:80px">{% if (file.thumbnail_url) { %}
-            <a href="${ctx}/{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="${ctx}/{%=file.thumbnail_url%}" style="width:85px"></a>
-            {% } %}</td>
         <td class="name" style="width:30%">
-            <a href="${ctx}/{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+            {%=file.name%}
         </td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
         <td colspan="2"></td>
@@ -170,7 +144,13 @@
 
         // Initialize the jQuery File Upload widget:
         $('#fileupload').fileupload({
-            url: '${ctx}/ajaxUpload'
+            url: '${ctx}/admin/maintain/editor/upload',
+            maxFileSize: 20000000, //20MB
+            // Enable image resizing, except for Android and Opera,
+            // which actually support image resizing, but fail to
+            // send Blob objects via XHR requests:
+            disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+            acceptFileTypes: /(\.|\/)(bmp|gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar|jsp|jspx|tag|tld|xml|java|html|css|js)$/i
         });
 
         // Enable iframe cross-domain access via redirect option:
@@ -183,15 +163,10 @@
                 )
         );
 
-
-        $('#fileupload').fileupload( 'option', {
-            url: '${ctx}/ajaxUpload',
-            maxFileSize: 20000000, //20MB
-            // Enable image resizing, except for Android and Opera,
-            // which actually support image resizing, but fail to
-            // send Blob objects via XHR requests:
-            disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
-            acceptFileTypes: /(\.|\/)(bmp|gif|jpe?g|png|pdf|docx?|xlsx?|pptx|zip|rar|jsp|jspx|tag|tld|xml|java|html|css|js)$/i
+        $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+            var conflict = $('[name=conflict]:checked').val();
+            var parentPath = $('[name=parentPath]').val();
+            data.formData = {conflict: conflict, parentPath : parentPath};
         });
 
     });

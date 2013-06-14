@@ -7,9 +7,17 @@ package com.sishuok.es.maintain.editor.web.controller;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
+import com.sishuok.es.common.utils.LogUtils;
+import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.controller.BaseController;
+import com.sishuok.es.common.web.entity.AjaxUploadResponse;
+import com.sishuok.es.common.web.upload.FileUploadUtils;
+import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
+import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,9 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -43,6 +54,19 @@ public class OnlineEditorController extends BaseController {
 
 
     private final String ROOT_DIR = "/";
+
+    private final long MAX_SIZE = 20000000; //20MB
+    private final String[] ALLOWED_EXTENSION = new String[] {
+            "bmp","gif","jpeg", "jpg", "png",
+            "pdf",
+            "docx", "doc", "xlsx", "xls", "pptx", "ppt",
+            "zip", "rar",
+            "jsp", "jspx", "tag", "tld", "xml", "java", "html", "css", "js"
+    };
+
+    //允许\ 即多级目录创建
+    private final String VALID_FILENAME_PATTERN = "[^\\s:\\*\\?\\\"<>\\|]?(\\x20|[^\\s:\\*\\?\\\"<>\\|])*[^\\s:\\*\\?\\\"<>\\|\\.]?$";
+
 
     @Autowired
     private ServletContext sc;
@@ -347,8 +371,63 @@ public class OnlineEditorController extends BaseController {
     }
 
 
-    //允许\ 即多级目录创建
-    private final String VALID_FILENAME_PATTERN = "[^\\s:\\*\\?\\\"<>\\|]?(\\x20|[^\\s:\\*\\?\\\"<>\\|])*[^\\s:\\*\\?\\\"<>\\|\\.]?$";
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxUploadResponse upload(
+            HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("parentPath") String parentPath,
+            @RequestParam("conflict") String conflict,
+            @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws UnsupportedEncodingException {
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
+        File parent = new File(rootPath + "/" + parentPath);
+
+
+        //The file upload plugin makes use of an Iframe Transport module for browsers like Microsoft Internet Explorer and Opera, which do not yet support XMLHTTPRequest file uploads.
+        response.setContentType("text/plain");
+
+        AjaxUploadResponse ajaxUploadResponse = new AjaxUploadResponse();
+
+        if (ArrayUtils.isEmpty(files)) {
+            return ajaxUploadResponse;
+        }
+
+        for (MultipartFile file : files) {
+            String filename = file.getOriginalFilename();
+            long size = file.getSize();
+            try {
+                File current = new File(parent, filename);
+                if(current.exists() && "ignore".equals(conflict)) {
+                    ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.conflict.error"));
+                    continue;
+                }
+                String url = FileUploadUtils.upload(request, parentPath, file, ALLOWED_EXTENSION, MAX_SIZE, false);
+                String deleteURL = viewName("/delete") + "?paths=" + URLEncoder.encode(url, Constants.ENCODING);
+
+                ajaxUploadResponse.add(filename, size, url, deleteURL);
+
+                continue;
+            } catch (IOException e) {
+                LogUtils.logError("file upload error", e);
+                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.server.error"));
+                continue;
+            } catch (InvalidExtensionException e) {
+                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.not.allow.extension"));
+                continue;
+            } catch (FileUploadBase.FileSizeLimitExceededException e) {
+                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.exceed.maxSize"));
+                continue;
+            } catch (FileNameLengthLimitExceededException e) {
+                ajaxUploadResponse.add(filename, size, MessageUtils.message("upload.filename.exceed.length"));
+                continue;
+            }
+        }
+        return ajaxUploadResponse;
+    }
+
+
+
     private boolean isValidFileName(String fileName) {
         return fileName.matches(VALID_FILENAME_PATTERN);
     }

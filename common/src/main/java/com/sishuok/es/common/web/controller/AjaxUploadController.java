@@ -72,7 +72,7 @@ public class AjaxUploadController {
             long size = file.getSize();
 
             try {
-                String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize);
+                String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize, true);
                 String deleteURL = "/ajaxUpload/delete?filename=" + URLEncoder.encode(url, Constants.ENCODING);
                 if (ImagesUtils.isImage(filename)) {
                     ajaxUploadResponse.add(filename, size, url, url, deleteURL);

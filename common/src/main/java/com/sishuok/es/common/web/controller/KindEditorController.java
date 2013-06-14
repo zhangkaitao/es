@@ -97,7 +97,7 @@ public class KindEditorController {
         String[] allowedExtension = extractAllowedExtension(dir);
 
         try {
-            String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize);
+            String url = FileUploadUtils.upload(request, baseDir, file, allowedExtension, maxSize, true);
             return successResponse(request, file.getOriginalFilename(), url);
 
         } catch (IOException e) {
