@@ -14,6 +14,7 @@ import com.sishuok.es.common.web.entity.AjaxUploadResponse;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
+import com.sishuok.es.maintain.editor.web.controller.utils.CompressUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -114,7 +115,7 @@ public class OnlineEditorController extends BaseController {
 
         String rootPath = sc.getRealPath(ROOT_DIR);
 
-        File parentPathDirectory = new File(rootPath + "/" + parentPath);
+        File parentPathDirectory = new File(rootPath + File.separator + parentPath);
 
         List<Map> trees = Lists.newArrayList();
 
@@ -143,7 +144,7 @@ public class OnlineEditorController extends BaseController {
 
         String rootPath = sc.getRealPath(ROOT_DIR);
 
-        File currentDirectory = new File(rootPath + "/" + path);
+        File currentDirectory = new File(rootPath + File.separator + path);
 
         Map<Object, Object> current = extractFileInfoMap(currentDirectory, rootPath);
         current.put("name", currentDirectory.getName());
@@ -180,7 +181,7 @@ public class OnlineEditorController extends BaseController {
 
 
         path = URLDecoder.decode(path, Constants.ENCODING);
-        File file = new File(rootPath + "/" + path);
+        File file = new File(rootPath + File.separator + path);
         String parentPath = file.getParentFile().getAbsolutePath().replace(rootPath, "");
 
         boolean hasError = false;
@@ -228,7 +229,7 @@ public class OnlineEditorController extends BaseController {
         String rootPath = sc.getRealPath(ROOT_DIR);
 
         path = URLDecoder.decode(path, Constants.ENCODING);
-        File file = new File(rootPath + "/" + path);
+        File file = new File(rootPath + File.separator + path);
         String parentPath = file.getParentFile().getAbsolutePath().replace(rootPath, "");
 
         FileUtils.write(file, content);
@@ -252,7 +253,7 @@ public class OnlineEditorController extends BaseController {
         String rootPath = sc.getRealPath(ROOT_DIR);
         path = URLDecoder.decode(path, Constants.ENCODING);
 
-        File current = new File(rootPath + "/" + path);
+        File current = new File(rootPath + File.separator + path);
         File parent = current.getParentFile();
         String parentPath = parent.getAbsolutePath().replace(rootPath, "");
 
@@ -278,14 +279,14 @@ public class OnlineEditorController extends BaseController {
 
         for(String path : paths) {
             path = URLDecoder.decode(path, Constants.ENCODING);
-            File current = new File(rootPath + "/" + path);
+            File current = new File(rootPath + File.separator + path);
             FileUtils.deleteQuietly(current);
         }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功！");
 
         String path = URLDecoder.decode(paths[0], Constants.ENCODING);
-        File file = new File(rootPath + "/" + path);
+        File file = new File(rootPath + File.separator + path);
         String parentPath = file.getParentFile().getAbsolutePath().replace(rootPath, "");
         redirectAttributes.addAttribute("path", parentPath);
         return redirectToUrl(viewName("list"));
@@ -306,7 +307,7 @@ public class OnlineEditorController extends BaseController {
             String rootPath = sc.getRealPath(ROOT_DIR);
             parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
 
-            File parent = new File(rootPath + "/" + parentPath);
+            File parent = new File(rootPath + File.separator + parentPath);
             File currentDirectory = new File(parent, name);
             boolean result = currentDirectory.mkdirs();
             if(result == false) {
@@ -333,7 +334,7 @@ public class OnlineEditorController extends BaseController {
             String rootPath = sc.getRealPath(ROOT_DIR);
             parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
 
-            File parent = new File(rootPath + "/" + parentPath);
+            File parent = new File(rootPath + File.separator + parentPath);
             File currentFile = new File(parent, name);
             currentFile.getParentFile().mkdirs();
             boolean result = currentFile.createNewFile();
@@ -359,7 +360,7 @@ public class OnlineEditorController extends BaseController {
 
         String rootPath = sc.getRealPath(ROOT_DIR);
         parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
-        File parent = new File(rootPath + "/" + parentPath);
+        File parent = new File(rootPath + File.separator + parentPath);
         if(!parent.exists()) {
             redirectAttributes.addFlashAttribute(Constants.ERROR, parentPath + "目录不存在！");
             redirectAttributes.addAttribute("path", "");
@@ -381,7 +382,7 @@ public class OnlineEditorController extends BaseController {
 
         String rootPath = sc.getRealPath(ROOT_DIR);
         parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
-        File parent = new File(rootPath + "/" + parentPath);
+        File parent = new File(rootPath + File.separator + parentPath);
 
 
         //The file upload plugin makes use of an Iframe Transport module for browsers like Microsoft Internet Explorer and Opera, which do not yet support XMLHTTPRequest file uploads.
@@ -424,6 +425,30 @@ public class OnlineEditorController extends BaseController {
             }
         }
         return ajaxUploadResponse;
+    }
+
+
+    //压缩
+    @RequestMapping("compress")
+    public String compress(
+            @RequestParam(value = "parentPath") String parentPath,
+            @RequestParam(value = "paths") String[] paths) throws IOException {
+
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
+
+        String compressPath = parentPath + File.separator + System.nanoTime() + ".zip";
+
+        for(int i = 0, l = paths.length; i < l; i++) {
+            String path = paths[i];
+            path = URLDecoder.decode(path, Constants.ENCODING);
+            paths[i] = rootPath + File.separator + path;
+        }
+
+        CompressUtils.zip(rootPath + File.separator + compressPath, paths);
+
+        return compressPath;
     }
 
 

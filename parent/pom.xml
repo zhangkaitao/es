@@ -334,6 +334,11 @@
             <artifactId>commons-fileupload</artifactId>
             <version>${common.fileupload.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${common.compress.version}</version>
+        </dependency>
 
         <!-- data source 相关jar包-->
         <dependency>
@@ -678,7 +683,7 @@
         <commons-io.version>2.4</commons-io.version>
         <guava.version>13.0.1</guava.version>
         <common.fileupload.version>1.2.2</common.fileupload.version>
-
+        <common.compress.version>1.5</common.compress.version>
 
         <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>

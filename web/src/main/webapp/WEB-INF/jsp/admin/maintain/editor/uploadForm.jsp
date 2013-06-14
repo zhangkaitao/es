@@ -31,8 +31,7 @@
         <input type="hidden" name="parentPath" value="${parentPath}"/>
 
         <label class="label label-info">冲突时：</label>
-        <label class="radio inline"><input type="radio" name="conflict" value="override">覆盖</label>
-        <label class="radio inline"><input type="radio" name="conflict" value="ignore" checked="checked">忽略</label>
+        <label class="radio inline"><input type="radio" name="conflict" value="override">覆盖</label><label class="radio inline"><input type="radio" name="conflict" value="ignore" checked="checked">跳过</label>
         <br/><br/>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">

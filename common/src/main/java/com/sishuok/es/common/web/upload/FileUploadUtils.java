@@ -161,7 +161,7 @@ public class FileUploadUtils {
 
         uploadDir = FilenameUtils.normalizeNoEndSeparator(uploadDir);
 
-        File desc = new File(uploadDir + "/" + filename);
+        File desc = new File(uploadDir + File.separator + filename);
 
         if (!desc.getParentFile().exists()) {
             desc.getParentFile().mkdirs();
@@ -181,9 +181,9 @@ public class FileUploadUtils {
             filename = filename.substring(slashIndex + 1);
         }
         if(needDatePathAndRandomName) {
-            filename = baseDir + "/" + datePath() + "/" + encodingFilename(filename);
+            filename = baseDir + File.separator + datePath() + File.separator + encodingFilename(filename);
         } else {
-            filename = baseDir + "/" + filename;
+            filename = baseDir + File.separator + filename;
         }
 
         return filename;

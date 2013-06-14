@@ -3,7 +3,6 @@
 <es:contentHeader/>
 <div data-table="table" class="panel">
 
-
     <ul class="nav nav-tabs">
         <li class="active">
             <a href="${ctx}/admin/maintain/editor/list?path=${current.path}">
@@ -59,6 +58,14 @@
                 <a class="btn btn-custom btn-delete">
                     <i class="icon-trash"></i>
                     删除
+                </a>
+                <a class="btn btn-custom btn-compress">
+                    <i class="icon-trash"></i>
+                    压缩并下载
+                </a>
+                <a class="btn btn-custom btn-uncompress">
+                    <i class="icon-trash"></i>
+                    解压缩
                 </a>
             </div>
         </div>
@@ -118,7 +125,7 @@
             }
 
             $.app.confirm({
-                title : "确认删除选中的文件吗？",
+                title : "确认删除选中的文件",
                 message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果选择的是目录将会删除子目录！并且此操作不可恢复，执行请慎重！</span><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行删除：</span><input type='text' id='confirmText' class='input-small'>",
                 ok : function() {
                     var confirmText = $("#confirmText").val();
@@ -166,6 +173,60 @@
 
         $(".btn-upload").click(function() {
             location.href = ctx + '/admin/maintain/editor/upload?parentPath=${current.path}';
+        });
+
+        $(".btn-compress").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+            if(!checkbox.length) {
+                return;
+            }
+            $.app.confirm({
+                title : "确认压缩并下载选中的文件",
+                message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果选择的文件比较大，速度可能比较慢！</span><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行压缩并下载：</span><input type='text' id='confirmText' class='input-small'>",
+                ok : function() {
+                    var confirmText = $("#confirmText").val();
+                    if(confirmText != 'ok') {
+                        $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
+                        return;
+                    }
+                    window.open("ctx + '/admin/maintain/editor/compress?parentPath=${current.path}&" + checkbox.serialize());
+                }
+            });
+
+        });
+
+        $(".btn-uncompress").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+            if(!checkbox.length) {
+                return;
+            }
+            var canUncompress = true;
+            $(checkbox).each(function() {
+                if(decodeURIComponent($(this).val()).toLowerCase().indexOf(".zip") == -1) {
+                    canUncompress = false;
+                }
+            });
+            if(!canUncompress) {
+                $.app.alert({
+                    message : "目前只支持zip文件的解压缩，请只选择zip文件"
+                });
+                return;
+            }
+
+            $.app.confirm({
+                title : "确认解压选中的文件",
+                message: "<span class='text-error muted'>冲突时：<label class='radio inline'><input type='radio' name='conflict' value='override'>覆盖</label><label class='radio inline'><input type='radio' name='conflict' value='ignore' checked='checked'>跳过</label><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行解压：</span><input type='text' id='confirmText' class='input-small'>",
+                ok : function() {
+                    var conflict = $("[name=conflict]:checked").val();
+                    var confirmText = $("#confirmText").val();
+                    if(confirmText != 'ok') {
+                        $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
+                        return;
+                    }
+                    window.open("ctx + '/admin/maintain/editor/uncompress" + checkbox.serialize());
+                }
+            });
+
         });
     });
 </script>
