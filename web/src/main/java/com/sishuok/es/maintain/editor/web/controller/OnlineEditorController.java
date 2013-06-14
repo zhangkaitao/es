@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -432,13 +434,17 @@ public class OnlineEditorController extends BaseController {
     @RequestMapping("compress")
     public String compress(
             @RequestParam(value = "parentPath") String parentPath,
-            @RequestParam(value = "paths") String[] paths) throws IOException {
+            @RequestParam(value = "paths") String[] paths,
+            RedirectAttributes redirectAttributes) throws IOException {
 
 
         String rootPath = sc.getRealPath(ROOT_DIR);
         parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
 
-        String compressPath = parentPath + File.separator + System.nanoTime() + ".zip";
+        Date now = new Date();
+        String pattern = "yyyyMMddHHmmss";
+
+        String compressPath = parentPath + File.separator + "[系统压缩]" + DateFormatUtils.format(now, pattern) + System.nanoTime() + ".zip";
 
         for(int i = 0, l = paths.length; i < l; i++) {
             String path = paths[i];
@@ -446,9 +452,56 @@ public class OnlineEditorController extends BaseController {
             paths[i] = rootPath + File.separator + path;
         }
 
-        CompressUtils.zip(rootPath + File.separator + compressPath, paths);
+        try {
+            CompressUtils.zip(rootPath + File.separator + compressPath, paths);
+            String msg = "压缩成功，<a href='%s/%s?path=%s' target='_blank' class='btn btn-primary'>点击下载</a>";
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE,
+                    String.format(msg,
+                            sc.getContextPath(),
+                            viewName("download"),
+                            URLEncoder.encode(compressPath, Constants.ENCODING)));
 
-        return compressPath;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
+        }
+
+        redirectAttributes.addAttribute("path", URLEncoder.encode(parentPath, Constants.ENCODING));
+        return redirectToUrl(viewName("list"));
+    }
+
+    @RequestMapping("uncompress")
+    public String uncompress(
+            @RequestParam(value = "parentPath") String parentPath,
+            @RequestParam(value = "paths") String[] paths,
+            @RequestParam(value = "conflict") String conflict,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
+
+        for(int i = 0, l = paths.length; i < l; i++) {
+            String path = paths[i];
+            path = URLDecoder.decode(path, Constants.ENCODING);
+            //只保留.zip的
+            if(!path.toLowerCase().endsWith(".zip")) {
+                continue;
+            }
+            paths[i] = rootPath + File.separator + path;
+        }
+
+        try {
+            String descPath = rootPath + File.separator + parentPath;
+            for(String path : paths) {
+                CompressUtils.unzip(path, descPath, "override".equals(conflict));
+            }
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "解压成功！");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
+        }
+
+        redirectAttributes.addAttribute("path", URLEncoder.encode(parentPath, Constants.ENCODING));
+        return redirectToUrl(viewName("list"));
     }
 
 

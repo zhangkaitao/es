@@ -189,7 +189,7 @@
                         $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
                         return;
                     }
-                    window.open("ctx + '/admin/maintain/editor/compress?parentPath=${current.path}&" + checkbox.serialize());
+                    window.location.href = ctx + "/admin/maintain/editor/compress?parentPath=${current.path}&" + checkbox.serialize();
                 }
             });
 
@@ -223,7 +223,7 @@
                         $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
                         return;
                     }
-                    window.open("ctx + '/admin/maintain/editor/uncompress" + checkbox.serialize());
+                    window.location.href = ctx + "/admin/maintain/editor/uncompress?parentPath=${current.path}&conflict=" + conflict + "&" + checkbox.serialize();
                 }
             });
 

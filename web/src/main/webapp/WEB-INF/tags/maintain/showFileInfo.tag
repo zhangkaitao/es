@@ -21,11 +21,15 @@
                     ${fileInfo.name}
                 </a>
             </c:when>
-            <c:otherwise>
+            <c:when test="${fileInfo.canEdit}">
                 <a href="${ctx}/admin/maintain/editor/edit?path=${fileInfo.path}">
                     <i class="${fileInfo.iconSkin}"></i>
-                    ${fileInfo.name}
+                        ${fileInfo.name}
                 </a>
+            </c:when>
+            <c:otherwise>
+                <i class="${fileInfo.iconSkin}"></i>
+                ${fileInfo.name}
             </c:otherwise>
         </c:choose>
     </td>

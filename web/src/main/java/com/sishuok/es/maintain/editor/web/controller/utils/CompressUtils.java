@@ -81,20 +81,20 @@ public class CompressUtils {
         }
     }
 
-    public static void unzip(String path, String descPath) {
+    public static void unzip(String path, String descPath, boolean override) {
         File uncompressFile = new File(path);
         File descPathFile = null;
 
         try {
             descPathFile = new File(descPath);
-            unzipFolder(uncompressFile, descPathFile);
+            unzipFolder(uncompressFile, descPathFile, override);
         } catch (RuntimeException e) {
             throw e;
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static void unzipFolder(File uncompressFile, File descPathFile) {
+    private static void unzipFolder(File uncompressFile, File descPathFile, boolean override) {
 
         ZipFile zipFile = null;
         try {
@@ -107,6 +107,12 @@ public class CompressUtils {
                 name = name.replace("\\", "/");
 
                 File currentFile = new File(descPathFile, name);
+
+                //非覆盖 跳过
+                if(currentFile.isFile() && currentFile.exists() && !override) {
+                    continue;
+                }
+
                 if(name.endsWith("/")) {
                     currentFile.mkdirs();
                     continue;

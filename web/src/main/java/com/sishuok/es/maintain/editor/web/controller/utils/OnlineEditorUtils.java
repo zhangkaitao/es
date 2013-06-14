@@ -45,8 +45,10 @@ public class OnlineEditorUtils {
     public static Map<Object, Object> extractFileInfoMap(File currentFile, String rootPath)
             throws UnsupportedEncodingException {
         Map<Object, Object> info = Maps.newHashMap();
-        info.put("name", currentFile.getName());
+        String name = currentFile.getName();
+        info.put("name", name);
         info.put("path", URLEncoder.encode(currentFile.getAbsolutePath().replace(rootPath, ""), Constants.ENCODING));
+        info.put("canEdit", canEdit(name));
         info.put("hasParent", !currentFile.getPath().equals(rootPath));
         info.put("isParent", hasSubFiles(currentFile));
         info.put("isDirectory", currentFile.isDirectory());
@@ -58,6 +60,20 @@ public class OnlineEditorUtils {
         info.put("lastModified", DateFormatUtils.format(modifiedDate, DATE_PATTERN));
         info.put("lastModifiedForLong", currentFile.lastModified());
         return info;
+    }
+
+    private static final String[] CAN_EDIT_EXTENSION = new String[] {
+        "js", "css", "html", "htm", "jsp", "jspx", "tld", "tag", "xml", "properties", "txt"
+    };
+
+    private static boolean canEdit(String name) {
+        name = name.toLowerCase();
+       for(String extension : CAN_EDIT_EXTENSION) {
+           if(name.endsWith(extension)) {
+               return true;
+           }
+       }
+        return false;
     }
 
     public static boolean hasParent(File currentFile, String rootPath) {
