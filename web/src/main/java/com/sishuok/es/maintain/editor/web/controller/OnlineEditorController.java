@@ -352,10 +352,5 @@ public class OnlineEditorController extends BaseController {
     private boolean isValidFileName(String fileName) {
         return fileName.matches(VALID_FILENAME_PATTERN);
     }
-//
-//    public static void main(String[] args) {
-//        final String VALID_FILENAME_PATTERN = "[^\\s:\\*\\?\\\"<>\\|]?(\\x20|[^\\s:\\*\\?\\\"<>\\|])*[^\\s:\\*\\?\\\"<>\\|\\.]?$";
-//        System.out.println("a".matches(VALID_FILENAME_PATTERN));
-//    }
 
 }
