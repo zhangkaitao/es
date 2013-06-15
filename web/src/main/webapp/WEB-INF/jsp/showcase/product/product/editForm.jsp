@@ -162,7 +162,12 @@
                     "${ctx}/showcase/product/category/select/single;domId=categoryId;domName=categoryName",
                     {
                         width:600,
-                        height:450
+                        height:450,
+                        okBtn:false,
+                        callback : function() {
+                            $("[name='category.name']").validationEngine('validate');
+                            return true;
+                        }
                     }
              );
         });

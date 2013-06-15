@@ -152,7 +152,7 @@ $.app = {
     modalDialog : function(title, url, settings) {
 
         $.app.waiting();
-
+        console.info(settings.ok);
         var defaultSettings = {
             title : title,
             closeText : "关闭",
@@ -161,14 +161,33 @@ $.app = {
             width:600,
             modal:true,
             noTitle : false,
+            okBtn : true,
             close: function() {
                 $(this).closest(".ui-dialog").remove();
             },
+            _close : function(modal) {
+                $(modal).dialog("close");
+                if($.app._modalDialogQueue.length > 0) {
+                    $.app._modalDialogQueue.pop();
+                }
+            },
             buttons:{
+                '确定': function() {
+                    if(settings.ok) {
+                        if(settings.ok($(this))) {
+                            settings._close(this);
+                        }
+                    } else {
+                        settings._close(this);
+                    }
+                    if(settings.callback) {
+                        settings.callback();
+                    }
+                },
                 '关闭': function () {
-                    $(this).dialog("close");
-                    if($.app._modalDialogQueue.length > 0) {
-                        $.app._modalDialogQueue.pop();
+                    settings._close(this);
+                    if(settings.callback) {
+                        settings.callback();
                     }
                 }
             }
@@ -176,7 +195,11 @@ $.app = {
         if(!settings) {
             settings = {};
         }
-        settings = $.extend({}, defaultSettings, settings);
+        settings = $.extend(true, {}, defaultSettings, settings);
+
+        if(!settings.okBtn) {
+            delete settings.buttons['确定'];
+        }
 
         $.ajax({
             url: url,
@@ -471,7 +494,7 @@ $.app = {
             }
         };
 
-        config = $.extend(defaultConfig, config, true);
+        config = $.extend(true, defaultConfig, config);
 
         $(config.input)
             .on( "keydown", function( event ) {
@@ -1275,7 +1298,7 @@ $.table = {
             var checkbox = $(this).find(":checkbox,:radio");
             checkbox.off("click").on("click", function (event) {
                 var checked = checkbox.is(":checked");
-                if(checked) {
+                if(!checked) {
                     checkbox.closest("tr").removeClass(activeClass);
                 } else {
                     checkbox.closest("tr").addClass(activeClass);

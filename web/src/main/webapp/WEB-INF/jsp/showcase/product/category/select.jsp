@@ -13,9 +13,7 @@
 
                 <th sort="id">编号</th>
                 <th sort="name">名称</th>
-                <th style="width: 80px">
-                    选择
-                </th>
+                <th style="width: 80px">选择</th>
             </tr>
           </thead>
           <tbody>
@@ -47,7 +45,6 @@
         var table = $("#childTable");
         $.table.initTable(table);
 
-        var multiple = ${selectType eq 'multiple'};
         var hasDomName = ${not empty domName};
         //参照窗口的dom
         var $openerId = $("#${domId}");
@@ -68,8 +65,11 @@
                 }
             });
         });
-        $checkboxOrRadio.parent().click(function() {
-            var $current = $(this).find(":checkbox,:radio");
+        $checkboxOrRadio.closest("tr").andSelf().click(function() {
+            var $current = $(this);
+            if($current.is("tr")) {
+                $current = $current.find(":checkbox,:radio");
+            }
             //单选按钮仅有一个值
             if($current.is(":radio")) {
                 $.array.clear(ids);
