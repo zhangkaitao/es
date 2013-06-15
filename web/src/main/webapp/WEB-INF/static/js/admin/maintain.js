@@ -1,6 +1,6 @@
 $.maintain = {
-   icon : {
-       initIconList : function(input, callback) {
+    icon : {
+        initIconList : function(input, callback) {
 
             if(!callback) {
                 callback = function(cssClass) {
@@ -57,10 +57,10 @@ $.maintain = {
             });
 
         }
-   }
-   ,
-   staticResource : {
-       initBtn : function() {
+    }
+    ,
+    staticResource : {
+        initBtn : function() {
            $(".btn-version").click(function() {
                $.app.waiting("正在执行...");
                var tr = $(this).closest("tr");
@@ -248,10 +248,6 @@ $.maintain = {
 
            });
 
-
-
-
-
            $(".btn-switch").click(function() {
                $.app.waiting("正在执行...");
                var btn = $(this);
@@ -323,5 +319,206 @@ $.maintain = {
                });
            });
        }
-   }
+    }
+    ,
+    editor : {
+        initBtn : function() {
+
+            $(".btn-rename").click(function() {
+                var checkbox = $.table.getFirstSelectedCheckbox($("#table"));
+                if(!checkbox.length) {
+                    return;
+                }
+
+                var path = checkbox.val();
+                var oldName = checkbox.siblings("[name='names']").val();
+
+                $.app.confirm({
+                    title : "重命名",
+                    message: "请输入新的名字：<input type='text' id='newName' value='" + oldName + "'/>",
+                    ok : function() {
+                        var newName = $("#newName").val();
+                        location.href = ctx + '/admin/maintain/editor/rename?path=' + path + "&newName=" + newName;
+                    }
+                });
+            });
+
+            $(".btn-delete").click(function() {
+                var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+                if(!checkbox.length) {
+                    return;
+                }
+
+                $.app.confirm({
+                    title : "确认删除选中的文件",
+                    message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果选择的是目录将会删除子目录！并且此操作不可恢复，执行请慎重！</span><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行删除：</span><input type='text' id='confirmText' class='input-small'>",
+                    ok : function() {
+                        var confirmText = $("#confirmText").val();
+                        if(confirmText != 'ok') {
+                            $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
+                            return;
+                        }
+                        location.href = ctx + '/admin/maintain/editor/delete?' + checkbox.serialize();
+                    }
+                });
+            });
+
+            $(".btn-create-directory").click(function() {
+                $.app.confirm({
+                    title : "新建目录",
+                    message: "请输入目录名字：<input type='text' id='name' placeholder='支持如/a/b/c多级目录'/>",
+                    ok : function() {
+                        var name = $("#name").val();
+                        if($.trim(name)) {
+                            $.app.alert({
+                                message : "名称不能为空"
+                            });
+                        }
+                        location.href = ctx + '/admin/maintain/editor/create/directory?parentPath=${current.path}' + "&name=" + name;
+                    }
+                });
+            });
+
+
+            $(".btn-create-file").click(function() {
+                $.app.confirm({
+                    title : "新建文件",
+                    message: "请输入文件名字：<input type='text' id='name' placeholder='支持如/a/b.txt多级目录'/>",
+                    ok : function() {
+                        var name = $("#name").val();
+                        if($.trim(name)) {
+                            $.app.alert({
+                                message : "名称不能为空"
+                            });
+                        }
+                        location.href = ctx + '/admin/maintain/editor/create/file?parentPath=${current.path}' + "&name=" + name;
+                    }
+                });
+            });
+
+            $(".btn-upload").click(function() {
+                location.href = ctx + '/admin/maintain/editor/upload?parentPath=${current.path}';
+            });
+
+            $(".btn-compress").click(function() {
+                var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+                if(!checkbox.length) {
+                    return;
+                }
+                $.app.confirm({
+                    title : "确认压缩并下载选中的文件",
+                    message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果选择的文件比较大，速度可能比较慢！</span><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行压缩并下载：</span><input type='text' id='confirmText' class='input-small'>",
+                    ok : function() {
+                        var confirmText = $("#confirmText").val();
+                        if(confirmText != 'ok') {
+                            $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
+                            return;
+                        }
+                        window.location.href = ctx + "/admin/maintain/editor/compress?parentPath=${current.path}&" + checkbox.serialize();
+                    }
+                });
+
+            });
+
+            $(".btn-uncompress").click(function() {
+                var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+                if(!checkbox.length) {
+                    return;
+                }
+                var canUncompress = true;
+                $(checkbox).each(function() {
+                    if(decodeURIComponent($(this).val()).toLowerCase().indexOf(".zip") == -1) {
+                        canUncompress = false;
+                    }
+                });
+                if(!canUncompress) {
+                    $.app.alert({
+                        message : "目前只支持zip文件的解压缩，请只选择zip文件"
+                    });
+                    return;
+                }
+
+                $.app.confirm({
+                    title : "确认解压选中的文件",
+                    message: "<span class='text-error muted'>冲突时：<label class='radio inline'><input type='radio' name='conflict' value='override'>覆盖</label><label class='radio inline'><input type='radio' name='conflict' value='ignore' checked='checked'>跳过</label><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行解压：</span><input type='text' id='confirmText' class='input-small'>",
+                    ok : function() {
+                        var conflict = $("[name=conflict]:checked").val();
+                        var confirmText = $("#confirmText").val();
+                        if(confirmText != 'ok') {
+                            $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
+                            return;
+                        }
+                        $.app.modalDialog(
+                            "选择解压到的目录",
+                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            {
+                                height:300,
+                                width:300,
+                                ok : function(modal) {
+                                    var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
+                                    var selectedNode = ztree.getSelectedNodes()[0];
+                                    var descPath = selectedNode.path;
+                                    window.location.href = ctx + "/admin/maintain/editor/uncompress?descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                }
+                            });
+                    }
+                });
+            });
+            $(".btn-move").click(function() {
+                var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+                if(!checkbox.length) {
+                    return;
+                }
+
+                $.app.confirm({
+                    title : "确认移动选中的文件",
+                    message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果目标文件夹有同名的文件/目录，如果选择'先删除再移动'，可能造成目录丢失，请慎用</span><br/><br/><span class='text-error muted'>冲突时：<label class='radio inline'><input type='radio' name='conflict' value='override'>先删除再移动</label><label class='radio inline'><input type='radio' name='conflict' value='ignore' checked='checked'>跳过</label><br/>",
+                    ok : function() {
+                        var conflict = $("[name=conflict]:checked").val();
+                        $.app.modalDialog(
+                            "选择移动到的目录",
+                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            {
+                                height:300,
+                                width:300,
+                                ok : function(modal) {
+                                    var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
+                                    var selectedNode = ztree.getSelectedNodes()[0];
+                                    var descPath = selectedNode.path;
+                                    window.location.href = ctx + "/admin/maintain/editor/move?descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                }
+                            });
+                    }
+                });
+            });
+            $(".btn-copy").click(function() {
+                var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+                if(!checkbox.length) {
+                    return;
+                }
+
+                $.app.confirm({
+                    title : "确认复制选中的文件",
+                    message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果目标文件夹有同名的文件/目录，如果选择'先删除再移动'，可能造成目录丢失，请慎用</span><br/><br/><span class='text-error muted'>冲突时：<label class='radio inline'><input type='radio' name='conflict' value='override'>先删除再移动</label><label class='radio inline'><input type='radio' name='conflict' value='ignore' checked='checked'>跳过</label><br/>",
+                    ok : function() {
+                        var conflict = $("[name=conflict]:checked").val();
+                        $.app.modalDialog(
+                            "选择复制到的目录",
+                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            {
+                                height:300,
+                                width:300,
+                                ok : function(modal) {
+                                    var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
+                                    var selectedNode = ztree.getSelectedNodes()[0];
+                                    var descPath = selectedNode.path;
+                                    window.location.href = ctx + "/admin/maintain/editor/copy?descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                }
+                            });
+                    }
+                });
+            });
+        }
+    }
+
 };
