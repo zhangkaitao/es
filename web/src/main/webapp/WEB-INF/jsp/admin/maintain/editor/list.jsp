@@ -59,6 +59,14 @@
                     <i class="icon-trash"></i>
                     删除
                 </a>
+                <a class="btn btn-custom btn-move">
+                    <i class="icon-move"></i>
+                    移动
+                </a>
+                <a class="btn btn-custom btn-copy">
+                    <i class="icon-copy"></i>
+                    复制
+                </a>
                 <a class="btn btn-custom btn-compress">
                     <i class="icon-trash"></i>
                     压缩并下载
@@ -201,11 +209,11 @@
                 return;
             }
             var canUncompress = true;
-//            $(checkbox).each(function() {
-//                if(decodeURIComponent($(this).val()).toLowerCase().indexOf(".zip") == -1) {
-//                    canUncompress = false;
-//                }
-//            });
+            $(checkbox).each(function() {
+                if(decodeURIComponent($(this).val()).toLowerCase().indexOf(".zip") == -1) {
+                    canUncompress = false;
+                }
+            });
             if(!canUncompress) {
                 $.app.alert({
                     message : "目前只支持zip文件的解压缩，请只选择zip文件"
@@ -224,6 +232,33 @@
                         return;
                     }
                     $.app.modalDialog(
+                            "选择解压到的目录",
+                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            {
+                                height:300,
+                                width:300,
+                                ok : function(modal) {
+                                    var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
+                                    var selectedNode = ztree.getSelectedNodes()[0];
+                                    var descPath = selectedNode.path;
+                                    window.location.href = ctx + "/admin/maintain/editor/uncompress?descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                }
+                            });
+                }
+            });
+        });
+        $(".btn-move").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+            if(!checkbox.length) {
+                return;
+            }
+
+            $.app.confirm({
+                title : "确认移动选中的文件",
+                message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果目标文件夹有同名的文件/目录，如果选择'先删除再移动'，可能造成目录丢失，请慎用</span><br/><br/><span class='text-error muted'>冲突时：<label class='radio inline'><input type='radio' name='conflict' value='override'>先删除再移动</label><label class='radio inline'><input type='radio' name='conflict' value='ignore' checked='checked'>跳过</label><br/>",
+                ok : function() {
+                    var conflict = $("[name=conflict]:checked").val();
+                    $.app.modalDialog(
                             "选择移动到的目录",
                             "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
@@ -233,12 +268,38 @@
                                     var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
                                     var selectedNode = ztree.getSelectedNodes()[0];
                                     var descPath = selectedNode.path;
-                                    window.location.href = ctx + "/admin/maintain/editor/uncompress?parentPath=${current.path}&descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                    window.location.href = ctx + "/admin/maintain/editor/move?descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
                                 }
                             });
                 }
             });
+        });
+        $(".btn-copy").click(function() {
+            var checkbox = $.table.getAllSelectedCheckbox($("#table"));
+            if(!checkbox.length) {
+                return;
+            }
 
+            $.app.confirm({
+                title : "确认复制选中的文件",
+                message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果目标文件夹有同名的文件/目录，如果选择'先删除再移动'，可能造成目录丢失，请慎用</span><br/><br/><span class='text-error muted'>冲突时：<label class='radio inline'><input type='radio' name='conflict' value='override'>先删除再移动</label><label class='radio inline'><input type='radio' name='conflict' value='ignore' checked='checked'>跳过</label><br/>",
+                ok : function() {
+                    var conflict = $("[name=conflict]:checked").val();
+                    $.app.modalDialog(
+                            "选择复制到的目录",
+                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            {
+                                height:300,
+                                width:300,
+                                ok : function(modal) {
+                                    var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
+                                    var selectedNode = ztree.getSelectedNodes()[0];
+                                    var descPath = selectedNode.path;
+                                    window.location.href = ctx + "/admin/maintain/editor/copy?descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                }
+                            });
+                }
+            });
         });
     });
 </script>

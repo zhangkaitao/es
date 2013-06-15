@@ -523,7 +523,6 @@ public class OnlineEditorController extends BaseController {
 
     @RequestMapping("uncompress")
     public String uncompress(
-            @RequestParam(value = "parentPath") String parentPath,
             @RequestParam(value = "descPath") String descPath,
             @RequestParam(value = "paths") String[] paths,
             @RequestParam(value = "conflict") String conflict,
@@ -531,7 +530,6 @@ public class OnlineEditorController extends BaseController {
 
 
         String rootPath = sc.getRealPath(ROOT_DIR);
-        parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
         descPath = URLDecoder.decode(descPath, Constants.ENCODING);
 
         for(int i = 0, l = paths.length; i < l; i++) {
@@ -559,6 +557,96 @@ public class OnlineEditorController extends BaseController {
         return redirectToUrl(viewName("list"));
     }
 
+
+    @RequestMapping("move")
+    public String move(
+            @RequestParam(value = "descPath") String descPath,
+            @RequestParam(value = "paths") String[] paths,
+            @RequestParam(value = "conflict") String conflict,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        descPath = URLDecoder.decode(descPath, Constants.ENCODING);
+
+        for(int i = 0, l = paths.length; i < l; i++) {
+            String path = paths[i];
+            path = URLDecoder.decode(path, Constants.ENCODING);
+            paths[i] = (rootPath + File.separator + path).replace("\\", "/");
+        }
+
+        try {
+            File descPathFile = new File(rootPath + File.separator + descPath);
+            for(String path : paths) {
+                File sourceFile = new File(path);
+                File descFile = new File(descPathFile, sourceFile.getName());
+                if(descFile.exists() && "ignore".equals(conflict)) {
+                    continue;
+                }
+
+                FileUtils.deleteQuietly(descFile);
+
+                if(sourceFile.isDirectory()) {
+                    FileUtils.moveDirectoryToDirectory(sourceFile, descPathFile, true);
+                } else {
+                    FileUtils.moveFileToDirectory(sourceFile, descPathFile, true);
+                }
+
+            }
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动成功！");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
+        }
+
+        redirectAttributes.addAttribute("path", URLEncoder.encode(descPath, Constants.ENCODING));
+        return redirectToUrl(viewName("list"));
+    }
+
+
+
+    @RequestMapping("copy")
+    public String copy(
+            @RequestParam(value = "descPath") String descPath,
+            @RequestParam(value = "paths") String[] paths,
+            @RequestParam(value = "conflict") String conflict,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        descPath = URLDecoder.decode(descPath, Constants.ENCODING);
+
+        for(int i = 0, l = paths.length; i < l; i++) {
+            String path = paths[i];
+            path = URLDecoder.decode(path, Constants.ENCODING);
+            paths[i] = (rootPath + File.separator + path).replace("\\", "/");
+        }
+
+        try {
+            File descPathFile = new File(rootPath + File.separator + descPath);
+            for(String path : paths) {
+                File sourceFile = new File(path);
+                File descFile = new File(descPathFile, sourceFile.getName());
+                if(descFile.exists() && "ignore".equals(conflict)) {
+                    continue;
+                }
+
+                FileUtils.deleteQuietly(descFile);
+
+                if(sourceFile.isDirectory()) {
+                    FileUtils.copyDirectoryToDirectory(sourceFile, descPathFile);
+                } else {
+                    FileUtils.copyFileToDirectory(sourceFile, descPathFile);
+                }
+
+            }
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE, "复制成功！");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
+        }
+
+        redirectAttributes.addAttribute("path", URLEncoder.encode(descPath, Constants.ENCODING));
+        return redirectToUrl(viewName("list"));
+    }
 
 
     private boolean isValidFileName(String fileName) {
