@@ -14,6 +14,7 @@ import com.sishuok.es.common.web.entity.AjaxUploadResponse;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.common.web.upload.exception.FileNameLengthLimitExceededException;
 import com.sishuok.es.common.web.upload.exception.InvalidExtensionException;
+import com.sishuok.es.common.web.utils.DownloadUtils;
 import com.sishuok.es.maintain.editor.web.controller.utils.CompressUtils;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileUtils;
@@ -481,6 +482,21 @@ public class OnlineEditorController extends BaseController {
         return ajaxUploadResponse;
     }
 
+    @RequestMapping("/download")
+    public String download(
+            HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("path") String path) throws Exception {
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+        String filePath = rootPath + File.separator + URLDecoder.decode(path, Constants.ENCODING);
+        filePath = filePath.replace("\\", "/");
+
+        DownloadUtils.download(request, response, filePath, null);
+
+        return null;
+
+    }
+
 
     //压缩
     @RequestMapping("compress")
@@ -496,7 +512,7 @@ public class OnlineEditorController extends BaseController {
         Date now = new Date();
         String pattern = "yyyyMMddHHmmss";
 
-        String compressPath = parentPath + File.separator + "[系统压缩]" + DateFormatUtils.format(now, pattern) + System.nanoTime() + ".zip";
+        String compressPath = parentPath + File.separator + "[系统压缩]" + DateFormatUtils.format(now, pattern) + "-" + System.nanoTime() + ".zip";
 
         for(int i = 0, l = paths.length; i < l; i++) {
             String path = paths[i];
@@ -506,7 +522,7 @@ public class OnlineEditorController extends BaseController {
 
         try {
             CompressUtils.zip(rootPath + File.separator + compressPath, paths);
-            String msg = "压缩成功，<a href='%s/%s?path=%s' target='_blank' class='btn btn-primary'>点击下载</a>";
+            String msg = "压缩成功，<a href='%s/%s?path=%s' target='_blank' class='btn btn-primary'>点击下载</a>，下载完成后，请手工删除生成的压缩包";
             redirectAttributes.addFlashAttribute(Constants.MESSAGE,
                     String.format(msg,
                             sc.getContextPath(),
