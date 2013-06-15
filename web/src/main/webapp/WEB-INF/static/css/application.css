@@ -305,11 +305,12 @@ html, body {
 }
 
 
-.userinfo {
-    font-size: 14px;
+#userinfo {
+    font-size: 12px;
+    font-weight: bold;
     position:absolute;
     top:0;right:0;
-    margin: 5px 10px 0 0;
+    margin: 5px 15px 0 0;
     z-index: 999;
 
     /*background-clip: padding-box;*/
@@ -324,23 +325,28 @@ html, body {
     /*border: 1px solid #f5f5f5;*/
 }
 
-.userinfo, .userinfo a, .userinfo .btn {
-    font-size: 14px;
+#userinfo a {
     color: #0099ff;
-    font-weight: bold;
 }
 
-.userinfo .btn-message.unread {
-    color:#cd0c0c;
-}
-
-.userinfo .dropdown-menu {
+#userinfo .dropdown-menu {
     min-width: 80px;
     cursor: pointer;
 }
-.userinfo .dropdown-menu li {
-    text-align: right;
+#userinfo .btn-message.unread {
+    color:#cd0c0c;
+}
+#userinfo .btn-message > .icon-count{
+    font-size: 10px;
+}
 
+#user-navbar  > ul > li {
+    margin: 0;
+    padding: 0;
+}
+
+#user-navbar  > ul > li > a {
+    padding: 3px 10px;
 }
 
 .ui-layout-west {

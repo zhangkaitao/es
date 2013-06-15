@@ -21,11 +21,17 @@ $.app = {
 
         var initMessageBtn = function() {
             var messageBtn = $(".btn-message");
-            var icon = messageBtn.find("i");
+            var icon = messageBtn.find(".icon-message");
+            var label = messageBtn.find(".icon-count");
             var messageBtnInterval = null;
 
             var activeUnreadIcon = function(count) {
                 if(count > 0) {
+                    if(!label.length) {
+                        label = $("<i class='label label-important icon-count'></i>");
+                        messageBtn.append(label);
+                    }
+                    label.text(count);
                     messageBtn.addClass("unread");
                     messageBtnInterval = setInterval(function() {icon.toggleClass("icon-envelope-alt").toggleClass("icon-envelope");}, 650);
                 }
