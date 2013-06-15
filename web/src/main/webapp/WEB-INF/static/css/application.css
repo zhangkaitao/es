@@ -334,7 +334,7 @@ html, body {
     cursor: pointer;
 }
 #userinfo .btn-message.unread {
-    color:#cd0c0c;
+    color:#b94a48;
 }
 #userinfo .btn-message > .icon-count{
     font-size: 10px;
