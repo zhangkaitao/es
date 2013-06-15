@@ -75,8 +75,7 @@
                     "参照",
                     "${ctx}/showcase/product/category/select/multiple;domId=searchCategoryId",
                     {
-                        height : 400,
-                        okBtn : false
+                        height : 400
                     }
             );
         });

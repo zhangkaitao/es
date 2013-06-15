@@ -152,7 +152,6 @@ $.app = {
     modalDialog : function(title, url, settings) {
 
         $.app.waiting();
-        console.info(settings.ok);
         var defaultSettings = {
             title : title,
             closeText : "关闭",
@@ -161,7 +160,6 @@ $.app = {
             width:600,
             modal:true,
             noTitle : false,
-            okBtn : true,
             close: function() {
                 $(this).closest(".ui-dialog").remove();
             },
@@ -197,7 +195,7 @@ $.app = {
         }
         settings = $.extend(true, {}, defaultSettings, settings);
 
-        if(!settings.okBtn) {
+        if(!settings.ok) {
             delete settings.buttons['确定'];
         }
 

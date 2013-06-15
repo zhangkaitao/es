@@ -163,7 +163,6 @@
                     {
                         width:600,
                         height:450,
-                        okBtn:false,
                         callback : function() {
                             $("[name='category.name']").validationEngine('validate');
                             return true;

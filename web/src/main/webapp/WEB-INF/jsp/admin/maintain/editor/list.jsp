@@ -201,11 +201,11 @@
                 return;
             }
             var canUncompress = true;
-            $(checkbox).each(function() {
-                if(decodeURIComponent($(this).val()).toLowerCase().indexOf(".zip") == -1) {
-                    canUncompress = false;
-                }
-            });
+//            $(checkbox).each(function() {
+//                if(decodeURIComponent($(this).val()).toLowerCase().indexOf(".zip") == -1) {
+//                    canUncompress = false;
+//                }
+//            });
             if(!canUncompress) {
                 $.app.alert({
                     message : "目前只支持zip文件的解压缩，请只选择zip文件"
@@ -223,7 +223,19 @@
                         $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
                         return;
                     }
-                    window.location.href = ctx + "/admin/maintain/editor/uncompress?parentPath=${current.path}&conflict=" + conflict + "&" + checkbox.serialize();
+                    $.app.modalDialog(
+                            "选择移动到的目录",
+                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            {
+                                height:300,
+                                width:300,
+                                ok : function(modal) {
+                                    var ztree = $.fn.zTree.getZTreeObj(modal.find("#selectTree .ztree").attr("id"));
+                                    var selectedNode = ztree.getSelectedNodes()[0];
+                                    var descPath = selectedNode.path;
+                                    window.location.href = ctx + "/admin/maintain/editor/uncompress?parentPath=${current.path}&descPath=" + descPath + "&conflict=" + conflict + "&" + checkbox.serialize();
+                                }
+                            });
                 }
             });
 

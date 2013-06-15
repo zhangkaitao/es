@@ -40,6 +40,7 @@ public class CompressUtils {
             try {
                 zaos = new ZipArchiveOutputStream(compressFile);
                 zaos.setUseZip64(Zip64Mode.AsNeeded);
+                zaos.setEncoding("GBK");
 
                 for (File file : files) {
                     addFilesToCompression(zaos, file, "");
@@ -98,7 +99,7 @@ public class CompressUtils {
 
         ZipFile zipFile = null;
         try {
-            zipFile = new ZipFile(uncompressFile);
+            zipFile = new ZipFile(uncompressFile, "GBK");
 
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements()) {

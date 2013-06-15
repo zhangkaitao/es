@@ -111,6 +111,7 @@ public class OnlineEditorController extends BaseController {
     @ResponseBody
     public Object ajaxLoad(
             @RequestParam("id") long parentId,
+            @RequestParam(value = "paths", required = false) String[] excludePaths,
             @RequestParam("path") String parentPath) throws UnsupportedEncodingException {
 
         parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
@@ -125,6 +126,10 @@ public class OnlineEditorController extends BaseController {
 
         for(File subFile : parentPathDirectory.listFiles()) {
             if(!subFile.isDirectory()) {
+                continue;
+            }
+            String path = URLEncoder.encode(subFile.getAbsolutePath().replace(rootPath, ""), Constants.ENCODING);
+            if(isExclude(excludePaths, path)) {
                 continue;
             }
             id++;
@@ -171,6 +176,53 @@ public class OnlineEditorController extends BaseController {
         model.addAttribute("files", files);
 
         return viewName("list");
+    }
+
+    @RequestMapping("select")
+    public String showSelectForm(
+            @RequestParam("paths") String[] excludePaths,
+            Model model) throws UnsupportedEncodingException {
+
+        String rootPath = sc.getRealPath(ROOT_DIR);
+
+        List<Map> trees = Lists.newArrayList();
+
+        long id = 0L;
+        File rootDirectory = new File(rootPath);
+
+        Map<Object, Object> root= extractFileInfoMap(rootDirectory, rootPath, id, -1);
+
+        trees.add(root);
+
+        for(File subFile : rootDirectory.listFiles()) {
+            if(!subFile.isDirectory()) {
+                continue;
+            }
+            String path = URLEncoder.encode(subFile.getAbsolutePath().replace(rootPath, ""), Constants.ENCODING);
+            if(isExclude(excludePaths, path)) {
+                continue;
+            }
+            id++;
+            trees.add(extractFileInfoMap(subFile, rootPath, id, (Long)root.get("id")));
+        }
+
+        model.addAttribute("trees", trees);
+        model.addAttribute("excludePaths", excludePaths);
+
+        return viewName("selectForm");
+    }
+
+    private boolean isExclude(String[] excludePaths, String path) {
+        if (excludePaths == null) {
+            return false;
+        }
+        for (int i = 0; i < excludePaths.length; i++) {
+            String excludePath = excludePaths[i];
+            if(path.equals(excludePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.GET)
@@ -472,6 +524,7 @@ public class OnlineEditorController extends BaseController {
     @RequestMapping("uncompress")
     public String uncompress(
             @RequestParam(value = "parentPath") String parentPath,
+            @RequestParam(value = "descPath") String descPath,
             @RequestParam(value = "paths") String[] paths,
             @RequestParam(value = "conflict") String conflict,
             RedirectAttributes redirectAttributes) throws IOException {
@@ -479,6 +532,7 @@ public class OnlineEditorController extends BaseController {
 
         String rootPath = sc.getRealPath(ROOT_DIR);
         parentPath = URLDecoder.decode(parentPath, Constants.ENCODING);
+        descPath = URLDecoder.decode(descPath, Constants.ENCODING);
 
         for(int i = 0, l = paths.length; i < l; i++) {
             String path = paths[i];
@@ -491,16 +545,17 @@ public class OnlineEditorController extends BaseController {
         }
 
         try {
-            String descPath = rootPath + File.separator + parentPath;
+
+            String descAbsolutePath = rootPath + File.separator + descPath;
             for(String path : paths) {
-                CompressUtils.unzip(path, descPath, "override".equals(conflict));
+                CompressUtils.unzip(path, descAbsolutePath, "override".equals(conflict));
             }
             redirectAttributes.addFlashAttribute(Constants.MESSAGE, "解压成功！");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute(Constants.ERROR, e.getMessage());
         }
 
-        redirectAttributes.addAttribute("path", URLEncoder.encode(parentPath, Constants.ENCODING));
+        redirectAttributes.addAttribute("path", URLEncoder.encode(descPath, Constants.ENCODING));
         return redirectToUrl(viewName("list"));
     }
 

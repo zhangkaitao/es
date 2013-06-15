@@ -13,7 +13,7 @@
             <input type="hidden" name="names" value="${fileInfo.name}">
         </c:if>
     </td>
-    <td>
+    <td style="word-break: break-all;">
         <c:choose>
             <c:when test="${fileInfo.isDirectory}">
                 <a href="${ctx}/admin/maintain/editor/list?path=${fileInfo.path}">

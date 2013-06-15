@@ -403,6 +403,7 @@ iframe[tabs="true"] {
 
 #menu li a {
     color: #0088cc;
+    font-weight: bold;
     text-decoration: none;
 }
 
@@ -593,9 +594,15 @@ iframe[tabs="true"] {
     text-align: center;
 }
 
-.table > tbody > tr.active {
-    color: #bd362f;
+.table > tbody > tr.active, .table > tbody > tr.active > td{
+    background: #0088cc;
+
 }
+.table > tbody > tr.active * {
+    color: #fff!important;
+    font-weight: bold;
+}
+
 
 .popover {
     color: #333;
