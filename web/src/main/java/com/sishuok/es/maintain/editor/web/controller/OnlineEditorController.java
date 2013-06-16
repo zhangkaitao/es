@@ -83,7 +83,6 @@ public class OnlineEditorController extends BaseController {
 
     @RequestMapping(value = "tree", method = RequestMethod.GET)
     public String tree(Model model) throws UnsupportedEncodingException {
-
         String rootPath = sc.getRealPath(ROOT_DIR);
 
         long id = 0L;
