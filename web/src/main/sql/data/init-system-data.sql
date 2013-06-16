@@ -156,7 +156,7 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
          values (43, 39, '0/1/39/', 4, 'ehcache监控', '', '/admin/monitor/ehcache', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (44, 39, '0/1/39/', 5, 'jmv监控', '', '/admin/monitor/jvm', true);;
+         values (44, 39, '0/1/39/', 5, 'jvm监控', '', '/admin/monitor/jvm', true);;
 
 
 
