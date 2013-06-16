@@ -188,7 +188,6 @@
     //排序：总命中率 命中次数  失效次数  被缓存的个数  执行次数 执行返回的总行数   平均执行时间  最长执行时间  最短执行时间
     private void sort(final String[] queries, final Statistics statistics, final String sortBy) {
         Arrays.sort(queries, new Comparator<String>() {
-            @Override
             public int compare(String q1, String q2) {
                 QueryStatistics s1 = statistics.getQueryStatistics(q1);
                 QueryStatistics s2 = statistics.getQueryStatistics(q2);

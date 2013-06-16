@@ -175,7 +175,6 @@
     //总命中率  命中次数  失效次数  被缓存的个数    所占内存大小   内存中的实体数
     private void sort(final String[] secondLevelCacheRegionNames, final Statistics statistics, final String sortBy) {
         Arrays.sort(secondLevelCacheRegionNames, new Comparator<String>() {
-            @Override
             public int compare(String region1, String region2) {
                 SecondLevelCacheStatistics s1 = statistics.getSecondLevelCacheStatistics(region1);
                 SecondLevelCacheStatistics s2 = statistics.getSecondLevelCacheStatistics(region2);

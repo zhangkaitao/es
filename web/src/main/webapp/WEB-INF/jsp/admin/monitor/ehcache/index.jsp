@@ -84,7 +84,6 @@
 <%!
         private void sort(final String[] cacheNames, final CacheManager cacheManager, final String sort) {
             Arrays.sort(cacheNames, new Comparator<String>() {
-                @Override
                 public int compare(String n1, String n2) {
                     Statistics s1 = cacheManager.getCache(n1).getStatistics();
                     Statistics s2 = cacheManager.getCache(n2).getStatistics();
