@@ -88,6 +88,7 @@ public class LoginFormController {
             subject.logout();
         }
 
+
         //如果同时存在错误消息 和 普通消息  只保留错误消息
         if (model.containsAttribute(Constants.ERROR)) {
             model.remove(Constants.MESSAGE);

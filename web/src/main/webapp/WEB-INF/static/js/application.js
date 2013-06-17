@@ -710,6 +710,8 @@ $.tabs = {
             }
         });
         $.tabs.initTabScroll();
+
+        $.tabs.initTabContextMenu();
     },
     removeTab : function(panelId) {
         var tabs = $.tabs.tabs;
@@ -897,6 +899,97 @@ $.tabs = {
         });
 
     },
+    /**
+     * 初始化上下文菜单（右键菜单）
+      */
+    initTabContextMenu : function() {
+        //初始化右键菜单
+        var tabsMenu = $("#tabs-menu");
+        //调用这个方法后将禁止系统的右键菜单
+        $(document).bind('contextmenu', function (e) {
+            var target = $(e.target);
+            var clickTab = target.closest(".tabs-bar").length && target.is(".ui-tabs-anchor");
+
+            if (clickTab && target.attr("href") == '#tabs-0') {
+                return true;
+            }
+            if (clickTab) {
+                shoowMenu(target.attr("id"), e.pageX - 5, e.pageY - 5);
+                tabsMenu.mouseleave(function () {
+                    hideMenu();
+                });
+                return false;
+            }
+            return true;
+        });
+
+        function hideMenu() {
+            tabsMenu.hide();
+            tabsMenu.data("tabId", "");
+        }
+
+        function shoowMenu(tabId, x, y) {
+            tabsMenu.data("tabId", tabId);
+            tabsMenu.css("left", x).css("top", y);
+            tabsMenu.show();
+        }
+
+        function closeTab(tabId) {
+            $("#" + tabId).parent().find(".icon-remove").click();
+        }
+        tabsMenu.find(".close-current").click(function (e) {
+            var currentTabId = tabsMenu.data("tabId");
+            closeTab(currentTabId);
+            hideMenu();
+        });
+
+        tabsMenu.find(".close-others").click(function (e) {
+            var currentTabId = tabsMenu.data("tabId");
+            var tabs = $.tabs.tabs.find(".ul-wrapper > ul > li > a");
+            tabs.each(function() {
+                var tabId = this.id;
+                if(tabId != currentTabId) {
+                    closeTab(tabId);
+                }
+            });
+            hideMenu();
+        });
+        tabsMenu.find(".close-all").click(function (e) {
+            var currentTabId = tabsMenu.data("tabId");
+            var tabs = $.tabs.tabs.find(".ul-wrapper > ul > li > a");
+            tabs.each(function() {
+                var tabId = this.id;
+                closeTab(tabId);
+            });
+            hideMenu();
+        });
+
+        tabsMenu.find(".close-left-all").click(function (e) {
+            var currentTabId = tabsMenu.data("tabId");
+            var tabs = $.tabs.tabs.find(".ul-wrapper > ul > li > a");
+            var currentTabIndex = tabs.index($("#" + currentTabId));
+            tabs.each(function(index) {
+                if(index < currentTabIndex) {
+                    var tabId = this.id;
+                    closeTab(tabId);
+                }
+            });
+            hideMenu();
+        });
+        tabsMenu.find(".close-right-all").click(function (e) {
+            var currentTabId = tabsMenu.data("tabId");
+            var tabs = $.tabs.tabs.find(".ul-wrapper > ul > li > a");
+            var currentTabIndex = tabs.index($("#" + currentTabId));
+            tabs.each(function(index) {
+                if(index > currentTabIndex) {
+                    var tabId = this.id;
+                    closeTab(tabId);
+                }
+            });
+            hideMenu();
+        });
+    },
+
     /**
      * 获取下一个自定义panel的索引
      */
