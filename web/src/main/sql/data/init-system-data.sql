@@ -139,8 +139,6 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (35, 33, '0/1/33/', 2, '键值对', '', '/admin/maintain/keyvalue', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (36, 33, '0/1/33/', 3, '配置管理', '', '/admin/maintain/config', true);;
-insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (37, 33, '0/1/33/', 4, '静态资源版本控制', '', '/admin/maintain/staticResource', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (38, 33, '0/1/33/', 5, '在线编辑', '', '/admin/maintain/editor', true);;
