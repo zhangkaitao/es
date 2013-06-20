@@ -145,6 +145,7 @@ public class UserService extends BaseService<User, Long> {
 
         User user = null;
 
+        //此处需要走代理对象，目的是能走缓存切面
         UserService proxyUserService = (UserService) AopContext.currentProxy();
         if (maybeUsername(username)) {
             user = proxyUserService.findByUsername(username);
