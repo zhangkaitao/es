@@ -29,6 +29,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>用于绑定@FormModel的方法参数解析器
@@ -39,6 +41,11 @@ import java.util.Map.Entry;
  * @since 3.1
  */
 public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver {
+
+    /**
+     * 提取索引的模式 如[0].
+     */
+    private final Pattern INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]\\.");
 
     public FormModelMethodArgumentResolver() {
     }
@@ -232,7 +239,22 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
                         target.add(simpleBinder.convertIfNecessary(value, componentType));
                     }
                 } else {
-                    Object component = BeanUtils.instantiate(componentType);
+                    Object component = null;
+                    Matcher matcher = INDEX_PATTERN.matcher(prefixName);
+                    if(matcher.matches()) {
+                        int index = Integer.valueOf(matcher.group(1));
+                        if(target.size() > index) {
+                            Iterator iterator = target.iterator();
+                            for(int i = 0; i < index; i++) {
+                                iterator.next();
+                            }
+                            component = iterator.next();
+                        }
+                    }
+                    if(component == null) {
+                        component = BeanUtils.instantiate(componentType);
+                    }
+
                     WebDataBinder componentBinder = binderFactory.createBinder(request, component, null);
                     component = componentBinder.getTarget();
 
@@ -262,8 +284,12 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
             }
 
 
-            Map target = new HashMap();
-            ((MapWapper) binder.getTarget()).setInnerMap(target);
+            MapWapper mapWapper = ((MapWapper) binder.getTarget());
+            Map target = mapWapper.getInnerMap();
+            if(target == null) {
+                target = new HashMap();
+                mapWapper.setInnerMap(target);
+            }
 
             for (Object key : servletRequest.getParameterMap().keySet()) {
                 String prefixName = getPrefixName((String) key);
@@ -284,7 +310,12 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
                         target.put(keyValue, simpleBinder.convertIfNecessary(value, valueType));
                     }
                 } else {
-                    Object component = BeanUtils.instantiate(valueType);
+
+                    Object component = target.get(keyValue);
+                    if(component == null) {
+                        BeanUtils.instantiate(valueType);
+                    }
+
                     WebDataBinder componentBinder = binderFactory.createBinder(request, component, null);
                     component = componentBinder.getTarget();
 
