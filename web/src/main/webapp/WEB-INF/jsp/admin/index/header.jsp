@@ -5,7 +5,5 @@
       <%--<img src="${ctx}/static/images/favicon.png"/>--%>
       <%--&nbsp;&nbsp;Easy-Scaffold项目开发脚手架——基于主流Java开源技术构建--%>
   </div>
-
-
 </div>
 

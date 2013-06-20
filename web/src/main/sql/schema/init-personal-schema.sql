@@ -9,7 +9,7 @@ create table `personal_message`(
   `sender_id`        bigint,
   `receiver_id`      bigint,
   `send_date`        timestamp default 0,
-  `title`            varchar(500),
+  `title`            varchar(200),
   `sender_state`     varchar(20),
   `sender_state_change_date`    timestamp  default 0,
   `receiver_state`   varchar(20),
@@ -18,7 +18,7 @@ create table `personal_message`(
   `read`            bool ,
   `replied`          bool ,
   `parent_id`        bigint,
-  `parent_ids`        varchar(500),
+  `parent_ids`        varchar(200),
 
   constraint `pk_personal_message` primary key(`id`),
   index `idx_personal_message_sender_id_sender_state` (`sender_id`, `sender_state`),

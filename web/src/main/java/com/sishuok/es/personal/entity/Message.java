@@ -120,6 +120,8 @@ public class Message extends BaseEntity<Long> {
     @Column(name = "parent_ids")
     private String parentIds;
 
+
+
     public Long getSenderId() {
         return senderId;
     }

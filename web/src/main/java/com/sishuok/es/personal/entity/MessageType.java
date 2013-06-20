@@ -19,4 +19,7 @@ public enum MessageType {
     public String getInfo() {
         return info;
     }
+
+    
+
 }
