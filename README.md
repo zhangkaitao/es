@@ -1,3 +1,8 @@
+<a href="http://zhangkaitao.github.io/es/" target="_blank">项目首页</a>
+|
+<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a>
+
+
 ##介绍
 * ES是一个JavaEE企业级项目的快速开发的脚手架，提供了底层抽象和通用功能，拿来即用。
 
