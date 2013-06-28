@@ -9,6 +9,8 @@
 * 提供常用功能的用例，直接拿来用即可，比如树、可移动列表（即如排序的分类）、父子表、编辑器、文件上传等等
 * 监控功能，比如缓存管理（命中率、缓存控制等）、二级缓存管理、JVM状态、数据库（druid做的很好了，直接用它的）等等
 * 维护功能，比如图标管理、强大的在线编辑功能（直接在线编辑JSP，无需来回切服务器，上传下载等等）、静态资源管理（自动的压缩、版本化js/css）
+* 站内信功能，支持嵌套展示等
+* 通用的文件上传/下载、通用的验证模型等等
 * ……
 
 ### 技术选型：
@@ -46,6 +48,16 @@
  * 目前只支持mysql，建议mysql5.5及以上
 ####
  * 本脚手架会选型技术的最新版本
+
+###支持的浏览器
+ * chrome
+ * firefox（目前使用firefox 19.0.2测试）
+ * opera 12
+ * ie7及以上（建议ie9以上，获取更好的体验）
+ * 其他浏览器暂时未测试
+
+###系统界面截图
+<img src="https://travis-ci.org/zhangkaitao/es.png" width="600px" height="450px"/>
 
 ###CI status : 
 <a href="https://travis-ci.org/zhangkaitao/es"><img src="https://travis-ci.org/zhangkaitao/es.png"/></a>

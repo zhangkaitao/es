@@ -22,7 +22,7 @@
 
     <%@include file="refreshTreeMessage.jsp"%>
 
-    <div class="row-fluid tool ui-toolbar">
+    <div class="row-fluid tool ui-toolbar" data-current-path="${current.path}">
         <div class="span4">
             <div class="btn-group">
                 <a class="btn btn-custom btn-upload no-disabled">

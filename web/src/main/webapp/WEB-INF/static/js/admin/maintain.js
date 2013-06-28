@@ -364,6 +364,7 @@ $.maintain = {
             });
 
             $(".btn-create-directory").click(function() {
+                var currentPath  = $(this).closest(".tool").data("current-path");
                 $.app.confirm({
                     title : "新建目录",
                     message: "请输入目录名字：<input type='text' id='name' placeholder='支持如/a/b/c多级目录'/>",
@@ -374,13 +375,14 @@ $.maintain = {
                                 message : "名称不能为空"
                             });
                         }
-                        location.href = ctx + '/admin/maintain/editor/create/directory?parentPath=${current.path}' + "&name=" + name;
+                        location.href = ctx + '/admin/maintain/editor/create/directory?parentPath=' + currentPath + "&name=" + name;
                     }
                 });
             });
 
 
             $(".btn-create-file").click(function() {
+                var currentPath  = $(this).closest(".tool").data("current-path");
                 $.app.confirm({
                     title : "新建文件",
                     message: "请输入文件名字：<input type='text' id='name' placeholder='支持如/a/b.txt多级目录'/>",
@@ -391,13 +393,14 @@ $.maintain = {
                                 message : "名称不能为空"
                             });
                         }
-                        location.href = ctx + '/admin/maintain/editor/create/file?parentPath=${current.path}' + "&name=" + name;
+                        location.href = ctx + '/admin/maintain/editor/create/file?parentPath=' + currentPath + "&name=" + name;
                     }
                 });
             });
 
             $(".btn-upload").click(function() {
-                location.href = ctx + '/admin/maintain/editor/upload?parentPath=${current.path}';
+                var currentPath  = $(this).closest(".tool").data("current-path");
+                location.href = ctx + '/admin/maintain/editor/upload?parentPath=' + currentPath;
             });
 
             $(".btn-compress").click(function() {
@@ -405,6 +408,7 @@ $.maintain = {
                 if(!checkbox.length) {
                     return;
                 }
+                var currentPath  = $(this).closest(".tool").data("current-path");
                 $.app.confirm({
                     title : "确认压缩并下载选中的文件",
                     message: "<strong class='text-error'>注意：</strong><span class='text-error muted'>如果选择的文件比较大，速度可能比较慢！</span><br/><br/><span class='text-error'>请输入 <strong>ok</strong> 进行压缩并下载：</span><input type='text' id='confirmText' class='input-small'>",
@@ -414,7 +418,7 @@ $.maintain = {
                             $.app.alert({message: "请输入<strong>ok</strong>确认执行操作！"});
                             return;
                         }
-                        window.location.href = ctx + "/admin/maintain/editor/compress?parentPath=${current.path}&" + checkbox.serialize();
+                        window.location.href = ctx + "/admin/maintain/editor/compress?parentPath=" + currentPath + "&" + checkbox.serialize();
                     }
                 });
 
