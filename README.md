@@ -62,9 +62,10 @@
  * 其他浏览器暂时未测试
 
 ###系统界面截图
-<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/1.PNG" width="600px" height="450px"/>
-<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/2.PNG" width="600px" height="450px"/>
-<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/3.PNG" width="600px" height="450px"/>
+<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/1.PNG?raw=true" width="600px" height="450px"/>
+<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/2.PNG?raw=true" width="600px" height="450px"/>
+<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/3.PNG?raw=true" width="600px" height="450px"/>
+
 
 ##CI status
 <a href="https://travis-ci.org/zhangkaitao/es"><img src="https://travis-ci.org/zhangkaitao/es.png"/></a>
