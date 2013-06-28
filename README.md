@@ -1,5 +1,6 @@
-##介绍：
+##介绍
 * ES是一个JavaEE企业级项目的快速开发的脚手架，提供了底层抽象和通用功能，拿来即用。
+
 ### 核心功能
 * 通用的DAO、Service、Controller抽象，从CRUD中解放
 * 简单的分页、排序、查询抽象，更快的开发速度
@@ -13,10 +14,12 @@
 * 通用的文件上传/下载、通用的验证模型等等
 * ……
 
-### 技术选型：
+### 技术选型
+
 #### 管理
 * maven依赖和项目管理
 * git版本控制
+
 #### 后端
 * IoC容器 spring
 * web框架 springmvc
@@ -44,8 +47,10 @@
 * jquery blockUI 弹出框/遮罩框架
 * jquery-fileupload 文件上传
 * bootstrap-datatimepicker 日历选择
+
 #### 数据库
  * 目前只支持mysql，建议mysql5.5及以上
+
 ####
  * 本脚手架会选型技术的最新版本
 
@@ -57,9 +62,11 @@
  * 其他浏览器暂时未测试
 
 ###系统界面截图
-<img src="https://travis-ci.org/zhangkaitao/es.png" width="600px" height="450px"/>
+<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/1.PNG" width="600px" height="450px"/>
+<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/2.PNG" width="600px" height="450px"/>
+<img src="https://github.com/zhangkaitao/es/blob/master/src/support/img/3.PNG" width="600px" height="450px"/>
 
-###CI status : 
+##CI status
 <a href="https://travis-ci.org/zhangkaitao/es"><img src="https://travis-ci.org/zhangkaitao/es.png"/></a>
 
 
