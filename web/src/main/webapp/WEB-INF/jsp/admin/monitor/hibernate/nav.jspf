@@ -34,10 +34,4 @@
             缓存控制
         </a>
     </li>
-    <li ${type eq 'ql' ? 'class="active"' : ''}>
-        <a href="${ctx}/admin/monitor/hibernate/ql">
-            <i class="icon-table"></i>
-            执行QL
-        </a>
-    </li>
 </ul>
