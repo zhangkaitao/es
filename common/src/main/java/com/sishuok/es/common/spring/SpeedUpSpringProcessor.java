@@ -157,6 +157,9 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
                 if(beanName.equals(removedBeanName)) {
                     return true;
                 }
+                if(beanDefinition.getBeanClassName().equals(removedBeanName)) {
+                    return true;
+                }
             }
         }
 

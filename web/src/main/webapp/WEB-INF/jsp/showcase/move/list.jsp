@@ -25,30 +25,31 @@
     </ul>
 
     <es:showMessage/>
+
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:move:create">
                 <a id="create" class="btn " href="${ctx}/showcase/move/create">
-                    <span class="icon-file-alt"></span>
+                    <i class="icon-file-alt"></i>
                     新增
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:move:update">
                 <a class="btn btn-update">
-                    <span class="icon-edit"></span>
+                    <i class="icon-edit"></i>
                     修改
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:move:deleted">
                 <a class="btn btn-delete">
-                    <span class="icon-trash"></span>
+                    <i class="icon-trash"></i>
                     删除
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:move:create or showcase:move:update or showcase:move:delete">
                 <a id="reweight" class="btn">
-                    <span class="icon-cog"></span>
+                    <i class="icon-cog"></i>
                     优化权重
                 </a>
                 </shiro:hasPermission>

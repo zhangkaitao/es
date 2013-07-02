@@ -3,13 +3,15 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.group.service;
+package com.sishuok.es.sys.group.task;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.entity.GroupRelation;
 import com.sishuok.es.sys.group.entity.GroupType;
+import com.sishuok.es.sys.group.service.GroupRelationService;
+import com.sishuok.es.sys.group.service.GroupService;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.service.OrganizationService;
 import com.sishuok.es.test.BaseIT;
@@ -22,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Date: 13-5-18 下午5:06
  * <p>Version: 1.0
  */
-public class GroupClearRelationServiceIT extends BaseIT {
+public class GroupClearRelationTaskIT extends BaseIT {
 
     @Autowired
-    private GroupClearRelationService groupClearRelationService;
+    private GroupClearRelationTask groupClearRelationTask;
 
     @Autowired
     private GroupService groupService;
@@ -65,11 +67,11 @@ public class GroupClearRelationServiceIT extends BaseIT {
 
         organizationService.delete(organization1);
 
-        groupClearRelationService.clearDeletedGroupRelation();
+        groupClearRelationTask.clearDeletedGroupRelation();
         Assert.assertEquals(1, groupRelationService.count());
 
         groupService.delete(group);
-        groupClearRelationService.clearDeletedGroupRelation();
+        groupClearRelationTask.clearDeletedGroupRelation();
         Assert.assertEquals(0, groupRelationService.count());
 
     }

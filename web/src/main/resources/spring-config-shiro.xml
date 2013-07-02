@@ -54,11 +54,11 @@
         <property name="cacheManager" ref="springCacheManager"/>
     </bean>
 
-    <!-- 会话验证调度 -->
-    <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+    <!-- 会话验证调度  -->
+    <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.scheduler.SpringSessionValidationScheduler">
         <property name="sessionValidationInterval" value="${shiro.session.validation.interval}"/>
         <property name="sessionManager" ref="sessionManager"/>
-        <!-- see spring-config-quartz.xml-->
+        <!-- see spring-config-task.xml-->
         <property name="scheduler" ref="scheduler"/>
     </bean>
     <!-- 会话管理器 -->

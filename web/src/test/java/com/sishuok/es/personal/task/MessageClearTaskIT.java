@@ -3,11 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal;
+package com.sishuok.es.personal.task;
 
+import com.sishuok.es.personal.BaseMessageIT;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.service.MessageClearService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,14 +20,14 @@ import java.util.Date;
  * <p>Date: 13-5-25 下午11:43
  * <p>Version: 1.0
  */
-public class MessageClearServiceIT extends BaseMessageIT {
+public class MessageClearTaskIT extends BaseMessageIT {
 
     @Autowired
-    private MessageClearService messageClearService;
+    private MessageClearTask messageClearTask;
 
     private Date today = new Date();
-    private Date oneYearAgo = DateUtils.addDays(today, -1 - MessageClearService.EXPIRE_DAYS_OF_ONE_YEAR);
-    private Date oneMonthAgo = DateUtils.addDays(today, -1 - MessageClearService.EXPIRE_DAYS_OF_ONE_MONTH);
+    private Date oneYearAgo = DateUtils.addDays(today, -1 - MessageClearTask.EXPIRE_DAYS_OF_ONE_YEAR);
+    private Date oneMonthAgo = DateUtils.addDays(today, -1 - MessageClearTask.EXPIRE_DAYS_OF_ONE_MONTH);
 
 
     @Test
@@ -46,7 +46,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         messageService.update(message);
         clear();
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
 
         Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
@@ -65,7 +65,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         messageService.update(message);
         clear();
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
 
         Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
@@ -87,7 +87,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         messageService.update(message);
         clear();
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
 
         Long actualTrashBoxCount = messageApi.findUserMessage(senderId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
@@ -109,7 +109,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         messageService.update(message);
         clear();
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
 
         Long actualTrashBoxCount = messageApi.findUserMessage(receiverId, MessageState.trash_box, null).getTotalElements();
         Assert.assertEquals(expectedTrashBoxCount, actualTrashBoxCount);
@@ -131,7 +131,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         messageService.update(message);
         clear();
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
         Long actualDeleteBoxCount = messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
 
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
@@ -154,7 +154,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         messageService.update(message);
         clear();
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
 
         Long actualDeleteBoxCount = messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);
@@ -169,7 +169,7 @@ public class MessageClearServiceIT extends BaseMessageIT {
         clear();
 
 
-        messageClearService.autoClearExpiredOrDeletedmMessage();
+        messageClearTask.autoClearExpiredOrDeletedmMessage();
 
         actualDeleteBoxCount = messageApi.findUserMessage(receiverId, MessageState.delete_box, null).getTotalElements();
         Assert.assertEquals(expectedDeleteBoxCount, actualDeleteBoxCount);

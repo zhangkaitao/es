@@ -3,10 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.auth.service;
+package com.sishuok.es.sys.auth.task;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
+import com.sishuok.es.sys.auth.service.UserAuthService;
 import com.sishuok.es.sys.group.service.GroupService;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
@@ -25,10 +26,10 @@ import java.util.Set;
  * <p>Date: 13-5-18 下午8:53
  * <p>Version: 1.0
  */
-public class AuthRelationClearServiceIT extends BaseIT {
+public class AuthRelationClearTaskIT extends BaseIT {
 
     @Autowired
-    private AuthRelationClearService authRelationClearService;
+    private AuthRelationClearTask authRelationClearTask;
 
     @Autowired
     private UserAuthService userAuthService;
@@ -67,7 +68,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
         groupService.delete(1L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -84,7 +85,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
         groupService.delete(2L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -103,7 +104,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
         organizationService.delete(2L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -119,7 +120,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
         organizationService.delete(1L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -138,7 +139,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
         groupService.delete(3L);
         groupService.delete(4L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -156,7 +157,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
         jobService.delete(2L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -173,7 +174,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
 
         jobService.delete(1L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -192,7 +193,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
         organizationService.delete(2L);
         jobService.delete(1L);
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);
@@ -211,7 +212,7 @@ public class AuthRelationClearServiceIT extends BaseIT {
         jobService.delete(new Long[]{1L, 2L, 3L});
         groupService.delete(new Long[]{1L, 2L, 3L, 4L});
         clear();
-        authRelationClearService.clearDeletedAuthRelation();
+        authRelationClearTask.clearDeletedAuthRelation();
         clear();
 
         roles = userAuthService.findStringRoles(user);

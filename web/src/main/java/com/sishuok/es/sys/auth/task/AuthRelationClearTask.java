@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.auth.service;
+package com.sishuok.es.sys.auth.task;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.sys.auth.entity.Auth;
+import com.sishuok.es.sys.auth.service.AuthService;
 import com.sishuok.es.sys.group.service.GroupService;
 import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
@@ -37,7 +38,7 @@ import java.util.Set;
  * <p>Version: 1.0
  */
 @Service
-public class AuthRelationClearService {
+public class AuthRelationClearTask {
 
     @Autowired
     private AuthService authService;
@@ -72,7 +73,7 @@ public class AuthRelationClearService {
             authPage = authService.findAll(pageable);
             //开启新事物清除
             try {
-                AuthRelationClearService authRelationClearService = (AuthRelationClearService) AopContext.currentProxy();
+                AuthRelationClearTask authRelationClearService = (AuthRelationClearTask) AopContext.currentProxy();
                 authRelationClearService.doClear(authPage.getContent(), allRoleIds);
             } catch (Exception e) {
                 //出异常也无所谓

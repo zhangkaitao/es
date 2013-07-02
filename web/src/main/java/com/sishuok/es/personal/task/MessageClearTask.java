@@ -3,10 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.service;
+package com.sishuok.es.personal.task;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.personal.entity.MessageState;
+import com.sishuok.es.personal.service.MessageService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
  * <p>Version: 1.0
  */
 @Service
-public class MessageClearService {
+public class MessageClearTask {
 
     public static final int EXPIRE_DAYS_OF_ONE_YEAR = 366;
     public static final int EXPIRE_DAYS_OF_ONE_MONTH = 31;
@@ -27,13 +28,13 @@ public class MessageClearService {
     private MessageService messageService;
 
     public void autoClearExpiredOrDeletedmMessage() {
-        MessageClearService messageClearService = (MessageClearService) AopContext.currentProxy();
+        MessageClearTask messageClearTask = (MessageClearTask) AopContext.currentProxy();
         //1、收件箱、发件箱状态修改为垃圾箱状态
-        messageClearService.doClearInOrOutBox();
+        messageClearTask.doClearInOrOutBox();
         //2、垃圾箱状态改为已删除状态
-        messageClearService.doClearTrashBox();
+        messageClearTask.doClearTrashBox();
         //3、物理删除那些已删除的（即收件人和发件人 同时都删除了的）
-        messageClearService.doClearDeletedMessage();
+        messageClearTask.doClearDeletedMessage();
     }
 
 

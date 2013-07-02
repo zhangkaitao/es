@@ -3,15 +3,15 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.role.service;
+package com.sishuok.es.sys.role.task;
 
 import com.google.common.collect.Sets;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
 import com.sishuok.es.sys.permission.service.PermissionService;
-import com.sishuok.es.sys.permission.service.RoleClearRelationService;
 import com.sishuok.es.sys.permission.service.RoleService;
+import com.sishuok.es.sys.permission.task.RoleClearRelationTask;
 import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import com.sishuok.es.test.BaseIT;
@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Date: 13-5-18 下午4:42
  * <p>Version: 1.0
  */
-public class RoleClearRelationServiceIT extends BaseIT {
+public class RoleClearRelationTaskIT extends BaseIT {
 
     @Autowired
-    private RoleClearRelationService roleClearRelationService;
+    private RoleClearRelationTask roleClearRelationTask;
 
     @Autowired
     private RoleService roleService;
@@ -86,7 +86,7 @@ public class RoleClearRelationServiceIT extends BaseIT {
         permissionService.delete(permission1);
         clear();
 
-        roleClearRelationService.clearDeletedRoleRelation();
+        roleClearRelationTask.clearDeletedRoleRelation();
 
 
         role = roleService.findOne(role.getId());

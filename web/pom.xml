@@ -113,6 +113,13 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>com.sishuok</groupId>
+                <artifactId>codegen</artifactId>
+                <version>${codegen.version}</version>
+            </plugin>
+
         </plugins>
         <resources>
             <resource>
@@ -151,12 +158,20 @@
             <!--<version>1.0</version>-->
             <!--<scope>provided</scope>-->
         <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>bsh</groupId>-->
+            <!--<artifactId>bsh</artifactId>-->
+            <!--<version>1.3.0</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
+        <!-- poi:office word/excel/power point…… -->
         <dependency>
-            <groupId>bsh</groupId>
-            <artifactId>bsh</artifactId>
-            <version>1.3.0</version>
-            <scope>provided</scope>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
         </dependency>
+
 
     </dependencies>
 
@@ -168,6 +183,8 @@
         <site.basedir>${project.parent.parent.basedir}</site.basedir>
         <mysql.version>5.1.9</mysql.version>
         <yui.compressor.version>2.4.2</yui.compressor.version>
+
+        <codegen.version>1.0-SNAPSHOT</codegen.version>
     </properties>
 
     <profiles>

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.group.service;
+package com.sishuok.es.sys.group.task;
 
 import com.sishuok.es.sys.group.repository.GroupRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
  * <p>Version: 1.0
  */
 @Service
-public class GroupClearRelationService {
+public class GroupClearRelationTask {
 
     @Autowired
     private GroupRelationRepository groupRelationRepository;

@@ -49,6 +49,10 @@
 
     <root level="info"/>
 
+    <logger name="org.apache" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
     <!--错误日志-->
     <logger name="es-error" level="info">
         <appender-ref ref="ERROR"/>
@@ -63,7 +67,7 @@
     </logger>
 
     <!-- cache -->
-    <logger name="com.sishuok.es.extra.aop" level="debug">
+    <logger name="com.sishuok.es.extra.aop" level="info">
             <appender-ref ref="STDOUT"/>
     </logger>
 

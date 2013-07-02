@@ -12,6 +12,7 @@ drop table if exists `showcase_product`;;
 drop table if exists `showcase_status_audit`;;
 drop table if exists `showcase_status_show`;;
 drop table if exists `showcase_editor`;;
+drop table if exists `showcase_excel_data`;;
 ##showcase
 create table `showcase_sample`(
     `id`         bigint not null auto_increment,
@@ -121,4 +122,9 @@ create table `showcase_editor`(
 ) charset=utf8 ENGINE=InnoDB;;
 
 
+create table `showcase_excel_data`(
+  `id`         bigint not null auto_increment,
+  `content`   longtext,
+  constraint `pk_excel_data` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;;
 

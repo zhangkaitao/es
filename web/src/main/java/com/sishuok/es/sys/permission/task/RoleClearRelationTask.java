@@ -3,12 +3,14 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.permission.service;
+package com.sishuok.es.sys.permission.task;
 
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
+import com.sishuok.es.sys.permission.service.PermissionService;
+import com.sishuok.es.sys.permission.service.RoleService;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ import java.util.Iterator;
  * <p>Version: 1.0
  */
 @Service()
-public class RoleClearRelationService {
+public class RoleClearRelationTask {
 
     @Autowired
     private RoleService roleService;
@@ -55,8 +57,8 @@ public class RoleClearRelationService {
             rolePage = roleService.findAll(pageable);
             //开启新事物清除
             try {
-                RoleClearRelationService roleClearRelationService = (RoleClearRelationService) AopContext.currentProxy();
-                roleClearRelationService.doClear(rolePage.getContent());
+                RoleClearRelationTask roleClearRelationTask = (RoleClearRelationTask) AopContext.currentProxy();
+                roleClearRelationTask.doClear(rolePage.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
                 LogUtils.logError("clear role relation error", e);

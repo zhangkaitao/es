@@ -7,29 +7,38 @@
 
     <!-- 启动时加 spring.profiles.active=development -->
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="url" value="${connection.url}"/>
-        <property name="username" value="${connection.username}"/>
-        <property name="password" value="${connection.password}"/>
-    </bean>
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+        <!--<property name="url" value="${connection.url}"/>-->
+        <!--<property name="username" value="${connection.username}"/>-->
+        <!--<property name="password" value="${connection.password}"/>-->
+    <!--</bean>-->
 
     <!-- 优化spring启动 通过移除bean定义 和 lazy init 实现 -->
     <bean class="com.sishuok.es.common.spring.SpeedUpSpringProcessor">
         <!-- 需要从bean定义中移除的bean的名字 -->
         <property name="removedBeanNames">
             <list>
-                <!-- spring-config-quartz.xml -->
+
+                <!--spring-config-task.xml -->
+                <value>executor</value>
                 <value>scheduler</value>
-                <value>autoClearDeletedRelationTrigger</value>
-                <value>autoClearExpiredOrDeletedmMessageTrigger</value>
-                <value>autoClearDeletedRelationJob</value>
-                <value>autoClearExpiredOrDeletedmMessageJob</value>
+
+                <!-- <task:scheduled-tasks> 自动注册的 -->
+                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
+
+                <!-- <task:annotation-driven/> 自动注册的 -->
+                <value>org.springframework.context.annotation.internalAsyncAnnotationProcessor</value>
+                <value>org.springframework.context.annotation.internalScheduledAnnotationProcessor</value>
+                <value>org.springframework.scheduling.config.internalAsyncExecutionAspect</value>
+
+                <!-- <task:scheduled-tasks> 自动注册的 -->
+                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
+
 
                 <!-- spring-config-shiro.xml -->
                 <value>rememberMeCookie</value>
                 <value>rememberMeManager</value>
                 <value>shiroCacheManager</value>
-                <value>sessionValidationScheduler</value>
                 <value>sessionValidationScheduler</value>
 
                 <!-- spring-config-monitor.xml -->
@@ -45,7 +54,6 @@
         <property name="removeOrReplaceBeanProperties">
             <list>
                 <!-- spring-config-shiro.xml -->
-                <value>sessionManager#cacheManager</value>
                 <value>sessionManager#cacheManager</value>
                 <value>sessionManager#sessionValidationScheduler</value>
                 <value>securityManager#rememberMeManager</value>

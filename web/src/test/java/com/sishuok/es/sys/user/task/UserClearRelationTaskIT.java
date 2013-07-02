@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.user.service;
+package com.sishuok.es.sys.user.task;
 
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.entity.Organization;
@@ -11,6 +11,7 @@ import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
+import com.sishuok.es.sys.user.service.BaseUserIT;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Date: 13-5-18 下午2:18
  * <p>Version: 1.0
  */
-public class UserClearRelationServiceIT extends BaseUserIT {
+public class UserClearRelationTaskIT extends BaseUserIT {
 
 
     @Autowired
@@ -29,7 +30,7 @@ public class UserClearRelationServiceIT extends BaseUserIT {
     private JobService jobService;
 
     @Autowired
-    private UserClearRelationService userClearRelationService;
+    private UserClearRelationTask userClearRelationTask;
 
     @Test
     public void testClearRelation() {
@@ -60,7 +61,7 @@ public class UserClearRelationServiceIT extends BaseUserIT {
         organizationService.delete(organization1);
         jobService.delete(job1);
 
-        userClearRelationService.clearDeletedUserRelation();
+        userClearRelationTask.clearDeletedUserRelation();
 
         clear();
 

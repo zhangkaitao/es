@@ -3,10 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal;
+package com.sishuok.es.personal.service;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.personal.BaseMessageIT;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageContent;
 import com.sishuok.es.personal.entity.MessageState;
@@ -15,6 +16,8 @@ import com.sishuok.es.sys.user.entity.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -26,6 +29,8 @@ import java.util.List;
  * <p>Version: 1.0
  */
 public class MessageApiServiceIT extends BaseMessageIT {
+
+    private Logger log = LoggerFactory.getLogger(MessageApiServiceIT.class);
 
     @Before
     public void setUp() {

@@ -20,26 +20,26 @@
                 <shiro:hasPermission name="showcase:upload:create">
                 <div class="btn-group first">
                     <a class="btn no-disabled dropdown-toggle" data-toggle="dropdown">
-                        <span class="icon-file-alt"></span>
+                        <i class="icon-file-alt"></i>
                         新&nbsp;增
-                        <span class="caret"></span>
+                        <i class="caret"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
                             <a class="btn no-disabled btn-create">
-                                <span class="icon-file-alt"></span>
+                                <i class="icon-file-alt"></i>
                                 普通新增
                             </a>
                         </li>
                         <li>
                             <a id="ajaxCreate" class="btn no-disabled" href="${ctx}/showcase/upload/ajax/create">
-                                <span class="icon-file-alt"></span>
+                                <i class="icon-file-alt"></i>
                                 ajax新增
                             </a>
                         </li>
                         <li>
                             <a id="ajaxBatchCreate"  class="btn no-disabled" href="${ctx}/ajaxUpload">
-                                <span class="icon-file-alt"></span>
+                                <i class="icon-file-alt"></i>
                                 ajax批量上传
                             </a>
                         </li>
@@ -48,13 +48,13 @@
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:upload:update">
                 <a class="btn btn-update">
-                    <span class="icon-edit"></span>
+                    <i class="icon-edit"></i>
                     修&nbsp;改
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:upload:delete">
                 <a class="btn btn-delete">
-                    <span class="icon-trash"></span>
+                    <i class="icon-trash"></i>
                     删除
                 </a>
                 </shiro:hasPermission>

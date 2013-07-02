@@ -92,6 +92,8 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
         values (14, 13, '0/1/2/13/', 1, '审核状态列表', 'statusAudit', '/showcase/status/audit', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
         values (15, 13, '0/1/2/13/', 2, '显示状态列表', 'statusShow', '/showcase/status/show', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
+        values (46, 2, '0/1/2/', 10, 'Excel导入/导出', 'excel', '/showcase/excel', true);;
 
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)

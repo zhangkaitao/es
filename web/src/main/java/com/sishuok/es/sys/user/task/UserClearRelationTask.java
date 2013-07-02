@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.sys.user.service;
+package com.sishuok.es.sys.user.task;
 
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
@@ -11,6 +11,7 @@ import com.sishuok.es.sys.organization.service.JobService;
 import com.sishuok.es.sys.organization.service.OrganizationService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
+import com.sishuok.es.sys.user.service.UserService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ import java.util.Collection;
  * <p>Version: 1.0
  */
 @Service()
-public class UserClearRelationService {
+public class UserClearRelationTask {
 
     @Autowired
     private UserService userService;
@@ -60,8 +61,8 @@ public class UserClearRelationService {
 
             //开启新事物清除
             try {
-                UserClearRelationService userClearRelationService = (UserClearRelationService) AopContext.currentProxy();
-                userClearRelationService.doClear(page.getContent());
+                UserClearRelationTask userClearRelationTask = (UserClearRelationTask) AopContext.currentProxy();
+                userClearRelationTask.doClear(page.getContent());
             } catch (Exception e) {
                 //出异常也无所谓
                 LogUtils.logError("clear user relation error", e);

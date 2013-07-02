@@ -21,19 +21,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class BaseMessageIT extends BaseUserIT {
 
     @Autowired
-    MessageApi messageApi;
+    protected MessageApi messageApi;
 
     @Autowired
-    MessageService messageService;
+    protected MessageService messageService;
 
     @Autowired
-    UserService userService;
+    protected UserService userService;
 
-    Long senderId = 1L;
-    Long receiverId = 2L;
+    protected Long senderId = 1L;
+    protected Long receiverId = 2L;
 
 
-    Message sendDefaultMessage() {
+    protected Message sendDefaultMessage() {
         Message message = new Message();
         message.setSenderId(senderId);
         message.setReceiverId(receiverId);
