@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -184,12 +183,11 @@ public class MessageApiServiceIT extends BaseMessageIT {
         content.setContent("abcde");
         message.setContent(content);
 
-        if(AopUtils.isAopProxy(messageApi)) {
-
+        if(AopProxyUtils.isAsync(messageApi)) {
+            AopProxyUtils.removeAsync(messageApi);
         }
 
         messageApi.sendSystemMessageToAllUser(message);
-
 
         Long actualCount = messageService.count();
         Assert.assertEquals(expectedCount, actualCount);
