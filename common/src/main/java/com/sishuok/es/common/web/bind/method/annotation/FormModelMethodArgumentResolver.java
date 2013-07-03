@@ -45,7 +45,9 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
     /**
      * 提取索引的模式 如[0].
      */
-    private final Pattern INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]\\.");
+    private final Pattern INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]\\.?");
+
+    private int autoGrowCollectionLimit = Integer.MAX_VALUE;
 
     public FormModelMethodArgumentResolver() {
     }
@@ -207,12 +209,14 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
         ServletRequest servletRequest = prepareServletRequest(binder.getTarget(), request, parameter);
         WebDataBinder simpleBinder = binderFactory.createBinder(request, null, null);
 
-        if (Collection.class.isAssignableFrom(targetType)) {//bind collection
+        if (Collection.class.isAssignableFrom(targetType)) {//bind collection or array
 
             Type type = parameter.getGenericParameterType();
             Class<?> componentType = Object.class;
 
             Collection target = (Collection) binder.getTarget();
+
+            List targetList = new ArrayList(target);
 
             if (type instanceof ParameterizedType) {
                 componentType = (Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0];
@@ -221,7 +225,6 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
             if (parameter.getParameterType().isArray()) {
                 componentType = parameter.getParameterType().getComponentType();
             }
-
 
             for (Object key : servletRequest.getParameterMap().keySet()) {
                 String prefixName = getPrefixName((String) key);
@@ -235,22 +238,36 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
 
                 if (isSimpleComponent(prefixName)) { //bind simple type
                     Map<String, Object> paramValues = WebUtils.getParametersStartingWith(servletRequest, prefixName);
-                    for (Object value : paramValues.values()) {
-                        target.add(simpleBinder.convertIfNecessary(value, componentType));
-                    }
-                } else {
-                    Object component = null;
                     Matcher matcher = INDEX_PATTERN.matcher(prefixName);
-                    if(matcher.matches()) {
-                        int index = Integer.valueOf(matcher.group(1));
-                        if(target.size() > index) {
-                            Iterator iterator = target.iterator();
-                            for(int i = 0; i < index; i++) {
-                                iterator.next();
-                            }
-                            component = iterator.next();
+                    if(!matcher.matches()) { //处理如 array=1&array=2的情况
+                        for (Object value : paramValues.values()) {
+                            targetList.add(simpleBinder.convertIfNecessary(value, componentType));
                         }
+                    } else {  //处理如 array[0]=1&array[1]=2的情况
+                        int index = Integer.valueOf(matcher.group(1));
+
+                        if (targetList.size() <= index) {
+                            growCollectionIfNecessary(targetList, index);
+                        }
+                        targetList.set(index, simpleBinder.convertIfNecessary(paramValues.values(), componentType));
                     }
+                } else { //处理如 votes[1].title=votes[1].title&votes[0].title=votes[0].title&votes[0].id=0&votes[1].id=1
+                    Object component = null;
+                    //先查找老的 即已经在集合中的数据（而不是新添加一个）
+                    Matcher matcher = INDEX_PATTERN.matcher(prefixName);
+                    if(!matcher.matches()) {
+                        throw new IllegalArgumentException("bind collection error, need integer index, key:" + key);
+                    }
+                    int index = Integer.valueOf(matcher.group(1));
+                    if (targetList.size() <= index) {
+                        growCollectionIfNecessary(targetList, index);
+                    }
+                    Iterator iterator = targetList.iterator();
+                    for (int i = 0; i < index; i++) {
+                        iterator.next();
+                    }
+                    component = iterator.next();
+
                     if(component == null) {
                         component = BeanUtils.instantiate(componentType);
                     }
@@ -267,9 +284,11 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
                                 throw new BindException(componentBinder.getBindingResult());
                             }
                         }
-                        target.add(component);
+                        targetList.set(index, component);
                     }
                 }
+                target.clear();
+                target.addAll(targetList);
             }
         } else if (MapWapper.class.isAssignableFrom(targetType)) {
 
@@ -332,6 +351,14 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
         } else {//bind model
             ServletRequestDataBinder servletBinder = (ServletRequestDataBinder) binder;
             servletBinder.bind(servletRequest);
+        }
+    }
+
+    private void growCollectionIfNecessary(final Collection collection, final int index) {
+        if(index >= collection.size() && index < this.autoGrowCollectionLimit) {
+            for (int i = collection.size(); i <= index; i++) {
+                collection.add(null);
+            }
         }
     }
 
