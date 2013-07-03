@@ -49,9 +49,9 @@
 
     <root level="info"/>
 
-    <logger name="org.apache" level="debug">
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <!--<logger name="org.apache" level="debug">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+    <!--</logger>-->
 
     <!--错误日志-->
     <logger name="es-error" level="info">

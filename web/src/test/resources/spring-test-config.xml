@@ -6,6 +6,8 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+
+
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
 
@@ -13,6 +15,7 @@
             <tx:method name="doReweight" propagation="REQUIRED"/>
             <tx:method name="doClear*" propagation="REQUIRED"/>
             <tx:method name="doSend*" propagation="REQUIRED"/>
+            <tx:method name="doBatchSave*" propagation="REQUIRED"/>
 
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
             <tx:method name="get*" propagation="REQUIRED" read-only="true"/>

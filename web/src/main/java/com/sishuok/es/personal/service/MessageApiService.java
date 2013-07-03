@@ -12,6 +12,7 @@ import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
+import com.sishuok.es.common.utils.SpringUtils;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageContent;
 import com.sishuok.es.personal.entity.MessageState;
@@ -206,7 +207,6 @@ public class MessageApiService implements MessageApi {
             RepositoryHelper.clear();
         } while (page.hasNextPage());
 
-
     }
 
     public void doSendSystemMessage(List<User> receivers, Message message) {
@@ -378,5 +378,19 @@ public class MessageApiService implements MessageApi {
     private void changeReceiverState(Message message, MessageState state) {
         message.setReceiverState(state);
         message.setReceiverStateChangeDate(new Date());
+    }
+
+    private MessageApiService messageApiService;
+    /**
+     * ((MessageApiService) AopContext.currentProxy()) 在@Async环境下是不可用的
+     * @return
+     */
+    private MessageApiService currentProxy() {
+        if(messageApiService != null) {
+            return messageApiService;
+        }
+        messageApiService = SpringUtils.getBean(MessageApiService.class);
+
+        return messageApiService;
     }
 }

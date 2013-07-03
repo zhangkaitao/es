@@ -135,7 +135,8 @@
         <tx:attributes>
             <tx:method name="doReweight" propagation="REQUIRES_NEW"/>
             <tx:method name="doClear*" propagation="REQUIRES_NEW"/>
-            <tx:method name="doSenn*" propagation="REQUIRES_NEW"/>
+            <tx:method name="doSend*" propagation="REQUIRES_NEW"/>
+            <tx:method name="doBatchSave*" propagation="REQUIRES_NEW"/>
 
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
             <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
@@ -148,7 +149,7 @@
 
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
-        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok.es..service..*+.*(..))"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.sishuok.es..service..*+.*(..)) or execution(* com.sishuok.es..task..*+.*(..))"/>
         <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
@@ -197,7 +198,7 @@
     </bean>
 
     <import resource="spring-config-cache.xml"/>
-    <import resource="spring-config-task.xml"/>
+     <import resource="spring-config-task.xml"/>
     <import resource="spring-config-shiro.xml"/>
     <import resource="spring-config-monitor.xml"/>
     <import resource="spring-speed-up.xml"/>

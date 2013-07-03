@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.excel.web.controller;
 
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.excel.entity.ExcelData;
@@ -38,7 +39,7 @@ public class ExcelController extends BaseCRUDController<ExcelData, Long> {
     @RequestMapping("/init")
     public String initOneMillionData(RedirectAttributes redirectAttributes) {
         excelDataService.initOneMillionData();
-        redirectAttributes.addAttribute("正在初始化，请稍候");
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "任务已经提交，正在执行，数据量比较大，需要等待30分钟，先去干点别的吧");
         return redirectToUrl(null);
     }
 

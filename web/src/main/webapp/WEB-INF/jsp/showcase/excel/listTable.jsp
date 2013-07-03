@@ -19,7 +19,7 @@
             <td>
                 <a class="btn btn-link btn-edit" href="${ctx}/showcase/excel/${m.id}">${m.id}</a>
             </td>
-            <td>${m.content}</td>
+            <td style="word-wrap: break-word;word-break: break-all;">${m.content}</td>
         </tr>
     </c:forEach>
     </tbody>

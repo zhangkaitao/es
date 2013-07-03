@@ -15,4 +15,6 @@ import com.sishuok.es.showcase.excel.entity.ExcelData;
  */
 public interface ExcelDataRepository extends BaseRepository<ExcelData, Long> {
 
+    public void truncate();
+
 }

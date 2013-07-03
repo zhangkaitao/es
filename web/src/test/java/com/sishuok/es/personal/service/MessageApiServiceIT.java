@@ -7,6 +7,7 @@ package com.sishuok.es.personal.service;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.spring.utils.AopProxyUtils;
 import com.sishuok.es.personal.BaseMessageIT;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageContent;
@@ -18,10 +19,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <p>User: Zhang Kaitao
@@ -34,6 +37,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
 
     @Before
     public void setUp() {
+        super.setUp();
         deleteAll(messageService.findAll());
         clear();
     }
@@ -143,6 +147,12 @@ public class MessageApiServiceIT extends BaseMessageIT {
         content.setContent("abcde");
         message.setContent(content);
         Long[] userIds = new Long[]{1L, 2L, 3L};
+
+        //移除异步支持
+        if(AopProxyUtils.isAsync(messageApi)) {
+            AopProxyUtils.removeAsync(messageApi);
+        }
+
         messageApi.sendSystemMessage(userIds, message);
 
         Long actualCount = messageService.count();
@@ -161,7 +171,7 @@ public class MessageApiServiceIT extends BaseMessageIT {
 
 
     @Test
-    public void testSendSystemMessageToAllUserSuccess() {
+    public void testSendSystemMessageToAllUserSuccess() throws ExecutionException, InterruptedException {
 
         User user1 = createDefaultUser();
 
@@ -174,7 +184,12 @@ public class MessageApiServiceIT extends BaseMessageIT {
         content.setContent("abcde");
         message.setContent(content);
 
+        if(AopUtils.isAopProxy(messageApi)) {
+
+        }
+
         messageApi.sendSystemMessageToAllUser(message);
+
 
         Long actualCount = messageService.count();
         Assert.assertEquals(expectedCount, actualCount);
