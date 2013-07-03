@@ -71,14 +71,17 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport
         Method specificMethod = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);
         specificMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 
-        final Object currentProxy = AopContext.currentProxy();
         final Method setCurrentProxyMethod = ReflectionUtils.findMethod(AopContext.class, "setCurrentProxy", Object.class);
+
+        final Object currentProxy = AopContext.currentProxy();
         ReflectionUtils.makeAccessible(setCurrentProxyMethod);
         Future<?> result = determineAsyncExecutor(specificMethod).submit(
                 new Callable<Object>() {
                     public Object call() throws Exception {
                         try {
-                            ReflectionUtils.invokeMethod(setCurrentProxyMethod, null, currentProxy);
+                            if(currentProxy != null) {
+                                ReflectionUtils.invokeMethod(setCurrentProxyMethod, null, currentProxy);
+                            }
                             Object result = invocation.proceed();
                             if (result instanceof Future) {
                                 return ((Future<?>) result).get();
@@ -87,7 +90,9 @@ public class AsyncExecutionInterceptor extends AsyncExecutionAspectSupport
                         catch (Throwable ex) {
                             ReflectionUtils.rethrowException(ex);
                         } finally {
-                            ReflectionUtils.invokeMethod(setCurrentProxyMethod, null, (Object) null);
+                            if(currentProxy != null) {
+                                ReflectionUtils.invokeMethod(setCurrentProxyMethod, null, (Object) null);
+                            }
                         }
                         return null;
                     }
