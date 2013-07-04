@@ -135,6 +135,13 @@ public abstract class Searchable {
      */
     public abstract Searchable removeSearchFilter(final String key);
 
+    /**
+     * 移除指定属性 和 操作符的过滤条件
+     * @param searchProperty
+     * @param operator
+     * @return
+     */
+    public abstract Searchable removeSearchFilter(String searchProperty, SearchOperator operator);
 
     /**
      * 把字符串类型的值转化为entity属性值

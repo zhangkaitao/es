@@ -125,6 +125,26 @@ public final class SearchRequest extends Searchable {
         return addSearchFilter(searchFilter);
     }
 
+    @Override
+    public Searchable addSearchFilter(SearchFilter searchFilter) {
+        if (searchFilter == null) {
+            return this;
+        }
+        if (searchFilter instanceof Condition) {
+            Condition condition = (Condition) searchFilter;
+            String key = condition.getKey();
+            searchFilterMap.put(key, condition);
+        }
+        int index = searchFilters.indexOf(searchFilter);
+        if(index != -1) {
+            searchFilters.set(index, searchFilter);
+        } else {
+            searchFilters.add(searchFilter);
+        }
+        return this;
+
+    }
+
 
     @Override
     public Searchable addSearchFilters(Collection<? extends SearchFilter> searchFilters) {
@@ -150,21 +170,13 @@ public final class SearchRequest extends Searchable {
         return this;
     }
 
+
+
     @Override
-    public Searchable addSearchFilter(SearchFilter searchFilter) {
-        if (searchFilter == null) {
-            return this;
-        }
-        if (searchFilter instanceof Condition) {
-            Condition condition = (Condition) searchFilter;
-            String key = condition.getKey();
-            searchFilterMap.put(key, condition);
-        }
-        searchFilters.add(searchFilter);
+    public Searchable removeSearchFilter(final String searchProperty, final SearchOperator operator) {
+        this.removeSearchFilter(searchProperty + Condition.separator + operator);
         return this;
-
     }
-
     /**
      * @param key
      * @return
