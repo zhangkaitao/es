@@ -11,7 +11,6 @@ import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.interceptor.AsyncExecutionInterceptor;
 import org.springframework.aop.support.AopUtils;
-import org.springframework.scheduling.annotation.AsyncAnnotationAdvisor;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.util.ReflectionUtils;
 
@@ -61,6 +60,15 @@ public class AopProxyUtils {
 
 
     /**
+     * 移除代理对象的异步调用支持
+     * @return
+     */
+    public static void removeTransactional(Object proxy) {
+         removeAdvisor(proxy, TransactionInterceptor.class);
+    }
+
+
+    /**
      * 是否是异步的代理
      * @param proxy
      * @return
@@ -74,6 +82,12 @@ public class AopProxyUtils {
      * @return
      */
     public static void removeAsync(Object proxy) {
+        removeAdvisor(proxy, AsyncExecutionInterceptor.class);
+
+    }
+
+
+    private static void removeAdvisor(Object proxy, Class<? extends Advice> adviceClass) {
         if(!AopUtils.isAopProxy(proxy)) {
             return;
         }
@@ -92,15 +106,12 @@ public class AopProxyUtils {
         }
 
         for(Advisor advisor : advisors) {
-            if(advisor instanceof AsyncAnnotationAdvisor) {
+            if(adviceClass.isAssignableFrom(advisor.getAdvice().getClass())) {
                 proxyFactory.removeAdvisor(advisor);
                 break;
             }
         }
-
     }
-
-
 
 
 
