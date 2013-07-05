@@ -18,8 +18,6 @@ import org.apache.poi.hssf.record.*;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
-import org.apache.poi.xssf.model.SharedStringsTable;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -236,11 +234,10 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
         OPCPackage pkg = OPCPackage.open(fileName);
         XSSFReader r = new XSSFReader( pkg );
-        SharedStringsTable sst = r.getSharedStringsTable();
 
         XMLReader parser =
                 XMLReaderFactory.createXMLReader();
-        ContentHandler handler = new Excel2007SheetHandler(sst, dataList);
+        ContentHandler handler = new Excel2007SheetHandler(dataList);
         parser.setContentHandler(handler);
 
         Iterator<InputStream> sheets = r.getSheetsData();
@@ -251,57 +248,75 @@ public class ImportExcelDateServiceIT extends BaseIT {
             sheet.close();
         }
 
+
+        //把最后剩下的不足batchSize大小
+        if(dataList.size() > 0) {
+            doBatchSave(dataList);
+        }
+
         long endTime = System.currentTimeMillis();
         log.info("耗时(秒):" + (endTime - beginTime) / 1000);
     }
 
     class Excel2007SheetHandler extends DefaultHandler {
-        private SharedStringsTable sst;
+
+
+        private int batchSize = 100; //批处理大小
+        private int totalSize = 1; //总行数
+
+        private int rowNumber = 1;
         private String lastContents;
-        private boolean nextIsString;
+        private List<ExcelData> dataList;
 
-        int batchSize = 100; //批处理大小
-        int totalSize = 1; //总大小
+        private List<String> currentCellData = Lists.newArrayList();
 
-        List<ExcelData> dataList;
-        ExcelData current = null;
 
-        private Excel2007SheetHandler(SharedStringsTable sst, List<ExcelData> dataList) {
-            this.sst = sst;
+        private Excel2007SheetHandler(List<ExcelData> dataList) {
             this.dataList = dataList;
         }
 
         public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
-            // c => cell
-            if(name.equals("c")) {
-                // Print the cell reference
-                System.out.print(attributes.getValue("r") + " - ");
-                // Figure out if the value is an index in the SST
-                String cellType = attributes.getValue("t");
-                if(cellType != null && cellType.equals("s")) {
-                    nextIsString = true;
-                } else {
-                    nextIsString = false;
+            if("row".equals(name)) {//如果是行开始 清空cell数据 重来
+                rowNumber = Integer.valueOf(attributes.getValue("r"));
+                if(rowNumber == 1) {
+                    return;
                 }
+                currentCellData.clear();
             }
-            // Clear contents cache
+
             lastContents = "";
         }
 
         public void endElement(String uri, String localName, String name) throws SAXException {
-            // Process the last contents as required.
-            // Do now, as characters() may be called more than once
-            if(nextIsString) {
-                int idx = Integer.parseInt(lastContents);
-                lastContents = new XSSFRichTextString(sst.getEntryAt(idx)).toString();
-                nextIsString = false;
+
+            if("row".equals(name)) {//如果是行开始 清空cell数据 重来
+                if(rowNumber == 1) {
+                    return;
+                }
+                ExcelData data = new ExcelData();
+                data.setId(Double.valueOf(currentCellData.get(0)).longValue());
+                data.setContent(currentCellData.get(1));
+                dataList.add(data);
+
+                if (totalSize % batchSize == 0) {
+                    try {
+                        doBatchSave(dataList);
+                    } catch (Exception e) {
+                        Long fromId = dataList.get(0).getId();
+                        Long endId = dataList.get(dataList.size() - 1).getId();
+                        log.error("from " + fromId + " to " + endId + ", error", e);
+                    }
+                    dataList.clear();
+                }
+
+                totalSize++;
             }
 
-            // v => contents of a cell
-            // Output after we've seen the string contents
-            if(name.equals("v")) {
-                System.out.println(lastContents);
+            if("c".equals(name)) {//按照列顺序添加数据
+                currentCellData.add(lastContents);
             }
+
+
         }
 
         public void characters(char[] ch, int start, int length) throws SAXException {
