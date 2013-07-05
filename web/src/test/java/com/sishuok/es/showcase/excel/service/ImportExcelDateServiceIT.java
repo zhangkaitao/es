@@ -68,7 +68,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
         String separator = ",";
         int batchSize = 100; //批处理大小
-        int totalSize = 1; //总大小
+        int totalSize = 0; //总大小
 
         final List<ExcelData> dataList = Lists.newArrayList();
 
@@ -77,8 +77,10 @@ public class ImportExcelDateServiceIT extends BaseIT {
         }
 
         while (iterator.hasNext()) {
-            String line = iterator.nextLine();
 
+            totalSize++;
+
+            String line = iterator.nextLine();
             String[] dataArray = StringUtils.split(line, separator);
 
             ExcelData data = new ExcelData();
@@ -96,7 +98,6 @@ public class ImportExcelDateServiceIT extends BaseIT {
                 }
                 dataList.clear();
             }
-            totalSize++;
         }
         IOUtils.closeQuietly(is);
 
@@ -140,7 +141,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
         din.close();
 
         //把最后剩下的不足batchSize大小
-        if(dataList.size() > 0) {
+        if (dataList.size() > 0) {
             doBatchSave(dataList);
         }
 
@@ -151,9 +152,8 @@ public class ImportExcelDateServiceIT extends BaseIT {
     class Excel2003Listener implements HSSFListener {
 
 
-
         int batchSize = 100; //批处理大小
-        int totalSize = 1; //总大小
+        int totalSize = 0; //总大小
         private SSTRecord sstrec;
 
         List<ExcelData> dataList;
@@ -166,7 +166,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
         @Override
         public void processRecord(final Record record) {
             switch (record.getSid()) {
-                case BOFRecord.sid :
+                case BOFRecord.sid:
                     //开始解析到workboot sheet 等
                     BOFRecord bof = (BOFRecord) record;
                     if (bof.getType() == bof.TYPE_WORKBOOK) {
@@ -175,41 +175,42 @@ public class ImportExcelDateServiceIT extends BaseIT {
                         //sheet
                     }
                     break;
-                case BoundSheetRecord.sid :
+                case BoundSheetRecord.sid:
                     //开始解析BundleSheet
                     BoundSheetRecord bsr = (BoundSheetRecord) record;
                     //bsr.getSheetname() 得到sheet name
                     break;
-                case RowRecord.sid :
+                case RowRecord.sid:
                     //开始解析行
                     RowRecord rowrec = (RowRecord) record;
-
                     break;
-                case NumberRecord.sid :
+                case NumberRecord.sid:
                     //解析一个Number类型的单元格值
                     NumberRecord numrec = (NumberRecord) record;
                     //numrec.getRow()  numrec.getColumn()   numrec.getValue()
 
                     //非第一行 第一列
-                    if(numrec.getRow() > 1 && numrec.getColumn() == 0) {
+                    if (numrec.getRow() > 1 && numrec.getColumn() == 0) {
                         current = new ExcelData();
                         current.setId(Double.valueOf(numrec.getValue()).longValue());
                     }
                     break;
-                case SSTRecord.sid :
+                case SSTRecord.sid:
                     // SSTRecords存储了在Excel中使用的所有唯一String的数组
                     sstrec = (SSTRecord) record;
                     break;
-                case LabelSSTRecord.sid :
+                case LabelSSTRecord.sid:
                     //解析一个String类型的单元格值（存储在SSTRecord）
                     LabelSSTRecord lrec = (LabelSSTRecord) record;
 
-                    if(lrec.getRow() > 1 && lrec.getColumn() == 1) {
+                    if (lrec.getRow() > 1 && lrec.getColumn() == 1) {
                         current.setContent(sstrec.getString(lrec.getSSTIndex()).getString());
                         dataList.add(current);
+
                         totalSize++;
+
                         //最后一个单元格时 判断是否该写了
-                        if(totalSize % batchSize == 0) {
+                        if (totalSize % batchSize == 0) {
                             doBatchSave(dataList);
                             dataList.clear();
                         }
@@ -219,7 +220,6 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
         }
     }
-
 
 
     @Test
@@ -233,7 +233,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
 
         OPCPackage pkg = OPCPackage.open(fileName);
-        XSSFReader r = new XSSFReader( pkg );
+        XSSFReader r = new XSSFReader(pkg);
 
         XMLReader parser =
                 XMLReaderFactory.createXMLReader();
@@ -241,7 +241,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
         parser.setContentHandler(handler);
 
         Iterator<InputStream> sheets = r.getSheetsData();
-        while(sheets.hasNext()) {
+        while (sheets.hasNext()) {
             InputStream sheet = sheets.next();
             InputSource sheetSource = new InputSource(sheet);
             parser.parse(sheetSource);
@@ -250,7 +250,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
 
         //把最后剩下的不足batchSize大小
-        if(dataList.size() > 0) {
+        if (dataList.size() > 0) {
             doBatchSave(dataList);
         }
 
@@ -262,7 +262,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
 
         private int batchSize = 100; //批处理大小
-        private int totalSize = 1; //总行数
+        private int totalSize = 0; //总行数
 
         private int rowNumber = 1;
         private String lastContents;
@@ -276,9 +276,9 @@ public class ImportExcelDateServiceIT extends BaseIT {
         }
 
         public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
-            if("row".equals(name)) {//如果是行开始 清空cell数据 重来
-                rowNumber = Integer.valueOf(attributes.getValue("r"));
-                if(rowNumber == 1) {
+            if ("row".equals(name)) {//如果是行开始 清空cell数据 重来
+                rowNumber = Integer.valueOf(attributes.getValue("r"));//当前行号
+                if (rowNumber == 1) {
                     return;
                 }
                 currentCellData.clear();
@@ -289,14 +289,16 @@ public class ImportExcelDateServiceIT extends BaseIT {
 
         public void endElement(String uri, String localName, String name) throws SAXException {
 
-            if("row".equals(name)) {//如果是行开始 清空cell数据 重来
-                if(rowNumber == 1) {
+            if ("row".equals(name)) {//如果是行开始 清空cell数据 重来
+                if (rowNumber == 1) {
                     return;
                 }
                 ExcelData data = new ExcelData();
                 data.setId(Double.valueOf(currentCellData.get(0)).longValue());
                 data.setContent(currentCellData.get(1));
                 dataList.add(data);
+
+                totalSize++;
 
                 if (totalSize % batchSize == 0) {
                     try {
@@ -309,10 +311,9 @@ public class ImportExcelDateServiceIT extends BaseIT {
                     dataList.clear();
                 }
 
-                totalSize++;
             }
 
-            if("c".equals(name)) {//按照列顺序添加数据
+            if ("c".equals(name)) {//按照列顺序添加数据
                 currentCellData.add(lastContents);
             }
 

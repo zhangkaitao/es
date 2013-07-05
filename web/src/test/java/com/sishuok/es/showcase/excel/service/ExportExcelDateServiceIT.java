@@ -52,7 +52,7 @@ public class ExportExcelDateServiceIT extends BaseIT {
         OutputStream out = new BufferedOutputStream(new FileOutputStream("D:\\Backup\\test.csv"));
 
         int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 1;
+        int totalRows = 0;
 
         int pageSize = 1000;
         Searchable searchable = Searchable.newSearchable();
@@ -63,8 +63,10 @@ public class ExportExcelDateServiceIT extends BaseIT {
         out.write("编号,内容\n".getBytes(encoding));
 
         while (true) {
-            Page<ExcelData> page = null;
 
+            totalRows = 0;
+
+            Page<ExcelData> page = null;
             do {
                 searchable.setPage(0, pageSize);
                 //优化分页性能
@@ -76,14 +78,12 @@ public class ExportExcelDateServiceIT extends BaseIT {
                     out.write(separator.getBytes(encoding));
                     out.write((data.getContent()).replace(separator, ";").getBytes(encoding));
                     out.write("\n".getBytes(encoding));
-                    totalRows++;
                     maxId = Math.max(maxId, data.getId());
+                    totalRows++;
                 }
                 //clear entity manager
                 RepositoryHelper.clear();
             } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            totalRows = 1;
 
             if (!page.hasNextPage()) {
                 break;
@@ -112,12 +112,15 @@ public class ExportExcelDateServiceIT extends BaseIT {
         wb.setCompressTempFiles(true);//生成的临时文件将进行gzip压缩
 
         int perSheetRows = 100000; //每个sheet 10w条
-        int totalRows = 1; //统计总行数
+        int totalRows = 0; //统计总行数
 
         int pageSize = 1000;
         Searchable searchable = Searchable.newSearchable();
         Long maxId = 0L;//当前查询的数据中最大的id 优化分页的
         while (true) {
+
+            totalRows = 0;
+
             Sheet sheet = wb.createSheet();
             Row headerRow = sheet.createRow(0);
             Cell idHeaderCell = headerRow.createCell(0);
@@ -134,18 +137,17 @@ public class ExportExcelDateServiceIT extends BaseIT {
                 page = excelDataService.findAll(searchable);
 
                 for (ExcelData data : page.getContent()) {
-                    Row row = sheet.createRow(totalRows++);
+                    Row row = sheet.createRow(totalRows);
                     Cell idCell = row.createCell(0);
                     idCell.setCellValue(data.getId());
                     Cell contentCell = row.createCell(1);
                     contentCell.setCellValue(data.getContent());
                     maxId = Math.max(maxId, data.getId());
+                    totalRows++;
                 }
                 //clear entity manager
                 RepositoryHelper.clear();
             } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            totalRows = 1;
 
             if (!page.hasNextPage()) {
                 break;
@@ -178,12 +180,15 @@ public class ExportExcelDateServiceIT extends BaseIT {
 
         HSSFWorkbook wb = new HSSFWorkbook();
         int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 1;
+        int totalRows = 0;
 
         int pageSize = 1000;
         Searchable searchable = Searchable.newSearchable();
         Long maxId = 0L;
         while (true) {
+
+            totalRows = 0;
+
             Sheet sheet = wb.createSheet();
             Row headerRow = sheet.createRow(0);
             Cell idHeaderCell = headerRow.createCell(0);
@@ -200,18 +205,17 @@ public class ExportExcelDateServiceIT extends BaseIT {
                 page = excelDataService.findAll(searchable);
 
                 for (ExcelData data : page.getContent()) {
-                    Row row = sheet.createRow(totalRows++);
+                    Row row = sheet.createRow(totalRows);
                     Cell idCell = row.createCell(0);
                     idCell.setCellValue(data.getId());
                     Cell contentCell = row.createCell(1);
                     contentCell.setCellValue(data.getContent());
                     maxId = Math.max(maxId, data.getId());
+                    totalRows++;
                 }
                 //clear entity manager
                 RepositoryHelper.clear();
             } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            totalRows = 1;
 
             if (!page.hasNextPage()) {
                 break;
@@ -233,11 +237,10 @@ public class ExportExcelDateServiceIT extends BaseIT {
      * 1、生成模板，另存为：XML表格
      * 2、需要在导出之前，先做好模板（即先到excel中定义好格式，不支持复杂格式，如图片等），然后输出数）
      * 3、复杂格式请考虑testExportExcel2003_3
-     *
+     * <p/>
      * 生成的文件巨大。。
-     *
+     * <p/>
      * 还一种是写html（缺点不支持多sheet）
-     *
      */
     @Test
     public void testExportExcel2003_2() throws IOException {
@@ -254,8 +257,8 @@ public class ExportExcelDateServiceIT extends BaseIT {
 
 
         int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 1;
-        int totalSheets = 1;
+        int totalRows = 0;
+        int totalSheets = 0;
 
         int pageSize = 1000;
         Searchable searchable = Searchable.newSearchable();
@@ -263,6 +266,10 @@ public class ExportExcelDateServiceIT extends BaseIT {
 
 
         while (true) {
+
+            totalRows = 0;
+            totalSheets++;
+
             out.write(sheetHeader.replace("{sheetName}", "Sheet" + totalSheets).getBytes(encoding));
             Page<ExcelData> page = null;
 
@@ -274,16 +281,13 @@ public class ExportExcelDateServiceIT extends BaseIT {
 
                 for (ExcelData data : page.getContent()) {
                     out.write(rowTemplate.replace("{id}", String.valueOf(data.getId())).replace("{content}", data.getContent()).getBytes(encoding));
-                    totalRows++;
                     maxId = Math.max(maxId, data.getId());
+                    totalRows++;
                 }
                 //clear entity manager
                 RepositoryHelper.clear();
             } while (page.hasNextPage() && totalRows <= perSheetRows);
 
-            totalRows = 1;
-
-            totalSheets++;
             out.write(sheetFooter.getBytes(encoding));
 
             if (!page.hasNextPage()) {
@@ -304,25 +308,27 @@ public class ExportExcelDateServiceIT extends BaseIT {
      * 方法3  写多个workbook
      * 1、给用户一个vbs 脚本合并
      * 2、给用户写一个c#程序合并
-     *
+     * <p/>
      * 不想这么麻烦 需要时再写吧，还不如直接让用户装office 2007 更简单。
-     *
      */
     @Test
     public void testExportExcel2003_3() throws IOException {
         long beginTime = System.currentTimeMillis();
 
-        int workbookCount = 1;
+        int workbookCount = 0;
         int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 1;
+        int totalRows = 0;
 
         int pageSize = 1000;
         Searchable searchable = Searchable.newSearchable();
         Long maxId = 0L;
 
         while (true) {
-            HSSFWorkbook wb = new HSSFWorkbook();
 
+            totalRows++;
+            workbookCount++;
+
+            HSSFWorkbook wb = new HSSFWorkbook();
             Sheet sheet = wb.createSheet();
             Row headerRow = sheet.createRow(0);
             Cell idHeaderCell = headerRow.createCell(0);
@@ -339,12 +345,13 @@ public class ExportExcelDateServiceIT extends BaseIT {
                 page = excelDataService.findAll(searchable);
 
                 for (ExcelData data : page.getContent()) {
-                    Row row = sheet.createRow(totalRows++);
+                    Row row = sheet.createRow(totalRows);
                     Cell idCell = row.createCell(0);
                     idCell.setCellValue(data.getId());
                     Cell contentCell = row.createCell(1);
                     contentCell.setCellValue(data.getContent());
                     maxId = Math.max(maxId, data.getId());
+                    totalRows++;
                 }
                 //clear entity manager
                 RepositoryHelper.clear();
@@ -356,15 +363,12 @@ public class ExportExcelDateServiceIT extends BaseIT {
 
             IOUtils.closeQuietly(out);
 
-            totalRows = 1;
-            workbookCount++;
+            totalRows = 0;
 
             if (!page.hasNextPage()) {
                 break;
             }
-
         }
-
 
         long endTime = System.currentTimeMillis();
 
