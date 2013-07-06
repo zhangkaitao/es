@@ -123,6 +123,7 @@
             factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
             entity-manager-factory-ref="entityManagerFactory"
             transaction-manager-ref="transactionManager">
+
     </jpa:repositories>
 
 
