@@ -8,6 +8,7 @@ package com.sishuok.es.monitor.web.controller;
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.common.web.controller.BaseController;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.hibernate.Cache;
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
@@ -31,6 +32,7 @@ import java.util.TreeMap;
  */
 @Controller
 @RequestMapping("/admin/monitor/hibernate")
+@RequiresPermissions("monitor:hibernate:*")
 public class HibernateCacheMonitorController extends BaseController {
 
     @PersistenceContext

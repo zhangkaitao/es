@@ -38,7 +38,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <shiro:hasPermission name="sys:userOnline or monitor"><%-- 等价于sys:userOnline:* 所有权限 --%>
+                <shiro:hasPermission name="sys:userOnline or monitor:userOnline"><%-- 等价于sys:userOnline:* 所有权限 --%>
                 <a class="btn btn-force-logout">
                     <span class="icon-lightbulb"></span>
                     强制退出

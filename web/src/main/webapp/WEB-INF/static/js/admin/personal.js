@@ -113,6 +113,16 @@ $.personal = {
                     }
                 });
             });
+
+            $(".btn-mark-read").click(function() {
+                var table = $(".table");
+                var checkbox = $.table.getAllSelectedCheckbox(table);
+                if (checkbox.size() == 0) {
+                    return;
+                }
+
+                location.href = ctx + "/admin/personal/message/markRead?" + checkbox.serialize() + "&BackURL=" + $.table.encodeTableURL(table);
+            });
         }
 
     }

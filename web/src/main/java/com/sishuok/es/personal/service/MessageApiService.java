@@ -370,6 +370,11 @@ public class MessageApiService implements MessageApi {
         messageService.update(message);
     }
 
+    @Override
+    public void markRead(final Long userId, final Long[] ids) {
+        messageService.markRead(userId, ids);
+    }
+
     private void changeSenderState(Message message, MessageState state) {
         message.setSenderState(state);
         message.setSenderStateChangeDate(new Date());

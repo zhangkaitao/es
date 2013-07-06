@@ -9,6 +9,7 @@ import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +40,7 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping("/admin/monitor/db")
+@RequiresPermissions("monitor:ql:*")
 public class JPAQLExecutorController extends BaseController {
 
     @PersistenceContext

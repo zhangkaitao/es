@@ -187,4 +187,5 @@ public interface MessageApi {
     public void markReplied(Message message);
 
 
+    void markRead(Long userId, Long[] ids);
 }

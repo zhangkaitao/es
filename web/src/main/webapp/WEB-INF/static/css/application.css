@@ -340,6 +340,10 @@ html, body {
     font-size: 10px;
 }
 
+#user-navbar .btn * {
+    text-shadow: none;
+}
+
 #user-navbar  > ul > li {
     margin: 0;
     padding: 0;
@@ -607,6 +611,7 @@ iframe[tabs="true"] {
 .table > tbody > tr.active * {
     color: #fff!important;
     font-weight: bold;
+    text-shadow: none;
 }
 
 

@@ -31,7 +31,7 @@ public class KeyValueController extends BaseCRUDController<KeyValue, Long> {
     private KeyValueService keyValueService;
 
     public KeyValueController() {
-        setResourceIdentity("maintain");
+        setResourceIdentity("maintain:icon");
     }
 
 

@@ -22,7 +22,7 @@
                 查看
             </a>
         </li>
-        <shiro:hasPermission name="sys:user:create">
+        <shiro:hasPermission name="sys:user:update">
         <li ${op eq '修改' ? 'class="active"' : ''}>
             <a href="${ctx}/admin/sys/user/${m.id}/update?BackURL=<es:BackURL/>">
                 <i class="icon-edit"></i>

@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -46,4 +47,7 @@ public interface MessageRepository extends BaseRepository<Message, Long> {
     @Query("select count(o) from Message o where (receiverId=?1 and receiverState=?2 and read=false)")
     Long countUnread(Long userId, MessageState receiverState);
 
+    @Modifying
+    @Query("update Message set read=true where receiverId=?1 and id in (?2)")
+    void markRead(Long userId, List<Long> ids);
 }

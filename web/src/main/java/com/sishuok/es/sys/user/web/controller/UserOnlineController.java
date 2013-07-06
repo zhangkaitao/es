@@ -43,8 +43,8 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
 
     @Override
     public String list(Searchable searchable, Model model) {
-        if (!SecurityUtils.getSubject().isPermitted("sys:userOnline or monitor")) {
-            throw new UnauthorizedException(MessageUtils.message("no.view.permission", "sys:userOnline或monitor"));
+        if (!SecurityUtils.getSubject().isPermitted("sys:userOnline:view or monitor:userOnline:view")) {
+            throw new UnauthorizedException(MessageUtils.message("no.view.permission", "sys:userOnline:view或monitor:userOnline:view"));
         }
         return super.list(searchable, model);
     }
@@ -52,8 +52,8 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
     @RequestMapping("/forceLogout")
     public String forceLogout(@RequestParam(value = "ids") String[] ids) {
 
-        if (!SecurityUtils.getSubject().isPermitted("sys:userOnline or monitor")) {
-            throw new UnauthorizedException(MessageUtils.message("no.view.permission", "sys:userOnline或monitor"));
+        if (!SecurityUtils.getSubject().isPermitted("sys:userOnline or monitor:userOnline")) {
+            throw new UnauthorizedException(MessageUtils.message("no.view.permission", "sys:userOnline或monitor:userOnline"));
         }
 
         for (String id : ids) {

@@ -25,7 +25,7 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <shiro:hasPermission name="maintain:create">
+                <shiro:hasPermission name="maintain:icon:create">
                 <div class="btn-group first">
                     <a class="btn btn-custom dropdown-toggle no-disabled" data-toggle="dropdown">
                         <i class="icon-file-alt"></i>
@@ -45,19 +45,19 @@
                     </ul>
                 </div>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="maintain:update">
+                <shiro:hasPermission name="maintain:icon:update">
                 <a id="update" class="btn btn-update">
                     <i class="icon-edit"></i>
                     修改
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="maintain:delete">
+                <shiro:hasPermission name="maintain:icon:delete">
                 <a class="btn btn-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="maintain:create or maintain:update or maintain:delete">
+                <shiro:hasPermission name="maintain:icon:create or maintain:icon:update or maintain:icon:delete">
                 <a class="btn no-disabled btn-gen-css-file"
                    data-toggle="tooltip" data-placement="bottom" data-html="true"
                    title="生成相应的样式表文件(icon.css)<br/>标识符作为css class使用">

@@ -4,8 +4,8 @@
 delete from `sys_user` where id>=1 and id<=1000;;
 /*默认admin/123456*/
 insert into `sys_user`
-  (`id`, `username`, `email`, `mobile_phone_number`, `password`, `salt`, `create_date`, `status`, `admin`, `deleted`)
-values
+(`id`, `username`, `email`, `mobile_phone_number`, `password`, `salt`, `create_date`, `status`, `admin`, `deleted`)
+  values
   (1, 'admin', 'admin@sishuok.com', '13412345671', 'ec21fa1738f39d5312c6df46002d403d', 'yDd1956wn1', sysdate(), 'normal', 1, 0);;
 
 insert into `sys_user`
@@ -63,102 +63,102 @@ insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) v
 
 delete from `sys_resource` where id>=1 and id<=1000;;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (1, 0, '0/', 1, '资源', '', '', true);;
+  values (1, 0, '0/', 1, '资源', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (2, 1, '0/1/', 1, '示例管理', 'showcase', '', true);;
+  values (2, 1, '0/1/', 1, '示例管理', 'showcase', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (3, 2, '0/1/2/', 1, '示例列表', 'sample', '/showcase/sample', true);;
+  values (3, 2, '0/1/2/', 1, '示例列表', 'sample', '/showcase/sample', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (4, 2, '0/1/2/', 2, '逻辑删除列表', 'deleted', '/showcase/deleted', true);;
+  values (4, 2, '0/1/2/', 2, '逻辑删除列表', 'deleted', '/showcase/deleted', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (5, 2, '0/1/2/', 3, '可移动列表', 'move', '/showcase/move', true);;
+  values (5, 2, '0/1/2/', 3, '可移动列表', 'move', '/showcase/move', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (6, 2, '0/1/2/', 4, '文件上传列表', 'upload', '/showcase/upload', true);;
+  values (6, 2, '0/1/2/', 4, '文件上传列表', 'upload', '/showcase/upload', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (7, 2, '0/1/2/', 5, '树列表', 'tree', '/showcase/tree', true);;
+  values (7, 2, '0/1/2/', 5, '树列表', 'tree', '/showcase/tree', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (8, 2, '0/1/2/', 6, '编辑器列表', 'editor', '/showcase/editor', true);;
+  values (8, 2, '0/1/2/', 6, '编辑器列表', 'editor', '/showcase/editor', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (9, 2, '0/1/2/', 7, '父子表（小数据量）', 'parentchild', '/showcase/parentchild/parent', true);;
+  values (9, 2, '0/1/2/', 7, '父子表（小数据量）', 'parentchild', '/showcase/parentchild/parent', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (10, 2, '0/1/2/', 8, '父子表（大数据量）管理', '', '', true);;
+  values (10, 2, '0/1/2/', 8, '父子表（大数据量）管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (11, 10, '0/1/2/10/', 1, '类别列表', 'productCategory', '/showcase/product/category', true);;
+  values (11, 10, '0/1/2/10/', 1, '类别列表', 'productCategory', '/showcase/product/category', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (12, 10, '0/1/2/10/', 2, '产品列表', 'product', '/showcase/product/product', true);;
+  values (12, 10, '0/1/2/10/', 2, '产品列表', 'product', '/showcase/product/product', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (13, 2, '0/1/2/', 9, '状态管理', '', '', true);;
+  values (13, 2, '0/1/2/', 9, '状态管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (14, 13, '0/1/2/13/', 1, '审核状态列表', 'statusAudit', '/showcase/status/audit', true);;
+  values (14, 13, '0/1/2/13/', 1, '审核状态列表', 'statusAudit', '/showcase/status/audit', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (15, 13, '0/1/2/13/', 2, '显示状态列表', 'statusShow', '/showcase/status/show', true);;
+  values (15, 13, '0/1/2/13/', 2, '显示状态列表', 'statusShow', '/showcase/status/show', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (46, 2, '0/1/2/', 10, 'Excel导入/导出', 'excel', '/showcase/excel', true);;
+  values (46, 13, '0/1/2/13/', 3, 'Excel导入/导出', 'excel', '/showcase/excel', true);;
 
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (16, 1, '0/1/', 2, '系统管理', 'sys', '', true);;
+  values (16, 1, '0/1/', 2, '系统管理', 'sys', '', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (17, 16, '0/1/16/', 1, '用户管理', '', '', true);;
+  values (17, 16, '0/1/16/', 1, '用户管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (18, 17, '0/1/16/17/', 1, '用户列表', 'user', '/admin/sys/user/main', true);;
+  values (18, 17, '0/1/16/17/', 1, '用户列表', 'user', '/admin/sys/user/main', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (19, 17, '0/1/16/17/', 2, '在线用户列表', 'userOnline', '/admin/sys/user/online', true);;
+  values (19, 17, '0/1/16/17/', 2, '在线用户列表', 'userOnline', '/admin/sys/user/online', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (20, 17, '0/1/16/17/', 3, '状态变更历史列表', 'userStatusHistory', '/admin/sys/user/statusHistory', true);;
+  values (20, 17, '0/1/16/17/', 3, '状态变更历史列表', 'userStatusHistory', '/admin/sys/user/statusHistory', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (21, 17, '0/1/16/17/', 4, '用户最后在线历史列表', 'userLastOnline', '/admin/sys/user/lastOnline', true);;
+  values (21, 17, '0/1/16/17/', 4, '用户最后在线历史列表', 'userLastOnline', '/admin/sys/user/lastOnline', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (22, 16, '0/1/16/', 2, '组织机构管理', '', '', true);;
+  values (22, 16, '0/1/16/', 2, '组织机构管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (23, 22, '0/1/16/22/', 1, '组织机构列表', 'organization', '/admin/sys/organization/organization', true);;
+  values (23, 22, '0/1/16/22/', 1, '组织机构列表', 'organization', '/admin/sys/organization/organization', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (24, 22, '0/1/16/22/', 2, '工作职务列表', 'job', '/admin/sys/organization/job', true);;
+  values (24, 22, '0/1/16/22/', 2, '工作职务列表', 'job', '/admin/sys/organization/job', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (29, 16, '0/1/16/', 3, '分组列表', 'group', '/admin/sys/group', true);;
+  values (29, 16, '0/1/16/', 3, '分组列表', 'group', '/admin/sys/group', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (25, 16, '0/1/16/', 4, '资源列表', 'resource', '/admin/sys/resource', true);;
+  values (25, 16, '0/1/16/', 4, '资源列表', 'resource', '/admin/sys/resource', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (26, 16, '0/1/16/', 5, '权限管理', '', '', true);;
+  values (26, 16, '0/1/16/', 5, '权限管理', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (27, 26, '0/1/16/26/', 1, '权限列表', 'permission', '/admin/sys/permission/permission', true);;
+  values (27, 26, '0/1/16/26/', 1, '权限列表', 'permission', '/admin/sys/permission/permission', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (28, 26, '0/1/16/26/', 2, '授权权限给角色', 'role', '/admin/sys/permission/role', true);;
+  values (28, 26, '0/1/16/26/', 2, '授权权限给角色', 'role', '/admin/sys/permission/role', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (30, 26, '0/1/16/26/', 3, '授权角色给实体', 'auth', '/admin/sys/auth', true);;
+  values (30, 26, '0/1/16/26/', 3, '授权角色给实体', 'auth', '/admin/sys/auth', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (31, 1, '0/1/', 4, '个人中心', '', '', true);;
+  values (31, 1, '0/1/', 4, '个人中心', '', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (32, 31, '0/1/31/', 1, '我的消息', '', '/admin/personal/message', true);;
+  values (32, 31, '0/1/31/', 1, '我的消息', '', '/admin/personal/message', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (33, 1, '0/1/', 5, '开发维护', 'maintain', '', true);;
+  values (33, 1, '0/1/', 5, '开发维护', 'maintain', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (34, 33, '0/1/33/', 1, '图标管理', '', '/admin/maintain/icon', true);;
+  values (34, 33, '0/1/33/', 1, '图标管理', 'icon', '/admin/maintain/icon', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (35, 33, '0/1/33/', 2, '键值对', '', '/admin/maintain/keyvalue', true);;
+  values (35, 33, '0/1/33/', 2, '键值对', 'keyvalue', '/admin/maintain/keyvalue', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (37, 33, '0/1/33/', 4, '静态资源版本控制', '', '/admin/maintain/staticResource', true);;
+  values (37, 33, '0/1/33/', 4, '静态资源版本控制', 'staticResource', '/admin/maintain/staticResource', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-        values (38, 33, '0/1/33/', 5, '在线编辑', '', '/admin/maintain/editor', true);;
+  values (38, 33, '0/1/33/', 5, '在线编辑', 'onlineEditor', '/admin/maintain/editor', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (39, 1, '0/1/', 6, '系统监控', 'monitor', '', true);;
+  values (39, 1, '0/1/', 6, '系统监控', 'monitor', '', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (40, 39, '0/1/39/', 1, '在线用户列表', '', '/admin/sys/user/online', true);;
+  values (40, 39, '0/1/39/', 1, '在线用户列表', 'userOnline', '/admin/sys/user/online', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (41, 39, '0/1/39/', 2, '数据库监控', '', '/admin/monitor/druid/index.html', true);;
+  values (41, 39, '0/1/39/', 2, '数据库监控', 'db', '/admin/monitor/druid/index.html', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (42, 39, '0/1/39/', 3, 'hibernate监控', '', '/admin/monitor/hibernate', true);;
+  values (42, 39, '0/1/39/', 3, 'hibernate监控', 'hibernate', '/admin/monitor/hibernate', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (43, 39, '0/1/39/', 4, '执行SQL/JPA QL', '', '/admin/monitor/db/sql', true);;
+  values (43, 39, '0/1/39/', 4, '执行SQL/JPA QL', 'ql', '/admin/monitor/db/sql', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (44, 39, '0/1/39/', 5, 'ehcache监控', '', '/admin/monitor/ehcache', true);;
+  values (44, 39, '0/1/39/', 5, 'ehcache监控', 'ehcache', '/admin/monitor/ehcache', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `show`)
-         values (45, 39, '0/1/39/', 6, 'jvm监控', '', '/admin/monitor/jvm', true);;
+  values (45, 39, '0/1/39/', 6, 'jvm监控', 'jvm', '/admin/monitor/jvm', true);;
 
 
 

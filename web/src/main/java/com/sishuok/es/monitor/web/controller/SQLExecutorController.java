@@ -10,6 +10,7 @@ import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.repository.hibernate.HibernateUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin/monitor/db")
+@RequiresPermissions("monitor:ql:*")
 public class SQLExecutorController extends BaseController {
 
     @PersistenceContext

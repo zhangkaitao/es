@@ -10,11 +10,13 @@ import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.personal.entity.Message;
 import com.sishuok.es.personal.entity.MessageState;
 import com.sishuok.es.personal.repository.MessageRepository;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -87,4 +89,10 @@ public class MessageService extends BaseService<Message, Long> {
     }
 
 
+    public void markRead(final Long userId, final Long[] ids) {
+        if(ArrayUtils.isEmpty(ids)) {
+            return;
+        }
+        messageRepository.markRead(userId, Arrays.asList(ids));
+    }
 }

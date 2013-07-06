@@ -50,7 +50,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
 
     public IconController() {
         setListAlsoSetCommonData(true);
-        setResourceIdentity("maintain");
+        setResourceIdentity("maintain:icon");
     }
 
     @Override

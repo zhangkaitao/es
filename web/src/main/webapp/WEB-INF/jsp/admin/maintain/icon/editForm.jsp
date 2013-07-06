@@ -6,7 +6,7 @@
     <c:set var="type" value="${not empty type ? type : m.type}"/>
 
     <ul class="nav nav-tabs">
-        <shiro:hasPermission name="maintain:create">
+        <shiro:hasPermission name="maintain:icon:create">
         <c:if test="${op eq '新增'}">
             <c:forEach items="${types}" var="t">
                 <li ${type eq t ? 'class="active"' : ''}>
@@ -26,7 +26,7 @@
                     查看
                 </a>
             </li>
-            <shiro:hasPermission name="maintain:update">
+            <shiro:hasPermission name="maintain:icon:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/maintain/icon/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
@@ -34,7 +34,7 @@
                 </a>
             </li>
             </shiro:hasPermission>
-            <shiro:hasPermission name="maintain:delete">
+            <shiro:hasPermission name="maintain:icon:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/maintain/icon/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>

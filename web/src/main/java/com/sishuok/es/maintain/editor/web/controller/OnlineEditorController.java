@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -54,6 +55,7 @@ import static com.sishuok.es.maintain.editor.web.controller.utils.OnlineEditorUt
  */
 @Controller
 @RequestMapping("/admin/maintain/editor")
+@RequiresPermissions("maintain:onlineEditor:*")
 public class OnlineEditorController extends BaseController {
 
 

@@ -26,6 +26,13 @@
                     发送新消息
                 </a>
 
+                <c:if test="${state eq 'in_box'}">
+                    <a class="btn btn-mark-read">
+                        <i class="icon-bookmark"></i>
+                        标记为已读
+                    </a>
+                </c:if>
+
                 <c:if test="${state ne 'draft_box' and state ne 'store_box' and state ne 'trash_box'}">
                     <a class="btn btn-store">
                         <i class="icon-briefcase"></i>

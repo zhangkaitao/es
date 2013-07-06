@@ -330,10 +330,27 @@ public class MessageController extends BaseController<Message, Long> {
         return redirectToUrl(viewName(MessageState.trash_box + "/list"));
     }
 
+    @RequestMapping("markRead")
+    public String markRead(
+            @CurrentUser User user,
+            @RequestParam(value = "ids", required = false) Long[] ids,
+            @RequestParam("BackURL") String backURL,
+            RedirectAttributes redirectAttributes) {
+
+        messageApi.markRead(user.getId(), ids);
+
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "成功标记为已读！");
+        return redirectToUrl(backURL);
+
+    }
+
+
     @RequestMapping(value = "/unreadCount")
     @ResponseBody
     public String unreadCount(@CurrentUser User user) {
         return String.valueOf(messageApi.countUnread(user.getId()));
     }
+
+
 
 }

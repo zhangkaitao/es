@@ -140,6 +140,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
         // 关闭文档流
         din.close();
 
+        System.out.println(dataList.size());
         //把最后剩下的不足batchSize大小
         if (dataList.size() > 0) {
             doBatchSave(dataList);
@@ -190,7 +191,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
                     //numrec.getRow()  numrec.getColumn()   numrec.getValue()
 
                     //非第一行 第一列
-                    if (numrec.getRow() > 1 && numrec.getColumn() == 0) {
+                    if (numrec.getRow() > 0 && numrec.getColumn() == 0) {
                         current = new ExcelData();
                         current.setId(Double.valueOf(numrec.getValue()).longValue());
                     }
@@ -203,7 +204,7 @@ public class ImportExcelDateServiceIT extends BaseIT {
                     //解析一个String类型的单元格值（存储在SSTRecord）
                     LabelSSTRecord lrec = (LabelSSTRecord) record;
 
-                    if (lrec.getRow() > 1 && lrec.getColumn() == 1) {
+                    if (lrec.getRow() > 0 && lrec.getColumn() == 1) {
                         current.setContent(sstrec.getString(lrec.getSSTIndex()).getString());
                         dataList.add(current);
 

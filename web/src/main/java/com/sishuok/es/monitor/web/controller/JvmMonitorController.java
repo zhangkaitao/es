@@ -6,6 +6,7 @@
 package com.sishuok.es.monitor.web.controller;
 
 import com.sishuok.es.common.web.controller.BaseController;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/admin/monitor/jvm")
+@RequiresPermissions("monitor:jvm:*")
 public class JvmMonitorController extends BaseController {
 
     @RequestMapping("")

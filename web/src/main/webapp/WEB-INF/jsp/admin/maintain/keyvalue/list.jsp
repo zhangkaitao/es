@@ -8,19 +8,19 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <shiro:hasPermission name="maintain:create">
+                <shiro:hasPermission name="maintain:keyvalue:create">
                 <a class="btn btn-create">
                     <i class="icon-file-alt"></i>
                     新增
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="maintain:update">
+                <shiro:hasPermission name="maintain:keyvalue:update">
                 <a class="btn btn-update">
                     <i class="icon-edit"></i>
                     修改
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="maintain:delete">
+                <shiro:hasPermission name="maintain:keyvalue:delete">
                 <a class="btn btn-delete">
                     <i class="icon-trash"></i>
                     删除

@@ -52,8 +52,20 @@
                             <shiro:hasPermission name="showcase:excel:import">
                             <li>
                                 <a class="btn no-disabled">
+                                   <i class="icon-level-down"></i>
+                                    导入CVS数据
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn no-disabled">
                                     <i class="icon-level-down"></i>
-                                    Excel导入
+                                    导入Excel2003及以下
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn no-disabled">
+                                    <i class="icon-level-down"></i>
+                                    导入Excel2007及以上
                                 </a>
                             </li>
                             </shiro:hasPermission>
@@ -61,7 +73,19 @@
                             <li>
                                 <a class="btn no-disabled">
                                     <i class="icon-level-up"></i>
-                                    Excel导出
+                                    导出CVS
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn no-disabled">
+                                    <i class="icon-level-up"></i>
+                                    导出Excel2003
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn no-disabled">
+                                    <i class="icon-level-up"></i>
+                                    导出Excel2007
                                 </a>
                             </li>
                             </shiro:hasPermission>

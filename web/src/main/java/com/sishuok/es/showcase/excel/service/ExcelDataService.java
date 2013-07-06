@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.showcase.excel.service;
 
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.SpringUtils;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 
 /**
  * <p>User: Zhang Kaitao
@@ -56,5 +59,14 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
             data.setContent("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
             excelDataRepository.save(data);
         }
+    }
+
+
+    public void importExcel(File file) {
+
+    }
+
+    public String exportExcel(Searchable searchable) {
+        return "";
     }
 }

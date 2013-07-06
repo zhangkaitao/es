@@ -4,7 +4,7 @@
 <div class="panel">
 
     <ul class="nav nav-tabs">
-        <shiro:hasPermission name="maintain:create">
+        <shiro:hasPermission name="maintain:keyvalue:create">
         <c:if test="${op eq '新增'}">
             <li ${op eq '新增' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/maintain/keyvalue/create?BackURL=<es:BackURL/>">
@@ -23,7 +23,7 @@
                     查看
                 </a>
             </li>
-            <shiro:hasPermission name="maintain:update">
+            <shiro:hasPermission name="maintain:keyvalue:update">
             <li ${op eq '修改' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/maintain/keyvalue/${m.id}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
@@ -32,7 +32,7 @@
             </li>
             </shiro:hasPermission>
 
-            <shiro:hasPermission name="maintain:delete">
+            <shiro:hasPermission name="maintain:keyvalue:delete">
             <li ${op eq '删除' ? 'class="active"' : ''}>
                 <a href="${ctx}/admin/maintain/keyvalue/${m.id}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>

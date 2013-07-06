@@ -12,6 +12,7 @@ import com.sishuok.es.maintain.staticresource.web.controller.utils.YuiCompressor
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +44,7 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping("/admin/maintain/staticResource")
+@RequiresPermissions("maintain:staticResource:*")
 public class StaticResourceVersionController extends BaseController {
 
     private final String versionedResourcePath ="/WEB-INF/jsp/common";
