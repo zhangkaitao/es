@@ -27,7 +27,7 @@ public class Child extends BaseEntity<Long> {
     @Fetch(FetchMode.SELECT)
     private Parent parent;
 
-    @NotNull(message = "name.not.null")
+    @NotNull(message = "not.null")
     @Column(name = "name")
     private String name;
 

@@ -24,7 +24,7 @@ import java.util.Date;
 @Table(name = "showcase_sample")
 public class DeletedSample extends BaseEntity<Long> implements LogicDeleteable {
 
-    @NotNull(message = "{name.not.null}")
+    @NotNull(message = "{not.null}")
     @Column(name = "name")
     private String name;
 

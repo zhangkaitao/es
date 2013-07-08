@@ -5,7 +5,7 @@
  */
 package com.sishuok.es.index.web.controller;
 
-import com.sishuok.es.personal.service.MessageApi;
+import com.sishuok.es.personal.message.service.MessageApi;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import com.sishuok.es.sys.user.entity.User;

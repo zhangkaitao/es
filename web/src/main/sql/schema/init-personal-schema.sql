@@ -3,6 +3,8 @@
 
 drop table if exists `personal_message`;;
 drop table if exists `personal_message_content`;;
+drop table if exists `personal_notification_template`;;
+drop table if exists `personal_notification_data`;;
 
 create table `personal_message`(
   `id`               bigint not null auto_increment,
@@ -37,3 +39,26 @@ create table `personal_message_content`(
   constraint `pk_personal_message_content` primary key(`id`),
   index `idx_personal_message_content_message_id` (`message_id`)
 ) charset=utf8 ENGINE=InnoDB;;
+
+create table `personal_notification_template`(
+  `id`               bigint not null auto_increment,
+  `name`            varchar(200),
+  `system`           varchar(50),
+  `template`         varchar(2000),
+  `deleted`          bool,
+
+  constraint `pk_personal_notification_template` primary key(`id`),
+  constraint `unique_personal_personal_notification_template_name` unique(`name`)
+) charset=utf8 ENGINE=InnoDB;
+
+create table `personal_notification_data`(
+  `id`               bigint not null auto_increment,
+  `user_id`          bigint,
+  `system`           varchar(50),
+  `content`          varchar(2000),
+  `notification_date`  timestamp default 0,
+  `read`            bool,
+
+  constraint `pk_personal_notification_data` primary key(`id`),
+  index `idx_personal_personal_notification_data_user_id_read` (`user_id`, `read`)
+) charset=utf8 ENGINE=InnoDB;

@@ -21,7 +21,7 @@ import java.util.Date;
 @Table(name = "showcase_parent")
 public class Parent extends BaseEntity<Long> {
 
-    @NotNull(message = "name.not.null")
+    @NotNull(message = "not.null")
     @Column(name = "name")
     private String name;
 

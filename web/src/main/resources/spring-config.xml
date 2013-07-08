@@ -15,7 +15,7 @@
     <context:property-placeholder location="classpath:resources.properties"/>
 
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.sishuok.es.**.service,com.sishuok.es.**.task,com.sishuok.es.**.extra">
+    <context:component-scan base-package="com.sishuok.es.personal.message.service,com.sishuok.es.personal.message.task,com.sishuok.es.**.extra">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!-- 开启AOP监听 只对当前配置文件有效 -->
@@ -65,7 +65,7 @@
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSourceProxy"/>
-        <property name="packagesToScan" value="com.sishuok.es.**.entity"/>
+        <property name="packagesToScan" value="com.sishuok.es.personal.message.entity"/>
 
         <property name="persistenceUnitName" value="${jpa.persistenceUnitName}"/>
         <property name="persistenceProvider">
@@ -118,7 +118,7 @@
 
     -->
     <jpa:repositories
-            base-package="com.sishuok.es.**.repository"
+            base-package="com.sishuok.es.personal.message.repository"
             repository-impl-postfix="Impl"
             factory-class="com.sishuok.es.common.repository.support.SimpleBaseRepositoryFactoryBean"
             entity-manager-factory-ref="entityManagerFactory"

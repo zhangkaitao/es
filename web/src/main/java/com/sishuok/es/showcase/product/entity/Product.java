@@ -28,7 +28,7 @@ public class Product extends BaseEntity<Long> {
     @Fetch(FetchMode.SELECT)
     private Category category;
 
-    @NotNull(message = "name.not.null")
+    @NotNull(message = "not.null")
     @Column(name = "name")
     private String name;
 
