@@ -106,7 +106,7 @@
         <pluginRepository>
             <id>maven-db-plugin-repo</id>
             <name>maven db plugin repository</name>
-            <url>http://maven-db-plugin.googlecode.com/svn/maven/repo</url>
+            <url>https://maven-db-plugin.googlecode.com/svn/maven/repo</url>
             <layout>default</layout>
         </pluginRepository>
 
