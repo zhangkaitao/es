@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.service;
+package com.sishuok.es.personal.message.service;
 
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.search.SearchOperator;
@@ -13,10 +13,10 @@ import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.utils.SpringUtils;
-import com.sishuok.es.personal.entity.Message;
-import com.sishuok.es.personal.entity.MessageContent;
-import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.entity.MessageType;
+import com.sishuok.es.personal.message.entity.Message;
+import com.sishuok.es.personal.message.entity.MessageContent;
+import com.sishuok.es.personal.message.entity.MessageState;
+import com.sishuok.es.personal.message.entity.MessageType;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.service.UserService;

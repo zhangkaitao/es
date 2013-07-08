@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.entity;
+package com.sishuok.es.personal.message.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
 import org.hibernate.annotations.Fetch;

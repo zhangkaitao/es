@@ -1,4 +1,4 @@
-package com.sishuok.es.personal.entity;
+package com.sishuok.es.personal.message.entity;
 
 /**
  * 消息类型

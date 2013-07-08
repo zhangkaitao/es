@@ -3,17 +3,17 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.web.controller;
+package com.sishuok.es.personal.message.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
-import com.sishuok.es.personal.entity.Message;
-import com.sishuok.es.personal.entity.MessageContent;
-import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.service.MessageApi;
-import com.sishuok.es.personal.service.MessageService;
+import com.sishuok.es.personal.message.entity.Message;
+import com.sishuok.es.personal.message.entity.MessageContent;
+import com.sishuok.es.personal.message.entity.MessageState;
+import com.sishuok.es.personal.message.service.MessageApi;
+import com.sishuok.es.personal.message.service.MessageService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.service.UserService;
 import com.sishuok.es.sys.user.web.bind.annotation.CurrentUser;

@@ -3,11 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.task;
+package com.sishuok.es.personal.message.task;
 
 import com.google.common.collect.Lists;
-import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.service.MessageService;
+import com.sishuok.es.personal.message.entity.MessageState;
+import com.sishuok.es.personal.message.service.MessageService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

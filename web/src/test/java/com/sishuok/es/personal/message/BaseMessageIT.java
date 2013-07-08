@@ -3,12 +3,12 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal;
+package com.sishuok.es.personal.message;
 
-import com.sishuok.es.personal.entity.Message;
-import com.sishuok.es.personal.entity.MessageContent;
-import com.sishuok.es.personal.service.MessageApi;
-import com.sishuok.es.personal.service.MessageService;
+import com.sishuok.es.personal.message.entity.Message;
+import com.sishuok.es.personal.message.entity.MessageContent;
+import com.sishuok.es.personal.message.service.MessageApi;
+import com.sishuok.es.personal.message.service.MessageService;
 import com.sishuok.es.sys.user.service.BaseUserIT;
 import com.sishuok.es.sys.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

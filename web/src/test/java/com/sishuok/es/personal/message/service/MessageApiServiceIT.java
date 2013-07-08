@@ -3,16 +3,16 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.service;
+package com.sishuok.es.personal.message.service;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.spring.utils.AopProxyUtils;
-import com.sishuok.es.personal.BaseMessageIT;
-import com.sishuok.es.personal.entity.Message;
-import com.sishuok.es.personal.entity.MessageContent;
-import com.sishuok.es.personal.entity.MessageState;
-import com.sishuok.es.personal.entity.MessageType;
+import com.sishuok.es.personal.message.BaseMessageIT;
+import com.sishuok.es.personal.message.entity.Message;
+import com.sishuok.es.personal.message.entity.MessageContent;
+import com.sishuok.es.personal.message.entity.MessageState;
+import com.sishuok.es.personal.message.entity.MessageType;
 import com.sishuok.es.sys.user.entity.User;
 import org.junit.Assert;
 import org.junit.Before;

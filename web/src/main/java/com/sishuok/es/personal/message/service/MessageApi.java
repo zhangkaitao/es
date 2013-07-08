@@ -3,10 +3,10 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.service;
+package com.sishuok.es.personal.message.service;
 
-import com.sishuok.es.personal.entity.Message;
-import com.sishuok.es.personal.entity.MessageState;
+import com.sishuok.es.personal.message.entity.Message;
+import com.sishuok.es.personal.message.entity.MessageState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -3,11 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.personal.task;
+package com.sishuok.es.personal.message.task;
 
-import com.sishuok.es.personal.BaseMessageIT;
-import com.sishuok.es.personal.entity.Message;
-import com.sishuok.es.personal.entity.MessageState;
+import com.sishuok.es.personal.message.BaseMessageIT;
+import com.sishuok.es.personal.message.entity.Message;
+import com.sishuok.es.personal.message.entity.MessageState;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
