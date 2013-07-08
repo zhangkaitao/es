@@ -92,6 +92,12 @@
             <name>Sourceforge Releases</name>
             <url>https://oss.sonatype.org/content/repositories/sourceforge-releases/</url>
         </repository>
+        <repository>
+            <id>maven-db-plugin-repo</id>
+            <name>maven db plugin repository</name>
+            <url>http://maven-db-plugin.googlecode.com/svn/maven/repo</url>
+            <layout>default</layout>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
