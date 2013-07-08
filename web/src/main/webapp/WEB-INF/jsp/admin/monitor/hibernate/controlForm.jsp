@@ -92,7 +92,6 @@
                     $.app.waiting("正在执行..");
                     $.get(url, function(data) {
                         $.app.waitingOver();
-                        $.app.alert({message : data});
                     });
                 }
             });
@@ -106,7 +105,6 @@
                     $.app.waiting("正在执行..");
                     $.get(url, function(data) {
                         $.app.waitingOver();
-                        $.app.alert({message : data});
                     });
                 }
             });
@@ -121,7 +119,6 @@
                     $.app.waiting("正在执行..");
                     $.get(url, function(data) {
                         $.app.waitingOver();
-                        $.app.alert({message : data});
                     });
                 }
             });
@@ -136,7 +133,6 @@
             $.app.waiting("正在执行..");
             $.get(url, function(data) {
                 $.app.waitingOver();
-                $.app.alert({message : data});
             });
         });
 
@@ -149,7 +145,6 @@
                     $.app.waiting("正在执行..");
                     $.get(url, function(data) {
                         $.app.waitingOver();
-                        $.app.alert({message : data});
                     });
                 }
             });
@@ -164,7 +159,6 @@
             $.app.waiting("正在执行..");
             $.get(url, function(data) {
                 $.app.waitingOver();
-                $.app.alert({message : data});
             });
         });
 
@@ -177,7 +171,6 @@
                     $.app.waiting("正在执行..");
                     $.get(url, function(data) {
                         $.app.waitingOver();
-                        $.app.alert({message : data});
                     });
                 }
             });
@@ -185,14 +178,13 @@
         $(".btn-evict-query").click(function() {
             if(!$("#queries").val()) {
                 $(".btn-evict-query-all").click();
-                return
+                return;
             }
             var form = $("#quries").closest("form");
             var url = "${ctx}/admin/monitor/hibernate/evictQuery?" + form.serialize();
             $.app.waiting("正在执行..");
             $.get(url, function(data) {
                 $.app.waitingOver();
-                $.app.alert({message : data});
             });
         });
     });

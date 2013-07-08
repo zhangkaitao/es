@@ -126,7 +126,7 @@ create table `sys_organization`(
   `parent_ids`  varchar(200) default '',
   `icon`       varchar(200),
   `weight`    int,
-  `show`       bool,
+  `is_show`       bool,
   constraint `pk_sys_organization` primary key(`id`),
   index `idx_sys_organization_name` (`name`),
   index `idx_sys_organization_type` (`type`),
@@ -143,7 +143,7 @@ create table `sys_job`(
   `parent_ids`  varchar(200) default '',
   `icon`       varchar(200),
   `weight`    int,
-  `show`       bool,
+  `is_show`       bool,
   constraint `pk_sys_job` primary key(`id`),
   index `idx_sys_job_nam` (`name`),
   index `idx_sys_job_parent_id` (`parent_id`),
@@ -170,7 +170,7 @@ create table `sys_resource`(
   `parent_ids`  varchar(200) default '',
   `icon`       varchar(200),
   `weight`    int,
-  `show`       bool,
+  `is_show`       bool,
   constraint `pk_sys_resource` primary key(`id`),
   index `idx_sys_resource_name` (`name`),
   index `idx_sys_resource_identity` (`identity`),
@@ -186,11 +186,11 @@ create table `sys_permission`(
   `name`      varchar(100),
   `permission`  varchar(100),
   `description`      varchar(200),
-  `show`       bool,
+  `is_show`       bool,
   constraint `pk_sys_permission` primary key(`id`),
   index idx_sys_permission_name (`name`),
   index idx_sys_permission_permission (`permission`),
-  index idx_sys_permission_show (`show`)
+  index idx_sys_permission_show (`is_show`)
 ) charset=utf8 ENGINE=InnoDB;;
 alter table `sys_permission` auto_increment=1000;;
 
@@ -199,11 +199,11 @@ create table `sys_role`(
   `name`      varchar(100),
   `role`  varchar(100),
   `description`      varchar(200),
-  `show`       bool,
+  `is_show`       bool,
   constraint `pk_sys_role` primary key(`id`),
   index `idx_sys_role_name` (`name`),
   index `idx_sys_role_role` (`role`),
-  index `idx_sys_role_show` (`show`)
+  index `idx_sys_role_show` (`is_show`)
 ) charset=utf8 ENGINE=InnoDB;;
 alter table `sys_role` auto_increment=1000;;
 
@@ -222,11 +222,11 @@ create table `sys_group`(
   `id`         bigint not null auto_increment,
   `name`       varchar(100),
   `type`       varchar(50),
-  `show`       bool,
+  `is_show`       bool,
   `default_group` bool,
   constraint `pk_sys_group` primary key(`id`),
   index `idx_sys_group_type` (`type`),
-  index `idx_sys_group_show` (`show`),
+  index `idx_sys_group_show` (`is_show`),
   index `idx_sys_group_default_group` (`default_group`)
 ) charset=utf8 ENGINE=InnoDB;;
 
@@ -264,7 +264,4 @@ create table `sys_auth`(
   index `idx_sys_auth_type` (`type`)
 ) charset=utf8 ENGINE=InnoDB;;
 alter table `sys_auth` auto_increment=1000;;
-
-
-
 

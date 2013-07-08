@@ -12,7 +12,6 @@ import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
-import com.sishuok.es.common.utils.SpringUtils;
 import com.sishuok.es.personal.message.entity.Message;
 import com.sishuok.es.personal.message.entity.MessageContent;
 import com.sishuok.es.personal.message.entity.MessageState;
@@ -40,7 +39,7 @@ import java.util.List;
  * <p>Version: 1.0
  */
 @Service
-public class MessageApiService implements MessageApi {
+public class MessageApiImpl implements MessageApi {
 
     @Autowired
     private MessageService messageService;
@@ -200,7 +199,7 @@ public class MessageApiService implements MessageApi {
             page = userService.findAll(pageable);
 
             try {
-                ((MessageApiService) AopContext.currentProxy()).doSendSystemMessage(page.getContent(), message);
+                ((MessageApiImpl) AopContext.currentProxy()).doSendSystemMessage(page.getContent(), message);
             } catch (Exception e) {
                 LogUtils.logError("send system message to all user error", e);
             }
@@ -385,17 +384,4 @@ public class MessageApiService implements MessageApi {
         message.setReceiverStateChangeDate(new Date());
     }
 
-    private MessageApiService messageApiService;
-    /**
-     * ((MessageApiService) AopContext.currentProxy()) 在@Async环境下是不可用的
-     * @return
-     */
-    private MessageApiService currentProxy() {
-        if(messageApiService != null) {
-            return messageApiService;
-        }
-        messageApiService = SpringUtils.getBean(MessageApiService.class);
-
-        return messageApiService;
-    }
 }

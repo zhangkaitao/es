@@ -31,7 +31,7 @@ public class Move extends BaseEntity<Long> implements Movable {
     private Integer weight;
 
 
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show;
 
     public String getName() {

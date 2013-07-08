@@ -43,7 +43,7 @@ public class Sample extends BaseEntity<Long> {
     @Enumerated(value = EnumType.STRING)
     private Sex sex;
 
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show;
 
     public String getName() {

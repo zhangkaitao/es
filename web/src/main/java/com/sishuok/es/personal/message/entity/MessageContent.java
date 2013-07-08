@@ -33,7 +33,7 @@ public class MessageContent extends BaseEntity<Long> {
     /**
      * 消息内容
      */
-    @Length(min = 5, max = 50000, message = "{message.content.length.not.valid}")
+    @Length(min = 5, max = 50000, message = "{length.not.valid}")
     private String content;
 
 

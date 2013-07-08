@@ -27,7 +27,7 @@ public class Icon extends BaseEntity<Long> {
     /**
      * 类名称
      */
-    @Column(name = "`css_class`")
+    @Column(name = "css_class")
     private String cssClass;
 
     //////和 class、css sprite 三者选一
@@ -43,19 +43,19 @@ public class Icon extends BaseEntity<Long> {
      * 绝对地址  如http://a.com/a.png
      * 相对于上下文地址 如/a/a.png 不加上下文
      */
-    @Column(name = "`sprite_src`")
+    @Column(name = "sprite_src")
     private String spriteSrc;
 
     /**
      * 距离sprite图片左边多少
      */
-    @Column(name = "`left`")
+    @Column(name = "left")
     private Integer left;
 
     /**
      * 距离sprite图片上边多少
      */
-    @Column(name = "`top`")
+    @Column(name = "top")
     private Integer top;
 
 

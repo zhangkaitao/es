@@ -18,15 +18,15 @@ import javax.persistence.Table;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name = "maintain_keyvalue")
+@Table(name = "maintain_map")
 public class KeyValue extends BaseEntity<Long> {
 
     @Length(min = 1, max = 200, message = "{keyvalue.key.not.valid}")
-    @Column(name = "`key`")
+    @Column(name = "map_key")
     private String key;
 
     @Length(min = 1, max = 500, message = "{keyvalue.value.not.valid}")
-    @Column(name = "`value`")
+    @Column(name = "map_value")
     private String value;
 
     public String getKey() {

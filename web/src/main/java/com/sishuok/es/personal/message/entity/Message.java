@@ -57,7 +57,7 @@ public class Message extends BaseEntity<Long> {
     /**
      * 标题
      */
-    @Length(min = 5, max = 200, message = "{message.title.length.not.valid}")
+    @Length(min = 5, max = 200, message = "{length.not.valid}")
     @Column(name = "title")
     private String title;
 
@@ -93,19 +93,18 @@ public class Message extends BaseEntity<Long> {
     /**
      * 消息类型,默认普通消息
      */
-    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private MessageType type = MessageType.user_message;
 
     /**
      * 是否已读
      */
-    @Column(name = "`read`")
+    @Column(name = "is_read")
     private Boolean read = Boolean.FALSE;
     /**
      * 是否已回复
      */
-    @Column(name = "`replied`")
+    @Column(name = "is_replied")
     private Boolean replied = Boolean.FALSE;
 
     /**

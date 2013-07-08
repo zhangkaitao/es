@@ -6,12 +6,11 @@
        profile="development" >
 
     <!-- 启动时加 spring.profiles.active=development -->
-
-    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<property name="url" value="${connection.url}"/>-->
-        <!--<property name="username" value="${connection.username}"/>-->
-        <!--<property name="password" value="${connection.password}"/>-->
-    <!--</bean>-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="${connection.url}"/>
+        <property name="username" value="${connection.username}"/>
+        <property name="password" value="${connection.password}"/>
+    </bean>
 
     <!-- 优化spring启动 通过移除bean定义 和 lazy init 实现 -->
     <bean class="com.sishuok.es.common.spring.SpeedUpSpringProcessor">

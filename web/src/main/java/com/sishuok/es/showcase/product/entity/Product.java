@@ -55,7 +55,7 @@ public class Product extends BaseEntity<Long> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show;
 
     public Category getCategory() {

@@ -30,15 +30,20 @@ import java.util.concurrent.ExecutionException;
  * <p>Date: 13-5-24 下午6:17
  * <p>Version: 1.0
  */
-public class MessageApiServiceIT extends BaseMessageIT {
+public class MessageApiIT extends BaseMessageIT {
 
-    private Logger log = LoggerFactory.getLogger(MessageApiServiceIT.class);
+    private Logger log = LoggerFactory.getLogger(MessageApiIT.class);
 
     @Before
     public void setUp() {
         super.setUp();
         deleteAll(messageService.findAll());
         clear();
+
+        //移除异步支持
+        if(AopProxyUtils.isAsync(messageApi)) {
+            AopProxyUtils.removeAsync(messageApi);
+        }
     }
 
     @Test
@@ -146,11 +151,6 @@ public class MessageApiServiceIT extends BaseMessageIT {
         content.setContent("abcde");
         message.setContent(content);
         Long[] userIds = new Long[]{1L, 2L, 3L};
-
-        //移除异步支持
-        if(AopProxyUtils.isAsync(messageApi)) {
-            AopProxyUtils.removeAsync(messageApi);
-        }
 
         messageApi.sendSystemMessage(userIds, message);
 

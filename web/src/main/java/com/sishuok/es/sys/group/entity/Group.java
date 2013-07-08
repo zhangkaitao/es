@@ -42,7 +42,7 @@ public class Group extends BaseEntity<Long> {
     /**
      * 是否显示/可用
      */
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show = Boolean.FALSE;
 
 

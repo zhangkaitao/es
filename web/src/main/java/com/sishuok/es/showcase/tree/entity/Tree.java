@@ -52,7 +52,7 @@ public class Tree extends BaseEntity<Long> implements Treeable<Long> {
     /**
      * 是否显示
      */
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show = Boolean.FALSE;
 
 

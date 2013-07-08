@@ -43,7 +43,7 @@ public class Child extends BaseEntity<Long> {
     @Column(name = "endTime")
     private Date endTime;
 
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show;
 
     public Parent getParent() {

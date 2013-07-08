@@ -83,7 +83,6 @@ public class Auth extends BaseEntity<Long> {
     @Column(name = "role_ids")
     private Set<Long> roleIds;
 
-    @Column(name = "`type`")
     @Enumerated(EnumType.STRING)
     private AuthType type;
 

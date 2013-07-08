@@ -3,8 +3,7 @@
 
 drop table if exists `personal_message`;;
 drop table if exists `personal_message_content`;;
-drop table if exists `personal_notification_template`;;
-drop table if exists `personal_notification_data`;;
+
 
 create table `personal_message`(
   `id`               bigint not null auto_increment,
@@ -17,14 +16,14 @@ create table `personal_message`(
   `receiver_state`   varchar(20),
   `receiver_state_change_date`    timestamp  default 0,
   `type`            varchar(20) ,
-  `read`            bool ,
-  `replied`          bool ,
+  `is_read`            bool ,
+  `is_replied`          bool ,
   `parent_id`        bigint,
   `parent_ids`        varchar(200),
 
   constraint `pk_personal_message` primary key(`id`),
   index `idx_personal_message_sender_id_sender_state` (`sender_id`, `sender_state`),
-  index `idx_personal_message_receiver_id_receiver_state` (`receiver_id`, `receiver_state`,`read`),
+  index `idx_personal_message_receiver_id_receiver_state` (`receiver_id`, `receiver_state`,`is_read`),
   index `idx_personal_sender_state_change_date` (`sender_state_change_date`),
   index `idx_personal_receiver_state_change_date` (`receiver_state_change_date`),
   index `idx_personal_parent_id` (`parent_id`),
@@ -39,26 +38,3 @@ create table `personal_message_content`(
   constraint `pk_personal_message_content` primary key(`id`),
   index `idx_personal_message_content_message_id` (`message_id`)
 ) charset=utf8 ENGINE=InnoDB;;
-
-create table `personal_notification_template`(
-  `id`               bigint not null auto_increment,
-  `name`            varchar(200),
-  `system`           varchar(50),
-  `template`         varchar(2000),
-  `deleted`          bool,
-
-  constraint `pk_personal_notification_template` primary key(`id`),
-  constraint `unique_personal_personal_notification_template_name` unique(`name`)
-) charset=utf8 ENGINE=InnoDB;
-
-create table `personal_notification_data`(
-  `id`               bigint not null auto_increment,
-  `user_id`          bigint,
-  `system`           varchar(50),
-  `content`          varchar(2000),
-  `notification_date`  timestamp default 0,
-  `read`            bool,
-
-  constraint `pk_personal_notification_data` primary key(`id`),
-  index `idx_personal_personal_notification_data_user_id_read` (`user_id`, `read`)
-) charset=utf8 ENGINE=InnoDB;

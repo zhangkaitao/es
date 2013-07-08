@@ -20,7 +20,7 @@ create table `showcase_sample`(
     `age`        smallint,
     `birthday`   timestamp default 0,
     `sex`        varchar(50),
-    `show`       bool default false,
+    `is_show`       bool default false,
      `deleted`  bool default false,
 
     constraint `pk_showcase_sample` primary key(`id`),
@@ -32,7 +32,7 @@ create table `showcase_moveable`(
     `id`         bigint not null auto_increment,
     `name`       varchar(100),
     `weight`    int default 0,
-    `show`       bool default false,
+    `is_show`       bool default false,
     constraint `pk_showcase_moveable` primary key(`id`),
     index `idx_showcase_moveable_weight` (`weight`)
 ) charset=utf8 ENGINE=InnoDB;;
@@ -51,7 +51,7 @@ create table `showcase_tree`(
     `parent_ids`  varchar(200) default '',
     `icon`       varchar(200),
     `weight`    int,
-    `show`       bool,
+    `is_show`       bool,
     constraint `pk_showcase_tree` primary key(`id`),
     index idx_showcase_tree_parentId (`parent_id`),
     index idx_showcase_tree_parentIds_weight (`parent_ids`, `weight`)
@@ -64,7 +64,7 @@ create table `showcase_parent`(
   `type`        varchar(50),
   `beginDate`  timestamp default 0,
   `endDate`    timestamp default 0,
-  `show`        bool,
+  `is_show`        bool,
   constraint `pk_showcase_parent` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;;
 
@@ -75,7 +75,7 @@ create table `showcase_child`(
   `type`        varchar(50),
   `beginTime`  time,
   `endTime`    time,
-  `show`        bool,
+  `is_show`        bool,
   constraint `pk_showcase_child` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;;
 
@@ -83,7 +83,7 @@ create table `showcase_category`(
   `id`          bigint not null auto_increment,
   `name`        varchar(100),
   `weight`      int default 0,
-  `show`        bool,
+  `is_show`        bool,
   constraint `pk_showcase_category` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;;
 
@@ -95,7 +95,7 @@ create table `showcase_product`(
   `number`        bigint default 0,
   `beginDate`    timestamp default 0 ,
   `endDate`      timestamp default 0 ,
-  `show`        bool,
+  `is_show`        bool,
   constraint `pk_showcase_product` primary key(`id`)
 ) charset=utf8 ENGINE=InnoDB;;
 

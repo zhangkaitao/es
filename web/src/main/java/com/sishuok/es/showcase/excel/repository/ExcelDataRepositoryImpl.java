@@ -29,7 +29,7 @@ public class ExcelDataRepositoryImpl {
         em.unwrap(Session.class).doWork(new Work() {
             @Override
             public void execute(final Connection connection) throws SQLException {
-                connection.createStatement().execute("truncate table `showcase_excel_data`");
+                connection.createStatement().execute("truncate table showcase_excel_data");
             }
         });
 

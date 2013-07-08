@@ -44,7 +44,7 @@ public class DeletedSample extends BaseEntity<Long> implements LogicDeleteable {
     @Enumerated(value = EnumType.STRING)
     private Sex sex;
 
-    @Column(name = "`show`")
+    @Column(name = "is_show")
     private Boolean show;
 
     private Boolean deleted;
