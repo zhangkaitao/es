@@ -16,6 +16,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface NotificationTemplateRepository extends BaseRepository<NotificationTemplate, Long> {
 
-    @Query("select o from NotificationTemplate o where name=?1")
+    @Query("from NotificationTemplate o where name=?1")
     NotificationTemplate findByName(String name);
 }

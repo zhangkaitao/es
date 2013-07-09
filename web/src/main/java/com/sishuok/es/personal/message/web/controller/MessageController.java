@@ -143,6 +143,7 @@ public class MessageController extends BaseController<Message, Long> {
         message.setSenderId(user.getId());
         messageApi.send(message);
 
+
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "发送成功！");
         return redirectToUrl(viewName(MessageState.out_box + "/list"));
     }

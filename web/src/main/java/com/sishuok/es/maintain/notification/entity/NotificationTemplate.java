@@ -10,6 +10,8 @@ import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -34,6 +36,7 @@ public class NotificationTemplate extends BaseEntity<Long> implements LogicDelet
      * 所属系统
      */
     @NotNull(message = "{not.null}")
+    @Enumerated(EnumType.STRING)
     private NotificationSystem system;
 
 

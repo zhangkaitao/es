@@ -45,6 +45,7 @@ create table `maintain_notification_template`(
   constraint `pk_maintain_notification_template` primary key(`id`),
   constraint `unique_maintain_notification_template_name` unique(`name`)
 ) charset=utf8 ENGINE=InnoDB;;
+alter table `maintain_notification_template` auto_increment=2000;;
 
 create table `maintain_notification_data`(
   `id`               bigint not null auto_increment,

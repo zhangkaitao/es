@@ -353,6 +353,20 @@ html, body {
     padding: 3px 10px;
 }
 
+#notification-list {
+    top: 26px;
+    left: -147px;
+    display: hidden;
+    width: 320px;
+}
+#notification-list.in {
+    display: block;
+}
+
+#notification-list .arrow {
+    overflow: visible;
+}
+
 .ui-layout-west {
     z-index: 2!important;
 }

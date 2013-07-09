@@ -11,7 +11,26 @@
                     </a>
                 </li>
                 <li class="btn">
-                    <a class="btn-message" data-unread="${unreadMessageCount}"  data-toggle="tooltip" data-placement="bottom" title="有${unreadMessageCount}封未读消息">
+                    <a class="btn-notification">
+                        <i class="icon-large icon-envelope-alt icon-volume-up"></i>
+                    </a>
+                    <div id="notification-list" class="popover fade bottom">
+                        <div class="arrow"></div>
+                        <div class="popover-title bold">
+                            <a class="btn btn-link no-padding view-all-notification"><i class="icon-table"></i> 查看所有通知</a>
+                            <span class="pull-right">
+                                <a  class="btn btn-link no-padding close-notification-list"><i class="icon-remove"></i></a>
+                            </span>
+                        </div>
+                        <div class="popover-content">
+                            <div class="no-comment muted" style="text-align: center;font-weight: normal;">
+                                <i class="icon-comment"></i>暂无新通知
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="btn">
+                    <a class="btn-message" data-unread="${unreadMessageCount}"  data-toggle="tooltip" data-placement="bottom" title="有${unreadMessageCount}条未读消息">
                         <i class="icon-large icon-envelope-alt icon-message"></i>
                     </a>
                 </li>

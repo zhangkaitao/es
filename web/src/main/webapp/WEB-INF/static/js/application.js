@@ -43,6 +43,7 @@ $.app = {
                 clearInterval(messageBtnInterval);
                 $($.find("#menu a:contains(我的消息)")).click();
                 messageBtn.removeClass("unread");
+                messageBtn.find(".icon-count").remove();
                 icon.removeClass("icon-envelope").addClass("icon-envelope-alt");
 
             });
@@ -68,7 +69,27 @@ $.app = {
             }, fiveMinute);
         };
 
+        var initNotification = function() {
+            var notificationBtn = $(".btn-notification");
+            var notificationList = $("#notification-list");
+            notificationBtn.click(function() {
+                if(notificationList.hasClass("in")) {
+                    notificationList.removeClass("in");
+                } else {
+                    notificationList.addClass("in");
+                }
+            });
+            notificationList.find(".view-all-notification").click(function() {
+                $($.find("#menu a:contains(我的通知)")).click();
+                notificationList.removeClass("in");
+            });
+            notificationList.find(".close-notification-list").click(function() {
+                notificationList.removeClass("in");
+            });
+        };
+
         initMessageBtn();
+        initNotification();
     },
     /**
      * 异步加载url内容到tab

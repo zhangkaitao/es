@@ -13,7 +13,7 @@ package com.sishuok.es.maintain.notification.entity;
  */
 public enum NotificationSystem {
 
-    inner("系统消息"),excel("excel导入/导出");
+    inner("系统"), message("消息"),excel("excel");
 
     private final String info;
 
