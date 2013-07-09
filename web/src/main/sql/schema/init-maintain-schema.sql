@@ -38,6 +38,7 @@ create table `maintain_notification_template`(
   `id`               bigint not null auto_increment,
   `name`            varchar(200),
   `system`           varchar(50),
+  `title`         varchar(600),
   `template`         varchar(2000),
   `deleted`          bool,
 
@@ -49,6 +50,7 @@ create table `maintain_notification_data`(
   `id`               bigint not null auto_increment,
   `user_id`          bigint,
   `system`           varchar(50),
+  `title`          varchar(600),
   `content`          varchar(2000),
   `notification_date`  timestamp default 0,
   `is_read`            bool,

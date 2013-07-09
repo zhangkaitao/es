@@ -36,6 +36,14 @@ public class NotificationTemplate extends BaseEntity<Long> implements LogicDelet
     @NotNull(message = "{not.null}")
     private NotificationSystem system;
 
+
+    /**
+     * 模板标题
+     */
+    @Length(min=1, max=200, message = "{length.not.valid}")
+    private String title;
+
+
     /**
      * 模板内容
      */
@@ -60,6 +68,14 @@ public class NotificationTemplate extends BaseEntity<Long> implements LogicDelet
 
     public void setSystem(final NotificationSystem system) {
         this.system = system;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     public String getTemplate() {

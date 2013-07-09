@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.maintain.service;
+package com.sishuok.es.maintain.notification.service;
 
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.SearchOperator;
@@ -13,9 +13,6 @@ import com.sishuok.es.maintain.notification.entity.NotificationData;
 import com.sishuok.es.maintain.notification.entity.NotificationSystem;
 import com.sishuok.es.maintain.notification.entity.NotificationTemplate;
 import com.sishuok.es.maintain.notification.exception.TemplateNotFoundException;
-import com.sishuok.es.maintain.notification.service.NotificationApi;
-import com.sishuok.es.maintain.notification.service.NotificationDataService;
-import com.sishuok.es.maintain.notification.service.NotificationTemplateService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.service.BaseUserIT;
 import org.junit.Assert;
@@ -55,6 +52,7 @@ public class NotificationApiIT extends BaseUserIT {
         NotificationTemplate template = new NotificationTemplate();
         template.setName(templateName);
         template.setSystem(NotificationSystem.inner);
+        template.setTitle("hello {userId}");
         template.setTemplate("hello {userId}, say {message}");
         notificationTemplateService.save(template);
 
@@ -88,8 +86,11 @@ public class NotificationApiIT extends BaseUserIT {
 
         String expectedCotent = "hello " + user.getId() + ", say " + message;
         String actualContent = lastNotification.getContent();
-
         Assert.assertEquals(expectedCotent, actualContent);
+
+        String expectedTitle = "hello " + user.getId();
+        String actualTitle = lastNotification.getTitle();
+        Assert.assertEquals(expectedTitle, actualTitle);
 
     }
 

@@ -50,13 +50,16 @@ public class NotificationApiImpl implements NotificationApi {
 //        data.setNotificationDate(new Date());
 
         String content = template.getTemplate();
+        String title = template.getTitle();
         if(context != null) {
             for(String key : context.keySet()) {
                 //TODO 如果量大可能有性能问题 需要调优
+                title = title.replace("{" + key + "}", String.valueOf(context.get(key)));
                 content = content.replace("{" + key + "}", String.valueOf(context.get(key)));
             }
         }
 
+        data.setTitle(title);
         data.setContent(content);
 
         notificationDataService.save(data);

@@ -35,6 +35,7 @@ public class NotificationData extends BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     private NotificationSystem system;
 
+    private String title;
     /**
      * 通知内容
      */
@@ -67,6 +68,14 @@ public class NotificationData extends BaseEntity<Long> {
 
     public void setSystem(final NotificationSystem system) {
         this.system = system;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     public String getContent() {
