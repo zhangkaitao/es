@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -47,7 +48,7 @@ public class NotificationApiImpl implements NotificationApi {
 
         data.setUserId(userId);
         data.setSystem(template.getSystem());
-//        data.setNotificationDate(new Date());
+        data.setNotificationDate(new Date());
 
         String content = template.getTemplate();
         String title = template.getTitle();
