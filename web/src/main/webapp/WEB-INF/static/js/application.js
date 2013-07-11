@@ -19,77 +19,280 @@ $.app = {
             $.tabs.activeTab($.tabs.nextCustomTabIndex(), "个人资料", url, true)
         });
 
-        var initMessageBtn = function() {
-            var messageBtn = $(".btn-message");
-            var icon = messageBtn.find(".icon-message");
-            var label = messageBtn.find(".icon-count");
-            var messageBtnInterval = null;
-
-            var activeUnreadIcon = function(count) {
-                if(count > 0) {
-                    if(!label.length) {
-                        label = $("<i class='label label-important icon-count'></i>");
-                        messageBtn.append(label);
-                    }
-                    label.text(count);
-                    messageBtn.addClass("unread");
-                    messageBtnInterval = setInterval(function() {icon.toggleClass("icon-envelope-alt").toggleClass("icon-envelope");}, 650);
+        var message = $.app.initMessage();
+        var notification = $.app.initNotification();
+        var fiveMinute = 5 * 60 * 1000;
+        var fetchUrl = ctx + "/admin/fetchTips";
+        var fetchTips = function() {
+            $.ajax({
+                type: "GET",
+                url: fetchUrl,
+                dataType: "json",
+                global : false,
+                cache : false,
+                success: function (data) {
+                    message.update(data.unreadMessageCount);
+                    notification.update(data.notifications);
+                },
+                error: function (xmlHR, textStatus, errorThrown) {
+                    //ignore
                 }
-            };
-
-            activeUnreadIcon(messageBtn.data("unread"));
-
-            messageBtn.click(function() {
-                clearInterval(messageBtnInterval);
-                $($.find("#menu a:contains(我的消息)")).click();
-                messageBtn.removeClass("unread");
-                messageBtn.find(".icon-count").remove();
-                icon.removeClass("icon-envelope").addClass("icon-envelope-alt");
-
             });
+        };
+        setInterval(fetchTips, fiveMinute);
+        fetchTips();
 
-            var fiveMinute = 5 * 60 * 1000;
-            var url = ctx + "/admin/personal/message/unreadCount";
-            setInterval(function() {
+    },
+    initMessage : function() {
+        var messageBtn = $(".btn-message");
+        var icon = messageBtn.find(".icon-message");
+        var label = messageBtn.find(".icon-count");
+        var messageBtnInterval = null;
 
+        var activeUnreadIcon = function(count) {
+            clearInterval(messageBtnInterval);
+            if(count > 0) {
+                if(!label.length) {
+                    label = $("<i class='label label-important icon-count'></i>");
+                    messageBtn.append(label);
+                }
+                label.text(count);
+                messageBtn.addClass("unread");
+                messageBtnInterval = setInterval(function() {icon.toggleClass("icon-envelope-alt").toggleClass("icon-envelope");}, 650);
+            }
+        };
+
+        messageBtn.click(function() {
+            clearInterval(messageBtnInterval);
+            $($.find("#menu a:contains(我的消息)")).click();
+            messageBtn.removeClass("unread");
+            messageBtn.find(".icon-count").remove();
+            icon.removeClass("icon-envelope").addClass("icon-envelope-alt");
+
+        });
+
+        activeUnreadIcon(messageBtn.data("unread"));
+
+        return {
+            update : function(unReadMessageCount) {
+                activeUnreadIcon(unReadMessageCount);
+            }
+        };
+    },
+    initNotification : function() {
+        var notificationBtn = $(".btn-notification");
+        var notificationList = $(".notification-list");
+        var menu = $(".notification-list .menu");
+        var menuList = menu.find(".list");
+        var detail = $(".notification-list .detail");
+        var detailList = detail.find(".list");
+        var loading = $(".notification-list .loading");
+        var noComment = $(".notification-list .no-comment");
+        var markReadUrl = ctx + "/admin/personal/notification/markRead?id=";
+
+        var contentTemplate = '<li class="view-content {unread}"><span>{title}</span><span class="pull-right">{date}</span></li>';
+        var detailContentTemplate = '<div id="notificaiton-{id}" class="notification-detail" style="display: none"><div class="title"><span class="muted">{title}</span><span class="pull-right">{date}</span></div><div class="content">{content}</div></div>';
+        var moreContent = '<li class="view-all-notification"><span>&gt;&gt;查看所有通知</span></li>';
+
+        var viewAllNotification = function() {
+            $($.find("#menu a:contains(我的通知)")).click();
+            showNotification();
+            return false;
+        };
+        var hideNotification = function() {
+            notificationList.find(".content > div").hide();
+            notificationList.removeClass("in");
+            $("body")
+                .off("click")
+                .find("iframe").contents().find("body").each(function() {
+                    $(this).off("click");
+                });
+        };
+
+        var activeDetailBtn = function() {
+            var notificationDetails = detail.find(".notification-detail");
+            var current = notificationDetails.not(":hidden");
+            var currentIndex = notificationDetails.index(current);
+
+            var pre = detail.find(".pre");
+            var next = detail.find(".next");
+            pre.removeClass("none");
+            next.removeClass("none");
+
+
+            if(currentIndex == 0) {
+                pre.addClass("none");
+            }
+
+            var currentMenu = $(menu.find(".view-content").get(currentIndex));
+            if(currentMenu.hasClass("unread")) {
+                currentMenu.removeClass("unread");
+                var id = current.attr("id").replace("notificaiton-", "");
                 $.ajax({
-                    type: "GET",
-                    url: url,
-                    dataType: "html",
-                    global : false,
-                    cache : false,
-                    success: function (data) {
-                        clearInterval(messageBtnInterval);
-                        activeUnreadIcon(data);
-                    },
+                    url: markReadUrl + id,
+                    global: false,
                     error: function (xmlHR, textStatus, errorThrown) {
                         //ignore
                     }
                 });
-            }, fiveMinute);
+            }
+
+            if(currentIndex == notificationDetails.length - 1) {
+                next.addClass("none");
+            }
+
         };
 
-        var initNotification = function() {
-            var notificationBtn = $(".btn-notification");
-            var notificationList = $("#notification-list");
-            notificationBtn.click(function() {
-                if(notificationList.hasClass("in")) {
-                    notificationList.removeClass("in");
-                } else {
-                    notificationList.addClass("in");
+        var showNoComment = function() {
+            notificationList.find(".content > div").hide();
+            noComment.show();
+        };
+        var showMenu = function() {
+            notificationList.find(".content > div").hide();
+            menu.show();
+        };
+
+
+        var initDetail = function(dataList) {
+            var content = "";
+            $(dataList).each(function(index, data) {
+                content = content + detailContentTemplate.replace("{id}", data.id).replace("{title}", data.title).replace("{date}", data.date).replace("{content}", data.content);
+            });
+            detailList.html(content);
+            detail.find(".notification-detail:first").show();
+            detail.find(".back-notification-list").click(function() {
+                slide(detail, menu, "left");
+            });
+            detail.find(".pre").click(function() {
+                var current = detail.find(".notification-detail").not(":hidden");
+                var pre = current.prev(".notification-detail");
+                if (pre.length) {
+                    slide(current, pre, "left");
                 }
             });
-            notificationList.find(".view-all-notification").click(function() {
-                $($.find("#menu a:contains(我的通知)")).click();
-                notificationList.removeClass("in");
+            detail.find(".next").click(function() {
+                var current = detail.find(".notification-detail").not(":hidden");
+                var next = current.next(".notification-detail");
+                if (next.length) {
+                    slide(current, next, "right");
+                }
             });
-            notificationList.find(".close-notification-list").click(function() {
-                notificationList.removeClass("in");
+            slide(menu, detail, "right");
+
+            return false;
+        };
+
+
+
+        var initMenu = function(dataList) {
+
+            var content = "";
+            $(dataList).each(function (index, data) {
+                content = content + contentTemplate.replace("{unread}", data.read ? "" : "unread").replace("{title}", data.title).replace("{date}", data.date);
+            });
+            content = content + moreContent;
+            menuList.html(content);
+
+            menu.find(".view-content").click(function() {
+                initDetail(dataList);
+            });
+            menu.find(".view-all-notification").click(function() {
+                viewAllNotification();
+            });
+
+            showNotification();
+
+            return false;
+        };
+        var slide = function(from, to, direction) {
+            from.css({
+                position: 'relative',
+                width:"100%"
+            });
+            from.stop(true).hide("slide", {direction : direction == "left" ? "rigth" : "left"}, function() {
+                from.css({
+                    position : "",
+                    width : "",
+                    left : ""
+                });
+            });
+            to.css({
+                position: 'absolute',
+                top: to.is(".notification-detail") ? to.closest(".detail").find(".title").outerHeight() + "px" : "0px",
+                left: "0px",
+                width: "100%",
+                display : "none"
+            });
+            to.stop(true).show("slide", {direction : direction}, function() {
+                to.css({
+                    position : "",
+                    left : "",
+                    top : "",
+                    width : ""
+                });
+                if(to.is(".notification-detail") || to.is(".detail")) {
+                    activeDetailBtn();
+                }
             });
         };
 
-        initMessageBtn();
-        initNotification();
+        var showNotification = function() {
+            notificationList.addClass("in");
+
+            var windowClickHideNotification = function (event) {
+                var target = $(event.target);
+                if (!target.closest(".btn-notification").length && !target.closest(".notification-list").length) {
+                    hideNotification();
+                }
+            };
+
+            $("body")
+                .on("click", windowClickHideNotification)
+                .find("iframe").contents().find("body").each(function() {
+                    $(this).on("click", windowClickHideNotification);
+                });
+            if(menu.find(".view-content").length) {
+                showMenu();
+            } else {
+                showNoComment();
+            }
+        };
+
+        notificationBtn.click(function() {
+            if(notificationList.hasClass("in")) {
+                hideNotification();
+            } else {
+                showNotification();
+            }
+        });
+        notificationList.find(".close-notification-list").click(function() {
+            hideNotification();
+        });
+
+        hideNotification();
+
+        return {
+            update : function(dataList) {
+
+                if(!dataList.length) {
+                    showNoComment();
+                    return;
+                }
+
+                var hasUnread = false;
+                for(var i = 0, l = dataList.length; i < l; i++) {
+                    if(!dataList[i].read) {
+                        hasUnread = true;
+                        break;
+                    }
+                }
+
+                if(hasUnread) {
+                    initMenu(dataList);
+                }
+
+            }
+        };
     },
     /**
      * 异步加载url内容到tab
@@ -529,11 +732,11 @@ $.app = {
                 }
             })
             .autocomplete({
-            source : config.source,
-            minLength : config.minLength,
-            focus : config.focus,
-            select : config.select
-        }).data( "ui-autocomplete" )._renderItem = config.renderItem;
+                source : config.source,
+                minLength : config.minLength,
+                focus : config.focus,
+                select : config.select
+            }).data( "ui-autocomplete" )._renderItem = config.renderItem;
     }
 
 };
@@ -922,7 +1125,7 @@ $.tabs = {
     },
     /**
      * 初始化上下文菜单（右键菜单）
-      */
+     */
     initTabContextMenu : function() {
         //初始化右键菜单
         var tabsMenu = $("#tabs-menu");
@@ -1659,7 +1862,7 @@ $.table = {
             var containerId = table.data("async-container");
             var headers = {};
 
-            if(!containerId) {//只有只替换表格时使用
+            if(!containerId) {//只替换表格时使用
                 headers.table = true;
             } else {
                 headers.container = true;
