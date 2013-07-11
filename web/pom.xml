@@ -114,11 +114,11 @@
                 </dependencies>
             </plugin>
 
-            <plugin>
-                <groupId>com.sishuok</groupId>
-                <artifactId>codegen</artifactId>
-                <version>${codegen.version}</version>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>com.sishuok</groupId>-->
+                <!--<artifactId>codegen</artifactId>-->
+                <!--<version>${codegen.version}</version>-->
+            <!--</plugin>-->
 
         </plugins>
         <resources>
