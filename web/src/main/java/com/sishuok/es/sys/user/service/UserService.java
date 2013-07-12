@@ -96,15 +96,24 @@ public class UserService extends BaseService<User, Long> {
     }
 
     public User findByUsername(String username) {
+        if(StringUtils.isEmpty(username)) {
+            return null;
+        }
         return userRepository.findByUsername(username);
     }
 
     public User findByEmail(String email) {
+        if(StringUtils.isEmpty(email)) {
+            return null;
+        }
         return userRepository.findByEmail(email);
     }
 
 
     public User findByMobilePhoneNumber(String mobilePhoneNumber) {
+        if(StringUtils.isEmpty(mobilePhoneNumber)) {
+            return null;
+        }
         return userRepository.findByMobilePhoneNumber(mobilePhoneNumber);
     }
 
