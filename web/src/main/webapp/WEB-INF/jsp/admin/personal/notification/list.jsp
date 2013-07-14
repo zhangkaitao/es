@@ -19,7 +19,7 @@
             <thead>
             <tr>
                 <th sort="system" style="width: 100px;">所属系统</th>
-                <th sort="notificationDate" style="width: 120px;">发送时间</th>
+                <th sort="date" style="width: 120px;">时间</th>
                 <th>内容</th>
             </tr>
             </thead>
@@ -27,9 +27,9 @@
             <c:forEach items="${page.content}" var="m">
                 <tr>
                     <td>${m.system.info}</td>
-                    <td><pretty:prettyTime date="${m.notificationDate}"/></td>
+                    <td><pretty:prettyTime date="${m.date}"/></td>
                     <td>
-                        ${fn:replace(m.content, "${ctx}", ctx)}
+                        ${fn:replace(m.content, "{ctx}", ctx)}
                     </td>
                 </tr>
             </c:forEach>

@@ -5,14 +5,22 @@
  */
 package com.sishuok.es.maintain.notification.service;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sishuok.es.common.entity.search.SearchOperator;
+import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.utils.PrettyTimeUtils;
 import com.sishuok.es.maintain.notification.entity.NotificationData;
 import com.sishuok.es.maintain.notification.entity.NotificationTemplate;
 import com.sishuok.es.maintain.notification.exception.TemplateNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,7 +56,7 @@ public class NotificationApiImpl implements NotificationApi {
 
         data.setUserId(userId);
         data.setSystem(template.getSystem());
-        data.setNotificationDate(new Date());
+        data.setDate(new Date());
 
         String content = template.getTemplate();
         String title = template.getTitle();
@@ -65,5 +73,31 @@ public class NotificationApiImpl implements NotificationApi {
 
         notificationDataService.save(data);
 
+    }
+
+    @Override
+    public List<Map<String, Object>> topFiveNotification(final Long userId) {
+
+        List<Map<String, Object>> dataList = Lists.newArrayList();
+
+        Searchable searchable = Searchable.newSearchable();
+        searchable.addSearchFilter("userId", SearchOperator.eq, userId);
+//        searchable.addSearchFilter("read", SearchOperator.eq, Boolean.FALSE);
+        searchable.addSort(Sort.Direction.DESC, "id");
+        searchable.setPage(0, 5);
+
+        Page<NotificationData> page = notificationDataService.findAll(searchable);
+
+        for(NotificationData data : page.getContent()) {
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("id", data.getId());
+            map.put("title", data.getTitle());
+            map.put("content", data.getContent());
+            map.put("read", data.getRead());
+            map.put("date", PrettyTimeUtils.prettyTime(data.getDate()));
+            dataList.add(map);
+        }
+
+        return dataList;
     }
 }

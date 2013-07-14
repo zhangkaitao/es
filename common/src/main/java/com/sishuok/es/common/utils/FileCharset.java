@@ -3,11 +3,11 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package com.sishuok.es.showcase.excel.service;
+package com.sishuok.es.common.utils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 
 /**
  * 来自网络
@@ -23,6 +23,8 @@ import java.io.FileInputStream;
  */
 public class FileCharset {
 
+    private static final String DEFAULT_CHARSET = "GBK";
+
     public static String getCharset(String fileName) {
         return getCharset(new File(fileName));
     }
@@ -34,13 +36,23 @@ public class FileCharset {
      * @return
      */
     public static String getCharset(File file) {
-        String charset = "GBK";
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+            return getCharset(new BufferedInputStream(is));
+        } catch (FileNotFoundException e) {
+            return DEFAULT_CHARSET;
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+    }
+    public static String getCharset(final BufferedInputStream is) {
+        String charset = DEFAULT_CHARSET;
         byte[] first3Bytes = new byte[3];
         try {
             boolean checked = false;
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-            bis.mark(0);
-            int read = bis.read(first3Bytes, 0, 3);
+            is.mark(0);
+            int read = is.read(first3Bytes, 0, 3);
             if (read == -1)
                 return charset;
             if (first3Bytes[0] == (byte) 0xFF && first3Bytes[1] == (byte) 0xFE) {
@@ -56,18 +68,18 @@ public class FileCharset {
                 charset = "UTF-8";
                 checked = true;
             }
-            bis.reset();
+            is.reset();
             if (!checked) {
                 int loc = 0;
 
-                while ((read = bis.read()) != -1 && loc < 100) {
+                while ((read = is.read()) != -1 && loc < 100) {
                     loc++;
                     if (read >= 0xF0)
                         break;
                     if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
                         break;
                     if (0xC0 <= read && read <= 0xDF) {
-                        read = bis.read();
+                        read = is.read();
                         if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 - 0xDF)
                             // (0x80
                             // - 0xBF),也可能在GB编码内
@@ -75,9 +87,9 @@ public class FileCharset {
                         else
                             break;
                     } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
-                        read = bis.read();
+                        read = is.read();
                         if (0x80 <= read && read <= 0xBF) {
-                            read = bis.read();
+                            read = is.read();
                             if (0x80 <= read && read <= 0xBF) {
                                 charset = "UTF-8";
                                 break;
@@ -88,7 +100,7 @@ public class FileCharset {
                     }
                 }
             }
-            bis.close();
+            is.reset();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -102,7 +102,7 @@ public class User extends BaseEntity<Long> implements LogicDeleteable {
     @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     //集合缓存引起的
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)//集合缓存
-    @OrderBy
+    @OrderBy()
     private List<UserOrganizationJob> organizationJobs;
 
     public User() {

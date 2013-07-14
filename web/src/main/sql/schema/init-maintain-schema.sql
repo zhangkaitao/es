@@ -53,7 +53,7 @@ create table `maintain_notification_data`(
   `system`           varchar(50),
   `title`          varchar(600),
   `content`          varchar(2000),
-  `notification_date`  timestamp default 0,
+  `date`  timestamp default 0,
   `is_read`            bool,
 
   constraint `pk_maintain_notification_data` primary key(`id`),

@@ -91,12 +91,12 @@ $.app = {
         var markReadUrl = ctx + "/admin/personal/notification/markRead?id=";
 
         var contentTemplate = '<li class="view-content {unread}"><span>{title}</span><span class="pull-right">{date}</span></li>';
-        var detailContentTemplate = '<div id="notificaiton-{id}" class="notification-detail" style="display: none"><div class="title"><span class="muted">{title}</span><span class="pull-right">{date}</span></div><div class="content">{content}</div></div>';
+        var detailContentTemplate = '<div id="notificaiton-{id}" class="notification-detail" style="display: none"><div class="title"><span>{title}</span><span class="pull-right">{date}</span></div><div class="content">{content}</div></div>';
         var moreContent = '<li class="view-all-notification"><span>&gt;&gt;查看所有通知</span></li>';
 
         var viewAllNotification = function() {
             $($.find("#menu a:contains(我的通知)")).click();
-            showNotification();
+            hideNotification();
             return false;
         };
         var hideNotification = function() {
@@ -184,7 +184,7 @@ $.app = {
 
 
 
-        var initMenu = function(dataList) {
+        var initMenu = function(dataList, hasUnread) {
 
             var content = "";
             $(dataList).each(function (index, data) {
@@ -200,7 +200,9 @@ $.app = {
                 viewAllNotification();
             });
 
-            showNotification();
+            if(hasUnread) {
+                showNotification();
+            }
 
             return false;
         };
@@ -281,15 +283,15 @@ $.app = {
 
                 var hasUnread = false;
                 for(var i = 0, l = dataList.length; i < l; i++) {
-                    if(!dataList[i].read) {
+                    var data = dataList[i];
+                    if(!data.read) {
                         hasUnread = true;
-                        break;
+                        data.title = data.title.replace("{ctx}", ctx);
+                        data.content = data.content.replace("{ctx}", ctx);
                     }
                 }
 
-                if(hasUnread) {
-                    initMenu(dataList);
-                }
+               initMenu(dataList, hasUnread);
 
             }
         };

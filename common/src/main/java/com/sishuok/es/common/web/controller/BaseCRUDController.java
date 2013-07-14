@@ -67,7 +67,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
         Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
     }

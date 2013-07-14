@@ -58,10 +58,6 @@
                     <i class="icon-eraser"></i>
                     清空${state.info}
                 </a>
-
-
-
-
             </div>
         </div>
         <div class="span8 muted" style="text-align: right;line-height: 31px;padding-right: 10px;">

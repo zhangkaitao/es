@@ -7,6 +7,8 @@ package com.sishuok.es.maintain.notification.repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.maintain.notification.entity.NotificationData;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * <p>User: Zhang Kaitao
@@ -15,4 +17,7 @@ import com.sishuok.es.maintain.notification.entity.NotificationData;
  */
 public interface NotificationDataRepository extends BaseRepository<NotificationData, Long> {
 
+    @Modifying
+    @Query("update NotificationData o set o.read=true where userId=?1")
+    void markReadAll(Long userId);
 }

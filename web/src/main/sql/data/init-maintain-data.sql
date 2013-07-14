@@ -3,7 +3,20 @@
 
 delete from `maintain_notification_template` where id>=1 and id<=2000;;
 insert into `maintain_notification_template` (`id`, `name`, `system`, `title`, `template`, `deleted`)
-values(1, 'newMessage', 'message', '{sender}发送给你一封新消息', '{sender}发送给你一封新消息：<a href="${ctx}/admin/personal/message/{messageId}">{messageTitle}</a>', false);;
+  values(1, 'excelInitDataSuccess', 'excel', '初始化Excel数据完成', '初始化Excel数据已完成，耗时{seconds}秒钟，可以尝试导入/导出操作啦！', false);;
+
+insert into `maintain_notification_template` (`id`, `name`, `system`, `title`, `template`, `deleted`)
+  values(2, 'excelImportSuccess', 'excel', '导入Excel成功', '导入Excel成功，耗时{seconds}秒钟，<a onclick="$($.find(\'#menu a:contains(Excel导入/导出)\')).click();$(\'.notification-list .close-notification-list\').click();">点击前往查看</a>', false);;
+
+insert into `maintain_notification_template` (`id`, `name`, `system`, `title`, `template`, `deleted`)
+  values(3, 'excelImportError', 'excel', '导入Excel失败', '导入Excel失败了，请把错误报告给管理员，可能的失败原因：文件格式不对；错误码：{error}', false);;
+
+insert into `maintain_notification_template` (`id`, `name`, `system`, `title`, `template`, `deleted`)
+  values(4, 'excelExportSuccess', 'excel', '导出Excel成功', '导出Excel成功，耗时{seconds}秒钟，<a href="{ctx}{url}" target="_blank">点击下载</a>（注意：导出的文件只保留3天，请尽快下载，过期将删除）', false);;
+
+insert into `maintain_notification_template` (`id`, `name`, `system`, `title`, `template`, `deleted`)
+  values(5, 'excelExportError', 'excel', '导出Excel失败', '导出Excel失败了，请把错误报告给管理员，可能的失败原因：文件格式不对；错误码：{error}', false);;
+
 
 
 delete from `maintain_icon` where id >=1 and id<=2000;;

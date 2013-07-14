@@ -18,20 +18,20 @@
         <property name="removedBeanNames">
             <list>
 
-                <!--spring-config-task.xml -->
-                <value>executor</value>
-                <value>scheduler</value>
+                <!--&lt;!&ndash;spring-config-task.xml &ndash;&gt;-->
+                <!--<value>executor</value>-->
+                <!--<value>scheduler</value>-->
 
-                <!-- <task:scheduled-tasks> 自动注册的 -->
-                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
+                <!--&lt;!&ndash; <task:scheduled-tasks> 自动注册的 &ndash;&gt;-->
+                <!--<value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>-->
 
-                <!-- <task:annotation-driven/> 自动注册的 -->
-                <value>org.springframework.context.annotation.internalAsyncAnnotationProcessor</value>
-                <value>org.springframework.context.annotation.internalScheduledAnnotationProcessor</value>
-                <value>org.springframework.scheduling.config.internalAsyncExecutionAspect</value>
+                <!--&lt;!&ndash; <task:annotation-driven/> 自动注册的 &ndash;&gt;-->
+                <!--<value>org.springframework.context.annotation.internalAsyncAnnotationProcessor</value>-->
+                <!--<value>org.springframework.context.annotation.internalScheduledAnnotationProcessor</value>-->
+                <!--<value>org.springframework.scheduling.config.internalAsyncExecutionAspect</value>-->
 
-                <!-- <task:scheduled-tasks> 自动注册的 -->
-                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
+                <!--&lt;!&ndash; <task:scheduled-tasks> 自动注册的 &ndash;&gt;-->
+                <!--<value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>-->
 
 
                 <!-- spring-config-shiro.xml -->

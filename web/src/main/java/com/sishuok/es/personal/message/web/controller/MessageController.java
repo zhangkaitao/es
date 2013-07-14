@@ -72,6 +72,14 @@ public class MessageController extends BaseController<Message, Long> {
      *
      * @return
      */
+    @RequestMapping(value = "", method = RequestMethod.GET, headers = "table=true")
+    @PageableDefaults(sort = "id=desc")
+    public String listTableDefault(@CurrentUser User user,
+                            Pageable pageable,
+                            Model model) {
+        list(user, MessageState.in_box, pageable, model);
+        return viewName("listTable");
+    }
     @RequestMapping(value = "{state}/list", method = RequestMethod.GET, headers = "table=true")
     @PageableDefaults(sort = "id=desc")
     public String listTable(@CurrentUser User user,
@@ -124,11 +132,11 @@ public class MessageController extends BaseController<Message, Long> {
             @CurrentUser User user,
             @Valid @ModelAttribute("m") Message message,
             BindingResult result,
-            @RequestParam(value = "username", required = false) String username,
+            @RequestParam(value = "receiver", required = false) String receiverUsername,
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        User receiver = userService.findByUsername(username);
+        User receiver = userService.findByUsername(receiverUsername);
         if (receiver == null) {
             result.rejectValue("receiverId", "receiver.not.exists");
         }

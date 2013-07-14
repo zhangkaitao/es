@@ -34,7 +34,7 @@ public abstract class BaseMovableController<M extends BaseEntity & Movable, ID e
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         super.afterPropertiesSet();
 
         Assert.isTrue(

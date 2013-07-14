@@ -51,7 +51,7 @@ public class NotificationApiIT extends BaseUserIT {
 
         NotificationTemplate template = new NotificationTemplate();
         template.setName(templateName);
-        template.setSystem(NotificationSystem.inner);
+        template.setSystem(NotificationSystem.system);
         template.setTitle("hello {userId}");
         template.setTemplate("hello {userId}, say {message}");
         notificationTemplateService.save(template);

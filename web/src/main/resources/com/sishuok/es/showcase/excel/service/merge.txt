@@ -1,0 +1,25 @@
+Sub CombineWorkbooks()
+Dim FilesToOpen, ft
+Dim x As Integer
+Application.ScreenUpdating = False
+On Error GoTo errhandler
+FilesToOpen = Application.GetOpenFilename _
+(FileFilter:="Micrsofe Excel文件(*.xls), *.xls", _
+MultiSelect:=True, Title:="要合并的文件")
+If TypeName(FilesToOpen) = "boolean" Then
+MsgBox "没有选定文件"
+'GoTo errhandler
+End If
+x = 1
+While x <= UBound(FilesToOpen)
+Set wk = Workbooks.Open(Filename:=FilesToOpen(x))
+wk.Sheets().Move after:=ThisWorkbook.Sheets _
+(ThisWorkbook.Sheets.Count)
+x = x + 1
+Wend
+MsgBox "合并成功完成！"
+errhandler:
+'MsgBox Err.Description
+'Resume errhandler
+End Sub
+

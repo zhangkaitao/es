@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * <p>User: Zhang Kaitao
@@ -42,8 +44,18 @@ public class NotificationController extends BaseController {
         Page<NotificationData> page = notificationDataService.findAll(pageable);
 
         model.addAttribute("page", page);
+        if(pageable.getPageNumber() == 0) {
+            notificationDataService.markReadAll(user.getId());
+        }
 
         return viewName("list");
+    }
+
+    @RequestMapping("/markRead")
+    @ResponseBody
+    public String markRead(@RequestParam("id") Long id) {
+        notificationDataService.markRead(id);
+        return "";
     }
 
 }

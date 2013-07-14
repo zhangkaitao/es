@@ -44,9 +44,9 @@ public class NotificationData extends BaseEntity<Long> {
     /**
      * 通知时间
      */
-    @Column(name = "notification_date")
+    @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date notificationDate;
+    private Date date;
 
     /**
      * 是否已读
@@ -86,12 +86,12 @@ public class NotificationData extends BaseEntity<Long> {
         this.content = content;
     }
 
-    public Date getNotificationDate() {
-        return notificationDate;
+    public Date getDate() {
+        return date;
     }
 
-    public void setNotificationDate(final Date notificationDate) {
-        this.notificationDate = notificationDate;
+    public void setDate(final Date date) {
+        this.date = date;
     }
 
     public Boolean getRead() {

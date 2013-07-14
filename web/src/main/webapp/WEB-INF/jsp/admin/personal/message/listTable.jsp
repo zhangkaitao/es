@@ -8,7 +8,6 @@
             |
             <a class="reverse-all" href="javascript:;">反选</a>
         </th>
-        <%--<th style="width: 100px" sort="id">编号</th>--%>
         <th sort="title">标题</th>
 
         <c:if test="${state ne 'out_box'}">

@@ -93,7 +93,7 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
   values (15, 13, '0/1/2/13/', 2, '显示状态列表', 'statusShow', '/showcase/status/show', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
-  values (46, 13, '0/1/2/13/', 3, 'Excel导入/导出', 'excel', '/showcase/excel', true);;
+  values (46, 2, '0/1/2/', 10, 'Excel导入/导出', 'excel', '/showcase/excel', true);;
 
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)

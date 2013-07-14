@@ -102,9 +102,9 @@
             <c:if test="${op eq '发送新消息' or op eq '转发消息' or op eq '发送草稿'}">
             <div class="control-group">
                 <form:label path="receiverId" cssClass="control-label">收件人</form:label>
-                <div id="search-username" class="controls">
-                    <c:set var="username" value="${not empty username ? username : param.username}"/>
-                    <input type="text" id="receiverId_msg" name="username" value="${username}" placeholder="输入用户名">
+                <div id="search-receiver" class="controls">
+                    <c:set var="receiver" value="${not empty receiver ? receiver : param.receiver}"/>
+                    <input type="text" id="receiverId_msg" name="receiver" value="${receiver}" placeholder="输入收件人用户名">
                     <form:hidden path="receiverId"/>
                 </div>
             </div>

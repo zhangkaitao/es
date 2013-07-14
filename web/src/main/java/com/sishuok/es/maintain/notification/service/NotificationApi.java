@@ -7,6 +7,7 @@ package com.sishuok.es.maintain.notification.service;
 
 import com.sishuok.es.maintain.notification.exception.TemplateNotFoundException;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,4 +27,15 @@ public interface NotificationApi {
      */
     public void notify(Long userId, String templateName, Map<String, Object> context) throws TemplateNotFoundException;
 
+    /**
+     *
+     * id :
+     * title
+     * content
+     * date
+     *
+     * @param userId
+     * @return
+     */
+    public List<Map<String, Object>> topFiveNotification(Long userId);
 }

@@ -25,4 +25,17 @@ public class NotificationDataService extends BaseService<NotificationData, Long>
     private NotificationDataRepository notificationDataRepository;
 
 
+    public void markReadAll(final Long userId) {
+        notificationDataRepository.markReadAll(userId);
+    }
+
+
+    public void markRead(final Long notificationId) {
+        NotificationData data = findOne(notificationId);
+        if(data == null || data.getRead().equals(Boolean.TRUE)) {
+            return;
+        }
+        data.setRead(Boolean.TRUE);
+        update(data);
+    }
 }

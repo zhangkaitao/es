@@ -265,7 +265,7 @@ html, body {
 }
 
 .index {
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .bg {
@@ -328,6 +328,9 @@ html, body {
 #userinfo a {
     color: #0099ff;
 }
+#userinfo .dropdown-menu a:hover {
+    color: #fff;
+}
 
 #userinfo .dropdown-menu {
     min-width: 80px;
@@ -353,18 +356,87 @@ html, body {
     padding: 3px 10px;
 }
 
-#notification-list {
+.notification-list {
     top: 26px;
-    left: -147px;
+    left: -17px;
     display: hidden;
     width: 320px;
+    z-index: 0;
 }
-#notification-list.in {
+
+.notification-list a {
+    cursor: pointer;
+}
+.notification-list.in {
+    display: block;
+}
+.notification-list .popover-title, .notification-list .popover-title {
+    color:#b94a48!important;
+    font-weight: bold;
+}
+.notification-list .popover-title .pre, .notification-list .popover-title .next {
+    font-weight: normal;
+}
+.notification-list .popover-title a.none {
+    color: #999!important;
+    text-decoration: none;
+    cursor: auto;
+}
+.notification-list .arrow {
+    overflow: visible;
+}
+
+.notification-list .content {
+    overflow: hidden;
+    position: relative;
     display: block;
 }
 
-#notification-list .arrow {
-    overflow: visible;
+.notification-list .loading .popover-content,.notification-list .no-comment .popover-content {
+    text-align: center;
+    font-weight: normal;
+    color: #999999;
+    padding: 20px;
+}
+
+.notification-list .popover-content {
+    padding: 0px;
+}
+
+.notification-list .menu .popover-content > li {
+    cursor: pointer;
+}
+
+.notification-list .popover-content > li,.notification-list .popover-content .notification-detail {
+    border-bottom: 1px solid #f3f3f3;
+    line-height: 40px;
+    padding: 0 20px 0 10px;
+    color: #999;
+    font-weight: normal;
+}
+
+
+.notification-list .popover-content > li:hover {
+    background: #f8f8f8;
+}
+
+.notification-list .popover-content > li.unread {
+    color:#b94a48!important;
+    font-weight: bold;
+}
+
+.notification-list .popover-content .notification-detail {
+    padding: 0px;
+}
+.notification-list .popover-content .notification-detail .title {
+    color: #555;
+    background: #f8f8f8;
+    padding: 0 20px 0 10px;
+    cursor: auto;
+}
+.notification-list .popover-content .notification-detail .content {
+    padding: 10px 20px 10px 10px;
+    line-height: 20px;
 }
 
 .ui-layout-west {

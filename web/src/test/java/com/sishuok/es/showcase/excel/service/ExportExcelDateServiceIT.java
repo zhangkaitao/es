@@ -5,95 +5,48 @@
  */
 package com.sishuok.es.showcase.excel.service;
 
-import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.repository.RepositoryHelper;
-import com.sishuok.es.showcase.excel.entity.ExcelData;
+import com.sishuok.es.common.spring.utils.AopProxyUtils;
+import com.sishuok.es.maintain.notification.service.NotificationApi;
+import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.test.BaseIT;
-import org.apache.commons.io.IOUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-7-3 下午3:43
  * <p>Version: 1.0
  */
+
+@Ignore
 public class ExportExcelDateServiceIT extends BaseIT {
 
     @Autowired
     private ExcelDataService excelDataService;
 
-    private final Logger log = LoggerFactory.getLogger(ExcelDataService.class);
+    private User user;
 
+    @Before
+    public void setUp() throws Exception {
+        //模拟一个假的NotificationApi
+        excelDataService.setNotificationApi(Mockito.mock(NotificationApi.class));
+        //移除异步支持
+        AopProxyUtils.removeAsync(excelDataService);
 
-    /**
-     * csv格式 (","分隔)
-     */
+        user = new User();
+        user.setId(1L);
+        user.setUsername("zhang");
+    }
 
     @Test
     public void testExportCSV() throws IOException {
-        long beginTime = System.currentTimeMillis();
-        String encoding = "gbk";
-
-        OutputStream out = new BufferedOutputStream(new FileOutputStream("D:\\Backup\\test.csv"));
-
-        int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 0;
-
-        int pageSize = 1000;
-        Searchable searchable = Searchable.newSearchable();
-        Long maxId = 0L;
-        String separator = ",";
-
-
-        out.write("编号,内容\n".getBytes(encoding));
-
-        while (true) {
-
-            totalRows = 0;
-
-            Page<ExcelData> page = null;
-            do {
-                searchable.setPage(0, pageSize);
-                //优化分页性能
-                searchable.addSearchFilter("id", SearchOperator.gt, maxId);
-                page = excelDataService.findAll(searchable);
-
-                for (ExcelData data : page.getContent()) {
-                    out.write(String.valueOf(data.getId()).getBytes(encoding));
-                    out.write(separator.getBytes(encoding));
-                    out.write((data.getContent()).replace(separator, ";").getBytes(encoding));
-                    out.write("\n".getBytes(encoding));
-                    maxId = Math.max(maxId, data.getId());
-                    totalRows++;
-                }
-                //clear entity manager
-                RepositoryHelper.clear();
-            } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            if (!page.hasNextPage()) {
-                break;
-            }
-        }
-
-        IOUtils.closeQuietly(out);
-
-        long endTime = System.currentTimeMillis();
-        log.info("耗时(秒):" + (endTime - beginTime) / 1000);
+        excelDataService.exportCvs(user, "D:\\Backup", Searchable.newSearchable());
     }
 
 
@@ -105,67 +58,7 @@ public class ExportExcelDateServiceIT extends BaseIT {
      */
     @Test
     public void testExportExcel2007() throws IOException {
-        long beginTime = System.currentTimeMillis();
-
-        int rowAccessWindowSize = 1000; //内存中保留的行数，超出后会写到磁盘
-        SXSSFWorkbook wb = new SXSSFWorkbook(rowAccessWindowSize);
-        wb.setCompressTempFiles(true);//生成的临时文件将进行gzip压缩
-
-        int perSheetRows = 100000; //每个sheet 10w条
-        int totalRows = 0; //统计总行数
-
-        int pageSize = 1000;
-        Searchable searchable = Searchable.newSearchable();
-        Long maxId = 0L;//当前查询的数据中最大的id 优化分页的
-        while (true) {
-
-            totalRows = 0;
-
-            Sheet sheet = wb.createSheet();
-            Row headerRow = sheet.createRow(0);
-            Cell idHeaderCell = headerRow.createCell(0);
-            idHeaderCell.setCellValue("编号");
-            Cell contentHeaderCell = headerRow.createCell(1);
-            contentHeaderCell.setCellValue("内容");
-
-            Page<ExcelData> page = null;
-
-            do {
-                searchable.setPage(0, pageSize);
-                //优化分页性能
-                searchable.addSearchFilter("id", SearchOperator.gt, maxId);
-                page = excelDataService.findAll(searchable);
-
-                for (ExcelData data : page.getContent()) {
-                    Row row = sheet.createRow(totalRows);
-                    Cell idCell = row.createCell(0);
-                    idCell.setCellValue(data.getId());
-                    Cell contentCell = row.createCell(1);
-                    contentCell.setCellValue(data.getContent());
-                    maxId = Math.max(maxId, data.getId());
-                    totalRows++;
-                }
-                //clear entity manager
-                RepositoryHelper.clear();
-            } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            if (!page.hasNextPage()) {
-                break;
-            }
-        }
-
-
-        OutputStream out = new BufferedOutputStream(new FileOutputStream("D:\\Backup\\test.xlsx"));
-        wb.write(out);
-
-        IOUtils.closeQuietly(out);
-
-        // 清除本工作簿备份在磁盘上的临时文件
-        wb.dispose();
-
-        long endTime = System.currentTimeMillis();
-
-        log.info("耗时(秒):" + (endTime - beginTime) / 1000);
+        excelDataService.exportExcel2007(user, "D:\\Backup", Searchable.newSearchable());
     }
 
 
@@ -175,60 +68,8 @@ public class ExportExcelDateServiceIT extends BaseIT {
      * 每个sheet最多65536行(因为是usermodel模型，数据先写到内存 最后flush出去 不支持大数据量导出)
      */
     @Test
-    public void testExportExcel2003_1() throws IOException {
-        long beginTime = System.currentTimeMillis();
-
-        HSSFWorkbook wb = new HSSFWorkbook();
-        int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 0;
-
-        int pageSize = 1000;
-        Searchable searchable = Searchable.newSearchable();
-        Long maxId = 0L;
-        while (true) {
-
-            totalRows = 0;
-
-            Sheet sheet = wb.createSheet();
-            Row headerRow = sheet.createRow(0);
-            Cell idHeaderCell = headerRow.createCell(0);
-            idHeaderCell.setCellValue("编号");
-            Cell contentHeaderCell = headerRow.createCell(1);
-            contentHeaderCell.setCellValue("内容");
-
-            Page<ExcelData> page = null;
-
-            do {
-                searchable.setPage(0, pageSize);
-                //优化分页性能
-                searchable.addSearchFilter("id", SearchOperator.gt, maxId);
-                page = excelDataService.findAll(searchable);
-
-                for (ExcelData data : page.getContent()) {
-                    Row row = sheet.createRow(totalRows);
-                    Cell idCell = row.createCell(0);
-                    idCell.setCellValue(data.getId());
-                    Cell contentCell = row.createCell(1);
-                    contentCell.setCellValue(data.getContent());
-                    maxId = Math.max(maxId, data.getId());
-                    totalRows++;
-                }
-                //clear entity manager
-                RepositoryHelper.clear();
-            } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            if (!page.hasNextPage()) {
-                break;
-            }
-        }
-
-        OutputStream out = new BufferedOutputStream(new FileOutputStream("D:\\Backup\\test_1.xls"));
-        wb.write(out);
-
-        IOUtils.closeQuietly(out);
-        long endTime = System.currentTimeMillis();
-
-        log.info("耗时(秒):" + (endTime - beginTime) / 1000);
+    public void testExportExcel2003WithUsermodel() throws IOException {
+        excelDataService.exportExcel2003WithUsermodel(user, "D:\\Backup", Searchable.newSearchable());
     }
 
     /**
@@ -243,65 +84,8 @@ public class ExportExcelDateServiceIT extends BaseIT {
      * 还一种是写html（缺点不支持多sheet）
      */
     @Test
-    public void testExportExcel2003_2() throws IOException {
-        long beginTime = System.currentTimeMillis();
-        String encoding = "utf-8";
-        String workBookHeader = IOUtils.toString(ExportExcelDateServiceIT.class.getResourceAsStream("excel_2003_xml_workbook_header.txt"));
-        String workBookFooter = IOUtils.toString(ExportExcelDateServiceIT.class.getResourceAsStream("excel_2003_xml_workbook_footer.txt"));
-        String sheetHeader = IOUtils.toString(ExportExcelDateServiceIT.class.getResourceAsStream("excel_2003_xml_sheet_header.txt"));
-        String sheetFooter = IOUtils.toString(ExportExcelDateServiceIT.class.getResourceAsStream("excel_2003_xml_sheet_footer.txt"));
-        String rowTemplate = IOUtils.toString(ExportExcelDateServiceIT.class.getResourceAsStream("excel_2003_xml_row.txt"));
-
-        OutputStream out = new BufferedOutputStream(new FileOutputStream("D:\\Backup\\test_2003_2.xls"));
-        out.write(workBookHeader.getBytes("utf-8"));
-
-
-        int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 0;
-        int totalSheets = 0;
-
-        int pageSize = 1000;
-        Searchable searchable = Searchable.newSearchable();
-        Long maxId = 0L;
-
-
-        while (true) {
-
-            totalRows = 0;
-            totalSheets++;
-
-            out.write(sheetHeader.replace("{sheetName}", "Sheet" + totalSheets).getBytes(encoding));
-            Page<ExcelData> page = null;
-
-            do {
-                searchable.setPage(0, pageSize);
-                //优化分页性能
-                searchable.addSearchFilter("id", SearchOperator.gt, maxId);
-                page = excelDataService.findAll(searchable);
-
-                for (ExcelData data : page.getContent()) {
-                    out.write(rowTemplate.replace("{id}", String.valueOf(data.getId())).replace("{content}", data.getContent()).getBytes(encoding));
-                    maxId = Math.max(maxId, data.getId());
-                    totalRows++;
-                }
-                //clear entity manager
-                RepositoryHelper.clear();
-            } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-            out.write(sheetFooter.getBytes(encoding));
-
-            if (!page.hasNextPage()) {
-                break;
-            }
-        }
-
-        out.write(workBookFooter.getBytes(encoding));
-
-        IOUtils.closeQuietly(out);
-
-        long endTime = System.currentTimeMillis();
-
-        log.info("耗时(秒):" + (endTime - beginTime) / 1000);
+    public void testExportExcel2003WithXml() throws IOException {
+        excelDataService.exportExcel2003WithXml(user, "D:\\Backup", Searchable.newSearchable());
     }
 
     /**
@@ -312,67 +96,8 @@ public class ExportExcelDateServiceIT extends BaseIT {
      * 不想这么麻烦 需要时再写吧，还不如直接让用户装office 2007 更简单。
      */
     @Test
-    public void testExportExcel2003_3() throws IOException {
-        long beginTime = System.currentTimeMillis();
-
-        int workbookCount = 0;
-        int perSheetRows = 60000; //每个sheet 6w条
-        int totalRows = 0;
-
-        int pageSize = 1000;
-        Searchable searchable = Searchable.newSearchable();
-        Long maxId = 0L;
-
-        while (true) {
-
-            totalRows++;
-            workbookCount++;
-
-            HSSFWorkbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
-            Row headerRow = sheet.createRow(0);
-            Cell idHeaderCell = headerRow.createCell(0);
-            idHeaderCell.setCellValue("编号");
-            Cell contentHeaderCell = headerRow.createCell(1);
-            contentHeaderCell.setCellValue("内容");
-
-            Page<ExcelData> page = null;
-
-            do {
-                searchable.setPage(0, pageSize);
-                //优化分页性能
-                searchable.addSearchFilter("id", SearchOperator.gt, maxId);
-                page = excelDataService.findAll(searchable);
-
-                for (ExcelData data : page.getContent()) {
-                    Row row = sheet.createRow(totalRows);
-                    Cell idCell = row.createCell(0);
-                    idCell.setCellValue(data.getId());
-                    Cell contentCell = row.createCell(1);
-                    contentCell.setCellValue(data.getContent());
-                    maxId = Math.max(maxId, data.getId());
-                    totalRows++;
-                }
-                //clear entity manager
-                RepositoryHelper.clear();
-            } while (page.hasNextPage() && totalRows <= perSheetRows);
-
-
-            OutputStream out = new BufferedOutputStream(new FileOutputStream("D:\\Backup\\test_" + workbookCount + ".xls"));
-            wb.write(out);
-
-            IOUtils.closeQuietly(out);
-
-            totalRows = 0;
-
-            if (!page.hasNextPage()) {
-                break;
-            }
-        }
-
-        long endTime = System.currentTimeMillis();
-
-        log.info("耗时(秒):" + (endTime - beginTime) / 1000);
+    public void testExportExcel2003WithOneSheetPerWorkBook() throws IOException {
+        excelDataService.exportExcel2003WithOneSheetPerWorkBook(user, "D:\\Backup", Searchable.newSearchable());
     }
 
     /**
