@@ -18,21 +18,20 @@
         <property name="removedBeanNames">
             <list>
 
-                <!--&lt;!&ndash;spring-config-task.xml &ndash;&gt;-->
-                <!--<value>executor</value>-->
-                <!--<value>scheduler</value>-->
+                <!--spring-config-task.xml -->
+                <value>executor</value>
+                <value>scheduler</value>
 
-                <!--&lt;!&ndash; <task:scheduled-tasks> 自动注册的 &ndash;&gt;-->
-                <!--<value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>-->
+                <!-- <task:scheduled-tasks> 自动注册的 -->
+                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
 
-                <!--&lt;!&ndash; <task:annotation-driven/> 自动注册的 &ndash;&gt;-->
-                <!--<value>org.springframework.context.annotation.internalAsyncAnnotationProcessor</value>-->
-                <!--<value>org.springframework.context.annotation.internalScheduledAnnotationProcessor</value>-->
-                <!--<value>org.springframework.scheduling.config.internalAsyncExecutionAspect</value>-->
+                <!-- <task:annotation-driven/> 自动注册的 -->
+                <value>org.springframework.context.annotation.internalAsyncAnnotationProcessor</value>
+                <value>org.springframework.context.annotation.internalScheduledAnnotationProcessor</value>
+                <value>org.springframework.scheduling.config.internalAsyncExecutionAspect</value>
 
-                <!--&lt;!&ndash; <task:scheduled-tasks> 自动注册的 &ndash;&gt;-->
-                <!--<value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>-->
-
+                <!-- <task:scheduled-tasks> 自动注册的 -->
+                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
 
                 <!-- spring-config-shiro.xml -->
                 <value>rememberMeCookie</value>
@@ -53,16 +52,23 @@
         <property name="removeOrReplaceBeanProperties">
             <list>
                 <!-- spring-config-shiro.xml -->
-                <value>sessionManager#cacheManager</value>
-                <value>sessionManager#sessionValidationScheduler</value>
-                <value>securityManager#rememberMeManager</value>
+                <value>sessionManager@cacheManager</value>
+                <value>sessionManager@sessionValidationScheduler</value>
+                <value>securityManager@rememberMeManager</value>
 
                 <!-- spring-config.xml -->
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_second_level_cache=false</value>
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_query_cache</value>
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.region.factory_class</value>
-                <value>entityManagerFactory#jpaPropertyMap#hibernate.cache.use_structured_entries</value>
-                <value>entityManagerFactory#jpaPropertyMap#net.sf.ehcache.configurationResourceName</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.use_second_level_cache=false</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.use_query_cache</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.region.factory_class</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.use_structured_entries</value>
+                <value>entityManagerFactory@jpaPropertyMap@net.sf.ehcache.configurationResourceName</value>
+
+                <!-- spring-mvc.xml(<mvc:async-support default-timeout="30000" task-executor="executor"/>) -->
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@asyncRequestTimeout</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@taskExecutor</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@executor</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@callableInterceptors</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@deferredResultInterceptors</value>
             </list>
         </property>
 

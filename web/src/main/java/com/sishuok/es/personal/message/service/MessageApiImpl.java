@@ -6,13 +6,13 @@
 package com.sishuok.es.personal.message.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.entity.search.filter.SearchFilter;
 import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.utils.LogUtils;
+import com.sishuok.es.maintain.push.service.PushApi;
 import com.sishuok.es.personal.message.entity.Message;
 import com.sishuok.es.personal.message.entity.MessageContent;
 import com.sishuok.es.personal.message.entity.MessageState;
@@ -33,7 +33,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>User: Zhang Kaitao
@@ -48,6 +47,9 @@ public class MessageApiImpl implements MessageApi {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PushApi pushApi;
 
     @Override
     public Page<Message> findUserMessage(Long userId, MessageState state, Pageable pageable) {
@@ -160,10 +162,9 @@ public class MessageApiImpl implements MessageApi {
 
         messageService.save(message);
 
-        Map<String, Object> context = Maps.newHashMap();
-        context.put("messageTitle", message.getTitle());
-        context.put("messageId", message.getId());
-        context.put("sender", userService.findOne(message.getReceiverId()).getUsername());
+
+        pushApi.pushUnreadMessage(message.getReceiverId(), countUnread(message.getReceiverId()));
+
     }
 
     @Override

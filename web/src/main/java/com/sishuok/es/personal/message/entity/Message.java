@@ -6,6 +6,8 @@
 package com.sishuok.es.personal.message.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -64,6 +66,7 @@ public class Message extends BaseEntity<Long> {
     @Valid
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "message")
     @Basic(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
     private MessageContent content;
 
     /**

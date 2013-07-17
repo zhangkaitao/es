@@ -13,6 +13,7 @@ import com.sishuok.es.common.utils.PrettyTimeUtils;
 import com.sishuok.es.maintain.notification.entity.NotificationData;
 import com.sishuok.es.maintain.notification.entity.NotificationTemplate;
 import com.sishuok.es.maintain.notification.exception.TemplateNotFoundException;
+import com.sishuok.es.maintain.push.service.PushApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,9 @@ public class NotificationApiImpl implements NotificationApi {
 
     @Autowired
     private NotificationDataService notificationDataService;
+
+    @Autowired
+    private PushApi pushApi;
 
     /**
      * 异步发送
@@ -72,6 +76,9 @@ public class NotificationApiImpl implements NotificationApi {
         data.setContent(content);
 
         notificationDataService.save(data);
+
+
+        pushApi.pushNewNotification(userId, topFiveNotification(userId));
 
     }
 

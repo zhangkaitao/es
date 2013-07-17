@@ -38,7 +38,7 @@
 * 日志 slf4j+logback
 * Json fastjson
 * 日期美化 prettytime
-* servlet 2.5
+* servlet 3.0(需要支持servlet3的servlet容器，如tomcat7)
 * jcaptcha 验证码
 * jsp 模板视图
 

@@ -65,9 +65,9 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
     }
 
     /**
-     * 需要移除的bean及属性名字 如 bean#property
+     * 需要移除的bean及属性名字 如 bean@property
      * 或
-     * 需要替换掉值的bean及属性名字 如 bean#property=123
+     * 需要替换掉值的bean及属性名字 如 bean@property=123
      * @param removeOrReplaceBeanProperties
      */
     public void setRemoveOrReplaceBeanProperties(String[] removeOrReplaceBeanProperties) {
@@ -82,7 +82,7 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
                 removeBeanProperty = removeBeanProperty.substring(0, equalIndex);
             }
 
-            String[] properties = removeBeanProperty.split("#");
+            String[] properties = removeBeanProperty.split("@");
             String beanName = properties[0];
 
             Set<String[]> propertiesSet = this.removedBeanProperties.get(beanName);
@@ -125,7 +125,7 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
 
             //如果匹配模式 就移除掉
-            if(needRemove(beanName, beanDefinition, listableBeanFactory)) {
+            if(needRemove(beanName, beanDefinition)) {
                 listableBeanFactory.removeBeanDefinition(beanName);
                 continue;
             }
@@ -149,8 +149,7 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
         return true;
     }
 
-    private boolean needRemove(String beanName, BeanDefinition beanDefinition,
-                               DefaultListableBeanFactory listableBeanFactory) {
+    private boolean needRemove(String beanName, BeanDefinition beanDefinition) {
 
         if(ArrayUtils.isNotEmpty(removedBeanNames)) {
             for(String removedBeanName : removedBeanNames) {
@@ -178,7 +177,7 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
 
                         //如果需要替换，替换掉值（只支持基本属性）
                         if(this.replaceBeanProperties != null) {
-                            String key = beanName + "#" + properties[0];
+                            String key = beanName + "@" + properties[0];
                             if(this.replaceBeanProperties.containsKey(key)) {
                                 propertyValues.add(properties[0], this.replaceBeanProperties.get(key));
                             }
@@ -195,7 +194,7 @@ public class SpeedUpSpringProcessor implements BeanFactoryPostProcessor {
 
                                 //如果需要替换，替换掉值（只支持基本属性）
                                 if(this.replaceBeanProperties != null) {
-                                    String key = beanName + "#" + properties[0] + "#" + properties[1];
+                                    String key = beanName + "@" + properties[0] + "@" + properties[1];
                                     if(this.replaceBeanProperties.containsKey(key)) {
                                         ((ManagedMap) nextValue).put(properties[1], this.replaceBeanProperties.get(key));
                                     }

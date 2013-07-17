@@ -22,36 +22,62 @@ $.app = {
         var message = $.app.initMessage();
         var notification = $.app.initNotification();
         var fiveMinute = 5 * 60 * 1000;
-        var fetchUrl = ctx + "/admin/fetchTips";
-        var fetchTips = function() {
+        var pollingUrl = ctx + "/admin/polling";
+        var longPolling = function(url, callback) {
             $.ajax({
-                type: "GET",
-                url: fetchUrl,
-                dataType: "json",
-                global : false,
-                cache : false,
-                success: function (data) {
-                    message.update(data.unreadMessageCount);
-                    notification.update(data.notifications);
+                url: url,
+                async: true,
+                cache: false,
+                global: false,
+                timeout: 30 * 1000,
+                dataType : "json",
+                success: function (data, status, request) {
+                    callback(data);
+                    data = null;
+                    status = null;
+                    request = null;
+                    setTimeout(
+                        function () {
+                            longPolling(url, callback);
+                        },
+                        10
+                    );
                 },
                 error: function (xmlHR, textStatus, errorThrown) {
-                    //ignore
+                    xmlHR = null;
+                    textStatus = null;
+                    errorThrown = null;
+
+                    setTimeout(
+                        function () {
+                            longPolling(url, callback);
+                        },
+                        30 * 1000
+                    );
                 }
             });
         };
-        setInterval(fetchTips, fiveMinute);
-        fetchTips();
+        longPolling(pollingUrl, function(data) {
+            if(data) {
+                if(data.unreadMessageCount) {
+                    message.update(data.unreadMessageCount);
+                }
+                if(data.notifications) {
+                    notification.update(data.notifications);
+                }
+            }
+        });
 
     },
     initMessage : function() {
         var messageBtn = $(".btn-message");
         var icon = messageBtn.find(".icon-message");
-        var label = messageBtn.find(".icon-count");
         var messageBtnInterval = null;
 
         var activeUnreadIcon = function(count) {
             clearInterval(messageBtnInterval);
             if(count > 0) {
+                var label = messageBtn.find(".icon-count");
                 if(!label.length) {
                     label = $("<i class='label label-important icon-count'></i>");
                     messageBtn.append(label);
@@ -64,7 +90,7 @@ $.app = {
 
         messageBtn.click(function() {
             clearInterval(messageBtnInterval);
-            $($.find("#menu a:contains(我的消息)")).click();
+            $($.find("#menu a:contains(我的消息)")).dblclick();
             messageBtn.removeClass("unread");
             messageBtn.find(".icon-count").remove();
             icon.removeClass("icon-envelope").addClass("icon-envelope-alt");
@@ -95,7 +121,7 @@ $.app = {
         var moreContent = '<li class="view-all-notification"><span>&gt;&gt;查看所有通知</span></li>';
 
         var viewAllNotification = function() {
-            $($.find("#menu a:contains(我的通知)")).click();
+            $($.find("#menu a:contains(我的通知)")).dblclick();
             hideNotification();
             return false;
         };

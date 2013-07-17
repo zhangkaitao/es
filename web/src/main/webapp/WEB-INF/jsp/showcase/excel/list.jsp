@@ -116,23 +116,23 @@
 <script type="text/javascript">
     $(function () {
         $("#export-csv").click(function () {
-            var searchArgs = $("searchForm").serialize();
+            var searchArgs = $("#searchForm").serialize();
             window.location.href = "${ctx}/showcase/excel/export?type=csv&" + searchArgs;
         });
         $("#export-excel-2003-usermodel").click(function () {
-            var searchArgs = $("searchForm").serialize();
+            var searchArgs = $("#searchForm").serialize();
             window.location.href = "${ctx}/showcase/excel/export?type=excel2003_usermodel&" + searchArgs;
         });
         $("#export-excel-2003-xml").click(function () {
-            var searchArgs = $("searchForm").serialize();
+            var searchArgs = $("#searchForm").serialize();
             window.location.href = "${ctx}/showcase/excel/export?type=excel2003_xml&" + searchArgs;
         });
         $("#export-excel-2003-sheet").click(function () {
-            var searchArgs = $("searchForm").serialize();
+            var searchArgs = $("#searchForm").serialize();
             window.location.href = "${ctx}/showcase/excel/export?type=excel2003_sheet&" + searchArgs;
         });
         $("#export-excel-2007").click(function () {
-            var searchArgs = $("searchForm").serialize();
+            var searchArgs = $("#searchForm").serialize();
             window.location.href = "${ctx}/showcase/excel/export?type=excel2007&" + searchArgs;
         });
     });

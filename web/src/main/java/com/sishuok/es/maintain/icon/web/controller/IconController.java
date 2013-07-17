@@ -203,7 +203,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         String uploadFileTemplate = ".%1$s{background:url(%2$s/%3$s);width:%4$spx;height:%5$spx;display:inline-block;vertical-align: middle;%6$s}";
         String cssSpriteTemplate = ".%1$s{background:url(%2$s/%3$s) no-repeat -%4$spx -%5$spx;width:%6$spx;height:%7$spx;display:inline-block;vertical-align: middle;%8$s}";
 
-        ServletContext sc = request.getSession().getServletContext();
+        ServletContext sc = request.getServletContext();
         String ctx = sc.getContextPath();
 
         List<String> cssList = Lists.newArrayList();

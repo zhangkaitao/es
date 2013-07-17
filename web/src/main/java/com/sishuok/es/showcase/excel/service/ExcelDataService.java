@@ -334,7 +334,9 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
                 do {
                     searchable.setPage(0, pageSize);
                     //优化分页性能
-                    searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    if(!searchable.containsSearchKey("id_in")) {
+                        searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    }
                     page = findAll(searchable);
                     for (ExcelData data : page.getContent()) {
                         out.write(String.valueOf(data.getId()).getBytes(encoding));
@@ -420,7 +422,9 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
                 do {
                     searchable.setPage(0, pageSize);
                     //优化分页性能
-                    searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    if(!searchable.containsSearchKey("id_in")) {
+                        searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    }
                     page = findAll(searchable);
 
                     for (ExcelData data : page.getContent()) {
@@ -524,7 +528,9 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
                 do {
                     searchable.setPage(0, pageSize);
                     //优化分页性能
-                    searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    if(!searchable.containsSearchKey("id_in")) {
+                        searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    }
                     page = findAll(searchable);
 
                     for (ExcelData data : page.getContent()) {
@@ -601,7 +607,9 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
                 do {
                     searchable.setPage(0, pageSize);
                     //优化分页性能
-                    searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    if(!searchable.containsSearchKey("id_in")) {
+                        searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    }
                     page = findAll(searchable);
 
                     for (ExcelData data : page.getContent()) {
@@ -688,7 +696,9 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
                 do {
                     searchable.setPage(0, pageSize);
                     //优化分页性能
-                    searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    if(!searchable.containsSearchKey("id_in")) {
+                        searchable.addSearchFilter("id", SearchOperator.gt, maxId);
+                    }
                     page = findAll(searchable);
 
                     for (ExcelData data : page.getContent()) {
