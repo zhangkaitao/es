@@ -67,6 +67,9 @@ public class PushService {
 
     public void push(final Long userId, final Object data) {
         Queue<DeferredResult<Object>> queue =  userIdToDeferredResultMap.get(userId);
+        if(queue == null) {
+            return;
+        }
         for(DeferredResult<Object> deferredResult : queue) {
             if(!deferredResult.isSetOrExpired()) {
                 deferredResult.setResult(data);

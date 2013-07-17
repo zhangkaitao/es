@@ -6,8 +6,7 @@
 package com.sishuok.es.personal.message.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -23,11 +22,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "personal_message_content")
+@Proxy(lazy = true, proxyClass = MessageContent.class)
 public class MessageContent extends BaseEntity<Long> {
 
 
     @OneToOne(fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SELECT)
     private Message message;
 
     /**

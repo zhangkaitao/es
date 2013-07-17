@@ -106,7 +106,7 @@ $.personal = {
                 var stateInfo = panel.data("state-info");
 
                 $.app.confirm({
-                    title: "清空" + state,
+                    title: "清空" + stateInfo,
                     message: "确认清空" + stateInfo + "吗？",
                     ok: function () {
                         location.href = ctx + "/admin/personal/message/clear/" + state;

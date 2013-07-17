@@ -6,14 +6,15 @@
 package com.sishuok.es.personal.message.entity;
 
 import com.sishuok.es.common.entity.BaseEntity;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Proxy;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 系统消息
@@ -34,6 +35,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "personal_message")
+@Proxy(lazy = true, proxyClass = Message.class)
 public class Message extends BaseEntity<Long> {
 
     /**
@@ -63,11 +65,12 @@ public class Message extends BaseEntity<Long> {
     @Column(name = "title")
     private String title;
 
+    /**
+     * OneToOne如果不生成字节码代理不能代理 所以改成OneToMany
+     */
     @Valid
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "message")
-    @Basic(fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SELECT)
-    private MessageContent content;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "message", orphanRemoval = true)
+    private Set<MessageContent> contents;
 
     /**
      * 发件人状态
@@ -157,11 +160,17 @@ public class Message extends BaseEntity<Long> {
     }
 
     public MessageContent getContent() {
-        return content;
+        if(contents != null && contents.size() > 0) {
+            return contents.iterator().next();
+        }
+        return null;
     }
 
     public void setContent(MessageContent content) {
-        this.content = content;
+        if(contents == null) {
+            contents = new HashSet<MessageContent>();
+        }
+        contents.add(content);
     }
 
     public MessageState getSenderState() {
