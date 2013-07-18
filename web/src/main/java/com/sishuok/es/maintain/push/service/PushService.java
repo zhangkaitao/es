@@ -91,7 +91,10 @@ public class PushService {
             }
 
             for(DeferredResult<Object> deferredResult : queue) {
-                deferredResult.setResult("");
+                try {
+                    deferredResult.setResult("");
+                } catch (Exception e) {
+                }
             }
 
         }
