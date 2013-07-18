@@ -12,7 +12,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  *
@@ -36,7 +36,8 @@ public class PushService {
     public void online(final Long userId) {
         Queue<DeferredResult<Object>> queue = userIdToDeferredResultMap.get(userId);
         if(queue == null) {
-            queue = new ConcurrentLinkedDeque<DeferredResult<Object>>();
+
+            queue = new LinkedBlockingDeque<DeferredResult<Object>>(); //如果jdk 1.7 可以换成ConcurrentLinkedQueue
             userIdToDeferredResultMap.put(userId, queue);
         }
     }
@@ -57,7 +58,7 @@ public class PushService {
 
         Queue<DeferredResult<Object>> queue = userIdToDeferredResultMap.get(userId);
         if(queue == null) {
-            queue = new ConcurrentLinkedDeque<DeferredResult<Object>>();
+            queue = new LinkedBlockingDeque<DeferredResult<Object>>();
             userIdToDeferredResultMap.put(userId, queue);
         }
         queue.add(deferredResult);
