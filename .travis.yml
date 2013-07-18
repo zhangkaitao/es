@@ -13,10 +13,11 @@ mysql:
   encoding: utf8
 
 install:
-  - mvn install -Dmaven.test.skip=true
+  - mvn clean install -Dmaven.test.skip=true
 
 before_script:
   - cd web
+  - mvn clean
   - mvn db:create
   - mvn db:schema
   - mvn db:data
@@ -24,10 +25,10 @@ before_script:
 
 script:
   - cd common
-  - mvn test
+  - mvn clean test
   - cd ..
   - cd web
-  - mvn test -Pit
+  - mvn clean test -Pit
 
 
 
