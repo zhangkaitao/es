@@ -95,7 +95,6 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
   values (46, 2, '0/1/2/', 10, 'Excel导入/导出', 'excel', '/showcase/excel', true);;
 
-
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
   values (16, 1, '0/1/', 2, '系统管理', 'sys', '', true);;
 
