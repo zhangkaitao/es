@@ -6,7 +6,7 @@ values
   (1, 'admin', 'admin@sishuok.com', '13412345678', 'ec21fa1738f39d5312c6df46002d403d', 'yDd1956wn1', sysdate(), 'normal', 1, 0);
 
 --分组
-insert into `sys_group` (`id`, `name`, `type`, `show`, `default_group`)
+insert into `sys_group` (`id`, `name`, `type`, `is_show`, `default_group`)
    values(1, '默认', 'user', true, true);
 
 

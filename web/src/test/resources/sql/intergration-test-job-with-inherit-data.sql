@@ -7,14 +7,14 @@ values
 
 
 --组织机构
-insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '组织机构', true);
-insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (2, 1, '0/1/', 1, '组织机构2', true);
-insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (3, 1, '0/', 1, '组织机构3', false);
+insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `is_show`) values (1, 0, '0/', 1, '组织机构', true);
+insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `is_show`) values (2, 1, '0/1/', 1, '组织机构2', true);
+insert into `sys_organization`(`id`, `parent_id`, `parent_ids`, weight, `name`, `is_show`) values (3, 1, '0/', 1, '组织机构3', false);
 
 --工作职务
-insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (1, 0, '0/', 1, '职务', true);
-insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (2, 1, '0/1/', 1, '职务2', true);
-insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `show`) values (3, 0, '0/', 1, '职务3', false);
+insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `is_show`) values (1, 0, '0/', 1, '职务', true);
+insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `is_show`) values (2, 1, '0/1/', 1, '职务2', true);
+insert into `sys_job`(`id`, `parent_id`, `parent_ids`, weight, `name`, `is_show`) values (3, 0, '0/', 1, '职务3', false);
 
 
 --用户--组织机构--工作职务关系
