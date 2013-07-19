@@ -17,6 +17,7 @@ install:
 
 before_script:
   - cd web
+  - mvn clean
   - mvn db:create
   - mvn db:schema
   - mvn db:data

@@ -62,10 +62,10 @@
         </div>
         <div class="span8 muted" style="text-align: right;line-height: 31px;padding-right: 10px;">
             <c:if test="${state eq 'in_box' or state eq 'out_box'}">
-                提示: ${state.info}超过365天的短信将被移到垃圾箱, 请将您要保存的消息移到收藏箱
+                提示:${state.info}超过365天的消息将被移到垃圾箱, 请将要保存的消息移到收藏箱
             </c:if>
             <c:if test="${state eq 'trash_box'}">
-                <strong>提示: 系统会自动清除垃圾箱里超过30天的短信</strong>
+                提示: 系统会自动清除垃圾箱里超过30天的短信
             </c:if>
         </div>
     </div>

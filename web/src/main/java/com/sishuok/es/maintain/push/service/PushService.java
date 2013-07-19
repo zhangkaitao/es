@@ -42,6 +42,21 @@ public class PushService {
         }
     }
 
+
+    public void offline(final Long userId) {
+
+        Queue<DeferredResult<Object>> queue = userIdToDeferredResultMap.remove(userId);
+        if(queue != null) {
+            for(DeferredResult<Object> result : queue) {
+                try {
+                    result.setResult("");
+                } catch (Exception e) {
+                    //ignore
+                }
+            }
+        }
+    }
+
     public DeferredResult newDeferredResult(final Long userId) {
         final DeferredResult<Object> deferredResult = new DeferredResult<Object>();
 
@@ -73,7 +88,11 @@ public class PushService {
         }
         for(DeferredResult<Object> deferredResult : queue) {
             if(!deferredResult.isSetOrExpired()) {
-                deferredResult.setResult(data);
+                try {
+                    deferredResult.setResult(data);
+                } catch (Exception e) {
+                    queue.remove(deferredResult);
+                }
             }
         }
     }
@@ -95,12 +114,12 @@ public class PushService {
                 try {
                     deferredResult.setResult("");
                 } catch (Exception e) {
+                    queue.remove(deferredResult);
                 }
             }
 
         }
     }
-
 
 
 }

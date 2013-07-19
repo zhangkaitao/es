@@ -5,6 +5,7 @@
  */
 package com.sishuok.es.index.web.controller;
 
+import com.sishuok.es.maintain.push.service.PushApi;
 import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.service.ResourceService;
 import com.sishuok.es.sys.user.entity.User;
@@ -28,13 +29,16 @@ public class IndexController {
     @Autowired
     private ResourceService resourceService;
 
+    @Autowired
+    private PushApi pushApi;
 
     @RequestMapping(value = {"/{index:index;?.*}"}) //spring3.2.2 bug see  http://jinnianshilongnian.iteye.com/blog/1831408
     public String index(@CurrentUser User user, Model model) {
 
         List<Menu> menus = resourceService.findMenus(user);
-
         model.addAttribute("menus", menus);
+
+        pushApi.offline(user.getId());
 
         return "admin/index/index";
     }

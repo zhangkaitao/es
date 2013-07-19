@@ -776,7 +776,13 @@ $.layouts = {
         function resizePanel(panelName, panelElement, panelState, panelOptions, layoutName) {
             var tabul = $(".tabs-fix-top");
             if (panelName == 'north') {
-                var top = panelElement.height() - 30;
+                var top = 0;
+                if($("html").hasClass("ie")) {
+                    top = panelElement.height() - 33;
+
+                } else {
+                    top = panelElement.height() - 30;
+                }
                 if (panelState.isClosed) {
                     top = -58;
                 }

@@ -35,7 +35,9 @@
                     </c:when>
                     <c:otherwise>
                         <a href="${ctx}/admin/personal/message/${m.id}" class="btn btn-link no-padding">${m.title}</a>
-                        <span class="label label-important">${m.read eq false ? '未读' : ''}</span>
+                        <c:if test="${m.read eq false}">
+                            <span class="label label-important">未读</span>
+                        </c:if>
                     </c:otherwise>
 
                 </c:choose>

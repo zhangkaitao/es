@@ -370,7 +370,7 @@ html, body {
 .notification-list.in {
     display: block;
 }
-.notification-list .popover-title, .notification-list .popover-title {
+.notification-list .popover-title, .notification-list .popover-title a {
     color:#b94a48!important;
     font-weight: bold;
 }

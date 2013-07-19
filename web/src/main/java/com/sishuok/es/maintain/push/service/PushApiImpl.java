@@ -37,4 +37,8 @@ public class PushApiImpl implements PushApi {
         pushService.push(userId, data);
     }
 
+    @Override
+    public void offline(final Long userId) {
+        pushService.offline(userId);
+    }
 }
