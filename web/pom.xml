@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>es-parent</artifactId>
+        <artifactId>parent</artifactId>
         <groupId>com.sishuok</groupId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>es-web</artifactId>
+    <artifactId>web</artifactId>
     <packaging>war</packaging>
     <name>web</name>
     <url>https://github.com/zhangkaitao/es/web</url>
@@ -135,7 +135,7 @@
     <dependencies>
         <dependency>
             <groupId>com.sishuok</groupId>
-            <artifactId>es-common</artifactId>
+            <artifactId>common</artifactId>
             <version>${sishuok.common.version}</version>
         </dependency>
         <dependency>
