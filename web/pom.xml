@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>web</artifactId>
+    <artifactId>es-web</artifactId>
     <packaging>war</packaging>
     <name>web</name>
     <url>https://github.com/zhangkaitao/es/web</url>

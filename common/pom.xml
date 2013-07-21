@@ -11,7 +11,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>common</artifactId>
+    <artifactId>es-common</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>common</name>
