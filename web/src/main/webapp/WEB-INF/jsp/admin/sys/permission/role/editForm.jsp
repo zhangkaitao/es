@@ -273,7 +273,7 @@
                 btn : $("#selectResourceTree,#resourceName"),
                 id : "resourceId",
                 name : "resourceName",
-                includeRoot: true
+                includeRoot: false
             },
             autocomplete : {
                 enable : true
