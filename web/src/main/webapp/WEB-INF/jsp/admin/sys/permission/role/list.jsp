@@ -48,7 +48,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="sys:role:delete">
-                <div class="btn-group">
+                <div class="btn-group last">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-pencil"></i>
                         状态

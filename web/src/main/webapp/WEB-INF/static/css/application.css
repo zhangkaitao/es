@@ -691,12 +691,10 @@ iframe[tabs="true"] {
 }
 
 .table > tbody > tr.active, .table > tbody > tr.active > td{
-    background: #0088cc;
+    background: #eee;
 
 }
 .table > tbody > tr.active * {
-    color: #fff!important;
-    font-weight: bold;
     text-shadow: none;
 }
 
