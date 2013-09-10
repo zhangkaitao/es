@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-            http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0"
+        metadata-complete="false">
 
     <display-name>es-web</display-name>
 
@@ -29,6 +30,7 @@
     <filter>
         <filter-name>Set Character Encoding</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <async-supported>true</async-supported>
         <init-param>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
@@ -48,6 +50,7 @@
     <filter>
         <filter-name>AccessLogFilter</filter-name>
         <filter-class>com.sishuok.es.common.web.filter.AccessLogFilter</filter-class>
+        <async-supported>true</async-supported>
         <init-param>
             <param-name>blackListURL</param-name>
             <param-value>/static/**,*.js,*.css,*.jpg,*.gif,*.png,*.ico,/admin/monitor/druid/**</param-value>
@@ -68,6 +71,7 @@
     <filter>
         <filter-name>shiroFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <async-supported>true</async-supported>
         <init-param>
             <param-name>targetFilterLifecycle</param-name>
             <param-value>true</param-value>
@@ -88,6 +92,7 @@
     <filter>
         <filter-name>JCaptchaFilter</filter-name>
         <filter-class>com.sishuok.es.common.web.jcaptcha.JCaptchaFilter</filter-class>
+        <async-supported>true</async-supported>
     </filter>
     <filter-mapping>
         <filter-name>JCaptchaFilter</filter-name>
@@ -98,6 +103,7 @@
     <filter>
         <filter-name>DruidWebStatFilter</filter-name>
         <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <async-supported>true</async-supported>
         <init-param>
             <param-name>exclusions</param-name>
             <param-value>/static/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
@@ -149,6 +155,7 @@
             <param-value>classpath:spring-mvc.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
         <servlet-name>spring</servlet-name>

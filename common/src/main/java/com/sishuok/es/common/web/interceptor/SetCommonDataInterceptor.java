@@ -91,6 +91,11 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(url)) {
             url = request.getHeader("Referer");
         }
+
+        if (!StringUtils.isEmpty(url) && (url.startsWith("http://") || url.startsWith("https"))) {
+            return url;
+        }
+
         if (!StringUtils.isEmpty(url) && url.startsWith(request.getContextPath())) {
             url = getBasePath(request) + url;
         }
