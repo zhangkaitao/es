@@ -332,7 +332,7 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
 
                     Object component = target.get(keyValue);
                     if(component == null) {
-                        BeanUtils.instantiate(valueType);
+                       omponent = BeanUtils.instantiate(valueType);
                     }
 
                     WebDataBinder componentBinder = binderFactory.createBinder(request, component, null);
