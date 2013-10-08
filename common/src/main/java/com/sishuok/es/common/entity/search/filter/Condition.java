@@ -60,7 +60,7 @@ public final class Condition implements SearchFilter {
         }
 
         boolean allowBlankValue = SearchOperator.isAllowBlankValue(operator);
-        boolean isValueBlank = value == null;
+        boolean isValueBlank = (value == null);
         isValueBlank = isValueBlank || (value instanceof String && StringUtils.isBlank((String) value));
         isValueBlank = isValueBlank || (value instanceof List && ((List) value).size() == 0);
         //过滤掉空值，即不参与查询
@@ -164,7 +164,7 @@ public final class Condition implements SearchFilter {
      */
     public boolean isUnaryFilter() {
         String operatorStr = getOperator().getSymbol();
-        return operatorStr.startsWith("is");
+        return StringUtils.isNotEmpty(operatorStr) && operatorStr.startsWith("is");
     }
 
 
