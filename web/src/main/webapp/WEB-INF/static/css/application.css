@@ -513,7 +513,7 @@ iframe[tabs="true"] {
 }
 
 #menu .ui-accordion-header{
-    height: 35px;
+    /*height: 35px;*/
     line-height: 20px;
 
 }
@@ -526,10 +526,13 @@ iframe[tabs="true"] {
 
 #menu .menu-header-icon{
     float: left;
-    margin-top: 10px;
+    margin-top: 3px;
     margin-left: 8px;
     margin-right: 8px;
-    color:#f89406;
+    color: #f89406;
+    position: relative;
+    left: 0;
+    top: 0;
 }
 
 
