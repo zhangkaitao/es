@@ -209,7 +209,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         return redirectToUrl(backURL);
     }
 
-    @RequestMapping(value = "batch/delete")
+    @RequestMapping(value = "batch/delete", method = {RequestMethod.GET, RequestMethod.POST})
     public String deleteInBatch(
             @RequestParam(value = "ids", required = false) ID[] ids,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,
