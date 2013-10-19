@@ -9,6 +9,13 @@
     <uri>http://www.sishuok.com/tags/es-functions</uri>
 
     <function>
+        <description>obj in collection</description>
+        <name>in</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean in(java.lang.Iterable,java.lang.Object)</function-signature>
+    </function>
+
+    <function>
         <description>判断指定id的组织机构是否存在，第一个参数是id，第二个参数是onlyDisplayShow(是否仅显示可见的)</description>
         <name>existsOrganization</name>
         <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>

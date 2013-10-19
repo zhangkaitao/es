@@ -17,6 +17,8 @@ import com.sishuok.es.sys.permission.service.RoleService;
 import com.sishuok.es.sys.resource.entity.Resource;
 import com.sishuok.es.sys.resource.service.ResourceService;
 
+import java.util.Iterator;
+
 /**
  * 提供el中可以使用的一些函数
  * <p>User: Zhang Kaitao
@@ -24,6 +26,21 @@ import com.sishuok.es.sys.resource.service.ResourceService;
  * <p>Version: 1.0
  */
 public class EsFunctions {
+
+
+    public static boolean in(Iterable iterable, Object obj) {
+        if(iterable == null) {
+            return false;
+        }
+        Iterator iterator = iterable.iterator();
+
+        while(iterator.hasNext()) {
+            if(iterator.next().equals(obj)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * 判断是否存储指定id的组织机构
