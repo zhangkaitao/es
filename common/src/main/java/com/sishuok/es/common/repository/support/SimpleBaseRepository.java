@@ -11,6 +11,7 @@ import com.sishuok.es.common.plugin.entity.LogicDeleteable;
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.repository.callback.SearchCallback;
+import com.sishuok.es.common.repository.support.annotation.QueryJoin;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Page;
@@ -69,6 +70,8 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      */
     private String countAllQL;
 
+    private QueryJoin[] joins;
+
     private SearchCallback searchCallback = SearchCallback.DEFAULT;
 
     public SimpleBaseRepository(JpaEntityInformation<M, ID> entityInformation, EntityManager entityManager) {
@@ -89,7 +92,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
 
     /**
-     * Configures a custom {@link org.springframework.data.jpa.repository.support.LockMetadataProvider} to be used to detect {@link LockModeType}s to be applied to
+     * Configures a custom {@link org.springframework.data.jpa.repository.support.LockMetadataProvider} to be used to detect {@link javax.persistence.LockModeType}s to be applied to
      * queries.
      *
      * @param lockMetadataProvider
@@ -126,8 +129,11 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         this.countAllQL = countAllQL;
     }
 
+    public void setJoins(QueryJoin[] joins) {
+        this.joins = joins;
+    }
 
-    /////////////////////////////////////////////////
+/////////////////////////////////////////////////
     ////////覆盖默认spring data jpa的实现////////////
     /////////////////////////////////////////////////
 
@@ -296,8 +302,8 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     ///////直接从SimpleJpaRepository复制过来的///////////////////////////////
 
     /**
-     * Reads the given {@link TypedQuery} into a {@link Page} applying the given {@link Pageable} and
-     * {@link Specification}.
+     * Reads the given {@link javax.persistence.TypedQuery} into a {@link org.springframework.data.domain.Page} applying the given {@link org.springframework.data.domain.Pageable} and
+     * {@link org.springframework.data.jpa.domain.Specification}.
      *
      * @param query    must not be {@literal null}.
      * @param spec     can be {@literal null}.
@@ -316,7 +322,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     }
 
     /**
-     * Creates a new count query for the given {@link Specification}.
+     * Creates a new count query for the given {@link org.springframework.data.jpa.domain.Specification}.
      *
      * @param spec can be {@literal null}.
      * @return
@@ -341,7 +347,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     }
 
     /**
-     * Creates a new {@link TypedQuery} from the given {@link Specification}.
+     * Creates a new {@link javax.persistence.TypedQuery} from the given {@link org.springframework.data.jpa.domain.Specification}.
      *
      * @param spec     can be {@literal null}.
      * @param pageable can be {@literal null}.
@@ -354,7 +360,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     }
 
     /**
-     * Creates a {@link TypedQuery} for the given {@link Specification} and {@link Sort}.
+     * Creates a {@link javax.persistence.TypedQuery} for the given {@link org.springframework.data.jpa.domain.Specification} and {@link org.springframework.data.domain.Sort}.
      *
      * @param spec can be {@literal null}.
      * @param sort can be {@literal null}.
@@ -368,18 +374,32 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         Root<M> root = applySpecificationToCriteria(spec, query);
         query.select(root);
 
+        applyJoins(root);
+
         if (sort != null) {
             query.orderBy(toOrders(sort, root, builder));
         }
 
         TypedQuery<M> q = em.createQuery(query);
+
         repositoryHelper.applyEnableQueryCache(q);
+
         return applyLockMode(q);
+    }
+
+    private void applyJoins(Root<M> root) {
+        if(joins == null) {
+            return;
+        }
+
+        for(QueryJoin join : joins) {
+            root.join(join.property(), join.joinType());
+        }
     }
 
 
     /**
-     * Applies the given {@link Specification} to the given {@link CriteriaQuery}.
+     * Applies the given {@link org.springframework.data.jpa.domain.Specification} to the given {@link javax.persistence.criteria.CriteriaQuery}.
      *
      * @param spec  can be {@literal null}.
      * @param query must not be {@literal null}.

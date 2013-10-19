@@ -51,4 +51,8 @@ public @interface SearchableQuery {
      */
     Class<? extends SearchCallback> callbackClass() default SearchCallback.class;
 
+
+    QueryJoin[] joins() default {};
+
+
 }

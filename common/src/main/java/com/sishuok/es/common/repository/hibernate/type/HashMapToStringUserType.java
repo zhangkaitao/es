@@ -5,7 +5,8 @@
  */
 package com.sishuok.es.common.repository.hibernate.type;
 
-import org.apache.commons.beanutils.ConvertUtils;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
@@ -17,7 +18,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -26,52 +28,27 @@ import java.util.Properties;
  * <p>Date: 13-4-16 上午8:32
  * <p>Version: 1.0
  */
-public class CollectionToStringUserType implements UserType, ParameterizedType, Serializable {
+public class HashMapToStringUserType implements UserType, ParameterizedType, Serializable {
 
     /**
-     * 默认,
+     * 默认 java.lang.String
      */
-    private String separator;
-    /**
-     * 默认 java.lang.Long
-     */
-    private Class elementType;
-    /**
-     * 默认 ArrayList
-     */
-    private Class collectionType;
-
+    private Class keyType;
 
     @Override
     public void setParameterValues(Properties parameters) {
-        String separator = (String) parameters.get("separator");
-        if (!StringUtils.isEmpty(separator)) {
-            this.separator = separator;
-        } else {
-            this.separator = ",";
-        }
-
-        String collectionType = (String) parameters.get("collectionType");
-        if (!StringUtils.isEmpty(collectionType)) {
+        String keyType = (String) parameters.get("keyType");
+        if (!StringUtils.isEmpty(keyType)) {
             try {
-                this.collectionType = Class.forName(collectionType);
+                this.keyType = Class.forName(keyType);
             } catch (ClassNotFoundException e) {
                 throw new HibernateException(e);
             }
         } else {
-            this.collectionType = java.util.ArrayList.class;
+            this.keyType = String.class;
         }
 
-        String elementType = (String) parameters.get("elementType");
-        if (!StringUtils.isEmpty(elementType)) {
-            try {
-                this.elementType = Class.forName(elementType);
-            } catch (ClassNotFoundException e) {
-                throw new HibernateException(e);
-            }
-        } else {
-            this.elementType = Long.TYPE;
-        }
+
     }
 
     @Override
@@ -81,7 +58,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
 
     @Override
     public Class returnedClass() {
-        return collectionType;
+        return HashMap.class;
     }
 
     @Override
@@ -117,28 +94,21 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String valueStr = rs.getString(names[0]);
         if (StringUtils.isEmpty(valueStr)) {
-            return newCollection();
+            return newMap();
         }
 
-        String[] values = StringUtils.split(valueStr, separator);
-
-        Collection result = newCollection();
-
-        for (String value : values) {
-            if(StringUtils.isNotEmpty(value)) {
-                result.add(ConvertUtils.convert(value, elementType));
-            }
-        }
-        return result;
-
-    }
-
-    private Collection newCollection() {
+        Map map = JSONObject.parseObject(valueStr);
+        Map result = newMap();
         try {
-            return (Collection) collectionType.newInstance();
+            for(Object key : map.keySet()) {
+                Object value = map.get(key);
+                result.put(keyType.getConstructor(String.class).newInstance(key), value);
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new HibernateException(e);
         }
+        return result;
     }
 
     /**
@@ -151,14 +121,19 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
         if (value == null) {
             valueStr = "";
         } else {
-            valueStr = StringUtils.join((Collection) value, separator);
-        }
-        if(StringUtils.isNotEmpty(valueStr)) {
-            valueStr = valueStr + ",";
+            valueStr = JSONObject.toJSONString(value, SerializerFeature.WriteClassName);
         }
         st.setString(index, valueStr);
     }
 
+
+    private Map newMap() {
+        try {
+            return HashMap.class.newInstance();
+        } catch (Exception e) {
+            throw new HibernateException(e);
+        }
+    }
 
     /**
      * 提供自定义类型的完全复制方法
@@ -177,9 +152,9 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
     @Override
     public Object deepCopy(Object o) throws HibernateException {
         if (o == null) return null;
-        Collection copyCollection = newCollection();
-        copyCollection.addAll((Collection) o);
-        return copyCollection;
+        Map copyMap = newMap();
+        copyMap.putAll((Map) o);
+        return copyMap;
     }
 
     /**
