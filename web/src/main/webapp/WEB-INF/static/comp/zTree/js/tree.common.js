@@ -244,8 +244,8 @@ $.zTree = {
                 });
             };
             config.autocomplete.source = config.autocomplete.source
-                || config.urlPrefix + "/ajax/autocomplete" +
-                  (config.excludeId ? "?excludeId=" + config.excludeId : "") +
+                || config.urlPrefix + "/ajax/autocomplete?1=1" +
+                  (config.excludeId ? "&excludeId=" + config.excludeId : "") +
                   (config.onlyDisplayShow ? "&search.show_eq=true" : "");
 
             config.treeId = treeSelect;
@@ -409,8 +409,8 @@ $.zTree = {
                     });
                 };
                 config.autocomplete.source = config.autocomplete.source
-                    || config.urlPrefix + "/ajax/autocomplete" +
-                       (config.excludeId ? "?excludeId=" + config.excludeId : "") +
+                    || config.urlPrefix + "/ajax/autocomplete?1=1" +
+                       (config.excludeId ? "&excludeId=" + config.excludeId : "") +
                        (config.onlyDisplayShow ? "&search.show_eq=true" : "");
 
                 config.treeId = treeSelect;
