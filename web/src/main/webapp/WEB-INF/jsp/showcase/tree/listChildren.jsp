@@ -38,7 +38,7 @@
         <div class="span4">
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:tree:create">
-                <a class="btn btn-custom" href="${ctx}/showcase/tree/${parent.id}/appendChild?BackURL=<es:BackURL/>">
+                <a class="btn btn-custom no-disabled" href="${ctx}/showcase/tree/${parent.id}/appendChild?BackURL=<es:BackURL/>">
                     <i class="icon-file-alt"></i>
                     添加子节点
                 </a>
