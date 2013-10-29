@@ -95,7 +95,7 @@ create table `sys_user_last_online`(
 ) charset=utf8 ENGINE=InnoDB;;
 
 create trigger `trigger_sys_user_off_online`
-after delete on `sys_user_online`for each row
+after delete on `sys_user_online` for each row
 begin
    if OLD.`user_id` is not null then
       if not exists(select `user_id` from `sys_user_last_online` where `user_id` = OLD.`user_id`) then
