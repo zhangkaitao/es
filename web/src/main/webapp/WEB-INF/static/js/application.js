@@ -1770,7 +1770,11 @@ $.table = {
         });
 
         if(searchForm.is("[data-change-search=true]")) {
-            searchForm.find(":input:not(:button,:submit,:reset)").off("change").on("change", function() {
+            searchForm.find(":input:not(:button,:submit,:reset)").off("change").on("change", function(e) {
+                // avoid double search issue, when you click search button after change any input
+                searchForm.off("submit").on("submit", function() {
+                    return false;
+                });
                 turnSearch(table, searchForm, false);
             });
         }
