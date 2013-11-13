@@ -370,7 +370,7 @@ $.maintain = {
                     message: "请输入目录名字：<input type='text' id='name' placeholder='支持如/a/b/c多级目录'/>",
                     ok : function() {
                         var name = $("#name").val();
-                        if($.trim(name)) {
+                        if(!$.trim(name)) {
                             $.app.alert({
                                 message : "名称不能为空"
                             });
@@ -388,7 +388,7 @@ $.maintain = {
                     message: "请输入文件名字：<input type='text' id='name' placeholder='支持如/a/b.txt多级目录'/>",
                     ok : function() {
                         var name = $("#name").val();
-                        if($.trim(name)) {
+                        if(!$.trim(name)) {
                             $.app.alert({
                                 message : "名称不能为空"
                             });
