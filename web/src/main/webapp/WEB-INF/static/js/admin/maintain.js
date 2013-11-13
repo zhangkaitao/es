@@ -454,7 +454,7 @@ $.maintain = {
                         }
                         $.app.modalDialog(
                             "选择解压到的目录",
-                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            ctx + "/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
                                 height:300,
                                 width:300,
@@ -481,7 +481,7 @@ $.maintain = {
                         var conflict = $("[name=conflict]:checked").val();
                         $.app.modalDialog(
                             "选择移动到的目录",
-                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            ctx + "/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
                                 height:300,
                                 width:300,
@@ -508,7 +508,7 @@ $.maintain = {
                         var conflict = $("[name=conflict]:checked").val();
                         $.app.modalDialog(
                             "选择复制到的目录",
-                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            ctx + "/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
                                 height:300,
                                 width:300,
