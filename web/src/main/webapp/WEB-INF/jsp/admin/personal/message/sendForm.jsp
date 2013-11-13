@@ -159,14 +159,16 @@
         });
 
         var $username = $("#receiverId_msg");
-        $.app.initAutocomplete({
-            input : $username,
-            source : "${ctx}/admin/sys/user/ajax/autocomplete",
-            select : function(event, ui) {
-                $username.val(ui.item.label);
-                return false;
-            }
-        });
+        if($username[0]){
+            $.app.initAutocomplete({
+                input : $username,
+                source : "${ctx}/admin/sys/user/ajax/autocomplete",
+                select : function(event, ui) {
+                    $username.val(ui.item.label);
+                    return false;
+                }
+            });
+        }
 
         $(window).on('beforeunload',function() {
             if($username.val() || $("#title").val() || editor.html()) {
