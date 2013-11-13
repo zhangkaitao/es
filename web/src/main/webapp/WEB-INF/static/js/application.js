@@ -2001,7 +2001,7 @@ $.table = {
     removeSearchParam : function(url, form) {
         $.each(form.serializeArray(), function() {
             var name = this.name;
-            url = url.replace(new RegExp(name + "=.*\&","g"), '');
+            url = url.replace(new RegExp(name + "=.*?\&","g"), '');
             url = url.replace(new RegExp("[\&\?]" + name + "=.*$","g"), '');
         });
         return url;
