@@ -8,16 +8,7 @@ $.app = {
         $.layouts.initLayout();
         $.tabs.initTab();
 
-        $(".btn-view-info,.btn-change-password").click(function() {
-            var a = $(this);
-            var url = "";
-            if(a.is(".btn-view-info")) {
-                url = ctx +"/admin/sys/user/loginUser/viewInfo";
-            } else if(a.is(".btn-change-password")) {
-                url = ctx + "/admin/sys/user/loginUser/changePassword";
-            }
-            $.tabs.activeTab($.tabs.nextCustomTabIndex(), "个人资料", url, true)
-        });
+        $.app.initCommonBtn();
 
         var message = $.app.initMessage();
         var notification = $.app.initNotification();
@@ -67,6 +58,46 @@ $.app = {
                 }
             }
         });
+
+    },
+    initCommonBtn : function() {
+        $(".btn-view-info,.btn-change-password").click(function() {
+            var a = $(this);
+            var url = "";
+            if(a.is(".btn-view-info")) {
+                url = ctx +"/admin/sys/user/loginUser/viewInfo";
+            } else if(a.is(".btn-change-password")) {
+                url = ctx + "/admin/sys/user/loginUser/changePassword";
+            }
+            setTimeout(function() {
+                $.tabs.activeTab($.tabs.nextCustomTabIndex(), "个人资料", url, true)
+            }, 0);
+        });
+        $(".btn-view-message,.btn-message").click(function() {
+            var url = ctx + "/admin/personal/message";
+            setTimeout(function() {
+                $.tabs.activeTab($.tabs.nextCustomTabIndex(), "我的消息", url, true)
+            }, 0);
+        });
+        $(".btn-view-notice").click(function() {
+            var url = ctx + "/office/personal/notice/list?read=false";
+            setTimeout(function() {
+                $.tabs.activeTab($.tabs.nextCustomTabIndex(), "我的通知", url, true)
+            }, 0);
+        });
+        $(".btn-view-worklist,.btn-view-work").click(function() {
+            var $that = $(this);
+            var url = ctx + "/office/personal/worklist";
+            setTimeout(function() {
+                if($that.is(".btn-view-work")) {
+                    url = $that.data("url");
+                }
+                $.tabs.activeTab($.tabs.nextCustomTabIndex(), "我的待办工作", url, true)
+            }, 0);
+
+            return false;
+        });
+
 
     },
     initMessage : function() {
@@ -595,7 +626,7 @@ $.app = {
     ,
     initDatetimePicker : function() {
         //初始化 datetime picker
-        $('.date').each(function() {
+        $('.date:not(.custom)').each(function() {
             var $date = $(this);
 
             if($date.attr("initialized") == "true") {
@@ -609,9 +640,117 @@ $.app = {
                 pickTime : pickTime,
                 maskInput: true,
                 language:"zh-CN"
-            });
+            }).on('changeDate', function(ev) {
+                    if(pickTime == false) {
+                        $(this).data("datetimepicker").hide();
+                    }
+                });
             $date.find(":input").click(function() {$date.find(".icon-calendar,.icon-time,.icon-date").click();});
             $date.attr("initialized", true);
+        });
+    },
+    initCalendar : function() {
+
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        var calendar = $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            events: ctx + "/admin/personal/calendar/load",
+            eventDrop: function(event, delta) {
+                moveCalendar(event);
+            },
+            eventClick: function(event, delta) {
+                viewCalendar(event);
+            },
+            loading: function(bool) {
+                if (bool) $('#loading').show();
+                else $('#loading').hide();
+            },
+            editable: true,
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end, allDay) {
+                openNewCalendarForm(start, end);
+                calendar.fullCalendar('unselect');
+            }
+        });
+
+        $('span.fc-button-prev').before('<span class="fc-button fc-button-add fc-state-default fc-corner-left fc-corner-right">新增</span>');
+
+        $(".fc-button-add").click(function() {
+            openNewCalendarForm();
+        });
+
+        function openNewCalendarForm(start, end) {
+            var url = ctx + "/admin/personal/calendar/new";
+            if(start) {
+                start = $.fullCalendar.formatDate(start, "yyyy-MM-dd HH:mm:ss");
+                end = $.fullCalendar.formatDate(end, "yyyy-MM-dd HH:mm:ss");
+                url = url + "?start=" + start + "&end=" + end;
+            }
+            $.app.modalDialog("新增提醒事项", url, {
+                width:370,
+                height:430,
+                ok : function(modal) {
+
+                    var form = modal.find("#editForm");
+                    if(!form.validationEngine('validate')) {
+                        return false;
+                    }
+                    var url = ctx + "/admin/personal/calendar/new";
+                    $.post(url, form.serialize(), function() {
+                        calendar.fullCalendar("refetchEvents");
+                    });
+
+                    return true;
+                }
+            });
+        }
+
+        function moveCalendar(event) {
+            var url = ctx + "/admin/personal/calendar/move";
+            var id = event.id;
+            var start = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss");
+            var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
+            url = url + "?id=" + id;
+            url = url + "&start=" + start + "&end=" + end;
+
+            $.post(url, function() {
+                calendar.fullCalendar("refetchEvents");
+            });
+        }
+
+        function viewCalendar(event) {
+            var url = ctx + "/admin/personal/calendar/view/" + event.id;
+            $.app.modalDialog("查看提醒事项", url, {
+                width:370,
+                height:250,
+                noTitle : false,
+                okBtn : false,
+                closeBtn : false
+            });
+        }
+        $("body").on("click", ".btn-delete-calendar", function() {
+            var $this = $(this);
+            $.app.confirm({
+                title : '确认删除提醒事项吗？',
+                message : '确认删除提醒事项吗？',
+                ok : function() {
+                    var url = ctx + "/admin/personal/calendar/delete?id=" + $this.data("id");
+                    $.post(url, function() {
+                        calendar.fullCalendar("refetchEvents");
+                        $.app.closeModalDialog();
+                    });
+                }
+            });
+
         });
     }
     ,
@@ -994,15 +1133,15 @@ $.tabs = {
     createTab : function(title, panelIndex) {
         var tabs = $.tabs.tabs;
 
-        if(tabs.find(".ui-tabs-panel").length > 50) {
+        if(tabs.find(".ui-tabs-panel").length > 20) {
             $.app.alert({
                 message : "您打开的面板太多，为提高系统运行速度，请先关闭一些！"
             });
             return;
         }
 
-        var lastPanel = tabs.find(".ui-tabs-panel:last");
-        var newPanelIndex = panelIndex || parseInt(lastPanel.data("index")) + 1 || 1;
+
+        var newPanelIndex = panelIndex || $.tabs.maxTabIndex++ || 1;
         var newPanelId = "tabs-" + newPanelIndex;
         var tabTemplate = "<li><a href='#{href}'>{label}</a> <span class='menu icon-remove' role='presentation'title='关闭'></span><br/><span class='menu icon-refresh' role='presentation' title='刷新'></span></li>";
         var li = $(tabTemplate.replace(/\{href\}/g, newPanelId).replace(/\{label\}/g, title));

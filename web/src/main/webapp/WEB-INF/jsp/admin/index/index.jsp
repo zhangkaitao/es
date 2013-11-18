@@ -18,13 +18,17 @@
 
         <div class="ul-wrapper">
             <ul>
-                <li><a href="#tabs-0">欢迎使用</a></li>
+                <li>
+                    <a href="#tabs-0">欢迎使用</a>
+                    <span class='menu' role='presentation' style="display:inline-block;width: 14px;height: 14px"></span>
+                    <br/>
+                    <span class='menu icon-refresh' role='presentation' title='刷新'></span>
+                </li>
             </ul>
         </div>
         <span class="icon-chevron-right" style="display: none;"></span>
 
-        <div id="tabs-0">
-        </div>
+        <div id="tabs-0" data-index="0" data-url="${ctx}/admin/welcome"></div>
 
     </div>
 

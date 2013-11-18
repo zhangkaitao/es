@@ -571,7 +571,7 @@ iframe[tabs="true"] {
     color: #0088cc;
     border: 0px;
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 10px 10px 10px 20px;
 }
 
 .tabs-bar.ui-tabs .ui-tabs-nav li{
