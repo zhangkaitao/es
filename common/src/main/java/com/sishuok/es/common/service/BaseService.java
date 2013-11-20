@@ -189,6 +189,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public List<M> findAllWithSort(Searchable searchable) {
+        searchable.removePageable();
         return Lists.newArrayList(baseRepository.findAll(searchable).getContent());
     }
 
