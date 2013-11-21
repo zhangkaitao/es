@@ -92,7 +92,7 @@
                         double n2HitPercent = 1.0 * s2.getCacheHits() / Math.max(s2.getCacheHits() + s2.getCacheMisses(), 1);
                         return -Double.compare(n1HitPercent, n2HitPercent);
                     } else if("objectCount".equals(sort)) {
-                        return -Long.compare(s1.getObjectCount(), s2.getObjectCount());
+                        return -Long.valueOf(s1.getObjectCount()).compareTo(Long.valueOf(s2.getObjectCount()));
                     }
                     return -n1.compareTo(n2);
                 }
