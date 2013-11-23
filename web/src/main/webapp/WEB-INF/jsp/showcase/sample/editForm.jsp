@@ -72,7 +72,7 @@
             </div>
 
             <div class="control-group">
-                <form:label path="totalDays" cssClass="control-label">出生日期</form:label>
+                <form:label path="birthday" cssClass="control-label">出生日期</form:label>
                 <div class="controls input-append date">
                     <form:input path="birthday" data-format="yyyy-MM-dd hh:mm:ss" placeholder="例如2013-02-07 11:58:11"/>
                     <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
