@@ -22,6 +22,10 @@ import java.net.URLEncoder;
  */
 public class DownloadUtils {
 
+    public static void download(HttpServletRequest request, HttpServletResponse response, String filePath) throws IOException {
+        download(request, response, filePath, "");
+    }
+
     public static void download(HttpServletRequest request, HttpServletResponse response, String filePath, String displayName) throws IOException {
         File file = new File(filePath);
 

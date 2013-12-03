@@ -492,7 +492,7 @@ public class OnlineEditorController extends BaseController {
         String filePath = rootPath + File.separator + URLDecoder.decode(path, Constants.ENCODING);
         filePath = filePath.replace("\\", "/");
 
-        DownloadUtils.download(request, response, filePath, null);
+        DownloadUtils.download(request, response, filePath, "");
 
         return null;
 
