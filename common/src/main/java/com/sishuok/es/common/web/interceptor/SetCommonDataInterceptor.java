@@ -6,6 +6,8 @@
 package com.sishuok.es.common.web.interceptor;
 
 import com.sishuok.es.common.Constants;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -25,20 +27,31 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
 
+    private final PathMatcher pathMatcher = new AntPathMatcher();
+
     private static final String[] DEFAULT_EXCLUDE_PARAMETER_PATTERN = new String[]{
             "\\&\\w*page.pn=\\d+",
             "\\?\\w*page.pn=\\d+",
             "\\&\\w*page.size=\\d+"
     };
 
-    private String[] excludeParameterPattern = DEFAULT_EXCLUDE_PARAMETER_PATTERN;
+    private String[] excludeParameterPatterns = DEFAULT_EXCLUDE_PARAMETER_PATTERN;
+    private String[] excludeUrlPatterns = null;
 
-    public void setExcludeParameterPattern(String[] excludeParameterPattern) {
-        this.excludeParameterPattern = excludeParameterPattern;
+    public void setExcludeParameterPatterns(String[] excludeParameterPatterns) {
+        this.excludeParameterPatterns = excludeParameterPatterns;
+    }
+
+    public void setExcludeUrlPatterns(final String[] excludeUrlPatterns) {
+        this.excludeUrlPatterns = excludeUrlPatterns;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        if(isExclude(request)) {
+            return true;
+        }
 
         if (request.getAttribute(Constants.CONTEXT_PATH) == null) {
             request.setAttribute(Constants.CONTEXT_PATH, request.getContextPath());
@@ -53,7 +66,19 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
             request.setAttribute(Constants.BACK_URL, extractBackURL(request));
         }
 
-        return super.preHandle(request, response, handler);
+        return true;
+    }
+
+    private boolean isExclude(final HttpServletRequest request) {
+        if(excludeUrlPatterns == null) {
+            return false;
+        }
+        for(String pattern : excludeUrlPatterns) {
+            if(pathMatcher.match(pattern, request.getServletPath())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -62,7 +87,7 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
         String queryString = request.getQueryString();
         if (!StringUtils.isEmpty(queryString)) {
             queryString = "?" + queryString;
-            for (String pattern : excludeParameterPattern) {
+            for (String pattern : excludeParameterPatterns) {
                 queryString = queryString.replaceAll(pattern, "");
             }
             if (queryString.startsWith("&")) {
@@ -92,7 +117,7 @@ public class SetCommonDataInterceptor extends HandlerInterceptorAdapter {
             url = request.getHeader("Referer");
         }
 
-        if (!StringUtils.isEmpty(url) && (url.startsWith("http://") || url.startsWith("https"))) {
+        if(!StringUtils.isEmpty(url) && (url.startsWith("http://") || url.startsWith("https://"))) {
             return url;
         }
 
