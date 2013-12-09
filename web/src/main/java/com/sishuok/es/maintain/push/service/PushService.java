@@ -59,7 +59,6 @@ public class PushService {
 
     public DeferredResult newDeferredResult(final Long userId) {
         final DeferredResult<Object> deferredResult = new DeferredResult<Object>();
-
         deferredResult.onCompletion(new Runnable() {
             @Override
             public void run() {
@@ -70,7 +69,12 @@ public class PushService {
                 }
             }
         });
-
+        deferredResult.onTimeout(new Runnable() {
+            @Override
+            public void run() {
+                deferredResult.setErrorResult("");
+            }
+        });
         Queue<DeferredResult<Object>> queue = userIdToDeferredResultMap.get(userId);
         if(queue == null) {
             queue = new LinkedBlockingDeque<DeferredResult<Object>>();

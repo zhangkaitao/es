@@ -43,6 +43,27 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.maven.version}</version>
+                <configuration>
+                    <port>9080</port>
+                    <path>/${project.build.finalName}</path>
+                    <!-- spring profile  -->
+                    <systemProperties>
+                        <systemProperty>
+                            <name>spring.profiles.active</name>
+                            <value>development</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+
+            </plugin>
+
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>native2ascii-maven-plugin</artifactId>
@@ -185,6 +206,7 @@
     <properties>
         <sishuok.common.version>1.0-SNAPSHOT</sishuok.common.version>
         <jetty.version>8.1.8.v20121106</jetty.version>
+        <tomcat.maven.version>2.2</tomcat.maven.version>
         <support.basedir>${project.parent.parent.basedir}/src/support</support.basedir>
         <site.basedir>${project.parent.parent.basedir}</site.basedir>
         <mysql.version>5.1.27</mysql.version>
