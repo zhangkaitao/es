@@ -98,7 +98,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/admin/**" />
             <mvc:mapping path="/office/**" />
-            <!--<mvc:exclude-mapping path="/admin/polling"/>-->
+            <mvc:exclude-mapping path="/admin/polling"/>
             <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor"/>
         </mvc:interceptor>
         <!--<mvc:interceptor>-->
