@@ -9,7 +9,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseController;
 import com.sishuok.es.personal.calendar.entity.Calendar;
 import com.sishuok.es.personal.calendar.service.CalendarService;
@@ -42,7 +41,6 @@ public class CalendarController extends BaseController<Calendar, Long> {
     private static final String dataFormat = "yyyy-MM-dd HH:mm:ss";
 
     @Autowired
-    @BaseComponent
     private CalendarService calendarService;
 
 

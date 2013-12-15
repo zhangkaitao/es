@@ -17,12 +17,12 @@ import org.springframework.stereotype.Service;
  * <p>Date: 13-1-17 下午7:52
  * <p>Version: 1.0
  */
-@DependsOn("userRepository")
+@DependsOn("userRepository2")
 @Service()
-public class UserService extends BaseService<User, Long> {
+public class UserService2 extends UserService {
 
     @Autowired
-    @Qualifier("userRepository")
+    @Qualifier("userRepository2")
     @Override
     public void setBaseRepository(BaseRepository<User, Long> baseRepository) {
         super.setBaseRepository(baseRepository);

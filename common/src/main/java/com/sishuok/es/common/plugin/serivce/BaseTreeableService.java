@@ -40,7 +40,6 @@ public abstract class BaseTreeableService<M extends BaseEntity<ID> & Treeable<ID
 
     private RepositoryHelper repositoryHelper;
 
-
     protected BaseTreeableService() {
         Class<M> entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
         repositoryHelper = new RepositoryHelper(entityClass);

@@ -5,11 +5,8 @@
  */
 package com.sishuok.es.common.plugin.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Move;
-import com.sishuok.es.common.plugin.repository.MoveRepository;
 import com.sishuok.es.common.plugin.serivce.BaseMovableService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,9 +16,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MoveService extends BaseMovableService<Move, Long> {
-
-    @Autowired
-    @BaseComponent
-    private MoveRepository moveRepository;
 
 }

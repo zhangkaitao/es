@@ -9,6 +9,7 @@ import com.sishuok.es.common.entity.BaseInfo;
 import com.sishuok.es.common.entity.SchoolInfo;
 import com.sishuok.es.common.entity.User;
 import com.sishuok.es.common.entity.search.Searchable;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

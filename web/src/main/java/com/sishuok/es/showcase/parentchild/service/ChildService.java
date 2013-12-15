@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.parentchild.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.parentchild.entity.Child;
 import com.sishuok.es.showcase.parentchild.entity.Parent;
@@ -25,24 +24,24 @@ import java.util.List;
 @Service
 public class ChildService extends BaseService<Child, Long> {
 
-    @Autowired
-    @BaseComponent
-    private ChildRepository childRepository;
+    private ChildRepository getChildRepository() {
+        return (ChildRepository) baseRepository;
+    }
 
 
     public ChildService() {
     }
 
     public Page<Child> findByParent(Parent parent, Pageable pageable) {
-        return childRepository.findByParent(parent, pageable);
+        return getChildRepository().findByParent(parent, pageable);
     }
 
     Page<Child> findByParents(List<Parent> parents, Pageable pageable) {
-        return childRepository.findByParents(parents, pageable);
+        return getChildRepository().findByParents(parents, pageable);
     }
 
 
     public void deleteByParent(Parent parent) {
-        childRepository.deleteByParent(parent);
+        getChildRepository().deleteByParent(parent);
     }
 }

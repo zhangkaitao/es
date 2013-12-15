@@ -6,8 +6,6 @@
 package com.sishuok.es.common.web.controller;
 
 import com.sishuok.es.common.entity.AbstractEntity;
-import com.sishuok.es.common.inject.support.InjectBaseDependencyHelper;
-import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.ReflectUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -25,9 +23,7 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午3:56
  * <p>Version: 1.0
  */
-public abstract class BaseController<M extends AbstractEntity, ID extends Serializable> implements InitializingBean {
-
-    protected BaseService<M, ID> baseService;
+public abstract class BaseController<M extends AbstractEntity, ID extends Serializable> {
 
     /**
      * 实体类型
@@ -42,22 +38,6 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
         setViewPrefix(defaultViewPrefix());
     }
 
-    /**
-     * 设置基础service
-     *
-     * @param baseService
-     */
-    public void setBaseService(BaseService<M, ID> baseService) {
-        this.baseService = baseService;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if(this.entityClass != null) {
-            InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
-            Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
-        }
-    }
 
     /**
      * 设置通用数据

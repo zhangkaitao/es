@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.upload.web.controller;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
 import com.sishuok.es.showcase.upload.entity.Upload;
@@ -33,10 +32,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "showcase/upload")
 public class UploadController extends BaseCRUDController<Upload, Long> {
-
-    @Autowired
-    @BaseComponent
-    private UploadService uploadService;
 
     public UploadController() {
         setResourceIdentity("showcase:upload");

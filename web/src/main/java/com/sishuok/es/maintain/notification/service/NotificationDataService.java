@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.maintain.notification.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.maintain.notification.entity.NotificationData;
 import com.sishuok.es.maintain.notification.repository.NotificationDataRepository;
@@ -20,13 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationDataService extends BaseService<NotificationData, Long> {
 
-    @Autowired
-    @BaseComponent
-    private NotificationDataRepository notificationDataRepository;
+    private NotificationDataRepository getNotificationDataRepository() {
+        return (NotificationDataRepository) baseRepository;
+    }
 
 
     public void markReadAll(final Long userId) {
-        notificationDataRepository.markReadAll(userId);
+        getNotificationDataRepository().markReadAll(userId);
     }
 
 

@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.move.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseMovableService;
 import com.sishuok.es.showcase.move.entity.Move;
 import com.sishuok.es.showcase.move.repository.MoveRepository;
@@ -20,9 +19,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class MoveService extends BaseMovableService<Move, Long> {
 
-
-    @Autowired
-    @BaseComponent
-    private MoveRepository moveRepository;
 
 }

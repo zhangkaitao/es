@@ -8,7 +8,6 @@ package com.sishuok.es.maintain.icon.web.controller;
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.utils.LogUtils;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.upload.FileUploadUtils;
@@ -41,9 +40,9 @@ import java.util.List;
 @RequestMapping(value = "/admin/maintain/icon")
 public class IconController extends BaseCRUDController<Icon, Long> {
 
-    @Autowired
-    @BaseComponent
-    private IconService iconService;
+    private IconService getIconService() {
+        return (IconService) baseService;
+    }
 
     @Value("${icon.css.file.src}")
     private String iconClassFile;
@@ -181,7 +180,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
     @RequestMapping(value = "/select")
     public String select(Model model) {
         setCommonData(model);
-        model.addAttribute("icons", iconService.findAll());
+        model.addAttribute("icons", baseService.findAll());
         return viewName("select");
     }
 
@@ -211,7 +210,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         Searchable searchable = Searchable.newSearchable()
                 .addSearchParam("type_in", new IconType[]{IconType.upload_file, IconType.css_sprite});
 
-        List<Icon> iconList = iconService.findAllWithNoPageNoSort(searchable);
+        List<Icon> iconList = baseService.findAllWithNoPageNoSort(searchable);
 
         for (Icon icon : iconList) {
 
@@ -258,7 +257,7 @@ public class IconController extends BaseCRUDController<Icon, Long> {
         ValidateResponse response = ValidateResponse.newInstance();
 
         if ("identity".equals(fieldId)) {
-            Icon icon = iconService.findByIdentity(fieldValue);
+            Icon icon = getIconService().findByIdentity(fieldValue);
             if (icon == null || (icon.getId().equals(id) && icon.getIdentity().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");

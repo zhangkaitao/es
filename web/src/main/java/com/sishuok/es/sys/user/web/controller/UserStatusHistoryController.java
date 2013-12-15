@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.user.web.controller;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.user.entity.UserStatus;
 import com.sishuok.es.sys.user.entity.UserStatusHistory;
@@ -23,10 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/admin/sys/user/statusHistory")
 public class UserStatusHistoryController extends BaseCRUDController<UserStatusHistory, Long> {
-
-    @Autowired
-    @BaseComponent
-    private UserStatusHistoryService userStatusHistoryService;
 
     public UserStatusHistoryController() {
         setListAlsoSetCommonData(true);

@@ -7,7 +7,6 @@ package com.sishuok.es.sys.resource.service;
 
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.sys.auth.service.UserAuthService;
 import com.sishuok.es.sys.resource.entity.Resource;
@@ -32,10 +31,6 @@ import java.util.Set;
  */
 @Service
 public class ResourceService extends BaseTreeableService<Resource, Long> {
-
-    @Autowired
-    @BaseComponent
-    private ResourceRepository resourceRepository;
 
     @Autowired
     private UserAuthService userAuthService;

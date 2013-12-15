@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.upload.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.upload.entity.Upload;
 import com.sishuok.es.showcase.upload.repository.UploadRepository;
@@ -19,9 +18,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UploadService extends BaseService<Upload, Long> {
-
-    @Autowired
-    @BaseComponent
-    private UploadRepository uploadRepository;
 
 }

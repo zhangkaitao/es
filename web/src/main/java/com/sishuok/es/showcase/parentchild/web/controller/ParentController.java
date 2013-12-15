@@ -9,7 +9,6 @@ import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.FormModel;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
@@ -38,9 +37,9 @@ import java.util.List;
 @RequestMapping(value = "/showcase/parentchild/parent")
 public class ParentController extends BaseCRUDController<Parent, Long> {
 
-    @Autowired
-    @BaseComponent
-    private ParentService parentService;
+    private ParentService getParentService() {
+        return (ParentService) baseService;
+    }
 
     @Autowired
     private ChildService childService;
@@ -74,7 +73,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         if (hasError(parent, result)) {
             return showCreateForm(model);
         }
-        parentService.save(parent, childList);
+        getParentService().save(parent, childList);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "创建成功");
         return redirectToUrl(null);
     }
@@ -103,7 +102,7 @@ public class ParentController extends BaseCRUDController<Parent, Long> {
         if (hasError(parent, result)) {
             return showUpdateForm(parent, model);
         }
-        parentService.update(parent, childList);
+        getParentService().update(parent, childList);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
         return redirectToUrl(backURL);
     }

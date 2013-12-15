@@ -8,6 +8,7 @@ package com.sishuok.es.common.repository;
 import com.sishuok.es.common.entity.SchoolType;
 import com.sishuok.es.common.entity.Sex;
 import com.sishuok.es.common.entity.User;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

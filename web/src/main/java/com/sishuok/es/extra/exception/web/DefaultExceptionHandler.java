@@ -32,7 +32,6 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
         LogUtils.logError("用户权限验证失败", e);
-
         ExceptionResponse exceptionResponse = ExceptionResponse.from(e);
 
         ModelAndView mv = new ModelAndView();

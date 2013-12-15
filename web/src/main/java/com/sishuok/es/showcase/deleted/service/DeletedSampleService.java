@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.deleted.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.deleted.entity.DeletedSample;
 import com.sishuok.es.showcase.deleted.repository.DeletedSampleRepository;
@@ -20,12 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeletedSampleService extends BaseService<DeletedSample, Long> {
 
-    @Autowired
-    @BaseComponent
-    private DeletedSampleRepository sampleRepository;
+    private DeletedSampleRepository getSampleRepository() {
+        return (DeletedSampleRepository) baseRepository;
+    }
 
     public DeletedSample findByName(String name) {
-        return sampleRepository.findByName(name);
+        return getSampleRepository().findByName(name);
     }
 
 }

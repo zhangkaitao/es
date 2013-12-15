@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.user.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.UserLastOnline;
 import com.sishuok.es.sys.user.repository.UserLastOnlineRepository;
@@ -20,13 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserLastOnlineService extends BaseService<UserLastOnline, Long> {
 
-    @Autowired
-    @BaseComponent
-    private UserLastOnlineRepository userLastOnlineRepository;
+    private UserLastOnlineRepository getUserLastOnlineRepository() {
+        return (UserLastOnlineRepository) baseRepository;
+    }
 
 
     public UserLastOnline findByUserId(Long userId) {
-        return userLastOnlineRepository.findByUserId(userId);
+        return getUserLastOnlineRepository().findByUserId(userId);
     }
 
     public void lastOnline(UserLastOnline lastOnline) {

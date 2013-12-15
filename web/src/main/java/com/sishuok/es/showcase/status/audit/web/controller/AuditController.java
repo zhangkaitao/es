@@ -6,7 +6,6 @@
 package com.sishuok.es.showcase.status.audit.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Stateable;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.status.audit.entity.Audit;
@@ -35,9 +34,9 @@ import java.util.List;
 @RequestMapping(value = "/showcase/status/audit")
 public class AuditController extends BaseCRUDController<Audit, Long> {
 
-    @Autowired
-    @BaseComponent
-    private AuditService auditService;
+    private AuditService getAuditService() {
+        return (AuditService) baseService;
+    }
 
     public AuditController() {
         setListAlsoSetCommonData(true);
@@ -63,7 +62,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
 
         List<Audit> auditList = new ArrayList<Audit>();
         for (Long id : ids) {
-            Audit audit = auditService.findOne(id);
+            Audit audit = getAuditService().findOne(id);
             if (audit.getStatus() != Stateable.AuditStatus.waiting) {
                 redirectAttributes.addFlashAttribute(Constants.ERROR, "数据中有已通过审核的，不能重复审核！");
                 return "redirect:" + request.getAttribute(Constants.BACK_URL);
@@ -73,7 +72,7 @@ public class AuditController extends BaseCRUDController<Audit, Long> {
         for (Audit audit : auditList) {
             audit.setStatus(status);
             audit.setComment(comment);
-            auditService.update(audit);
+            getAuditService().update(audit);
         }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");

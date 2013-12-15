@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.group.service;
 
 import com.google.common.collect.Sets;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.group.entity.GroupRelation;
 import com.sishuok.es.sys.group.repository.GroupRelationRepository;
@@ -24,9 +23,9 @@ import java.util.Set;
 @Service
 public class GroupRelationService extends BaseService<GroupRelation, Long> {
 
-    @Autowired
-    @BaseComponent
-    private GroupRelationRepository groupRelationRepository;
+    private GroupRelationRepository getGroupRelationRepository() {
+        return (GroupRelationRepository) baseRepository;
+    }
 
 
     public void appendRelation(Long groupId, Long[] organizationIds) {
@@ -37,7 +36,7 @@ public class GroupRelationService extends BaseService<GroupRelation, Long> {
             if (organizationId == null) {
                 continue;
             }
-            GroupRelation r = groupRelationRepository.findByGroupIdAndOrganizationId(groupId, organizationId);
+            GroupRelation r = getGroupRelationRepository().findByGroupIdAndOrganizationId(groupId, organizationId);
             if (r == null) {
                 r = new GroupRelation();
                 r.setGroupId(groupId);
@@ -56,7 +55,7 @@ public class GroupRelationService extends BaseService<GroupRelation, Long> {
                 if (userId == null) {
                     continue;
                 }
-                GroupRelation r = groupRelationRepository.findByGroupIdAndUserId(groupId, userId);
+                GroupRelation r = getGroupRelationRepository().findByGroupIdAndUserId(groupId, userId);
                 if (r == null) {
                     r = new GroupRelation();
                     r.setGroupId(groupId);
@@ -71,11 +70,11 @@ public class GroupRelationService extends BaseService<GroupRelation, Long> {
                 Long startUserId = startUserIds[i];
                 Long endUserId = endUserIds[i];
                 //范围查 如果在指定范围内 就没必要再新增一个 如当前是[10,20] 如果数据库有[9,21]
-                GroupRelation r = groupRelationRepository.findByGroupIdAndStartUserIdLessThanEqualAndEndUserIdGreaterThanEqual(groupId, startUserId, endUserId);
+                GroupRelation r = getGroupRelationRepository().findByGroupIdAndStartUserIdLessThanEqualAndEndUserIdGreaterThanEqual(groupId, startUserId, endUserId);
 
                 if (r == null) {
                     //删除范围内的
-                    groupRelationRepository.deleteInRange(startUserId, endUserId);
+                    getGroupRelationRepository().deleteInRange(startUserId, endUserId);
                     r = new GroupRelation();
                     r.setGroupId(groupId);
                     r.setStartUserId(startUserId);
@@ -89,10 +88,10 @@ public class GroupRelationService extends BaseService<GroupRelation, Long> {
 
     public Set<Long> findGroupIds(Long userId, Set<Long> organizationIds) {
         if (organizationIds.isEmpty()) {
-            return Sets.newHashSet(groupRelationRepository.findGroupIds(userId));
+            return Sets.newHashSet(getGroupRelationRepository().findGroupIds(userId));
         }
 
-        return Sets.newHashSet(groupRelationRepository.findGroupIds(userId, organizationIds));
+        return Sets.newHashSet(getGroupRelationRepository().findGroupIds(userId, organizationIds));
     }
 
 }

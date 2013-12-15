@@ -6,7 +6,6 @@
 package com.sishuok.es.showcase.sample.web.controller;
 
 import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.sample.entity.Sample;
@@ -33,9 +32,9 @@ import java.util.Date;
 @RequestMapping(value = "/showcase/sample")
 public class SampleController extends BaseCRUDController<Sample, Long> {
 
-    @Autowired
-    @BaseComponent
-    private SampleService sampleService;
+    private SampleService getSampleService() {
+        return (SampleService) baseService;
+    }
 
     public SampleController() {
         setResourceIdentity("showcase:sample");
@@ -89,7 +88,7 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
         ValidateResponse response = ValidateResponse.newInstance();
 
         if ("name".equals(fieldId)) {
-            Sample sample = sampleService.findByName(fieldValue);
+            Sample sample = getSampleService().findByName(fieldValue);
             if (sample == null || (sample.getId().equals(id) && sample.getName().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");
