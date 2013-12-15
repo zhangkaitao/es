@@ -28,6 +28,7 @@
             validator="validator"
             conversion-service="conversionService"
             content-negotiation-manager="contentNegotiationManager"
+            enable-matrix-variables="true"
             >
         <!--enableMatrixVariables="true">-->
         <!-- 异步支持 默认30秒超时 -->
