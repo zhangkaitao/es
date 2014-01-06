@@ -9,7 +9,7 @@
     <%@include file="nav.jspf" %>
 
     <ul class="nav nav-pills">
-        <li ${empty param.sort ? "class='active'" : ""}><a href="">默认排序</a></li>
+        <li ${empty param.sort ? "class='active'" : ""}><a href="?">默认排序</a></li>
         <li ${param.sort eq 'hitPercent' ? "class='active'" : ""}><a href="?sort=hitPercent">总命中率</a></li>
         <li ${param.sort eq 'objectCount' ? "class='active'" : ""}><a href="?sort=objectCount">内存中对象数</a></li>
     </ul>
