@@ -19,6 +19,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.util.WebUtils;
 
@@ -404,7 +405,9 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
         MockHttpServletRequest mockRequest = null;
         if (multipartRequest != null) {
             MockMultipartHttpServletRequest mockMultipartRequest = new MockMultipartHttpServletRequest();
-            mockMultipartRequest.getMultiFileMap().putAll(multipartRequest.getMultiFileMap());
+            for(MultipartFile file : mockMultipartRequest.getFileMap().values()) {
+                mockMultipartRequest.addFile(file);
+            }
         } else {
             mockRequest = new MockHttpServletRequest();
         }
