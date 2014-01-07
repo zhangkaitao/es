@@ -1,6 +1,6 @@
 <a href="http://zhangkaitao.github.io/es/" target="_blank">项目首页</a>
 |
-<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a>
+<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a> | 加134755960 QQ群讨论
 
 
 ##介绍
@@ -68,6 +68,7 @@
  * 其他浏览器暂时未测试
 
 ###系统界面截图
+* <a href="http://demo.kaifazhe.me/es/admin/index" target="_blank">演示地址（感谢134755960群友Panda支持）</a>
 * <a href="https://github.com/zhangkaitao/es/blob/master/src/support/img/1.PNG?raw=true" target="_blank">点击查看1</a>
 * <a href="https://github.com/zhangkaitao/es/blob/master/src/support/img/2.PNG?raw=true" target="_blank">点击查看2</a>
 * <a href="https://github.com/zhangkaitao/es/blob/master/src/support/img/3.PNG?raw=true" target="_blank">点击查看3</a>
