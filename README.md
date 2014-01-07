@@ -1,6 +1,6 @@
 <a href="http://zhangkaitao.github.io/es/" target="_blank">项目首页</a>
 |
-<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a> | 加134755960 QQ群讨论
+<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a> | <a href="http://url.cn/MViZN0">点击加134755960 QQ群讨论</a>
 
 
 ##介绍
