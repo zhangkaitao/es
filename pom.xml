@@ -85,7 +85,12 @@
         <repository>
             <id>sourceforge-releases</id>
             <name>Sourceforge Releases</name>
-            <url>https://oss.sonatype.org/content/repositories/sourceforge-releases/</url>
+            <url>https://oss.sonatype.org/content/repositories/sourceforge-releases</url>
+        </repository>
+        <repository>
+            <id>oschina Releases</id>
+            <name>oschina Releases</name>
+            <url>http://maven.oschina.net/content/groups/public</url>
         </repository>
     </repositories>
     <pluginRepositories>
