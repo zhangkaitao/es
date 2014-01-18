@@ -31,7 +31,7 @@
             <a class="reverse-all" href="javascript:;">反选</a>
         </th>
         <th style="width: 100px" sort="id">任务名称</th>
-        <th style="width: 150px" sort="name">cron表达式</th>
+        <th style="width: 100px" sort="name">cron表达式</th>
         <th>任务Bean名称/任务全限定类名</th>
         <th>任务方法名</th>
         <th>是否已启动</th>
