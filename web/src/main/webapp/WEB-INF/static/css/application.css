@@ -186,6 +186,9 @@ input.search-query {
     font-size: 14px;
     left: 60%;
 }
+.modal input {
+    margin-bottom: 5px;
+}
 .modal.fade.in {
     top: 15%;
 }
