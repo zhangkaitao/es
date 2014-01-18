@@ -198,6 +198,8 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         }
 
         baseService.delete(m);
+
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
     }
 
