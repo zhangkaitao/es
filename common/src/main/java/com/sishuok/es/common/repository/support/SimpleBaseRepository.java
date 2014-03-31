@@ -88,7 +88,6 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
         findAllQL = String.format(FIND_QUERY_STRING, entityName);
         countAllQL = String.format(COUNT_QUERY_STRING, entityName);
-        countAllQL = String.format(COUNT_QUERY_STRING, entityName);
     }
 
 
