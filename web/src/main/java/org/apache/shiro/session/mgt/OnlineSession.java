@@ -23,6 +23,13 @@ public class OnlineSession extends SimpleSession {
     // a new number in this case, use the JDK's 'serialver' program to generate it.
     private static final long serialVersionUID = -7125642695178165650L;
 
+    private static final int USER_ID_BIT_MASK = 1 << bitIndexCounter++;
+    private static final int USER_AGENT_BIT_MASK = 1 << bitIndexCounter++;
+    private static final int STATUS_BIT_MASK = 1 << bitIndexCounter++;
+    private static final int USERNAME_BIT_MASK = 1 << bitIndexCounter++;
+    private static final int REMEMBER_ME_BIT_MASK = 1 << bitIndexCounter++;
+
+
     public static enum OnlineStatus {
         on_line("在线"), hidden("隐身"), force_logout("强制退出");
         private final String info;
@@ -35,13 +42,6 @@ public class OnlineSession extends SimpleSession {
             return info;
         }
     }
-
-    private static final int USER_ID_BIT_MASK = 1 << bitIndexCounter++;
-    private static final int USER_AGENT_BIT_MASK = 1 << bitIndexCounter++;
-    private static final int STATUS_BIT_MASK = 1 << bitIndexCounter++;
-    private static final int USERNAME_BIT_MASK = 1 << bitIndexCounter++;
-    private static final int REMEMBER_ME_BIT_MASK = 1 << bitIndexCounter++;
-
 
     //当前登录的用户Id
     private Long userId = 0L;
@@ -62,6 +62,7 @@ public class OnlineSession extends SimpleSession {
      * 用户登录时系统IP
      */
     private String systemHost;
+
 
     public OnlineSession() {
         super();
