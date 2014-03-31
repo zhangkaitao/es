@@ -41,6 +41,12 @@
     <repositories>
 
         <repository>
+            <id>oschina Releases</id>
+            <name>oschina Releases</name>
+            <url>http://maven.oschina.net/content/groups/public</url>
+        </repository>
+
+        <repository>
             <id>apache-repo</id>
             <name>apache Repository</name>
             <url>https://repository.apache.org/content/groups/public/</url>
@@ -87,13 +93,16 @@
             <name>Sourceforge Releases</name>
             <url>https://oss.sonatype.org/content/repositories/sourceforge-releases</url>
         </repository>
-        <repository>
+
+    </repositories>
+    <pluginRepositories>
+
+        <pluginRepository>
             <id>oschina Releases</id>
             <name>oschina Releases</name>
             <url>http://maven.oschina.net/content/groups/public</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
+        </pluginRepository>
+
         <pluginRepository>
             <id>maven2-repo</id>
             <name>maven2 Repository</name>
