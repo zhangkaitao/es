@@ -655,6 +655,11 @@
         <!-- jcaptcha 验证码 -->
         <dependency>
             <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha-api</artifactId>
+            <version>${jcaptcha.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
             <artifactId>jcaptcha</artifactId>
             <version>${jcaptcha.version}</version>
         </dependency>
