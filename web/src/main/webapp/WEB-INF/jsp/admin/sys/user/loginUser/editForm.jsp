@@ -93,7 +93,7 @@
             <div class="control-group">
                 <label class="control-label">总在线时长</label>
                 <div class="controls">
-                    <input type="text" value="<time:prettySecond seconds="${lastOnline.totalOnlineTime}"/>"/>
+                    <input type="text" value="<time:prettySecond seconds='lastOnline.totalOnlineTime'/>"/>
                 </div>
             </div>
         </c:if>
