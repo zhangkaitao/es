@@ -44,11 +44,12 @@ public class Generate {
 		// packageName 包名，这里如果更改包名，请在applicationContext.xml和srping-mvc.xml中配置base-package、packagesToScan属性，来指定多个（共4处需要修改）。
 		String packageName = "com.sishuok.es";
 		
-		String sysName = "showcase";			// 所属系统名，例：sys、showcase、maintain、personal
-		String moduleName = "member";		// 模块名（可选） 
-		String className = "Member";			// 类名，例：user
+		String sysName = "maintain";			// 所属系统名，例：sys、showcase、maintain、personal
+		String moduleName = "plugin";		// 模块名（可选） 
+		String tableName = "maintain_plugin_config";			// 表明，例：user
+		String className = "PluginConfig";			// 类名，例：User
 		String classAuthor = "xxs";		// 类作者，例：ThinkGem
-		String functionName = "会员";			// 功能名，例：用户
+		String functionName = "插件";			// 功能名，例：用户
 
 		// 是否启用生成工具
 		//Boolean isEnable = false;
@@ -87,7 +88,7 @@ public class Generate {
 		logger.info("Java Path: {}", javaPath);
 		
 		// 视图文件路径
-		String viewPath = StringUtils.replace(projectPath+"/src/main/webapp/WEB-INF/jsp/showcase", "/", separator);
+		String viewPath = StringUtils.replace(projectPath+"/src/main/webapp/WEB-INF/jsp/admin", "/", separator);
 		logger.info("View Path: {}", viewPath);
 		
 		// 代码模板配置
@@ -100,12 +101,12 @@ public class Generate {
 		model.put("packageName", StringUtils.lowerCase(packageName));	//包路径
 		model.put("sysName", StringUtils.lowerCase(sysName));			//所属系统模块名称
 		model.put("moduleName", StringUtils.lowerCase(moduleName));		//模块名称
+		model.put("tableName", StringUtils.lowerCase(tableName));	//表明
 		model.put("className", StringUtils.uncapitalize(className));	//类名（首字母大写）
 		model.put("ClassName", StringUtils.capitalize(className));		//类名
 		model.put("classAuthor", StringUtils.isNotBlank(classAuthor)?classAuthor:"Generate Tools");		//作者
 		model.put("classVersion", DateUtils.getDate());					//日期
 		model.put("functionName", functionName);						//模块名
-		model.put("tableName", model.get("className"));	//表名
 		model.put("urlPrefix", model.get("moduleName")+"_"+model.get("className"));	//jsp模板中需要的请求字符串
 		model.put("viewPrefix", //StringUtils.substringAfterLast(model.get("packageName"),".")+"/"+
 				model.get("urlPrefix"));
@@ -151,6 +152,7 @@ public class Generate {
 		template = cfg.getTemplate("editForm.ftl");
 		content = FreeMarkers.renderTemplate(template, model);
 		filePath = viewPath+separator+model.get("moduleName")+separator+"editForm.jsp";
+		System.out.println("---------------------------------------------------");
 		System.out.println("ViewForm   filePath"+filePath);
 		writeFile(content, filePath);
 		logger.info("ViewForm: {}", filePath);
