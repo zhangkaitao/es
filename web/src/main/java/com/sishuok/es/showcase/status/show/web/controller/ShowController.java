@@ -6,7 +6,6 @@
 package com.sishuok.es.showcase.status.show.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.entity.Stateable;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.status.show.entity.Show;
@@ -33,10 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/showcase/status/show")
 public class ShowController extends BaseCRUDController<Show, Long> {
 
-    @Autowired
-    @BaseComponent
-    private ShowService showService;
-
     public ShowController() {
         setListAlsoSetCommonData(true);
         setResourceIdentity("showcase:statusShow");
@@ -58,9 +53,9 @@ public class ShowController extends BaseCRUDController<Show, Long> {
         this.permissionList.assertHasPermission("audit");
 
         for (Long id : ids) {
-            Show show = showService.findOne(id);
+            Show show = baseService.findOne(id);
             show.setStatus(status);
-            showService.update(show);
+            baseService.update(show);
         }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");

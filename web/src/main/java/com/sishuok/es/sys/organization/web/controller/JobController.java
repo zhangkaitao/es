@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.organization.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.service.JobService;
@@ -28,10 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/organization/job")
 public class JobController extends BaseTreeableController<Job, Long> {
 
-    @Autowired
-    @BaseComponent
-    private JobService jobService;
-
     public JobController() {
         setResourceIdentity("sys:job");
     }
@@ -47,9 +42,9 @@ public class JobController extends BaseTreeableController<Job, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Job job = jobService.findOne(id);
+            Job job = baseService.findOne(id);
             job.setShow(newStatus);
-            jobService.update(job);
+            baseService.update(job);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 

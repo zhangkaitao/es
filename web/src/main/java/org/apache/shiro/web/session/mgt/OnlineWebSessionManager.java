@@ -100,9 +100,9 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
         PageRequest pageRequest = new PageRequest(0, 100);
         Page<UserOnline> page = userOnlineService.findExpiredUserOnlineList(expiredDate, pageRequest);
 
-        List<String> needOfflineIdList = Lists.newArrayList();
         //改成批量过期删除
         while (page.hasContent()) {
+            List<String> needOfflineIdList = Lists.newArrayList();
             for (UserOnline userOnline : page.getContent()) {
                 try {
                     SessionKey key = new DefaultSessionKey(userOnline.getId());
@@ -123,16 +123,15 @@ public class OnlineWebSessionManager extends DefaultWebSessionManager {
                     needOfflineIdList.add(userOnline.getId());
                 }
 
-                if (needOfflineIdList.size() > 0) {
-                    try {
-                        userOnlineService.batchOffline(needOfflineIdList);
-                    } catch (Exception e) {
-                        log.error("batch delete db session error.", e);
-                    }
+            }
+            if (needOfflineIdList.size() > 0) {
+                try {
+                    userOnlineService.batchOffline(needOfflineIdList);
+                } catch (Exception e) {
+                    log.error("batch delete db session error.", e);
                 }
             }
-
-            pageRequest = new PageRequest((pageRequest.getPageNumber() + 1) * pageRequest.getPageSize(), pageRequest.getPageSize());
+            pageRequest = new PageRequest(0, pageRequest.getPageSize());
             page = userOnlineService.findExpiredUserOnlineList(expiredDate, pageRequest);
         }
 

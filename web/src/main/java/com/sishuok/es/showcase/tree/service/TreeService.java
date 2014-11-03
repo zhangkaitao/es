@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.tree.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.showcase.tree.entity.Tree;
 import com.sishuok.es.showcase.tree.repository.TreeRepository;
@@ -19,10 +18,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TreeService extends BaseTreeableService<Tree, Long> {
-
-    @Autowired
-    @BaseComponent
-    private TreeRepository treeRepository;
-
 
 }

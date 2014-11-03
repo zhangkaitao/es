@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.organization.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.sys.organization.entity.Organization;
 import com.sishuok.es.sys.organization.entity.OrganizationType;
@@ -30,10 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/organization/organization")
 public class OrganizationController extends BaseTreeableController<Organization, Long> {
 
-    @Autowired
-    @BaseComponent
-    private OrganizationService organizationService;
-
     public OrganizationController() {
         setResourceIdentity("sys:organization");
     }
@@ -56,9 +51,9 @@ public class OrganizationController extends BaseTreeableController<Organization,
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Organization organization = organizationService.findOne(id);
+            Organization organization = baseService.findOne(id);
             organization.setShow(newStatus);
-            organizationService.update(organization);
+            baseService.update(organization);
         }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");

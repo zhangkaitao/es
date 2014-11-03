@@ -7,7 +7,6 @@ package com.sishuok.es.sys.permission.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.AvailableEnum;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.permission.entity.Permission;
 import com.sishuok.es.sys.permission.service.PermissionService;
@@ -29,10 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/permission/permission")
 public class PermissionController extends BaseCRUDController<Permission, Long> {
 
-    @Autowired
-    @BaseComponent
-    private PermissionService permissionService;
-
     public PermissionController() {
         setResourceIdentity("sys:permission");
     }
@@ -53,9 +48,9 @@ public class PermissionController extends BaseCRUDController<Permission, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Permission permission = permissionService.findOne(id);
+            Permission permission = baseService.findOne(id);
             permission.setShow(newStatus);
-            permissionService.update(permission);
+            baseService.update(permission);
         }
 
 

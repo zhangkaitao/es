@@ -9,7 +9,6 @@ import com.google.common.collect.Sets;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.AvailableEnum;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.permission.entity.Role;
 import com.sishuok.es.sys.permission.entity.RoleResourcePermission;
@@ -34,10 +33,6 @@ import java.util.Set;
 @Controller
 @RequestMapping(value = "/admin/sys/permission/role")
 public class RoleController extends BaseCRUDController<Role, Long> {
-
-    @Autowired
-    @BaseComponent
-    private RoleService roleService;
 
     @Autowired
     private PermissionService permissionService;
@@ -139,9 +134,9 @@ public class RoleController extends BaseCRUDController<Role, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Role role = roleService.findOne(id);
+            Role role = baseService.findOne(id);
             role.setShow(newStatus);
-            roleService.update(role);
+            baseService.update(role);
         }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");

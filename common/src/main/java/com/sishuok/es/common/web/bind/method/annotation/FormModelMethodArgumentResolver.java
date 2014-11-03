@@ -8,6 +8,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
@@ -19,11 +20,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -404,7 +409,10 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
         MockHttpServletRequest mockRequest = null;
         if (multipartRequest != null) {
             MockMultipartHttpServletRequest mockMultipartRequest = new MockMultipartHttpServletRequest();
-            mockMultipartRequest.getMultiFileMap().putAll(multipartRequest.getMultiFileMap());
+            for(MultipartFile file : multipartRequest.getFileMap().values()) {
+                mockMultipartRequest.addFile(new MultipartFileWrapper(getNewParameterName(file.getName(), modelPrefixName), file));
+            }
+            mockRequest = mockMultipartRequest;
         } else {
             mockRequest = new MockHttpServletRequest();
         }
@@ -523,5 +531,56 @@ public class FormModelMethodArgumentResolver extends BaseMethodArgumentResolver 
         boolean hasBindingResult = (paramTypes.length > (i + 1) && Errors.class.isAssignableFrom(paramTypes[i + 1]));
 
         return !hasBindingResult;
+    }
+
+
+    private static class MultipartFileWrapper implements MultipartFile {
+        private String name;
+        private MultipartFile delegate;
+
+        private MultipartFileWrapper(String name, MultipartFile delegate) {
+            this.name = name;
+            this.delegate = delegate;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String getOriginalFilename() {
+            return delegate.getOriginalFilename();
+        }
+
+        @Override
+        public String getContentType() {
+            return delegate.getContentType();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return delegate.isEmpty();
+        }
+
+        @Override
+        public long getSize() {
+            return delegate.getSize();
+        }
+
+        @Override
+        public byte[] getBytes() throws IOException {
+            return delegate.getBytes();
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return delegate.getInputStream();
+        }
+
+        @Override
+        public void transferTo(File dest) throws IOException, IllegalStateException {
+            delegate.transferTo(dest);
+        }
     }
 }

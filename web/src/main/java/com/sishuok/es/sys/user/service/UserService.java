@@ -11,7 +11,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOrganizationJob;
@@ -42,8 +41,9 @@ import java.util.Set;
 public class UserService extends BaseService<User, Long> {
 
     @Autowired
-    @BaseComponent
-    private UserRepository userRepository;
+    private UserRepository getUserRepository() {
+        return (UserRepository) baseRepository;
+    }
 
     @Autowired
     private UserStatusHistoryService userStatusHistoryService;
@@ -89,7 +89,7 @@ public class UserService extends BaseService<User, Long> {
     }
 
     public UserOrganizationJob findUserOrganizationJob(UserOrganizationJob userOrganizationJob) {
-        return userRepository.findUserOrganization(
+        return getUserRepository().findUserOrganization(
                 userOrganizationJob.getUser(),
                 userOrganizationJob.getOrganizationId(),
                 userOrganizationJob.getJobId());
@@ -99,14 +99,14 @@ public class UserService extends BaseService<User, Long> {
         if(StringUtils.isEmpty(username)) {
             return null;
         }
-        return userRepository.findByUsername(username);
+        return getUserRepository().findByUsername(username);
     }
 
     public User findByEmail(String email) {
         if(StringUtils.isEmpty(email)) {
             return null;
         }
-        return userRepository.findByEmail(email);
+        return getUserRepository().findByEmail(email);
     }
 
 
@@ -114,7 +114,7 @@ public class UserService extends BaseService<User, Long> {
         if(StringUtils.isEmpty(mobilePhoneNumber)) {
             return null;
         }
-        return userRepository.findByMobilePhoneNumber(mobilePhoneNumber);
+        return getUserRepository().findByMobilePhoneNumber(mobilePhoneNumber);
     }
 
 
@@ -275,7 +275,7 @@ public class UserService extends BaseService<User, Long> {
      * @return
      */
     public Page<UserOrganizationJob> findUserOrganizationJobOnNotExistsOrganizationOrJob(Pageable pageable) {
-        return userRepository.findUserOrganizationJobOnNotExistsOrganizationOrJob(pageable);
+        return getUserRepository().findUserOrganizationJobOnNotExistsOrganizationOrJob(pageable);
     }
 
     /**
@@ -284,6 +284,6 @@ public class UserService extends BaseService<User, Long> {
      * @return
      */
     public void deleteUserOrganizationJobOnNotExistsUser() {
-        userRepository.deleteUserOrganizationJobOnNotExistsUser();
+        getUserRepository().deleteUserOrganizationJobOnNotExistsUser();
     }
 }

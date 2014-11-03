@@ -6,9 +6,10 @@
 package com.sishuok.es.common.service;
 
 import com.sishuok.es.common.entity.User;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
-import com.sishuok.es.common.repository.UserRepository;
+import com.sishuok.es.common.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,10 +17,14 @@ import org.springframework.stereotype.Service;
  * <p>Date: 13-1-17 下午7:52
  * <p>Version: 1.0
  */
+@DependsOn("userRepository")
 @Service()
 public class UserService extends BaseService<User, Long> {
 
     @Autowired
-    @BaseComponent
-    UserRepository userRepository;
+    @Qualifier("userRepository")
+    @Override
+    public void setBaseRepository(BaseRepository<User, Long> baseRepository) {
+        super.setBaseRepository(baseRepository);
+    }
 }

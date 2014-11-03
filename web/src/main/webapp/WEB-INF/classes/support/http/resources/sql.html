@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Druid SQL Stat</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+		<link href='css/bootstrap.min.css' rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet"/>
+    	<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf8"></script>
+	</head>
+	<body>
+		<div class="container-fluid">
+      		<div class="row-fluid">
+        		<div class="span12">
+          				<h3>
+          					SQL Stat
+          					<a href="sql.json" target="_blank">View JSON API</a>
+          				</h3>
+						<table id="dataTable" class="table table-bordered table-striped responsive-utilities">
+							<thead>
+								<tr>
+									<th>N</th>
+									<th><a id="th-SQL" >SQL</a></th>
+									<th width="50" title="Execute Count"><a id="th-ExecuteCount" >ExecCount</a></th>
+									<th width="50" title="Execute Time Millis Total"><a id="th-TotalTime" >ExecTime</a></th>
+									<th width="50" title="Execute Time Millis Max"><a id="th-MaxTimespan" >ExecMax</a></th>
+									<th width="50" title="Execute In Transaction Count"><a id="th-InTransactionCount" >Txn</a></th>
+									<th width="50" title="Error Count"><a id="th-ErrorCount" >Error</a></th>
+									<th width="50" title="Update Count"><a id="th-UpdateCount" >Update</a></th>
+									<th width="50" title="Fetch Row Count"><a id="th-FetchRowCount" >FetchRow</a></th>
+									<th width="50" title="Running Count"><a id="th-RunningCount" >Running</a></th>
+									<th width="50" title="Concurrent Max"><a id="th-ConcurrentMax" >Concurrent</a></th>
+									<th align="left" width="100">ExecHisto <br />[ 
+										<a id="th-Histogram[0]" title="count of '0-1 ms'" >-</a>
+										<a id="th-Histogram[1]" title="count of '1-10 ms'" >-</a>
+										<a id="th-Histogram[2]" title="count of '10-100 ms'" >-</a>
+										<a id="th-Histogram[3]" title="count of '100ms-1 s'" >-</a>
+										<a id="th-Histogram[4]" title="count of '1-10 s'" >-</a>
+										<a id="th-Histogram[5]" title="count of '10-100 s'" >-</a>
+										<a id="th-Histogram[6]" title="count of '100-1000 s'" >-</a>
+										<a id="th-Histogram[7]" title="count of '> 1000 s'" >-</a> ]
+									</th>
+									<th align="left" width="100">ExecRsHisto <br />[ 
+										<a id="th-ExecuteAndResultHoldTimeHistogram[0]" title="count of '0-1 ms'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[1]" title="count of '1-10 ms'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[2]" title="count of '10-100 ms'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[3]" title="count of '100ms-1s'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[4]" title="count of '1-10 s'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[5]" title="count of '10-100 s'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[6]" title="count of '100-1000 s'" >-</a>
+										<a id="th-ExecuteAndResultHoldTimeHistogram[7]" title="count of '> 1000 s'" >-</a> ]
+									</th>
+									<th align="left" width="100">FetchRowHisto <br />[ 
+										<a id="th-FetchRowCountHistogram[0]" title="count of '0 FetchRow'" >-</a>
+										<a id="th-FetchRowCountHistogram[1]" title="count of '1-9 FetchRow'" >-</a>
+										<a id="th-FetchRowCountHistogram[2]" title="count of '10-99 FetchRow'" >-</a>
+										<a id="th-FetchRowCountHistogram[3]" title="count of '100-999 FetchRow'" >-</a>
+										<a id="th-FetchRowCountHistogram[4]" title="count of '1000-9999 FetchRow'" >-</a>
+										<a id="th-FetchRowCountHistogram[5]" title="count of '> 9999 FetchRow'" >-</a> ]
+									</th>
+									<th align="left" width="100">UpdateHisto <br />[ 
+										<a id="th-EffectedRowCountHistogram[0]" title="count of '0 UpdateCount'" >-</a>
+										<a id="th-EffectedRowCountHistogram[1]" title="count of '1-9 UpdateCount'" >-</a>
+										<a id="th-EffectedRowCountHistogram[2]" title="count of '10-99 UpdateCount'" >-</a>
+										<a id="th-EffectedRowCountHistogram[3]" title="count of '100-999 UpdateCount'" >-</a>
+										<a id="th-EffectedRowCountHistogram[4]" title="count of '1000-9999 UpdateCount'" >-</a>
+										<a id="th-EffectedRowCountHistogram[5]" title="count of '> 9999 UpdateCount'" >-</a> ]
+									</th>
+								</tr>
+							</thead> 
+							<tbody></tbody>
+						</table>
+        		</div>
+      		</div> 
+    	</div>
+    	<script type="text/javascript">
+	    	$.namespace("druid.sql");
+	    	druid.sql = function () {
+	    		var dataSourceId = druid.common.getUrlVar("dataSourceId");
+	    		return  {
+	    			init : function() {
+	    				$("#dataTable th a").click(function(obj) {
+	    					druid.common.setOrderBy(obj.target.id.substring(3))
+	    				})
+	    				druid.common.buildHead(2);
+	    				druid.common.ajaxuri = dataSourceId ? 'sql.json?dataSourceId=' + dataSourceId + '&' : 'sql.json?';
+	    				druid.common.handleAjaxResult = druid.sql.handleAjaxResult;
+	    				druid.common.setOrderBy("SQL");
+	    				druid.common.ajaxRequestForBasicInfo();
+	    				setInterval("druid.common.ajaxRequestForBasicInfo();",5000);
+	    			},
+	    			
+	    			handleAjaxResult : function(data) {
+	    				var sqlStatList = data.Content;
+	    				if(sqlStatList==null) return;
+	    				
+	    				var sqlStatTable = document.getElementById("dataTable");
+	    				while (sqlStatTable.rows.length > 1) {
+	    					sqlStatTable.deleteRow(1);
+	    				}
+	    				
+	    				var html = "";
+	    				for ( var i = 0; i < sqlStatList.length; i++) {
+	    					var stat = sqlStatList[i];
+	    					var newRow = sqlStatTable.insertRow(-1);
+	    					html += "<tr>";
+	    					html += "<td>" + (i + 1) + "</td>";
+	    					html += "<td>" + '<a target="_blank" href="sql-detail.html?sqlId=' + stat.ID + '">' + druid.common.subSqlString(stat.SQL, 25) + '</a>' + "</td>";
+	    					html += "<td>" + stat.ExecuteCount + "</td>";
+	    					html += "<td>" + stat.TotalTime + "</td>";
+	    					
+	    					var lastSlowHtml = stat.MaxTimespan;
+	    					if (stat.LastSlowParameters!=null && stat.LastSlowParameters.length>0) {
+	    						lastSlowHtml ='<a target="_blank" style="color:red" href="sql-detail.html?sqlId=' + stat.ID + '">'+stat.MaxTimespan+'</a>';
+	    					}
+	    					html += "<td>" + lastSlowHtml + "</td>";
+	    					html += "<td>" + stat.InTransactionCount + "</td>";
+	    					html += "<td>" + stat.ErrorCount + "</td>";
+	    					html += "<td>" + stat.EffectedRowCount + "</td>";
+	    					html += "<td>" + stat.FetchRowCount + "</td>";
+	    					html += "<td>" + stat.RunningCount + "</td>";
+	    					html += "<td>" + stat.ConcurrentMax + "</td>";
+	    					html += "<td>" + '[' + stat.Histogram + ']' + "</td>";
+	    					html += "<td>" + '[' + stat.ExecuteAndResultHoldTimeHistogram + ']' + "</td>";
+	    					html += "<td>" + '[' + stat.FetchRowCountHistogram + ']' + "</td>";
+	    					html += "<td>" + '[' + stat.EffectedRowCountHistogram + ']' + "</td>";
+	    					html += "</tr>";
+	    				}
+	    				$("#dataTable tbody").html(html);
+	    				druid.common.stripes();
+	    			}
+	    		}
+	    	}();
+	
+	    	$(document).ready(function() {
+	    		druid.sql.init();
+	    	});
+    	</script>
+	</body>
+</html>

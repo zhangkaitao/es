@@ -1053,6 +1053,7 @@ $.menus = {
 
 $.tabs = {
     tabs: null,
+    maxTabIndex : 1,
     /*自己创建tab时起始索引*/
     customTabStartIndex : 9999999999,
     /**初始化tab */
@@ -1077,43 +1078,51 @@ $.tabs = {
 
         var tabs = $(".tabs-bar").tabs({
             beforeActivate : function(event, ui) {
-                var tabs = $.tabs.tabs;
-                tabs.find(".menu").hide();
-                tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".menu").show();
+                setTimeout(function() {
+                    var tabs = $.tabs.tabs;
+                    tabs.find(".menu").hide();
+                    tabs.find("#" + ui.newPanel.attr("aria-labelledby")).siblings(".menu").show();
+                }, 0);
             },
             activate: function (event, ui) {
-                var tabs = $.tabs.tabs;
-                var newPanelId = ui.newPanel.prop("id");
-
-                activeMenu(newPanelId);
-                $.app.activeIframe(newPanelId);
-
+                setTimeout(function() {
+                    var tabs = $.tabs.tabs;
+                    var newPanelId = ui.newPanel.prop("id");
+                    activeMenu(newPanelId);
+                    $.app.activeIframe(newPanelId);
+                }, 0);
             }
         });
         $.tabs.tabs = tabs;
         tabs.delegate("span.icon-remove", "click", function () {
             var panelId = $(this).closest("li").remove().attr("aria-controls");
-            $.tabs.removeTab(panelId);
+            setTimeout(function() {
+                $.tabs.removeTab(panelId);
+            }, 0);
         });
         tabs.delegate("span.icon-refresh", "click", function () {
             var panelId = $(this).closest("li").attr("aria-controls");
-            $.tabs.activeTab(panelId, null, null, true);
+            setTimeout(function() {
+                $.tabs.activeTab(panelId, null, null, true);
+            }, 0);
         });
 
         tabs.bind("keyup", function (event) {
             if (event.altKey && event.keyCode === $.ui.keyCode.BACKSPACE) {
                 var panelId = tabs.find(".ui-tabs-active").remove().attr("aria-controls");
-                $.tabs.removeTab(panelId);
+                setTimeout(function() {
+                    $.tabs.removeTab(panelId);
+                }, 0);
             }
         });
-        $.tabs.initTabScroll();
 
+        $.tabs.initTabScroll();
         $.tabs.initTabContextMenu();
     },
     removeTab : function(panelId) {
         var tabs = $.tabs.tabs;
-        $("#" + panelId).remove();
-        $("#iframe-" + panelId).remove();
+        var panel = $("#" + panelId);
+        var iframe = $("#iframe-" + panelId);
 
         var currentMenu = $("#menu-" + panelId.replace("tabs-", ""));
         if(currentMenu.length) {
@@ -1124,7 +1133,24 @@ $.tabs = {
 
         tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").size());
         tabs.tabs("refresh");
+
+        panel.remove();
+        var iframeDom = iframe[0];
+        iframeDom.src = "";
+        iframeDom.contentWindow.document.write('');
+        iframeDom.contentWindow.close();
+        iframe.remove();
+        var isIE = !-[1,];
+        if (isIE) {
+            CollectGarbage();
+        }
+
     },
+    /**
+     * 创建新的tab
+     * @param title
+     * @param panelIndex
+     */
     /**
      * 创建新的tab
      * @param title
@@ -1166,7 +1192,6 @@ $.tabs = {
      */
     activeTab: function (panelIdOrIndex, title, url, forceRefresh, callback) {
         var tabs = $.tabs.tabs;
-
         if(panelIdOrIndex && ("" + panelIdOrIndex).indexOf("tabs-") == 0) {
             currentTabPanel = $("#" + panelIdOrIndex);
         } else {
@@ -1185,8 +1210,10 @@ $.tabs = {
             url = currentTabPanel.data("url");
         }
 
-        $.app.loadingToCenterIframe(currentTabPanel, url, null, forceRefresh);
-        tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").index(currentTabPanel));
+        setTimeout(function() {
+            $.app.loadingToCenterIframe(currentTabPanel, url, null, forceRefresh);
+            tabs.tabs("option", "active", tabs.find(".ui-tabs-panel").index(currentTabPanel));
+        }, 0);
         return currentTabPanel.data("index");
     },
 
@@ -1289,10 +1316,10 @@ $.tabs = {
         };
 
         $(".tabs-bar .icon-chevron-left").click(function () {
-            move(-200)();
+            setTimeout(function() {move(-200)()}, 0);
         });
         $(".tabs-bar .icon-chevron-right").click(function () {
-            move(200)();
+            setTimeout(function() {move(200)()}, 0);
         });
 
     },
@@ -1311,7 +1338,7 @@ $.tabs = {
                 return true;
             }
             if (clickTab) {
-                shoowMenu(target.attr("id"), e.pageX - 5, e.pageY - 5);
+                showMenu(target.attr("id"), e.pageX - 5, e.pageY - 5);
                 tabsMenu.mouseleave(function () {
                     hideMenu();
                 });
@@ -1325,7 +1352,7 @@ $.tabs = {
             tabsMenu.data("tabId", "");
         }
 
-        function shoowMenu(tabId, x, y) {
+        function showMenu(tabId, x, y) {
             tabsMenu.data("tabId", tabId);
             tabsMenu.css("left", x).css("top", y);
             tabsMenu.show();

@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.personal.calendar.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.personal.calendar.entity.Calendar;
 import com.sishuok.es.personal.calendar.repository.CalendarRepository;
@@ -24,9 +23,9 @@ import java.util.Date;
 @Service
 public class CalendarService extends BaseService<Calendar, Long> {
 
-    @Autowired
-    @BaseComponent
-    private CalendarRepository calendarRepository;
+    private CalendarRepository getCalendarRepository() {
+        return (CalendarRepository) baseRepository;
+    }
 
     public void copyAndRemove(Calendar calendar) {
         delete(calendar);
@@ -46,6 +45,6 @@ public class CalendarService extends BaseService<Calendar, Long> {
         nowDate.setMinutes(0);
         nowDate.setSeconds(0);
 
-        return calendarRepository.countRecentlyCalendar(userId, nowDate, nowTime, interval);
+        return getCalendarRepository().countRecentlyCalendar(userId, nowDate, nowTime, interval);
     }
 }

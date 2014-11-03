@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.user.web.controller;
 
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.user.entity.UserOnline;
@@ -31,10 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserOnlineController extends BaseCRUDController<UserOnline, String> {
 
     @Autowired
-    @BaseComponent
-    private UserOnlineService userOnlineService;
-
-    @Autowired
     private OnlineSessionDAO onlineSessionDAO;
 
     public UserOnlineController() {
@@ -57,7 +52,7 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
         }
 
         for (String id : ids) {
-            UserOnline online = userOnlineService.findOne(id);
+            UserOnline online = baseService.findOne(id);
             if (online == null) {
                 continue;
             }
@@ -67,7 +62,7 @@ public class UserOnlineController extends BaseCRUDController<UserOnline, String>
             }
             onlineSession.setStatus(OnlineSession.OnlineStatus.force_logout);
             online.setStatus(OnlineSession.OnlineStatus.force_logout);
-            userOnlineService.update(online);
+            baseService.update(online);
         }
         return redirectToUrl(null);
     }

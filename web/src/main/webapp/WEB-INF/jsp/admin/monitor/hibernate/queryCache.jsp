@@ -198,33 +198,35 @@
                     return -Double.compare(s1HitPercent, s2HitPercent);
                 }
                 if ("hitCount".equals(sortBy)) {
-                    return -Long.compare(s1.getCacheHitCount(), s2.getCacheHitCount());
+                    return -Long.valueOf(s1.getCacheHitCount()).compareTo(Long.valueOf(s2.getCacheHitCount()));
                 }
                 if ("missCount".equals(sortBy)) {
-                    return -Long.compare(s1.getCacheMissCount(), s2.getCacheMissCount());
+                    return -Long.valueOf(s1.getCacheMissCount()).compareTo(Long.valueOf(s2.getCacheMissCount()));
                 }
                 if ("putCount".equals(sortBy)) {
-                    return -Long.compare(s1.getCachePutCount(), s2.getCachePutCount());
+                    return -Long.valueOf(s1.getCachePutCount()).compareTo(Long.valueOf(s2.getCachePutCount()));
                 }
                 if ("executionCount".equals(sortBy)) {
-                    return -Long.compare(s1.getExecutionCount(), s2.getExecutionCount());
+                    return -Long.valueOf(s1.getExecutionCount()).compareTo(Long.valueOf(s2.getExecutionCount()));
                 }
                 if ("executionRowCount".equals(sortBy)) {
-                    return -Long.compare(s1.getExecutionRowCount(), s2.getExecutionRowCount());
+                    return -Long.valueOf(s1.getExecutionRowCount()).compareTo(Long.valueOf(s2.getExecutionRowCount()));
                 }
                 if ("executionAvgRowCount".equals(sortBy)) {
-                    return -Long.compare(
-                            s1.getExecutionRowCount() / s1.getExecutionRowCount(),
-                            s2.getExecutionRowCount() / s1.getExecutionRowCount());
+                    return -Long.valueOf(s1.getExecutionRowCount() / s1.getExecutionRowCount())
+                            .compareTo(Long.valueOf(s2.getExecutionRowCount() / s1.getExecutionRowCount()));
                 }
                 if ("executionAvgTime".equals(sortBy)) {
-                    return -Long.compare(s1.getExecutionAvgTime(), s2.getExecutionAvgTime());
+                    return -Long.valueOf(s1.getExecutionAvgTime())
+                            .compareTo(Long.valueOf(s2.getExecutionAvgTime()));
                 }
                 if ("executionMaxTime".equals(sortBy)) {
-                    return -Long.compare(s1.getExecutionMaxTime(), s2.getExecutionMaxTime());
+                    return -Long.valueOf(s1.getExecutionMaxTime())
+                            .compareTo(Long.valueOf(s2.getExecutionMaxTime()));
                 }
                 if ("executionMinTime".equals(sortBy)) {
-                    return -Long.compare(s1.getExecutionMinTime(), s2.getExecutionMinTime());
+                    return -Long.valueOf(s1.getExecutionMinTime())
+                            .compareTo(Long.valueOf(s2.getExecutionMinTime()));
                 }
 
                 return -q1.compareTo(q2);

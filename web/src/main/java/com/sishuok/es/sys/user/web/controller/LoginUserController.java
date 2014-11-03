@@ -7,7 +7,6 @@ package com.sishuok.es.sys.user.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseController;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatus;
@@ -35,7 +34,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LoginUserController extends BaseController<User, Long> {
 
     @Autowired
-    @BaseComponent
     private UserService userService;
 
     @Autowired

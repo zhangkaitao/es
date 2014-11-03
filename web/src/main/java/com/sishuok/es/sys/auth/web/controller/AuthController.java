@@ -7,7 +7,6 @@ package com.sishuok.es.sys.auth.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.auth.entity.Auth;
@@ -33,10 +32,6 @@ import javax.validation.Valid;
 public class AuthController extends BaseCRUDController<Auth, Long> {
 
     @Autowired
-    @BaseComponent
-    private AuthService authService;
-
-    @Autowired
     private RoleService roleService;
 
     public AuthController() {
@@ -44,6 +39,9 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
         setResourceIdentity("sys:auth");
     }
 
+    private AuthService getAuthService() {
+        return (AuthService) baseService;
+    }
 
     @Override
     protected void setCommonData(Model model) {
@@ -105,11 +103,11 @@ public class AuthController extends BaseCRUDController<Auth, Long> {
         }
 
         if (m.getType() == AuthType.user) {
-            authService.addUserAuth(userIds, m);
+            getAuthService().addUserAuth(userIds, m);
         } else if (m.getType() == AuthType.user_group || m.getType() == AuthType.organization_group) {
-            authService.addGroupAuth(groupIds, m);
+            getAuthService().addGroupAuth(groupIds, m);
         } else if (m.getType() == AuthType.organization_job) {
-            authService.addOrganizationJobAuth(organizationIds, jobIds, m);
+            getAuthService().addOrganizationJobAuth(organizationIds, jobIds, m);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "新增成功");
         return redirectToUrl("/admin/sys/auth?search.type_eq=" + m.getType());

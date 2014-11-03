@@ -5,13 +5,8 @@
  */
 package com.sishuok.es.showcase.move.web.controller;
 
-import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.entity.validate.group.Create;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
-import com.sishuok.es.common.plugin.web.controller.BaseMovableController;
-import com.sishuok.es.showcase.move.entity.Move;
-import com.sishuok.es.showcase.move.service.MoveService;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
+import com.sishuok.es.common.entity.enums.BooleanEnum;
+import com.sishuok.es.common.entity.validate.group.Create;
+import com.sishuok.es.common.plugin.web.controller.BaseMovableController;
+import com.sishuok.es.showcase.move.entity.Move;
 
 /**
  * <p>User: Zhang Kaitao
@@ -31,9 +29,6 @@ import javax.validation.Valid;
 @RequestMapping(value = "/showcase/move")
 public class MoveController extends BaseMovableController<Move, Long> {
 
-    @Autowired
-    @BaseComponent
-    private MoveService moveService;
 
     public MoveController() {
         setResourceIdentity("showcase:move");

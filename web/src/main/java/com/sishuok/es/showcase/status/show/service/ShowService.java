@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.status.show.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.showcase.status.show.entity.Show;
 import com.sishuok.es.showcase.status.show.repository.ShowRepository;
@@ -19,10 +18,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ShowService extends BaseService<Show, Long> {
-
-    @Autowired
-    @BaseComponent
-    private ShowRepository sampleRepository;
-
 
 }

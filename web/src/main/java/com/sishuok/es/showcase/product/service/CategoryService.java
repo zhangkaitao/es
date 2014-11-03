@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.showcase.product.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseMovableService;
 import com.sishuok.es.showcase.product.entity.Category;
 import com.sishuok.es.showcase.product.repository.CategoryRepository;
@@ -19,10 +18,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CategoryService extends BaseMovableService<Category, Long> {
-
-    @Autowired
-    @BaseComponent
-    private CategoryRepository categoryRepository;
-
 
 }

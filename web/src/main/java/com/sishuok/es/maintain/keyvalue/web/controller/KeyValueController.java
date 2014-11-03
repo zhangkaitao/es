@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.maintain.keyvalue.web.controller;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.maintain.keyvalue.entity.KeyValue;
@@ -26,9 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/admin/maintain/keyvalue")
 public class KeyValueController extends BaseCRUDController<KeyValue, Long> {
 
-    @Autowired
-    @BaseComponent
-    private KeyValueService keyValueService;
+    private KeyValueService getKeyValueService() {
+        return (KeyValueService) baseService;
+    }
 
     public KeyValueController() {
         setResourceIdentity("maintain:icon");
@@ -52,7 +51,7 @@ public class KeyValueController extends BaseCRUDController<KeyValue, Long> {
         ValidateResponse response = ValidateResponse.newInstance();
 
         if ("key".equals(fieldId)) {
-            KeyValue keyValue = keyValueService.findByKey(fieldValue);
+            KeyValue keyValue = getKeyValueService().findByKey(fieldValue);
             if (keyValue == null || (keyValue.getId().equals(id) && keyValue.getKey().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");

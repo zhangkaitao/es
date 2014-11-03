@@ -8,7 +8,6 @@ package com.sishuok.es.showcase.product.web.controller;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.product.entity.Category;
@@ -31,10 +30,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/showcase/product/product")
 public class ProductController extends BaseCRUDController<Product, Long> {
-
-    @Autowired
-    @BaseComponent
-    private ProductService productService;
 
     public ProductController() {
         setResourceIdentity("showcase:product");

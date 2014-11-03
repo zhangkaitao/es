@@ -7,7 +7,6 @@ package com.sishuok.es.showcase.excel.web.controller;
 
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.showcase.excel.entity.ExcelData;
 import com.sishuok.es.showcase.excel.service.ExcelDataService;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,9 +36,9 @@ import java.io.InputStream;
 @RequestMapping(value = "/showcase/excel")
 public class ExcelController extends BaseCRUDController<ExcelData, Long> {
 
-    @Autowired
-    @BaseComponent
-    private ExcelDataService excelDataService;
+    private ExcelDataService getExcelDataService() {
+        return (ExcelDataService) baseService;
+    }
 
     @Autowired
     private ServletContext servletContext;
@@ -52,9 +52,8 @@ public class ExcelController extends BaseCRUDController<ExcelData, Long> {
         setResourceIdentity("showcase:excel");
     }
 
-    @Override
+    @PostConstruct
     public void afterPropertiesSet() {
-        super.afterPropertiesSet();
         contextRootPath = servletContext.getRealPath("/");
     }
 
@@ -64,7 +63,7 @@ public class ExcelController extends BaseCRUDController<ExcelData, Long> {
      */
     @RequestMapping("/init")
     public String initOneMillionData(@CurrentUser User user, RedirectAttributes redirectAttributes) {
-        excelDataService.initOneMillionData(user);
+        getExcelDataService().initOneMillionData(user);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "任务已经提交，正在执行，数据量比较大，执行完成后会在页面右上角的“我的通知”中通知你");
         return redirectToUrl(null);
     }
@@ -91,13 +90,13 @@ public class ExcelController extends BaseCRUDController<ExcelData, Long> {
 
         switch (type) {
             case csv:
-                excelDataService.importCvs(user, is);
+                getExcelDataService().importCvs(user, is);
                 break;
             case excel2003:
-                excelDataService.importExcel2003(user, is);
+                getExcelDataService().importExcel2003(user, is);
                 break;
             case excel2007:
-                excelDataService.importExcel2007(user, is);
+                getExcelDataService().importExcel2007(user, is);
                 break;
             default:
                 //none
@@ -132,19 +131,19 @@ public class ExcelController extends BaseCRUDController<ExcelData, Long> {
 
         switch (type) {
             case csv:
-                excelDataService.exportCvs(user, contextRootPath, searchable);
+                getExcelDataService().exportCvs(user, contextRootPath, searchable);
                 break;
             case excel2003_sheet:
-                excelDataService.exportExcel2003WithOneSheetPerWorkBook(user, contextRootPath, searchable);
+                getExcelDataService().exportExcel2003WithOneSheetPerWorkBook(user, contextRootPath, searchable);
                 break;
             case excel2003_xml:
-                excelDataService.exportExcel2003WithXml(user, contextRootPath, searchable);
+                getExcelDataService().exportExcel2003WithXml(user, contextRootPath, searchable);
                 break;
             case excel2003_usermodel:
-                excelDataService.exportExcel2003WithUsermodel(user, contextRootPath, searchable);
+                getExcelDataService().exportExcel2003WithUsermodel(user, contextRootPath, searchable);
                 break;
             case excel2007:
-                excelDataService.exportExcel2007(user, contextRootPath, searchable);
+                getExcelDataService().exportExcel2007(user, contextRootPath, searchable);
                 break;
             default:
                 //none

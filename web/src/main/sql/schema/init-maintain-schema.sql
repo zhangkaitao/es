@@ -5,6 +5,7 @@ drop table if exists `maintain_icon`;;
 drop table if exists `maintain_map`;;
 drop table if exists `maintain_notification_template`;;
 drop table if exists `maintain_notification_data`;;
+drop table if exists `maintain_task_definition`;;
 
 create table `maintain_icon`(
   `id`         bigint not null auto_increment,
@@ -60,4 +61,16 @@ create table `maintain_notification_data`(
   index `idx_maintain_notification_data_user_id_read` (`user_id`, `is_read`)
 ) charset=utf8 ENGINE=InnoDB;;
 
+create table `maintain_task_definition`(
+  `id`               bigint not null auto_increment,
+  `name`           varchar(500),
+  `cron`            varchar(200),
+  `bean_class`      varchar(200),
+  `bean_name`       varchar(200),
+  `method_name`     varchar(200),
+  `is_start`        bool,
+  `description`     varchar(2000),
+
+  constraint `pk_maintain_task_definition` primary key(`id`)
+) charset=utf8 ENGINE=InnoDB;;
 

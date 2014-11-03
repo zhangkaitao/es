@@ -196,9 +196,9 @@ public class SearchableTest {
 
         Assert.assertEquals(1, searchable.getSearchFilters().size());
 
-        Assert.assertFalse(searchable.containsSearchKey("sex_like"));
+        Assert.assertTrue(searchable.containsSearchKey("sex_like"));
 
-        Assert.assertFalse(searchable.containsSearchKey("realname"));
+        Assert.assertTrue(searchable.containsSearchKey("realname"));
 
 
     }
@@ -217,9 +217,9 @@ public class SearchableTest {
 
         Assert.assertEquals(1, searchable.getSearchFilters().size());
 
-        Assert.assertFalse(searchable.containsSearchKey("sex_like"));
+        Assert.assertTrue(searchable.containsSearchKey("sex_like"));
 
-        Assert.assertFalse(searchable.containsSearchKey("realname"));
+        Assert.assertTrue(searchable.containsSearchKey("realname"));
 
 
     }

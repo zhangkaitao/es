@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 public class UserServiceTest extends BaseUserIT {
 
     @Autowired
-    UserService userService;
+    protected UserService userService;
 
     @Test
     public void testSave() {

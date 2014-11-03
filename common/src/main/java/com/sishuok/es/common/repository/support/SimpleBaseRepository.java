@@ -23,6 +23,7 @@ import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.LockMetadataProvider;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -87,7 +88,6 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
 
         findAllQL = String.format(FIND_QUERY_STRING, entityName);
         countAllQL = String.format(COUNT_QUERY_STRING, entityName);
-        countAllQL = String.format(COUNT_QUERY_STRING, entityName);
     }
 
 
@@ -133,7 +133,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         this.joins = joins;
     }
 
-/////////////////////////////////////////////////
+    /////////////////////////////////////////////////
     ////////覆盖默认spring data jpa的实现////////////
     /////////////////////////////////////////////////
 
@@ -142,6 +142,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      *
      * @param id 主键
      */
+    @Transactional
     @Override
     public void delete(final ID id) {
         M m = findOne(id);
@@ -153,6 +154,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      *
      * @param m 实体
      */
+    @Transactional
     @Override
     public void delete(final M m) {
         if (m == null) {
@@ -172,6 +174,8 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      *
      * @param ids 实体
      */
+    @Transactional
+    @Override
     public void delete(final ID[] ids) {
         if (ArrayUtils.isEmpty(ids)) {
             return;
@@ -194,6 +198,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
         deleteInBatch(models);
     }
 
+    @Transactional
     @Override
     public void deleteInBatch(final Iterable<M> entities) {
         Iterator<M> iter = entities.iterator();
@@ -220,6 +225,7 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
      * @param id 主键
      * @return 返回id对应的实体
      */
+    @Transactional
     @Override
     public M findOne(ID id) {
         if (id == null) {
@@ -289,9 +295,9 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     }
 
     /*
- * (non-Javadoc)
- * @see org.springframework.data.jpa.repository.JpaSpecificationExecutor#count(org.springframework.data.jpa.domain.Specification)
- */
+     * (non-Javadoc)
+     * @see org.springframework.data.jpa.repository.JpaSpecificationExecutor#count(org.springframework.data.jpa.domain.Specification)
+     */
     public long count(Specification<M> spec) {
 
         return getCountQuery(spec).getSingleResult();

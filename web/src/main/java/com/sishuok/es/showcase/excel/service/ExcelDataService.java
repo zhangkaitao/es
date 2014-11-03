@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.repository.RepositoryHelper;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.utils.FileCharset;
@@ -69,9 +68,9 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
     private final int MAX_EXPORT_FILE_SIZE = 10 * 1024 * 1024; //10MB
 
 
-    @Autowired
-    @BaseComponent
-    private ExcelDataRepository excelDataRepository;
+    private ExcelDataRepository getExcelDataRepository() {
+        return (ExcelDataRepository) baseRepository;
+    }
 
     @Autowired
     private NotificationApi notificationApi;
@@ -90,7 +89,7 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
 
         long beginTime = System.currentTimeMillis();
 
-        excelDataRepository.truncate();
+        getExcelDataRepository().truncate();
 
         final int ONE_MILLION = 1000000; //100w
         for(int i = batchSize; i <= ONE_MILLION; i += batchSize) {
@@ -110,7 +109,7 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
         for(int i = 1; i <= batchSize; i++) {
             Long id = Long.valueOf(fromId + i);
             String content = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-            excelDataRepository.save(id, content);
+            getExcelDataRepository().save(id, content);
         }
     }
 
@@ -122,7 +121,7 @@ public class ExcelDataService extends BaseService<ExcelData, Long> {
         for(ExcelData data : dataList) {
             ExcelData dbData = findOne(data.getId());
             if(dbData == null) {
-                excelDataRepository.save(data.getId(), data.getContent());
+                getExcelDataRepository().save(data.getId(), data.getContent());
             } else {
                 dbData.setContent(data.getContent());
                 update(dbData);

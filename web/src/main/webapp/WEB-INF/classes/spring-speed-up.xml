@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       profile="development" >
+
+    <!-- 启动时加 spring.profiles.active=development -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="${connection.url}"/>
+        <property name="username" value="${connection.username}"/>
+        <property name="password" value="${connection.password}"/>
+    </bean>
+
+    <!-- 优化spring启动 通过移除bean定义 和 lazy init 实现 -->
+    <bean class="com.sishuok.es.common.spring.SpeedUpSpringProcessor">
+        <!-- 需要从bean定义中移除的bean的名字 -->
+        <property name="removedBeanNames">
+            <list>
+
+                <!--spring-config-task.xml -->
+                <value>executor</value>
+                <value>scheduler</value>
+
+                <!-- <task:scheduled-tasks> 自动注册的 -->
+                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
+
+                <!-- <task:annotation-driven/> 自动注册的 -->
+                <value>org.springframework.context.annotation.internalAsyncAnnotationProcessor</value>
+                <value>org.springframework.context.annotation.internalScheduledAnnotationProcessor</value>
+                <value>org.springframework.scheduling.config.internalAsyncExecutionAspect</value>
+
+                <!-- <task:scheduled-tasks> 自动注册的 -->
+                <value>org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar</value>
+
+                <!-- spring-config-shiro.xml -->
+                <value>rememberMeCookie</value>
+                <value>rememberMeManager</value>
+                <value>shiroCacheManager</value>
+                <value>sessionValidationScheduler</value>
+
+                <!-- spring-config-monitor.xml -->
+                <value>druidStatInterceptor</value>
+                <value>druidAdvisor</value>
+
+
+
+            </list>
+        </property>
+        <!-- 需要从bean定义中移除的bean的属性 -->
+        <!--替换掉的属性值 see removedBeanProperties 只支持简单属性-->
+        <property name="removeOrReplaceBeanProperties">
+            <list>
+                <!-- spring-config-shiro.xml -->
+                <value>sessionManager@cacheManager</value>
+                <value>sessionManager@sessionValidationScheduler</value>
+                <value>securityManager@rememberMeManager</value>
+
+                <!-- spring-config.xml -->
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.use_second_level_cache=false</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.use_query_cache</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.region.factory_class</value>
+                <value>entityManagerFactory@jpaPropertyMap@hibernate.cache.use_structured_entries</value>
+                <value>entityManagerFactory@jpaPropertyMap@net.sf.ehcache.configurationResourceName</value>
+
+                <!-- spring-mvc.xml(<mvc:async-support default-timeout="30000" task-executor="executor"/>) -->
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@asyncRequestTimeout</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@taskExecutor</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@executor</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@callableInterceptors</value>
+                <value>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0@deferredResultInterceptors</value>
+            </list>
+        </property>
+
+        <!-- 需要从bean定义中移除指定的类类型 正则表达式-->
+        <property name="removedClassPatterns">
+            <list>
+                 <!--<value>com\.sishuok\.es\.showcase.*</value>-->
+                 <!--<value>com\.sishuok\.es\.monitor.*</value>-->
+                 <!--<value>com\.sishuok\.es\.extra\.aop.*</value>-->
+                 <!--<value>com\.sishuok\.es\.extra\.quartz.*</value>-->
+                 <!--<value>com\.sishuok\.es\.maintain.*</value>-->
+                 <!--<value>com\.sishuok\.es\.personal.*\.web\.controller.*</value>-->
+                 <!--<value>com\.sishuok\.es\.sys.*\.web\.controller.*</value>-->
+            </list>
+        </property>
+
+        <!-- 指定非延迟加载的bean-->
+        <property name="noneLazyBeanNames">
+            <list>
+                <value>domainClassConverter</value>
+            </list>
+        </property>
+    </bean>
+</beans>

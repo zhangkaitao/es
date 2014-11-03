@@ -6,7 +6,6 @@
 package com.sishuok.es.personal.message.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
 import com.sishuok.es.personal.message.entity.Message;
@@ -36,9 +35,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/personal/message")
 public class MessageController extends BaseController<Message, Long> {
-    @Autowired
-    @BaseComponent
-    MessageService messageService;
     @Autowired
     private MessageApi messageApi;
     @Autowired

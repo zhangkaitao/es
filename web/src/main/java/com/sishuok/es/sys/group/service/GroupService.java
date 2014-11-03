@@ -11,7 +11,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.group.entity.Group;
 import com.sishuok.es.sys.group.repository.GroupRepository;
@@ -29,13 +28,13 @@ import java.util.Set;
 @Service
 public class GroupService extends BaseService<Group, Long> {
 
-    @Autowired
-    @BaseComponent
-    private GroupRepository groupRepository;
 
     @Autowired
     private GroupRelationService groupRelationService;
 
+    private GroupRepository getGroupRepository() {
+        return (GroupRepository) baseRepository;
+    }
 
     public Set<Map<String, Object>> findIdAndNames(Searchable searchable, String groupName) {
 
@@ -66,7 +65,7 @@ public class GroupService extends BaseService<Group, Long> {
      */
     public Set<Long> findShowGroupIds(Long userId, Set<Long> organizationIds) {
         Set<Long> groupIds = Sets.newHashSet();
-        groupIds.addAll(groupRepository.findDefaultGroupIds());
+        groupIds.addAll(getGroupRepository().findDefaultGroupIds());
         groupIds.addAll(groupRelationService.findGroupIds(userId, organizationIds));
 
 

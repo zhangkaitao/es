@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Druid DataSourceStat</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+		<link href='css/bootstrap.min.css' rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet"/>
+    	<script type="text/javascript" src="js/jquery.min.js"></script>
+    	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf8"></script>
+	</head>
+	<body>
+    	<div class="container-fluid">
+      		<div class="row-fluid">
+        		<div class="span12">
+          				<h3>
+          					Wall Stat
+          					<a href="wall.json" target="_blank">View JSON API</a>
+          				</h3>
+						<table id="dataTable" style="background-color: #fff" class="table table-bordered responsive-utilities">
+							<tr >
+								<td valign="top" width="100" class="td_lable">CheckCount</td>
+								<td id="CheckCount" width="100"></td>
+								<td></td>
+							</tr>
+							<tr >
+								<td valign="top" width="100" class="td_lable">HardCheckCount</td>
+								<td id="HardCheckCount" width="100"></td>
+								<td></td>
+							</tr>
+							<tr >
+								<td valign="top" class="td_lable"> ViolationCount </td>
+								<td id="ViolationCount"> </td>
+								<td></td>
+							</tr>
+							<tr >
+								<td valign="top" class="td_lable"> BlackListHitCount </td>
+								<td id="BlackListHitCount"></td>
+								<td></td>
+							</tr>
+							<tr >
+								<td valign="top" class="td_lable"> BlackListSize </td>
+								<td id="BlackListSize"></td>
+								<td></td>
+							</tr>
+							<tr >
+								<td valign="top" class="td_lable"> WhiteListHitCount </td>
+								<td id="WhiteListHitCount"></td>
+								<td></td>
+							</tr>
+							<tr >
+								<td valign="top" class="td_lable"> WhiteListSize </td>
+								<td id="WhiteListSize"></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td valign="top" class="td_lable"> SyntaxErrrorCount </td>
+								<td id="SyntaxErrrorCount"></td>
+								<td></td>
+							</tr>
+						</table>
+						<table id="dataTable1" style="background-color: #fff" class="table table-bordered table-striped responsive-utilities">
+							<thead>
+								<tr >
+									<th class="td_lable"><a id="th-name" href="javascript:void(0);">Table Name</a></th>
+									<th class="td_lable"><a id="th-selectCount" href="javascript:void(0);">SelectCount</a></th>
+									<th class="td_lable"><a id="th-selectIntoCount" href="javascript:void(0);">SelectIntoCount</a></th>
+									<th class="td_lable"><a id="th-insertCount" href="javascript:void(0);">InsertCount</a></th>
+									<th class="td_lable"><a id="th-updateCount" href="javascript:void(0);">UpdateCount</a></th>
+									<th class="td_lable"><a id="th-deleteCount" href="javascript:void(0);">DeleteCount</a></th>
+									<th class="td_lable"><a id="th-truncateCount" href="javascript:void(0);">TruncateCount</a></th>
+									<th class="td_lable"><a id="th-createCount" href="javascript:void(0);">CreateCount</a></th>
+									<th class="td_lable"><a id="th-alterCount" href="javascript:void(0);">AlterCount</a></th>
+									<th class="td_lable"><a id="th-dropCount" href="javascript:void(0);">DropCount</a></th>
+									<th class="td_lable"><a id="th-replaceCount" href="javascript:void(0);">ReplaceCount</a></th>
+									<th class="td_lable"><a id="th-deleteDataCount" href="javascript:void(0);">DeleteDataCount</a></th>
+									<th class="td_lable"><a id="th-updateDataCount" href="javascript:void(0);">UpdateDataCount</a></th>
+									<th class="td_lable"><a id="th-fetchRowCount" href="javascript:void(0);">FetchRowCount</a></th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+						<table id="dataTable2" style="background-color: #fff" class="table table-bordered responsive-utilities">
+							<thead>
+								<tr >
+									<th class="td_lable">Function Name</th>
+									<th class="td_lable"><a id="th-invokeCount" href="javascript:void(0);">InvokeCount</a></th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+          			</div>
+        		</div>
+      		</div> 
+    	<script type="text/javascript">
+			$.namespace("druid.datasource");
+			druid.wall = function () {  
+				return  {
+					init : function() {
+						$("#dataTable1 th a").click(function(obj) {
+	    					druid.common.setOrderBy(obj.target.id.substring(3))
+	    				})
+	    				$("#dataTable2 th a").click(function(obj) {
+	    					druid.common.setOrderBy(obj.target.id.substring(3))
+	    				})
+						druid.common.buildHead(3);
+						
+						druid.common.ajaxuri = 'wall.json?';
+	    				druid.common.handleAjaxResult = druid.wall.handleAjaxResult;
+	    				druid.common.ajaxRequestForBasicInfo();
+	    				setInterval("druid.common.ajaxRequestForBasicInfo();",5000);
+					},
+					
+					handleAjaxResult : function(data) {
+						$("#CheckCount").text(data.Content.checkCount)
+						$("#HardCheckCount").text(data.Content.hardCheckCount)
+						$("#ViolationCount").text(data.Content.violationCount)
+						$("#BlackListHitCount").text(data.Content.blackListHitCount)
+						$("#BlackListSize").text(data.Content.blackListSize)
+						$("#WhiteListHitCount").text(data.Content.whiteListHitCount)
+						$("#WhiteListSize").text(data.Content.whiteListSize)
+						$("#SyntaxErrrorCount").text(data.Content.syntaxErrrorCount)
+						
+						var html = "";
+						var tables = data.Content.tables;
+	    				for ( var i = 0; i < tables.length; i++) {
+	    					var table = tables[i];
+	    					html += "<tr>";
+	    					html += "<td>" + table.name + "</td>";
+	    					html += "<td>" + (table.selectCount ? table.selectCount : 0)+ "</td>";
+	    					html += "<td>" + (table.selectIntoCount ? table.selectIntoCount : 0) + "</td>";
+	    					html += "<td>" + (table.insertCount ? table.insertCount : 0) + "</td>";
+	    					html += "<td>" + (table.updateCount ? table.updateCount : 0) + "</td>";
+	    					html += "<td>" + (table.deleteCount ? table.deleteCount : 0) + "</td>";
+	    					html += "<td>" + (table.truncateCount ? table.truncateCount : 0) + "</td>";
+	    					html += "<td>" + (table.createCount ? table.createCount : 0) + "</td>";
+	    					html += "<td>" + (table.alterCount ? table.alterCount : 0) + "</td>";
+	    					html += "<td>" + (table.dropCount ? table.dropCount : 0) + "</td>";
+	    					html += "<td>" + (table.replaceCount ? table.replaceCount : 0) + "</td>";
+	    					html += "<td>" + (table.deleteDataCount ? table.deleteDataCount : 0) + "</td>";
+	    					html += "<td>" + (table.updateDataCount ? table.updateDataCount : 0) + "</td>";
+	    					html += "<td>" + (table.fetchRowCount ? table.fetchRowCount : 0) + "</td>";
+	    					html += "</tr>";
+	    				}
+	    				$("#dataTable1 tbody").html(html);
+	    				
+	    				html = "";
+						var functions = data.Content.functions;
+	    				for ( var i = 0; i < functions.length; i++) {
+	    					var fun = functions[i];
+	    					html += "<tr>";
+	    					html += "<td>" + fun.name + "</td>";
+	    					html += "<td>" + fun.invokeCount + "</td>";
+	    					html += "</tr>";
+	    				}
+	    				$("#dataTable2 tbody").html(html);
+					}
+				}
+			}();
+	
+			$(document).ready(function() {
+				druid.wall.init();
+			});
+		</script>
+	</body>
+</html>

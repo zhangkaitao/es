@@ -148,6 +148,8 @@ insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `ide
   values (37, 33, '0/1/33/', 4, '静态资源版本控制', 'staticResource', '/admin/maintain/staticResource', true);;
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
   values (38, 33, '0/1/33/', 5, '在线编辑', 'onlineEditor', '/admin/maintain/editor', true);;
+insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
+  values (49, 33, '0/1/33/', 6, '任务调度', 'dynamicTask', '/admin/maintain/dynamicTask', true);;
 
 insert into `sys_resource`(`id`, `parent_id`, `parent_ids`, weight, `name`, `identity`, `url`, `is_show`)
   values (39, 1, '0/1/', 6, '系统监控', 'monitor', '', true);;

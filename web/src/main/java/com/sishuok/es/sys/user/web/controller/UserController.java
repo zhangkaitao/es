@@ -8,7 +8,6 @@ package com.sishuok.es.sys.user.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
@@ -42,9 +41,9 @@ import java.util.Set;
 @RequestMapping(value = "/admin/sys/user")
 public class UserController extends BaseCRUDController<User, Long> {
 
-    @Autowired
-    @BaseComponent
-    private UserService userService;
+    private UserService getUserService() {
+        return (UserService) baseService;
+    }
 
     public UserController() {
         setResourceIdentity("sys:user");
@@ -182,7 +181,7 @@ public class UserController extends BaseCRUDController<User, Long> {
             @CurrentUser User opUser,
             RedirectAttributes redirectAttributes) {
 
-        userService.changePassword(opUser, ids, newPassword);
+        getUserService().changePassword(opUser, ids, newPassword);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "改密成功！");
 
@@ -198,7 +197,7 @@ public class UserController extends BaseCRUDController<User, Long> {
             @CurrentUser User opUser,
             RedirectAttributes redirectAttributes) {
 
-        userService.changeStatus(opUser, ids, newStatus, reason);
+        getUserService().changeStatus(opUser, ids, newStatus, reason);
 
         if (newStatus == UserStatus.normal) {
             redirectAttributes.addFlashAttribute(Constants.MESSAGE, "解封成功！");
@@ -212,9 +211,9 @@ public class UserController extends BaseCRUDController<User, Long> {
     @RequestMapping(value = "recycle")
     public String recycle(HttpServletRequest request, @RequestParam("ids") Long[] ids, RedirectAttributes redirectAttributes) {
         for (Long id : ids) {
-            User user = userService.findOne(id);
+            User user = getUserService().findOne(id);
             user.setDeleted(Boolean.FALSE);
-            userService.update(user);
+            getUserService().update(user);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "还原成功！");
         return redirectToUrl((String) request.getAttribute(Constants.BACK_URL));
@@ -234,7 +233,7 @@ public class UserController extends BaseCRUDController<User, Long> {
             Searchable searchable,
             @RequestParam("term") String term) {
 
-        return userService.findIdAndNames(searchable, term);
+        return getUserService().findIdAndNames(searchable, term);
     }
 
 
@@ -257,7 +256,7 @@ public class UserController extends BaseCRUDController<User, Long> {
 
 
         if ("username".equals(fieldId)) {
-            User user = userService.findByUsername(fieldValue);
+            User user = getUserService().findByUsername(fieldValue);
             if (user == null || (user.getId().equals(id) && user.getUsername().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");
@@ -267,7 +266,7 @@ public class UserController extends BaseCRUDController<User, Long> {
         }
 
         if ("email".equals(fieldId)) {
-            User user = userService.findByEmail(fieldValue);
+            User user = getUserService().findByEmail(fieldValue);
             if (user == null || (user.getId().equals(id) && user.getEmail().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");
@@ -277,7 +276,7 @@ public class UserController extends BaseCRUDController<User, Long> {
         }
 
         if ("mobilePhoneNumber".equals(fieldId)) {
-            User user = userService.findByMobilePhoneNumber(fieldValue);
+            User user = getUserService().findByMobilePhoneNumber(fieldValue);
             if (user == null || (user.getId().equals(id) && user.getMobilePhoneNumber().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");

@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.auth.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.auth.entity.Auth;
 import com.sishuok.es.sys.auth.repository.AuthRepository;
@@ -28,14 +27,14 @@ import java.util.Set;
 public class AuthService extends BaseService<Auth, Long> {
 
     @Autowired
-    @BaseComponent
-    private AuthRepository authRepository;
-
-    @Autowired
     private UserService userService;
+
     @Autowired
     private GroupService groupService;
 
+    private AuthRepository getAuthRepository() {
+        return (AuthRepository) baseRepository;
+    }
 
     public void addUserAuth(Long[] userIds, Auth m) {
 
@@ -50,7 +49,7 @@ public class AuthService extends BaseService<Auth, Long> {
                 continue;
             }
 
-            Auth auth = authRepository.findByUserId(userId);
+            Auth auth = getAuthRepository().findByUserId(userId);
             if (auth != null) {
                 auth.addRoleIds(m.getRoleIds());
                 continue;
@@ -74,7 +73,7 @@ public class AuthService extends BaseService<Auth, Long> {
                 continue;
             }
 
-            Auth auth = authRepository.findByGroupId(groupId);
+            Auth auth = getAuthRepository().findByGroupId(groupId);
             if (auth != null) {
                 auth.addRoleIds(m.getRoleIds());
                 continue;
@@ -124,7 +123,7 @@ public class AuthService extends BaseService<Auth, Long> {
         }
 
 
-        Auth auth = authRepository.findByOrganizationIdAndJobId(organizationId, jobId);
+        Auth auth = getAuthRepository().findByOrganizationIdAndJobId(organizationId, jobId);
         if (auth != null) {
             auth.addRoleIds(m.getRoleIds());
             return;
@@ -156,6 +155,6 @@ public class AuthService extends BaseService<Auth, Long> {
      * @return
      */
     public Set<Long> findRoleIds(Long userId, Set<Long> groupIds, Set<Long> organizationIds, Set<Long> jobIds, Set<Long[]> organizationJobIds) {
-        return authRepository.findRoleIds(userId, groupIds, organizationIds, jobIds, organizationJobIds);
+        return getAuthRepository().findRoleIds(userId, groupIds, organizationIds, jobIds, organizationJobIds);
     }
 }
