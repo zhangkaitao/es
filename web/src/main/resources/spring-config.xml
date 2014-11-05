@@ -26,9 +26,9 @@
     <!--see https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_DruidDataSource%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!-- 基本属性 url、user、password -->
-        <property name="url" value="${connection.url}"/>
-        <property name="username" value="${connection.username}"/>
-        <property name="password" value="${connection.password}"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/es?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
 
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="${druid.initialSize}"/>

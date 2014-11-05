@@ -18,16 +18,16 @@
     <!-- uid(session id) 生成策略 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg value="${shiro.uid.cookie.name}"/>
-        <property name="domain" value="${shiro.uid.cookie.domain}"/>
-        <property name="path" value="${shiro.uid.cookie.path}"/>
+        <constructor-arg value="uid"/>
+        <property name="domain" value=""/>
+        <property name="path" value="/"/>
         <property name="httpOnly" value="${shiro.uid.cookie.httpOnly}"/>
         <property name="maxAge" value="${shiro.uid.cookie.maxAge}"/>
     </bean>
     <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <constructor-arg value="${shiro.uid.rememeberMe.cookie.name}"/>
-        <property name="domain" value="${shiro.uid.cookie.domain}"/>
-        <property name="path" value="${shiro.uid.cookie.path}"/>
+        <property name="domain" value=""/>
+        <property name="path" value="/"/>
         <property name="httpOnly" value="${shiro.uid.cookie.httpOnly}"/>
         <property name="maxAge" value="${shiro.uid.rememeberMe.cookie.maxAge}"/>
     </bean>
