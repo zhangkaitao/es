@@ -9,7 +9,7 @@
     <%@include file="nav.jspf" %>
 
     <ul class="nav nav-pills">
-        <li ${empty param.sort ? "class='active'" : ""}><a href="">默认排序</a></li>
+        <li ${empty param.sort ? "class='active'" : ""}><a href="?">默认排序</a></li>
         <li ${param.sort eq 'hitPercent' ? "class='active'" : ""}><a href="?sort=hitPercent">总命中率</a></li>
         <li ${param.sort eq 'objectCount' ? "class='active'" : ""}><a href="?sort=objectCount">内存中对象数</a></li>
     </ul>
@@ -92,7 +92,7 @@
                         double n2HitPercent = 1.0 * s2.getCacheHits() / Math.max(s2.getCacheHits() + s2.getCacheMisses(), 1);
                         return -Double.compare(n1HitPercent, n2HitPercent);
                     } else if("objectCount".equals(sort)) {
-                        return -Long.compare(s1.getObjectCount(), s2.getObjectCount());
+                        return -Long.valueOf(s1.getObjectCount()).compareTo(Long.valueOf(s2.getObjectCount()));
                     }
                     return -n1.compareTo(n2);
                 }

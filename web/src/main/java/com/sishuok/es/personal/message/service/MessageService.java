@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.personal.message.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.personal.message.entity.Message;
 import com.sishuok.es.personal.message.entity.MessageState;
@@ -27,9 +26,9 @@ import java.util.Date;
 @Service
 public class MessageService extends BaseService<Message, Long> {
 
-    @Autowired
-    @BaseComponent
-    private MessageRepository messageRepository;
+    private MessageRepository getMessageRepository() {
+        return (MessageRepository) baseRepository;
+    }
 
     /**
      * 改变发件人 消息的原状态为目标状态
@@ -40,7 +39,7 @@ public class MessageService extends BaseService<Message, Long> {
      */
     public Integer changeSenderState(Long senderId, MessageState oldState, MessageState newState) {
         Date changeDate = new Date();
-        return messageRepository.changeSenderState(senderId, oldState, newState, changeDate);
+        return getMessageRepository().changeSenderState(senderId, oldState, newState, changeDate);
     }
 
     /**
@@ -52,7 +51,7 @@ public class MessageService extends BaseService<Message, Long> {
      */
     public Integer changeReceiverState(Long receiverId, MessageState oldState, MessageState newState) {
         Date changeDate = new Date();
-        return messageRepository.changeReceiverState(receiverId, oldState, newState, changeDate);
+        return getMessageRepository().changeReceiverState(receiverId, oldState, newState, changeDate);
     }
 
     /**
@@ -61,7 +60,7 @@ public class MessageService extends BaseService<Message, Long> {
      * @param deletedState
      */
     public Integer clearDeletedMessage(MessageState deletedState) {
-        return messageRepository.clearDeletedMessage(deletedState);
+        return getMessageRepository().clearDeletedMessage(deletedState);
     }
 
     /**
@@ -73,8 +72,8 @@ public class MessageService extends BaseService<Message, Long> {
      */
     public Integer changeState(ArrayList<MessageState> oldStates, MessageState newState, int expireDays) {
         Date changeDate = new Date();
-        Integer count = messageRepository.changeSenderState(oldStates, newState, changeDate, DateUtils.addDays(changeDate, -expireDays));
-        count += messageRepository.changeReceiverState(oldStates, newState, changeDate, DateUtils.addDays(changeDate, -expireDays));
+        Integer count = getMessageRepository().changeSenderState(oldStates, newState, changeDate, DateUtils.addDays(changeDate, -expireDays));
+        count += getMessageRepository().changeReceiverState(oldStates, newState, changeDate, DateUtils.addDays(changeDate, -expireDays));
         return count;
     }
 
@@ -85,7 +84,7 @@ public class MessageService extends BaseService<Message, Long> {
      * @return
      */
     public Long countUnread(Long userId) {
-        return messageRepository.countUnread(userId, MessageState.in_box);
+        return getMessageRepository().countUnread(userId, MessageState.in_box);
     }
 
 
@@ -93,6 +92,6 @@ public class MessageService extends BaseService<Message, Long> {
         if(ArrayUtils.isEmpty(ids)) {
             return;
         }
-        messageRepository.markRead(userId, Arrays.asList(ids));
+        getMessageRepository().markRead(userId, Arrays.asList(ids));
     }
 }

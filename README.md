@@ -1,6 +1,6 @@
 <a href="http://zhangkaitao.github.io/es/" target="_blank">项目首页</a>
 |
-<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a>
+<a href="http://jinnianshilongnian.iteye.com/" target="_blank">我的博客</a> | <a href="http://url.cn/MViZN0">点击加134755960 QQ群讨论</a> | <a href="http://demo.kaifazhe.me/es/admin/index" target="_blank">演示地址（感谢134755960群友Panda支持）</a>(admin/123456 请不要执行增删改操作 谢谢)
 
 
 ##介绍
@@ -14,7 +14,7 @@
 * 提供基于资源的细粒度授权管理，灵活的授权模型
 * 提供常用功能的用例，直接拿来用即可，比如树、可移动列表（即如排序的分类）、父子表、编辑器、文件上传、大数据量Excel导入导出等等
 * 监控功能，比如缓存管理（命中率、缓存控制等）、二级缓存管理、JVM状态、数据库（druid做的很好了，直接用它的）等等
-* 维护功能，比如图标管理、强大的在线编辑功能（直接在线编辑JSP，无需来回切服务器，上传下载等等）、静态资源管理（自动的压缩、版本化js/css）
+* 维护功能，比如图标管理、强大的在线编辑功能（直接在线编辑JSP，无需来回切服务器，上传下载等等）、静态资源管理（自动的压缩、版本化js/css）、动态增删任务调度
 * 站内信功能，支持嵌套展示等
 * 通知系统：耗时功能异步化，完成后使用通知系统通知
 * 通用的文件上传/下载、通用的验证模型等等
@@ -68,6 +68,7 @@
  * 其他浏览器暂时未测试
 
 ###系统界面截图
+* <a href="http://demo.kaifazhe.me/es/admin/index" target="_blank">演示地址（感谢134755960群友Panda支持）</a>
 * <a href="https://github.com/zhangkaitao/es/blob/master/src/support/img/1.PNG?raw=true" target="_blank">点击查看1</a>
 * <a href="https://github.com/zhangkaitao/es/blob/master/src/support/img/2.PNG?raw=true" target="_blank">点击查看2</a>
 * <a href="https://github.com/zhangkaitao/es/blob/master/src/support/img/3.PNG?raw=true" target="_blank">点击查看3</a>
@@ -88,7 +89,7 @@
 ####2、到项目的根下(es)
 * cd bin
 * install.bat 安装jar包到本地仓库（jdk6即可）
-* create-db.bat 创建数据库（mysql需要5.0及以上 编码为utf-8）
+* create-db.bat 创建数据库（mysql需要5.5及以上 编码为utf-8）
 * refresh-db.bat 创建schema和初始化data
 * jetty.bat 启动web应用 默认端口9080 可以到es/web/pom.xml下修改（servlet 2.5即可）
 * 系统默认帐户是admin/123456

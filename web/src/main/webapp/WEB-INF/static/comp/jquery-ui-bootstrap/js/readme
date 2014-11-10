@@ -1,0 +1,3 @@
+jquery ui 需要删除
+  datepicker(ie8 内存泄露)
+  tooltip(使用bootstrap的)

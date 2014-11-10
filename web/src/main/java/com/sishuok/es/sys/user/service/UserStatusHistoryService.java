@@ -6,7 +6,6 @@
 package com.sishuok.es.sys.user.service;
 
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserStatus;
@@ -27,11 +26,6 @@ import java.util.Date;
 @Service
 public class UserStatusHistoryService extends BaseService<UserStatusHistory, Long> {
 
-    @Autowired
-    @BaseComponent
-    private UserStatusHistoryRepository userStatusHistoryRepository;
-
-
     public void log(User opUser, User user, UserStatus newStatus, String reason) {
         UserStatusHistory history = new UserStatusHistory();
         history.setUser(user);
@@ -48,7 +42,7 @@ public class UserStatusHistoryService extends BaseService<UserStatusHistory, Lon
                 .addSort(Sort.Direction.DESC, "opDate")
                 .setPage(0, 1);
 
-        Page<UserStatusHistory> page = userStatusHistoryRepository.findAll(searchable);
+        Page<UserStatusHistory> page = baseRepository.findAll(searchable);
 
         if (page.hasContent()) {
             return page.getContent().get(0);

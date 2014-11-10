@@ -110,14 +110,14 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
      * @param names
      * @param owner
      * @return
-     * @throws HibernateException
+     * @throws org.hibernate.HibernateException
      * @throws java.sql.SQLException
      */
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String valueStr = rs.getString(names[0]);
         if (StringUtils.isEmpty(valueStr)) {
-            return null;
+            return newCollection();
         }
 
         String[] values = StringUtils.split(valueStr, separator);
@@ -125,7 +125,9 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
         Collection result = newCollection();
 
         for (String value : values) {
-            result.add(ConvertUtils.convert(value, elementType));
+            if(StringUtils.isNotEmpty(value)) {
+                result.add(ConvertUtils.convert(value, elementType));
+            }
         }
         return result;
 
@@ -151,6 +153,9 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
         } else {
             valueStr = StringUtils.join((Collection) value, separator);
         }
+        if(StringUtils.isNotEmpty(valueStr)) {
+            valueStr = valueStr + ",";
+        }
         st.setString(index, valueStr);
     }
 
@@ -167,7 +172,7 @@ public class CollectionToStringUserType implements UserType, ParameterizedType, 
      *
      * @param o
      * @return
-     * @throws HibernateException
+     * @throws org.hibernate.HibernateException
      */
     @Override
     public Object deepCopy(Object o) throws HibernateException {

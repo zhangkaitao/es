@@ -63,7 +63,7 @@ class SimpleBaseRepositoryFactory<M, ID extends Serializable> extends JpaReposit
                 if (!StringUtils.isEmpty(countAllQL)) {
                     repository.setCountAllQL(countAllQL);
                 }
-                String findAllQL = searchableQuery.countAllQuery();
+                String findAllQL = searchableQuery.findAllQuery();
                 if (!StringUtils.isEmpty(findAllQL)) {
                     repository.setFindAllQL(findAllQL);
                 }
@@ -71,6 +71,9 @@ class SimpleBaseRepositoryFactory<M, ID extends Serializable> extends JpaReposit
                 if (callbackClass != null && callbackClass != SearchCallback.class) {
                     repository.setSearchCallback(BeanUtils.instantiate(callbackClass));
                 }
+
+                repository.setJoins(searchableQuery.joins());
+
             }
 
             return repository;

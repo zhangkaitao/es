@@ -38,7 +38,7 @@
         <div class="span4">
             <div class="btn-group">
                 <shiro:hasPermission name="sys:resource:create">
-                <a id="appendChild" class="btn btn-custom">
+                    <a class="btn btn-custom no-disabled" href="${ctx}/admin/sys/resource/${parent.id}/appendChild?BackURL=<es:BackURL/>">
                     <i class="icon-file-alt"></i>
                     添加子节点
                 </a>

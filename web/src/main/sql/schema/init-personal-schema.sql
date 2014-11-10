@@ -3,6 +3,7 @@
 
 drop table if exists `personal_message`;;
 drop table if exists `personal_message_content`;;
+drop table if exists `personal_calendar`;;
 
 
 create table `personal_message`(
@@ -38,3 +39,18 @@ create table `personal_message_content`(
   constraint `pk_personal_message_content` primary key(`id`),
   index `idx_personal_message_content_message_id` (`message_id`)
 ) charset=utf8 ENGINE=InnoDB;;
+
+create table `personal_calendar`(
+  `id`         bigint not null auto_increment,
+  `user_id`    bigint,
+  `title`   varchar(500),
+  `details`   varchar(1000),
+  `start_date` date,
+  `length` int,
+  `start_time` time,
+  `end_time` time,
+  `background_color` varchar(100),
+  `text_color` varchar(100),
+  constraint `pk_office_calender` primary key(id),
+  index `office_calendar_user_id_start_date` (user_id, start_date)
+) ;

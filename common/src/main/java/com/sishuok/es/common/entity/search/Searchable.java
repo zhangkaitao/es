@@ -229,7 +229,7 @@ public abstract class Searchable {
 
     /**
      * 是否包含查询键  如 name_like
-     * 不能获取or的
+     * 包括 or 和 and的
      *
      * @param key
      * @return
@@ -238,7 +238,7 @@ public abstract class Searchable {
 
     /**
      * 获取查询属性对应的值
-     * 不能获取or的
+     * 不能获取or 或 and 的
      *
      * @param key
      * @return

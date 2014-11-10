@@ -8,7 +8,6 @@ package com.sishuok.es.sys.group.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.controller.permission.PermissionList;
@@ -39,10 +38,6 @@ import java.util.Set;
 public class GroupController extends BaseCRUDController<Group, Long> {
 
     @Autowired
-    @BaseComponent
-    private GroupService groupService;
-
-    @Autowired
     private GroupRelationService groupRelationService;
 
 
@@ -51,6 +46,9 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         setResourceIdentity("sys:group");
     }
 
+    private GroupService getGroupService() {
+        return (GroupService) baseService;
+    }
 
     @Override
     protected void setCommonData(Model model) {
@@ -104,9 +102,9 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Group group = groupService.findOne(id);
+            Group group = getGroupService().findOne(id);
             group.setShow(newStatus);
-            groupService.update(group);
+            getGroupService().update(group);
         }
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
@@ -122,12 +120,12 @@ public class GroupController extends BaseCRUDController<Group, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Group group = groupService.findOne(id);
+            Group group = getGroupService().findOne(id);
             if (group.getType() != GroupType.user) {//只有用户组 可设置为默认 其他无效
                 continue;
             }
             group.setDefaultGroup(newStatus);
-            groupService.update(group);
+            getGroupService().update(group);
         }
         return "redirect:" + request.getAttribute(Constants.BACK_URL);
     }
@@ -140,7 +138,7 @@ public class GroupController extends BaseCRUDController<Group, Long> {
             Searchable searchable,
             @RequestParam("term") String term) {
 
-        return groupService.findIdAndNames(searchable, term);
+        return getGroupService().findIdAndNames(searchable, term);
     }
 
 

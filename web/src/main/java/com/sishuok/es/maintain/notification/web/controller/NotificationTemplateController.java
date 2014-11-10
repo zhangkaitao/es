@@ -6,7 +6,7 @@
 package com.sishuok.es.maintain.notification.web.controller;
 
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
+import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.bind.annotation.SearchableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
@@ -33,9 +33,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/admin/maintain/notification/template")
 public class NotificationTemplateController extends BaseCRUDController<NotificationTemplate, Long> {
 
-    @Autowired
-    @BaseComponent
-    private NotificationTemplateService notificationTemplateService;
+    private NotificationTemplateService getNotificationTemplateService() {
+        return (NotificationTemplateService) baseService;
+    }
 
     public NotificationTemplateController() {
         setResourceIdentity("maintain:notificationTemplate");
@@ -66,7 +66,7 @@ public class NotificationTemplateController extends BaseCRUDController<Notificat
     protected boolean hasError(NotificationTemplate m, BindingResult result) {
         Assert.notNull(m);
 
-        NotificationTemplate template = notificationTemplateService.findByName(m.getName());
+        NotificationTemplate template = getNotificationTemplateService().findByName(m.getName());
         if (template == null || (template.getId().equals(m.getId()) && template.getName().equals(m.getName()))) {
             //success
         } else {
@@ -93,7 +93,7 @@ public class NotificationTemplateController extends BaseCRUDController<Notificat
         ValidateResponse response = ValidateResponse.newInstance();
 
         if ("name".equals(fieldId)) {
-            NotificationTemplate template = notificationTemplateService.findByName(fieldValue);
+            NotificationTemplate template = getNotificationTemplateService().findByName(fieldValue);
             if (template == null || (template.getId().equals(id) && template.getName().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");

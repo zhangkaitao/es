@@ -96,10 +96,6 @@ $.personal = {
             });
 
             $(".btn-clear").click(function () {
-                var checkbox = $.table.getAllSelectedCheckbox($(".table"));
-                if (checkbox.size() == 0) {
-                    return;
-                }
 
                 var panel = $(this).closest(".panel");
                 var state = panel.data("state");

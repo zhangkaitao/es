@@ -370,7 +370,7 @@ $.maintain = {
                     message: "请输入目录名字：<input type='text' id='name' placeholder='支持如/a/b/c多级目录'/>",
                     ok : function() {
                         var name = $("#name").val();
-                        if($.trim(name)) {
+                        if(!$.trim(name)) {
                             $.app.alert({
                                 message : "名称不能为空"
                             });
@@ -388,7 +388,7 @@ $.maintain = {
                     message: "请输入文件名字：<input type='text' id='name' placeholder='支持如/a/b.txt多级目录'/>",
                     ok : function() {
                         var name = $("#name").val();
-                        if($.trim(name)) {
+                        if(!$.trim(name)) {
                             $.app.alert({
                                 message : "名称不能为空"
                             });
@@ -454,7 +454,7 @@ $.maintain = {
                         }
                         $.app.modalDialog(
                             "选择解压到的目录",
-                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            ctx + "/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
                                 height:300,
                                 width:300,
@@ -481,7 +481,7 @@ $.maintain = {
                         var conflict = $("[name=conflict]:checked").val();
                         $.app.modalDialog(
                             "选择移动到的目录",
-                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            ctx + "/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
                                 height:300,
                                 width:300,
@@ -508,7 +508,7 @@ $.maintain = {
                         var conflict = $("[name=conflict]:checked").val();
                         $.app.modalDialog(
                             "选择复制到的目录",
-                            "${ctx}/admin/maintain/editor/select?" + checkbox.serialize(),
+                            ctx + "/admin/maintain/editor/select?" + checkbox.serialize(),
                             {
                                 height:300,
                                 width:300,

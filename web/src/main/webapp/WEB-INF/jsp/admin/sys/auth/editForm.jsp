@@ -181,7 +181,7 @@
                         <div class="list">
                             <ul>
                                 <c:forEach items="${roles}" var="r">
-                                    <c:if test="${not fn:contains(m.roleIds, r.id)}">
+                                    <c:if test="${not esfn:in(m.roleIds, r.id)}">
                                         <li class="ui-state-default" data-value="${r.id}" title="${r.description}">
                                             ${r.name}[${r.role}]
                                         </li>
@@ -203,7 +203,7 @@
                         <div class="list">
                             <ul data-input-id="roleIds">
                                 <c:forEach items="${roles}" var="r">
-                                    <c:if test="${fn:contains(m.roleIds, r.id)}">
+                                    <c:if test="${esfn:in(m.roleIds, r.id)}">
                                         <li class="ui-state-default" data-value="${r.id}" title="${r.description}">
                                             ${r.name}[${r.role}]
                                         </li>

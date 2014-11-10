@@ -299,9 +299,9 @@
             <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>${common-collections.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${common-collections4.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -485,7 +485,7 @@
             <version>${hibernate.core.version}</version>
         </dependency>
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>${javassist.version}</version>
             <exclusions>
@@ -655,6 +655,11 @@
         <!-- jcaptcha 验证码 -->
         <dependency>
             <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha-api</artifactId>
+            <version>${jcaptcha.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
             <artifactId>jcaptcha</artifactId>
             <version>${jcaptcha.version}</version>
         </dependency>
@@ -686,21 +691,21 @@
         <support.basedir>${project.parent.basedir}/src/support</support.basedir>
         <site.basedir>${project.parent.basedir}</site.basedir>
 
-        <asm.version>4.0</asm.version>
-        <cglib.version>3.0</cglib.version>
+        <asm.version>4.2</asm.version>
+        <cglib.version>3.1</cglib.version>
 
         <commons-lang3.version>3.1</commons-lang3.version>
-        <common-collections.version>3.2.1</common-collections.version>
+        <common-collections4.version>4.0</common-collections4.version>
         <commons-io.version>2.4</commons-io.version>
-        <guava.version>13.0.1</guava.version>
-        <common.fileupload.version>1.2.2</common.fileupload.version>
-        <common.compress.version>1.5</common.compress.version>
-        <ant.version>1.9.1</ant.version>
+        <guava.version>15.0</guava.version>
+        <common.fileupload.version>1.3</common.fileupload.version>
+        <common.compress.version>1.6</common.compress.version>
+        <ant.version>1.9.2</ant.version>
 
         <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>
-        <powermock.version>1.5</powermock.version>
-        <h2.version>1.3.170</h2.version>
+        <powermock.version>1.5.2</powermock.version>
+        <h2.version>1.3.174</h2.version>
         <jetty.version>8.1.8.v20121106</jetty.version>
 
         <servlet.version>3.0.1</servlet.version>
@@ -708,18 +713,18 @@
         <jstl.version>1.2</jstl.version>
         <standard.version>1.1.2</standard.version>
 
-        <aspectj.version>1.7.2</aspectj.version>
-        <spring.version>3.2.2.RELEASE</spring.version>
-        <spring.data.jpa.version>1.3.1.RELEASE</spring.data.jpa.version>
+        <aspectj.version>1.7.4</aspectj.version>
+        <spring.version>4.0.0.RELEASE</spring.version>
+        <spring.data.jpa.version>1.4.1.RELEASE</spring.data.jpa.version>
 
-        <hibernate.core.version>4.2.2.Final</hibernate.core.version>
-        <hibernate.ehcache.version>4.2.2.Final</hibernate.ehcache.version>
-        <hibernate.commons.annotaions.version>4.0.2.Final</hibernate.commons.annotaions.version>
-        <hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
+        <hibernate.core.version>4.3.0.Final</hibernate.core.version>
+        <hibernate.ehcache.version>4.3.0.Final</hibernate.ehcache.version>
+        <hibernate.commons.annotaions.version>4.0.4.Final</hibernate.commons.annotaions.version>
+        <hibernate.validator.version>5.0.2.Final</hibernate.validator.version>
 
-        <javassist.version>3.12.1.GA</javassist.version>
+        <javassist.version>3.18.0-GA</javassist.version>
 
-        <ehcache.core.version>2.6.5</ehcache.core.version>
+        <ehcache.core.version>2.6.6</ehcache.core.version>
 
         <shiro.version>1.2.2</shiro.version>
         <!--<quartz.version>1.8.6</quartz.version>-->
@@ -730,14 +735,14 @@
         <druid.version>0.2.23</druid.version>
         <fastjson.version>1.1.34</fastjson.version>
 
-        <httpclient.version>4.2.2</httpclient.version>
+        <httpclient.version>4.3.1</httpclient.version>
 
         <dom4j.version>1.6.1</dom4j.version>
-        <joda-time.version>2.2</joda-time.version>
-        <prettytime.version>2.1.2.Final</prettytime.version>
+        <joda-time.version>2.3</joda-time.version>
+        <prettytime.version>3.2.3.Final</prettytime.version>
         <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
 
-        <jsoup.version>1.7.2</jsoup.version>
+        <jsoup.version>1.7.3</jsoup.version>
     </properties>
 
 </project>

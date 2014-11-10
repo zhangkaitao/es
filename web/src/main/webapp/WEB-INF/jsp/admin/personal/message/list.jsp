@@ -47,12 +47,10 @@
                     </a>
                 </c:if>
 
-                <c:if test="${state ne 'trash_box'}">
                 <a class="btn btn-recycle-or-delete">
                     <i class="icon-trash"></i>
                     删除
                 </a>
-                </c:if>
 
                 <a class="btn no-disabled btn-clear">
                     <i class="icon-eraser"></i>

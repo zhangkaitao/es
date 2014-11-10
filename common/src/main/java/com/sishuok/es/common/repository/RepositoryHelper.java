@@ -20,6 +20,7 @@ import org.springframework.util.Assert;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
@@ -86,7 +87,6 @@ public class RepositoryHelper {
     public <M> List<M> findAll(final String ql, final Searchable searchable, final SearchCallback searchCallback) {
 
         assertConverted(searchable);
-
         StringBuilder s = new StringBuilder(ql);
         searchCallback.prepareQL(s, searchable);
         searchCallback.prepareOrder(s, searchable);
@@ -313,6 +313,5 @@ public class RepositoryHelper {
             query.setHint("org.hibernate.cacheable", true);//开启查询缓存
         }
     }
-
 
 }

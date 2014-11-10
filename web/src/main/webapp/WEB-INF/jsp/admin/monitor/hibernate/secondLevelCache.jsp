@@ -185,19 +185,19 @@
                     return -Double.compare(s1HitPercent, s2HitPercent);
                 }
                 if("hitCount".equals(sortBy)) {
-                    return -Long.compare(s1.getHitCount(), s2.getHitCount());
+                    return -Long.valueOf(s1.getHitCount()).compareTo(Long.valueOf(s2.getHitCount()));
                 }
                 if("missCount".equals(sortBy)) {
-                    return -Long.compare(s1.getMissCount(), s2.getMissCount());
+                    return -Long.valueOf(s1.getMissCount()).compareTo(Long.valueOf(s2.getMissCount()));
                 }
                 if("putCount".equals(sortBy)) {
-                    return -Long.compare(s1.getPutCount(), s2.getPutCount());
+                    return -Long.valueOf(s1.getPutCount()).compareTo(Long.valueOf(s2.getPutCount()));
                 }
                 if("sizeInMemory".equals(sortBy)) {
-                    return -Long.compare(s1.getSizeInMemory(), s2.getSizeInMemory());
+                    return -Long.valueOf(s1.getSizeInMemory()).compareTo(Long.valueOf(s2.getSizeInMemory()));
                 }
                 if("elementCountInMemory".equals(sortBy)) {
-                    return -Long.compare(s1.getElementCountInMemory(), s2.getElementCountInMemory());
+                    return -Long.valueOf(s1.getElementCountInMemory()).compareTo(Long.valueOf(s2.getElementCountInMemory()));
                 }
 
                 return -region1.compareTo(region2);

@@ -30,7 +30,7 @@
         <div class="span4">
             <div class="btn-group">
                 <shiro:hasPermission name="showcase:move:create">
-                <a id="create" class="btn " href="${ctx}/showcase/move/create">
+                <a id="create" class="btn btn-create" href="${ctx}/showcase/move/create">
                     <i class="icon-file-alt"></i>
                     新增
                 </a>
@@ -48,7 +48,7 @@
                 </a>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="showcase:move:create or showcase:move:update or showcase:move:delete">
-                <a id="reweight" class="btn">
+                <a id="reweight" class="btn btn-create">
                     <i class="icon-cog"></i>
                     优化权重
                 </a>

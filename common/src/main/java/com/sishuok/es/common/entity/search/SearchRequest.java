@@ -8,9 +8,7 @@ package com.sishuok.es.common.entity.search;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sishuok.es.common.entity.search.exception.SearchException;
-import com.sishuok.es.common.entity.search.filter.Condition;
-import com.sishuok.es.common.entity.search.filter.SearchFilter;
-import com.sishuok.es.common.entity.search.filter.SearchFilterHelper;
+import com.sishuok.es.common.entity.search.filter.*;
 import com.sishuok.es.common.entity.search.utils.SearchableConvertUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.data.domain.PageRequest;
@@ -294,9 +292,41 @@ public final class SearchRequest extends Searchable {
 
     @Override
     public boolean containsSearchKey(String key) {
-        return
+        boolean contains =
                 searchFilterMap.containsKey(key) ||
                         searchFilterMap.containsKey(getCustomKey(key));
+
+        if(contains) {
+            return true;
+        }
+
+        //否则检查其中的or 和 and
+        return containsSearchKey(searchFilters, key);
+    }
+
+    private boolean containsSearchKey(List<SearchFilter> searchFilters, String key) {
+        boolean contains = false;
+        for(SearchFilter searchFilter : searchFilters) {
+            if(searchFilter instanceof OrCondition) {
+                OrCondition orCondition = (OrCondition) searchFilter;
+                contains = containsSearchKey(orCondition.getOrFilters(), key);
+            }
+            if(searchFilter instanceof AndCondition) {
+                AndCondition andCondition = (AndCondition) searchFilter;
+                contains = containsSearchKey(andCondition.getAndFilters(), key);
+            }
+
+            if(searchFilter instanceof Condition) {
+                Condition condition = (Condition) searchFilter;
+                contains = condition.getKey().equals(key) || condition.getSearchProperty().equals(key);
+            }
+
+            if(contains) {
+                return true;
+            }
+        }
+
+        return contains;
     }
 
     @Override

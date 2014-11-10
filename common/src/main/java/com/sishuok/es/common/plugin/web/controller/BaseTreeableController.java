@@ -17,8 +17,8 @@ import com.sishuok.es.common.plugin.web.controller.entity.ZTree;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseController;
 import com.sishuok.es.common.web.controller.permission.PermissionList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +38,14 @@ import java.util.Set;
 public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable<ID>, ID extends Serializable>
         extends BaseController<M, ID> {
 
-    private BaseTreeableService<M, ID> treeableService;
+    protected BaseTreeableService<M, ID> baseService;
 
     protected PermissionList permissionList = null;
+
+    @Autowired
+    public void setBaseService(BaseTreeableService<M, ID> baseService) {
+        this.baseService = baseService;
+    }
 
     /**
      * 权限前缀：如sys:user
@@ -51,19 +56,6 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             permissionList = PermissionList.newPermissionList(resourceIdentity);
         }
     }
-
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.afterPropertiesSet();
-
-        Assert.isTrue(
-                BaseTreeableService.class.isAssignableFrom(baseService.getClass()),
-                "baseService must be BaseTreeableService subclass");
-
-        this.treeableService = (BaseTreeableService<M, ID>) this.baseService;
-    }
-
 
     protected void setCommonData(Model model) {
         model.addAttribute("booleanList", BooleanEnum.values());
@@ -96,10 +88,10 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         if (!StringUtils.isEmpty(searchName)) {
             searchable.addSearchParam("name_like", searchName);
-            models = treeableService.findAllByName(searchable, null);
+            models = baseService.findAllByName(searchable, null);
             if (!async) { //非异步 查自己和子子孙孙
                 searchable.removeSearchFilter("name_like");
-                List<M> children = treeableService.findChildren(models, searchable);
+                List<M> children = baseService.findChildren(models, searchable);
                 models.removeAll(children);
                 models.addAll(children);
             } else { //异步模式只查自己
@@ -107,9 +99,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             }
         } else {
             if (!async) {  //非异步 查自己和子子孙孙
-                models = treeableService.findAllWithSort(searchable);
+                models = baseService.findAllWithSort(searchable);
             } else {  //异步模式只查根 和 根一级节点
-                models = treeableService.findRootAndChild(searchable);
+                models = baseService.findRootAndChild(searchable);
             }
         }
 
@@ -172,7 +164,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             return updateForm(m, model, redirectAttributes);
         }
 
-        treeableService.update(m);
+        baseService.update(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "修改成功");
         return redirectToUrl(viewName("success"));
     }
@@ -207,7 +199,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             return deleteForm(m, model);
         }
 
-        treeableService.deleteSelfAndChild(m);
+        baseService.deleteSelfAndChild(m);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(viewName("success"));
     }
@@ -234,7 +226,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             }
         }
 
-        treeableService.deleteSelfAndChild(mList);
+        baseService.deleteSelfAndChild(mList);
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
     }
@@ -276,7 +268,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             return appendChildForm(parent, model);
         }
 
-        treeableService.appendChild(parent, child);
+        baseService.appendChild(parent, child);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "添加子节点成功");
         return redirectToUrl(viewName("success"));
@@ -305,9 +297,9 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
                 source.makeSelfAsNewParentIds() + "%");
 
         if (!async) {
-            models = treeableService.findAllWithSort(searchable);
+            models = baseService.findAllWithSort(searchable);
         } else {
-            models = treeableService.findRootAndChild(searchable);
+            models = baseService.findRootAndChild(searchable);
         }
 
         model.addAttribute("trees", convertToZtreeList(
@@ -342,7 +334,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             return showMoveForm(request, async, source, searchable, model);
         }
 
-        treeableService.move(source, target, moveType);
+        baseService.move(source, target, moveType);
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "移动节点成功");
         return redirectToUrl(viewName("success"));
@@ -363,7 +355,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             searchable.addSearchFilter("parentId", SearchOperator.eq, parent.getId());
         }
 
-        model.addAttribute("page", treeableService.findAll(searchable));
+        model.addAttribute("page", baseService.findAll(searchable));
 
         return viewName("listChildren");
     }
@@ -405,16 +397,16 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             Searchable searchable) {
 
 
-        M excludeM = treeableService.findOne(excludeId);
+        M excludeM = baseService.findOne(excludeId);
 
         List<M> models = null;
 
         if (!StringUtils.isEmpty(searchName)) {//按name模糊查
             searchable.addSearchParam("name_like", searchName);
-            models = treeableService.findAllByName(searchable, excludeM);
+            models = baseService.findAllByName(searchable, excludeM);
             if (!async || asyncLoadAll) {//非异步模式 查自己及子子孙孙 但排除
                 searchable.removeSearchFilter("name_like");
-                List<M> children = treeableService.findChildren(models, searchable);
+                List<M> children = baseService.findChildren(models, searchable);
                 models.removeAll(children);
                 models.addAll(children);
             } else { //异步模式 只查匹配的一级
@@ -428,14 +420,14 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
             if (async && !asyncLoadAll) { //异步模式下 且非异步加载所有
                 //排除自己 及 子子孙孙
-                treeableService.addExcludeSearchFilter(searchable, excludeM);
+                baseService.addExcludeSearchFilter(searchable, excludeM);
 
             }
 
             if (parentId == null && !asyncLoadAll) {
-                models = treeableService.findRootAndChild(searchable);
+                models = baseService.findRootAndChild(searchable);
             } else {
-                models = treeableService.findAllWithSort(searchable);
+                models = baseService.findAllWithSort(searchable);
             }
         }
 
@@ -458,7 +450,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
 
         M child = newModel();
         child.setName("新节点");
-        treeableService.appendChild(parent, child);
+        baseService.appendChild(parent, child);
         return convertToZtree(child, true, true);
     }
 
@@ -471,8 +463,8 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             this.permissionList.assertHasEditPermission();
         }
 
-        M tree = treeableService.findOne(id);
-        treeableService.deleteSelfAndChild(tree);
+        M tree = baseService.findOne(id);
+        baseService.deleteSelfAndChild(tree);
         return tree;
     }
 
@@ -486,7 +478,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
         tree.setName(newName);
-        treeableService.update(tree);
+        baseService.update(tree);
         return convertToZtree(tree, true, true);
     }
 
@@ -503,7 +495,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
         }
 
 
-        treeableService.move(source, target, moveType);
+        baseService.move(source, target, moveType);
 
         return source;
     }
@@ -517,7 +509,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             @RequestParam("term") String term,
             @RequestParam(value = "excludeId", required = false) ID excludeId) {
 
-        return treeableService.findNames(searchable, term, excludeId);
+        return baseService.findNames(searchable, term, excludeId);
     }
 
 

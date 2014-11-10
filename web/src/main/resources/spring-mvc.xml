@@ -28,9 +28,9 @@
             validator="validator"
             conversion-service="conversionService"
             content-negotiation-manager="contentNegotiationManager"
+            enable-matrix-variables="true"
             >
         <!--enableMatrixVariables="true">-->
-
         <!-- 异步支持 默认30秒超时 -->
         <mvc:async-support default-timeout="30000" task-executor="executor"/>
 
@@ -89,8 +89,19 @@
         <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
             <constructor-arg ref="conversionService"/>
         </bean>
-        <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor"/>
-        <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor"/>
+        <bean class="com.sishuok.es.common.web.interceptor.SetCommonDataInterceptor">
+            <property name="excludeUrlPatterns">
+                <value>
+                    /admin/polling
+                </value>
+            </property>
+        </bean>
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**" />
+            <mvc:mapping path="/office/**" />
+            <mvc:exclude-mapping path="/admin/polling"/>
+            <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor"/>
+        </mvc:interceptor>
         <!--<mvc:interceptor>-->
         <!--<mvc:mapping path="/**"/>-->
         <!--<bean class="cn.javass.test.interceptor.TestInterceptor"/>-->
@@ -160,6 +171,6 @@
     <bean class="com.sishuok.es.extra.exception.web.DefaultExceptionHandler"/>
 
     <import resource="spring-mvc-shiro.xml"/>
-    <import resource="spring-speed-up.xml"/>
+    <!--<import resource="spring-speed-up.xml"/>-->
 
 </beans>

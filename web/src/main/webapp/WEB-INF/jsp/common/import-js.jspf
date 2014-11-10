@@ -1,6 +1,6 @@
 
 <script src="${ctx}/static/comp/jquery-ui-bootstrap/js/bootstrap.min.js?1" type="text/javascript"></script>
-<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery-ui-1.10.2.custom.min.js?1" type="text/javascript"></script>
+<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery-ui-1.10.3.custom.min.js?1" type="text/javascript"></script>
 <script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery.layout-latest.js?1" type="text/javascript"></script>
 <%--<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery.layout.pseudoClose.min-1.1.js?1" type="text/javascript"></script>--%>
 <script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery.blockUI.js?1" type="text/javascript"></script>

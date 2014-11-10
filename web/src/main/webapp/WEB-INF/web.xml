@@ -122,6 +122,7 @@
     <servlet>
         <servlet-name>DruidStatView</servlet-name>
         <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
         <servlet-name>DruidStatView</servlet-name>

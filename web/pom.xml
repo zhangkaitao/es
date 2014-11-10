@@ -43,6 +43,27 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.maven.version}</version>
+                <configuration>
+                    <port>9080</port>
+                    <path>/${project.build.finalName}</path>
+                    <!-- spring profile  -->
+                    <systemProperties>
+                        <systemProperty>
+                            <name>spring.profiles.active</name>
+                            <value>development</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+
+            </plugin>
+
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>native2ascii-maven-plugin</artifactId>
@@ -185,9 +206,10 @@
     <properties>
         <sishuok.common.version>1.0-SNAPSHOT</sishuok.common.version>
         <jetty.version>8.1.8.v20121106</jetty.version>
+        <tomcat.maven.version>2.2</tomcat.maven.version>
         <support.basedir>${project.parent.parent.basedir}/src/support</support.basedir>
         <site.basedir>${project.parent.parent.basedir}</site.basedir>
-        <mysql.version>5.1.9</mysql.version>
+        <mysql.version>5.1.27</mysql.version>
         <yui.compressor.version>2.4.2</yui.compressor.version>
 
         <codegen.version>1.0-SNAPSHOT</codegen.version>
@@ -203,10 +225,10 @@
                 <db.name>es</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
-                    <![CDATA[ jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                    <![CDATA[jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
                 </connection.admin.url>
                 <connection.url>
-                    <![CDATA[ jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                    <![CDATA[jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
                 </connection.url>
                 <connection.username>root</connection.username>
                 <connection.password/>
@@ -228,10 +250,10 @@
                 <db.name>es</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
-                    <![CDATA[ jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                    <![CDATA[jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
                 </connection.admin.url>
                 <connection.url>
-                    <![CDATA[ jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                    <![CDATA[jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
                 </connection.url>
                 <connection.username>root</connection.username>
                 <connection.password/>
@@ -255,10 +277,10 @@
                 <db.name>es</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
-                    <![CDATA[ jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                    <![CDATA[jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
                 </connection.admin.url>
                 <connection.url>
-                    <![CDATA[ jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8 ]]>
+                    <![CDATA[jdbc:mysql://localhost:3306/${db.name}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
                 </connection.url>
                 <connection.username>root</connection.username>
                 <connection.password/>

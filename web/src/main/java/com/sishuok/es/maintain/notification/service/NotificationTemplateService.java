@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.maintain.notification.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.maintain.notification.entity.NotificationTemplate;
 import com.sishuok.es.maintain.notification.repository.NotificationTemplateRepository;
@@ -20,12 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationTemplateService extends BaseService<NotificationTemplate, Long> {
 
-    @Autowired
-    @BaseComponent
-    private NotificationTemplateRepository notificationTemplateRepository;
+    private NotificationTemplateRepository getNotificationTemplateRepository() {
+        return (NotificationTemplateRepository) baseRepository;
+    }
 
 
     public NotificationTemplate findByName(final String name) {
-        return notificationTemplateRepository.findByName(name);
+        return getNotificationTemplateRepository().findByName(name);
     }
 }

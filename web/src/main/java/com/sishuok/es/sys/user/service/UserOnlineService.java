@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.user.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.repository.UserOnlineRepository;
@@ -25,9 +24,9 @@ import java.util.List;
 @Service
 public class UserOnlineService extends BaseService<UserOnline, String> {
 
-    @Autowired
-    @BaseComponent
-    private UserOnlineRepository userOnlineRepository;
+    private UserOnlineRepository getUserOnlineRepository() {
+        return (UserOnlineRepository) baseRepository;
+    }
 
     /**
      * 上线
@@ -61,7 +60,7 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
      * @param needOfflineIdList
      */
     public void batchOffline(List<String> needOfflineIdList) {
-        userOnlineRepository.batchDelete(needOfflineIdList);
+        getUserOnlineRepository().batchDelete(needOfflineIdList);
     }
 
     /**
@@ -70,7 +69,7 @@ public class UserOnlineService extends BaseService<UserOnline, String> {
      * @return
      */
     public Page<UserOnline> findExpiredUserOnlineList(Date expiredDate, Pageable pageable) {
-        return userOnlineRepository.findExpiredUserOnlineList(expiredDate, pageable);
+        return getUserOnlineRepository().findExpiredUserOnlineList(expiredDate, pageable);
     }
 
 

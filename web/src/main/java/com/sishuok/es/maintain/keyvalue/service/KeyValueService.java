@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.maintain.keyvalue.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.maintain.keyvalue.entity.KeyValue;
 import com.sishuok.es.maintain.keyvalue.repository.KeyValueRepository;
@@ -20,13 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyValueService extends BaseService<KeyValue, Long> {
 
-    @Autowired
-    @BaseComponent
-    private KeyValueRepository keyValueRepository;
+    private KeyValueRepository getKeyValueRepository() {
+        return (KeyValueRepository) baseRepository;
+    }
 
 
     public KeyValue findByKey(String key) {
-        return keyValueRepository.findByKey(key);
+        return getKeyValueRepository().findByKey(key);
     }
 
 }

@@ -6,11 +6,8 @@
 package com.sishuok.es.sys.resource.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.sys.resource.entity.Resource;
-import com.sishuok.es.sys.resource.service.ResourceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/admin/sys/resource")
 public class ResourceController extends BaseTreeableController<Resource, Long> {
 
-    @Autowired
-    @BaseComponent
-    private ResourceService resourceService;
-
     public ResourceController() {
         setResourceIdentity("sys:resource");
     }
@@ -47,9 +40,9 @@ public class ResourceController extends BaseTreeableController<Resource, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Resource resource = resourceService.findOne(id);
+            Resource resource = baseService.findOne(id);
             resource.setShow(newStatus);
-            resourceService.update(resource);
+            baseService.update(resource);
         }
 
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");

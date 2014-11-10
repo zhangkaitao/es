@@ -186,6 +186,9 @@ input.search-query {
     font-size: 14px;
     left: 60%;
 }
+.modal input {
+    margin-bottom: 5px;
+}
 .modal.fade.in {
     top: 15%;
 }
@@ -513,7 +516,7 @@ iframe[tabs="true"] {
 }
 
 #menu .ui-accordion-header{
-    height: 35px;
+    /*height: 35px;*/
     line-height: 20px;
 
 }
@@ -526,10 +529,13 @@ iframe[tabs="true"] {
 
 #menu .menu-header-icon{
     float: left;
-    margin-top: 10px;
+    margin-top: 3px;
     margin-left: 8px;
     margin-right: 8px;
-    color:#f89406;
+    color: #f89406;
+    position: relative;
+    left: 0;
+    top: 0;
 }
 
 
@@ -568,7 +574,7 @@ iframe[tabs="true"] {
     color: #0088cc;
     border: 0px;
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 10px 10px 10px 20px;
 }
 
 .tabs-bar.ui-tabs .ui-tabs-nav li{

@@ -18,12 +18,11 @@ public class UserServiceWithRespository2ImplTest extends UserServiceTest {
 
 
     @Autowired
-    private UserRepository2 userRepository2;
-
+    private UserService2 userService2;
 
     @Before
     public void setUp() {
-        userService.setBaseRepository(userRepository2);
+        userService = userService2;
     }
 
 

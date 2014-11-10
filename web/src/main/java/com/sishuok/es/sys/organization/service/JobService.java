@@ -5,7 +5,6 @@
  */
 package com.sishuok.es.sys.organization.service;
 
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
 import com.sishuok.es.sys.organization.entity.Job;
 import com.sishuok.es.sys.organization.repository.JobRepository;
@@ -22,10 +21,6 @@ import java.util.Set;
  */
 @Service
 public class JobService extends BaseTreeableService<Job, Long> {
-
-    @Autowired
-    @BaseComponent
-    private JobRepository jobRepository;
 
 
     /**

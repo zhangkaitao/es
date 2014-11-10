@@ -28,7 +28,7 @@
             <div class="btn-group">
                 <shiro:hasPermission name="sys:group:create">
                 <div class="btn-group first">
-                    <a class="btn no-disabled btn-custom dropdown-toggle" data-toggle="dropdown">
+                    <a class="btn btn-custom no-disabled dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-file-alt"></i>
                         新&nbsp;增
                         <i class="caret"></i>

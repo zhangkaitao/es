@@ -8,9 +8,9 @@ package com.sishuok.es.common.service;
 import com.google.common.collect.Lists;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.support.InjectBaseDependencyHelper;
 import com.sishuok.es.common.repository.BaseRepository;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,25 +28,14 @@ import java.util.List;
  * <p>Date: 13-1-12 下午4:43
  * <p>Version: 1.0
  */
-public abstract class BaseService<M extends AbstractEntity, ID extends Serializable> implements InitializingBean {
-
+public abstract class BaseService<M extends AbstractEntity, ID extends Serializable> {
 
     protected BaseRepository<M, ID> baseRepository;
 
-
+    @Autowired
     public void setBaseRepository(BaseRepository<M, ID> baseRepository) {
         this.baseRepository = baseRepository;
     }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
-        InjectBaseDependencyHelper.findAndInjectBaseRepositoryDependency(this);
-
-        Assert.notNull(baseRepository, "BaseRepository required, Class is:" + getClass());
-
-    }
-
 
     /**
      * 保存单个实体
@@ -189,6 +178,7 @@ public abstract class BaseService<M extends AbstractEntity, ID extends Serializa
      * @return
      */
     public List<M> findAllWithSort(Searchable searchable) {
+        searchable.removePageable();
         return Lists.newArrayList(baseRepository.findAll(searchable).getContent());
     }
 

@@ -6,7 +6,6 @@
 package com.sishuok.es.showcase.deleted.web.controller;
 
 import com.sishuok.es.common.entity.enums.BooleanEnum;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.deleted.entity.DeletedSample;
@@ -33,9 +32,9 @@ import java.util.Date;
 @RequestMapping(value = "/showcase/deleted")
 public class DeletedSampleController extends BaseCRUDController<DeletedSample, Long> {
 
-    @Autowired
-    @BaseComponent
-    private DeletedSampleService sampleService;
+    private DeletedSampleService getSampleService() {
+        return (DeletedSampleService) baseService;
+    }
 
     public DeletedSampleController() {
         setListAlsoSetCommonData(true);
@@ -92,7 +91,7 @@ public class DeletedSampleController extends BaseCRUDController<DeletedSample, L
         ValidateResponse response = ValidateResponse.newInstance();
 
         if ("name".equals(fieldId)) {
-            DeletedSample sample = sampleService.findByName(fieldValue);
+            DeletedSample sample = getSampleService().findByName(fieldValue);
             if (sample == null || (sample.getId().equals(id) && sample.getName().equals(fieldValue))) {
                 //如果msg 不为空 将弹出提示框
                 response.validateSuccess(fieldId, "");

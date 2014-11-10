@@ -8,11 +8,11 @@ package com.sishuok.es.common.web.controller;
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.inject.support.InjectBaseDependencyHelper;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.permission.PermissionList;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -30,7 +30,7 @@ import java.io.Serializable;
  * <p>Version: 1.0
  */
 public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Serializable>
-        extends BaseController<M, ID> implements InitializingBean {
+        extends BaseController<M, ID> {
 
     protected BaseService<M, ID> baseService;
 
@@ -43,10 +43,10 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
      *
      * @param baseService
      */
+    @Autowired
     public void setBaseService(BaseService<M, ID> baseService) {
         this.baseService = baseService;
     }
-
 
     /**
      * 列表也设置common data
@@ -64,14 +64,6 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
             permissionList = PermissionList.newPermissionList(resourceIdentity);
         }
     }
-
-
-    @Override
-    public void afterPropertiesSet() {
-        InjectBaseDependencyHelper.findAndInjectBaseServiceDependency(this);
-        Assert.notNull(baseService, "BaseService required, Class is:" + getClass());
-    }
-
 
     @RequestMapping(method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
@@ -206,10 +198,12 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         }
 
         baseService.delete(m);
+
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE, "删除成功");
         return redirectToUrl(backURL);
     }
 
-    @RequestMapping(value = "batch/delete")
+    @RequestMapping(value = "batch/delete", method = {RequestMethod.GET, RequestMethod.POST})
     public String deleteInBatch(
             @RequestParam(value = "ids", required = false) ID[] ids,
             @RequestParam(value = Constants.BACK_URL, required = false) String backURL,

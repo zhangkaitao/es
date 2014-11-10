@@ -41,14 +41,15 @@
     <repositories>
 
         <repository>
+            <id>oschina Releases</id>
+            <name>oschina Releases</name>
+            <url>http://maven.oschina.net/content/groups/public</url>
+        </repository>
+
+        <repository>
             <id>apache-repo</id>
             <name>apache Repository</name>
             <url>https://repository.apache.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>travis-ci-repo</id>
-            <name>travis-ci Repository</name>
-            <url>http://maven.mirrors.travis-ci.org/nexus/content/repositories/central</url>
         </repository>
         <repository>
             <id>java-repo</id>
@@ -58,12 +59,12 @@
         <repository>
             <id>springsource-repo</id>
             <name>SpringSource Repository</name>
-            <url>http://repo.springsource.org/release/</url>
+            <url>http://repo.spring.io/release/</url>
         </repository>
         <repository>
             <id>springsource-repo-snapshot</id>
             <name>SpringSource Repository</name>
-            <url>http://repo.springsource.org/snapshot/</url>
+            <url>http://repo.spring.io/snapshot/</url>
         </repository>
         <repository>
             <id>cloudhopper</id>
@@ -90,10 +91,18 @@
         <repository>
             <id>sourceforge-releases</id>
             <name>Sourceforge Releases</name>
-            <url>https://oss.sonatype.org/content/repositories/sourceforge-releases/</url>
+            <url>https://oss.sonatype.org/content/repositories/sourceforge-releases</url>
         </repository>
+
     </repositories>
     <pluginRepositories>
+
+        <pluginRepository>
+            <id>oschina Releases</id>
+            <name>oschina Releases</name>
+            <url>http://maven.oschina.net/content/groups/public</url>
+        </pluginRepository>
+
         <pluginRepository>
             <id>maven2-repo</id>
             <name>maven2 Repository</name>

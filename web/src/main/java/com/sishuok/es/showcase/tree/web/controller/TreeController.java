@@ -6,11 +6,8 @@
 package com.sishuok.es.showcase.tree.web.controller;
 
 import com.sishuok.es.common.Constants;
-import com.sishuok.es.common.inject.annotation.BaseComponent;
 import com.sishuok.es.common.plugin.web.controller.BaseTreeableController;
 import com.sishuok.es.showcase.tree.entity.Tree;
-import com.sishuok.es.showcase.tree.service.TreeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/showcase/tree")
 public class TreeController extends BaseTreeableController<Tree, Long> {
 
-    @Autowired
-    @BaseComponent
-    private TreeService treeService;
-
     public TreeController() {
         setResourceIdentity("showcase:tree");
     }
@@ -48,9 +41,9 @@ public class TreeController extends BaseTreeableController<Tree, Long> {
         this.permissionList.assertHasUpdatePermission();
 
         for (Long id : ids) {
-            Tree tree = treeService.findOne(id);
+            Tree tree = baseService.findOne(id);
             tree.setShow(newStatus);
-            treeService.update(tree);
+            baseService.update(tree);
         }
         redirectAttributes.addFlashAttribute(Constants.MESSAGE, "操作成功！");
 
