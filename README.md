@@ -90,6 +90,8 @@
 * cd bin
 * install.bat 安装jar包到本地仓库（jdk6即可）
 * create-db.bat 创建数据库（mysql需要5.5及以上 编码为utf-8）
+
+  > 由于某些原因，maven-db-plugin不能顺利下载，把[这个](http://yun.baidu.com/share/link?shareid=757502277&uk=53741168)解压后放在Maven本地仓库的com/googlecode/下即可，或在[http://maven-db-plugin.googlecode.com/svn/maven/repo/com/googlecode/maven-db-plugin](http://maven-db-plugin.googlecode.com/svn/maven/repo/com/googlecode/maven-db-plugin)下载
 * refresh-db.bat 创建schema和初始化data
 * jetty.bat 启动web应用 默认端口9080 可以到es/web/pom.xml下修改（servlet 2.5即可）
 * 系统默认帐户是admin/123456
