@@ -76,7 +76,7 @@
                 <!-- 
                  <property name="generateDdl" value="${jpa.generateDdl}"/>
                  -->
-                 <property name="generateDdl" value="update"/>
+                 <property name="generateDdl" value="true"/>
                 <property name="database" value="${jpa.database}"/>
                 <property name="databasePlatform" value="${jpa.databasePlatform}"/>
                 <!-- 
