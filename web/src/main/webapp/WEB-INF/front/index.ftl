@@ -1,1 +1,1 @@
-前端测试页面 ${xxx}
+前端测试页面 ${xxx}    freemarker

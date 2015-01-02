@@ -5,9 +5,8 @@
  */
 package com.sishuok.es.common.web.controller;
 
-import com.sishuok.es.common.entity.AbstractEntity;
-import com.sishuok.es.common.utils.ReflectUtils;
-import org.springframework.beans.factory.InitializingBean;
+import java.io.Serializable;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -15,7 +14,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.Serializable;
+import com.sishuok.es.common.entity.AbstractEntity;
+import com.sishuok.es.common.utils.ReflectUtils;
 
 /**
  * 基础控制器
@@ -23,6 +23,7 @@ import java.io.Serializable;
  * <p>Date: 13-2-23 下午3:56
  * <p>Version: 1.0
  */
+@SuppressWarnings("rawtypes")
 public abstract class BaseController<M extends AbstractEntity, ID extends Serializable> {
 
     /**
