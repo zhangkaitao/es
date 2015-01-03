@@ -5,10 +5,10 @@
 
 
     <ul class="nav nav-tabs">
-        <shiro:hasPermission name="${permissionPrefix}:create">
+        <shiro:hasPermission name="${permissionName}:create">
         <c:if test="${r"${op eq '新增'}"} ">
             <li ${r"${op eq '新增' ? 'class=active' : ''}"}>
-                <a href="${r"${ctx}"}/${sysName}/${moduleName}/create?BackURL=<es:BackURL/>">
+                <a href="${r"${ctx}"}/admin/${sysName}/${folderName}/create?BackURL=<es:BackURL/>">
                     <i class="icon-file-alt"></i>
                     新增
                 </a>
@@ -17,22 +17,22 @@
         </shiro:hasPermission>
         <c:if test="${r"${not empty m.id}"}">
             <li ${r"${op eq '查看' ? 'class=active' : ''}"}>
-                <a href="${r"${ctx}"}/${sysName}/${moduleName}/${r"${m.id}"}?BackURL=<es:BackURL/>">
+                <a href="${r"${ctx}"}/admin/${sysName}/${folderName}/${r"${m.id}"}?BackURL=<es:BackURL/>">
                     <i class="icon-eye-open"></i>
                     查看
                 </a>
             </li>
-            <shiro:hasPermission name="${permissionPrefix}:update">
+            <shiro:hasPermission name="${permissionName}:update">
             <li ${r"${op eq '修改' ? 'class=active' : ''}"}>
-                <a href="${r"${ctx}"}/${sysName}/${moduleName}/${r"${m.id}"}/update?BackURL=<es:BackURL/>">
+                <a href="${r"${ctx}"}/admin/${sysName}/${folderName}/${r"${m.id}"}/update?BackURL=<es:BackURL/>">
                     <i class="icon-edit"></i>
                     修改
                 </a>
             </li>
             </shiro:hasPermission>
-            <shiro:hasPermission name="${permissionPrefix}:delete">
+            <shiro:hasPermission name="${permissionName}:delete">
             <li ${r"${op eq '删除' ? 'class=active' : ''}"}>
-                <a href="${r"${ctx}"}/${sysName}/${moduleName}/${r"${m.id}"}/delete?BackURL=<es:BackURL/>">
+                <a href="${r"${ctx}"}/admin/${sysName}/${folderName}/${r"${m.id}"}/delete?BackURL=<es:BackURL/>">
                     <i class="icon-trash"></i>
                     删除
                 </a>

@@ -7,7 +7,7 @@
 
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="${r"${ctx}"}/${sysName}/${moduleName}/editor">
+            <a href="${r"${ctx}"}/admin/${sysName}/${folderName}/editor">
                 <i class="icon-table"></i>
                 所有内容列表
             </a>
@@ -20,19 +20,19 @@
     <div class="row-fluid tool ui-toolbar">
         <div class="span4">
             <div class="btn-group">
-                <shiro:hasPermission name="${permissionPrefix}:create">
-                <a class="btn btn-create" href="${r"${ctx}"}/${sysName}/${moduleName}/create">
+                <shiro:hasPermission name="${permissionName}:create">
+                <a class="btn btn-create" href="${r"${ctx}"}/admin/${sysName}/${folderName}/create">
                     <span class="icon-file-alt"></span>
                     新增
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="${permissionPrefix}:update">
+                <shiro:hasPermission name="${permissionName}:update">
                 <a class="btn btn-update">
                     <span class="icon-edit"></span>
                     修改
                 </a>
                 </shiro:hasPermission>
-                <shiro:hasPermission name="${permissionPrefix}:delete">
+                <shiro:hasPermission name="${permissionName}:delete">
                 <a class="btn btn-delete">
                     <span class="icon-trash"></span>
                     删除

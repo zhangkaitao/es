@@ -20,6 +20,6 @@ import ${packageName}.${sysName}.${moduleName}.entity.${ClassName};
 public class ${ClassName}Controller extends BaseCRUDController<${ClassName}, Long> {
 
     public ${ClassName}Controller() {
-        setResourceIdentity("${permissionPrefix}");
+        setResourceIdentity("${permissionName}");
     }
 }

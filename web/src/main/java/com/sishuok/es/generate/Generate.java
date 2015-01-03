@@ -44,12 +44,14 @@ public class Generate {
 		// packageName 包名，这里如果更改包名，请在applicationContext.xml和srping-mvc.xml中配置base-package、packagesToScan属性，来指定多个（共4处需要修改）。
 		String packageName = "com.sishuok.es";
 		
-		String sysName = "shop";			// 所属系统名，例：sys、showcase、maintain、personal
-		String moduleName = "memberreak";		// 模块名（可选） 
+		String sysName = "shop";			// 所属系统名，例：sys、showcase、maintain、personal、shop
+		String moduleName = "memberRank";		// 模块名（可选） 
 		String tableName = "shop_member_rank";			// 表明，例：user
 		String className = "MemberRank";			// 类名，例：User
+		String permissionName = "shop:memberRank";//权限标志名（此处使用全名，不采用合成方式）
+		String folderName = "member_rank";//文件夹名
 		String classAuthor = "xxs";		// 类作者，例：ThinkGem
-		String functionName = "会员等级";			// 功能名，例：用户
+		String functionName = "会员等级管理";			// 功能名，例：用户
 
 		// 是否启用生成工具
 		//Boolean isEnable = false;
@@ -103,10 +105,12 @@ public class Generate {
 		model.put("moduleName", StringUtils.lowerCase(moduleName));		//模块名称
 		model.put("tableName", StringUtils.lowerCase(tableName));	//表明
 		model.put("className", StringUtils.uncapitalize(className));	//类名（首字母大写）
+		model.put("permissionName", permissionName);		//权限名
 		model.put("ClassName", StringUtils.capitalize(className));		//类名
 		model.put("classAuthor", StringUtils.isNotBlank(classAuthor)?classAuthor:"Generate Tools");		//作者
 		model.put("classVersion", DateUtils.getDate());					//日期
 		model.put("functionName", functionName);						//模块名
+		model.put("folderName", folderName);						//文件夹名
 		model.put("urlPrefix", model.get("moduleName")+"_"+model.get("className"));	//jsp模板中需要的请求字符串
 		model.put("viewPrefix", //StringUtils.substringAfterLast(model.get("packageName"),".")+"/"+
 				model.get("urlPrefix"));
@@ -139,11 +143,20 @@ public class Generate {
 		writeFile(content, filePath);
 		logger.info("Service: {}", filePath);
 		
-		// 生成 Controller
-		template = cfg.getTemplate("controller.ftl");
+		// 生成 前台Controller
+		template = cfg.getTemplate("frontController.ftl");
 		content = FreeMarkers.renderTemplate(template, model);
 		filePath = javaPath+separator+model.get("sysName")+separator+model.get("moduleName")+separator+"web"+separator
-				+"controller"+separator+model.get("ClassName")+"Controller.java";
+				+"controller"+separator+"front"+separator+model.get("ClassName")+"Controller.java";
+		System.out.println("Controller   filePath"+filePath);
+		writeFile(content, filePath);
+		logger.info("Controller: {}", filePath);
+		
+		// 生成 后台Controller
+		template = cfg.getTemplate("adminController.ftl");
+		content = FreeMarkers.renderTemplate(template, model);
+		filePath = javaPath+separator+model.get("sysName")+separator+model.get("moduleName")+separator+"web"+separator
+				+"controller"+separator+"admin"+separator+model.get("ClassName")+"Controller.java";
 		System.out.println("Controller   filePath"+filePath);
 		writeFile(content, filePath);
 		logger.info("Controller: {}", filePath);
@@ -151,7 +164,7 @@ public class Generate {
 		// 生成 editForm
 		template = cfg.getTemplate("editForm.ftl");
 		content = FreeMarkers.renderTemplate(template, model);
-		filePath = viewPath+separator+model.get("moduleName")+separator+"editForm.jsp";
+		filePath = viewPath+separator+model.get("sysName")+separator+model.get("folderName")+separator+"editForm.jsp";
 		System.out.println("---------------------------------------------------");
 		System.out.println("ViewForm   filePath"+filePath);
 		writeFile(content, filePath);
@@ -160,7 +173,7 @@ public class Generate {
 		// 生成 list
 		template = cfg.getTemplate("list.ftl");
 		content = FreeMarkers.renderTemplate(template, model);
-		filePath = viewPath+separator+model.get("moduleName")+separator+"list.jsp";
+		filePath = viewPath+separator+model.get("sysName")+separator+model.get("folderName")+separator+"list.jsp";
 		writeFile(content, filePath);
 		System.out.println("ViewListfilePath"+filePath);
 		logger.info("ViewList: {}", filePath);
@@ -168,7 +181,7 @@ public class Generate {
 		// 生成 searcheForm
 		template = cfg.getTemplate("searchForm.ftl");
 		content = FreeMarkers.renderTemplate(template, model);
-		filePath = viewPath+separator+model.get("moduleName")+separator+"searchForm.jsp";
+		filePath = viewPath+separator+model.get("sysName")+separator+model.get("folderName")+separator+"searchForm.jsp";
 		writeFile(content, filePath);
 		System.out.println("searcheForm filePath"+filePath);
 		logger.info("ViewList: {}", filePath);	
@@ -176,7 +189,7 @@ public class Generate {
 		// 生成 listTable
 		template = cfg.getTemplate("listTable.ftl");
 		content = FreeMarkers.renderTemplate(template, model);
-		filePath = viewPath+separator+model.get("moduleName")+separator+"listTable.jsp";
+		filePath = viewPath+separator+model.get("sysName")+separator+model.get("folderName")+separator+"listTable.jsp";
 		writeFile(content, filePath);
 		System.out.println("listTable filePath"+filePath);
 		logger.info("ViewList: {}", filePath);		

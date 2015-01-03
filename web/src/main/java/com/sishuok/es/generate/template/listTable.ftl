@@ -18,10 +18,10 @@
         <tr>
             <td class="check"><input type="checkbox" name="ids" value="${r"${m.id}"}"></td>
             <td>
-                <a class="btn btn-link btn-edit" href="${r"${ctx}"}/${sysName}/${moduleName}/${r"${m.id}"}">${r"${m.id}"}</a>
+                <a class="btn btn-link btn-edit" href="${r"${ctx}"}/admin/${sysName}/${folderName}/${r"${m.id}"}">${r"${m.id}"}</a>
             </td>
             <td>${r"${m.name}"}</td>
-            <td><a href="${r"${ctx}"}/${sysName}/${moduleName}/${r"${m.id}"}">查看</a></td>
+            <td><a href="${r"${ctx}"}/admin/${sysName}/${folderName}/${r"${m.id}"}">查看</a></td>
         </tr>
     </c:forEach>
     </tbody>

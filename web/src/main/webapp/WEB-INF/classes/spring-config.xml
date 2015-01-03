@@ -76,7 +76,7 @@
                 <!-- 
                  <property name="generateDdl" value="${jpa.generateDdl}"/>
                  -->
-                 <property name="generateDdl" value="true"/>
+                 <property name="generateDdl" value="false"/>
                 <property name="database" value="${jpa.database}"/>
                 <property name="databasePlatform" value="${jpa.databasePlatform}"/>
                 <!-- 
@@ -208,6 +208,7 @@
     <import resource="spring-config-task.xml"/>
     <import resource="spring-config-shiro.xml"/>
     <import resource="spring-config-monitor.xml"/>
+    <import resource="spring-speed-up.xml"/>
     <!--<import resource="spring-speed-up.xml"/>-->
 
 </beans>
