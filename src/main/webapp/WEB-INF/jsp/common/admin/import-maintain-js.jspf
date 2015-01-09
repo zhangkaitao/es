@@ -1,0 +1,2 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<script src="${ctx}/static/js/admin/maintain.js?5"></script>

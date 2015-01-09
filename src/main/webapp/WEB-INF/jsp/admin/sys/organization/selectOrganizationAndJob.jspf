@@ -1,0 +1,91 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div id="organization" class="form-inline" style="float: left;width: 100%;margin-bottom: 20px;">
+    <c:if test="${empty noOrganizationAndJobTitle}">
+        <h4 class="hr">组织机构和工作职务信息</h4>
+    </c:if>
+
+    <div id="selectOrganization" class="span9">
+        <div class="muted font-12" style="margin: 10px auto;">
+            请选择组织机构和工作职务
+        </div>
+        <label>组织机构</label>&nbsp;
+        <div class="input-append" title="选择组织机构">
+            <input type="hidden" id="organizationId" value="${target.id}">
+            <input type="text" id="organizationName" class="input-medium" value="${target.name}"
+                   readonly="readonly">
+            <a id="selectOrganizationTree" href="javascript:;">
+                <span class="add-on"><i class="icon-chevron-down"></i></span>
+            </a>
+        </div>
+        &nbsp;&nbsp;
+        <label>工作职务</label>&nbsp;
+        <div class="input-append" title="选择工作职务">
+            <input type="hidden" id="jobId" value="${target.id}">
+            <input type="text" id="jobName" class="input-medium" value="${target.name}" readonly="readonly">
+            <a id="selectJobTree" href="javascript:;">
+                <span class="add-on"><i class="icon-chevron-down"></i></span>
+            </a>
+        </div>
+        &nbsp;
+        <a class="btn btn-warning btn-add-organization">
+            <i class="icon-file"></i>
+            添加
+        </a>
+        <div class="muted font-12" style="margin: 10px auto;">
+            注意：添加的数据是临时的，还需要点击页面下方的[新增/修改]保存该数据
+        </div>
+
+    </div>
+    <div id="selectedOrganization" class="span9">
+        <div class="muted font-12" style="margin: 10px auto;">
+            已选择的组织机构和工作职务
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="btn btn-link btn-delete-all-organization">删除选中</a>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th style="width: 80px">
+                    <a class="check-all" href="javascript:;">全选</a>
+                    |
+                    <a class="reverse-all" href="javascript:;">反选</a>
+                </th>
+                <th style="width: 20%;">组织机构</th>
+                <th>工作职务</th>
+                <th style="width: 20px;">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${displayOrganizationJobs}" var="o">
+            <c:if test="${esfn:existsOrganization(o.key, onlyDisplayShow)}">
+                <tr>
+                    <td class="check"><input type="checkbox"></td>
+                    <td>
+                        <input type='hidden' id='organizationId_${o.key}' name='organizationId' value='${o.key}'>
+                        <sys:showOrganizationName id="${o.key}"/>
+                    </td>
+                    <td>
+                        <c:set var="jobIds" value=""/>
+                        <c:set var="count" value="0"/>
+                        <c:forEach items="${o.value}" var="oj" varStatus="status">
+                        <c:if test="${esfn:existsJob(oj.jobId, onlyDisplayShow)}">
+                            <c:set var="count" value="${count + 1}"/>
+                            <c:set var="jobIds" value="${jobIds}${count == 1 ? '' : ','}${oj.jobId}"/>
+                            <sys:showJobName id="${oj.jobId}"/><br/>
+                        </c:if>
+                        </c:forEach>
+                        <input type='hidden' name='jobId' value='${jobIds}'>
+                    </td>
+                    <td>
+                        <a class='btn btn-link btn-edit btn-delete-organization' href='javascript:;'
+                           onclick='$.sys.organization.removeOrganization(this);'>
+                            <i class='icon-trash'></i>
+                        </a>
+                    </td>
+                </tr>
+            </c:if>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>

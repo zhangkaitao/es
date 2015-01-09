@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <description>Spring Framework JSP Form Tag Library</description>
+    <tlib-version>3.0</tlib-version>
+    <short-name>esfn</short-name>
+    <uri>http://www.sishuok.com/tags/es-functions</uri>
+
+    <function>
+        <description>obj in collection</description>
+        <name>in</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean in(java.lang.Iterable,java.lang.Object)</function-signature>
+    </function>
+
+    <function>
+        <description>判断指定id的组织机构是否存在，第一个参数是id，第二个参数是onlyDisplayShow(是否仅显示可见的)</description>
+        <name>existsOrganization</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean existsOrganization(java.lang.Long,java.lang.Boolean)</function-signature>
+    </function>
+
+    <function>
+        <description>判断指定id的工作职务是否存在，第一个参数是id，第二个参数是onlyDisplayShow(是否仅显示可见的)</description>
+        <name>existsJob</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean existsJob(java.lang.Long,java.lang.Boolean)</function-signature>
+    </function>
+
+    <function>
+        <description>判断指定id的资源是否存在，第一个参数是id，第二个参数是onlyDisplayShow(是否仅显示可见的)</description>
+        <name>existsResource</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean existsResource(java.lang.Long,java.lang.Boolean)</function-signature>
+    </function>
+
+    <function>
+        <description>判断指定id的权限是否存在，第一个参数是id，第二个参数是onlyDisplayShow(是否仅显示可见的)</description>
+        <name>existsPermission</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean existsPermission(java.lang.Long,java.lang.Boolean)</function-signature>
+    </function>
+
+    <function>
+        <description>判断指定id的角色是否存在，第一个参数是id，第二个参数是onlyDisplayShow(是否仅显示可见的)</description>
+        <name>existsRole</name>
+        <function-class>com.sishuok.es.extra.web.taglib.EsFunctions</function-class>
+        <function-signature>boolean existsRole(java.lang.Long,java.lang.Boolean)</function-signature>
+    </function>
+
+</taglib>

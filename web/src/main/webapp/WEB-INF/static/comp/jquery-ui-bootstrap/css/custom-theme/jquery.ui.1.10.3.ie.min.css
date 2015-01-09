@@ -1,9 +1,0 @@
-.ui-corner-all,.ui-corner-top,.ui-corner-right,.ui-corner-left,.ui-corner-bottom{border-radius:0;}
-.ui-state-active,.ui-tabs-selected{border-radius:0;}
-.ui-tabs-selected{border-radius:0;}
-.ui-tabs .ui-tabs-nav li{filter:none;}
-.ui-tabs .ui-tabs-nav li a{border-radius:0;}
-.ui-button .ui-button-text{display:block;}
-.ui-button-text-icon-primary .ui-icon{top:50%;margin-top:5px;margin-bottom:-26px;}
-.ui-button-icon-only .ui-icon{top:50%;margin-top:0;margin-bottom:-28px;}
-.ui-menu li{list-style-type:none;display:inline;line-height:0;}

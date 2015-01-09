@@ -1,0 +1,84 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<ul class="nav nav-tabs">
+
+    <c:if test="${not empty source}">
+        <c:set var="m" value="${source}"/>
+    </c:if>
+    <c:if test="${not empty parent}">
+        <c:set var="m" value="${parent}"/>
+    </c:if>
+
+    <c:set var="id" value="${m.id}"/>
+
+    <c:if test="${not empty id}">
+        <li ${op eq '查看' ? 'class="active"' : ''}>
+            <a href="${ctx}/admin/sys/resource/${id}?BackURL=<es:BackURL/>">
+                <i class="icon-eye-open"></i>
+                查看
+            </a>
+        </li>
+
+        <shiro:hasPermission name="showcase:tree:update">
+            <li ${op eq '修改' ? 'class="active"' : ''}>
+                <a href="${ctx}/admin/sys/resource/${id}/update?BackURL=<es:BackURL/>">
+                    <i class="icon-edit"></i>
+                    修改
+                </a>
+            </li>
+        </shiro:hasPermission>
+
+        <c:if test="${(not m.root) and (not source.root)}">
+            <shiro:hasPermission name="showcase:tree:delete">
+                <li ${op eq '删除' ? 'class="active"' : ''}>
+                    <a href="${ctx}/admin/sys/resource/${id}/delete?BackURL=<es:BackURL/>">
+                        <i class="icon-trash"></i>
+                        删除
+                    </a>
+                </li>
+            </shiro:hasPermission>
+        </c:if>
+
+
+        <shiro:hasPermission name="showcase:tree:create">
+            <li ${op eq '添加子节点' ? 'class="active"' : ''}>
+                <a href="${ctx}/admin/sys/resource/${id}/appendChild?BackURL=<es:BackURL/>">
+                    <i class="icon-file"></i>
+                    添加子节点
+                </a>
+            </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="showcase:tree:update">
+            <li ${op eq '移动节点' ? 'class="active"' : ''}>
+                <a href="${ctx}/admin/sys/resource/${id}/move?BackURL=<es:BackURL/>">
+                    <i class="icon-move"></i>
+                    移动节点
+                </a>
+            </li>
+        </shiro:hasPermission>
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">更多 <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+
+
+                <c:if test="${not m.leaf}">
+                    <li ${op eq '查看子节点' ? 'class="active"' : ''}>
+                        <a href="${ctx}/admin/sys/resource/${id}/children?BackURL=<es:BackURL/>">
+                            <i class="icon-list"></i>
+                            查看子节点
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${not m.root}">
+                    <li>
+                        <a href="${ctx}/admin/sys/resource/${m.parentId}/update?BackURL=<es:BackURL/>">
+                            <i class="icon-reply"></i>
+                            父节点
+                        </a>
+                    </li>
+                </c:if>
+            </ul>
+        </li>
+    </c:if>
+
+</ul>

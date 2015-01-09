@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- see https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_Druid%E5%92%8CSpring%E5%85%B3%E8%81%94%E7%9B%91%E6%8E%A7%E9%85%8D%E7%BD%AE -->
+    <bean id="druidStatInterceptor"
+          class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>
+
+    <aop:config>
+        <aop:advisor id="druidAdvisor" advice-ref="druidStatInterceptor"
+                     pointcut="execution(* com.sishuok.es..service.*+.*(..))" />
+    </aop:config>
+
+</beans>

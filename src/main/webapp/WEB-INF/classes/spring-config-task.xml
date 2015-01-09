@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!-- 如下实现是通过线程池执行的 -->
+    <task:executor id="executor" pool-size="10"/>
+    <task:scheduler id="scheduler" pool-size="10"/>
+    <task:annotation-driven scheduler="scheduler" executor="executor" proxy-target-class="true"/>
+
+    <task:scheduled-tasks scheduler="scheduler">
+        <!--自动清理删除的关系 每天2点执行执行 -->
+        <task:scheduled ref="relationClearTask" method="autoClearRelation" cron="0 0 2 * * ?"/>
+        <!--自动清理删除的关系 每天2点30执行-->
+        <task:scheduled ref="messageClearTask" method="autoClearExpiredOrDeletedmMessage" cron="0 30 2 * * ?"/>
+    </task:scheduled-tasks>
+
+
+    <!--&lt;!&ndash; 使用quartz执行任务调度 shiro也是使用它   &ndash;&gt;-->
+    <!--<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method='destroy'>-->
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--<ref bean="autoClearDeletedRelationTrigger"/>-->
+                <!--<ref bean="autoClearExpiredOrDeletedmMessageTrigger"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 清理对象关系的定时任务 &ndash;&gt;-->
+
+    <!--&lt;!&ndash;自动清理删除的关系&ndash;&gt;-->
+    <!--<bean id="autoClearDeletedRelationJob"-->
+          <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="relationClearTask"/>-->
+        <!--<property name="targetMethod" value="autoClearRelation"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+    <!--<bean id="autoClearDeletedRelationTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="autoClearDeletedRelationJob"/>-->
+        <!--&lt;!&ndash; 每天2点执行 &ndash;&gt;-->
+        <!--<property name="cronExpression" value="0 0 2 * * ?"/>-->
+    <!--</bean>-->
+
+
+    <!--&lt;!&ndash;自动清理过期的消息&ndash;&gt;-->
+    <!--<bean id="autoClearExpiredOrDeletedmMessageJob"-->
+          <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="messageClearTask"/>-->
+        <!--<property name="targetMethod" value="autoClearExpiredOrDeletedmMessage"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+    <!--<bean id="autoClearExpiredOrDeletedmMessageTrigger"-->
+          <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="autoClearExpiredOrDeletedmMessageJob"/>-->
+        <!--&lt;!&ndash; 每天2点30执行 &ndash;&gt;-->
+        <!--<property name="cronExpression" value="0 30 2 * * ?"/>-->
+    <!--</bean>-->
+
+
+</beans>

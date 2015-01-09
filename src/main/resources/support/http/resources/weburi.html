@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Druid Web URI Stat</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+		<link href='css/bootstrap.min.css' rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet"/>
+    	<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf8"></script>
+	</head>
+	<body>
+		<div class="container-fluid">
+      		<div class="row-fluid">
+        		<div class="span12">
+          				<h3>
+          					Web URI Stat
+          					<a href="weburi.json" target="_blank">View JSON API</a>
+          				</h3>
+						<table id="dataTable" class="table table-bordered table-striped responsive-utilities">
+							<thead>
+								<tr>
+									<th>N</th>
+									<th><a id="th-URI" >URI</a></th>
+									<th width="50"><a id="th-RequestCount" >RequestCount</a></th>
+									<th width="50"><a id="th-RequestTimeMillis" >RequestTime</a></th>
+									<th width="50"><a id="th-RunningCount" >Running</a></th>
+									<th width="50" title="Concurrent Max"><a id="th-ConcurrentMax" >Concurrent</a></th>
+									<th width="50" title="Jdbc Execute Count"><a id="th-JdbcExecuteCount" >JdbcCount</a></th>
+									<th width="50" title="Jdbc Execute Error Count"><a id="th-JdbcExecuteErrorCount" >JdbcError</a></th>
+									<th width="50" title="Jdbc Execute Time"><a id="th-JdbcExecuteTimeMillis" >JdbcTime</a></th>
+									<th width="50"><a id="th-JdbcCommitCount" >JdbcCommit</a></th>
+									<th width="50"><a id="th-JdbcRollbackCount" >JdbcRollback</a></th>
+									<th width="50"><a id="th-JdbcFetchRowCount" >JdbcFetchRow</a></th>
+									<th width="50"><a id="th-JdbcUpdateCount" >JdbcUpdate</a></th>
+								</tr>
+							</thead> 
+							<tbody></tbody>
+						</table>
+        		</div>
+      		</div> 
+    	</div>
+    	<script type="text/javascript">
+    	$.namespace("druid.weburi");
+    	druid.weburi = function () {  
+    		return  {
+    			init : function() {
+    				$("#dataTable th a").click(function(obj) {
+    					druid.common.setOrderBy(obj.target.id.substring(3))
+    				})
+    				druid.common.buildHead(5);
+    				druid.common.ajaxuri = 'weburi.json?';
+    				druid.common.handleAjaxResult = druid.weburi.handleAjaxResult;
+    				druid.common.setOrderBy("URI");
+    				druid.common.ajaxRequestForBasicInfo();
+    				setInterval("druid.common.ajaxRequestForBasicInfo();",5000);
+    			},
+    			
+    			handleAjaxResult : function(data) {
+    				var statList = data.Content;
+    				if(statList == null) return;
+    				
+    				var sqlStatTable = document.getElementById("dataTable");
+    				while (sqlStatTable.rows.length > 1) {
+    					sqlStatTable.deleteRow(1);
+    				}
+
+    				var html = "";
+    				for ( var i = 0; i < statList.length; i++) {
+    					var stat = statList[i];
+    					var newRow = sqlStatTable.insertRow(-1);
+    					html += "<tr>";
+    					html += "<td>" + (i + 1) + "</td>";
+    					html += "<td>" + '<a target="_blank" href="weburi-detail.html?uri='+ encodeURI(stat.URI) + '">' + druid.common.subSqlString(stat.URI, 64) + '</a>' + "</td>";
+    					html += "<td>" + stat.RequestCount + "</td>";
+    					html += "<td>" + stat.RequestTimeMillis + "</td>";
+    					html += "<td>" + stat.RunningCount + "</td>";
+    					html += "<td>" + stat.ConcurrentMax + "</td>";
+    					html += "<td>" + stat.JdbcExecuteCount + "</td>";
+    					html += "<td>" + stat.JdbcExecuteErrorCount + "</td>";
+    					html += "<td>" + stat.JdbcExecuteTimeMillis + "</td>";
+    					html += "<td>" + stat.JdbcCommitCount + "</td>";
+    					html += "<td>" + stat.JdbcRollbackCount + "</td>";
+    					html += "<td>" + stat.JdbcFetchRowCount + "</td>";
+    					html += "<td>" + stat.JdbcUpdateCount + "</td>";
+    					html += "</tr>";
+    				}
+    				$("#dataTable tbody").html(html);
+    				druid.common.stripes();
+    			}
+    		}
+    	}();
+
+    	$(document).ready(function() {
+    		druid.weburi.init();
+    	});
+    	</script>
+	</body>
+</html>

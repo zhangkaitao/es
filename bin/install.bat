@@ -1,19 +1,11 @@
 @echo off
-echo [INFO] Install es.
+echo [INFO] Install jar to local repository.
+
+%~d0
 cd %~dp0
 cd ..
-call mvn clean install -pl . -Dmaven.test.skip=true  
 
-echo [INFO] Install es/parent.
-cd %~dp0
-cd ../parent
-call mvn clean install -pl . -Dmaven.test.skip=true
+call mvn clean install -Dmaven.test.skip=true
 
-
-echo [INFO] Install common.
-cd %~dp0
-cd ../common
-call mvn clean install -pl .  -Dmaven.test.skip=true
-
-cd ../bin
+cd bin
 pause

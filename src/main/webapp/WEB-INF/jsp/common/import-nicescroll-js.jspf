@@ -1,0 +1,2 @@
+<script src="${ctx}/static/comp/nicescroll/jquery.nicescroll.min.js?1"></script>
+<script src="${ctx}/static/comp/nicescroll/jquery.nicescroll.plus.js?2"></script>
