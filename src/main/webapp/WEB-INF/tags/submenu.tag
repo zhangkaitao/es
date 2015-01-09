@@ -5,12 +5,17 @@
 <%@taglib prefix="es" tagdir="/WEB-INF/tags" %>
 <c:choose>
     <c:when test="${!menu.hasChildren}">
-        <li><a href="<%=menuUrl(request, menu.getUrl())%>">${menu.name}(<%=menuUrl(request, menu.getUrl())%>)</a></li>
+        <li>
+        	<a class="dropdown-toggle" href="<%=menuUrl(request, menu.getUrl())%>">
+        		<i class="icon-double-angle-right"></i>
+					${menu.name}(<%=menuUrl(request, menu.getUrl())%>)lllllll
+        	</a>
+        </li>
     </c:when>
     <c:otherwise>
         <li>
             <a href="#">${menu.name}</a>
-            <ul>
+            <ul class="submenu">
                 <c:forEach items="${menu.children}" var="menu2">
                     <es:submenu menu="${menu2}"/>
                 </c:forEach>

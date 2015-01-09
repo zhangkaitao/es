@@ -48,7 +48,7 @@
            overflowToDisk="false"
            eternal="false"
            diskPersistent="false"
-           timeToLiveSeconds="0"
+           timeToLiveSeconds="2"
            timeToIdleSeconds="0"
            statistics="true"/>
 

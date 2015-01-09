@@ -5,14 +5,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sishuok</groupId>
-    <artifactId>es</artifactId>
+    <artifactId>es-shop</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>es-shop</name>
     <url>https://github.com/xxs/es-shop</url>
 
 	<build>
-        <finalName>es</finalName>
+        <finalName>es-shop</finalName>
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>

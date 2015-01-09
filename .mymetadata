@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project-module type="WEB" name="es" id="es" context-root="/es" j2ee-spec="1.4" archive="es.war">
+<project-module type="WEB" name="es-shop" id="es-shop" context-root="/es-shop" j2ee-spec="1.4" archive="es-shop.war">
   <attributes>
     <attribute name="webrootdir" value="src/main/webapp"/>
   </attributes>
