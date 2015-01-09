@@ -6,15 +6,18 @@
 <c:choose>
     <c:when test="${!menu.hasChildren}">
         <li>
-        	<a class="dropdown-toggle" href="<%=menuUrl(request, menu.getUrl())%>">
+        	<a href="<%=menuUrl(request, menu.getUrl())%>" title="${menu.url}"  target="iframe">
         		<i class="icon-double-angle-right"></i>
-					${menu.name}(<%=menuUrl(request, menu.getUrl())%>)lllllll
+					${menu.name}
         	</a>
         </li>
     </c:when>
     <c:otherwise>
         <li>
-            <a href="#">${menu.name}</a>
+            <a href="#" class="dropdown-toggle" >
+            	<i class="icon-double-angle-right"></i>${menu.name}
+            	<b class="arrow icon-angle-down"></b>
+            </a>
             <ul class="submenu">
                 <c:forEach items="${menu.children}" var="menu2">
                     <es:submenu menu="${menu2}"/>

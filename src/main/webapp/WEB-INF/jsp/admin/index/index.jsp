@@ -2,53 +2,23 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader title="Easy-Scaffold脚手架" index="true"/>
 
-    <ul id="tabs-menu" class="dropdown-menu">
-        <li><a class="close-current" href="#">关闭</a></li>
-        <li><a class="close-others" href="#">关闭其他</a></li>
-        <li><a class="close-all" href="#">关闭所有</a></li>
-        <li class="divider"></li>
-        <li><a class="close-left-all" href="#">关闭当前左边的所有</a></li>
-        <li><a class="close-right-all" href="#">关闭当前右边的所有</a></li>
-    </ul>
-
+<%@include file="header.jsp"%>
 <div class="index-panel">
 
-    <div class="tabs-bar tabs-fix-top">
-        <span class="icon-chevron-left" style="display: none;"></span>
+	<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
 
-        <div class="ul-wrapper">
-            <ul>
-                <li>
-                    <a href="#tabs-0">欢迎使用</a>
-                    <span class='menu' role='presentation' style="display:inline-block;width: 14px;height: 14px"></span>
-                    <br/>
-                    <span class='menu icon-refresh' role='presentation' title='刷新'></span>
-                </li>
-            </ul>
-        </div>
-        <span class="icon-chevron-right" style="display: none;"></span>
-
-        <div id="tabs-0" data-index="0" data-url="${ctx}/admin/welcome"></div>
-
-    </div>
-
-   <iframe id="iframe-tabs-0" tabs="true" class="ui-layout-center"
-            frameborder="0" scrolling="auto" src="${ctx}/admin/welcome"></iframe>
-
-    <%@include file="userinfo.jsp"%>
-
-    <div class="ui-layout-north index-header">
-        <%@include file="header.jsp"%>
-    </div>
-
-
-    <div class="ui-layout-south">
-        <%@include file="footer.jsp"%>
-    </div>
-    <div class="ui-layout-west menu">
-        <%@include file="menu.jsp"%>
-    </div>
-</div>
+			<div class="main-container-inner">
+        		<%@include file="menu.jsp"%>
+			   	<iframe id="iframe" name="iframe" width="1000" overflow="auto"  frameborder="0" src="${ctx}/admin/welcome"></iframe>
+				<%@include file="setting.jsp"%>
+			</div><!-- /.main-container-inner -->
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
 <es:contentFooter/>
 <script type="text/javascript">
     $(function() {
