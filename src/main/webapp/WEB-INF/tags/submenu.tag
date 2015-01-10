@@ -26,7 +26,6 @@
         </li>
     </c:otherwise>
 </c:choose>
-
 <%!
     private static String menuUrl(HttpServletRequest request, String url) {
         if(url.startsWith("http")) {

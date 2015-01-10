@@ -24,4 +24,4 @@
         var currentURL = "${requestScope.currentURL}";
     </script>
 </head>
-<body <c:if test="${index eq true}">class="index bg"</c:if>>
+<body>

@@ -2,57 +2,131 @@
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <c:if test="${empty header['container']}">
 <es:contentHeader/>
-<style type="text/css">
-    .scroll-pane {
-        float: left;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-    }
-</style>
 </c:if>
-<div data-table="table" class="panel" id="panel">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="#">首页</a>
+							</li>
 
-    <ul class="nav nav-tabs">
-        <li ${empty param['search.userId_eq'] and empty param['search.userId_gt'] ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/online">
-                <i class="icon-table"></i>
-                所有用户列表
-            </a>
-        </li>
+							<li>
+								<a href="#">用户管理</a>
+							</li>
+							<li class="active">在线用户列表</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+					<div class="page-content">
+						<div class="row">
+									<div class="col-sm-12">
+										<div class="tabbable">
+										
+										
+										
+										<ul class="nav nav-tabs">
+									        <li ${empty param['search.userId_eq'] and empty param['search.userId_gt'] ? 'class="active"' : ''}>
+									            <a href="${ctx}/admin/sys/user/online">
+									                <i class="icon-table"></i>
+									                所有用户列表
+									            </a>
+									        </li>
+									
+									        <li ${not empty param['search.userId_gt'] ? 'class="active"' : ''}>
+									            <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">
+									                <i class="icon-table"></i>
+									                登录用户列表
+									            </a>
+									        </li>
+									        <li ${not empty param['search.userId_eq'] ? 'class="active"' : ''}>
+									            <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">
+									                <i class="icon-table"></i>
+									                匿名游客列表
+									            </a>
+									        </li>
+									        <li class="dropdown">
+													<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+														Dropdown &nbsp;
+														<i class="icon-caret-down bigger-110 width-auto"></i>
+													</a>
 
-        <li ${not empty param['search.userId_gt'] ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">
-                <i class="icon-table"></i>
-                登录用户列表
-            </a>
-        </li>
-        <li ${not empty param['search.userId_eq'] ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">
-                <i class="icon-table"></i>
-                匿名游客列表
-            </a>
-        </li>
-    </ul>
+													<ul class="dropdown-menu dropdown-info">
+														<li>
+															<a data-toggle="tab" href="#dropdown1">@fat</a>
+														</li>
 
-    <div class="row-fluid tool ui-toolbar">
-        <div class="span4">
-            <div class="btn-group">
-                <shiro:hasPermission name="sys:userOnline or monitor:userOnline"><%-- 等价于sys:userOnline:* 所有权限 --%>
-                <a class="btn btn-force-logout">
-                    <span class="icon-lightbulb"></span>
-                    强制退出
-                </a>
-                </shiro:hasPermission>
-            </div>
+														<li>
+															<a data-toggle="tab" href="#dropdown2">@mdo</a>
+														</li>
+													</ul>
+												</li>
+									    </ul>
+											<div class="tab-content">
+												<div id="home" class="tab-pane in active">
+													<div class="page-header">
+														<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+																<button class="btn btn-sm btn-success">
+																	<i class="icon-file-alt bigger-120"></i> 新增
+																</button>
 
-        </div>
-        <div class="span8">
-            <%@include file="searchForm.jsp" %>
-        </div>
-    </div>
-    <%@include file="listTable.jsp"%>
-</div>
+																<button class="btn btn-sm btn-info">
+																	<i class="icon-edit bigger-120"></i> 编辑
+																</button>
+
+																<button class="btn btn-sm btn-danger">
+																	<i class="icon-trash bigger-120"></i> 删除
+																</button>
+
+																<button class="btn btn-sm btn-warning">
+																	<i class="icon-flag bigger-120"></i> 更多
+																</button>
+															</div>
+
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-cog icon-only bigger-110"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+																		<li>
+																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+																				<span class="blue">
+																					<i class="icon-zoom-in bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+																				<span class="green">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+																				<span class="red">
+																					<i class="icon-trash bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+															<!-- <%@include file="searchForm.jsp" %> -->
+													</div><!-- /.page-header -->
+												
+												<%@include file="listTable.jsp"%>
+												
+											
+												</div>
+											</div>
+										</div>
+									</div>
+									</div>
+									</div>
+
 <c:if test="${empty header['container']}">
 <es:contentFooter/>
 <%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
