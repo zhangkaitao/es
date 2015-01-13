@@ -35,10 +35,8 @@
 </c:if>
 
 
-<div class="table-pagination <c:if test='${simple ne false}'> row-fluid tool ui-toolbar</c:if>">
-
-<div class="pagination">
-    <ul>
+<div>
+    <ul  class="pagination">
         <c:choose>
             <c:when test="${page.firstPage}">
                 <li class="disabled"><a title="首页">首页</a></li>
@@ -87,12 +85,8 @@
                 <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${page.totalPages}, this);" title="尾页">尾页</a></li>
             </c:otherwise>
         </c:choose>
-
-
-    </ul>
     <div>
-        <span class="page-input">
-            第<input type="text" class="input-mini" value="${current}" onblur="$.table.turnPage('${pageSize}', $(this).val(), this);"/>页
+        <span class="page-input">第<input type="text" class="input-sm" value="${current}" onblur="$.table.turnPage('${pageSize}', $(this).val(), this);"/>页
         </span>
         &nbsp;
         <select class="input-small" onchange="$.table.turnPage($(this).val(), ${current}, this);">
@@ -103,5 +97,5 @@
         </select>
         <span class="page-info">[共${page.totalPages}页/${page.totalElements}条]</span >
     </div>
-</div>
+    </ul>
 </div>

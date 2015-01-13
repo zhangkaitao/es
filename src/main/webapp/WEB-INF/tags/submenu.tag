@@ -8,6 +8,7 @@
         <li>
         	<a href="<%=menuUrl(request, menu.getUrl())%>" title="${menu.url}"  target="iframe">
         		<i class="icon-double-angle-right"></i>
+        		<i class="${menu.icon}"></i>
 					${menu.name}
         	</a>
         </li>
@@ -15,7 +16,9 @@
     <c:otherwise>
         <li>
             <a href="#" class="dropdown-toggle" >
-            	<i class="icon-double-angle-right"></i>${menu.name}
+            	<i class="icon-double-angle-right"></i>
+            	<i class="${menu.icon}"></i>
+            		${menu.name}
             	<b class="arrow icon-angle-down"></b>
             </a>
             <ul class="submenu">

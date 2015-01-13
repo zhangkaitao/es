@@ -32,7 +32,7 @@
 	<c:forEach items="${menus}" var="m">
 		<li>
 			<a href="#" class="dropdown-toggle">
-				<i class="icon-desktop"></i>
+				<i class="${m.icon}"></i>
 				<span class="menu-text"> ${m.name} </span>
 				<b class="arrow icon-angle-down"></b>
 			</a>

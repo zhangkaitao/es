@@ -1,28 +1,103 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf" %>
-<es:contentHeader title="用户登录 Easy-Scaffold脚手架" index="true"/>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <a class="brand" href="#">&nbsp;&nbsp;es脚手架</a>
-        <ul class="nav">
-            <li><a href="http://sishuok.com" target="_blank">私塾在线</a></li>
-            <li class="active"><a href="#">登录</a></li>
-            <li><a href="http://jinnianshilongnian.iteye.com" target="_blank">我的博客</a></li>
-            <li><a href="https://github.com/zhangkaitao/es" target="_blank">github</a></li>
-        </ul>
-        <a class="brand" style="float: right" href="mailto:zhangkaitao0503@gmail.com" target="_blank">&nbsp;&nbsp;问题反馈</a>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>es-shop 后台管理</title>
+    <link rel="icon" href="${ctx}/static/images/favicon.ico">
+    <link rel="shortcut icon" href="${ctx}/static/images/favicon.ico">
+    <%@include file="/WEB-INF/jsp/common/import-css.jspf"%>
+    <script type="text/javascript">
+        var currentURL = "${requestScope.currentURL}";
+    </script>
+</head>
+<body class="login-layout">
+<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container">
+							<div class="center">
+								<h1>
+									<i class="icon-leaf green"></i>
+									<span class="red">ES-SHOP</span>
+									<span class="white">后台登陆</span>
+								</h1>
+								<h4 class="blue">&copy; 小小士工作室</h4>
+							</div>
+
+							<div class="space-6"></div>
+
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="icon-coffee green"></i>
+												登陆信息
+											</h4>
+
+											<div class="space-6"></div>
+
+											<form>
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="用户名/邮箱" />
+															<i class="icon-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" placeholder="密码" />
+															<i class="icon-lock"></i>
+														</span>
+													</label>
+
+													<div class="space"></div>
+
+													<div class="clearfix">
+														<label class="inline">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"> 下次自动登录</span>
+														</label>
+
+														<button type="button" class="width-35 pull-right btn btn-sm btn-primary">
+															<i class="icon-key"></i>
+															登陆
+														</button>
+													</div>
+
+													<div class="space-4"></div>
+												</fieldset>
+											</form>
+										</div><!-- /widget-main -->
+									</div><!-- /widget-body -->
+								</div><!-- /login-box -->
+							</div><!-- /position-relative -->
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div>
+		</div><!-- /.main-container -->
+		
+		
+		
 <div class="container">
     <div class="login">
         <div class="title">用户登录</div>
         <div class="form">
-
             <div style="margin-right: 30px;">
                 <es:showMessage></es:showMessage>
             </div>
-
             <form id="loginForm" method="post" class="form-horizontal">
             <es:BackURL hiddenInput="true"/>
             <div class="control-group">
@@ -64,21 +139,7 @@
         </div>
     </div>
 </div>
-
-<footer class="footer">
-    <div class="container">
-        <p><a href="http://sishuok.com" target="_blank">私塾在线学习网</a></p>
-        <p>Code licensed <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
-        <ul class="footer-links">
-            <li><a href="http://jinnianshilongnian.iteye.com">博客</a></li>
-            <li class="muted">·</li>
-            <li><a href="https://github.com/zhangkaitao/es/issues?state=open" target="_blank">问题反馈</a></li>
-            <li class="muted">·</li>
-            <li><a href="https://github.com/zhangkaitao/es" target="_blank">项目主页</a></li>
-        </ul>
-    </div>
-</footer>
-<es:contentFooter/>
+</body>
 <script type="text/javascript">
     $(function() {
         $("#username").focus();

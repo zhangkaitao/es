@@ -20,9 +20,6 @@
 						<div class="row">
 									<div class="col-sm-12">
 										<div class="tabbable">
-										
-										
-										
 										<ul class="nav nav-tabs">
 									        <li ${empty param['search.userId_eq'] and empty param['search.userId_gt'] ? 'class="active"' : ''}>
 									            <a href="${ctx}/admin/sys/user/online">
@@ -63,7 +60,7 @@
 											<div class="tab-content">
 												<div id="home" class="tab-pane in active">
 													<div class="page-header">
-														<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 																<button class="btn btn-sm btn-success">
 																	<i class="icon-file-alt bigger-120"></i> 新增
 																</button>
@@ -118,8 +115,6 @@
 													</div><!-- /.page-header -->
 												
 												<%@include file="listTable.jsp"%>
-												
-											
 												</div>
 											</div>
 										</div>

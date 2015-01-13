@@ -79,10 +79,7 @@
                  <property name="generateDdl" value="false"/>
                 <property name="database" value="${jpa.database}"/>
                 <property name="databasePlatform" value="${jpa.databasePlatform}"/>
-                <!-- 
                 <property name="showSql" value="${jpa.showSql}"/>
-                 -->
-                <property name="showSql" value="true"/>
             </bean>
         </property>
         <property name="jpaDialect">
