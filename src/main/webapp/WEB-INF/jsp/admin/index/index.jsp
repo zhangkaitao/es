@@ -27,5 +27,14 @@
 	try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){};
     $(function() {
         $.app.initIndex();
+        
     });
+    
+    var a=document.getElementById("left");
+    var b=document.getElementById("right");
+    if(a.clientHeight<b.clientHeight){
+      a.style.height=b.clientHeight+"px";
+    }else{ 
+      b.style.height=a.clientHeight+"px";
+    }
 </script>
