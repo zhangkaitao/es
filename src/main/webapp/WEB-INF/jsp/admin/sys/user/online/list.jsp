@@ -9,7 +9,6 @@
 								<i class="icon-home home-icon"></i>
 								<a href="#">首页</a>
 							</li>
-
 							<li>
 								<a href="#">用户管理</a>
 							</li>
@@ -111,7 +110,6 @@
 																	</ul>
 																</div>
 															</div>
-															<!-- <%@include file="searchForm.jsp" %> -->
 													</div><!-- /.page-header -->
 												
 												<%@include file="listTable.jsp"%>
