@@ -19,7 +19,7 @@
     </script>
 </head>
 <body class="login-layout">
-<div class="main-container">
+	<div class="main-container">
 			<div class="main-content">
 				<div class="row">
 					<div class="col-sm-10 col-sm-offset-1">
@@ -45,32 +45,48 @@
 											</h4>
 
 											<div class="space-6"></div>
-
-											<form>
+								 			<div style="margin-right: 30px;">
+								                <es:showMessage></es:showMessage>
+								            </div>
+											<form id="loginForm" method="post" class="form-horizontal">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="用户名/邮箱" />
+															<input type="text" id="username" name="username" value="${param.username}" class="form-control input-xlarge validate[required]" placeholder="用户名、邮箱或手机号" />
 															<i class="icon-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="密码" />
+															<input type="password" id="password" name="password" class="form-control input-xlarge validate[required]" placeholder="请输入密码" />
 															<i class="icon-lock"></i>
 														</span>
 													</label>
+													
+													
+													<%-- jcaptchaEbabled 在JCaptchaValidateFilter设置 --%>
+										            <c:if test="${jcaptchaEbabled}">
+										                <div class="control-group">
+										                    <label for="jcaptchaCode">验证码</label>
+										                    <div class="input-prepend">
+										                        <span class="add-on icon-circle-blank"></span>
+										                        <input type="text" id="jcaptchaCode" name="jcaptchaCode"
+										                                class="input-medium validate[required,ajax[ajaxJcaptchaCall]]" placeholder="请输入验证码">
+										                    </div>
+										                     <img class="jcaptcha-btn jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
+										                     <a class="jcaptcha-btn btn btn-link">换一张</a>
+										                </div>
+										            </c:if>
 
 													<div class="space"></div>
-
 													<div class="clearfix">
 														<label class="inline">
-															<input type="checkbox" class="ace" />
+															<input type="checkbox" class="ace" name="rememberMe" value="true" />
 															<span class="lbl"> 下次自动登录</span>
 														</label>
 
-														<button type="button" class="width-35 pull-right btn btn-sm btn-primary">
+														<button id="submitForm" type="submit" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="icon-key"></i>
 															登陆
 														</button>

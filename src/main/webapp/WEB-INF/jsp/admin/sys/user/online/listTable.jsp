@@ -15,8 +15,6 @@
 														<th class="hidden-580">最后访问时间</th>
 
 														<th>状态	</th>
-														<th class="hidden-480">信息</th>
-											            <th>User-Agent</th>
 											            <th>用户会话ID</th>
 														
 													</tr>
@@ -37,8 +35,6 @@
 										                <td>${m.systemHost}</td>
 										                <td><pretty:prettyTime date="${m.startTimestamp}"/></td>
 										                <td><pretty:prettyTime date="${m.lastAccessTime}"/></td>
-										                <td>${m.status.info}</td>
-										                <td>${m.userAgent}</td>
 										                <td>${m.id}</td>
 										                <td>
 															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">

@@ -10,8 +10,8 @@
 				<div class="sidebar" id="sidebar">
         			<%@include file="menu.jsp"%>
         		</div>	
-        		<div class="main-content" style="width:100%;height:100%;">
-			   		<iframe id="iframe" name="iframe" width="100%" height="100%"  frameborder="0" src="${ctx}/admin/welcome"></iframe>
+        		<div class="main-content" style="height:100%;">
+			   		<iframe id="iframe" name="iframe" width="100%" height="100%"  frameborder="0" src="${ctx}/admin/welcome" onLoad="iFrameHeight()"></iframe>
 			   	</div><!-- /.main-content -->	
 				<%@include file="setting.jsp"%>
 			</div><!-- /.main-container-inner -->
@@ -27,14 +27,14 @@
 	try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){};
     $(function() {
         $.app.initIndex();
-        
     });
-    
-    var a=document.getElementById("left");
-    var b=document.getElementById("right");
-    if(a.clientHeight<b.clientHeight){
-      a.style.height=b.clientHeight+"px";
-    }else{ 
-      b.style.height=a.clientHeight+"px";
-    }
+    function iFrameHeight() { 
+    	var ifm= document.getElementById("iframe"); 
+    	var subWeb = document.frames ? document.frames
+    	["iframe"].document : ifm.contentDocument; 
+    	if(ifm != null && subWeb != null) { 
+    		ifm.height = subWeb.body.scrollHeight; 
+    		ifm.width = subWeb.body.scrollWidth; 
+    	} 
+    }  
 </script>
