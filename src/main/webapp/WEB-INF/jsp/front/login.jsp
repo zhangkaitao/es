@@ -66,7 +66,7 @@
 													
 													
 													<%-- jcaptchaEbabled 在JCaptchaValidateFilter设置 --%>
-										            <c:if test="${jcaptchaEbabled}">
+										            <!-- <c:if test="${jcaptchaEbabled}"> -->
 										                <div class="control-group">
 										                    <label for="jcaptchaCode">验证码</label>
 										                    <div class="input-prepend">
@@ -77,7 +77,7 @@
 										                     <img class="jcaptcha-btn jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
 										                     <a class="jcaptcha-btn btn btn-link">换一张</a>
 										                </div>
-										            </c:if>
+										            <!-- </c:if> -->
 
 													<div class="space"></div>
 													<div class="clearfix">

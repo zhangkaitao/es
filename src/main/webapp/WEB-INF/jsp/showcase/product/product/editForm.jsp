@@ -1,57 +1,44 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
-<div class="panel">
-
-    <ul class="nav nav-tabs">
-        <shiro:hasPermission name="showcase:product:create">
-        <c:if test="${op eq '新增'}">
-            <li ${op eq '新增' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/product/product/create?BackURL=<es:BackURL/>">
-                    <i class="icon-file-alt"></i>
-                    新增
-                </a>
-            </li>
-        </c:if>
-        </shiro:hasPermission>
-
-        <c:if test="${not empty m.id}">
-            <li ${op eq '查看' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/product/product/${m.id}?BackURL=<es:BackURL/>">
-                    <i class="icon-eye-open"></i>
-                    查看
-                </a>
-            </li>
-            <shiro:hasPermission name="showcase:product:update">
-            <li ${op eq '修改' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/product/product/${m.id}/update?BackURL=<es:BackURL/>">
-                    <i class="icon-edit"></i>
-                    修改
-                </a>
-            </li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="showcase:product:delete">
-            <li ${op eq '删除' ? 'class="active"' : ''}>
-                <a href="${ctx}/showcase/product/product/${m.id}/delete?BackURL=<es:BackURL/>">
-                    <i class="icon-trash"></i>
-                    删除
-                </a>
-            </li>
-            </shiro:hasPermission>
-        </c:if>
-        <li>
-            <a href="<es:BackURL/>" class="btn btn-link">
-                <i class="icon-reply"></i>
-                返回
-            </a>
-        </li>
-    </ul>
-
-    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-          <es:showGlobalError commandName="m"/>
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="#">后台首页</a>
+			</li>
+			<li>
+				<a href="#">产品列表</a>
+			</li>
+			<li class="active">新增</li>
+		</ul><!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+		<div class="page-header">
+			<h1>
+				新增产品
+			<small>
+				<i class="icon-double-angle-right"></i>
+					基本信息
+			</small>
+			</h1>
+	</div><!-- /.page-header -->
+	<div class="row">
+		<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+    	<form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal" role="form">
+          	<es:showGlobalError commandName="m"/>
 
             <form:hidden path="id"/>
 
+<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Text Field </label>
+
+										<div class="col-sm-9">
+											<input type="text" id="form-field-1" placeholder="Username" class="col-xs-10 col-sm-5" />
+										</div>
+									</div>
             <div class="control-group">
                 <form:label path="category.name" cssClass="control-label">所属类别</form:label>
                 <div class="controls input-append">
@@ -59,6 +46,11 @@
                     <span class="add-on"><i class="icon-chevron-down"></i></span>
                     <form:hidden id="categoryId" path="category.id"/>
                 </div>
+                
+                <div class="input-group">
+					<input class="form-control input-mask-product" type="text" id="form-field-mask-3" />
+					<span class="input-group-addon"><i class="icon-search"></i></span>
+				</div>
             </div>
 
             <div class="control-group">

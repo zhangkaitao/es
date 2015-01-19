@@ -242,16 +242,16 @@
 								</li>
 
 								<li>
-									<a href="#">
-										<i class="icon-user"></i>
-										个人资料
-									</a>
+									 <a class="btn-view-info">
+                                		<i class="icon-user"></i>
+                                			个人资料
+                            		</a>
 								</li>
 
 								<li class="divider"></li>
 
 								<li>
-									<a href="#">
+									<a href="${ctx}/logout" title="退出">
 										<i class="icon-off"></i>
 										退出
 									</a>

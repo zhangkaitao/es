@@ -9,6 +9,13 @@
 
 		<!-- page specific plugin styles -->
 
+		<link rel="stylesheet" href="${ctx}/static/assets/css/jquery-ui-1.10.3.custom.min.css" />
+		<link rel="stylesheet" href="${ctx}/static/assets/css/chosen.css" />
+		<link rel="stylesheet" href="${ctx}/static/assets/css/datepicker.css" />
+		<link rel="stylesheet" href="${ctx}/static/assets/css/bootstrap-timepicker.css" />
+		<link rel="stylesheet" href="${ctx}/static/assets/css/daterangepicker.css" />
+		<link rel="stylesheet" href="${ctx}/static/assets/css/colorpicker.css" />
+
 		<!-- fonts -->
 
 
