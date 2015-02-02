@@ -58,7 +58,8 @@
 									    </ul>
 											<div class="tab-content">
 												<div id="home" class="tab-pane in active">
-													<div class="page-header">
+													<div class="row page-header smaller">
+														<span class="col-sm-7">
 															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 																<button class="btn btn-sm btn-success">
 																	<i class="icon-file-alt bigger-120"></i> 新增
@@ -76,7 +77,8 @@
 																	<i class="icon-flag bigger-120"></i> 更多
 																</button>
 															</div>
-
+														</span>
+														
 															<div class="visible-xs visible-sm hidden-md hidden-lg">
 																<div class="inline position-relative">
 																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
