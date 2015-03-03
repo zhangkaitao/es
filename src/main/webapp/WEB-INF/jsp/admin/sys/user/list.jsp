@@ -1,32 +1,47 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<es:contentHeader/>
-
+<c:if test="${empty header['container']}">
+	<es:contentHeader/>
+</c:if>
 <c:set var="organizationId" value="${empty organization ? 0 : organization.id}"/>
 <c:set var="jobId" value="${empty job ? 0 : job.id}"/>
-
-<div data-table="table" class="panel">
-
-    <ul class="nav nav-tabs">
-        <li ${param['search.deleted_eq'] ne 'true' and param['search.status_eq'] ne 'blocked' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/${organizationId}/${jobId}">
-                <i class="icon-table"></i>
-                所有用户列表
-            </a>
-        </li>
-        <li ${param['search.deleted_eq'] eq 'true' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/${organizationId}/${jobId}?search.deleted_eq=true">
-                <i class="icon-table"></i>
-                已删除用户列表
-            </a>
-        </li>
-        <li ${param['search.status_eq'] eq 'blocked' ? 'class="active"' : ''}>
-            <a href="${ctx}/admin/sys/user/${organizationId}/${jobId}?search.status_eq=blocked">
-                <i class="icon-table"></i>
-                已封禁用户列表
-            </a>
-        </li>
-    </ul>
+<div class="breadcrumbs" id="breadcrumbs">
+	<ul class="breadcrumb">
+		<li>
+			<i class="icon-home home-icon"></i>
+			<a href="#">首页</a>
+		</li>
+		<li>
+			<a href="#">用户管理</a>
+		</li>
+		<li class="active">用户列表</li>
+	</ul><!-- .breadcrumb -->
+</div>
+					
+<div class="page-content">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="tabbable">
+		    <ul class="nav nav-tabs">
+		        <li ${param['search.deleted_eq'] ne 'true' and param['search.status_eq'] ne 'blocked' ? 'class="active"' : ''}>
+		            <a href="${ctx}/admin/sys/user/${organizationId}/${jobId}">
+		                <i class="icon-table"></i>
+		                所有用户列表
+		            </a>
+		        </li>
+		        <li ${param['search.deleted_eq'] eq 'true' ? 'class="active"' : ''}>
+		            <a href="${ctx}/admin/sys/user/${organizationId}/${jobId}?search.deleted_eq=true">
+		                <i class="icon-table"></i>
+		                已删除用户列表
+		            </a>
+		        </li>
+		        <li ${param['search.status_eq'] eq 'blocked' ? 'class="active"' : ''}>
+		            <a href="${ctx}/admin/sys/user/${organizationId}/${jobId}?search.status_eq=blocked">
+		                <i class="icon-table"></i>
+		                已封禁用户列表
+		            </a>
+		        </li>
+		    </ul>
 
     <es:showMessage/>
 
