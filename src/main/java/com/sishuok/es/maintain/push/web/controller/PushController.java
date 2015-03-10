@@ -68,7 +68,4 @@ public class PushController {
             return pushService.newDeferredResult(userId);
         }
     }
-
-
-
 }

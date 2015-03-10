@@ -13,165 +13,47 @@
     <title>es-shop 后台管理</title>
     <link rel="icon" href="${ctx}/static/images/favicon.ico">
     <link rel="shortcut icon" href="${ctx}/static/images/favicon.ico">
-    <%@include file="/WEB-INF/jsp/common/import-css.jspf"%>
-    <script type="text/javascript">
-        var currentURL = "${requestScope.currentURL}";
-    </script>
+    <style type="text/css">
+      html,body,table{background-color:#f5f5f5;width:100%;text-align:center;}.form-signin-heading{font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:36px;margin-bottom:20px;color:#0663a2;}
+      .form-signin{position:relative;text-align:left;width:300px;padding:25px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
+        	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
+      .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
+      .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
+      .form-signin .btn.btn-large{font-size:16px;} .form-signin #themeSwitch{position:absolute;right:15px;bottom:10px;}
+      .form-signin div.validateCode {padding-bottom:15px;} .mid{vertical-align:middle;}
+      .header{height:80px;padding-top:20px;} .alert{position:relative;width:300px;margin:0 auto;*padding-bottom:0px;}
+      label.error{background:none;width:270px;font-weight:normal;color:inherit;margin:0;}
+    </style>
 </head>
-<body class="login-layout">
-	<div class="main-container">
-			<div class="main-content">
-				<div class="row">
-					<div class="col-sm-10 col-sm-offset-1">
-						<div class="login-container">
-							<div class="center">
-								<h1>
-									<i class="icon-leaf green"></i>
-									<span class="red">ES-SHOP</span>
-									<span class="white">后台登陆</span>
-								</h1>
-								<h4 class="blue">&copy; 小小士工作室</h4>
-							</div>
-
-							<div class="space-6"></div>
-
-							<div class="position-relative">
-								<div id="login-box" class="login-box visible widget-box no-border">
-									<div class="widget-body">
-										<div class="widget-main">
-											<h4 class="header blue lighter bigger">
-												<i class="icon-coffee green"></i>
-												登陆信息
-											</h4>
-
-											<div class="space-6"></div>
-								 			<div style="margin-right: 30px;">
-								                <es:showMessage></es:showMessage>
-								            </div>
-											<form id="loginForm" method="post" class="form-horizontal">
-												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" id="username" name="username" value="${param.username}" class="form-control input-xlarge validate[required]" placeholder="用户名、邮箱或手机号" />
-															<i class="icon-user"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" id="password" name="password" class="form-control input-xlarge validate[required]" placeholder="请输入密码" />
-															<i class="icon-lock"></i>
-														</span>
-													</label>
-													
-													
-													<%-- jcaptchaEbabled 在JCaptchaValidateFilter设置 --%>
-										            <!-- <c:if test="${jcaptchaEbabled}"> -->
-										                <div class="control-group">
-										                    <label for="jcaptchaCode">验证码</label>
-										                    <div class="input-prepend">
-										                        <span class="add-on icon-circle-blank"></span>
-										                        <input type="text" id="jcaptchaCode" name="jcaptchaCode"
-										                                class="input-medium validate[required,ajax[ajaxJcaptchaCall]]" placeholder="请输入验证码">
-										                    </div>
-										                     <img class="jcaptcha-btn jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
-										                     <a class="jcaptcha-btn btn btn-link">换一张</a>
-										                </div>
-										            <!-- </c:if> -->
-
-													<div class="space"></div>
-													<div class="clearfix">
-														<label class="inline">
-															<input type="checkbox" class="ace" name="rememberMe" value="true" />
-															<span class="lbl"> 下次自动登录</span>
-														</label>
-
-														<button id="submitForm" type="submit" class="width-35 pull-right btn btn-sm btn-primary">
-															<i class="icon-key"></i>
-															登陆
-														</button>
-													</div>
-
-													<div class="space-4"></div>
-												</fieldset>
-											</form>
-										</div><!-- /widget-main -->
-									</div><!-- /widget-body -->
-								</div><!-- /login-box -->
-							</div><!-- /position-relative -->
-						</div>
-					</div><!-- /.col -->
-				</div><!-- /.row -->
-			</div>
-		</div><!-- /.main-container -->
-		
-		
-		
-<div class="container">
-    <div class="login">
-        <div class="title">用户登录</div>
-        <div class="form">
-            <div style="margin-right: 30px;">
-                <es:showMessage></es:showMessage>
-            </div>
-            <form id="loginForm" method="post" class="form-horizontal">
-            <es:BackURL hiddenInput="true"/>
-            <div class="control-group">
-                <label for="username">用户名、邮箱或手机号</label>
-                <div class="input-prepend">
-                    <span class="add-on icon-user"></span>
-                    <input type="text" id="username" name="username" value="${param.username}"
-                            class="input-xlarge validate[required]" placeholder="请输入用户名、邮箱或手机号">
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="password">密码</label>
-                <div class="input-prepend">
-                    <span class="add-on icon-key"></span>
-                    <input type="password" id="password" name="password"
-                            class="input-xlarge validate[required]" placeholder="请输入密码">
-                </div>
-            </div>
-            <%-- jcaptchaEbabled 在JCaptchaValidateFilter设置 --%>
-            <c:if test="${jcaptchaEbabled}">
-                <div class="control-group">
-                    <label for="jcaptchaCode">验证码</label>
-                    <div class="input-prepend">
-                        <span class="add-on icon-circle-blank"></span>
-                        <input type="text" id="jcaptchaCode" name="jcaptchaCode"
-                                class="input-medium validate[required,ajax[ajaxJcaptchaCall]]" placeholder="请输入验证码">
-                    </div>
-                     <img class="jcaptcha-btn jcaptcha-img" style="margin-left: 10px;" src="${ctx}/jcaptcha.jpg" title="点击更换验证码">
-                     <a class="jcaptcha-btn btn btn-link">换一张</a>
-                </div>
-            </c:if>
-
-            <div class="control-group">
-                <label class="checkbox remember"><input type="checkbox" name="rememberMe" value="true">下次自动登录</label>
-                <input id="submitForm" type="submit" class="btn btn-login pull-left" value="登录">
-            </div>
-
-        </form>
-        </div>
-    </div>
-</div>
+<body>
+	<!--[if lte IE 6]><br/><div class='alert alert-block' style="text-align:left;padding-bottom:10px;"><a class="close" data-dismiss="alert">x</a><h4>温馨提示：</h4><p>你使用的浏览器版本过低。为了获得更好的浏览体验，我们强烈建议您 <a href="http://browsehappy.com" target="_blank">升级</a> 到最新版本的IE浏览器，或者使用较新版本的 Chrome、Firefox、Safari 等。</p></div><![endif]-->
+	<div class="header">
+		<div id="messageBox" class="alert alert-error ${empty message ? 'hide' : ''}"><button data-dismiss="alert" class="close">×</button>
+			<label id="loginError" class="error">${message}</label>
+		</div>
+	</div>
+	<h1 class="form-signin-heading">es-shop 管理后台</h1>
+	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
+		<label class="input-label" for="username">登录名</label>
+		<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
+		<label class="input-label" for="password">密码</label>
+		<input type="password" id="password" name="password" class="input-block-level required">
+		<c:if test="${isValidateCodeLogin}"><div class="validateCode">
+			<label class="input-label mid" for="validateCode">验证码</label>
+			< name="validateCode" inputCssStyle="margin-bottom:0;"/>
+		</div></c:if><%--
+		<label for="mobile" title="手机登录"><input type="checkbox" id="mobileLogin" name="mobileLogin" ${mobileLogin ? 'checked' : ''}/></label> --%>
+		<input class="btn btn-large btn-primary" type="submit" value="登 录"/>&nbsp;&nbsp;
+		<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe" ${rememberMe ? 'checked' : ''}/> 记住我（公共场所慎用）</label>
+		<div id="themeSwitch" class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">默认主题<b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			</ul>
+			<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
+		</div>
+	</form>
+	<div class="footer">
+	</div>
+	<script src="${ctxStatic}/flash/zoom.min.js" type="text/javascript"></script>
 </body>
-<script type="text/javascript">
-    $(function() {
-        $("#username").focus();
-        $(".jcaptcha-btn").click(function() {
-            var img = $(".jcaptcha-img");
-            var imageSrc = img.attr("src");
-            if(imageSrc.indexOf("?") > 0) {
-                imageSrc = imageSrc.substr(0, imageSrc.indexOf("?"));
-            }
-            imageSrc = imageSrc + "?" + new Date().getTime();
-            img.attr("src", imageSrc);
-        });
-        $.validationEngineLanguage.allRules.ajaxJcaptchaCall={
-            "url": "${ctx}/jcaptcha-validate",
-            "alertTextLoad": "* 正在验证，请稍等。。。"
-        };
-        $("#loginForm").validationEngine({scroll:false});
-    });
-</script>
+</html>
