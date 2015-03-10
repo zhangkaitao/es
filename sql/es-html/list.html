@@ -1,0 +1,2745 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn" >
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  
+  <meta name="description" content="">
+  <meta name="author" content="">
+  
+  <meta name="robots" content="NONE,NOARCHIVE" />
+  <title>用户小组件列表 | Django Xadmin</title>
+  
+<link href="./static/xadmin/vendor/bootstrap/css/bootstrap.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/vendor/font-awesome/css/font-awesome.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/vendor/select2/select2.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/vendor/selectize/selectize.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/vendor/selectize/selectize.bootstrap3.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/css/themes/bootstrap-xadmin.css" rel="stylesheet" type="text/css" id="site-theme"  />
+<link href="./static/xadmin/css/xadmin.main.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/css/xadmin.responsive.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/css/xadmin.form.css" type="text/css" media="screen" rel="stylesheet" />
+<link href="./static/xadmin/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />
+  
+<style type="text/css">
+  .btn-toolbar{margin-top: 0;}
+  #content-block.full-content{margin-left: 0;}
+</style>
+
+<script type="text/javascript" src="./static/xadmin/vendor/jquery/jquery.js"></script>
+  
+  <script type="text/javascript">
+    window.__admin_media_prefix__ = "./static/xadmin/";
+    window.__admin_path_prefix__ = "./";
+  </script>
+</head>
+<body class="change-list">
+  <!-- Header -->
+  <div id="top-nav" class="navbar navbar-xs navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">DefinedWeek Admin</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+
+<li class="dropdown g-add">
+  <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+  <i class="icon-plus icon-white"></i> <span class="hide-sm">增加 <i class="caret"></i></span></a>
+  <ul id="g-add-menu" class="dropdown-menu" role="menu">
+    
+        <li><a href="/xadmin/bookmark/add/"><i class="icon-plus"></i> 增加 书签</a></li>
+    
+        <li><a href="/xadmin/usersettings/add/"><i class="icon-plus"></i> 增加 用户设置</a></li>
+    
+        <li><a href="/comments/comment/add/"><i class="icon-plus"></i> 增加 评论</a></li>
+    
+        <li><a href="/app/continent/add/"><i class="icon-plus"></i> 增加 Continent</a></li>
+    
+        <li><a href="/host/idc/add/"><i class="icon-plus"></i> 增加 IDC</a></li>
+    
+        <li><a href="/host/host/add/"><i class="icon-plus"></i> 增加 Host</a></li>
+    
+        <li><a href="/reversion/version/add/"><i class="icon-plus"></i> 增加 Version</a></li>
+    
+        <li><a href="/auth/user/add/"><i class="icon-plus"></i> 增加 用户</a></li>
+    
+        <li><a href="/reversion/revision/add/"><i class="icon-plus"></i> 增加 Revision</a></li>
+    
+        <li><a href="/auth/permission/add/"><i class="icon-plus"></i> 增加 权限</a></li>
+    
+        <li><a href="/host/maintainlog/add/"><i class="icon-plus"></i> 增加 Maintain Log</a></li>
+    
+        <li><a href="/xadmin/userwidget/add/"><i class="icon-plus"></i> 增加 用户小组件</a></li>
+    
+        <li><a href="/app/country/add/"><i class="icon-plus"></i> 增加 Country</a></li>
+    
+        <li><a href="/host/accessrecord/add/"><i class="icon-plus"></i> 增加 Access Record</a></li>
+    
+        <li><a href="/app/kitchensink/add/"><i class="icon-plus"></i> 增加 Kitchen sink</a></li>
+    
+        <li><a href="/host/hostgroup/add/"><i class="icon-plus"></i> 增加 Host Group</a></li>
+    
+        <li><a href="/auth/group/add/"><i class="icon-plus"></i> 增加 组</a></li>
+    
+  </ul>
+</li>
+
+
+
+<li class="dropdown g-setlang">
+  <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+  <i class="icon-globe icon-white"></i> <span class="hide-sm">
+    简体中文
+    <i class="caret"></i></span></a>
+  <form id="setlang-form" action="/i18n/setlang/" method="post" style="display:none;">
+    <input type='hidden' name='csrfmiddlewaretoken' value='depy0qAotmsVOdoNJbNKvzmuBljvyVks' />
+    <input name="next" type="hidden" value="/xadmin/userwidget/" />
+    <input id="setlang-id_language" name="language" type="hidden" value="zh-cn" />
+  </form>
+  <ul id="g-setlang-menu" class="dropdown-menu" role="menu">
+    
+    
+      <li><a data-lang="de"><i class="icon-flag"></i> Deutsch (de)</a></li>
+    
+      <li><a data-lang="en"><i class="icon-flag"></i> English (en)</a></li>
+    
+      <li><a data-lang="ja"><i class="icon-flag"></i> 日本語 (ja)</a></li>
+    
+      <li><a data-lang="lt"><i class="icon-flag"></i> Lietuvi?kai (lt)</a></li>
+    
+      <li><a data-lang="nl"><i class="icon-flag"></i> Nederlands (nl)</a></li>
+    
+      <li><a data-lang="pl"><i class="icon-flag"></i> polski (pl)</a></li>
+    
+      <li><a data-lang="pt"><i class="icon-flag"></i> Português (pt)</a></li>
+    
+      <li class="active"><a data-lang="zh-cn"><i class="icon-flag"></i> 简体中文 (zh-cn)</a></li>
+    
+  </ul>
+</li>
+<script type="text/javascript">
+  $(function(){
+    $('#g-setlang-menu a').click(function(e){
+      var lang = $(this).data('lang');
+      $('#setlang-form #setlang-id_language').attr('value', lang);
+      $('#setlang-form').submit();
+      
+      var topmenu = $('#top-nav .navbar-collapse');
+      if(topmenu.data('bs.collapse')) topmenu.collapse('hide');
+    })
+  })
+</script>
+<li class="dropdown g-theme">
+<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+<i class="icon-magic icon-white"></i> <span class="hide-sm">主题 <i class="caret"></i></span></a>
+<ul id="g-theme-menu" class="dropdown-menu" role="menu">
+  
+      <li class="active"><a data-css-href="/static/xadmin/css/themes/bootstrap-xadmin.css">默认</a></li>
+  
+      <li><a data-css-href="/static/xadmin/css/themes/bootstrap-theme.css">Bootstrap2</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/cerulean/bootstrap.min.css">Cerulean</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/cosmo/bootstrap.min.css">Cosmo</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/cyborg/bootstrap.min.css">Cyborg</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/darkly/bootstrap.min.css">Darkly</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/flatly/bootstrap.min.css">Flatly</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/journal/bootstrap.min.css">Journal</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/lumen/bootstrap.min.css">Lumen</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/paper/bootstrap.min.css">Paper</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/readable/bootstrap.min.css">Readable</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/sandstone/bootstrap.min.css">Sandstone</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/simplex/bootstrap.min.css">Simplex</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/slate/bootstrap.min.css">Slate</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/spacelab/bootstrap.min.css">Spacelab</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/superhero/bootstrap.min.css">Superhero</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/united/bootstrap.min.css">United</a></li>
+  
+      <li><a data-css-href="http://bootswatch.com/yeti/bootstrap.min.css">Yeti</a></li>
+  
+</ul>
+</li>
+        
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+            <strong>欢迎， admin</strong> <span class="caret"></span></a>
+            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+              <li><a href="/account/password/"><i class="icon-key"></i> Change Password</a></li>
+            </ul>
+          </li>
+        
+        <li><a href="/logout/"><i class="show-sm icon-signout"></i><span class="hide-sm">注销</span></a></li>
+      </ul>
+      
+
+<form method="get" class="top-search-form navbar-form navbar-left" id="g-search">
+  <div class="input-group">
+    <input name="_q_" class="form-control" type="text">
+    <span class="input-group-btn">
+      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-search"></i> 搜索 <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+      
+          <li><a data-action="/comments/comment/"><i class="icon-search"></i> 搜索评论</a></li>
+      
+          <li><a data-action="/app/continent/"><i class="icon-search"></i> 搜索Continents</a></li>
+      
+          <li><a data-action="/host/idc/"><i class="icon-search"></i> 搜索IDC</a></li>
+      
+          <li><a data-action="/host/host/"><i class="icon-search"></i> 搜索Host</a></li>
+      
+          <li><a data-action="/auth/user/"><i class="icon-search"></i> 搜索用户</a></li>
+      
+          <li><a data-action="/host/maintainlog/"><i class="icon-search"></i> 搜索Maintain Log</a></li>
+      
+          <li><a data-action="/app/country/"><i class="icon-search"></i> 搜索Countries</a></li>
+      
+          <li><a data-action="/app/kitchensink/"><i class="icon-search"></i> 搜索Kitchen sinks</a></li>
+      
+          <li><a data-action="/host/hostgroup/"><i class="icon-search"></i> 搜索Host Group</a></li>
+      
+          <li><a data-action="/auth/group/"><i class="icon-search"></i> 搜索组</a></li>
+      
+      </ul>
+    </span>
+  </div>
+</form>
+
+
+    </div>
+  </div>
+
+  <div id="body-content" class="clearfix row">
+    <div id="left-side" class="col-sm-1 col-md-2">
+        
+        
+          
+
+
+
+<div class="panel-group hide-sm nav-sitemenu col-md-2" id="nav-accordion">
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h6 class="panel-title">
+        <span class="badge badge-info">3</span>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-1">
+          
+          <i class="icon-fixed-width icon-globe"></i>
+          
+          App
+          
+        </a>
+      </h6>
+    </div>
+    <div id="nav-panel-1" class="list-group panel-collapse collapse">
+      
+      <a href="/app/continent/" class="list-group-item">
+        <i class="icon-fixed-width icon-globe"></i>
+        Continents</span>
+      </a>
+      
+      <a href="/app/country/" class="list-group-item">
+        <i class="icon-fixed-width icon-flag"></i>
+        Countries</span>
+      </a>
+      
+      <a href="/app/kitchensink/" class="list-group-item">
+        <i class="icon-fixed-width icon-briefcase"></i>
+        Kitchen sinks</span>
+      </a>
+      
+    </div>
+  </div>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h6 class="panel-title">
+        <span class="badge badge-info">3</span>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-2">
+          
+          <i class="icon-fixed-width icon-user"></i>
+          
+          Auth
+          
+        </a>
+      </h6>
+    </div>
+    <div id="nav-panel-2" class="list-group panel-collapse collapse">
+      
+      <a href="/auth/group/" class="list-group-item">
+        <i class="icon-fixed-width icon-group"></i>
+        组</span>
+      </a>
+      <a href="/auth/group/" class="list-group-item">
+        <i class="icon-fixed-width icon-group"></i>
+        组</span>
+      </a>
+	  <a href="/auth/group/" class="list-group-item">
+        <i class="icon-fixed-width icon-group"></i>
+        组</span>
+      </a>
+      <a href="/auth/permission/" class="list-group-item">
+        <i class="icon-fixed-width icon-lock"></i>
+        权限</span>
+      </a>
+      
+      <a href="/auth/user/" class="list-group-item">
+        <i class="icon-fixed-width icon-user"></i>
+        用户</span>
+      </a>
+      
+    </div>
+  </div>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h6 class="panel-title">
+        <span class="badge badge-info">1</span>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-3">
+          
+          <i class="icon-fixed-width icon-comment"></i>
+          
+          Comments
+          
+        </a>
+      </h6>
+    </div>
+    <div id="nav-panel-3" class="list-group panel-collapse collapse">
+      
+      <a href="/comments/comment/" class="list-group-item">
+        <i class="icon-fixed-width icon-comment"></i>
+        评论</span>
+      </a>
+      
+    </div>
+  </div>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h6 class="panel-title">
+        <span class="badge badge-info">5</span>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-4">
+          
+          <i class="icon-fixed-width icon-exclamation-sign"></i>
+          IDC Management
+          
+        </a>
+      </h6>
+    </div>
+    <div id="nav-panel-4" class="list-group panel-collapse collapse">
+      
+      <a href="/host/host/" class="list-group-item">
+        <i class="icon-fixed-width icon-exclamation-sign"></i>
+        Host</span>
+      </a>
+      
+      <a href="/host/hostgroup/" class="list-group-item">
+        <i class="icon-fixed-width icon-exclamation-sign"></i>
+        Host Group</span>
+      </a>
+      
+      <a href="/host/maintainlog/" class="list-group-item">
+        <i class="icon-fixed-width icon-exclamation-sign"></i>
+        Maintain Log</span>
+      </a>
+      
+      <a href="/host/idc/" class="list-group-item">
+        <i class="icon-fixed-width icon-exclamation-sign"></i>
+        IDC</span>
+      </a>
+      
+      <a href="/host/accessrecord/" class="list-group-item">
+        <i class="icon-fixed-width icon-exclamation-sign"></i>
+        Access Record</span>
+      </a>
+      
+    </div>
+  </div>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h6 class="panel-title">
+        <span class="badge badge-info">2</span>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-5">
+          
+          <i class="icon-fixed-width icon-file"></i>
+          
+          Reversion
+          
+        </a>
+      </h6>
+    </div>
+    <div id="nav-panel-5" class="list-group panel-collapse collapse">
+      
+      <a href="/reversion/revision/" class="list-group-item">
+        <i class="icon-fixed-width icon-exchange"></i>
+        Revisions</span>
+      </a>
+      
+      <a href="/reversion/version/" class="list-group-item">
+        <i class="icon-fixed-width icon-file"></i>
+        Versions</span>
+      </a>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+  <ul class="well nav nav-list nav-sitemenu show-sm">
+    <li class="app_menu">
+      <a href="/"><i class="icon-fixed-width icon-home"></i></a><hr/>
+    </li>
+    
+      <li class="app_menu dropdown-submenu ">
+        <a href="#" class="section">
+          <i class="icon-globe"></i>
+          
+        </a><hr/>
+        <ul class="dropdown-menu">
+          
+          <li>
+            <a href="/app/continent/">
+            <i class="icon-fixed-width icon-globe"></i>
+            Continents</span></a>
+          </li>
+          
+          <li>
+            <a href="/app/country/">
+            <i class="icon-fixed-width icon-flag"></i>
+            Countries</span></a>
+          </li>
+          
+          <li>
+            <a href="/app/kitchensink/">
+            <i class="icon-fixed-width icon-briefcase"></i>
+            Kitchen sinks</span></a>
+          </li>
+          
+        </ul>
+      </li>
+    
+      <li class="app_menu dropdown-submenu ">
+        <a href="#" class="section">
+          <i class="icon-user"></i>
+          
+        </a><hr/>
+        <ul class="dropdown-menu">
+          
+          <li>
+            <a href="/auth/group/">
+            <i class="icon-fixed-width icon-group"></i>
+            组</span></a>
+          </li>
+          
+          <li>
+            <a href="/auth/permission/">
+            <i class="icon-fixed-width icon-lock"></i>
+            权限</span></a>
+          </li>
+          
+          <li>
+            <a href="/auth/user/">
+            <i class="icon-fixed-width icon-user"></i>
+            用户</span></a>
+          </li>
+          
+        </ul>
+      </li>
+    
+      <li class="app_menu dropdown-submenu ">
+        <a href="#" class="section">
+          <i class="icon-comment"></i>
+          
+        </a><hr/>
+        <ul class="dropdown-menu">
+          
+          <li>
+            <a href="/comments/comment/">
+            <i class="icon-fixed-width icon-comment"></i>
+            评论</span></a>
+          </li>
+          
+        </ul>
+      </li>
+    
+      <li class="app_menu dropdown-submenu ">
+        <a href="#" class="section">
+          <i class="icon-exclamation-sign"></i>
+        </a><hr/>
+        <ul class="dropdown-menu">
+          
+          <li>
+            <a href="/host/host/">
+            <i class="icon-fixed-width icon-exclamation-sign"></i>
+            Host</span></a>
+          </li>
+          
+          <li>
+            <a href="/host/hostgroup/">
+            <i class="icon-fixed-width icon-exclamation-sign"></i>
+            Host Group</span></a>
+          </li>
+          
+          <li>
+            <a href="/host/maintainlog/">
+            <i class="icon-fixed-width icon-exclamation-sign"></i>
+            Maintain Log</span></a>
+          </li>
+          
+          <li>
+            <a href="/host/idc/">
+            <i class="icon-fixed-width icon-exclamation-sign"></i>
+            IDC</span></a>
+          </li>
+          
+          <li>
+            <a href="/host/accessrecord/">
+            <i class="icon-fixed-width icon-exclamation-sign"></i>
+            Access Record</span></a>
+          </li>
+          
+        </ul>
+      </li>
+    
+      <li class="app_menu dropdown-submenu ">
+        <a href="#" class="section">
+          <i class="icon-file"></i>
+          
+        </a><hr/>
+        <ul class="dropdown-menu">
+          
+          <li>
+            <a href="/reversion/revision/">
+            <i class="icon-fixed-width icon-exchange"></i>
+            Revisions</span></a>
+          </li>
+          
+          <li>
+            <a href="/reversion/version/">
+            <i class="icon-fixed-width icon-file"></i>
+            Versions</span></a>
+          </li>
+          
+        </ul>
+      </li>
+    
+    
+  </ul>
+
+
+        
+      
+    </div>
+
+    <div id="content-block" class="col-sm-11 col-md-10">
+      
+      <ul class="breadcrumb">
+      
+      
+      <li>
+        <a href="/">首页</a>
+      </li>
+      
+      <li>
+        用户小组件
+        
+      </li>
+      
+      
+      </ul>
+      
+
+      
+      <div class="navbar content-navbar navbar-default navbar-xs" data-toggle="breakpoint"
+        data-class-xs="navbar content-navbar navbar-inverse navbar-xs"
+        data-class-sm="navbar content-navbar navbar-default navbar-xs">
+        <div class="navbar-header">
+          
+          
+<button class="navbar-toggle pull-left" data-toggle="class" data-target="#body-content" data-class-name="show_menu">
+  <i class="icon-list"></i>
+</button>
+
+  <a href="/xadmin/userwidget/add/" class="navbar-toggle pull-right"><i class="icon-plus icon-white"></i></a>
+
+<button class="navbar-toggle pull-right" data-toggle="collapse" data-target=".content-navbar .navbar-collapse">
+  <i class="icon-filter icon-white"></i>
+</button>
+
+
+          <a class="navbar-brand" data-toggle="collapse" data-target="#top-nav .navbar-collapse">
+            <i class="icon-dashboard"></i> 用户小组件
+          </a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            
+<li class="dropdown bookmarks">
+  <a id="drop-bookmark" title="书签" class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+  <i class="icon-book"></i> <i class="fa fa-book fa-fw"></i>书签<span class="caret"></span></a>
+  <ul id="bookmark-menu" class="dropdown-menu" role="menu">
+    
+    
+    <li class="with_menu_btn">
+      <a href="/xadmin/userwidget/?_cols=id.widget_type.page_id.user&amp;_p_user__id__exact=1" title="1"><i class="icon-bookmark"></i> 1</a>
+      
+        <a href="/xadmin/bookmark/28/update/" class="dropdown-menu-btn"><i class="icon-pencil"></i></a>
+      
+    </li>
+    
+    
+  </ul>
+</li>
+
+<li class="dropdown">
+  <a id="drop-filter" class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+  <i class="icon-filter"></i> 过滤器
+  <span class="caret"></span></a>
+  <ul id="filter-menu" class="dropdown-menu" role="menu" aria-labelledby="drop-filter">
+    
+  	
+<li class="dropdown-submenu filter-fk-search">
+  <a><i class="icon-filter text-muted"></i> 用户</a>
+  <div class="popover right">
+    <div class="arrow"></div>
+    <h3 class="popover-title">
+      搜索 用户
+    </h3>
+    <div class="popover-content">
+      <form class="exform" method="get" action="">
+        
+          <input name="_p_user__id__exact" class="select-search" type="hidden" value="" 
+          data-search-url="/auth/user/" data-label=" " data-choices="?"
+          data-placeholder="搜索 用户…"/>
+
+          <button type="submit" class="btn btn-success">应用</button>
+        
+      </form>
+    </div>
+  </div>
+</li>
+
+<li class="dropdown-submenu filter-char">
+  <a><i class="icon-filter text-muted"></i> Widget类型</a>
+  <div class="popover right">
+    <div class="arrow"></div>
+    <h3 class="popover-title">
+      搜索 Widget类型
+    </h3>
+    <div class="popover-content">
+      <form method="get" action="">
+        
+        <div class="input-group">
+          <input name="_p_widget_type__contains" class="input-char form-control" type="text" value="" placeholder="输入 Widget类型…"/>
+          <span class="input-group-btn">
+          
+            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</li>
+<li class="dropdown-submenu filter-char">
+  <a><i class="icon-filter text-muted"></i> 页面</a>
+  <div class="popover right">
+    <div class="arrow"></div>
+    <h3 class="popover-title">
+      搜索 页面
+    </h3>
+    <div class="popover-content">
+      <form method="get" action="">
+        
+        <div class="input-group">
+          <input name="_p_page_id__contains" class="input-char form-control" type="text" value="" placeholder="输入 页面…"/>
+          <span class="input-group-btn">
+          
+            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</li>
+  </ul>
+</li>
+          </ul>
+          
+          
+          <div class="navbar-btn navbar-right hide-xs">
+            
+            
+  
+    <a href="/xadmin/userwidget/add/" class="btn btn-primary"><i class="icon-plus icon-white"></i> 
+    增加 用户小组件</a>
+  
+
+          </div>
+        </div>
+      </div>
+      
+
+      
+      
+      
+
+      
+  <div class="content-toolbar btn-toolbar pull-right clearfix">
+    
+<div class="btn-group export">
+  <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+    <i class="icon-share"></i> 导出 <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+    
+      <li><a data-toggle="modal" data-target="#export-modal-csv"><i class="icon-circle-arrow-down"></i> 导出 CSV</a></li>
+    
+      <li><a data-toggle="modal" data-target="#export-modal-xml"><i class="icon-circle-arrow-down"></i> 导出 XML</a></li>
+    
+      <li><a data-toggle="modal" data-target="#export-modal-json"><i class="icon-circle-arrow-down"></i> 导出 JSON</a></li>
+    
+  </ul>
+
+  
+    <div id="export-modal-csv" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="get" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导出 CSV</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_do_" value="export"/>
+            <input type="hidden" name="export_type" value="csv">
+              <label class="checkbox">
+                
+                
+                <input type="checkbox" name="export_csv_header" checked="checked" value="on"> 导出表头
+                
+                
+                
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="all" value="on"> 导出全部数据
+              </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit"><i class="icon-share"></i> 导出</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  
+    <div id="export-modal-xml" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="get" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导出 XML</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_do_" value="export"/>
+            <input type="hidden" name="export_type" value="xml">
+              <label class="checkbox">
+                
+                
+                
+                <input type="checkbox" name="export_xml_format" checked="checked" value="on"> 导出格式
+                
+                
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="all" value="on"> 导出全部数据
+              </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit"><i class="icon-share"></i> 导出</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  
+    <div id="export-modal-json" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="get" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导出 JSON</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_do_" value="export"/>
+            <input type="hidden" name="export_type" value="json">
+              <label class="checkbox">
+                
+                
+                
+                
+                <input type="checkbox" name="export_json_format" checked="checked" value="on"> 导出格式
+                
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="all" value="on"> 导出全部数据
+              </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit"><i class="icon-share"></i> 导出</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  
+
+</div>
+    
+    <div class="btn-group">
+      <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+        <i class="icon-list-alt"></i> 列 <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu model_fields pull-right" role="menu" aria-labelledby="dLabel">
+        <li><a href="?"><i class="icon-refresh"></i> 恢复显示列</a></li>
+        <li class="divider"></li>
+        
+        <li><a href="?_cols=id.widget_type.page_id.user">
+          <i class="icon-blank"></i>
+          ID</a></li>
+        
+        <li><a href="?_cols=widget_type.page_id">
+          <i class="icon-check"></i>
+          用户</a></li>
+        
+        <li><a href="?_cols=widget_type.user">
+          <i class="icon-check"></i>
+          页面</a></li>
+        
+        <li><a href="?_cols=page_id.user">
+          <i class="icon-check"></i>
+          Widget类型</a></li>
+        
+        <li><a href="?_cols=widget_type.page_id.user.value">
+          <i class="icon-blank"></i>
+          Widget参数</a></li>
+        
+      </ul>
+    </div>
+    
+    
+    <div class="btn-group layout-btns" data-toggle="buttons">
+      <label class="btn btn-default btn-sm layout-normal active">
+        <input type="radio"> <i class="icon-th-large"></i>
+      </label>
+      <label class="btn btn-default btn-sm layout-condensed">
+        <input type="radio"> <i class="icon-th"></i>
+      </label>
+      
+    </div>
+    
+    
+    <div class="btn-group layout-btns" data-toggle="buttons-checkbox">
+      <button type="button" class="btn btn-default btn-sm layout-full"><i class="icon-fullscreen"></i></button>
+      
+    </div>
+    
+    
+  </div>
+
+  <ul class="pagination pagination-sm pagination-left pagination-inline">
+    
+  <li><span><span class="text-success">93</span> 用户小组件</span></li>
+  
+    
+        <li><span class="this-page">1</span> </li>
+    
+        <li><a href="?p=1" class="end">2</a> </li>
+    
+  
+  
+    <li><a href="?all=" class="showall">显示全部</a></li>
+  
+
+  </ul>
+  
+  <form id="changelist-form" action="" method="post"><input type='hidden' name='csrfmiddlewaretoken' value='depy0qAotmsVOdoNJbNKvzmuBljvyVks' />
+  
+  <div class="results table-responsive">
+  
+  
+  <table class="table table-bordered table-striped table-hover">
+    
+    <thead>
+      <tr>
+        <th scope="col" class="action-checkbox-column">
+          
+          
+            <input type="checkbox" id="action-toggle" />
+          
+        </th>
+        <th scope="col" class="sortable">
+          
+          
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Widget类型
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=widget_type" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-widget_type" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+        <th scope="col" class="sortable">
+          
+          
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                页面
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=page_id" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-page_id" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+        <th scope="col" class="sortable">
+          
+          
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                用户
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=user" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-user" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+      </tr>
+      
+    </thead>
+    
+    
+    <tbody>
+    
+   
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="278" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/278/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            test ccc
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="277" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/277/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="275" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/275/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="274" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/274/update/">qbutton</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            http://www.baidu.com
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="273" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/273/update/">qbutton</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="272" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/272/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="271" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/271/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="270" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/270/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            1
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="268" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/268/update/">html</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="265" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/265/update/">qbutton</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="257" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/257/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            ccccc
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="256" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/256/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            test
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="255" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/255/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="253" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/253/update/">html</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            hhhome
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="252" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/252/update/">html</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            cghky etyk
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="251" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/251/update/">bookmark</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="250" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/250/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="248" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/248/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="242" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/242/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            Gg
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="234" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/234/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            Potricos
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="232" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/232/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            a
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="231" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/231/update/">html</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            222
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="226" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/226/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="222" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/222/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="221" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/221/update/">bookmark</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="219" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/219/update/">bookmark</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="215" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/215/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="212" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/212/update/">bookmark</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="211" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/211/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            adawd
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="206" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/206/update/">html</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="204" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/204/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="200" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/200/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            监控
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="198" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/198/update/">addform</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            aaa
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="197" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/197/update/">html</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            rongzai
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="196" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/196/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            test
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="195" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/195/update/">bookmark</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="193" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/193/update/">addform</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            fomr1
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="188" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/188/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            test123
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="186" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/186/update/">qbutton</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            报表
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="182" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/182/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="179" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/179/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            tu
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="176" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/176/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="175" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/175/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="173" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/173/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="171" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/171/update/">list</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            home
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+      <tr class="grid-item">
+        <td  class="action-checkbox">
+          
+          
+            <input class="action-select" name="_selected_action" type="checkbox" value="169" />
+          
+        </td>
+      
+        <td >
+          
+          
+            <a href="/xadmin/userwidget/169/update/">chart</a>
+          
+        </td>
+      
+        <td >
+          
+          
+            a
+          
+        </td>
+      
+        <td  class="nowrap">
+          
+            <div class="btn-group pull-right">
+              
+                <a data-res-uri="/auth/user/1/detail/" data-edit-uri="/auth/user/1/update/" class="details-handler" rel="tooltip" title="admin详情"><i class="icon-info-sign"></i></a>
+              
+            </div>
+          
+          
+            admin
+          
+        </td>
+      </tr>
+      
+    
+    </tbody>
+    
+  </table>
+  
+  
+  </div>
+  
+<div class="form-actions well well-sm">
+  <input type="hidden" id="action" name="action" value=""/>
+  <input type="hidden" id="select-across" name="select_across" value=""/>
+  <div class="btn-group clearfix dropup">
+    <a class="dropdown-toggle btn btn-success" data-toggle="dropdown" href="#">
+    <i class="icon-wrench icon-white"></i> 
+    <span class="action-counter">50 个中 0 个被选</span>
+    <span class="all" style="display: none;">选中了 93 个</span>
+    <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      
+        <li><a onclick="$.do_action('delete_selected');"><i class="icon-remove"></i> Delete selected 用户小组件</a></li>
+      
+    </ul>
+  </div>
+  
+      
+      <a class="question btn btn-default" href="javascript:;" style="display: none;" title="点击此处选择所有页面中包含的对象。">选中所有的 93 个 用户小组件</a>
+      <a class="clear btn btn-default" href="javascript:;" style="display: none;">清除选中</a>
+      
+      <script type="text/javascript">var _actions_icnt="50";</script>
+  
+</div>
+
+  </form>
+
+  <ul class="pagination">
+    
+  <li><span><span class="text-success">93</span> 用户小组件</span></li>
+    
+        <li><span class="this-page">1</span> </li>
+    
+        <li><a href="?p=1" class="end">2</a> </li>
+    
+  
+  
+    <li><a href="?all=" class="showall">显示全部</a></li>
+
+  </ul>
+
+    </div>
+  </div>
+
+  <div id="footer">
+    <hr/>
+    <footer class="text-center">
+      <p>&copy; my-company.inc 2013</p>
+    </footer>
+  </div>
+
+<script type="text/javascript" src="./static/xadmin/vendor/jquery-ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/jquery-ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/jquery-ui/jquery.ui.mouse.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/jquery-ui/jquery.ui.sortable.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/jquery-ui/jquery.ui.effect.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/select2/select2.js"></script>
+<script type="text/javascript" src="./static/xadmin/vendor/selectize/selectize.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.main.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.responsive.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.plugin.themes.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.plugin.details.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.plugin.bookmark.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.widget.select.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.plugin.filters.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.plugin.actions.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.page.list.js"></script>
+<script type="text/javascript" src="./static/xadmin/js/xadmin.page.form.js"></script>
+  
+  
+</body>
+</html>
