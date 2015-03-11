@@ -1,7 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf" %>
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
@@ -10,50 +14,140 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    <title>es-shop 后台管理</title>
+    <title>${title}</title>
     <link rel="icon" href="${ctx}/static/images/favicon.ico">
     <link rel="shortcut icon" href="${ctx}/static/images/favicon.ico">
+    
+    <link href="./static/vendor/bootstrap/css/bootstrap.css" type="text/css" media="screen" rel="stylesheet" />
+  
+	<!-- <link rel="stylesheet" type="text/css" id="site-theme" href="http://bootswatch.com/paper/bootstrap.min.css" /> -->
+  
+	<link href="${ctx}/static/vendor/font-awesome/css/font-awesome.css" type="text/css" media="screen" rel="stylesheet" />
+	<link href="${ctx}/static/css/xadmin.main.css" type="text/css" media="screen" rel="stylesheet" />
+	<link href="${ctx}/static/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />
+	<link href="${ctx}/static/css/xadmin.responsive.css" type="text/css" media="screen" rel="stylesheet" />
+    
     <style type="text/css">
-      html,body,table{background-color:#f5f5f5;width:100%;text-align:center;}.form-signin-heading{font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:36px;margin-bottom:20px;color:#0663a2;}
-      .form-signin{position:relative;text-align:left;width:300px;padding:25px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
-        	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
-      .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
-      .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
-      .form-signin .btn.btn-large{font-size:16px;} .form-signin #themeSwitch{position:absolute;right:15px;bottom:10px;}
-      .form-signin div.validateCode {padding-bottom:15px;} .mid{vertical-align:middle;}
-      .header{height:80px;padding-top:20px;} .alert{position:relative;width:300px;margin:0 auto;*padding-bottom:0px;}
-      label.error{background:none;width:270px;font-weight:normal;color:inherit;margin:0;}
-    </style>
+	  #panel-login {
+	    max-width: 350px;
+	  }
+	  #panel-login .controls{
+	    padding: 0px 15px 15px !important;
+	  }
+	
+	  #panel-login .alert-block{
+	    padding: 0px;
+	  }
+	  #panel-login .alert-block ul{
+	    margin: 10px 15px;
+	    padding-left: 0px;
+	  }
+	  #panel-login .alert-block ul li{
+	    list-style-type: none;
+	  }
+	</style>
+	
+	<style type="text/css">
+	  .form-signin {
+	      max-width: 320px;
+	    -webkit-border-radius: 10px;
+	       -moz-border-radius: 10px;
+	            border-radius: 10px;
+	    -webkit-box-shadow: 0 0px 40px rgba(0,0,0,.2);
+	       -moz-box-shadow: 0 0px 40px rgba(0,0,0,.2);
+	            box-shadow: 0 0px 40px rgba(0,0,0,.2);
+	  }
+	</style>
+
+  	<script type="text/javascript" src="${ctx}/static/vendor/jquery/jquery.js"></script>
+  
+    <script type="text/javascript">
+        var currentURL = "${requestScope.currentURL}";
+    </script>
 </head>
-<body>
-	<!--[if lte IE 6]><br/><div class='alert alert-block' style="text-align:left;padding-bottom:10px;"><a class="close" data-dismiss="alert">x</a><h4>温馨提示：</h4><p>你使用的浏览器版本过低。为了获得更好的浏览体验，我们强烈建议您 <a href="http://browsehappy.com" target="_blank">升级</a> 到最新版本的IE浏览器，或者使用较新版本的 Chrome、Firefox、Safari 等。</p></div><![endif]-->
-	<div class="header">
-		<div id="messageBox" class="alert alert-error ${empty message ? 'hide' : ''}"><button data-dismiss="alert" class="close">×</button>
-			<label id="loginError" class="error">${message}</label>
-		</div>
-	</div>
-	<h1 class="form-signin-heading">es-shop 管理后台</h1>
-	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
-		<label class="input-label" for="username">登录名</label>
-		<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
-		<label class="input-label" for="password">密码</label>
-		<input type="password" id="password" name="password" class="input-block-level required">
-		<c:if test="${isValidateCodeLogin}"><div class="validateCode">
-			<label class="input-label mid" for="validateCode">验证码</label>
-			< name="validateCode" inputCssStyle="margin-bottom:0;"/>
-		</div></c:if><%--
-		<label for="mobile" title="手机登录"><input type="checkbox" id="mobileLogin" name="mobileLogin" ${mobileLogin ? 'checked' : ''}/></label> --%>
-		<input class="btn btn-large btn-primary" type="submit" value="登 录"/>&nbsp;&nbsp;
-		<label for="rememberMe" title="下次不需要再登录"><input type="checkbox" id="rememberMe" name="rememberMe" ${rememberMe ? 'checked' : ''}/> 记住我（公共场所慎用）</label>
-		<div id="themeSwitch" class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">默认主题<b class="caret"></b></a>
-			<ul class="dropdown-menu">
-			</ul>
-			<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
-		</div>
-	</form>
-	<div class="footer">
-	</div>
-	<script src="${ctxStatic}/flash/zoom.min.js" type="text/javascript"></script>
+<body class="login">
+  
+<div class="container">
+
+  <form id="loginForm" method="post" class="form-horizontal">
+    <div class="panel panel-default panel-single" id="panel-login">
+    
+    <es:BackURL hiddenInput="true"/>
+    
+    <input type='hidden' name='csrfmiddlewaretoken' value='depy0qAotmsVOdoNJbNKvzmuBljvyVks' />
+    
+      <div class="panel-heading">
+        
+	<h2 class="form-signin-heading"><i class="icon-heart"></i> 开启体验之旅</h2>
+	<p class="text-success" style="margin-bottom: 20px;">当前测试账号： <b>admin/admin</b></p>
+      </div>
+      <div class="panel-body">
+
+      <div id="div_id_username" class="row">
+        <div class="controls clearfix">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><i class="icon-user icon-fixed-width"></i></span>
+          <input type="text" id="username" name="username" value="${param.username}" maxlength="254"
+                            class="form-control input-lg validate[required]" placeholder="请输入用户名、邮箱或手机号">
+        </div>
+        </div>
+      </div>
+
+      <div id="div_id_password" class="row">
+        <div class="controls clearfix">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><i class="icon-lock icon-fixed-width"></i></span>
+          <input type="password" id="password" name="password" value="123456"
+                            class="form-control input-lg validate[required]" placeholder="请输入密码">
+        </div>
+        
+        </div>
+      </div>
+      
+		<div class="row">
+			<div class="controls clearfix">
+	        	<div class="input-group">
+	        		<label class="checkbox remember"><input type="checkbox" name="rememberMe" value="true">下次自动登录</label>
+	        	</div>
+	     	</div>
+     	</div>
+            
+      <button class="btn btn-lg btn-primary btn-block" id="submitForm" type="submit">登录</button>
+
+      <div class="text-info" style="margin-top:15px;"><a href="/xadmin/password_reset/"><i class="icon-question-sign"></i> 忘记了您的密码或用户名？</a></div>
+      </div>
+    
+    </div>
+  </form>
+
+</div> <!-- /container -->
+		<script src="${ctx}/static/js/application.js?11" type="text/javascript"></script>
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='${ctx}/static/vendor/jquery/jquery.min.js'>"+"<"+"script>");
+		</script>
+		<script src="${ctx}/static/vendor/bootstrap/js/bootstrap.js"></script>
+		
+		<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/jquery.validationEngine.js?1" charset="utf-8" type="text/javascript"></script>
+		<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/languages/jquery.validationEngine-zh_CN.js?1" charset="utf-8" type="text/javascript"></script>
+		<script type="text/javascript">
+		    $(function() {
+		    		
+		        $("#username").focus();
+		        $(".jcaptcha-btn").click(function() {
+		            var img = $(".jcaptcha-img");
+		            var imageSrc = img.attr("src");
+		            if(imageSrc.indexOf("?") > 0) {
+		                imageSrc = imageSrc.substr(0, imageSrc.indexOf("?"));
+		            }
+		            imageSrc = imageSrc + "?" + new Date().getTime();
+		            img.attr("src", imageSrc);
+		        });
+		        $.validationEngineLanguage.allRules.ajaxJcaptchaCall={
+		            "url": "${ctx}/jcaptcha-validate",
+		            "alertTextLoad": "* 正在验证，请稍等。。。"
+		        };
+		        $("#loginForm").validationEngine({scroll:false});
+		    });
+		</script>
 </body>
 </html>

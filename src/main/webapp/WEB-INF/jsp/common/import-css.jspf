@@ -1,41 +1,20 @@
-		<link href="${ctx}/static/css/application.css?1" rel="stylesheet">
-		<!-- basic styles -->
-		<link rel="stylesheet" href="${ctx}/static/assets/css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/font-awesome.min.css" />
-
-		<!--[if IE 7]>
-		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
-		<![endif]-->
-
-		<!-- page specific plugin styles -->
-
-		<link rel="stylesheet" href="${ctx}/static/assets/css/jquery-ui-1.10.3.custom.min.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/chosen.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/datepicker.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/bootstrap-timepicker.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/daterangepicker.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/colorpicker.css" />
-
-		<!-- fonts -->
-
-
-		<!-- ace styles -->
-
-		<link rel="stylesheet" href="${ctx}/static/assets/css/ace.min.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/ace-rtl.min.css" />
-		<link rel="stylesheet" href="${ctx}/static/assets/css/ace-skins.min.css" />
-		
-		<!-- ace settings handler -->
-
-		<script src="${ctx}/static/assets/js/ace-extra.min.js"></script>
-
-		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-
-		<!--[if lt IE 9]>
-		<script src="${ctx}/static/assets/js/html5shiv.js"></script>
-		<script src="${ctx}/static/assets/js/respond.min.js"></script>
-		<![endif]-->
+		<link href="${ctx}/static/vendor/bootstrap/css/bootstrap.css" type="text/css" media="screen" rel="stylesheet" />
+		<!-- <link rel="stylesheet" type="text/css" id="site-theme" href="http://bootswatch.com/paper/bootstrap.min.css" /> -->
+		<link href="${ctx}/static/vendor/font-awesome/css/font-awesome.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/vendor/select2/select2.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/vendor/selectize/selectize.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/vendor/selectize/selectize.bootstrap3.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/css/themes/bootstrap-xadmin.css" rel="stylesheet" type="text/css" id="site-theme"  />
+		<link href="${ctx}/static/css/xadmin.main.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/css/xadmin.responsive.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/css/xadmin.form.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />
+		<style type="text/css">
+		  .btn-toolbar{margin-top: 0;}
+		  #content-block.full-content{margin-left: 0;}
+		</style>
 		<script>
 		    var ctx = '${ctx}';
 		</script>
-		<script src="${ctx}/static/comp/jquery-ui-bootstrap/js/jquery-1.10.1.min.js?1" type="text/javascript"></script>
+		<script src="${ctx}/static/vendor/jquery/jquery.js?1" type="text/javascript"></script>

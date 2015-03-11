@@ -3,30 +3,30 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="es" tagdir="/WEB-INF/tags" %>
+${menu.name}
 <c:choose>
     <c:when test="${!menu.hasChildren}">
-        <li>
-        	<a href="<%=menuUrl(request, menu.getUrl())%>" title="${menu.url}"  target="iframe">
-        		<i class="icon-double-angle-right"></i>
-        		<i class="${menu.icon}"></i>
-					${menu.name}
-        	</a>
-        </li>
+    	<a href="<%=menuUrl(request, menu.getUrl())%>" title="${menu.url}" class="list-group-item">
+		        <i class="icon-fixed-width ${menu.icon}"></i>
+		        ${menu.name}
+		</a>
     </c:when>
     <c:otherwise>
-        <li>
-            <a href="#" class="dropdown-toggle" >
-            	<i class="icon-double-angle-right"></i>
-            	<i class="${menu.icon}"></i>
-            		${menu.name}
-            	<b class="arrow icon-angle-down"></b>
-            </a>
-            <ul class="submenu">
+    	<div class="panel-heading">
+	      <h6 class="panel-title">
+	        <span class="badge badge-info">3</span>
+	        
+				<a href="#" class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-${menu.id}">
+					<i class="icon-fixed-width ${menu.icon}"></i>
+					${menu.name}
+				</a>
+			</h6>
+		</div>
+            <div id="nav-panel-#${menu.id}" class="list-group panel-collapse collapse">
                 <c:forEach items="${menu.children}" var="menu2">
                     <es:submenu menu="${menu2}"/>
                 </c:forEach>
-            </ul>
-        </li>
+            </div>
     </c:otherwise>
 </c:choose>
 <%!
