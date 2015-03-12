@@ -1,14 +1,13 @@
 		<!-- 
 		 <script src="${ctx}/static/js/application.js?11" type="text/javascript"></script>
 		 -->
-		<script src="${ctx}/static/vendor/bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="${ctx}/static/vendor/bootstrap/js/bootstrap.js"></script>
 		
 		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.core.js"></script>
 		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.widget.js"></script>
 		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.mouse.js"></script>
 		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.sortable.js"></script>
 		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.effect.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/bootstrap/js/bootstrap.js"></script>
 		<script type="text/javascript" src="${ctx}/static/vendor/select2/select2.js"></script>
 		<script type="text/javascript" src="${ctx}/static/vendor/selectize/selectize.js"></script>
 		<script type="text/javascript" src="${ctx}/static/js/xadmin.main.js"></script>

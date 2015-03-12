@@ -67,6 +67,12 @@ public class Resource extends BaseEntity<Long> implements Treeable<Long> {
     private boolean hasChildren;
 
     /**
+     * 是否快捷项
+     */
+    @Column(name = "is_shortcut")
+    private Boolean shortcut = Boolean.FALSE;
+    
+    /**
      * 是否显示
      */
     @Column(name = "is_show")
@@ -188,6 +194,14 @@ public class Resource extends BaseEntity<Long> implements Treeable<Long> {
         this.hasChildren = hasChildren;
     }
 
+    public Boolean getShortcut() {
+    	return shortcut;
+    }
+    
+    public void setShortcut(Boolean shortcut) {
+    	this.shortcut = shortcut;
+    }
+    
     public Boolean getShow() {
         return show;
     }

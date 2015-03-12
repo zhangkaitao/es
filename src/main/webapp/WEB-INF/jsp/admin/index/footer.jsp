@@ -1,4 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<p style="text-align: center;margin:0">
-    版权所有 mmmmmmmmmmmmmmmCopyright(C)2013 <a href="http://sishuok.com" target="_blank">私塾在线学习网</a>
-</p>
+	</div>
+</div>
+<!-- 内容结束 -->
+<!-- 页脚开始 -->
+<div id="footer">
+    <hr/>
+    <footer class="text-center">
+      <p>&copy; my-company.inc 2013</p>
+    </footer>
+</div>
+<!-- 页脚结束 -->

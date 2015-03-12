@@ -3,138 +3,230 @@
 <c:if test="${empty header['container']}">
 <es:contentHeader/>
 </c:if>
-<div class="breadcrumbs" id="breadcrumbs">
-	<ul class="breadcrumb">
-		<li>
-			<i class="icon-home home-icon"></i>
-			<a href="#">首页</a>
-		</li>
-		<li>
-			<a href="#">用户管理</a>
-		</li>
-		<li class="active">在线用户列表</li>
-	</ul><!-- .breadcrumb -->
+   <%@include file="/WEB-INF/jsp/admin/index/headermenu.jsp"%>
+   <!-- 右侧开始 -->	
+    <div id="content-block" class="col-sm-11 col-md-10">
+      <ul class="breadcrumb">
+	      <li>
+	        <a href="/">首页</a>
+	      </li>
+	      <li>
+	       	 <a href="#">用户管理</a>
+	      </li>
+	      <li>
+	       	 用户管理在线列表
+	      </li>
+      </ul>
+      <%@include file="searchForm.jsp" %>
+
+      
+      
+  <div class="content-toolbar btn-toolbar pull-right clearfix">
+    
+<div class="btn-group export">
+  <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+    <i class="icon-share"></i> 导出 <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+    
+      <li><a data-toggle="modal" data-target="#export-modal-csv"><i class="icon-circle-arrow-down"></i> 导出 CSV</a></li>
+    
+      <li><a data-toggle="modal" data-target="#export-modal-xml"><i class="icon-circle-arrow-down"></i> 导出 XML</a></li>
+    
+      <li><a data-toggle="modal" data-target="#export-modal-json"><i class="icon-circle-arrow-down"></i> 导出 JSON</a></li>
+    
+  </ul>
+
+  
+    <div id="export-modal-csv" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="get" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导出 CSV</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_do_" value="export"/>
+            <input type="hidden" name="export_type" value="csv">
+              <label class="checkbox">
+                
+                
+                <input type="checkbox" name="export_csv_header" checked="checked" value="on"> 导出表头
+                
+                
+                
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="all" value="on"> 导出全部数据
+              </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit"><i class="icon-share"></i> 导出</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  
+    <div id="export-modal-xml" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="get" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导出 XML</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_do_" value="export"/>
+            <input type="hidden" name="export_type" value="xml">
+              <label class="checkbox">
+                
+                
+                
+                <input type="checkbox" name="export_xml_format" checked="checked" value="on"> 导出格式
+                
+                
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="all" value="on"> 导出全部数据
+              </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit"><i class="icon-share"></i> 导出</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  
+    <div id="export-modal-json" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="get" action="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导出 JSON</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_do_" value="export"/>
+            <input type="hidden" name="export_type" value="json">
+              <label class="checkbox">
+                
+                
+                
+                
+                <input type="checkbox" name="export_json_format" checked="checked" value="on"> 导出格式
+                
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="all" value="on"> 导出全部数据
+              </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit"><i class="icon-share"></i> 导出</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  
+
 </div>
-<div class="page-content">
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="tabbable">
-			<ul class="nav nav-tabs">
-		        <li ${empty param['search.userId_eq'] and empty param['search.userId_gt'] ? 'class="active"' : ''}>
-		            <a href="${ctx}/admin/sys/user/online">
-		                <i class="icon-table"></i>
-		                所有用户列表
-		            </a>
-		        </li>
-		
-		        <li ${not empty param['search.userId_gt'] ? 'class="active"' : ''}>
-		            <a href="${ctx}/admin/sys/user/online?search.userId_gt=0">
-		                <i class="icon-table"></i>
-		                登录用户列表
-		            </a>
-		        </li>
-		        <li ${not empty param['search.userId_eq'] ? 'class="active"' : ''}>
-		            <a href="${ctx}/admin/sys/user/online?search.userId_eq=0">
-		                <i class="icon-table"></i>
-		                匿名游客列表
-		            </a>
-		        </li>
-		        <li class="dropdown">
-						<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-							Dropdown &nbsp;
-							<i class="icon-caret-down bigger-110 width-auto"></i>
-						</a>
+    
+    <div class="btn-group">
+      <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+        <i class="icon-list-alt"></i> 列 <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu model_fields pull-right" role="menu" aria-labelledby="dLabel">
+        <li><a href="?"><i class="icon-refresh"></i> 恢复显示列</a></li>
+        <li class="divider"></li>
+        
+        <li><a href="?_cols=id.widget_type.page_id.user">
+          <i class="icon-blank"></i>
+          ID</a></li>
+        
+        <li><a href="?_cols=widget_type.page_id">
+          <i class="icon-check"></i>
+          用户</a></li>
+        
+        <li><a href="?_cols=widget_type.user">
+          <i class="icon-check"></i>
+          页面</a></li>
+        
+        <li><a href="?_cols=page_id.user">
+          <i class="icon-check"></i>
+          Widget类型</a></li>
+        
+        <li><a href="?_cols=widget_type.page_id.user.value">
+          <i class="icon-blank"></i>
+          Widget参数</a></li>
+        
+      </ul>
+    </div>
+    
+    
+    <div class="btn-group layout-btns" data-toggle="buttons">
+      <label class="btn btn-default btn-sm layout-normal active">
+        <input type="radio"> <i class="icon-th-large"></i>
+      </label>
+      <label class="btn btn-default btn-sm layout-condensed">
+        <input type="radio"> <i class="icon-th"></i>
+      </label>
+      
+    </div>
+    
+    
+    <div class="btn-group layout-btns" data-toggle="buttons-checkbox">
+      <button type="button" class="btn btn-default btn-sm layout-full"><i class="icon-fullscreen"></i></button>
+      
+    </div>
+    
+    
+  </div>
 
-						<ul class="dropdown-menu dropdown-info">
-							<li>
-								<a data-toggle="tab" href="#dropdown1">@fat</a>
-							</li>
-
-							<li>
-								<a data-toggle="tab" href="#dropdown2">@mdo</a>
-							</li>
-						</ul>
-					</li>
-		    </ul>
-		    <es:showMessage/>
-				<div class="tab-content">
-					<div id="home" class="tab-pane in active">
-						<div class="row page-header">
-							<span class="col-sm-7">
-								<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-									<button class="btn btn-sm btn-success">
-										<i class="icon-file-alt bigger-120"></i> 新增
-									</button>
-
-									<button class="btn btn-sm btn-info">
-										<i class="icon-edit bigger-120"></i> 编辑
-									</button>
-
-									<button class="btn btn-sm btn-danger">
-										<i class="icon-trash bigger-120"></i> 删除
-									</button>
-
-									<button class="btn btn-sm btn-warning">
-										<i class="icon-flag bigger-120"></i> 更多
-									</button>
-								</div>
-							</span>
-							<span class="col-sm-5">
-								<%@include file="searchForm.jsp" %>
-							</span>
-								<div class="visible-xs visible-sm hidden-md hidden-lg">
-									<div class="inline position-relative">
-										<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-											<i class="icon-cog icon-only bigger-110"></i>
-										</button>
-
-										<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
-											<li>
-												<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-													<span class="blue">
-														<i class="icon-zoom-in bigger-120"></i>
-													</span>
-												</a>
-											</li>
-
-											<li>
-												<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-													<span class="green">
-														<i class="icon-edit bigger-120"></i>
-													</span>
-												</a>
-											</li>
-
-											<li>
-												<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-													<span class="red">
-														<i class="icon-trash bigger-120"></i>
-													</span>
-												</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-						</div><!-- /.page-header -->
-					
-					<%@include file="listTable.jsp"%>
-					</div>
-				</div>
-			</div>
-		</div>
+  
+  <form id="changelist-form" action="" method="post"><input type='hidden' name='csrfmiddlewaretoken' value='depy0qAotmsVOdoNJbNKvzmuBljvyVks' />
+  
+  <div class="results table-responsive">
+  
+  
+  <%@include file="listTable.jsp"%>
+  
+  
+  </div>
+  
+	<div class="form-actions well well-sm">
+	  <input type="hidden" id="action" name="action" value=""/>
+	  <input type="hidden" id="select-across" name="select_across" value=""/>
+	  <div class="btn-group clearfix dropup">
+	    <a class="dropdown-toggle btn btn-success" data-toggle="dropdown" href="#">
+	    <i class="icon-wrench icon-white"></i> 
+	    <span class="action-counter">50 个中 0 个被选</span>
+	    <span class="all" style="display: none;">选中了 93 个</span>
+	    <span class="caret"></span></a>
+	    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	      
+	        <li><a onclick="$.do_action('delete_selected');"><i class="icon-remove"></i> Delete selected 用户小组件</a></li>
+	      
+	    </ul>
+	  </div>
+	  
+	      
+	      <a class="question btn btn-default" href="javascript:;" style="display: none;" title="点击此处选择所有页面中包含的对象。">选中所有的 93 个 用户小组件</a>
+	      <a class="clear btn btn-default" href="javascript:;" style="display: none;">清除选中</a>
+	      
+	      <script type="text/javascript">var _actions_icnt="50";</script>
+	  
 	</div>
-</div>
+
+  </form>
 
 <c:if test="${empty header['container']}">
-<es:contentFooter/>
-<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
-<script type="text/javascript">
-    function callback() {
-        $(".scroll-pane").niceScroll({domfocus:true, hidecursordelay: 2000});
-        $.sys.user.initOnlineListButton();
-    }
-    $(function() {
-        callback();
-    });
-</script>
+	<%@include file="/WEB-INF/jsp/admin/index/footer.jsp"%>
+	<es:contentFooter/>
+	<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
 </c:if>

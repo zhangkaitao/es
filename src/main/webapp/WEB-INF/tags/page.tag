@@ -33,10 +33,8 @@
 <c:if test="${end < 0 or page.totalPages < displaySize * 4}">
     <c:set var="end" value="${page.totalPages}"/>
 </c:if>
-
-
-<div>
     <ul  class="pagination">
+    	<li><span><span class="text-success">${page.totalElements}</span> 用户在线记录</span></li>
         <c:choose>
             <c:when test="${page.firstPage}">
                 <li class="disabled"><a title="首页">首页</a></li>
@@ -78,24 +76,14 @@
         <c:choose>
             <c:when test="${page.lastPage}">
                 <li class="disabled"><a title="下一页">&gt;&gt;</a></li>
-                <li class="disabled"><a title="尾页">尾页</a></li>
+                <li class="disabled"><a title="尾页"><span>尾页</span></a></li>
             </c:when>
             <c:otherwise>
                 <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${current + 1}, this);" title="下一页">&gt;&gt;</a></li>
-                <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${page.totalPages}, this);" title="尾页">尾页</a></li>
+                <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${page.totalPages}, this);" title="尾页"><span>尾页</span></a></li>
             </c:otherwise>
         </c:choose>
-    <div>
-        <span class="page-input">第<input type="text" class="input-sm" value="${current}" onblur="$.table.turnPage('${pageSize}', $(this).val(), this);"/>页
-        </span>
-        &nbsp;
-        <select class="input-small" onchange="$.table.turnPage($(this).val(), ${current}, this);">
-            <option value="10" <c:if test="${pageSize eq 10}">selected="selected" </c:if>>10</option>
-            <option value="20" <c:if test="${pageSize eq 20}">selected="selected" </c:if>>20</option>
-            <option value="30" <c:if test="${pageSize eq 30}">selected="selected" </c:if>>30</option>
-            <option value="50" <c:if test="${pageSize eq 50}">selected="selected" </c:if>>50</option>
-        </select>
-        <span class="page-info">[共${page.totalPages}页/${page.totalElements}条]</span >
-    </div>
+    <li>
+        <span class="page-info">[共${page.totalPages}页]</span >
+    </li>
     </ul>
-</div>

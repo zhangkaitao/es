@@ -1,96 +1,100 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
-<table id="sample-table-1" class="table table-striped table-bordered table-hover">
-												<thead>
-													<tr>
-														<th class="center" style="width: 100px;">
-															<a class="check-all" href="javascript:;">全选</a>
-											                |
-											                <a class="reverse-all" href="javascript:;">反选</a>
-														</th>
-														<th>用户</th>
-														<th>用户主机IP</th>
-														<th>系统主机IP</th>
-														<th class="hidden-480" >登录时间</th>
-														<th class="hidden-580">最后访问时间</th>
-
-														<th>状态	</th>
-											            <th>用户会话ID</th>
-														
-													</tr>
-												</thead>
-
-												<tbody>
-												<c:forEach items="${page.content}" var="m">
-										            <tr>
-										                <td class="check center">
-										                    <input type="checkbox" name="ids"  class="ace" value="${m.id}"/>
-										                    <span class="lbl"></span>
-										                </td>
-										                <td>
-										                    <c:if test="${m.userId eq 0}">游客</c:if>
-										                    <a href="${ctx}/admin/sys/user/${m.userId}">${m.username}</a>
-										                </td>
-										                <td>${m.host}</td>
-										                <td>${m.systemHost}</td>
-										                <td><pretty:prettyTime date="${m.startTimestamp}"/></td>
-										                <td><pretty:prettyTime date="${m.lastAccessTime}"/></td>
-										                <td>${m.id}</td>
-										                <td>
-															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-																<button class="btn btn-xs btn-success">
-																	<i class="icon-ok bigger-120"></i>
-																</button>
-
-																<button class="btn btn-xs btn-info">
-																	<i class="icon-edit bigger-120"></i>
-																</button>
-
-																<button class="btn btn-xs btn-danger">
-																	<i class="icon-trash bigger-120"></i>
-																</button>
-
-																<button class="btn btn-xs btn-warning">
-																	<i class="icon-flag bigger-120"></i>
-																</button>
-															</div>
-
-															<div class="visible-xs visible-sm hidden-md hidden-lg">
-																<div class="inline position-relative">
-																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-																		<i class="icon-cog icon-only bigger-110"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="icon-zoom-in bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="icon-edit bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="icon-trash bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-										            </tr>
-										        </c:forEach>
-												</tbody>
-											</table>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="action-checkbox-column">
+            <input type="checkbox" id="action-toggle" />
+        </th>
+        <th scope="col" class="sortable">
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                	用户名
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=widget_type" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-widget_type" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+        </th>
+        <th scope="col" class="sortable">
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                	用户主机IP
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=page_id" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-page_id" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+        <th scope="col" class="sortable">
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+               		 登录时间
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=user" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-user" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+        <th scope="col" class="sortable">
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+               		 登录时间
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=user" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-user" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+        <th scope="col" class="sortable">
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+               		 登录时间
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li><a href="?o=user" class="active"><i class="icon-caret-up"></i> 正序</a></li>
+                
+                  <li><a href="?o=-user" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
+                
+              </ul>
+            </div>
+          
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+   		<c:forEach items="${page.content}" var="m">
+      		<tr class="grid-item">
+        		<td  class="action-checkbox">
+            		<input class="action-select" name="_selected_action" type="checkbox" value="278" />
+        		</td>
+      			<td>${m.host}</td>
+				<td>${m.systemHost}</td>
+				<td><pretty:prettyTime date="${m.startTimestamp}"/></td>
+				<td><pretty:prettyTime date="${m.lastAccessTime}"/></td>
+				<td>${m.id}</td>
+      		</tr>
+    	</c:forEach>
+    </tbody>
+  </table>
 <es:page page="${page}"/>
