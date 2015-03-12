@@ -60,7 +60,7 @@
 		</script>
 <li class="dropdown g-theme">
 <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-<i class="icon-magic icon-white"></i> <span class="hide-sm">主题 <i class="caret"></i></span></a>
+<i class=" icon-wrench icon-white"></i> <span class="hide-sm">主题 <i class="caret"></i></span></a>
 <ul id="g-theme-menu" class="dropdown-menu" role="menu">
   
       <li class="active"><a data-css-href="/static/xadmin/css/themes/bootstrap-xadmin.css">默认</a></li>
@@ -78,47 +78,46 @@
             <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
             <strong>欢迎， <sys:showLoginUsername/></strong> <span class="caret"></span></a>
             <ul id="g-account-menu" class="dropdown-menu" role="menu">
-              <li><a href="/account/password/"><i class="icon-key"></i> Change Password</a></li>
+              <li><a href="/account/password/"><i class="icon-key"></i>修改密码</a></li>
             </ul>
           </li>
         
         <li><a href="${ctx}/logout"><i class="show-sm icon-signout"></i><span class="hide-sm">注销</span></a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-left">
-			<li class="dropdown g-add">
-		  		<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-		  			<span class="hide-sm">cms 管理 <i class="caret"></i></span></a>
-		  			<ul id="g-add-menu" class="dropdown-menu" role="menu">
-		    
-		        		<li><a href="/xadmin/bookmark/add/"><i class="icon-plus"></i> 增加 书签</a></li>
-		    
-		        		<li><a href="/xadmin/usersettings/add/"><i class="icon-plus"></i> 增加 用户设置</a></li>
-		  			</ul>
-			</li>
-		</ul>
-		<ul class="nav navbar-nav navbar-left">
-			<li class="dropdown g-add">
-		  		<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-		  			<span class="hide-sm">个人中心 <i class="caret"></i></span></a>
-		  			<ul id="g-add-menu" class="dropdown-menu" role="menu">
-		    
-		        		<li><a href="/xadmin/bookmark/add/"><i class="icon-plus"></i> 增加 书签</a></li>
-		    
-		        		<li><a href="/xadmin/usersettings/add/"><i class="icon-plus"></i> 增加 用户设置</a></li>
-		  			</ul>
-			</li>
-		</ul>
-		<ul class="nav navbar-nav navbar-left">
-			<li class="dropdown g-add">
-		  		<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-		  			<span class="hide-sm">系统设置 <i class="caret"></i></span></a>
-		  			<ul id="g-add-menu" class="dropdown-menu" role="menu">
-		    
-		        		<li><a href="/xadmin/bookmark/add/"><i class="icon-plus"></i> 增加 书签</a></li>
-		    
-		        		<li><a href="/xadmin/usersettings/add/"><i class="icon-plus"></i> 增加 用户设置</a></li>
-		  			</ul>
-			</li>
-		</ul>
+      <c:forEach items="${menus}" var="m">
+      		<ul class="nav navbar-nav navbar-left">
+				<li class="dropdown g-add">
+					<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+		  			<i class="${m.icon} icon-white"></i> <span class="hide-sm">${m.name} <i class="caret"></i></span></a>
+			  			<ul id="g-nav-${m.id}" class="dropdown-menu" role="menu">
+			    
+			        		<li><a href="/xadmin/bookmark/add/"><i class="icon-plus"></i> 增加 书签</a></li>
+			    
+			        		<li><a href="/xadmin/usersettings/add/"><i class="icon-plus"></i> 增加 用户设置</a></li>
+			  			</ul>
+				</li>
+			</ul>
+		</c:forEach>
     </div>
   </div>
+<div id="body-content" class="clearfix row">
+    <div id="left-side" class="col-sm-1 col-md-2">
+		<div class="panel-group hide-sm nav-sitemenu col-md-2" id="nav-accordion">
+		  <div class="panel panel-default">
+			  <c:forEach items="${menus}" var="m">
+				   <div class="panel-heading">
+				      <h6 class="panel-title">
+				        	<span class="badge badge-info">3</span>
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-${m.id}"><i class="icon-fixed-width ${m.icon}"></i>${m.name}</a>
+						</h6>
+					</div>
+					<div id="nav-panel-${m.id}" class="list-group panel-collapse collapse">
+			      		<c:forEach items="${m.children}" var="c">
+					        <es:submenu menu="${c}"/>
+					   	</c:forEach>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+</div>
+</div>		
