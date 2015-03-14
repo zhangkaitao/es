@@ -23,7 +23,7 @@
 							    </div>
 							    <div id="nav-panel-1" class="list-group panel-collapse collapse">
 							      
-							      <a href="/admin/sys/user/online" class="list-group-item">
+							      <a href="/admin/sys/user/online"  target="iframe" class="list-group-item">
 							        <i class="icon-fixed-width icon-globe"></i>
 							        用户在线列表</span>
 							      </a>

@@ -7,13 +7,6 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-		<li class="dropdown g-add">
-		  <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-		  <i class="icon-plus icon-white"></i> <span class="hide-sm">增加 <i class="caret"></i></span></a>
-		  <ul id="g-add-menu" class="dropdown-menu" role="menu">
-		        <li><a href="/xadmin/bookmark/add/"><i class="icon-plus"></i> 增加 书签</a></li>
-		  </ul>
-		</li>
 		<li class="dropdown g-setlang">
 		  <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
 		  <i class="icon-globe icon-white"></i> <span class="hide-sm">
