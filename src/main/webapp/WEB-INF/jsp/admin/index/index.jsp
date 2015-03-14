@@ -3,9 +3,8 @@
 <es:contentHeader title="新版本" index="true"/>
 <%@include file="headermenu.jsp"%>
 <!-- 内容开始 -->
-  <div id="body-content" class="clearfix row">
+  <div id="main" class="clearfix row">
       <div id="left-side" class="col-sm-1 col-md-2">
-      
       		<!-- 左侧导航开始 -->
 			<div class="panel-group hide-sm nav-sitemenu col-md-2" id="nav-accordion">
   

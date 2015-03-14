@@ -5,7 +5,7 @@
         <div class="navbar-header">
           
           
-<button class="navbar-toggle pull-left" data-toggle="class" data-target="#body-content" data-class-name="show_menu">
+<button class="navbar-toggle pull-left" data-toggle="class" data-target="#main" data-class-name="show_menu">
   <i class="icon-list"></i>
 </button>
 
