@@ -24,15 +24,15 @@
           <ul class="nav navbar-nav">
             
 <li class="dropdown bookmarks">
-  <a id="drop-bookmark" title="书签" class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-  <i class="icon-book"></i> <i class="fa fa-book fa-fw"></i>书签<span class="caret"></span></a>
+  <a id="drop-bookmark" title="特别关注" class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+  <i class="icon-star"></i> 特别关注<span class="caret"></span></a>
   <ul id="bookmark-menu" class="dropdown-menu" role="menu">
     
     
     <li class="with_menu_btn">
-      <a href="/xadmin/userwidget/?_cols=id.widget_type.page_id.user&amp;_p_user__id__exact=1" title="1"><i class="icon-bookmark"></i> 1</a>
+      <a href="/xadmin/userwidget/?_cols=id.widget_type.page_id.user&amp;_p_user__id__exact=1" title="1"><i class="icon-star"></i> 127.0.0.1:8080</a>
       
-        <a href="/xadmin/bookmark/28/update/" class="dropdown-menu-btn"><i class="icon-pencil"></i></a>
+        <span><a href="/xadmin/bookmark/28/update/" class="dropdown-menu-btn"><i class="icon-pencil"></i></a></span>
       
     </li>
     

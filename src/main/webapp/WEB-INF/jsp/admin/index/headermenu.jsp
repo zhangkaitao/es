@@ -73,7 +73,7 @@
 		  			<!-- 多层导航开始  -->
 		  			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 			        	<c:forEach items="${m.children}" var="c">
-			        		<li class="dropdown-submenu"><a href="${c.url}"><i class="${c.icon}"></i> ${c.name}</a>
+			        		<li class="dropdown-submenu"><a href="${c.url}" target="iframe"><i class="${c.icon}"></i> ${c.name}</a>
 				        		<ul class="dropdown-menu">
 			        				<c:forEach items="${c.children}" var="t">
 				        				<es:subnav menu="${t}" />
@@ -88,34 +88,4 @@
     </div>
   </div>
   
-<!-- 内容开始 -->
-  <div id="body-content" class="clearfix row">
-      <div id="left-side" class="col-sm-1 col-md-2">
-      
-      		<!-- 左侧导航开始 -->
-			<div class="panel-group hide-sm nav-sitemenu col-md-2" id="nav-accordion">
-  
-			  <div class="panel panel-default">
-			    <div class="panel-heading">
-			      <h6 class="panel-title">
-			        <span class="badge badge-info">3</span>
-			        <a class="accordion-toggle" data-toggle="collapse" data-parent="#nav-accordion" href="#nav-panel-1">
-			          
-			          <i class="icon-fixed-width icon-globe"></i>
-			          
-			          	用户管理
-			          
-			        </a>
-			      </h6>
-			    </div>
-			    <div id="nav-panel-1" class="list-group panel-collapse collapse">
-			      
-			      <a href="/admin/sys/user/online" class="list-group-item">
-			        <i class="icon-fixed-width icon-globe"></i>
-			        用户在线列表</span>
-			      </a>
-			    </div>
-			  </div>
-			 </div>
-		</div>
-		<!-- 左侧导航结束 -->
+

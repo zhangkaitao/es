@@ -20,6 +20,8 @@
 		<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.actions.js"></script>
 		<script type="text/javascript" src="${ctx}/static/js/xadmin.page.list.js"></script>
 		<script type="text/javascript" src="${ctx}/static/js/xadmin.page.form.js"></script>
+		<!-- 页面布局文件 -->
+		<script type="text/javascript" src="${ctx}/static/common/wsize.js" ></script>
 		
 		<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/jquery.validationEngine.js?1" charset="utf-8" type="text/javascript"></script>
 		<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/languages/jquery.validationEngine-zh_CN.js?1" charset="utf-8" type="text/javascript"></script>

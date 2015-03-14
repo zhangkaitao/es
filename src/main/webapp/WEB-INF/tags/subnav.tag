@@ -6,7 +6,7 @@
 <c:choose>
     <c:when test="${!menu.hasChildren}">
     	<li>
-    		<a href="<%=menuUrl(request, menu.getUrl())%>" title="${menu.url}">
+    		<a href="<%=menuUrl(request, menu.getUrl())%>" title="${menu.url}" target="iframe">
     			<i class="${menu.icon}"></i> ${menu.name}
     		</a>
     	</li>
