@@ -3,8 +3,9 @@
 <c:if test="${empty header['container']}">
 <es:contentHeader/>
 </c:if>
-   <!-- 右侧开始 -->	
-    
+<%@include file="/WEB-INF/jsp/admin/index/header.jsp"%>
+<%@include file="/WEB-INF/jsp/admin/index/menu.jsp"%>
+	<div id="content-block" class="col-sm-11 col-md-10">
       <ul class="breadcrumb">
 	      <li>
 	        <a href="/">首页</a>
@@ -75,8 +76,6 @@
 	</div>
 
   </form>
-
-<c:if test="${empty header['container']}">
-	<es:contentFooter/>
-	<%@include file="/WEB-INF/jsp/common/admin/import-sys-js.jspf"%>
-</c:if>
+  </div>
+<%@include file="/WEB-INF/jsp/admin/index/footer.jsp"%>
+<es:contentFooter/>

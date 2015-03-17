@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/taglibs.jspf"%>
 <es:contentHeader/>
+<%@include file="/WEB-INF/jsp/admin/index/headermenu.jsp"%>
 <div data-table="table" class="panel">
 
     <ul class="nav nav-tabs">

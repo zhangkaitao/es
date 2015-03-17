@@ -11,6 +11,11 @@ import com.sishuok.es.common.web.validate.ValidateResponse;
 import com.sishuok.es.showcase.sample.entity.Sample;
 import com.sishuok.es.showcase.sample.entity.Sex;
 import com.sishuok.es.showcase.sample.service.SampleService;
+import com.sishuok.es.sys.resource.entity.tmp.Menu;
+import com.sishuok.es.sys.resource.service.ResourceService;
+import com.sishuok.es.sys.user.entity.User;
+import com.sishuok.es.sys.user.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>User: Zhang Kaitao
@@ -32,6 +38,12 @@ import java.util.Date;
 @RequestMapping(value = "/showcase/sample")
 public class SampleController extends BaseCRUDController<Sample, Long> {
 
+    @Autowired
+    private ResourceService resourceService;
+    
+    @Autowired
+    private UserService userService;
+    
     private SampleService getSampleService() {
         return (SampleService) baseService;
     }
@@ -44,6 +56,12 @@ public class SampleController extends BaseCRUDController<Sample, Long> {
     protected void setCommonData(Model model) {
         model.addAttribute("sexList", Sex.values());
         model.addAttribute("booleanList", BooleanEnum.values());
+        User user = userService.findByUsername("admin");
+		// TODO 设置菜单通用数据
+    	System.out.println(user);
+    	List<Menu> menus = resourceService.findMenus(user);
+        model.addAttribute("menus", menus);
+        
     }
 
     /**

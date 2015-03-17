@@ -44,14 +44,14 @@ public class Generate {
 		// packageName 包名，这里如果更改包名，请在applicationContext.xml和srping-mvc.xml中配置base-package、packagesToScan属性，来指定多个（共4处需要修改）。
 		String packageName = "com.sishuok.es";
 		
-		String sysName = "shop";			// 所属系统名，例：sys、showcase、maintain、personal、shop
-		String moduleName = "navigation";		// 模块名（可选） 
-		String tableName = "shop_navigation";			// 表明，例：user
-		String className = "Navigation";			// 类名，例：User
-		String permissionName = "shop:navigation";//权限标志名（此处使用全名，不采用合成方式）
-		String folderName = "navigation";//文件夹名
+		String sysName = "sys";			// 所属系统名，例：sys、showcase、maintain、personal、shop
+		String moduleName = "site";		// 模块名（可选） 
+		String tableName = "sys_site";			// 表明，例：user
+		String className = "Site";			// 类名，例：User
+		String permissionName = "sys:site";//权限标志名（此处使用全名，不采用合成方式）
+		String folderName = "site";//文件夹名
 		String classAuthor = "xxs";		// 类作者，例：ThinkGem
-		String functionName = "导航管理";			// 功能名，例：用户
+		String functionName = "站点管理";			// 功能名，例：用户
 
 		// 是否启用生成工具
 		//Boolean isEnable = false;

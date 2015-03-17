@@ -46,6 +46,8 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
      * @param model
      */
     protected void setCommonData(Model model) {
+    	//将菜单数据放入通用资源中
+    	
     }
 
 

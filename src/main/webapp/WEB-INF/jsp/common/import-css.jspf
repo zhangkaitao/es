@@ -11,17 +11,6 @@
 		<link href="${ctx}/static/css/xadmin.form.css" type="text/css" media="screen" rel="stylesheet" />
 		<link href="${ctx}/static/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />
 		<style type="text/css">
-		  .btn-toolbar{margin-top: 0;}
-		  #content-block.full-content{margin-left: 0;}
-		  iframe {
-		  		padding: 0px;
-				margin: 0px;
-				border: 0px;
-				outline: 0px;
-				width: 100%;
-				height: 100%;
-			}
-			
 		</style>
 		<script>
 		    var ctx = '${ctx}';

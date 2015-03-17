@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-	</div>
 </div>
 <!-- 内容结束 -->
 <!-- 页脚开始 -->
