@@ -33,7 +33,10 @@
 <c:if test="${end < 0 or page.totalPages < displaySize * 4}">
     <c:set var="end" value="${page.totalPages}"/>
 </c:if>
-    <ul  class="pagination">
+    <!--  两种样式，此处采用统一的排版样式，方便页面显示均匀
+     <ul  class="pagination">
+     -->
+    <ul  class="pagination pagination-sm pagination-left pagination-inline">
     	<li><span><span class="text-success">${page.totalElements}</span> 用户在线记录</span></li>
         <c:choose>
             <c:when test="${page.firstPage}">

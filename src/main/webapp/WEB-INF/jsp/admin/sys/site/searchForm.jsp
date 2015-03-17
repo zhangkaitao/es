@@ -45,78 +45,36 @@
   <i class="icon-filter"></i> 过滤器
   <span class="caret"></span></a>
   <ul id="filter-menu" class="dropdown-menu" role="menu" aria-labelledby="drop-filter">
-    
-  	
-<li class="dropdown-submenu filter-fk-search">
-  <a><i class="icon-filter text-muted"></i> 用户</a>
-  <div class="popover right">
-    <div class="arrow"></div>
-    <h3 class="popover-title">
-      搜索 用户
-    </h3>
-    <div class="popover-content">
-      <form class="exform" method="get" action="">
-        
-          <input name="_p_user__id__exact" class="select-search" type="hidden" value="" 
-          data-search-url="/auth/user/" data-label=" " data-choices="?"
-          data-placeholder="搜索 用户…"/>
 
-          <button type="submit" class="btn btn-success">应用</button>
-        
-      </form>
-    </div>
-  </div>
-</li>
+	<li class="dropdown-submenu filter-char">
+	  <a><i class="icon-filter text-muted"></i> 名称</a>
+	  <div class="popover right">
+	    <div class="arrow"></div>
+	    <h3 class="popover-title">
+	      搜索名称
+	    </h3>
+	    <div class="popover-content">
+	      <form method="get" action="">
+	        
+	        <div class="input-group">
+	          <input name="_p_widget_type__contains" class="input-char form-control" type="text" value="" placeholder="输入 名称…"/>
+	          <span class="input-group-btn">
+	          
+	            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
+	          </span>
+	        </div>
+	      </form>
+	    </div>
+	  </div>
+	</li>
 
-<li class="dropdown-submenu filter-char">
-  <a><i class="icon-filter text-muted"></i> Widget类型</a>
-  <div class="popover right">
-    <div class="arrow"></div>
-    <h3 class="popover-title">
-      搜索 Widget类型
-    </h3>
-    <div class="popover-content">
-      <form method="get" action="">
-        
-        <div class="input-group">
-          <input name="_p_widget_type__contains" class="input-char form-control" type="text" value="" placeholder="输入 Widget类型…"/>
-          <span class="input-group-btn">
-          
-            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
-          </span>
-        </div>
-      </form>
-    </div>
-  </div>
-</li>
-<li class="dropdown-submenu filter-char">
-  <a><i class="icon-filter text-muted"></i> 页面</a>
-  <div class="popover right">
-    <div class="arrow"></div>
-    <h3 class="popover-title">
-      搜索 页面
-    </h3>
-    <div class="popover-content">
-      <form method="get" action="">
-        
-        <div class="input-group">
-          <input name="_p_page_id__contains" class="input-char form-control" type="text" value="" placeholder="输入 页面…"/>
-          <span class="input-group-btn">
-          
-            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
-          </span>
-        </div>
-      </form>
-    </div>
-  </div>
-</li>
   </ul>
 </li>
           </ul>
           
           
           <div class="navbar-btn navbar-right hide-xs">
-    		<a href="/xadmin/userwidget/add/" class="btn btn-primary"><i class="icon-plus icon-white"></i> 增加 用户小组件</a>
-          </div>
+    		<a href="${ctx}/admin/sys/site/create" class="btn btn-primary"><i class="icon-plus icon-white"></i> 新增 站点</a>
         </div>
-      </div>
+     </div>
+</div>
