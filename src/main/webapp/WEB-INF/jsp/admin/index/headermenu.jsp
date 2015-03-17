@@ -64,7 +64,7 @@
       	  		<!-- 第一行nav -->
 				<li><a role="button" data-toggle="dropdown" href="javascript:;"><i class="${m.icon} icon-white"></i> <span class="hide-sm">${m.name}</span></a>
 		  			<!-- 多层导航开始  -->
-		  			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+		  			<ul class="dropdown-menu">
 			        	<c:forEach items="${m.children}" var="c">
 			        		<li class="dropdown-submenu"><a href="${c.url}" target="iframe"><i class="${c.icon}"></i> ${c.name}</a>
 				        		<ul class="dropdown-menu">
