@@ -1,25 +1,23 @@
-		<!-- 
-		 <script src="${ctx}/static/js/application.js?11" type="text/javascript"></script>
-		 -->
-		<script type="text/javascript" src="${ctx}/static/vendor/bootstrap/js/bootstrap.js"></script>
-		
-		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.core.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.widget.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.mouse.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.sortable.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.effect.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/select2/select2.js"></script>
-		<script type="text/javascript" src="${ctx}/static/vendor/selectize/selectize.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.main.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.responsive.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.themes.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.details.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.bookmark.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.widget.select.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.filters.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.actions.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.page.list.js"></script>
-		<script type="text/javascript" src="${ctx}/static/js/xadmin.page.form.js"></script>
-		
-		<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/jquery.validationEngine.js?1" charset="utf-8" type="text/javascript"></script>
-		<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/languages/jquery.validationEngine-zh_CN.js?1" charset="utf-8" type="text/javascript"></script>
+<script src="${ctx}/static/js/application.js" type="text/javascript"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/bootstrap/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.mouse.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.sortable.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/jquery-ui/jquery.ui.effect.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/select2/select2.js"></script>
+<script type="text/javascript" src="${ctx}/static/vendor/selectize/selectize.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.main.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.responsive.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.themes.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.details.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.bookmark.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.widget.select.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.filters.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.actions.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.page.list.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/xadmin.page.form.js"></script>
+
+<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/jquery.validationEngine.js?1" charset="utf-8" type="text/javascript"></script>
+<script src="${ctx}/static/comp/jQuery-Validation-Engine/js/languages/jquery.validationEngine-zh_CN.js?1" charset="utf-8" type="text/javascript"></script>

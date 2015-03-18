@@ -5,7 +5,9 @@
     <thead>
       <tr>
         <th scope="col" class="action-checkbox-column">
-            <input type="checkbox" id="action-toggle" />
+          	<a class="check-all" href="javascript:;">全选</a>
+                |
+            <a class="reverse-all" href="javascript:;">反选</a>
         </th>
         <th scope="col" class="sortable">
             <div class="dropdown pull-left">
@@ -44,8 +46,11 @@
     <tbody>
    		<c:forEach items="${page.content}" var="m">
       		<tr class="grid-item">
-        		<td  class="action-checkbox">
-            		<input class="action-select" name="_selected_action" type="checkbox" value="${m.id}" />
+        		<td  class="action-checkbox check">
+            		<!-- 
+            		 <input class="action-select" name="_selected_action" type="checkbox" value="${m.id}" />
+            		 -->
+            		<input type="checkbox" name="ids" value="${m.id}" />
         		</td>
       			<td><a href="${ctx}/admin/sys/site/${m.id}">${m.id}</a></td>
       			<td>${m.name}</td>
