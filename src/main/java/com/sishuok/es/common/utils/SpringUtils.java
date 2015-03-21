@@ -41,7 +41,6 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
      *
      */
     public static <T> T getBean(Class<T> clz) throws BeansException {
-        @SuppressWarnings("unchecked")
         T result = (T) beanFactory.getBean(clz);
         return result;
     }

@@ -5,24 +5,26 @@
  */
 package com.sishuok.es.sys.resource.service;
 
-import com.sishuok.es.common.entity.search.SearchOperator;
-import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
-import com.sishuok.es.sys.auth.service.UserAuthService;
-import com.sishuok.es.sys.resource.entity.Resource;
-import com.sishuok.es.sys.resource.entity.tmp.Menu;
-import com.sishuok.es.sys.resource.repository.ResourceRepository;
-import com.sishuok.es.sys.user.entity.User;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import com.sishuok.es.common.entity.search.SearchOperator;
+import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.plugin.serivce.BaseTreeableService;
+import com.sishuok.es.sys.auth.service.UserAuthService;
+import com.sishuok.es.sys.resource.entity.Resource;
+import com.sishuok.es.sys.resource.entity.ResourceShortcut;
+import com.sishuok.es.sys.resource.entity.tmp.Menu;
+import com.sishuok.es.sys.user.entity.User;
 
 /**
  * <p>User: Zhang Kaitao
@@ -32,8 +34,11 @@ import java.util.Set;
 @Service
 public class ResourceService extends BaseTreeableService<Resource, Long> {
 
+	@Autowired
+	private UserAuthService userAuthService;
+	
     @Autowired
-    private UserAuthService userAuthService;
+    private ResourceShortcutService resourceShortcutService;
 
     /**
      * 得到真实的资源标识  即 父亲:儿子
@@ -104,6 +109,36 @@ public class ResourceService extends BaseTreeableService<Resource, Long> {
         }
 
         return convertToMenus(resources);
+    }
+    
+    /**
+     * 获取用户快捷菜单
+     * @param user
+     * @return
+     */
+    public List<Resource> findMenuShortcuts(User user) {
+        Set<String> userPermissions = userAuthService.findStringPermissions(user);
+
+        
+        //获取用户快捷菜单的ids
+        Searchable searchable2 =
+                Searchable.newSearchable()
+                        .addSearchFilter("user", SearchOperator.eq, user)
+                        .addSort(new Sort(Sort.Direction.DESC,"weight"));
+        List<ResourceShortcut> resourceShortcuts = resourceShortcutService.findAllWithSort(searchable2);
+        List<Resource> lists = new ArrayList<Resource>();
+        for (int i = 0; i < resourceShortcuts.size(); i++) {
+			lists.add(resourceShortcuts.get(i).getResource());
+		}
+        Iterator<Resource> iter = lists.iterator();
+        
+        //筛选权限
+        while (iter.hasNext()) {
+            if (!hasPermission(iter.next(), userPermissions)) {
+                iter.remove();
+            }
+        }
+        return lists;
     }
 
     private boolean hasPermission(Resource resource, Set<String> userPermissions) {

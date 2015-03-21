@@ -51,6 +51,12 @@ public interface Constants {
      */
     String CURRENT_USER = "user";
     String CURRENT_USERNAME = "username";
+    
+    /**
+     * 当前登录用户菜单
+     */
+    String CURRENT_USER_MENUS = "menus";
+    String CURRENT_USER_MENUSHORTCUTS = "menuShortcuts";
 
     String ENCODING = "UTF-8";
 

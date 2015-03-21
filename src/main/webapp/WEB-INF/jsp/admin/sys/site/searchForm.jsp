@@ -17,7 +17,7 @@
 
 
           <a class="navbar-brand" data-toggle="collapse" data-target="#top-nav .navbar-collapse">
-            <i class="icon-dashboard"></i> 用户小组件
+            <i class="icon-fixed-width icon-lock"></i> 站点列表
           </a>
         </div>
         <div class="navbar-collapse collapse">
@@ -27,16 +27,10 @@
   <a id="drop-bookmark" title="特别关注" class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
   <i class="icon-star"></i> 特别关注<span class="caret"></span></a>
   <ul id="bookmark-menu" class="dropdown-menu" role="menu">
-    
-    
     <li class="with_menu_btn">
-      <a href="/xadmin/userwidget/?_cols=id.widget_type.page_id.user&amp;_p_user__id__exact=1" title="1"><i class="icon-star"></i> 127.0.0.1:8080</a>
-      
-        <span><a href="/xadmin/bookmark/28/update/" class="dropdown-menu-btn"><i class="icon-pencil"></i></a></span>
-      
+      <a href="#" title="1"><i class="icon-star"></i> 127.0.0.1:8080 </a>
+        <span><a href="#" class="dropdown-menu-btn"> <i class="icon-trash"></i></a></span>
     </li>
-    
-    
   </ul>
 </li>
 
@@ -54,8 +48,7 @@
 	      搜索名称
 	    </h3>
 	    <div class="popover-content">
-	      <form method="get" action="">
-	        
+	        <form id="searchForm" class="search-form" data-change-search="true">
 	        <div class="input-group">
 	          <input name="_p_widget_type__contains" class="input-char form-control" type="text" value="" placeholder="输入 名称…"/>
 	          <span class="input-group-btn">
@@ -63,7 +56,7 @@
 	            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
 	          </span>
 	        </div>
-	      </form>
+	        </form>
 	    </div>
 	  </div>
 	</li>

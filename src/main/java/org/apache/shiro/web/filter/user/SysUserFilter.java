@@ -5,19 +5,25 @@
  */
 package org.apache.shiro.web.filter.user;
 
-import com.sishuok.es.common.Constants;
-import com.sishuok.es.sys.user.entity.User;
-import com.sishuok.es.sys.user.entity.UserStatus;
-import com.sishuok.es.sys.user.service.UserService;
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import com.sishuok.es.common.Constants;
+import com.sishuok.es.sys.resource.entity.Resource;
+import com.sishuok.es.sys.resource.entity.tmp.Menu;
+import com.sishuok.es.sys.resource.service.ResourceService;
+import com.sishuok.es.sys.user.entity.User;
+import com.sishuok.es.sys.user.entity.UserStatus;
+import com.sishuok.es.sys.user.service.UserService;
 
 /**
  * 验证用户过滤器
@@ -31,6 +37,8 @@ public class SysUserFilter extends AccessControlFilter {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ResourceService resourceService;
 
     /**
      * 用户删除了后重定向的地址
@@ -81,6 +89,18 @@ public class SysUserFilter extends AccessControlFilter {
         User user = userService.findByUsername(username);
         //把当前用户放到session中
         request.setAttribute(Constants.CURRENT_USER, user);
+        
+        
+        //将菜单信息放入session中
+        List<Menu> menus = resourceService.findMenus(user);
+        request.setAttribute(Constants.CURRENT_USER_MENUS, menus);
+        
+        
+        //将快捷菜单信息放入session中
+        List<Resource> menuShortcuts = resourceService.findMenuShortcuts(user);
+        request.setAttribute(Constants.CURRENT_USER_MENUSHORTCUTS, menuShortcuts);
+        
+        
         //druid监控需要
         ((HttpServletRequest)request).getSession().setAttribute(Constants.CURRENT_USERNAME, username);
 
