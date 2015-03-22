@@ -45,13 +45,13 @@ public class Generate {
 		String packageName = "com.sishuok.es";
 		
 		String sysName = "sys";			// 所属系统名，例：sys、showcase、maintain、personal、shop
-		String moduleName = "site";		// 模块名（可选） 
-		String tableName = "sys_site";			// 表明，例：user
-		String className = "Site";			// 类名，例：User
-		String permissionName = "sys:site";//权限标志名（此处使用全名，不采用合成方式）
-		String folderName = "site";//文件夹名
+		String moduleName = "xxs";		// 模块名（可选） 
+		String tableName = "sys_xxs_attribute";			// 表明，例：user
+		String className = "XxsAttribute";			// 类名，例：User
+		String permissionName = "sys:xxsAttribute";//权限标志名（此处使用全名，不采用合成方式）
+		String folderName = "xxs";//文件夹名
 		String classAuthor = "xxs";		// 类作者，例：ThinkGem
-		String functionName = "站点管理";			// 功能名，例：用户
+		String functionName = "不知道叫什么功能，可耻的用了自己的名字";			// 功能名，例：用户
 
 		// 是否启用生成工具
 		//Boolean isEnable = false;

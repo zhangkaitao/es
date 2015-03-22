@@ -11,6 +11,7 @@ import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.permission.PermissionList;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -20,7 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.Entity;
 import javax.validation.Valid;
+
 import java.io.Serializable;
 
 /**
@@ -69,6 +72,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @PageableDefaults(sort = "id=desc")
     public String list(Searchable searchable, Model model) {
 
+    	
         if (permissionList != null) {
             this.permissionList.assertHasViewPermission();
         }

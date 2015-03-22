@@ -5,9 +5,12 @@
  */
 package com.sishuok.es.common.repository;
 
-import com.sishuok.es.common.entity.search.Searchable;
-import com.sishuok.es.common.repository.callback.SearchCallback;
-import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +20,9 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformationSuppo
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
 import org.springframework.util.Assert;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.criteria.Root;
-import java.util.List;
+import com.sishuok.es.common.entity.search.Searchable;
+import com.sishuok.es.common.repository.callback.SearchCallback;
+import com.sishuok.es.common.repository.support.annotation.EnableQueryCache;
 
 /**
  * 仓库辅助类

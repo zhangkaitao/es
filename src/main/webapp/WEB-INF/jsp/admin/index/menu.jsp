@@ -23,6 +23,11 @@
 							 <i class="icon-fixed-width icon-globe"></i> 站点管理</span>
 						</a>
 					</div>
+					<div id="nav-panel-1" class="list-group panel-collapse collapse in">
+						<a href="/admin/sys/xxs" class="list-group-item">
+							 <i class="icon-fixed-width icon-globe"></i> 表管理</span>
+						</a>
+					</div>
 					<c:forEach items="${menuShortcuts}" var="m">
 						<div id="nav-panel-1" class="list-group panel-collapse collapse in">
 							<a href="${m.url}" class="list-group-item">
