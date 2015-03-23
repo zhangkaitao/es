@@ -5,7 +5,11 @@ package com.sishuok.es.sys.xxs.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.sishuok.es.common.entity.BaseEntity;
 
@@ -20,18 +24,27 @@ public class XxsAttribute extends BaseEntity<Long> {
 	
 	private static final long serialVersionUID = 1L;
 		
+    @OneToOne(optional = true)
+    @Fetch(FetchMode.SELECT)
 	private Xxs xxs;	// 归属表
 	
 	@Column(name = "name")
 	private String name; 		// 属性名
 	@Column(name = "comments")
 	private String comments;	// 描述
+	@Column(name = "java_type")
 	private String javaType;	// JAVA类型
-	private String isEdit;		// 是否编辑字段（1：编辑字段）
-	private String isList;		// 是否列表字段（1：列表字段）
-	private String isQuery;		// 是否查询字段（1：查询字段）
+	@Column(name = "is_edit")
+	private Boolean edit;		// 是否编辑字段（1：编辑字段）
+	@Column(name = "is_list")
+	private Boolean list;		// 是否列表字段（1：列表字段）
+	@Column(name = "is_query")
+	private Boolean query;		// 是否查询字段（1：查询字段）
+	@Column(name = "query_type")
 	private String queryType;	// 查询方式（等于、不等于、大于、小于、范围、左LIKE、右LIKE、左右LIKE）
+	@Column(name = "show_type")
 	private String showType;	// 字段生成方案（文本框、文本域、下拉框、复选框、单选框、字典选择、人员选择、部门选择、区域选择）
+	@Column(name = "sort")
 	private Integer sort;		// 排序（升序）
 	
     public String getName() {
@@ -66,28 +79,28 @@ public class XxsAttribute extends BaseEntity<Long> {
 		this.javaType = javaType;
 	}
 
-	public String getIsEdit() {
-		return isEdit;
+	public Boolean getEdit() {
+		return edit;
 	}
 
-	public void setIsEdit(String isEdit) {
-		this.isEdit = isEdit;
+	public void setEdit(Boolean edit) {
+		this.edit = edit;
 	}
 
-	public String getIsList() {
-		return isList;
+	public Boolean getList() {
+		return list;
 	}
 
-	public void setIsList(String isList) {
-		this.isList = isList;
+	public void setList(Boolean list) {
+		this.list = list;
+	}
+	
+	public Boolean getQuery() {
+		return query;
 	}
 
-	public String getIsQuery() {
-		return isQuery;
-	}
-
-	public void setIsQuery(String isQuery) {
-		this.isQuery = isQuery;
+	public void setQuery(Boolean query) {
+		this.query = query;
 	}
 
 	public String getQueryType() {

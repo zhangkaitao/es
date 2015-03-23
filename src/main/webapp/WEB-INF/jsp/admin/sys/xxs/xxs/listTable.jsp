@@ -52,9 +52,9 @@
             		 -->
             		<input type="checkbox" name="ids" value="${m.id}" />
         		</td>
-      			<td><a href="${ctx}/admin/sys/site/${m.id}">${m.id}</a></td>
+      			<td><a href="${ctx}/admin/sys/xxs/xxs/${m.id}">${m.id}</a></td>
       			<td>${m.name}</td>
-				<td><a href="${ctx}/admin/sys/site/${m.id}">查看</a></td>
+				<td><a href="${ctx}/admin/sys/xxs/xxsAttribute/${m.id}">查看属性</a></td>
       		</tr>
     	</c:forEach>
     </tbody>

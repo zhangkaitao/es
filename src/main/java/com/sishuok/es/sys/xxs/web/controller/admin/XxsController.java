@@ -16,7 +16,7 @@ import com.sishuok.es.sys.xxs.entity.Xxs;
  */
  
 @Controller("adminXxsController")
-@RequestMapping(value = "/admin/sys/xxs")
+@RequestMapping(value = "/admin/sys/xxs/xxs")
 public class XxsController extends BaseCRUDController<Xxs, Long> {
 
     public XxsController() {

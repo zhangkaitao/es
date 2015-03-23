@@ -186,6 +186,18 @@
     <bean id="domainClassConverter" class="org.springframework.data.repository.support.DomainClassConverter">
         <constructor-arg ref="conversionService"/>
     </bean>
+    
+    
+    <!-- 扫描特定注解的实体类方法 -->
+    <bean id="loadPackageClasses" class="com.sishuok.es.sys.xxs.utils.LoadPackageClasses">
+		<constructor-arg value="com.sishuok.es.**.entity" />
+		<constructor-arg>
+			<list>
+				<value>javax.persistence.Table</value>
+			</list>
+		</constructor-arg>
+	</bean>
+    
 
     <!--设置查询字符串转换器的conversion service-->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
