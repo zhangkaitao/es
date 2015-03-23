@@ -4,25 +4,6 @@
 <table class="table table-bordered table-striped table-hover">
     <thead>
       <tr>
-        <th scope="col" class="action-checkbox-column">
-          	<a class="check-all" href="javascript:;">全选</a>
-                |
-            <a class="reverse-all" href="javascript:;">反选</a>
-        </th>
-        <th scope="col" class="sortable">
-            <div class="dropdown pull-left">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                	id
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                
-                  <li><a href="?o=widget_type" class="active"><i class="icon-caret-up"></i> 正序</a></li>
-                
-                  <li><a href="?o=-widget_type" class="active"><i class="icon-caret-down"></i> 倒序</a></li>
-                
-              </ul>
-            </div>
-        </th>
         <th scope="col" class="sortable">
             <div class="dropdown pull-left">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -44,17 +25,10 @@
       </tr>
     </thead>
     <tbody>
-   		<c:forEach items="${page.content}" var="m">
+   		<c:forEach items="${entityLists}" var="m">
       		<tr class="grid-item">
-        		<td  class="action-checkbox check">
-            		<!-- 
-            		 <input class="action-select" name="_selected_action" type="checkbox" value="${m.id}" />
-            		 -->
-            		<input type="checkbox" name="ids" value="${m.id}" />
-        		</td>
-      			<td><a href="${ctx}/admin/sys/xxs/${m.id}">${m.id}</a></td>
-      			<td>${m.name}</td>
-				<td><a href="${ctx}/admin/sys/xxsAttribute/${m.id}">查看属性</a></td>
+      			<td>${m.simpleName}</td>
+				<td><a href="${ctx}/admin/sys/xxsAttribute/${m.simpleName}">查看属性</a></td>
       		</tr>
     	</c:forEach>
     </tbody>

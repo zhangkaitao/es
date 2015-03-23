@@ -95,6 +95,7 @@
             showClear();
         }
     }
+    
     /* Setup plugin defaults */
     $.fn.actions.defaults = {
         counterContainer: "div.form-actions .action-counter",

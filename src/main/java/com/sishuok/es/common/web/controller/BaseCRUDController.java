@@ -5,6 +5,21 @@
  */
 package com.sishuok.es.common.web.controller;
 
+import java.io.Serializable;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.search.Searchable;
@@ -12,26 +27,13 @@ import com.sishuok.es.common.service.BaseService;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.permission.PermissionList;
 
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.persistence.Entity;
-import javax.validation.Valid;
-
-import java.io.Serializable;
-
 /**
  * 基础CRUD 控制器
  * <p>User: Zhang Kaitao
  * <p>Date: 13-2-23 下午1:20
  * <p>Version: 1.0
  */
+@SuppressWarnings("rawtypes")
 public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Serializable>
         extends BaseController<M, ID> {
 

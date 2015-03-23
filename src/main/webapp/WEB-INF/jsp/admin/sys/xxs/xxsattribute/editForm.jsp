@@ -55,7 +55,6 @@
         </div>
       </div>
       
-      <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
   
   
 
@@ -126,108 +125,6 @@
 				
 				
 				</div>
-		</form>
 
     </div>
     
-    
-    
-    
-      
-      
-      
-      
-      
-      
-      
-      
-      
-<div class="panel">
-
-
-   
-
-    <form:form id="editForm" method="post" commandName="m" cssClass="form-horizontal">
-
-            <es:showGlobalError commandName="m"/>
-
-            <form:hidden path="id"/>
-
-
-            <div class="control-group">
-                <form:label path="name" cssClass="control-label">名称</form:label>
-                <div class="controls">
-                    <form:input path="name" cssClass="input-xxlarge validate[required,minSize[2],maxSize[200]]"/>
-                </div>
-            </div>
-
-
-            <div class="control-group">
-                <form:label path="remarks" cssClass="control-label">描述</form:label>
-                <div class="controls">
-                    <c:choose>
-                    <c:when test="${op ne '查看'}">
-                        <form:textarea path="remarks" cssClass="validate[required]" cssStyle="width: 550px;height: 300px;"/>
-                    </c:when>
-                    <c:otherwise>
-                        ${m.remarks}
-                    </c:otherwise>
-                    </c:choose>
-
-               </div>
-            </div>
-
-
-            <c:if test="${op eq '新增'}">
-                <c:set var="icon" value="icon-file-alt"/>
-            </c:if>
-            <c:if test="${op eq '修改'}">
-                <c:set var="icon" value="icon-edit"/>
-            </c:if>
-            <c:if test="${op eq '删除'}">
-                <c:set var="icon" value="icon-trash"/>
-            </c:if>
-
-            <div class="control-group">
-                <div class="controls">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="${icon}"></i>
-                            ${op}
-                    </button>
-                    <a href="<es:BackURL/>" class="btn">
-                        <i class="icon-reply"></i>
-                        返回
-                    </a>
-                </div>
-            </div>
-
-
-    </form:form>
-</div>
-<es:contentFooter/>
-<%@include file="/WEB-INF/jsp/common/import-editor-js.jspf"%>
-<script type="text/javascript">
-    $(function () {
-        <c:choose>
-            <c:when test="${op eq '删除'}">
-                //删除时不验证 并把表单readonly
-                $.app.readonlyForm($("#editForm"), false);
-            </c:when>
-            <c:when test="${op eq '查看'}">
-                $.app.readonlyForm($("#		"), true);
-            </c:when>
-            <c:otherwise>
-                var validationEngine = $("#editForm").validationEngine();
-                <es:showFieldError commandName="m"/>
-            </c:otherwise>
-        </c:choose>
-
-        var editor = KindEditor.create('textarea[name="content"]', {
-            themeType: 'simple',
-            uploadJson: '${ctx}/kindeditor/upload',
-            fileManagerJson: '${ctx}/kindeditor/filemanager',
-            allowFileManager: true,
-            afterBlur: function(){this.sync();}
-        });
-    });
-</script>

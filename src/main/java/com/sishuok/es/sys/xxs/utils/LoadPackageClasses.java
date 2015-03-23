@@ -2,10 +2,9 @@ package com.sishuok.es.sys.xxs.utils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -27,7 +26,7 @@ public class LoadPackageClasses {
 
 	private List<TypeFilter> typeFilters = new LinkedList<TypeFilter>();
 
-	private Set<Class<?>> classSet = new HashSet<Class<?>>();
+	private List<Class<?>> classSet = new ArrayList<Class<?>>();
 
 	/**
 	 * 构造函数
@@ -58,7 +57,7 @@ public class LoadPackageClasses {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public Set<Class<?>> getClassSet() throws IOException,
+	public List<Class<?>> getClassList() throws IOException,
 			ClassNotFoundException {
 		this.classSet.clear();
 		if (!this.packagesList.isEmpty()) {
@@ -82,13 +81,6 @@ public class LoadPackageClasses {
 					}
 				}
 			}
-		}
-		// 输出日志
-		for (Class<?> clazz : this.classSet) {
-			System.out
-					.println(String.format(
-							"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm:",
-							clazz.getName()));
 		}
 		return this.classSet;
 	}

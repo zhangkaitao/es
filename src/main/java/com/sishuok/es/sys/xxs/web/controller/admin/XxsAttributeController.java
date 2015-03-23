@@ -5,17 +5,18 @@ package com.sishuok.es.sys.xxs.web.controller.admin;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.sishuok.es.common.entity.enums.BooleanEnum;
+import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.SpringUtils;
+import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.xxs.entity.XxsAttribute;
 import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
@@ -27,7 +28,7 @@ import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
  */
  
 @Controller("adminXxsAttributeController")
-@RequestMapping(value = "/admin/sys/xxs/xxsAttribute")
+@RequestMapping(value = "/admin/sys/xxs/xxsattribute")
 public class XxsAttributeController extends BaseCRUDController<XxsAttribute, Long> {
 
 	@Autowired
@@ -38,54 +39,54 @@ public class XxsAttributeController extends BaseCRUDController<XxsAttribute, Lon
     }
     @Override
     protected void setCommonData(Model model) {
-    	Field [] fields = entityClass.getDeclaredFields();
-        for(int i=0; i< fields.length; i++)
-        {
-            Field f = fields[i];
-            System.out.println(f.getName()+"---------------------"+f.getType()+"-----------------"+f.getType().getSimpleName()+"-----------------");
-        } 
-        
         LoadPackageClasses loadPackageClasses = (LoadPackageClasses) SpringUtils.getBean("loadPackageClasses");
         try {
-        	Set<Class<?>> dd = loadPackageClasses.getClassSet();
-        	
-        	Iterator<Class<?>> it = dd.iterator();  
-        	while (it.hasNext()) {  
-        	  String str = it.next().getSimpleName();  
-        	  System.out.println(str);  
-        	}  
-        	
+        	List<Class<?>> lists = loadPackageClasses.getClassList();
+        	for (int i = 0; i < lists.size(); i++) {
+        		String str = lists.get(i).getSimpleName();  
+          	  	System.out.println("-----------------------------实体类名称："+str+"--------------------------------");  
+          	  	Field [] fields = lists.get(i).getDeclaredFields();
+                for(int ii=0; ii< fields.length; ii++)
+                {
+                    Field f = fields[ii];
+                    System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
+                } 
+			}
+        	model.addAttribute("entityLists", lists);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        //String [] strs = SpringContextHolder.getApplicationContext().getBeanNamesForType(Entity.class);
-        //SpringUtils.getAliases(Entity.class);
-//        String [] strs = ctx.getBeanNamesForAnnotation(Entity.class);
-//        
-//        
-//        try {
-//            // 获取所有beanNames
-//        	String[] beanNames = ctx.getBeanDefinitionNames();
-//            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee:"+ctx.getBeanDefinitionCount());
-//            for (String beanName : beanNames) {
-//                 System.out.println(beanName);    
-//                //Entity en = ctx.findAnnotationOnBean(beanName,Entity.class);
-//                //System.out.println(en.name());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        
-//        
-//        System.out.println(strs);
-        
-       
-        model.addAttribute("booleanList", BooleanEnum.values());
+    }
+    
+    @RequestMapping(method = RequestMethod.GET)
+    @PageableDefaults(sort = "id=desc")
+    public String list(Searchable searchable, Model model) {
+
+        if (permissionList != null) {
+            this.permissionList.assertHasViewPermission();
+        }
+        LoadPackageClasses loadPackageClasses = (LoadPackageClasses) SpringUtils.getBean("loadPackageClasses");
+        try {
+        	List<Class<?>> lists = loadPackageClasses.getClassList();
+        	for (int i = 0; i < lists.size(); i++) {
+        		String str = lists.get(i).getSimpleName();  
+          	  	System.out.println("-----------------------------实体类名称："+str+"--------------------------------");  
+          	  	Field [] fields = lists.get(i).getDeclaredFields();
+                for(int ii=0; ii< fields.length; ii++)
+                {
+                    Field f = fields[ii];
+                    System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
+                } 
+			}
+        	model.addAttribute("entityLists", lists);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return super.list(searchable, model);
     }
     
 }

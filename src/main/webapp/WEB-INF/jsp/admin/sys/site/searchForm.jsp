@@ -17,7 +17,7 @@
 
 
           <a class="navbar-brand" data-toggle="collapse" data-target="#top-nav .navbar-collapse">
-            <i class="icon-fixed-width icon-lock"></i> 站点列表
+            <i class="icon-fixed-width icon-lock"></i> 列表
           </a>
         </div>
         <div class="navbar-collapse collapse">
