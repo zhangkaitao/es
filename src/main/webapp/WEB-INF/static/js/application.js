@@ -1,7 +1,7 @@
 //自己扩展的jquery函数
 //压缩时请把编码改成ANSI
-$.app = {
-		
+$.app = function(){
+	//alert("test app");	
 };
 $.table = {
 
@@ -15,12 +15,6 @@ $.table = {
 	        }
 
 	        table.attr("initialized", "true");
-
-	        $.table.initSort(table);
-	        $.table.initSearchForm(table);
-	        if(table.is(".move-table")) {
-	            $.movable.initMoveableTable(table);
-	        }
 
 	        //初始化table里的a标签
 	        $.table.initTableBtn(table);
@@ -526,3 +520,4 @@ $.table = {
 	        return checkbox;
 	    }
 	}
+

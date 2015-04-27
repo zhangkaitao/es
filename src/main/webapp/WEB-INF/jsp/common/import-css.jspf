@@ -4,6 +4,7 @@
 		<link href="${ctx}/static/vendor/select2/select2.css" type="text/css" media="screen" rel="stylesheet" />
 		<link href="${ctx}/static/vendor/selectize/selectize.css" type="text/css" media="screen" rel="stylesheet" />
 		<link href="${ctx}/static/vendor/selectize/selectize.bootstrap3.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="${ctx}/static/vendor/bootstrap-datepicker/css/datepicker.css" type="text/css" media="screen" rel="stylesheet" />
 		<link href="${ctx}/static/css/themes/bootstrap-xadmin.css" rel="stylesheet" type="text/css" id="site-theme"  />
 		<link href="${ctx}/static/css/xadmin.main.css" type="text/css" media="screen" rel="stylesheet" />
 		<link href="${ctx}/static/css/xadmin.plugins.css" type="text/css" media="screen" rel="stylesheet" />

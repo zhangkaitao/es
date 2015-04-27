@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.sishuok.es.common.Constants;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.SpringUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
@@ -41,26 +42,29 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
     @Override
     protected void setCommonData(Model model) {
         
-//        LoadPackageClasses loadPackageClasses = (LoadPackageClasses) SpringUtils.getBean("loadPackageClasses");
-//        try {
-//        	List<Class<?>> lists = loadPackageClasses.getClassList();
-//        	for (int i = 0; i < lists.size(); i++) {
-//        		String str = lists.get(i).getSimpleName();  
-//          	  	System.out.println("-----------------------------实体类名称："+str+"--------------------------------");  
-//          	  	Field [] fields = lists.get(i).getDeclaredFields();
-//                for(int ii=0; ii< fields.length; ii++)
-//                {
-//                    Field f = fields[ii];
-//                    System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
-//                } 
-//			}
-//        	model.addAttribute("entityLists", lists);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-    }
+        LoadPackageClasses loadPackageClasses = (LoadPackageClasses) SpringUtils.getBean("loadPackageClasses");
+        try {
+        	List<Class<?>> lists = loadPackageClasses.getClassList();
+        	for (int i = 0; i < lists.size(); i++) {
+        		String str = lists.get(i).getSimpleName();  
+          	  	System.out.println("-----------------------------实体类名称："+str+"--------------------------------");  
+          	  	Field [] fields = lists.get(i).getDeclaredFields();
+                for(int ii=0; ii< fields.length; ii++)
+                {
+                    Field f = fields[ii];
+                    System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
+                } 
+			}
+        	model.addAttribute("entityLists", lists);
+        	model.addAttribute("entityName", lists.get(0).getSimpleName());
+        	model.addAttribute("fields", lists.get(0).getDeclaredFields());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    	
+	    }
     
     @RequestMapping(method = RequestMethod.GET)
     @PageableDefaults(sort = "id=desc")
@@ -90,5 +94,4 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
 		}
         return super.list(searchable, model);
     }
-    
 }
