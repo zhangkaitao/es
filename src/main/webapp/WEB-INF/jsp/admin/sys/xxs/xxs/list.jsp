@@ -9,13 +9,9 @@
 	        	<a href="/">首页</a>
 	      	</li>
 	      	<li>
-	       	 	<a href="${ctx}/admin/sys/site">站点管理</a>
-	      	</li>
-	      	<li>
-	       	 	站点列表
+	       	 	实体列表
 	      	</li>
       	</ul>
-		<%@include file="searchForm.jsp" %>
     	<es:showMessage/>
 		<%@include file="functionForm.jsp" %>
   		<div class="results table-responsive">

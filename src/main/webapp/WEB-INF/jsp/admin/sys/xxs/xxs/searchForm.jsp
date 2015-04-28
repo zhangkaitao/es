@@ -67,7 +67,7 @@
           
           
           <div class="navbar-btn navbar-right hide-xs">
-    		<a href="${ctx}/admin/sys/site/create" class="btn btn-primary"><i class="icon-plus icon-white"></i> 新增 站点</a>
+    		<a href="${ctx}/admin/sys/xxs/xxs/create" class="btn btn-primary"><i class="icon-plus icon-white"></i> 新增 站点</a>
         </div>
      </div>
 </div>
