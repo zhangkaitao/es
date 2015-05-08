@@ -24,7 +24,10 @@
             ${op} xxs
 	     </li>
 	</ul>
+	<!-- 
 	<form class="exform" enctype="multipart/form-data" action="" method="post" id="user_form"> 
+	 -->
+	<form:form id="editForm" method="post" commandName="m" enctype="multipart/form-data" cssClass="exform">
 	   <div class="form-container row clearfix">
 	    <div id="column-0" class="formColumn column form-column full col col-sm-12 form-horizontal" horizontal="True" span="12">
 	     <div class="panel panel-default fieldset unsort no_title" id="box-0">
@@ -166,7 +169,7 @@
 	     <input type="submit" class="btn btn-default" value="保存并继续编辑" name="_continue" /> 
 	    </div> 
 	   </div> 
-	  </form>
+	   </form:form>
 </div>
    <%@include file="/WEB-INF/jsp/admin/index/footer.jsp"%>
 <es:contentFooter/>
