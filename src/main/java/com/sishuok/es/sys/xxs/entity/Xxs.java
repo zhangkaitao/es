@@ -23,13 +23,25 @@ public class Xxs extends BaseEntity<Long> {
 	@Column(name = "name")
 	private String name; 	
 	
+	@Column(name = "classname")
+	private String classname; 	
+	
 	@Column(name = "comments")
 	private String comments; 	
 
 	@Column(name = "remarks")
     private String remarks;
 
-    public String getName() {
+	
+	public String getClassname() {
+		return classname;
+	}
+	
+	public void setClassname(String classname) {
+		this.classname = classname;
+	}
+
+	public String getName() {
         return name;
     }
 

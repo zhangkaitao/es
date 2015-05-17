@@ -25,73 +25,60 @@
 			<li class="dropdown">
 			  <a id="drop-filter" class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
 			  <i class="icon-filter"></i> 过滤器
+			  
+			  <span class="badge badge-success"></span>
+			  
 			  <span class="caret"></span></a>
 			  <ul id="filter-menu" class="dropdown-menu" role="menu" aria-labelledby="drop-filter">
 			    
-			  	
-			<li class="dropdown-submenu filter-fk-search">
-			  <a><i class="icon-filter text-muted"></i> 用户</a>
-			  <div class="popover right">
-			    <div class="arrow"></div>
-			    <h3 class="popover-title">
-			      搜索 用户
-			    </h3>
-			    <div class="popover-content">
-			      <form class="exform" method="get" action="">
-			        
-			          <input name="_p_user__id__exact" class="select-search" type="hidden" value="" 
-			          data-search-url="/auth/user/" data-label=" " data-choices="?"
-			          data-placeholder="搜索 用户…"/>
+			    <li><a href="?" class="btn-clear-search"><i class="icon-trash"></i> 清除过滤器</a></li>
+    			<li class="divider"></li>
+			    
+				 <!-- 
+				<li class="dropdown-submenu filter-fk-search">
+				  <a><i class="icon-filter text-muted"></i> 用户名</a>
+				  <div class="popover right">
+				    <div class="arrow"></div>
+				    <h3 class="popover-title">
+				      搜索 用户名
+				    </h3>
+				    <div class="popover-content">
+				      <form class="exform" method="get" action="">
+				        
+				          <input name="_p_user__id__exact" class="select-search" type="hidden" value="" 
+				          data-search-url="/auth/user/" data-label=" " data-choices="?"
+				          data-placeholder="搜索 用户…"/>
+				
+				          <button type="submit" class="btn btn-success">应用</button>
+				        
+				      </form>
+				    </div>
+				  </div>
+				</li>
+				  -->	
+				<li class="dropdown-submenu filter-char">
+				  <a><i class="icon-filter text-muted"></i> 用户主机IP</a>
+				  <div class="popover right">
+				    <div class="arrow"></div>
+				    <h3 class="popover-title">
+				      搜索 用户主机IP
+				    </h3>
+				    <div class="popover-content">
+				      <form id="searchForm" class="form-inline search-form">
+				        
+				        <div class="input-group">
+				          
+				          <esform:input path="search.systemHost_like" cssClass="input-char form-control" type="text" placeholder="用户主机IP 模糊匹配"/>
+				          <span class="input-group-btn">
+				          
+				            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
+				          </span>
+				        </div>
+				      </form>
+				    </div>
+				  </div>
+				</li>
 			
-			          <button type="submit" class="btn btn-success">应用</button>
-			        
-			      </form>
-			    </div>
-			  </div>
-			</li>
-			
-			<li class="dropdown-submenu filter-char">
-			  <a><i class="icon-filter text-muted"></i> Widget类型</a>
-			  <div class="popover right">
-			    <div class="arrow"></div>
-			    <h3 class="popover-title">
-			      搜索 Widget类型
-			    </h3>
-			    <div class="popover-content">
-			      <form method="get" action="">
-			        
-			        <div class="input-group">
-			          <input name="_p_widget_type__contains" class="input-char form-control" type="text" value="" placeholder="输入 Widget类型…"/>
-			          <span class="input-group-btn">
-			          
-			            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
-			          </span>
-			        </div>
-			      </form>
-			    </div>
-			  </div>
-			</li>
-			<li class="dropdown-submenu filter-char">
-			  <a><i class="icon-filter text-muted"></i> 页面</a>
-			  <div class="popover right">
-			    <div class="arrow"></div>
-			    <h3 class="popover-title">
-			      搜索 页面
-			    </h3>
-			    <div class="popover-content">
-			      <form method="get" action="">
-			        
-			        <div class="input-group">
-			          <input name="_p_page_id__contains" class="input-char form-control" type="text" value="" placeholder="输入 页面…"/>
-			          <span class="input-group-btn">
-			          
-			            <button class="btn btn-success" type="submit"><i class="icon-search icon-white"></i></button>
-			          </span>
-			        </div>
-			      </form>
-			    </div>
-			  </div>
-			</li>
 			  </ul>
 			</li>
           </ul>

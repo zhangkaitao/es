@@ -18,9 +18,13 @@
     <tbody>
    			<c:forEach items="${xxsLists}" var="m">
 				             <tr class="grid-item">
-				      			<td>${m.name}</td>
+				      			<td>${m.classname}</td>
 				      			<td>${m.comments}</td>
 								<td><a href="${ctx}/admin/sys/xxs/xxs/${m.id}/update">修改属性</a></td>
+								
+								
+								
+								
 				      		</tr>
     		</c:forEach>
     		<c:forEach items="${classLists}" var="m">
@@ -28,6 +32,13 @@
 				      			<td>${m.simpleName}</td>
 				      			<td>--------</td>
 								<td><a href="${ctx}/admin/sys/xxs/xxs/${m.canonicalName}/create">设置属性</a></td>
+								
+								
+								${ctx}/showcase/product/product/category-"+ id + "/create" +
+                            "?BackURL=" + $.table.tableURL($(".table"))
+								
+								
+								<td><a href="${ctx}/admin/sys/xxs/xxs/xxs-${m.canonicalName}/create">设置属性</a></td>
 				      		</tr>
     		</c:forEach>
     </tbody>
