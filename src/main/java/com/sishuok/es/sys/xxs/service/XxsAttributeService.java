@@ -3,6 +3,8 @@
  */
 package com.sishuok.es.sys.xxs.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.sishuok.es.common.service.BaseService;
@@ -16,6 +18,10 @@ import com.sishuok.es.sys.xxs.entity.XxsAttribute;
  
 @Service
 public class XxsAttributeService extends BaseService<XxsAttribute, Long> {
-
-
+	
+	public void save(List<XxsAttribute> attributes) {
+		for (int i = 0; i < attributes.size(); i++) {
+			baseRepository.save(attributes.get(i));
+		}
+    }
 }

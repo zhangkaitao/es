@@ -6,7 +6,6 @@ package com.sishuok.es.sys.xxs.web.controller.admin;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,8 @@ import com.sishuok.es.common.utils.SpringUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
 import com.sishuok.es.sys.xxs.entity.Xxs;
+import com.sishuok.es.sys.xxs.entity.XxsAttribute;
+import com.sishuok.es.sys.xxs.service.XxsAttributeService;
 import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
 
 /**
@@ -37,6 +38,8 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
 
 	@Autowired
     private ApplicationContext ctx;
+	@Autowired
+    private XxsAttributeService xxsAttributeService;
 	
     public XxsController() {
         setResourceIdentity("sys:xxs");
@@ -55,7 +58,7 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         	classLists = loadPackageClasses.getClassList();
         	for (int i = 0; i < classLists.size(); i++) {
         		String str = classLists.get(i).getSimpleName();  
-          	  	System.out.println("-----------------------------实体类名称："+str+"--------------------------------"+classLists.get(i).getCanonicalName()+"77777777777777777777777777777777");  
+          	  	//System.out.println("-----------------------------实体类名称："+str+"--------------------------------"+classLists.get(i).getCanonicalName()+"77777777777777777777777777777777");  
           	  	Field [] fields = classLists.get(i).getDeclaredFields();
                 for(int ii=0; ii< fields.length; ii++)
                 {
@@ -70,7 +73,7 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
 		}
         List<Xxs> xxsLists = baseService.findAll();
         //删除已设置的实体类
-        Iterator <Class<?>> it = classLists.iterator();  
+        //Iterator <Class<?>> it = classLists.iterator();  
 //        while(it.hasNext())  
 //        {  
 //        	for (int j = 0; j < xxsLists.size(); j++) {
@@ -108,40 +111,68 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         return viewName("editForm");
     }
     
+    @RequestMapping(value = "{id}/update888", method = RequestMethod.GET)
+    public String showUpdateForm(@PathVariable("id") Long id,Model model) {
+        if (permissionList != null) {
+            this.permissionList.assertHasCreatePermission();
+        }
+        System.out.println("当前修改的xxs的id："+id);
+        
+        Xxs xxs = baseService.findOne(id);
+        
+		model.addAttribute("c",xxs);
+        
+        model.addAttribute(Constants.OP_NAME, "修改");
+        if (!model.containsAttribute("m")) {
+            model.addAttribute("m", newModel());
+        }
+        return viewName("editForm");
+    }
     
-    @RequestMapping(value = "{name}/update", method = RequestMethod.GET)
-    public String showUpdateForm(@PathVariable("name") String name,Model model) {
+    
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(Xxs xxs,String[] xxsname,String[] xxssimpleName,Model model) {
+    	
+    	if (permissionList != null) {
+    		this.permissionList.assertHasCreatePermission();
+    	}
+    	//xxs.setName(name);
+    	//xxs.setComments(comments);
+    	List<XxsAttribute> attributes = new ArrayList<XxsAttribute>();
+    	XxsAttribute attribute = new XxsAttribute();
+    	for (int i = 0; i < xxsname.length; i++) {
+    		attribute.setName(xxsname[i]);
+    		attribute.setXxs(xxs);
+    		attributes.add(attribute);
+    		
+    	}
+    	baseService.save(xxs);
+    	xxsAttributeService.save(attributes);
+    	
+    	Searchable searchable = null;
+    	return list(searchable,model);
+    }
+    
+    @RequestMapping(value = "/updateppp", method = RequestMethod.POST)
+    public String update(Xxs xxs,String[] name,String[] simpleName,Model model) {
 
     	if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
-    	if("".equals(name)){
-    		LoadPackageClasses loadPackageClasses = (LoadPackageClasses) SpringUtils.getBean("loadPackageClasses");
-    		List<Class<?>> lists;
-			try {
-				lists = loadPackageClasses.getClassList();
-				for (int i = 0; i < lists.size(); i++) {
-	        		String str = lists.get(i).getSimpleName();  
-	        		if(str.equals(name)){
-	        			//System.out.println("当前实体对象实体类名称："+str+"--------------------------------");  
-		          	  	Field [] fields = lists.get(i).getDeclaredFields();
-		                for(int ii=0; ii< fields.length; ii++)
-		                {
-		                    Field f = fields[ii];
-		                    //System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
-		                } 
-	        		}
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-    	}
-        setCommonData(model);
-        model.addAttribute(Constants.OP_NAME, "新增");
-        
-        return viewName("editForm");
+    	System.out.println(name);
+    	
+    	List<XxsAttribute> attributes = new ArrayList<XxsAttribute>();
+    	XxsAttribute attribute = new XxsAttribute();
+    	for (int i = 0; i < name.length; i++) {
+    		attribute.setName(name[i]);
+    		attributes.add(attribute);
+    		
+		}
+    	baseService.save(xxs);
+    	xxsAttributeService.save(attributes);
+    	
+        Searchable searchable = null;
+        return list(searchable,model);
     }
     
 }

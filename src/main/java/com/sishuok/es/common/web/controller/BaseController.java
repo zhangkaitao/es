@@ -6,10 +6,6 @@
 package com.sishuok.es.common.web.controller;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;

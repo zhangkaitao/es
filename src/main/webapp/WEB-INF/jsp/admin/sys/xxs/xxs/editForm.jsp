@@ -21,7 +21,7 @@
             <c:if test="${op eq '删除'}">
                 <c:set var="icon" value="icon-trash"/> 
             </c:if>
-            ${op} xxs
+            ${op} 实体管理
 	     </li>
 	</ul>
 	<!-- 
@@ -97,10 +97,10 @@
 			   		<c:forEach items="${c.declaredFields}" var="t">
 				      		<tr class="grid-item">
 				      			
-				      			<td>${t.name}</td>
-				      			<td>${t.type.simpleName}</td>
+				      			<td>${t.name}<input name="xxsname" value="${t.name}"/></td>
+				      			<td>${t.type.simpleName}<input name="xxssimpleName" value="${t.type.simpleName}"/></td>
 				      			<td>
-	         						<input class="textinput textInput form-control" id="id_username" maxlength="30" name="username" type="text" /> 
+	         						<input class="textinput textInput form-control" id="id_username" maxlength="30" name="displayName" type="text" /> 
 	        					</td>
 	        					<td>
 				      				<select name="" class="form-control">

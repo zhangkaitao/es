@@ -15,7 +15,7 @@
 <script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.bookmark.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/xadmin.widget.select.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.filters.js"></script>
-<script type="text/javascript" src="${ctx}/static/js/xadmin.plugin.actions.js"></script>
+<script type="text/javascript" src="${ctx}/static/js/plugin/actions.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/xadmin.page.list.js"></script>
 <script type="text/javascript" src="${ctx}/static/js/xadmin.page.form.js"></script>
 

@@ -13,6 +13,7 @@
 							  </a>
 						</h6>
 					</div>
+					
 					<div id="nav-panel-1" class="list-group panel-collapse collapse in">
 						<a href="/admin/sys/user/online" class="list-group-item active">
 							 <i class="icon-fixed-width icon-globe"></i> 用户在线列表</span>

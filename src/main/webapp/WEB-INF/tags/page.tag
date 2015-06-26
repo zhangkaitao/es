@@ -37,7 +37,6 @@
      <ul  class="pagination">
      -->
     <ul  class="pagination pagination-sm pagination-left pagination-inline">
-    	<li><span><span class="text-success">${page.totalElements}</span> 条记录</span></li>
         <c:choose>
             <c:when test="${page.firstPage}">
                 <li class="disabled"><a title="首页">首页</a></li>
@@ -86,7 +85,10 @@
                 <li><a href="#" onclick="$.table.turnPage('${pageSize}', ${page.totalPages}, this);" title="尾页"><span>尾页</span></a></li>
             </c:otherwise>
         </c:choose>
+    	<li><span>共计<span class="text-success">${page.totalElements}</span> 条记录</span></li>
     <li>
         <span class="page-info">[共${page.totalPages}页]</span >
     </li>
-    </ul>
+ </ul>
+ 
+ 
