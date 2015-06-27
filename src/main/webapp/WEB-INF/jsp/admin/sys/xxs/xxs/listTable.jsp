@@ -18,7 +18,7 @@
 					<c:if test="${m.simpleName == x.classname}">
 						<c:set var="state" value="true"></c:set>
 						<td>${x.name}</td>
-						<td><a href="${ctx}/admin/sys/xxs/xxs/${x.id}/update888">修改属性</a></td>
+						<td><a href="${ctx}/admin/sys/xxs/xxs/${x.id}/modify">修改属性</a></td>
 					</c:if>
 				</c:forEach>
 				<c:if test="${!state}">

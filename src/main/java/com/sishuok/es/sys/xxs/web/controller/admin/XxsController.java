@@ -4,7 +4,6 @@
 package com.sishuok.es.sys.xxs.web.controller.admin;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,16 +55,16 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         List<Class<?>> classLists = new ArrayList<Class<?>>();
         try {
         	classLists = loadPackageClasses.getClassList();
-        	for (int i = 0; i < classLists.size(); i++) {
-        		String str = classLists.get(i).getSimpleName();  
-          	  	//System.out.println("-----------------------------实体类名称："+str+"--------------------------------"+classLists.get(i).getCanonicalName()+"77777777777777777777777777777777");  
-          	  	Field [] fields = classLists.get(i).getDeclaredFields();
-                for(int ii=0; ii< fields.length; ii++)
-                {
-                    Field f = fields[ii];
-                    //System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
-                } 
-			}
+//        	for (int i = 0; i < classLists.size(); i++) {
+//        		String str = classLists.get(i).getSimpleName();  
+//          	  	//System.out.println("-----------------------------实体类名称："+str+"--------------------------------"+classLists.get(i).getCanonicalName()+"77777777777777777777777777777777");  
+//          	  	Field [] fields = classLists.get(i).getDeclaredFields();
+//                for(int ii=0; ii< fields.length; ii++)
+//                {
+//                    Field f = fields[ii];
+//                    //System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
+//                } 
+//			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -77,22 +76,26 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         return viewName("list");
     }
     
-    @RequestMapping(value = "{name}/create", method = RequestMethod.GET)
-    public String showCreateForm(@PathVariable("name") String name,Model model) {
+    @RequestMapping(value = "{allclassname}/create", method = RequestMethod.GET)
+    public String showCreateForm(@PathVariable("allclassname") String allclassname,Model model) {
 
         if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
-        System.out.println("当前名字："+name);
-        Class<?> c = null ;
+        System.out.println("当前名字："+allclassname);
+        Class<?> loadclass = null ;
         try {
-			c = Class.forName(name);
+			loadclass = Class.forName(allclassname);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        Xxs xxs = new Xxs();
+        xxs.setAllclassname(allclassname);
+        xxs.setClassname(loadclass.getSimpleName());
         setCommonData(model);
-		model.addAttribute("c",c);
+		model.addAttribute("m",xxs);
+		model.addAttribute("c",loadclass);
         
         model.addAttribute(Constants.OP_NAME, "新增");
         if (!model.containsAttribute("m")) {
@@ -101,16 +104,27 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         return viewName("editForm");
     }
     
-    @RequestMapping(value = "{id}/update888", method = RequestMethod.GET)
-    public String showUpdateForm(@PathVariable("id") Long id,Model model) {
+    @RequestMapping(value = "{id}/modify", method = RequestMethod.GET)
+    public String showModifyForm(@PathVariable("id") Long id,Model model) {
         if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
         System.out.println("当前修改的xxs的id："+id);
         
+        
+        
         Xxs xxs = baseService.findOne(id);
         
-		model.addAttribute("c",xxs);
+        Class<?> loadclass = null ;
+        try {
+			loadclass = Class.forName(xxs.getAllclassname());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        model.addAttribute("m",xxs);
+		model.addAttribute("c",loadclass);
         
         model.addAttribute(Constants.OP_NAME, "修改");
         if (!model.containsAttribute("m")) {

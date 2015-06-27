@@ -5,9 +5,6 @@
  */
 package com.sishuok.es.sys.user.web.controller;
 
-import java.util.List;
-
-import org.apache.catalina.connector.Request;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.session.mgt.OnlineSession;
@@ -21,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.MessageUtils;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.sys.resource.entity.tmp.Menu;
 import com.sishuok.es.sys.resource.service.ResourceService;
-import com.sishuok.es.sys.user.entity.User;
 import com.sishuok.es.sys.user.entity.UserOnline;
 import com.sishuok.es.sys.user.service.UserService;
 

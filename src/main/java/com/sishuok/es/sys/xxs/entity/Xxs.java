@@ -24,21 +24,28 @@ public class Xxs extends BaseEntity<Long> {
 	private String name; 	
 	
 	@Column(name = "classname")
-	private String classname; 	
+	private String classname; 
+	
+	@Column(name = "allclassname")
+	private String allclassname; 	
 	
 	@Column(name = "comments")
 	private String comments; 	
 
-	@Column(name = "remarks")
-    private String remarks;
-
-	
 	public String getClassname() {
 		return classname;
 	}
 	
 	public void setClassname(String classname) {
 		this.classname = classname;
+	}
+	
+	public String getAllclassname() {
+		return allclassname;
+	}
+	
+	public void setAllclassname(String allclassname) {
+		this.allclassname = allclassname;
 	}
 
 	public String getName() {
@@ -47,14 +54,6 @@ public class Xxs extends BaseEntity<Long> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
     }
 
 	public String getComments() {

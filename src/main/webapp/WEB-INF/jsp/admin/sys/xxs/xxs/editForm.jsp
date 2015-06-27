@@ -28,6 +28,10 @@
 	<form class="exform" enctype="multipart/form-data" action="" method="post" id="user_form"> 
 	 -->
 	<form:form id="editForm" method="post" action="/admin/sys/xxs/xxs/create" commandName="m" enctype="multipart/form-data" cssClass="exform">
+	
+			<es:showGlobalError commandName="m"/>
+            <form:hidden path="id"/>
+            
 	   <div class="form-container row clearfix">
 	    <div id="column-0" class="formColumn column form-column full col col-sm-12 form-horizontal" horizontal="True" span="12">
 	     <div class="panel panel-default fieldset unsort no_title" id="box-0">
@@ -40,7 +44,8 @@
 	       <div id="div_id_password2" class="form-group">
 	        <label for="id_password2" class="control-label  requiredField">选择实体类</label>
 	        <div class="controls ">
-	        	<form:input path="classname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${c.simpleName}"/>
+	        	<form:input path="classname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${m.classname}"/>
+	        	<form:input path="allclassname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${m.allclassname}"/>
 	        </div>
 	       </div>
 	       <div id="div_id_username" class="form-group">
