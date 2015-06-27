@@ -7,32 +7,6 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-		<li class="dropdown g-setlang">
-		  <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-		  <i class="icon-globe icon-white"></i> <span class="hide-sm">
-		   	 简体中文
-		    <i class="caret"></i></span></a>
-		  <ul id="g-setlang-menu" class="dropdown-menu" role="menu">
-		    
-		    
-		      <li><a data-lang="de"><i class="icon-flag"></i> Deutsch (de)</a></li>
-		    
-		      <li><a data-lang="en"><i class="icon-flag"></i> English (en)</a></li>
-		    
-		      <li><a data-lang="ja"><i class="icon-flag"></i> 日本語 (ja)</a></li>
-		    
-		      <li><a data-lang="lt"><i class="icon-flag"></i> Lietuvi?kai (lt)</a></li>
-		    
-		      <li><a data-lang="nl"><i class="icon-flag"></i> Nederlands (nl)</a></li>
-		    
-		      <li><a data-lang="pl"><i class="icon-flag"></i> polski (pl)</a></li>
-		    
-		      <li><a data-lang="pt"><i class="icon-flag"></i> Português (pt)</a></li>
-		    
-		      <li class="active"><a data-lang="zh-cn"><i class="icon-flag"></i> 简体中文 (zh-cn)</a></li>
-		    
-		  </ul>
-		</li>
 		<li class="dropdown g-theme">
 			<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class=" icon-wrench icon-white"></i> <span class="hide-sm">主题 <i class="caret"></i></span></a>
 			<ul id="g-theme-menu" class="dropdown-menu" role="menu">

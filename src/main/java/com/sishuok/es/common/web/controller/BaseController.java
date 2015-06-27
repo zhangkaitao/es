@@ -7,6 +7,7 @@ package com.sishuok.es.common.web.controller;
 
 import java.io.Serializable;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.utils.ReflectUtils;
+import com.sishuok.es.sys.xxs.service.XxsService;
 
 /**
  * 基础控制器
@@ -31,6 +33,9 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
      * 实体类型
      */
     protected final Class<M> entityClass;
+    
+    @Autowired
+    private XxsService xxsService;
 
     private String viewPrefix;
 

@@ -72,16 +72,6 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
 			e.printStackTrace();
 		}
         List<Xxs> xxsLists = baseService.findAll();
-        //删除已设置的实体类
-        //Iterator <Class<?>> it = classLists.iterator();  
-//        while(it.hasNext())  
-//        {  
-//        	for (int j = 0; j < xxsLists.size(); j++) {
-//				if (it.next().getSimpleName().equals(xxsLists.get(j).getClassname())) {
-//					it.remove();
-//				}
-//			}
-//        } 
         model.addAttribute("xxsLists", xxsLists);
         model.addAttribute("classLists", classLists);
         return viewName("list");
