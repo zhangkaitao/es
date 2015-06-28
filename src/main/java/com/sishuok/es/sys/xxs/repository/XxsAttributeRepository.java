@@ -3,7 +3,11 @@
  */
 package com.sishuok.es.sys.xxs.repository;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import com.sishuok.es.common.repository.BaseRepository;
 import com.sishuok.es.sys.xxs.entity.XxsAttribute;
 
@@ -15,4 +19,6 @@ import com.sishuok.es.sys.xxs.entity.XxsAttribute;
 @Repository
 public interface XxsAttributeRepository extends BaseRepository<XxsAttribute, Long> {
 	
+	@Query("from XxsAttribute o where o.xxs.name=?1")
+	List<XxsAttribute> findByName(String name);
 }

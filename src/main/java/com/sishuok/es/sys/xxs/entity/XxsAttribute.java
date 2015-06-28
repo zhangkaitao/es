@@ -28,8 +28,10 @@ public class XxsAttribute extends BaseEntity<Long> {
     @Fetch(FetchMode.SELECT)
 	private Xxs xxs;	// 归属表
 	
-	@Column(name = "name")
-	private String name; 		// 属性名
+    @Column(name = "name")
+    private String name; 		// 属性名
+	@Column(name = "display_name")
+	private String displayName; 		// 属性名
 	@Column(name = "comments")
 	private String comments;	// 描述
 	@Column(name = "java_type")
@@ -47,8 +49,16 @@ public class XxsAttribute extends BaseEntity<Long> {
 	@Column(name = "sort")
 	private Integer sort;		// 排序（升序）
 	
-    public String getName() {
-        return name;
+	public String getName() {
+		return name;
+	}
+	
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+	
+    public String getDisplayName() {
+        return displayName;
     }
 
     public void setName(String name) {

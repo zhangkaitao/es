@@ -27,7 +27,7 @@
 	<!-- 
 	<form class="exform" enctype="multipart/form-data" action="" method="post" id="user_form"> 
 	 -->
-	<form:form id="editForm" method="post" action="/admin/sys/xxs/xxs/create" commandName="m" enctype="multipart/form-data" cssClass="exform">
+	<form:form id="editForm" method="post" action="/admin/sys/xxs/xxs/save" commandName="m" enctype="multipart/form-data" cssClass="exform">
 	
 			<es:showGlobalError commandName="m"/>
             <form:hidden path="id"/>
@@ -45,7 +45,7 @@
 	        <label for="id_password2" class="control-label  requiredField">选择实体类</label>
 	        <div class="controls ">
 	        	<form:input path="classname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${m.classname}"/>
-	        	<form:input path="allclassname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${m.allclassname}"/>
+	        	<form:hidden path="allclassname" value="${m.allclassname}"/>
 	        </div>
 	       </div>
 	       <div id="div_id_username" class="form-group">
@@ -99,13 +99,12 @@
 			      </tr>
 			    </thead>
 			    <tbody>
-			   		<c:forEach items="${c.declaredFields}" var="t">
+			   		<c:forEach items="${xxsAttributes}" var="t">
 				      		<tr class="grid-item">
-				      			
-				      			<td>${t.name}<input name="xxsname" value="${t.name}"/></td>
-				      			<td>${t.type.simpleName}<input name="xxssimpleName" value="${t.type.simpleName}"/></td>
+				      			<td>${t.name}<input name="xxsname" type="hidden" value="${t.name}"/></td>
+				      			<td>${t.javaType}<input name="xxssimpleName" type="hidden" value="${t.javaType}"/></td>
 				      			<td>
-	         						<input class="textinput textInput form-control" id="id_username" maxlength="30" name="displayName" type="text" /> 
+	         						<input class="textinput textInput form-control" id="id_username" maxlength="30" name="displayName" type="text" value="${t.displayName}" /> 
 	        					</td>
 	        					<td>
 				      				<select name="" class="form-control">

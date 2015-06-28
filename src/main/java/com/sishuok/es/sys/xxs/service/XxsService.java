@@ -17,5 +17,4 @@ import com.sishuok.es.sys.xxs.entity.Xxs;
 @Service
 public class XxsService extends BaseService<Xxs, Long> {
 
-
 }

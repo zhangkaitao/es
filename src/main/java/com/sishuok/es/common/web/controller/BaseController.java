@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sishuok.es.common.entity.AbstractEntity;
 import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.utils.ReflectUtils;
+import com.sishuok.es.sys.xxs.service.XxsAttributeService;
 import com.sishuok.es.sys.xxs.service.XxsService;
 
 /**
@@ -36,6 +37,8 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
     
     @Autowired
     private XxsService xxsService;
+    @Autowired
+    private XxsAttributeService xxsAttributeService;
 
     private String viewPrefix;
 
@@ -54,7 +57,9 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
     protected void setCommonData(Model model) {
     	//将列设置数据放入通用资源中
         
-        
+    	System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvv"+entityClass.getName());
+        System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvv"+entityClass.getSimpleName());
+        //xxsService.
         model.addAttribute("booleanList", BooleanEnum.values());
         
     }

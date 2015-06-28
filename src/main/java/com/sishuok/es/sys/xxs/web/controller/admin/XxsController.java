@@ -4,6 +4,7 @@
 package com.sishuok.es.sys.xxs.web.controller.admin;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +97,23 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         setCommonData(model);
 		model.addAttribute("m",xxs);
 		model.addAttribute("c",loadclass);
+		
+		
+		List<XxsAttribute> xxsAttributes = new ArrayList<XxsAttribute>();
+		Field[] fields = loadclass.getDeclaredFields();
+		XxsAttribute xa = null;
+		System.out.println("77777777777777777"+fields.length);
+		
+		for (int i = 0; i < fields.length; i++) {
+			xa = new XxsAttribute();
+			xa.setName(fields[i].getName());
+			xa.setJavaType(fields[i].getType().getSimpleName());
+			xxsAttributes.add(xa);
+		}
+		
+		model.addAttribute("xxsAttributes",xxsAttributes);
+		
+		
         
         model.addAttribute(Constants.OP_NAME, "新增");
         if (!model.containsAttribute("m")) {
@@ -111,10 +129,10 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         }
         System.out.println("当前修改的xxs的id："+id);
         
-        
-        
         Xxs xxs = baseService.findOne(id);
-        
+        System.out.println("classname:"+xxs.getClassname());
+        List<XxsAttribute> xas = xxsAttributeService.findByName(xxs.getClassname());
+//      List<XxsAttribute> xas = null;
         Class<?> loadclass = null ;
         try {
 			loadclass = Class.forName(xxs.getAllclassname());
@@ -125,6 +143,35 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         
         model.addAttribute("m",xxs);
 		model.addAttribute("c",loadclass);
+		
+		List<XxsAttribute> xxsAttributes = new ArrayList<XxsAttribute>();
+		Field[] fields = loadclass.getDeclaredFields();
+		XxsAttribute xa = null;
+		System.out.println("77777777777777777"+fields.length);
+		System.out.println("77777777777777777"+xas.size());
+		
+		for (int i = 0; i < fields.length; i++) {
+			xa = new XxsAttribute();
+			boolean isture = true;
+			for (int j = 0; j < xas.size(); j++) {
+				System.out.println("ttttttttttttttttttttttttt"+xas.get(j).getName());
+				System.out.println("ttttttttttttttttttttttttt"+loadclass.getDeclaredFields()[i].getName());
+				if(xas.get(j).getName().equals(loadclass.getDeclaredFields()[i].getName())){
+					xxsAttributes.add(xas.get(j));
+					isture = false;
+					break;
+				}
+			}
+			if(isture){
+				System.out.println("44444444444444444444"+fields[i].getType().getSimpleName());
+				xa.setName(fields[i].getName());
+				xa.setJavaType(fields[i].getType().getSimpleName());
+				//xa.setDisplayName();
+				xxsAttributes.add(xa);
+			}
+		}
+		
+		model.addAttribute("xxsAttributes",xxsAttributes);
         
         model.addAttribute(Constants.OP_NAME, "修改");
         if (!model.containsAttribute("m")) {
@@ -135,20 +182,23 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
     
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Xxs xxs,String[] xxsname,String[] xxssimpleName,Model model) {
+    public String save(Xxs xxs,String[] xxsname,String[] xxssimpleName,String[] displayName,Model model) {
     	
     	if (permissionList != null) {
     		this.permissionList.assertHasCreatePermission();
     	}
+    	System.out.println("5555555555555555555555555555555");
     	//xxs.setName(name);
     	//xxs.setComments(comments);
     	List<XxsAttribute> attributes = new ArrayList<XxsAttribute>();
-    	XxsAttribute attribute = new XxsAttribute();
+    	XxsAttribute attribute = null;
     	for (int i = 0; i < xxsname.length; i++) {
+    		attribute = new XxsAttribute();
     		attribute.setName(xxsname[i]);
+    		attribute.setJavaType(xxssimpleName[i]);
+    		attribute.setDisplayName(displayName[i]);
     		attribute.setXxs(xxs);
     		attributes.add(attribute);
-    		
     	}
     	baseService.save(xxs);
     	xxsAttributeService.save(attributes);
@@ -166,8 +216,9 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
     	System.out.println(name);
     	
     	List<XxsAttribute> attributes = new ArrayList<XxsAttribute>();
-    	XxsAttribute attribute = new XxsAttribute();
+    	XxsAttribute attribute = null;
     	for (int i = 0; i < name.length; i++) {
+    		attribute = new XxsAttribute();
     		attribute.setName(name[i]);
     		attributes.add(attribute);
     		
