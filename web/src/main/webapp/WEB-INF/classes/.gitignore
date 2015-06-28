@@ -1,0 +1,16 @@
+/ValidationMessages.properties
+/com
+/ehcache
+/logback.xml
+/messages.properties
+/org
+/resources.properties
+/spring-config-cache.xml
+/spring-config-monitor.xml
+/spring-config-shiro.xml
+/spring-config-task.xml
+/spring-config.xml
+/spring-mvc-shiro.xml
+/spring-mvc.xml
+/spring-speed-up.xml
+/support
