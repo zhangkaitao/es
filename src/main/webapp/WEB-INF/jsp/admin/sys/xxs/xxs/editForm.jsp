@@ -100,6 +100,7 @@
 			    </thead>
 			    <tbody>
 			   		<c:forEach items="${xxsAttributes}" var="t">
+			   				<input name="ids" type="hidden" value="${t.id}"/>
 				      		<tr class="grid-item">
 				      			<td>${t.name}<input name="xxsname" type="hidden" value="${t.name}"/></td>
 				      			<td>${t.javaType}<input name="xxssimpleName" type="hidden" value="${t.javaType}"/></td>

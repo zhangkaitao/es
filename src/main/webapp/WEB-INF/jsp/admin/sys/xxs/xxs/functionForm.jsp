@@ -14,3 +14,4 @@
       <button type="button" class="btn btn-default btn-sm layout-full"><i class="icon-fullscreen"></i></button>
     </div>
 </div>
+

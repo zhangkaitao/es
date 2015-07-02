@@ -9,8 +9,9 @@
             <a class="reverse-all" href="javascript:;">反选</a>
         </th>
         <th style="width: 100px" sort="id">编号</th>
-        <th sort="key">键</th>
-        <th>值</th>
+        <c:forEach items="${commonXxs}" var="x">
+        	<th sort="${x.name }">${x.displayName }</th>
+        </c:forEach>
     </tr>
     </thead>
     <tbody>
@@ -20,8 +21,10 @@
             <td>
                 <a class="btn btn-link btn-edit" href="${ctx}/admin/maintain/keyvalue/${m.id}">${m.id}</a>
             </td>
-            <td>${m.key}</td>
-            <td>${m.value}</td>
+            
+            <c:forEach items="${commonXxs}" var="x">
+	        	<td>${m.${x.name}}</td>
+	        </c:forEach>
         </tr>
     </c:forEach>
     </tbody>

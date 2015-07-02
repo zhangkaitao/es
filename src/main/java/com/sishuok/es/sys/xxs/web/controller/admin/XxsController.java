@@ -131,7 +131,8 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
         
         Xxs xxs = baseService.findOne(id);
         System.out.println("classname:"+xxs.getClassname());
-        List<XxsAttribute> xas = xxsAttributeService.findByName(xxs.getClassname());
+        List<XxsAttribute> xas = xxsAttributeService.findByXxsId(xxs.getId());
+        System.out.println(xas.size());
 //      List<XxsAttribute> xas = null;
         Class<?> loadclass = null ;
         try {
@@ -172,17 +173,17 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
 		}
 		
 		model.addAttribute("xxsAttributes",xxsAttributes);
-        
         model.addAttribute(Constants.OP_NAME, "修改");
         if (!model.containsAttribute("m")) {
             model.addAttribute("m", newModel());
         }
+        setCommonData(model);
         return viewName("editForm");
     }
     
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Xxs xxs,String[] xxsname,String[] xxssimpleName,String[] displayName,Model model) {
+    public String save(Xxs xxs,Long[]ids, String[] xxsname,String[] xxssimpleName,String[] displayName,Model model) {
     	
     	if (permissionList != null) {
     		this.permissionList.assertHasCreatePermission();
@@ -195,39 +196,16 @@ public class XxsController extends BaseCRUDController<Xxs, Long> {
     	for (int i = 0; i < xxsname.length; i++) {
     		attribute = new XxsAttribute();
     		attribute.setName(xxsname[i]);
+    		attribute.setClassname(xxs.getClassname());
     		attribute.setJavaType(xxssimpleName[i]);
     		attribute.setDisplayName(displayName[i]);
     		attribute.setXxs(xxs);
     		attributes.add(attribute);
     	}
     	baseService.save(xxs);
-    	xxsAttributeService.save(attributes);
+    	xxsAttributeService.save(ids,attributes);
     	
     	Searchable searchable = null;
     	return list(searchable,model);
     }
-    
-    @RequestMapping(value = "/updateppp", method = RequestMethod.POST)
-    public String update(Xxs xxs,String[] name,String[] simpleName,Model model) {
-
-    	if (permissionList != null) {
-            this.permissionList.assertHasCreatePermission();
-        }
-    	System.out.println(name);
-    	
-    	List<XxsAttribute> attributes = new ArrayList<XxsAttribute>();
-    	XxsAttribute attribute = null;
-    	for (int i = 0; i < name.length; i++) {
-    		attribute = new XxsAttribute();
-    		attribute.setName(name[i]);
-    		attributes.add(attribute);
-    		
-		}
-    	baseService.save(xxs);
-    	xxsAttributeService.save(attributes);
-    	
-        Searchable searchable = null;
-        return list(searchable,model);
-    }
-    
 }

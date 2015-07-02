@@ -30,6 +30,8 @@ public class XxsAttribute extends BaseEntity<Long> {
 	
     @Column(name = "name")
     private String name; 		// 属性名
+    @Column(name = "classname")
+    private String classname; 		// 属性名
 	@Column(name = "display_name")
 	private String displayName; 		// 属性名
 	@Column(name = "comments")
@@ -52,6 +54,16 @@ public class XxsAttribute extends BaseEntity<Long> {
 	public String getName() {
 		return name;
 	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getClassname() {
+		return classname;
+	}
+	public void setClassname(String classname) {
+		this.classname = classname;
+	}
 	
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
@@ -61,9 +73,6 @@ public class XxsAttribute extends BaseEntity<Long> {
         return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
 	public Xxs getXxs() {
 		return xxs;

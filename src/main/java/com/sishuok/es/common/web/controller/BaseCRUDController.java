@@ -80,6 +80,7 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
         }
 
         model.addAttribute("page", baseService.findAll(searchable));
+        setCommonData(model);
         if (listAlsoSetCommonData) {
             setCommonData(model);
         }

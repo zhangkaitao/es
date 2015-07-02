@@ -1,5 +1,3 @@
-/com
-/support
-/org
-/ehcache
 /META-INF
+/ValidationMessages.properties
+/com
