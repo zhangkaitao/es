@@ -23,7 +23,8 @@
             </td>
             
             <c:forEach items="${commonXxs}" var="x">
-	        	<td>${m.${x.name}}</td>
+            	<c:set var="tname" value="${x.name}" scope="page" />
+	        	<td>${m[tname]}</td>
 	        </c:forEach>
         </tr>
     </c:forEach>

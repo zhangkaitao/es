@@ -18,8 +18,6 @@ import com.sishuok.es.common.entity.BaseEntity;
 @Table(name = "sys_site")
 public class Site extends BaseEntity<Long> {
 	
-	private static final long serialVersionUID = 1L;
-		
 	public Site() {
 		super();
 	}
