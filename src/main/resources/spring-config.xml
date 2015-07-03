@@ -28,7 +28,7 @@
         <!-- 基本属性 url、user、password -->
         <property name="url" value="jdbc:mysql://localhost:3306/es?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
         <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value=""/>
 
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="${druid.initialSize}"/>

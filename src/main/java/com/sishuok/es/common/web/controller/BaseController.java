@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -22,10 +21,9 @@ import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.ReflectUtils;
-import com.sishuok.es.sys.xxs.entity.Xxs;
-import com.sishuok.es.sys.xxs.entity.XxsAttribute;
-import com.sishuok.es.sys.xxs.service.XxsAttributeService;
-import com.sishuok.es.sys.xxs.service.XxsService;
+import com.sishuok.es.sys.xxs.entity.BeanColumns;
+import com.sishuok.es.sys.xxs.service.BeanColumnsService;
+import com.sishuok.es.sys.xxs.service.BeansService;
 
 /**
  * 基础控制器
@@ -45,9 +43,9 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 	protected final Class<M> entityClass;
 
 	@Autowired
-	private XxsService xxsService;
+	private BeansService xxsService;
 	@Autowired
-	private XxsAttributeService xxsAttributeService;
+	private BeanColumnsService beanColumnsService;
 
 	private String viewPrefix;
 
@@ -63,16 +61,10 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 	 */
 	protected void setCommonData(Model model) {
 		// 将列设置数据放入通用资源中
-
-		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-				+ entityClass.getName());
-		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-				+ entityClass.getSimpleName());
-		Searchable searchable = Searchable.newSearchable().addSearchFilter(
-				"classname", SearchOperator.eq, entityClass.getSimpleName());
+		Searchable searchable = Searchable.newSearchable().addSearchFilter("classname", SearchOperator.eq, entityClass.getSimpleName());
 		//Page<Xxs> pa = xxsService.findAll(searchable);
-		List<XxsAttribute> lists = xxsAttributeService.findAll(searchable).getContent();
-		model.addAttribute("commonXxs", lists);
+		List<BeanColumns> lists = beanColumnsService.findAll(searchable).getContent();
+		model.addAttribute("beanColumnLists", lists);
 		model.addAttribute("booleanList", BooleanEnum.values());
 
 	}

@@ -122,8 +122,8 @@
 										</select>
 				      				
 								</td>
-				      			<td><input checked="checked" class="checkboxinput" id="id_is_public" name="is_public" type="checkbox" /></td>
-				      			<td><input checked="checked" class="checkboxinput" id="id_is_public" name="is_public" type="checkbox" /></td>
+				      			<td><input <c:if test="${t.list}">checked="checked"</c:if> class="checkboxinput" id="list" name="isList" type="checkbox" /></td>
+				      			<td><input <c:if test="${t.query}">checked="checked"</c:if> class="checkboxinput" id="query" name="isQuery" type="checkbox" /></td>
 				      			<td>
 				      				<select name="" class="form-control">
 												<option value="=" selected title="">=</option>
