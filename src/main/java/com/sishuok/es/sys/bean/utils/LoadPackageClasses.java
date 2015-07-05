@@ -1,4 +1,4 @@
-package com.sishuok.es.sys.xxs.utils;
+package com.sishuok.es.sys.bean.utils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

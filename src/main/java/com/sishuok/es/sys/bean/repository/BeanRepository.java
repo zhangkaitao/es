@@ -1,18 +1,18 @@
 /**
  * auto code generation
  */
-package com.sishuok.es.sys.xxs.repository;
+package com.sishuok.es.sys.bean.repository;
 
 import org.springframework.stereotype.Repository;
 
 import com.sishuok.es.common.repository.BaseRepository;
-import com.sishuok.es.sys.xxs.entity.Beans;
+import com.sishuok.es.sys.bean.entity.Bean;
 
 /**
  * @author xxs
  * @version 2015-03-22
  */
 @Repository
-public interface BeansRepository extends BaseRepository<Beans, Long> {
+public interface BeanRepository extends BaseRepository<Bean, Long> {
 	
 }

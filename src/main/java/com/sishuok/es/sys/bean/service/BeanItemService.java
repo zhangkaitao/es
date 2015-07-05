@@ -1,7 +1,7 @@
 /**
  * auto code generation
  */
-package com.sishuok.es.sys.xxs.service;
+package com.sishuok.es.sys.bean.service;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.service.BaseService;
-import com.sishuok.es.sys.xxs.entity.BeanColumns;
+import com.sishuok.es.sys.bean.entity.BeanItem;
 
 /**
  * @author xxs
@@ -18,18 +18,18 @@ import com.sishuok.es.sys.xxs.entity.BeanColumns;
  */
 
 @Service
-public class BeanColumnsService extends BaseService<BeanColumns, Long> {
+public class BeanItemService extends BaseService<BeanItem, Long> {
 
-	public void save(Long[] ids, List<BeanColumns> attributes) {
+	public void save(Long[] ids, List<BeanItem> attributes) {
 		baseRepository.delete(ids);
 		for (int i = 0; i < attributes.size(); i++) {
 			baseRepository.save(attributes.get(i));
 		}
 	}
 
-	public List<BeanColumns> findByBeansId(Long id) {
+	public List<BeanItem> findByBeansId(Long id) {
 		Searchable searchable = Searchable.newSearchable().addSearchFilter(
-				"beans.id", SearchOperator.eq, id);
+				"bean.id", SearchOperator.eq, id);
 		return baseRepository.findAll(searchable).getContent();
 	};
 }

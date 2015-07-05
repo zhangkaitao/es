@@ -1,12 +1,12 @@
 /**
  * auto code generation
  */
-package com.sishuok.es.sys.xxs.service;
+package com.sishuok.es.sys.bean.service;
 
 import org.springframework.stereotype.Service;
 
 import com.sishuok.es.common.service.BaseService;
-import com.sishuok.es.sys.xxs.entity.Beans;
+import com.sishuok.es.sys.bean.entity.Bean;
 
 /**
  * @author xxs
@@ -14,6 +14,6 @@ import com.sishuok.es.sys.xxs.entity.Beans;
  */
  
 @Service
-public class BeansService extends BaseService<Beans, Long> {
+public class BeanService extends BaseService<Bean, Long> {
 
 }

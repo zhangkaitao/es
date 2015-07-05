@@ -1,7 +1,7 @@
 /**
  * auto code generation
  */
-package com.sishuok.es.sys.xxs.web.controller.admin;
+package com.sishuok.es.sys.bean.web.controller.admin;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -18,8 +18,8 @@ import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.SpringUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.sys.xxs.entity.BeanColumns;
-import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
+import com.sishuok.es.sys.bean.entity.BeanItem;
+import com.sishuok.es.sys.bean.utils.LoadPackageClasses;
 
 /**
  * 不知道叫什么功能，可耻的用了自己的名字Controller
@@ -27,14 +27,14 @@ import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
  * @version 2015-03-22
  */
  
-@Controller("adminXxsAttributeController")
-@RequestMapping(value = "/admin/sys/beans/beanColumns")
-public class BeanColumnsController extends BaseCRUDController<BeanColumns, Long> {
+@Controller("adminBeanItemController")
+@RequestMapping(value = "/admin/sys/bean/beanItem")
+public class BeanItemController extends BaseCRUDController<BeanItem, Long> {
 
 	@Autowired
     private ApplicationContext ctx;
 	
-    public BeanColumnsController() {
+    public BeanItemController() {
         //setResourceIdentity("sys:xxsAttribute");
     }
     @Override
@@ -49,7 +49,7 @@ public class BeanColumnsController extends BaseCRUDController<BeanColumns, Long>
                 for(int ii=0; ii< fields.length; ii++)
                 {
                     Field f = fields[ii];
-                    System.out.println("属性名："+f.getName()+"                    类型:"+f.getType().getSimpleName());
+                    System.out.println("属性名："+f.getName()+"类型:"+f.getType().getSimpleName());
                 } 
 			}
         	model.addAttribute("entityLists", lists);

@@ -27,7 +27,7 @@
 	<!-- 
 	<form class="exform" enctype="multipart/form-data" action="" method="post" id="user_form"> 
 	 -->
-	<form:form id="editForm" method="post" action="/admin/sys/xxs/xxs/save" commandName="m" enctype="multipart/form-data" cssClass="exform">
+	<form:form id="editForm" method="post" action="/admin/sys/bean/bean/save" commandName="m" enctype="multipart/form-data" cssClass="exform">
 	
 			<es:showGlobalError commandName="m"/>
             <form:hidden path="id"/>

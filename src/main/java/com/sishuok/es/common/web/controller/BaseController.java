@@ -21,9 +21,9 @@ import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.ReflectUtils;
-import com.sishuok.es.sys.xxs.entity.BeanColumns;
-import com.sishuok.es.sys.xxs.service.BeanColumnsService;
-import com.sishuok.es.sys.xxs.service.BeansService;
+import com.sishuok.es.sys.bean.entity.BeanItem;
+import com.sishuok.es.sys.bean.service.BeanItemService;
+import com.sishuok.es.sys.bean.service.BeanService;
 
 /**
  * 基础控制器
@@ -43,9 +43,9 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 	protected final Class<M> entityClass;
 
 	@Autowired
-	private BeansService xxsService;
+	private BeanService xxsService;
 	@Autowired
-	private BeanColumnsService beanColumnsService;
+	private BeanItemService beanColumnsService;
 
 	private String viewPrefix;
 
@@ -63,7 +63,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 		// 将列设置数据放入通用资源中
 		Searchable searchable = Searchable.newSearchable().addSearchFilter("classname", SearchOperator.eq, entityClass.getSimpleName());
 		//Page<Xxs> pa = xxsService.findAll(searchable);
-		List<BeanColumns> lists = beanColumnsService.findAll(searchable).getContent();
+		List<BeanItem> lists = beanColumnsService.findAll(searchable).getContent();
 		model.addAttribute("beanColumnLists", lists);
 		model.addAttribute("booleanList", BooleanEnum.values());
 

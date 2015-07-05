@@ -1,7 +1,7 @@
 /**
  * auto code generation
  */
-package com.sishuok.es.sys.xxs.web.controller.admin;
+package com.sishuok.es.sys.bean.web.controller.admin;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -21,10 +21,10 @@ import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.SpringUtils;
 import com.sishuok.es.common.web.bind.annotation.PageableDefaults;
 import com.sishuok.es.common.web.controller.BaseCRUDController;
-import com.sishuok.es.sys.xxs.entity.BeanColumns;
-import com.sishuok.es.sys.xxs.entity.Beans;
-import com.sishuok.es.sys.xxs.service.BeanColumnsService;
-import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
+import com.sishuok.es.sys.bean.entity.Bean;
+import com.sishuok.es.sys.bean.entity.BeanItem;
+import com.sishuok.es.sys.bean.service.BeanItemService;
+import com.sishuok.es.sys.bean.utils.LoadPackageClasses;
 
 /**
  * 不知道叫什么功能，可耻的用了自己的名字Controller
@@ -32,16 +32,16 @@ import com.sishuok.es.sys.xxs.utils.LoadPackageClasses;
  * @version 2015-03-22
  */
  
-@Controller("adminBeansController")
-@RequestMapping(value = "/admin/sys/beans/beans")
-public class BeansController extends BaseCRUDController<Beans, Long> {
+@Controller("adminBeanController")
+@RequestMapping(value = "/admin/sys/bean/bean")
+public class BeanController extends BaseCRUDController<Bean, Long> {
 
 	@Autowired
     private ApplicationContext ctx;
 	@Autowired
-    private BeanColumnsService beanColumnsService;
+    private BeanItemService beanItemService;
 	
-    public BeansController() {
+    public BeanController() {
         //setResourceIdentity("sys:beans");
     }
     
@@ -60,7 +60,7 @@ public class BeansController extends BaseCRUDController<Beans, Long> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        List<Beans> beanLists = baseService.findAll();
+        List<Bean> beanLists = baseService.findAll();
         model.addAttribute("beanLists", beanLists);
         model.addAttribute("classLists", classLists);
         return viewName("list");
@@ -79,7 +79,7 @@ public class BeansController extends BaseCRUDController<Beans, Long> {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-        Beans beans = new Beans();
+        Bean beans = new Bean();
         beans.setAllclassname(allclassname);
         beans.setClassname(loadclass.getSimpleName());
         setCommonData(model);
@@ -87,12 +87,12 @@ public class BeansController extends BaseCRUDController<Beans, Long> {
 		model.addAttribute("c",loadclass);
 		
 		
-		List<BeanColumns> beanColumns = new ArrayList<BeanColumns>();
+		List<BeanItem> beanColumns = new ArrayList<BeanItem>();
 		Field[] fields = loadclass.getDeclaredFields();
-		BeanColumns bc = null;
+		BeanItem bc = null;
 		
 		for (int i = 0; i < fields.length; i++) {
-			bc = new BeanColumns();
+			bc = new BeanItem();
 			bc.setName(fields[i].getName());
 			bc.setJavaType(fields[i].getType().getSimpleName());
 			beanColumns.add(bc);
@@ -116,25 +116,26 @@ public class BeansController extends BaseCRUDController<Beans, Long> {
         }
         System.out.println("当前修改的xxs的id："+id);
         
-        Beans beans = baseService.findOne(id);
-        System.out.println("classname:"+beans.getClassname());
-        List<BeanColumns> xas = beanColumnsService.findByBeansId(beans.getId());
+        Bean bean = baseService.findOne(id);
+        System.out.println("classname:"+bean.getClassname());
+        System.out.println(bean.getBeanItems().size());
+        List<BeanItem> xas = beanItemService.findByBeansId(bean.getId());
         System.out.println(xas.size());
         Class<?> loadclass = null ;
         try {
-			loadclass = Class.forName(beans.getAllclassname());
+			loadclass = Class.forName(bean.getAllclassname());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
         
-        model.addAttribute("m",beans);
+        model.addAttribute("m",bean);
 		model.addAttribute("c",loadclass);
 		
-		List<BeanColumns> xxsAttributes = new ArrayList<BeanColumns>();
+		List<BeanItem> xxsAttributes = new ArrayList<BeanItem>();
 		Field[] fields = loadclass.getDeclaredFields();
-		BeanColumns xa = null;
+		BeanItem xa = null;
 		for (int i = 0; i < fields.length; i++) {
-			xa = new BeanColumns();
+			xa = new BeanItem();
 			boolean isture = true;
 			for (int j = 0; j < xas.size(); j++) {
 				if(xas.get(j).getName().equals(loadclass.getDeclaredFields()[i].getName())){
@@ -161,26 +162,26 @@ public class BeansController extends BaseCRUDController<Beans, Long> {
     
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Beans xxs,Long[]ids, String[] xxsname,String[] xxssimpleName,String[] displayName,Boolean[] isList,Boolean[] isQuery,Model model) {
+    public String save(Bean xxs,Long[]ids, String[] xxsname,String[] xxssimpleName,String[] displayName,Boolean[] isList,Boolean[] isQuery,Model model) {
     	
     	if (permissionList != null) {
     		this.permissionList.assertHasCreatePermission();
     	}
-    	List<BeanColumns> attributes = new ArrayList<BeanColumns>();
-    	BeanColumns attribute = null;
+    	List<BeanItem> attributes = new ArrayList<BeanItem>();
+    	BeanItem attribute = null;
     	for (int i = 0; i < xxsname.length; i++) {
-    		attribute = new BeanColumns();
+    		attribute = new BeanItem();
     		attribute.setName(xxsname[i]);
     		attribute.setClassname(xxs.getClassname());
     		attribute.setJavaType(xxssimpleName[i]);
     		attribute.setDisplayName(displayName[i]);
     		attribute.setList(isList[i]);
     		attribute.setQuery(isQuery[i]);
-    		attribute.setBeans(xxs);
+    		attribute.setBean(xxs);
     		attributes.add(attribute);
     	}
     	baseService.save(xxs);
-    	beanColumnsService.save(ids,attributes);
+    	beanItemService.save(ids,attributes);
     	
     	Searchable searchable = null;
     	return list(searchable,model);

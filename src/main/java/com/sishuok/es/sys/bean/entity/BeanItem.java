@@ -1,15 +1,14 @@
 /**
  * auto code generation
  */
-package com.sishuok.es.sys.xxs.entity;
+package com.sishuok.es.sys.bean.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import com.sishuok.es.common.entity.BaseEntity;
 
@@ -19,14 +18,12 @@ import com.sishuok.es.common.entity.BaseEntity;
  * @version 2015-03-22
  */
 @Entity
-@Table(name = "sys_beancolumns")
-public class BeanColumns extends BaseEntity<Long> {
+@Table(name = "sys_bean_item")
+public class BeanItem extends BaseEntity<Long> {
 	
 	private static final long serialVersionUID = 1L;
 		
-    @OneToOne(optional = true)
-    @Fetch(FetchMode.SELECT)
-	private Beans beans;	// 归属表
+	private Bean bean;	// 归属表
 	
     @Column(name = "name")
     private String name; 		// 属性名
@@ -72,15 +69,6 @@ public class BeanColumns extends BaseEntity<Long> {
     public String getDisplayName() {
         return displayName;
     }
-
-
-	public Beans getBeans() {
-		return beans;
-	}
-
-	public void setBeans(Beans beans) {
-		this.beans = beans;
-	}
 
 	public String getComments() {
 		return comments;
@@ -146,6 +134,16 @@ public class BeanColumns extends BaseEntity<Long> {
 		this.sort = sort;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "beans", nullable = false, updatable = false)
+	public Bean getBean() {
+		return bean;
+	}
+
+	public void setBean(Bean bean) {
+		this.bean = bean;
+	}
+	
     
 }
 

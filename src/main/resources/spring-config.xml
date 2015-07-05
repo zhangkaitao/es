@@ -189,7 +189,7 @@
     
     
     <!-- 扫描特定注解的实体类方法 -->
-    <bean id="loadPackageClasses" class="com.sishuok.es.sys.xxs.utils.LoadPackageClasses">
+    <bean id="loadPackageClasses" class="com.sishuok.es.sys.bean.utils.LoadPackageClasses">
 		<constructor-arg value="com.sishuok.es.**.entity" />
 		<constructor-arg>
 			<list>
