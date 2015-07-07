@@ -9,7 +9,7 @@
 	        <a href="/">首页</a>
 		</li>
 	    <li>
-	       	<a href="${ctx}/admin/sys/site">站点管理</a>
+	       	<a href="${ctx}/admin/sys/site">${bean.name }管理</a>
 	     </li>
 	     <li>
         	<c:if test="${op eq '新增'}">
@@ -44,7 +44,7 @@
 	       <div id="div_id_password2" class="form-group">
 	        <label for="id_password2" class="control-label  requiredField">选择实体类</label>
 	        <div class="controls ">
-	        	<form:input path="classname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${m.classname}"/>
+	        	<form:input path="cname" cssClass="textinput textInput form-control validate[required,minSize[2],maxSize[200]]" value="${m.cname}"/>
 	        	<form:hidden path="allclassname" value="${m.allclassname}"/>
 	        </div>
 	       </div>
@@ -99,7 +99,7 @@
 			      </tr>
 			    </thead>
 			    <tbody>
-			   		<c:forEach items="${xxsAttributes}" var="t">
+			   		<c:forEach items="${beanColumns}" var="t">
 			   				<input name="ids" type="hidden" value="${t.id}"/>
 				      		<tr class="grid-item">
 				      			<td>${t.name}<input name="xxsname" type="hidden" value="${t.name}"/></td>
@@ -122,8 +122,8 @@
 										</select>
 				      				
 								</td>
-				      			<td><input <c:if test="${t.list}">checked="checked"</c:if> class="checkboxinput" id="list" name="isList" type="checkbox" /></td>
-				      			<td><input <c:if test="${t.query}">checked="checked"</c:if> class="checkboxinput" id="query" name="isQuery" type="checkbox" /></td>
+				      			<td><input <c:if test="${t.isShow}">checked="checked"</c:if> class="checkboxinput" id="list" name="isShow" type="checkbox" /></td>
+				      			<td><input <c:if test="${t.isQuery}">checked="checked"</c:if> class="checkboxinput" id="query" name="isQuery" type="checkbox" /></td>
 				      			<td>
 				      				<select name="" class="form-control">
 												<option value="=" selected title="">=</option>

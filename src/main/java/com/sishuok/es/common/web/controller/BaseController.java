@@ -6,10 +6,13 @@
 package com.sishuok.es.common.web.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -21,8 +24,7 @@ import com.sishuok.es.common.entity.enums.BooleanEnum;
 import com.sishuok.es.common.entity.search.SearchOperator;
 import com.sishuok.es.common.entity.search.Searchable;
 import com.sishuok.es.common.utils.ReflectUtils;
-import com.sishuok.es.sys.bean.entity.BeanItem;
-import com.sishuok.es.sys.bean.service.BeanItemService;
+import com.sishuok.es.sys.bean.entity.Bean;
 import com.sishuok.es.sys.bean.service.BeanService;
 
 /**
@@ -43,9 +45,7 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 	protected final Class<M> entityClass;
 
 	@Autowired
-	private BeanService xxsService;
-	@Autowired
-	private BeanItemService beanColumnsService;
+	private BeanService beanService;
 
 	private String viewPrefix;
 
@@ -61,10 +61,17 @@ public abstract class BaseController<M extends AbstractEntity, ID extends Serial
 	 */
 	protected void setCommonData(Model model) {
 		// 将列设置数据放入通用资源中
-		Searchable searchable = Searchable.newSearchable().addSearchFilter("classname", SearchOperator.eq, entityClass.getSimpleName());
-		//Page<Xxs> pa = xxsService.findAll(searchable);
-		List<BeanItem> lists = beanColumnsService.findAll(searchable).getContent();
-		model.addAttribute("beanColumnLists", lists);
+		Searchable searchable = Searchable.newSearchable().addSearchFilter(
+				"cname", SearchOperator.eq, entityClass.getSimpleName());
+		Page page = null;
+		List<T> t= new ArrayList<T>();
+		List<Bean> lists = beanService.findAll(searchable).getContent();
+		Bean bean = new Bean();
+		if (lists != null && lists.size() > 0) {
+			bean = lists.get(0);
+		}
+		model.addAttribute("bean", bean);
+		model.addAttribute("beanItems", bean.getBeanItems());
 		model.addAttribute("booleanList", BooleanEnum.values());
 
 	}

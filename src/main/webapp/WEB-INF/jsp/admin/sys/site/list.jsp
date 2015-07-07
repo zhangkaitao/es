@@ -12,12 +12,12 @@
 	       	 	<a href="${ctx}/admin/sys/site">站点管理</a>
 	      	</li>
 	      	<li>
-	       	 	站点列表
+	       	 	${bean.name }列表
 	      	</li>
       	</ul>
 		<%@include file="searchForm.jsp" %>
     	<es:showMessage/>
-		<%@include file="functionForm.jsp" %>
+    	<es:tools bean="${bean }"/>
   		<div class="results table-responsive">
   			<%@include file="listTable.jsp"%>
   		</div>

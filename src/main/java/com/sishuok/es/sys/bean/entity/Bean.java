@@ -23,16 +23,14 @@ import com.sishuok.es.common.entity.BaseEntity;
 @Table(name = "sys_bean")
 public class Bean extends BaseEntity<Long> {
 	
-	private static final long serialVersionUID = 1L;
-		
 	@Column(name = "name")
 	private String name; 	
 	
-	@Column(name = "classname")
-	private String classname; 
+	@Column(name = "cname")
+	private String cname; //类名
 	
 	@Column(name = "allclassname")
-	private String allclassname; 	
+	private String allclassname; 	//全类名
 	
 	@Column(name = "comments")
 	private String comments; 	
@@ -40,12 +38,12 @@ public class Bean extends BaseEntity<Long> {
 	@OneToMany(mappedBy = "bean", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<BeanItem> beanItems = new ArrayList<BeanItem>();
 
-	public String getClassname() {
-		return classname;
+	public String getCname() {
+		return cname;
 	}
 	
-	public void setClassname(String classname) {
-		this.classname = classname;
+	public void setCname(String cname) {
+		this.cname = cname;
 	}
 	
 	public String getAllclassname() {

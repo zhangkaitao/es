@@ -74,7 +74,6 @@ public abstract class BaseCRUDController<M extends AbstractEntity, ID extends Se
     @PageableDefaults(sort = "id=desc")
     public String list(Searchable searchable, Model model) {
 
-    	
         if (permissionList != null) {
             this.permissionList.assertHasViewPermission();
         }

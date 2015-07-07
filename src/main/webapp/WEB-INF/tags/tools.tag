@@ -1,4 +1,5 @@
 <%@tag pageEncoding="UTF-8" description="操作" %>
+<%@ attribute name="bean" type="com.sishuok.es.sys.bean.entity.Bean" required="true" description="实体对象" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="es" tagdir="/WEB-INF/tags" %>
 
@@ -11,16 +12,15 @@
       	<ul class="dropdown-menu model_fields pull-right" role="menu" aria-labelledby="dLabel">
         	<li><a href=""><i class="icon-refresh"></i> 恢复显示列</a></li>
         	<li class="divider"></li>
-	        <li>
-	        	<a href="">
-	          		<i class="icon-blank"></i>
-	          		ID</a>
-	        </li>
-	        <li>
-	        	<a href="">
-	          		<i class="icon-blank"></i>
-	          		名称</a>
-	         </li>
+        	<c:if test="${not empty bean}">
+			    <c:forEach items="${bean.beanItems}" var="bi">
+			    	<li>
+			        	<a href="">
+			          		<i class="icon-blank"></i>
+			          		${bi.displayName}</a>
+			        </li>
+			    </c:forEach>
+			</c:if>
       	 </ul>
     </div>
 	<!-- 行列密度 -->

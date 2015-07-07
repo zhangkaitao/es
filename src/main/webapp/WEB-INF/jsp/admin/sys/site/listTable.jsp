@@ -7,9 +7,7 @@
         <th scope="col" class="action-checkbox-column">
             <input type="checkbox" id="action-toggle" />
         </th>
-        <c:forEach items="${commonXxs}" var="x">
-        	<th sort="${x.name }">${x.displayName }</th>
-        </c:forEach>
+        <es:showListTitle bean="${bean}" />
         <th scope="col" class="sortable">
             <div class="dropdown pull-left">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -36,10 +34,7 @@
         		<td  class="action-checkbox">
             		<input class="action-select" type="checkbox" name="ids" value="${m.id}" />
         		</td>
-        		<c:forEach items="${commonXxs}" var="x">
-	            	<c:set var="tname" value="${x.name}" scope="page" />
-		        	<td>${m[tname]}</td>
-		        </c:forEach>
+        		<es:showListValue bean="${bean}" m="${m}"/>
       			<td class="nowrap">
       				<div class="btn-group pull-right">
 		                <a class="editable-handler" title="输入name" data-editable-field="name" data-editable-loadurl="/host/host/1/patch/?fields=name"><i class="icon-edit"></i></a>

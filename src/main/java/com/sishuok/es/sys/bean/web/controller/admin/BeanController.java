@@ -63,6 +63,7 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
         List<Bean> beanLists = baseService.findAll();
         model.addAttribute("beanLists", beanLists);
         model.addAttribute("classLists", classLists);
+        setCommonData(model);
         return viewName("list");
     }
     
@@ -81,7 +82,7 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
 		}
         Bean beans = new Bean();
         beans.setAllclassname(allclassname);
-        beans.setClassname(loadclass.getSimpleName());
+        beans.setCname(loadclass.getSimpleName());
         setCommonData(model);
 		model.addAttribute("m",beans);
 		model.addAttribute("c",loadclass);
@@ -117,7 +118,7 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
         System.out.println("当前修改的xxs的id："+id);
         
         Bean bean = baseService.findOne(id);
-        System.out.println("classname:"+bean.getClassname());
+        System.out.println("classname:"+bean.getCname());
         System.out.println(bean.getBeanItems().size());
         List<BeanItem> xas = beanItemService.findByBeansId(bean.getId());
         System.out.println(xas.size());
@@ -131,7 +132,7 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
         model.addAttribute("m",bean);
 		model.addAttribute("c",loadclass);
 		
-		List<BeanItem> xxsAttributes = new ArrayList<BeanItem>();
+		List<BeanItem> beanColumns = new ArrayList<BeanItem>();
 		Field[] fields = loadclass.getDeclaredFields();
 		BeanItem xa = null;
 		for (int i = 0; i < fields.length; i++) {
@@ -139,7 +140,7 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
 			boolean isture = true;
 			for (int j = 0; j < xas.size(); j++) {
 				if(xas.get(j).getName().equals(loadclass.getDeclaredFields()[i].getName())){
-					xxsAttributes.add(xas.get(j));
+					beanColumns.add(xas.get(j));
 					isture = false;
 					break;
 				}
@@ -147,11 +148,11 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
 			if(isture){
 				xa.setName(fields[i].getName());
 				xa.setJavaType(fields[i].getType().getSimpleName());
-				xxsAttributes.add(xa);
+				beanColumns.add(xa);
 			}
 		}
 		
-		model.addAttribute("xxsAttributes",xxsAttributes);
+		model.addAttribute("beanColumns",beanColumns);
         model.addAttribute(Constants.OP_NAME, "修改");
         if (!model.containsAttribute("m")) {
             model.addAttribute("m", newModel());
@@ -162,26 +163,26 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
     
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Bean xxs,Long[]ids, String[] xxsname,String[] xxssimpleName,String[] displayName,Boolean[] isList,Boolean[] isQuery,Model model) {
+    public String save(Bean bean,Long[]ids, String[] xxsname,String[] xxssimpleName,String[] displayName,Boolean[] isShow,Boolean[] isQuery,Model model) {
     	
     	if (permissionList != null) {
     		this.permissionList.assertHasCreatePermission();
     	}
-    	List<BeanItem> attributes = new ArrayList<BeanItem>();
-    	BeanItem attribute = null;
+    	List<BeanItem> beanItems = new ArrayList<BeanItem>();
+    	BeanItem beanItem = null;
     	for (int i = 0; i < xxsname.length; i++) {
-    		attribute = new BeanItem();
-    		attribute.setName(xxsname[i]);
-    		attribute.setClassname(xxs.getClassname());
-    		attribute.setJavaType(xxssimpleName[i]);
-    		attribute.setDisplayName(displayName[i]);
-    		attribute.setList(isList[i]);
-    		attribute.setQuery(isQuery[i]);
-    		attribute.setBean(xxs);
-    		attributes.add(attribute);
+    		beanItem = new BeanItem();
+    		beanItem.setName(xxsname[i]);
+    		beanItem.setCname(bean.getCname());
+    		beanItem.setJavaType(xxssimpleName[i]);
+    		beanItem.setDisplayName(displayName[i]);
+    		beanItem.setIsShow(isShow[i]);
+    		beanItem.setIsQuery(isQuery[i]);
+    		beanItem.setBean(bean);
+    		beanItems.add(beanItem);
     	}
-    	baseService.save(xxs);
-    	beanItemService.save(ids,attributes);
+    	baseService.save(bean);
+    	beanItemService.save(ids,beanItems);
     	
     	Searchable searchable = null;
     	return list(searchable,model);

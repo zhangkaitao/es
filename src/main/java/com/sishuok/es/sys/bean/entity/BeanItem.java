@@ -21,14 +21,14 @@ import com.sishuok.es.common.entity.BaseEntity;
 @Table(name = "sys_bean_item")
 public class BeanItem extends BaseEntity<Long> {
 	
-	private static final long serialVersionUID = 1L;
-		
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "bean", nullable = false, updatable = false)
 	private Bean bean;	// 归属表
 	
     @Column(name = "name")
     private String name; 		// 属性名
-    @Column(name = "classname")
-    private String classname; 		// 属性名
+    @Column(name = "class_name")
+    private String cname; 		// 属性名
 	@Column(name = "display_name")
 	private String displayName; 		// 属性名
 	@Column(name = "comments")
@@ -36,11 +36,11 @@ public class BeanItem extends BaseEntity<Long> {
 	@Column(name = "java_type")
 	private String javaType;	// JAVA类型
 	@Column(name = "is_edit")
-	private Boolean edit;		// 是否编辑字段（1：编辑字段）
-	@Column(name = "is_list")
-	private Boolean list;		// 是否列表字段（1：列表字段）
+	private Boolean isEdit;		// 是否编辑字段（1：编辑字段）
+	@Column(name = "is_show")
+	private Boolean isShow;		// 是否显示在列表（1：列表字段）
 	@Column(name = "is_query")
-	private Boolean query;		// 是否查询字段（1：查询字段）
+	private Boolean isQuery;		// 是否查询字段（1：查询字段）
 	@Column(name = "query_type")
 	private String queryType;	// 查询方式（等于、不等于、大于、小于、范围、左LIKE、右LIKE、左右LIKE）
 	@Column(name = "show_type")
@@ -55,11 +55,11 @@ public class BeanItem extends BaseEntity<Long> {
 		this.name = name;
 	}
 	
-	public String getClassname() {
-		return classname;
+	public String getCname() {
+		return cname;
 	}
-	public void setClassname(String classname) {
-		this.classname = classname;
+	public void setCname(String cname) {
+		this.cname = cname;
 	}
 	
 	public void setDisplayName(String displayName) {
@@ -86,28 +86,28 @@ public class BeanItem extends BaseEntity<Long> {
 		this.javaType = javaType;
 	}
 
-	public Boolean getEdit() {
-		return edit;
+	public Boolean getIsEdit() {
+		return isEdit;
 	}
 
-	public void setEdit(Boolean edit) {
-		this.edit = edit;
+	public void setIsEdit(Boolean isEdit) {
+		this.isEdit = isEdit;
 	}
 
-	public Boolean getList() {
-		return list;
+	public Boolean getIsShow() {
+		return isShow;
 	}
 
-	public void setList(Boolean list) {
-		this.list = list;
+	public void setIsShow(Boolean isShow) {
+		this.isShow = isShow;
 	}
 	
-	public Boolean getQuery() {
-		return query;
+	public Boolean getIsQuery() {
+		return isQuery;
 	}
 
-	public void setQuery(Boolean query) {
-		this.query = query;
+	public void setIsQuery(Boolean isQuery) {
+		this.isQuery = isQuery;
 	}
 
 	public String getQueryType() {
@@ -134,8 +134,6 @@ public class BeanItem extends BaseEntity<Long> {
 		this.sort = sort;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "beans", nullable = false, updatable = false)
 	public Bean getBean() {
 		return bean;
 	}

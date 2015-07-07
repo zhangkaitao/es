@@ -9,7 +9,7 @@
 		<li>实体列表</li>
 	</ul>
 	<es:showMessage />
-	<es:tools />
+	<es:tools bean="${bean }"/>
 	<%@include file="listTable.jsp"%>
 </div>
 <%@include file="/WEB-INF/jsp/admin/index/footer.jsp"%>
