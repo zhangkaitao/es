@@ -36,7 +36,7 @@ public class BeanItem extends BaseEntity<Long> {
 	@Column(name = "java_type")
 	private String javaType;	// JAVA类型
 	@Column(name = "is_edit")
-	private Boolean isEdit;		// 是否编辑字段（1：编辑字段）
+	private Boolean isEdit;		// 快捷编辑
 	@Column(name = "is_show")
 	private Boolean isShow;		// 是否显示在列表（1：列表字段）
 	@Column(name = "is_query")

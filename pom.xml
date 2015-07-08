@@ -888,7 +888,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <db.name>es</db.name>
+                <db.name>es-shop</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
                     <![CDATA[jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
@@ -913,7 +913,7 @@
             <!-- integration test -->
             <id>it</id>
             <properties>
-                <db.name>es</db.name>
+                <db.name>es-shop</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
                     <![CDATA[jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
@@ -940,7 +940,7 @@
             <!--正式环境-->
             <id>production</id>
             <properties>
-                <db.name>es</db.name>
+                <db.name>es-shop</db.name>
                 <connection.driver_class>com.mysql.jdbc.Driver</connection.driver_class>
                 <connection.admin.url>
                     <![CDATA[jdbc:mysql://localhost:3306?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>

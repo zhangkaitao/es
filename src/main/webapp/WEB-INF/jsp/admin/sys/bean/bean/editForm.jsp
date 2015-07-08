@@ -88,6 +88,9 @@
 			                	查询
 			        </th>
 			        <th scope="col">
+			                	快捷编辑
+			        </th>
+			        <th scope="col">
 			                	查询匹配方式
 			        </th>
 			        <th scope="col">
@@ -99,13 +102,13 @@
 			      </tr>
 			    </thead>
 			    <tbody>
-			   		<c:forEach items="${beanColumns}" var="t">
+			   		<c:forEach items="${beanColumns}" var="t" varStatus="p">
 			   				<input name="ids" type="hidden" value="${t.id}"/>
 				      		<tr class="grid-item">
-				      			<td>${t.name}<input name="xxsname" type="hidden" value="${t.name}"/></td>
-				      			<td>${t.javaType}<input name="xxssimpleName" type="hidden" value="${t.javaType}"/></td>
+				      			<td>${t.name}<input name="names" type="hidden" value="${t.name}"/></td>
+				      			<td>${t.javaType}<input name="types" type="hidden" value="${t.javaType}"/></td>
 				      			<td>
-	         						<input class="textinput textInput form-control" id="id_username" maxlength="30" name="displayName" type="text" value="${t.displayName}" /> 
+	         						<input class="textinput textInput form-control" name="displayNames" maxlength="30" type="text" value="${t.displayName}" /> 
 	        					</td>
 	        					<td>
 				      				<select name="" class="form-control">
@@ -115,42 +118,50 @@
 										        <option value="4">单选框</option>
 										        <option value="5">下拉框</option>
 										        <option value="6">文本区</option>
-										        <option value="50">文本编辑器</option>
-										        <option value="7">图片上传</option>
-										        <option value="8">视频上传</option>
-										        <option value="9">附件上传</option>
+										        <option value="7">文本编辑器</option>
+										        <option value="8">图片上传</option>
+										        <option value="9">视频上传</option>
+										        <option value="10">附件上传</option>
 										</select>
 				      				
 								</td>
 				      			<td><input <c:if test="${t.isShow}">checked="checked"</c:if> class="checkboxinput" id="list" name="isShow" type="checkbox" /></td>
 				      			<td><input <c:if test="${t.isQuery}">checked="checked"</c:if> class="checkboxinput" id="query" name="isQuery" type="checkbox" /></td>
+				      			<td><input <c:if test="${t.isEdit}">checked="checked"</c:if> class="checkboxinput" id="edit" name="isEdit" type="checkbox" /></td>
 				      			<td>
-				      				<select name="" class="form-control">
-												<option value="=" selected title="">=</option>
+				      				<select name="showType" class="form-control">
+												<option value="1" selected title="">=</option>
 											
-												<option value="!="  title="">!=</option>
+												<option value="2"  title="">!=</option>
 											
-												<option value="&gt;"  title="">&gt;</option>
+												<option value="3"  title="">&gt;</option>
 											
-												<option value="&gt;="  title="">&gt;=</option>
+												<option value="4"  title="">&gt;=</option>
 											
-												<option value="&lt;"  title="">&lt;</option>
+												<option value="5"  title="">&lt;</option>
 											
-												<option value="&lt;="  title="">&lt;=</option>
+												<option value="6"  title="">&lt;=</option>
 											
-												<option value="between"  title="">Between</option>
+												<option value="7"  title="">Between</option>
 											
-												<option value="like"  title="">Like</option>
+												<option value="8"  title="">Like</option>
 											
-												<option value="left_like"  title="">Left Like</option>
+												<option value="9"  title="">Left Like</option>
 											
-												<option value="right_like"  title="">Right Like</option>
+												<option value="10"  title="">Right Like</option>
 											
 										</select>
 				      				
 								</td>
 								<td>
-	         						<input class="textinput textInput form-control" id="id_username" maxlength="30" name="username" type="text" /> 
+	         						<input class="form-control input-small" id="sort" maxlength="30" name="sort" 
+	         						<c:if test="${op eq '新增'}">
+						                value="${p.index+1}"
+						            </c:if>
+						            <c:if test="${op eq '修改'}">
+						                value="${t.sort}"
+						            </c:if>
+	         						 type="text" /> 
 	        					</td>
 	        					<td>更多设置</td>
 				      		</tr>

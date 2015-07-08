@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.sishuok.es.common.entity.BaseEntity;
@@ -36,6 +37,7 @@ public class Bean extends BaseEntity<Long> {
 	private String comments; 	
 	
 	@OneToMany(mappedBy = "bean", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderBy("sort desc")
 	private List<BeanItem> beanItems = new ArrayList<BeanItem>();
 
 	public String getCname() {

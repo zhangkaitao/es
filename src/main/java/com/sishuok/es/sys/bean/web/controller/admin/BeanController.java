@@ -163,22 +163,24 @@ public class BeanController extends BaseCRUDController<Bean, Long> {
     
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Bean bean,Long[]ids, String[] xxsname,String[] xxssimpleName,String[] displayName,Boolean[] isShow,Boolean[] isQuery,Model model) {
+    public String save(Bean bean,Long[]ids, String[] names,String[] types,String[] displayNames,Boolean[] isShow,Boolean[] isQuery,Boolean[] isEdit,Integer[] sort,Model model) {
     	
     	if (permissionList != null) {
     		this.permissionList.assertHasCreatePermission();
     	}
     	List<BeanItem> beanItems = new ArrayList<BeanItem>();
     	BeanItem beanItem = null;
-    	for (int i = 0; i < xxsname.length; i++) {
+    	for (int i = 0; i < names.length; i++) {
     		beanItem = new BeanItem();
-    		beanItem.setName(xxsname[i]);
+    		beanItem.setName(names[i]);
     		beanItem.setCname(bean.getCname());
-    		beanItem.setJavaType(xxssimpleName[i]);
-    		beanItem.setDisplayName(displayName[i]);
+    		beanItem.setJavaType(types[i]);
+    		beanItem.setDisplayName(displayNames[i]);
     		beanItem.setIsShow(isShow[i]);
     		beanItem.setIsQuery(isQuery[i]);
+    		beanItem.setIsEdit(isEdit[i]);
     		beanItem.setBean(bean);
+    		beanItem.setSort(sort[i]);
     		beanItems.add(beanItem);
     	}
     	baseService.save(bean);
