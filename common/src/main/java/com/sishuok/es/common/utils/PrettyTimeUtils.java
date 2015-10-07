@@ -85,7 +85,7 @@ public class PrettyTimeUtils {
 
     public static void main(String[] args) {
         System.out.println(PrettyTimeUtils.prettyTime(new Date()));
-        System.out.println(PrettyTimeUtils.prettyTime(123));
+        System.out.println(PrettyTimeUtils.prettyTime(3));
 
         System.out.println(PrettyTimeUtils.prettySeconds(10));
         System.out.println(PrettyTimeUtils.prettySeconds(61));
