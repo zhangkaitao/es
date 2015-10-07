@@ -145,8 +145,10 @@ public class SimpleBaseRepository<M, ID extends Serializable> extends SimpleJpaR
     @Transactional
     @Override
     public void delete(final ID id) {
-        M m = findOne(id);
-        delete(m);
+//        M m = findOne(id);
+//        delete(m);
+        //直接调用父类实现，原来实现有待改进
+        this.delete(id);
     }
 
     /**
