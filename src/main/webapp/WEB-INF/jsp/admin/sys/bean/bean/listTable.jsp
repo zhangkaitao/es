@@ -15,7 +15,7 @@
 					<c:forEach items="${beanLists}" var="x">
 						<c:if test="${m.simpleName == x.cname}">
 							<c:set var="state" value="true"></c:set>
-							<es:showListValue bean="${bean}" m="${x}"/>
+							<es:showListValue bean="${bean}" page="${page }" m="${x}"/>
 							<td><a href="${ctx}/admin/sys/bean/bean/${x.id}/modify">修改属性</a></td>
 						</c:if>
 					</c:forEach>

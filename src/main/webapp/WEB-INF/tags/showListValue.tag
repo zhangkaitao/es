@@ -1,5 +1,6 @@
 <%@ tag pageEncoding="UTF-8" description="列文本"%>
 <%@ tag import="java.util.List"%>
+<%@ attribute name="page" type="org.springframework.data.domain.Page" required="true" description="分页" %>
 <%@ attribute name="bean" type="com.sishuok.es.sys.bean.entity.Bean"
 	required="true" description="实体对象"%>
 <%@ attribute name="m" type="java.lang.Object" required="true"
@@ -11,12 +12,21 @@
 			<c:set var="tname" value="${bi.name}" scope="page" />
 			<td>${m[tname]}
 				<c:if test="${bi.isEdit }">
+				
+					<c:if test="${page.totalElements > 1}">
+				        <a href="#" class="ui-icon ui-icon-extlink pop-movable"
+				           rel="popover"
+				           data-placement="left"
+				           data-html="true"
+				           data-original-title="请输入移动到的数据编号"
+				           data-content="<input type='text' class='input-small id'/>&nbsp;&nbsp;<a href='#' class='btn-link btn-custom popover-up-btn'>之后</a>|<a href='#' class='btn-link popover-down-btn'>之前</a>"></a>
+				    </c:if>
+				
 					<div class="btn-group pull-right">
 						<a class="editable-handler" title="输入新 ${bi.displayName }"
 							data-editable-field="name"
 							data-html="true"
 							data-original-title="请输入移动到的数据编号"
-							data-content="<input type='text' class='input-small id'/>"
 							data-editable-loadurl="/host/host/1/patch/?fields=name">
 							<i class="icon-edit"></i></a> 
 							

@@ -34,7 +34,7 @@
         		<td  class="action-checkbox">
             		<input class="action-select" type="checkbox" name="ids" value="${m.id}" />
         		</td>
-        		<es:showListValue bean="${bean}" m="${m}"/>
+        		<es:showListValue page="${page }" bean="${bean}" m="${m}"/>
       			<td class="nowrap">
       				<div class="btn-group pull-right">
 		                <a class="editable-handler" title="输入name" data-editable-field="name" data-editable-loadurl="/host/host/1/patch/?fields=name"><i class="icon-edit"></i></a>
