@@ -695,7 +695,7 @@
         <cglib.version>3.1</cglib.version>
 
         <commons-lang3.version>3.1</commons-lang3.version>
-        <common-collections4.version>4.0</common-collections4.version>
+        <common-collections4.version>4.1</common-collections4.version>
         <commons-io.version>2.4</commons-io.version>
         <guava.version>15.0</guava.version>
         <common.fileupload.version>1.3</common.fileupload.version>
