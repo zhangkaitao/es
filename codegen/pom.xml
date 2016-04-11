@@ -79,7 +79,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.6</jdk.version>
         <commons-lang3.version>3.1</commons-lang3.version>
-        <common-collections.version>3.2.1</common-collections.version>
+        <common-collections.version>3.2.2</common-collections.version>
         <commons-io.version>2.4</commons-io.version>
         <guava.version>13.0.1</guava.version>
         <velocity.version>1.7</velocity.version>
