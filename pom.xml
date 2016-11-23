@@ -39,13 +39,6 @@
     </properties>
 
     <repositories>
-
-        <repository>
-            <id>oschina Releases</id>
-            <name>oschina Releases</name>
-            <url>http://maven.oschina.net/content/groups/public</url>
-        </repository>
-
         <repository>
             <id>apache-repo</id>
             <name>apache Repository</name>
