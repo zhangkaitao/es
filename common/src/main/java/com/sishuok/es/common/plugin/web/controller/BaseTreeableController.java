@@ -319,7 +319,7 @@ public abstract class BaseTreeableController<M extends BaseEntity<ID> & Treeable
             HttpServletRequest request,
             @RequestParam(value = "async", required = false, defaultValue = "false") boolean async,
             @PathVariable("source") M source,
-            @RequestParam("target") M target,
+            @RequestParam("targetId") M target,
             @RequestParam("moveType") String moveType,
             Searchable searchable,
             Model model,
